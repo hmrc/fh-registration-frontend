@@ -3,6 +3,7 @@ import sbt.Tests.{SubProcess, Group}
 import sbt._
 import play.routes.compiler.StaticRoutesGenerator
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import play.sbt.PlayImport.PlayKeys
 
 
 trait MicroService {
@@ -22,10 +23,12 @@ trait MicroService {
   lazy val appDependencies : Seq[ModuleID] = ???
   lazy val plugins : Seq[Plugins] = Seq.empty
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
+  val defaultPort = 9000
 
 
   lazy val microservice = Project(appName, file("."))
     .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .settings(PlayKeys.playDefaultPort := 1118)
     .settings(playSettings : _*)
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
