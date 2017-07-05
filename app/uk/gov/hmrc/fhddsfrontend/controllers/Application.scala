@@ -16,17 +16,22 @@
 
 package uk.gov.hmrc.fhddsfrontend.controllers
 
+
+import javax.inject.{Inject, Singleton}
+
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.mvc._
+import uk.gov.hmrc.fhddsfrontend.views.html.start_page
+
 import scala.concurrent.Future
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
 
+@Singleton
+class Application @Inject()(override val messagesApi: MessagesApi)
+  extends FrontendController with I18nSupport {
 
-object HelloWorld extends HelloWorld
-
-trait HelloWorld extends FrontendController {
-  val helloWorld = Action.async { implicit request =>
-		Future.successful(Ok(uk.gov.hmrc.fhddsfrontend.views.html.helloworld.hello_world()))
+  def start(): Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(start_page()))
   }
+
 }

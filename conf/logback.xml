@@ -2,7 +2,7 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/fhdds-frontend.log</file>
+        <file>logs/FHDDS.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%date{ISO8601} level=[%level] logger=[%logger] thread=[%thread] message=[%message] %replace(exception=[%xException]){'^exception=\[\]$',''}%n</pattern>
         </encoder>
@@ -34,6 +34,11 @@
         </encoder>
     </appender>
 
+    <logger name="org.asynchttpclient.netty" level="WARN"/>
+
+    <logger name="com.codahale.metrics.graphite.GraphiteReporter" level="ERROR"/>
+
+    <logger name="play.core.netty" level="INFO"/>
 
     <logger name="accesslog" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_LOG_FILE" />
@@ -46,6 +51,8 @@
     <logger name="com.google.inject" level="INFO"/>
 
     <logger name="uk.gov" level="INFO"/>
+
+    <logger name="akka.actor" level="DEBUG"/>
 
     <logger name="application" level="DEBUG"/>
 

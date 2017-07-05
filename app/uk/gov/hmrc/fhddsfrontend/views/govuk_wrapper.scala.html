@@ -40,7 +40,7 @@
 
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some("fhdds-frontend"),
+      navTitle = Some("Fulfilment House Due Diligence Scheme"),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
@@ -62,9 +62,18 @@
 
 @serviceInfo = {
     @uiLayouts.serviceInfo(
-      betaBanner = HtmlFormat.empty,
+      betaBanner = betaBanner,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
+}
+
+@betaBanner = {
+  @uiLayouts.betaBanner(
+    userLoggedIn = false,
+    betaFeedbackUrl = "",
+    betaFeedbackUnauthenticatedUrl = "",
+    showFeedbackLinkInBetaBanner = true
+  )
 }
 
 @mainContentHeader = {
