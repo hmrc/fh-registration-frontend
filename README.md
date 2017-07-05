@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/hmrc/fhdds-frontend.svg)](https://travis-ci.org/hmrc/fhdds-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/fhdds-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/fhdds-frontend/_latestVersion)
 
 ## Software Requirements
+*   Contact to team barzan if needed #team-barzan
 *   MongoDB 3.2 or later version
 *   KEYSTORE and ASSETS_FRONTEND get the latest version via the service-manager
 
@@ -12,8 +13,6 @@ To run the application execute
 ```
 sbt run
 ```
-
-## Endpoints <a name="endpoints"></a>
 
 #### Get to the first form page by a web browser
 ```
