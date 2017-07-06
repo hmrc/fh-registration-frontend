@@ -16,23 +16,12 @@
 
 package uk.gov.hmrc.fhddsfrontend.controllers
 
-import akka.stream.Materializer
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
-import play.api.i18n.{Lang, Messages, MessagesApi}
-import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.http.HeaderNames
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
 
-class ApplicationControllerSpec extends UnitSpec with OneAppPerSuite {
 
-  val appInjector: Injector = app.injector
-  implicit val materializer: Materializer = appInjector.instanceOf[Materializer]
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
-  implicit val messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
+class ApplicationControllerSpec extends AppUnitGenerator {
 
   val applicationController = new Application(messages.messages)
 
@@ -46,7 +35,6 @@ class ApplicationControllerSpec extends UnitSpec with OneAppPerSuite {
       val result = applicationController.start().apply(request)
       charset(result) shouldBe Some("utf-8")
     }
-
   }
 
 }

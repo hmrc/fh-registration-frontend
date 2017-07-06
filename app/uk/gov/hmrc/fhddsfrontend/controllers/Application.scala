@@ -19,12 +19,17 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.fhddsfrontend.FrontendAuthConnector
+import uk.gov.hmrc.fhddsfrontend.models.FHDDSRegime
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
+import uk.gov.hmrc.play.frontend.auth.Actions
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(override val messagesApi: MessagesApi)
@@ -33,5 +38,21 @@ class Application @Inject()(override val messagesApi: MessagesApi)
   def start(): Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(start_page()))
   }
+}
+
+@Singleton
+abstract class AppController(ds: CommonPlayDependencies)
+  extends FrontendController with I18nSupport with Actions {
+
+  implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+
+  lazy val conf: Configuration = ds.conf
+  implicit lazy val messagesApi: MessagesApi = ds.messagesApi
+  override val authConnector: AuthConnector = FrontendAuthConnector
+
+  def authorised: AuthenticatedBy = AuthorisedFor(taxRegime = FHDDSRegime, pageVisibility = GGConfidence)
 
 }
+
+@Singleton
+final class CommonPlayDependencies @Inject()(val conf: Configuration, val messagesApi: MessagesApi)

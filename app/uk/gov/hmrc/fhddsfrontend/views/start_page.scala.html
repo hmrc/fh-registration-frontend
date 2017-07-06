@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhddsfrontend.controllers.routes
 @()(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "Hello from fhdds-frontend", bodyClasses = None) {
@@ -155,7 +156,7 @@
                     </ul>
 
                     <div style="background-color: #DEE0E2; padding: 15px;">
-                      <p><a href="/login/">Apply online now to register for the AWRS service.</a></p>
+                      <p><a href="@routes.SoleTraderController.information()">Apply online now to register for the AWRS service.</a></p>
                     </div>
 
                     <h2 id="exclusions-to-the-scheme">What happens next</h2>
