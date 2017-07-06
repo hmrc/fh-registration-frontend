@@ -1,1 +1,8 @@
+select_one=Answer ‘Yes’ or ‘No’
+confirm.Yes=Yes
+confirm.No=No
+
+inf.register=Is this the business you want to register?
+inf.error.inf=You haven’t told us is this the business you want to register?
+
 app.name=Fulfilment House Due Diligence Scheme
