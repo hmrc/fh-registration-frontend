@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
   object soleTraderController extends SoleTraderController(ds) {
-    implicit lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
     override val authConnector: AuthConnector = mockAuthConnector
   }
 

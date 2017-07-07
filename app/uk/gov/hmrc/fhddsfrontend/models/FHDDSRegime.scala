@@ -19,10 +19,10 @@ package uk.gov.hmrc.fhddsfrontend.models
 import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.frontend.auth.connectors.domain.Accounts
 import uk.gov.hmrc.play.frontend.auth.{AuthenticationProvider, GovernmentGateway, TaxRegime}
+import uk.gov.hmrc.fhddsfrontend.controllers.routes
 
 object FHDDSRegime extends TaxRegime {
   override def isAuthorised(accounts: Accounts): Boolean = true
-
   override def authenticationType: AuthenticationProvider = FHDDSAuthenticationProvider
 }
 
@@ -38,6 +38,6 @@ object FHDDSExternalUrls extends RunMode with ServicesConfig {
   private[FHDDSExternalUrls] val loginPath = getConfString("auth.login_path", "")
 
   val loginUrl = s"$companyAuthHost$loginPath"
-  val continueUrl = s"$loginCallback${uk.gov.hmrc.fhddsfrontend.controllers.routes.SoleTraderController.information()}"
+  val continueUrl = s"$loginCallback${routes.SignInOutController.postSignIn()}"
 
 }
