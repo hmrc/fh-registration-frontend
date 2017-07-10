@@ -9,12 +9,18 @@
 
 ## Run the application locally
 
+User service manager to run all services required by FHDDS Frontend:
+
+```
+sm --start FHDDS_ALL -f
+```
+
 To run the application execute
 ```
 sbt run
 ```
 
-#### Get to the first form page by a web browser
+#### Get to the landing page
 ```
 GET   	/fhdds-frontend/
 ```

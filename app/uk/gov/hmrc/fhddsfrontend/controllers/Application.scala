@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.fhddsfrontend.FrontendAuthConnector
+import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSRegime
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
 import uk.gov.hmrc.play.frontend.auth.Actions
