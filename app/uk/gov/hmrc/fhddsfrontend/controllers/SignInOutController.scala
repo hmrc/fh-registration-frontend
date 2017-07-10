@@ -26,11 +26,8 @@ class SignInOutController @Inject()(ds: CommonPlayDependencies) extends AppContr
   lazy val compRegFEURL: String = getConfString("company-registration-frontend.www.url", "")
   lazy val compRegFEURI: String = getConfString("company-registration-frontend.www.uri", "")
 
-  def postSignIn: Action[AnyContent] = authorised(implicit user => implicit request =>
-    Redirect(routes.SoleTraderController.information()))
-
-  def signOut: Action[AnyContent] = authorised { implicit user => implicit request =>
-    Redirect(s"$compRegFEURL$compRegFEURI/questionnaire").withNewSession
-  }
+  def postSignIn: Action[AnyContent] = authorised(implicit user => implicit request => {
+    Redirect(routes.SoleTraderController.information())
+  })
 
 }
