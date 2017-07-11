@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhddsfrontend
+package uk.gov.hmrc.fhddsfrontend.config
 
+import javax.inject.{Inject, Singleton}
+
+import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait AppConfig {
@@ -25,17 +28,20 @@ trait AppConfig {
   val reportAProblemNonJSUrl: String
 }
 
-object FrontendAppConfig extends AppConfig with ServicesConfig {
+@Singleton
+class FrontendAppConfig @Inject()(configuration: play.api.Configuration) extends AppConfig with ServicesConfig {
 
-  def configuration(key: String): Option[String] = Some(play.Configuration.root().getString(key))
+  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private def loadConfig(key: String) = configuration(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-
-  private val contactHost = configuration(s"contact-frontend.host").getOrElse("")
+  private val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+}
+
+object FrontendAppConfig {
+  lazy val config = new FrontendAppConfig(Configuration.load(play.Environment.simple().underlying()))
 }

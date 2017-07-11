@@ -16,28 +16,29 @@
 
 package uk.gov.hmrc.fhddsfrontend.models
 
+import uk.gov.hmrc.fhddsfrontend.controllers.routes
 import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.frontend.auth.connectors.domain.Accounts
 import uk.gov.hmrc.play.frontend.auth.{AuthenticationProvider, GovernmentGateway, TaxRegime}
-import uk.gov.hmrc.fhddsfrontend.controllers.routes
 
 object FHDDSRegime extends TaxRegime {
   override def isAuthorised(accounts: Accounts): Boolean = true
+
   override def authenticationType: AuthenticationProvider = FHDDSAuthenticationProvider
 }
 
 object FHDDSAuthenticationProvider extends GovernmentGateway {
   override val continueURL: String = FHDDSExternalUrls.continueUrl
-  override val loginURL: String = FHDDSExternalUrls.loginUrl
+  override val loginURL: String = FHDDSExternalUrls.ggLoginUrl
 }
 
 object FHDDSExternalUrls extends RunMode with ServicesConfig {
 
-  private[FHDDSExternalUrls] val companyAuthHost = getConfString("auth.company-auth.url", "")
-  private[FHDDSExternalUrls] val loginCallback = getConfString("auth.login-callback.url", "")
-  private[FHDDSExternalUrls] val loginPath = getConfString("auth.login_path", "")
+  val companyAuthHost: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
+  val loginCallback: String = getConfString("auth.login-callback.url", "")
+  val loginPath: String = getConfString("auth.login_path", "")
 
-  val loginUrl = s"$companyAuthHost$loginPath"
-  val continueUrl = s"$loginCallback${routes.SignInOutController.postSignIn()}"
+  val ggLoginUrl = s"$companyAuthHost$loginPath"
+  val continueUrl = s"$loginCallback${routes.SoleTraderController.information()}"
 
 }

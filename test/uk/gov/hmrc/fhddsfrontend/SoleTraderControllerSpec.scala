@@ -16,27 +16,46 @@
 
 package uk.gov.hmrc.fhddsfrontend
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.mockito.stubbing.OngoingStubbing
 import play.api.http.Status
-import uk.gov.hmrc.fhddsfrontend.controllers.SoleTraderController
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.fhddsfrontend.controllers.{SoleTraderController, routes}
 
+import scala.concurrent.Future
 
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
   object soleTraderController extends SoleTraderController(ds) {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    override val authConnector: AuthConnector = mockAuthConnector
+
+    val fakeEnrolment = Set(
+      Enrolment("", Seq(EnrolmentIdentifier("", "")), confidenceLevel = ConfidenceLevel.L200,
+        state = "", delegatedAuthRule = Some(""))
+    )
+
+    val mockAuthConnector: core.AuthConnector = mock[PlayAuthConnector]
+    override val authConnector: core.AuthConnector = mockAuthConnector
+
+    def authorisedForUserMock(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
+      when(authConnector.authorise(any(), any[Retrieval[~[Option[AffinityGroup], Enrolments]]]())(any()))
+        .thenReturn(Future.successful(new ~[Option[AffinityGroup], Enrolments](Some(AffinityGroup.Agent), Enrolments(fakeEnrolment))))
   }
 
   "SoleTraderController" should {
+    soleTraderController.authorisedForUserMock()
     "information return 303" in {
       val result = csrfAddToken(soleTraderController.information())(request)
       status(result) shouldBe Status.SEE_OTHER
+      redirectLocation(result).get shouldBe routes.Application.start().url
     }
 
     "submitCheckResult return 303" in {
       val result = csrfAddToken(soleTraderController.submitCheckResult())(request)
       status(result) shouldBe Status.SEE_OTHER
+      redirectLocation(result).get shouldBe routes.Application.start().url
     }
   }
 }

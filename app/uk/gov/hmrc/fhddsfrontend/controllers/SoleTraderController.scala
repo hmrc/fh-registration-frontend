@@ -27,13 +27,13 @@ import scala.concurrent.Future
 
 class SoleTraderController @Inject()(ds: CommonPlayDependencies) extends AppController(ds) {
 
-  def information(): Action[AnyContent] = authorised.async { implicit user =>
-    implicit request =>
+  def information(): Action[AnyContent] = authorisedUser {
+    implicit request ⇒
       Future.successful(Ok(inf(Forms.confirmForm)))
   }
 
-  def submitCheckResult(): Action[AnyContent] = authorised.async { implicit user =>
-    implicit request =>
+  def submitCheckResult(): Action[AnyContent] = authorisedUser {
+    implicit request ⇒
       Forms.confirmForm.bindFromRequest().fold(
         formWithErrors => {
           Future.successful(Ok(inf(formWithErrors)))
@@ -44,4 +44,3 @@ class SoleTraderController @Inject()(ds: CommonPlayDependencies) extends AppCont
       )
   }
 }
-

@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhddsfrontend.config
 
+import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector ⇒ Auditing}
 import uk.gov.hmrc.play.config.{AppName, RunMode, ServicesConfig}
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.http.ws._
 
 object FrontendAuditConnector extends Auditing with AppName with RunMode {
@@ -30,7 +30,7 @@ object WSHttp extends WSHttp with AppName with RunMode {
   override val hooks = NoneRequired
 }
 
-object FrontendAuthConnector extends AuthConnector with ServicesConfig {
-  val serviceUrl = baseUrl("auth")
+object FrontendAuthConnector extends PlayAuthConnector with ServicesConfig {
+  val serviceUrl: String = baseUrl("auth")
   lazy val http = WSHttp
 }
