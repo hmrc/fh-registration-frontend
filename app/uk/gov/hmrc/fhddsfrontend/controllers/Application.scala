@@ -19,14 +19,14 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.{Configuration, Logger}
+import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
-import uk.gov.hmrc.fhddsfrontend.models.FHDDSRegime
+import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
-import uk.gov.hmrc.play.frontend.auth.Actions
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -42,16 +42,39 @@ class Application @Inject()(override val messagesApi: MessagesApi)
 
 @Singleton
 abstract class AppController(ds: CommonPlayDependencies)
-  extends FrontendController with I18nSupport with Actions {
+  extends FrontendController with I18nSupport with AuthorisedFunctions {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
   lazy val conf: Configuration = ds.conf
   implicit lazy val messagesApi: MessagesApi = ds.messagesApi
-  override val authConnector: AuthConnector = FrontendAuthConnector
 
-  def authorised: AuthenticatedBy = AuthorisedFor(taxRegime = FHDDSRegime, pageVisibility = GGConfidence)
+  override def authConnector: uk.gov.hmrc.auth.core.AuthConnector = FrontendAuthConnector
 
+  lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
+
+  def authorisedUser(action: Request[AnyContent] => Future[Result]): Action[AnyContent] = {
+    Action.async { implicit request ⇒
+      authorised(authProvider) {
+        action(request)
+      } recover {
+        case e ⇒ handleFailure(e)
+      }
+    }
+  }
+
+  def handleFailure(e: Throwable): Result =
+    e match {
+      case x: NoActiveSession ⇒
+        Logger.warn(s"could not authenticate user due to: No Active Session " + x)
+        Redirect(ggLoginUrl, Map(
+          "continue" -> Seq(continueUrl),
+          "origin" -> Seq(continueUrl)
+        ))
+      case ex ⇒
+        Logger.warn(s"could not authenticate user due to: $ex")
+        Redirect(routes.Application.start())
+    }
 }
 
 @Singleton

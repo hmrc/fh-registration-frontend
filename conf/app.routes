@@ -3,7 +3,6 @@
 #use: 543212300016 (password testing123)
 
 GET         /                       @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
-GET         /sign-in                @uk.gov.hmrc.fhddsfrontend.controllers.SignInOutController.postSignIn
 
 GET         /sole-trader-inf        @uk.gov.hmrc.fhddsfrontend.controllers.SoleTraderController.information
 POST        /sole-trader-inf        @uk.gov.hmrc.fhddsfrontend.controllers.SoleTraderController.submitCheckResult
