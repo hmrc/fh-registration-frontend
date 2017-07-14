@@ -19,28 +19,36 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 import javax.inject.Inject
 
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.fhddsfrontend.connectors.DESConnectorImpl
-import uk.gov.hmrc.fhddsfrontend.models.Forms
+import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
+import uk.gov.hmrc.fhddsfrontend.models.{BusinessMatchingModels, EtmpAddress, Forms}
 import uk.gov.hmrc.fhddsfrontend.views.html.sole_trader_views._
+import uk.gov.hmrc.play.views.html.helpers.address
 
 import scala.concurrent.Future
 
 
-class SoleTraderController @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnectorImpl) extends AppController(ds, DESConnector) {
+class SoleTraderController @Inject()(ds: CommonPlayDependencies, desConnector:DESConnector)
+  extends AppController(ds, desConnector) {
 
   def information(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
-      implicit address ⇒
-        implicit org ⇒
-          Future.successful(Ok(inf(Forms.confirmForm, address, org.organisationName)))
+      implicit userEnrolments ⇒
+        BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
+          case Some((address, org)) ⇒ Ok(inf(Forms.confirmForm, address, org.organisationName))
+          case _ ⇒ Ok(summary())
+        }
   }
 
   def submitCheckResult(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
-      implicit address ⇒
-        implicit org ⇒
+      implicit userEnrolments ⇒
           Forms.confirmForm.bindFromRequest().fold(
-            formWithErrors => Future.successful(Ok(inf(formWithErrors, address, org.organisationName))),
+            formWithErrors => {
+              BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
+                case Some((address, org)) ⇒ Ok(inf(formWithErrors, address, org.organisationName))
+                case _ ⇒ Ok(summary())
+              }
+            },
             register => Future.successful(Ok(summary()))
           )
   }

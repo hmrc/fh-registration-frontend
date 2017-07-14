@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class DESConnectorImpl extends DESConnector {
+class DESConnector extends DESConnect {
   val DESrviceUrl: String = baseUrl("etmp-hod")
   val orgLookupURI: String = "registration/organisation"
   val urlHeaderEnvironment: String = config("etmp-hod").getString("environment").getOrElse("")
@@ -42,7 +42,7 @@ class DESConnectorImpl extends DESConnector {
   val http = WSHttp
 }
 
-trait DESConnector extends ServicesConfig with RawResponseReads {
+trait DESConnect extends ServicesConfig with RawResponseReads {
 
   val DESrviceUrl: String
   val orgLookupURI: String
@@ -62,7 +62,7 @@ trait DESConnector extends ServicesConfig with RawResponseReads {
     implicit val hc: HeaderCarrier = createHeaderCarrier
     http.POST[JsValue, HttpResponse](s"$DESrviceUrl/$orgLookupURI/utr/${utr.value}", Json.toJson(lookupData)).map { response =>
       if (response.status != OK) {
-        Logger.warn(s"[DESConnector][lookup] - status: ${response.status}")
+        Logger.warn(s"[DESConnect][lookup] - status: ${response.status}")
         doFailedAudit("lookupFailed", lookupData.toString, response.body)
       }
       response

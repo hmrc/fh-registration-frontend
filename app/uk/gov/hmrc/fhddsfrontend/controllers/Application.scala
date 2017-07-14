@@ -19,9 +19,6 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import cats.data.EitherT
-import cats.instances.future._
-import cats.syntax.either._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -30,16 +27,15 @@ import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.Retrievals.allEnrolments
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
-import uk.gov.hmrc.fhddsfrontend.connectors.DESConnectorImpl
+import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
-import uk.gov.hmrc.fhddsfrontend.models.{EtmpAddress, FindBusinessDataResponse, OrganisationResponse, Utr}
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
-class Application @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnectorImpl) extends AppController(ds, DESConnector) {
+class Application @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnector) extends AppController(ds, DESConnector) {
 
   def start(): Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(start_page()))
@@ -48,7 +44,7 @@ class Application @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnecto
 }
 
 @Singleton
-abstract class AppController(ds: CommonPlayDependencies, DESConnector:DESConnectorImpl)
+abstract class AppController(ds: CommonPlayDependencies, desConnector:DESConnector)
   extends FrontendController with I18nSupport with AuthorisedFunctions {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
@@ -60,25 +56,11 @@ abstract class AppController(ds: CommonPlayDependencies, DESConnector:DESConnect
 
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
 
-  def authorisedUser(action: Request[AnyContent] ⇒ EtmpAddress ⇒ OrganisationResponse ⇒ Future[Result]): Action[AnyContent] = {
+  def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
       authorised(authProvider).retrieve(allEnrolments) {
-        userDetailsUri ⇒ {
-          val utr = for {
-            enrolment ← userDetailsUri.getEnrolment("IR-CT")
-            utr ← enrolment.getIdentifier("UTR")
-          } yield Utr(utr.value)
-
-          val organisationDetails = DESConnector.lookup(utr.get)
-
-          val response = EitherT(organisationDetails.map { response =>
-            Json.parse(response.body).validate[FindBusinessDataResponse].asEither.leftMap(_ => UnexpectedState(response.body))
-          }).toOption.subflatMap { findResponse => Some(findResponse) }
-
-          val address = response.map(find ⇒ find.address).value.map(a ⇒ a.get)
-          val organisation = response.map(find ⇒ find.organisation).value.map(o ⇒ o.get).map(o ⇒ o.get)
-
-          organisation.flatMap(o ⇒ address.flatMap(a ⇒ action(request)(a)(o)))
+        userEnrolments ⇒ {
+          action(request)(userEnrolments)
         }
       } recover { case e ⇒ handleFailure(e) }
     }

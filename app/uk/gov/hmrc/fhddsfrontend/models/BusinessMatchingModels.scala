@@ -17,6 +17,33 @@
 package uk.gov.hmrc.fhddsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
+import uk.gov.hmrc.play.http.HttpResponse
+
+import scala.concurrent.Future
+
+object BusinessMatchingModels {
+
+  import scala.concurrent.ExecutionContext.Implicits.global
+
+  def getBusinessDetail(userEnrolments: Enrolments, desConnector: DESConnector): Future[Option[(EtmpAddress, OrganisationResponse)]] = {
+
+    def parseDesResponse(response: HttpResponse): Option[(EtmpAddress, OrganisationResponse)] = {
+      for {
+        businessData ← Json.parse(response.body).validate[FindBusinessDataResponse].asOpt
+        address = businessData.address
+        organization ← businessData.organisation
+      } yield (address, organization)
+    }
+
+    val utr = userEnrolments.getEnrolment("IR-CT").flatMap(_.getIdentifier("UTR"))
+
+    utr
+      .map(u ⇒ desConnector.lookup(Utr(u.value)).map(parseDesResponse))
+      .getOrElse(Future successful None)
+  }
+}
 
 case class EtmpAddress(addressLine1: Option[String], addressLine2: Option[String],
                        addressLine3: Option[String], addressLine4: Option[String],
