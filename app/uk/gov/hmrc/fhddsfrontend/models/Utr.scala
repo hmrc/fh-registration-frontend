@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhddsfrontend.controllers
+package uk.gov.hmrc.fhddsfrontend.models
 
-import play.api.http.Status
-import play.api.test.Helpers._
-import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
+import play.api.libs.json._
+import uk.gov.hmrc.domain.{SimpleObjectReads, SimpleObjectWrites, TaxIdentifier}
 
+case class Utr(utr: String) extends TaxIdentifier {
+  override def value: String = utr
+}
 
-class ApplicationControllerSpec extends AppUnitGenerator {
-
-  val applicationController = new Application(ds,dc)
-
-  "GET /" should {
-    "return 200" in {
-      val result = applicationController.start().apply(request)
-      result.header.status shouldBe Status.OK
-    }
-
-    "return HTML" in {
-      val result = applicationController.start().apply(request)
-      charset(result) shouldBe Some("utf-8")
-    }
-  }
-
+object Utr {
+  implicit val utrWrite: Writes[Utr] = new SimpleObjectWrites[Utr](_.value)
+  implicit val utrRead: Reads[Utr] = new SimpleObjectReads[Utr]("utr", Utr.apply)
 }

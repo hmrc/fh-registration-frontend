@@ -21,10 +21,12 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "passcode-verification" % "4.1.0",
     "com.typesafe.play" %% "play-json" % "2.5.12",
     "org.pegdown" % "pegdown" % "1.4.2",
+    "uk.gov.hmrc" %% "play-hmrc-api" % "1.3.0",
     "uk.gov.hmrc" %% "http-caching-client" % "6.2.0",
     "uk.gov.hmrc" %% "play-conditional-form-mapping" % "0.2.0",
     "uk.gov.hmrc" %% "time" % "3.0.0",
     "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0",
+    "uk.gov.hmrc" %% "domain" % "4.1.0",
     "org.typelevel" %% "cats" % "0.9.0"
   )
 

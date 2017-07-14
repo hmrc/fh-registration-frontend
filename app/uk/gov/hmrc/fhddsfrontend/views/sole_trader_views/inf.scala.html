@@ -14,15 +14,14 @@
  * limitations under the License.
  *@
 
-@import play.api.i18n._
-@import uk.gov.hmrc.fhddsfrontend.models.Confirm
+@import uk.gov.hmrc.fhddsfrontend.models.{Confirm, EtmpAddress}
 
-@(confirmForm: Form[Confirm])(implicit request: Request[_], messages: Messages)
+@(confirmForm: Form[Confirm], address: EtmpAddress, orgName: String)(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "Hello from FHDDS", bodyClasses = None) {
+@uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "fulfilment-house-due-diligence-scheme-sole-trader-application") {
 
   <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="grid-layout__column--2-3">
 
       <div class="padding-left-0">
         <a href="#">Business tax account home</a>
@@ -30,14 +29,15 @@
 
       <h1 class="heading-xlarge">@Messages("inf.register")</h1>
 
-      <p><span class="bold-small">Pick'n Pack</span></p>
+      <p><span class="bold-small">@orgName</span></p>
 
       <p>
-        123 Acacia Rd<br>
-        Business Park<br>
-        Sometown<br>
-        East County<br>
-        AB1 2DE
+        @{address.addressLine1}<br>
+        @{address.addressLine2}<br>
+        @{address.addressLine3}<br>
+        @{address.addressLine4}<br>
+        @{address.postalCode}<br>
+        @{address.countryCode}<br>
       </p>
 
       <details role="group" class="">

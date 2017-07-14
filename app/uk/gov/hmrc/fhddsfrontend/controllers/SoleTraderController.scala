@@ -19,28 +19,29 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 import javax.inject.Inject
 
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.fhddsfrontend.connectors.DESConnectorImpl
 import uk.gov.hmrc.fhddsfrontend.models.Forms
 import uk.gov.hmrc.fhddsfrontend.views.html.sole_trader_views._
 
 import scala.concurrent.Future
 
 
-class SoleTraderController @Inject()(ds: CommonPlayDependencies) extends AppController(ds) {
+class SoleTraderController @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnectorImpl) extends AppController(ds, DESConnector) {
 
   def information(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
-      Future.successful(Ok(inf(Forms.confirmForm)))
+      implicit address ⇒
+        implicit org ⇒
+          Future.successful(Ok(inf(Forms.confirmForm, address, org.organisationName)))
   }
 
   def submitCheckResult(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
-      Forms.confirmForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(Ok(inf(formWithErrors)))
-        },
-        register => {
-          Future.successful(Ok(summary()))
-        }
-      )
+      implicit address ⇒
+        implicit org ⇒
+          Forms.confirmForm.bindFromRequest().fold(
+            formWithErrors => Future.successful(Ok(inf(formWithErrors, address, org.organisationName))),
+            register => Future.successful(Ok(summary()))
+          )
   }
 }
