@@ -20,7 +20,7 @@ import uk.gov.hmrc.play.config.ServicesConfig
 
 object DFSURL extends ServicesConfig {
   val DFSHost: String = config("dfs-frontend").getString("host").getOrElse("")
-  val DFServiceSoleTraderUrl: String = config("dfs-frontend").getString("sole-trader-url").getOrElse("")
+  val DFServiceSoleTraderFormName: String = config("dfs-frontend").getString("sole-trader-form-name").getOrElse("")
 
-  val SoleTraderUrl:String = s"$DFSHost$DFServiceSoleTraderUrl"
+  val SoleTraderUrl:String = s"$DFSHost/forms/form/$DFServiceSoleTraderFormName/new"
 }
