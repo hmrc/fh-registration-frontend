@@ -34,24 +34,24 @@ class SoleTraderController @Inject()(ds: CommonPlayDependencies, desConnector:DE
       implicit userEnrolments ⇒
         BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
           case Some((address, org)) ⇒ Ok(inf(Forms.confirmForm, address, org.organisationName))
-          case _ ⇒ Redirect(DFSURL.DFServiceSoleTraderUrl)
+          case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
         }
   }
 
   def submitCheckResult(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
-          Forms.confirmForm.bindFromRequest().fold(
-            formWithErrors => {
-              BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
-                case Some((address, org)) ⇒ Ok(inf(formWithErrors, address, org.organisationName))
-                case _ ⇒ Redirect(DFSURL.DFServiceSoleTraderUrl)
-              }
-            },
-            register => {
-              if (register.value) Future.successful(Redirect(DFSURL.DFServiceSoleTraderUrl))
-              else Future.successful(Redirect(DFSURL.DFServiceSoleTraderUrl))
+        Forms.confirmForm.bindFromRequest().fold(
+          formWithErrors => {
+            BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
+              case Some((address, org)) ⇒ Ok(inf(formWithErrors, address, org.organisationName))
+              case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
             }
-          )
+          },
+          register => {
+            if (register.value) Future.successful(Redirect(DFSURL.SoleTraderUrl))
+            else Future.successful(Redirect(DFSURL.SoleTraderUrl))
+          }
+        )
   }
 }
