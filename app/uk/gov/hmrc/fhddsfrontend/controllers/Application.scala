@@ -20,11 +20,14 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core.Retrievals.allEnrolments
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
+import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -32,16 +35,16 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
-class Application @Inject()(override val messagesApi: MessagesApi)
-  extends FrontendController with I18nSupport {
+class Application @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnector) extends AppController(ds, DESConnector) {
 
   def start(): Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(start_page()))
   }
+
 }
 
 @Singleton
-abstract class AppController(ds: CommonPlayDependencies)
+abstract class AppController(ds: CommonPlayDependencies, desConnector:DESConnector)
   extends FrontendController with I18nSupport with AuthorisedFunctions {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
@@ -53,13 +56,13 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
 
-  def authorisedUser(action: Request[AnyContent] => Future[Result]): Action[AnyContent] = {
+  def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider) {
-        action(request)
-      } recover {
-        case e ⇒ handleFailure(e)
-      }
+      authorised(authProvider).retrieve(allEnrolments) {
+        userEnrolments ⇒ {
+          action(request)(userEnrolments)
+        }
+      } recover { case e ⇒ handleFailure(e) }
     }
   }
 
@@ -79,3 +82,9 @@ abstract class AppController(ds: CommonPlayDependencies)
 
 @Singleton
 final class CommonPlayDependencies @Inject()(val conf: Configuration, val messagesApi: MessagesApi)
+
+case class UnexpectedState(errorMsg: String, json: Option[JsValue] = None)
+
+object UnexpectedState {
+  implicit val invalidStateFormat: OFormat[UnexpectedState] = Json.format[UnexpectedState]
+}

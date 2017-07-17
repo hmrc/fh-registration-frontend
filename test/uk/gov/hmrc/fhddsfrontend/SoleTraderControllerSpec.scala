@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
-  object soleTraderController extends SoleTraderController(ds) {
+  object soleTraderController extends SoleTraderController(ds,dc) {
 
     val fakeEnrolment = Set(
       Enrolment("", Seq(EnrolmentIdentifier("", "")), confidenceLevel = ConfidenceLevel.L200,
