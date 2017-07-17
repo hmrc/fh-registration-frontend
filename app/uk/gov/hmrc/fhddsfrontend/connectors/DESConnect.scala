@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 @Singleton
 class DESConnector extends DESConnect {
-  val DESrviceUrl: String = baseUrl("etmp-hod")
+  val DEServiceUrl: String = baseUrl("etmp-hod")
   val orgLookupURI: String = "registration/organisation"
   val urlHeaderEnvironment: String = config("etmp-hod").getString("environment").getOrElse("")
   val urlHeaderAuthorization: String = s"Bearer ${config("etmp-hod").getString("authorization-token").getOrElse("")}"
@@ -44,7 +44,7 @@ class DESConnector extends DESConnect {
 
 trait DESConnect extends ServicesConfig with RawResponseReads {
 
-  val DESrviceUrl: String
+  val DEServiceUrl: String
   val orgLookupURI: String
   val urlHeaderEnvironment: String
   val urlHeaderAuthorization: String
@@ -60,7 +60,7 @@ trait DESConnect extends ServicesConfig with RawResponseReads {
 
   def lookup(utr: Utr): Future[HttpResponse] = {
     implicit val hc: HeaderCarrier = createHeaderCarrier
-    http.POST[JsValue, HttpResponse](s"$DESrviceUrl/$orgLookupURI/utr/${utr.value}", Json.toJson(lookupData)).map { response =>
+    http.POST[JsValue, HttpResponse](s"$DEServiceUrl/$orgLookupURI/utr/${utr.value}", Json.toJson(lookupData)).map { response =>
       if (response.status != OK) {
         Logger.warn(s"[DESConnect][lookup] - status: ${response.status}")
         doFailedAudit("lookupFailed", lookupData.toString, response.body)
@@ -86,6 +86,6 @@ trait DESConnect extends ServicesConfig with RawResponseReads {
 trait RawResponseReads {
 
   implicit val httpReads: HttpReads[HttpResponse] = new HttpReads[HttpResponse] {
-    override def read(method: String, url: String, response: HttpResponse) = response
+    override def read(method: String, url: String, response: HttpResponse): HttpResponse = response
   }
 }
