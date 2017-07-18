@@ -20,9 +20,8 @@ import javax.inject.Inject
 
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
-import uk.gov.hmrc.fhddsfrontend.models.{BusinessMatchingModels, EtmpAddress, Forms}
+import uk.gov.hmrc.fhddsfrontend.models.{BusinessMatchingModels, DFSURL, Forms}
 import uk.gov.hmrc.fhddsfrontend.views.html.sole_trader_views._
-import uk.gov.hmrc.play.views.html.helpers.address
 
 import scala.concurrent.Future
 
@@ -35,21 +34,24 @@ class SoleTraderController @Inject()(ds: CommonPlayDependencies, desConnector:DE
       implicit userEnrolments ⇒
         BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
           case Some((address, org)) ⇒ Ok(inf(Forms.confirmForm, address, org.organisationName))
-          case _ ⇒ Ok(summary())
+          case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
         }
   }
 
   def submitCheckResult(): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
-          Forms.confirmForm.bindFromRequest().fold(
-            formWithErrors => {
-              BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
-                case Some((address, org)) ⇒ Ok(inf(formWithErrors, address, org.organisationName))
-                case _ ⇒ Ok(summary())
-              }
-            },
-            register => Future.successful(Ok(summary()))
-          )
+        Forms.confirmForm.bindFromRequest().fold(
+          formWithErrors => {
+            BusinessMatchingModels.getBusinessDetail(userEnrolments, desConnector).map {
+              case Some((address, org)) ⇒ Ok(inf(formWithErrors, address, org.organisationName))
+              case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
+            }
+          },
+          register => {
+            if (register.value) Future.successful(Redirect(DFSURL.SoleTraderUrl))
+            else Future.successful(Redirect(DFSURL.SoleTraderUrl))
+          }
+        )
   }
 }
