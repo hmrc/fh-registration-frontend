@@ -15,87 +15,64 @@
  *@
 
 @import uk.gov.hmrc.fhddsfrontend.models.{Confirm, EtmpAddress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import uk.gov.hmrc.fhddsfrontend.controllers.routes._
 
 @(confirmForm: Form[Confirm], address: EtmpAddress, orgName: String)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "fulfilment-house-due-diligence-scheme-sole-trader-application") {
 
-  <div class="grid-row">
-    <div class="grid-layout__column--2-3">
+    <div class="grid-row">
+        <div class="grid-layout__column--2-3">
 
-      <div class="padding-left-0">
-        <a href="#">Business tax account home</a>
-      </div>
+            <a href="#">@Messages("link.businessTaxAccount")</a>
 
-      <h1 class="heading-xlarge">@Messages("inf.register")</h1>
+            @errorSummary(Messages("error.summary.heading"),confirmForm)
 
-      <p><span class="bold-small">@orgName</span></p>
+            <h1 class="heading-xlarge">@Messages("confirm.legend")</h1>
 
-      <p>
-        @{address.addressLine1}<br>
-        @{address.addressLine2}<br>
-        @{address.addressLine3}<br>
-        @{address.addressLine4}<br>
-        @{address.postalCode}<br>
-        @{address.countryCode}<br>
-      </p>
+            <p><span class="bold-small">@orgName</span></p>
 
-      <details role="group" class="">
-        <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary">Not the right address?</span></summary>
-        <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
-          <p>Content TBC ...</p>
-        </div>
-      </details>
+            <p>
+                @{address.addressLine1}<br>
+                @{address.addressLine2}<br>
+                @{address.addressLine3}<br>
+                @{address.addressLine4}<br>
+                @{address.postalCode}<br>
+                @{address.countryCode}<br>
+            </p>
 
-      @if(confirmForm.hasErrors) {
-        <div class="flash error-summary error-summary--show"
-        id="error-summary-display"
-        role="alert"
-        aria-labelledby="error-summary-heading"
-        tabindex="-1">
-          <h1 id="error-summary-heading" class="h2-heading">Something’s wrong</h1>
-          <ul>
-            <li>
-              <a id="error-link" href="#error">
-                @Messages("inf.error.inf")
-              </a>
-            </li>
-          </ul>
-        </div>
-      }
+          @form(
+            action = SoleTraderController.submitCheckResult(),
+            'class -> "form js-form") {
 
-      <form action="@uk.gov.hmrc.fhddsfrontend.controllers.routes.SoleTraderController.submitCheckResult()" method="post" class="form margin-top-30">
-        @helper.CSRF.formField
-        <div class="form-group">
-          <fieldset class="inline form-field-group">
+                @inputRadioGroup(
+                    confirmForm("confirm"),
+                    Seq(("true", Messages("confirm.yes")),("false", Messages("confirm.no"))),
+                    '_legend -> Messages("confirm.legend"),
+                    '_legendClass -> "visuallyhidden",
+                    '_labelClass -> "block-label",
+                    '_groupClass -> "inline form-field-group visible-javascript-on js-aria-show js-toggle",
+                    '_fieldsetAttributes -> Html("""
+                        id='confirm'
+                        data-target='toggle-target-div'
+                        data-trigger='js-toggle-trigger'
+                        data-open='confirm-false'
+                        data-close='confirm-true'
+                        """),
+                    '_inputClass -> "js-toggle-trigger"
+                )
 
-            <legend class="visuallyhidden">@Messages("inf.register")</legend>
-
-            @if(confirmForm("confirm").hasErrors){
-              <fieldset class="form-field--error">
-                <div class="error-notification" id="error">
-                @{confirmForm("confirm").errors.head.message}
+                <div id="toggle-target-div" class="toggle-target hidden">
+                    <p class="panel panel-indent">@Messages("panel.signInCorrectAccount") <a href="#TODO">@Messages("link.signout")</a></p>
                 </div>
-                } else {<fieldset>}
 
-              <label class="block-label" for="yes">
-                @Messages("confirm.Yes")
-                <input id="yes" type="radio" name="confirm" value="true">
-              </label>
+                <div class="form-field">
+                    <button type="submit" class="button" id="continue">@Messages("button.save.continue")</button>
+                </div>
 
-              <label class="block-label" for="no">
-                @Messages("confirm.No")
-                <input id="no" type="radio" name="confirm" value="false">
-              </label>
+            }
 
-            </fieldset>
-          </fieldset>
         </div>
-        <div class="form-group">
-          <button type="submit" class="button">Save and continue</button>
-        </div>
-      </form>
-
     </div>
-  </div>
 }
