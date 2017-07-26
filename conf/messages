@@ -1,8 +1,14 @@
-select_one=Answer ‘Yes’ or ‘No’
-confirm.Yes=Yes
-confirm.No=No
-
-inf.register=Is this the business you want to register?
-inf.error.inf=You haven’t told us is this the business you want to register?
-
+#COMMON
 app.name=Fulfilment House Due Diligence Scheme
+error.summary.heading=Something’s wrong
+button.save.continue=Save and continue
+link.signout=Sign out
+link.businessTaxAccount=Business tax account home
+
+#CONFORM CORRECT BUSINESS
+confirm.legend=Is this the business you want to register?
+confirm.error=You haven’t told us is this the business you want to register?
+confirm.selectone=Answer ‘Yes’ or ‘No’
+confirm.yes=Yes
+confirm.no=No
+panel.signInCorrectAccount=You will need to sign in to the correct business tax account.
