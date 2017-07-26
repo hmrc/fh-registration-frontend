@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhddsfrontend
+package uk.gov.hmrc.fhddsfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.fhddsfrontend.controllers.{SoleTraderController, routes}
+import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
 
 import scala.concurrent.Future
 

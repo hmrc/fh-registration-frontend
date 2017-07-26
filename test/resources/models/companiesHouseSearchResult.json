@@ -1,0 +1,90 @@
+{
+  "items": [
+    {
+      "description_identifier": [
+        "incorporated-on"
+      ],
+      "snippet": "",
+      "address": {
+        "locality": "Gloucester",
+        "region": "Gloucestershire",
+        "postal_code": "GL00 0AA",
+        "premises": "Premise A",
+        "address_line_1": "Some Road"
+      },
+      "links": {
+        "self": "/company/01234567"
+      },
+      "address_snippet": "Premise A, Some Road, Gloucester, Gloucestershire, GL00 0AA",
+      "kind": "searchresults#company",
+      "description": "01234567 - Incorporated on 01 June 2010",
+      "company_type": "ltd",
+      "company_status": "active",
+      "date_of_creation": "2010-06-01",
+      "matches": {
+        "snippet": []
+      },
+      "company_number": "01234567",
+      "title": "COMPANY A"
+    },
+    {
+      "address_snippet": "Premise B 1-2 Some Square, London, WC00 0AA",
+      "description": "02123456 - Incorporated on 1 October 1987",
+      "kind": "searchresults#company",
+      "address": {
+        "postal_code": "WC00 0AA",
+        "premises": "Premise B",
+        "locality": "London"
+      },
+      "snippet": "",
+      "description_identifier": [
+        "incorporated-on",
+        "liquidation"
+      ],
+      "links": {
+        "self": "/company/02123456"
+      },
+      "date_of_creation": "1987-10-01",
+      "company_status": "liquidation",
+      "title": "COMPANY B",
+      "company_number": "02123456",
+      "matches": {
+        "snippet": []
+      },
+      "company_type": "ltd"
+    },
+    {
+      "kind": "searchresults#company",
+      "description": "03123456 - Dissolved on 01 July 2015",
+      "address_snippet": "100  Some Street, Billericay, United Kingdom, CM00 0AA",
+      "date_of_cessation": "2015-07-01",
+      "links": {
+        "self": "/company/03123456"
+      },
+      "snippet": "",
+      "description_identifier": [
+        "dissolved-on"
+      ],
+      "address": {
+        "address_line_1": "Some Street",
+        "postal_code": "CM00 0AA",
+        "premises": "100 ",
+        "country": "United Kingdom",
+        "locality": "Billericay"
+      },
+      "matches": {
+        "snippet": []
+      },
+      "company_number": "03123456",
+      "title": "COMPANY C",
+      "date_of_creation": "2015-01-01",
+      "company_status": "dissolved",
+      "company_type": "ltd"
+    }
+  ],
+  "start_index": 0,
+  "items_per_page": 3,
+  "total_results": 6187229,
+  "page_number": 1,
+  "kind": "search#companies"
+}

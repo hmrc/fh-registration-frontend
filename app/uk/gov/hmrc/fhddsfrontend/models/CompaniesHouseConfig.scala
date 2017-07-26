@@ -16,11 +16,20 @@
 
 package uk.gov.hmrc.fhddsfrontend.models
 
+import com.google.common.base.Charsets
+import com.google.common.io.BaseEncoding
 import uk.gov.hmrc.play.config.ServicesConfig
 
-object DFSURL extends ServicesConfig {
-  val DFSHost: String = config("fhdds-dfs-frontend").getString("host").getOrElse("")
-  val DFServiceSoleTraderFormName: String = config("fhdds-dfs-frontend").getString("sole-trader-form-name").getOrElse("")
+object CompaniesHouseConfig extends ServicesConfig {
 
-  val SoleTraderUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceSoleTraderFormName/new"
+  val authHeader = s"Basic ${encodeAuthCode(getCompaniesHouseAuthCode)}"
+  val url = config("companies-house").getString("api-key").getOrElse("url")
+
+  def getCompaniesHouseAuthCode: String = {
+    config("companies-house").getString("api-key").getOrElse("")
+  }
+
+  def encodeAuthCode(code :String): String = {
+    BaseEncoding.base64().encode(code.getBytes(Charsets.UTF_8))
+  }
 }
