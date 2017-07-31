@@ -22,10 +22,9 @@ import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
 import uk.gov.hmrc.play.http.HttpResponse
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object BusinessMatchingModels {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
 
   def getBusinessDetail(userEnrolments: Enrolments, desConnector: DESConnector): Future[Option[(EtmpAddress, OrganisationResponse)]] = {
 
