@@ -2,7 +2,7 @@
 #http://localhost:1118/fhdds-frontend/sole-trader-inf
 #use: 543212300016 (password testing123)
 
-GET         /                       @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
+GET         /                @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
 
-GET         /sole-trader-inf        @uk.gov.hmrc.fhddsfrontend.controllers.SoleTraderController.information
-POST        /sole-trader-inf        @uk.gov.hmrc.fhddsfrontend.controllers.SoleTraderController.submitCheckResult
+GET         /inf             @uk.gov.hmrc.fhddsfrontend.controllers.Application.information()
+POST        /showForm        @uk.gov.hmrc.fhddsfrontend.controllers.Application.showForm()

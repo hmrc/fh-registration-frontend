@@ -24,24 +24,14 @@ import uk.gov.hmrc.fhddsfrontend.models.CustomFormatters._
 
 case class Confirm(value: Boolean) extends AnyVal
 
-case class BusinessDetails(hasTradingName: Boolean, after2017: Boolean, howManyCustomer: Int)
-
 object Forms {
 
   implicit val confirmFormat: OFormat[Confirm] = Json.format[Confirm]
-
-  implicit val businessDetailsFormat: OFormat[BusinessDetails] = Json.format[BusinessDetails]
 
   def confirmForm(implicit messages: Messages) = Form(
     mapping(
       "confirm" -> of(requiredBooleanFormatter)
     )(Confirm.apply)(Confirm.unapply))
 
-  def businessDetailsForm(implicit messages: Messages) = Form(
-    mapping(
-      "hasTradingName" -> of(requiredBooleanFormatter),
-      "after2017" -> of(requiredBooleanFormatter),
-      "howManyCustomer" -> of(requiredIntFormatter)
-    )(BusinessDetails.apply)(BusinessDetails.unapply))
 }
 

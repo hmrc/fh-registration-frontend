@@ -16,31 +16,33 @@
 
 package uk.gov.hmrc.fhddsfrontend.connectors
 
+import javax.inject.Singleton
+
 import uk.gov.hmrc.fhddsfrontend.config.WSHttp
-import uk.gov.hmrc.fhddsfrontend.models.CompaniesHouse.companySearchResultReader
-import uk.gov.hmrc.fhddsfrontend.models.{CompaniesHouseConfig, Company, CompanySearchResult}
+import uk.gov.hmrc.fhddsfrontend.models.FhddsModels._
+import uk.gov.hmrc.fhddsfrontend.models._
+import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.http.logging.Authorization
 import uk.gov.hmrc.play.http.ws.WSHttp
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
-object CompaniesHouseConnector extends CompaniesHouseConnector  {
-  override val authHeader = CompaniesHouseConfig.authHeader
-  override val url = CompaniesHouseConfig.url
-  override val http = WSHttp
+@Singleton
+class FhddsConnector extends FhddsConnect {
+  val FHDSSServiceUrl: String = baseUrl("fhdds")
+  val orgLookupURI: String = "fhdds/companyDetails"
+  val http = WSHttp
 }
 
-trait CompaniesHouseConnector {
+trait FhddsConnect extends ServicesConfig  {
+
+  val FHDSSServiceUrl: String
+  val orgLookupURI: String
   val http: WSHttp
-  val url: String
-  val authHeader: String
 
-  def fuzzySearchCompany(title: String): Future[List[Company]] = {
-    implicit val hc = HeaderCarrier(authorization = Some(Authorization(authHeader)))
-    http.GET[CompanySearchResult](s"$url/search/companies", Seq("q" → title)).map(_.items)
+  def lookupCompanyDetails()(implicit hc: HeaderCarrier): Future[CompanyDetails] = {
+    println(s"=========\n\n\n1111111111")
+    http.GET[CompanyDetails](s"$FHDSSServiceUrl/$orgLookupURI")
   }
-
 
 }

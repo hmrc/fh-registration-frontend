@@ -27,24 +27,56 @@ import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.Retrievals.allEnrolments
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
-import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
+import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhddsfrontend.models._
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
+import uk.gov.hmrc.fhddsfrontend.views.html.address_inf
 import uk.gov.hmrc.fhddsfrontend.views.html.start_page
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
-class Application @Inject()(ds: CommonPlayDependencies, DESConnector:DESConnector) extends AppController(ds, DESConnector) {
+class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsConnector) extends AppController(ds) {
 
   def start(): Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(start_page()))
   }
 
+  def information(): Action[AnyContent] = authorisedUser {
+    implicit request ⇒
+      implicit userEnrolments ⇒
+        fhddsConnector.lookupCompanyDetails().map {
+          case CompanyDetails(address, org) ⇒ Ok(address_inf(Forms.confirmForm,
+                                                             address.getOrElse(Address("")),
+                                                             org.getOrElse(Company(title = "")).title))
+          case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
+        }
+  }
+
+  //TODO should add form's name as para
+  def showForm(): Action[AnyContent] = authorisedUser {
+    implicit request ⇒
+      implicit userEnrolments ⇒
+        Forms.confirmForm.bindFromRequest().fold(
+          formWithErrors => {
+            fhddsConnector.lookupCompanyDetails().map {
+              case CompanyDetails(address, org) ⇒ Ok(address_inf(formWithErrors,
+                                                                 address.getOrElse(Address("")),
+                                                                 org.getOrElse(Company(title = "")).title))
+              case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
+            }
+          },
+          register => {
+            if (register.value) Future.successful(Redirect(DFSURL.SoleTraderUrl))
+            else Future.successful(Redirect(DFSURL.SoleTraderUrl))
+          }
+        )
+  }
 }
 
 @Singleton
-abstract class AppController(ds: CommonPlayDependencies, desConnector:DESConnector)
+abstract class AppController(ds: CommonPlayDependencies)
   extends FrontendController with I18nSupport with AuthorisedFunctions {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
@@ -58,8 +90,10 @@ abstract class AppController(ds: CommonPlayDependencies, desConnector:DESConnect
 
   def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
+      println(s"=========\n\n\n2121212")
       authorised(authProvider).retrieve(allEnrolments) {
         userEnrolments ⇒ {
+          println(s"=========\n\n\n$userEnrolments")
           action(request)(userEnrolments)
         }
       } recover { case e ⇒ handleFailure(e) }
@@ -70,13 +104,16 @@ abstract class AppController(ds: CommonPlayDependencies, desConnector:DESConnect
     e match {
       case x: NoActiveSession ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
-        Redirect(ggLoginUrl, Map(
+
+        val ggRedirectParms = Map(
           "continue" -> Seq(continueUrl),
-          "origin" -> Seq(continueUrl)
-        ))
+          "origin" -> Seq(getString("appName"))
+        )
+        println(s"=====$ggRedirectParms")
+        Redirect(ggLoginUrl, ggRedirectParms)
       case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
-        Redirect(routes.Application.start())
+        Unauthorized("Unauthorized")
     }
 }
 
