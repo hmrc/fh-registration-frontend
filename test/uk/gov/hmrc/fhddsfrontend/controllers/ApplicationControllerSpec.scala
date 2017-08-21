@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
 
 class ApplicationControllerSpec extends AppUnitGenerator {
 
-  val applicationController = new Application(ds,bc)
+  val applicationController = new Application(ds,mockFhddsConnector)
 
   "GET /" should {
     "return 200" in {

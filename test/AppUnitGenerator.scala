@@ -27,23 +27,30 @@ import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
+import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhddsfrontend.controllers.CommonPlayDependencies
-import uk.gov.hmrc.play.http.HeaderNames
+import uk.gov.hmrc.play.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.test.UnitSpec
+
+import scala.concurrent.ExecutionContextExecutor
 
 
 trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
-  override implicit val patienceConfig = PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
+  implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
   val appInjector: Injector = app.injector
+
   implicit val materializer: Materializer = appInjector.instanceOf[Materializer]
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
-  implicit val messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
-  val bc: FhddsConnector = mock[FhddsConnector]
+  implicit val messages: Messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
+  implicit val headerCarrier: HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers)
+
+  val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
+  val mockAuthConnector: PlayAuthConnector = mock[PlayAuthConnector]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
 
 }

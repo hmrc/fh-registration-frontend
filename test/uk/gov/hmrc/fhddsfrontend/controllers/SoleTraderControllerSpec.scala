@@ -29,14 +29,13 @@ import scala.concurrent.Future
 
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
-  object soleTraderController extends Application(ds,bc) {
+  object soleTraderController extends Application(ds, mockFhddsConnector) {
 
     val fakeEnrolment = Set(
       Enrolment("", Seq(EnrolmentIdentifier("", "")), confidenceLevel = ConfidenceLevel.L200,
         state = "", delegatedAuthRule = Some(""))
     )
 
-    val mockAuthConnector: core.AuthConnector = mock[PlayAuthConnector]
     override val authConnector: core.AuthConnector = mockAuthConnector
 
     def authorisedForUserMock(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =

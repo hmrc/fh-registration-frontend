@@ -111,7 +111,7 @@ abstract class AppController(ds: CommonPlayDependencies)
         Redirect(ggLoginUrl, ggRedirectParms)
       case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
-        Unauthorized("Unauthorized")
+        Redirect(routes.Application.start())
     }
 }
 
