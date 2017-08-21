@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.fhddsfrontend.models.{Address, Confirm}
 @import uk.gov.hmrc.play.views.html.helpers.{errorSummary, form, inputRadioGroup}
 
-@(confirmForm: Form[Confirm], address: Address, orgName: String)(implicit request: Request[_], messages: Messages)
+@(formName: String, confirmForm: Form[Confirm], address: Address, orgName: String)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "fulfilment-house-due-diligence-scheme-sole-trader-application") {
 
@@ -43,7 +43,7 @@
             </p>
 
           @form(
-            action = uk.gov.hmrc.fhddsfrontend.controllers.routes.Application.showForm(),
+            action = uk.gov.hmrc.fhddsfrontend.controllers.routes.Application.showForm(formName),
             'class -> "form js-form") {
 
                 @inputRadioGroup(

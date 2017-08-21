@@ -23,11 +23,11 @@ import play.api.i18n.Messages
 object CustomFormatters {
 
   def requiredBooleanFormatter(implicit messages: Messages): Formatter[Boolean] = new Formatter[Boolean] {
-    override def bind(key: String, data: Map[String, String]) = {
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] = {
       Right(data.getOrElse(key, "")).right.flatMap {
-        case "true" ⇒ Right(true)
+        case "true"  ⇒ Right(true)
         case "false" ⇒ Right(false)
-        case _ ⇒ Left(Seq(FormError(key, Messages(s"${key}.selectone"))))
+        case _       ⇒ Left(Seq(FormError(key, Messages(s"$key.selectone"))))
       }
     }
 
@@ -35,10 +35,10 @@ object CustomFormatters {
   }
 
   def requiredIntFormatter(implicit messages: Messages): Formatter[Int] = new Formatter[Int] {
-    override def bind(key: String, data: Map[String, String]) = {
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
       Right(data.getOrElse(key, "")).right.flatMap {
         case number ⇒ Right(number.toInt)
-        case _ ⇒ Left(Seq(FormError(key, Messages(s"${key}.selectone"))))
+        case _      ⇒ Left(Seq(FormError(key, Messages(s"$key.selectone"))))
       }
     }
 

@@ -1,8 +1,6 @@
 # microservice specific routes
-#http://localhost:1118/fhdds-frontend/sole-trader-inf
-#use: 543212300016 (password testing123)
 
-GET         /                @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
+GET         /                          @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
 
-GET         /inf             @uk.gov.hmrc.fhddsfrontend.controllers.Application.information()
-POST        /showForm        @uk.gov.hmrc.fhddsfrontend.controllers.Application.showForm()
+GET         /inf/:formName             @uk.gov.hmrc.fhddsfrontend.controllers.Application.information(formName: String)
+POST        /showForm/:formName        @uk.gov.hmrc.fhddsfrontend.controllers.Application.showForm(formName: String)

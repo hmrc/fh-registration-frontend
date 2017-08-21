@@ -46,13 +46,13 @@ class SoleTraderControllerSpec extends AppUnitGenerator {
   "SoleTraderController" should {
     soleTraderController.authorisedForUserMock()
     "information return 303" in {
-      val result = csrfAddToken(soleTraderController.information())(request)
+      val result = csrfAddToken(soleTraderController.information("sole-trader-application"))(request)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).get shouldBe routes.Application.start().url
     }
 
     "submitCheckResult return 303" in {
-      val result = csrfAddToken(soleTraderController.showForm())(request)
+      val result = csrfAddToken(soleTraderController.showForm("sole-trader-application"))(request)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).get shouldBe routes.Application.start().url
     }

@@ -43,33 +43,34 @@ class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsCon
     Future.successful(Ok(start_page()))
   }
 
-  def information(): Action[AnyContent] = authorisedUser {
+  def information(formName: String): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
         fhddsConnector.lookupCompanyDetails().map {
-          case CompanyDetails(address, org) ⇒ Ok(address_inf(Forms.confirmForm,
+          case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
+                                                             Forms.confirmForm,
                                                              address.getOrElse(Address("")),
                                                              org.getOrElse(Company(title = "")).title))
-          case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
+          case _ ⇒ Redirect(routes.Application.start())
         }
   }
 
-  //TODO should add form's name as para
-  def showForm(): Action[AnyContent] = authorisedUser {
+  def showForm(formName: String): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
         Forms.confirmForm.bindFromRequest().fold(
           formWithErrors => {
             fhddsConnector.lookupCompanyDetails().map {
-              case CompanyDetails(address, org) ⇒ Ok(address_inf(formWithErrors,
+              case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
+                                                                 formWithErrors,
                                                                  address.getOrElse(Address("")),
                                                                  org.getOrElse(Company(title = "")).title))
-              case _ ⇒ Redirect(DFSURL.SoleTraderUrl)
+              case _ ⇒ Redirect(routes.Application.start())
             }
           },
-          register => {
-            if (register.value) Future.successful(Redirect(DFSURL.SoleTraderUrl))
-            else Future.successful(Redirect(DFSURL.SoleTraderUrl))
+          apply => {
+            if (apply.value) Future.successful(Redirect(DFSURL.dfsURL(formName)))
+            else Future.successful(Redirect(routes.Application.start()))
           }
         )
   }

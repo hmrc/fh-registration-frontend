@@ -20,7 +20,16 @@ import uk.gov.hmrc.play.config.ServicesConfig
 
 object DFSURL extends ServicesConfig {
   val DFSHost: String = config("fhdds-dfs-frontend").getString("host").getOrElse("")
-  val DFServiceSoleTraderFormName: String = config("fhdds-dfs-frontend").getString("sole-trader-form-name").getOrElse("")
+  val DFServiceSoleTraderFormName: String = config("fhdds-dfs-frontend").getString("sole-trader-application").getOrElse("")
+  val DFServiceLimitedCompanyFormName: String = config("fhdds-dfs-frontend").getString("limited-company-application").getOrElse("")
 
-  val SoleTraderUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceSoleTraderFormName/new"
+  val soleTraderUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceSoleTraderFormName/new"
+  val limitedCompanyUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceLimitedCompanyFormName/new"
+
+  def dfsURL(formName: String): String = {
+    formName match {
+      case "sole-trader-application" ⇒ soleTraderUrl
+      case "limited-company-application" ⇒ limitedCompanyUrl
+    }
+  }
 }

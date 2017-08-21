@@ -39,5 +39,5 @@ object FHDDSExternalUrls extends RunMode with ServicesConfig {
   val loginPath: String = getConfString("auth.login_path", "")
 
   val ggLoginUrl = s"$companyAuthHost$loginPath"
-  val continueUrl = s"$loginCallback${routes.Application.information()}"
+  val continueUrl = s"$loginCallback${routes.Application.start()}"
 }
