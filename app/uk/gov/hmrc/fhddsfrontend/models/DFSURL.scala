@@ -28,8 +28,8 @@ object DFSURL extends ServicesConfig {
 
   def dfsURL(formName: String): String = {
     formName match {
-      case "sole-trader-application" ⇒ soleTraderUrl
-      case "limited-company-application" ⇒ limitedCompanyUrl
+      case "Individual" ⇒ soleTraderUrl
+      case "Organisation" ⇒ limitedCompanyUrl
     }
   }
 }

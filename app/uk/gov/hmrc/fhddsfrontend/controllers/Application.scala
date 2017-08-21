@@ -46,13 +46,17 @@ class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsCon
   def information(formName: String): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
-        fhddsConnector.lookupCompanyDetails().map {
-          case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
-                                                             Forms.confirmForm,
-                                                             address.getOrElse(Address("")),
-                                                             org.getOrElse(Company(title = "")).title))
-          case _ ⇒ Redirect(routes.Application.start())
+        val affinityGroup = request.session.get("affinityGroup")
+        if (affinityGroup.getOrElse("") == formName) {
+          fhddsConnector.lookupCompanyDetails().map {
+            case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
+                                                   Forms.confirmForm,
+                                                   address.getOrElse(Address("")),
+                                                   org.getOrElse(Company(title = "")).title))
+            case _ ⇒ Redirect(routes.Application.start())
+          }
         }
+        else Future.successful(Redirect(routes.Application.start()))
   }
 
   def showForm(formName: String): Action[AnyContent] = authorisedUser {
