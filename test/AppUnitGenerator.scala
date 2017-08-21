@@ -27,7 +27,7 @@ import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
-import uk.gov.hmrc.fhddsfrontend.connectors.DESConnector
+import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhddsfrontend.controllers.CommonPlayDependencies
 import uk.gov.hmrc.play.http.HeaderNames
 import uk.gov.hmrc.play.test.UnitSpec
@@ -43,7 +43,7 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
   implicit val messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
-  val dc: DESConnector = mock[DESConnector]
+  val bc: FhddsConnector = mock[FhddsConnector]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
 
 }

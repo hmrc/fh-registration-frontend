@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
-  object soleTraderController extends SoleTraderController(ds,dc) {
+  object soleTraderController extends Application(ds,bc) {
 
     val fakeEnrolment = Set(
       Enrolment("", Seq(EnrolmentIdentifier("", "")), confidenceLevel = ConfidenceLevel.L200,
@@ -53,7 +53,7 @@ class SoleTraderControllerSpec extends AppUnitGenerator {
     }
 
     "submitCheckResult return 303" in {
-      val result = csrfAddToken(soleTraderController.submitCheckResult())(request)
+      val result = csrfAddToken(soleTraderController.showForm())(request)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).get shouldBe routes.Application.start().url
     }

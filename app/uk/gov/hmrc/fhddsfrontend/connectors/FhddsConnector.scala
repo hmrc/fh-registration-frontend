@@ -41,7 +41,6 @@ trait FhddsConnect extends ServicesConfig  {
   val http: WSHttp
 
   def lookupCompanyDetails()(implicit hc: HeaderCarrier): Future[CompanyDetails] = {
-    println(s"=========\n\n\n1111111111")
     http.GET[CompanyDetails](s"$FHDSSServiceUrl/$orgLookupURI")
   }
 

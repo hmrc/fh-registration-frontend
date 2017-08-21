@@ -18,35 +18,32 @@ package uk.gov.hmrc.fhddsfrontend.connectors
 
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import play.api.test.FakeRequest
 import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
-import uk.gov.hmrc.fhddsfrontend.models.{Company, CompanyAddress, CompanySearchResult}
+import uk.gov.hmrc.fhddsfrontend.models._
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.ws.WSHttp
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 
-class CompaniesHouseConnectorSpec extends AppUnitGenerator {
-  object CHConnector extends CompaniesHouseConnector  {
-    override val http: WSHttp = mock[WSHttp]
-    override val url: String = "https://api.companieshouse.gov.uk"
-    override val authHeader: String = "Basic YVZadWZfbWhCbE1aU1RTQnRKU1g3d19NekFKM3BGSGU2YWpNWmVhTzo="
-  }
+class FhddsConnectorSpec extends AppUnitGenerator {
 
+  val CHConnector = mock[FhddsConnector]
 
   "Companies House Connector" should {
     "Use HTTP Get to connect to Companies House" in {
-      val expected = List(Company(
-        "COMPANY", "12334", "ltd", "active", CompanyAddress("AB1 2CD")))
+      val expected = CompanyDetails(
+        Some(Address("")),
+        Some(Company("COMPANY", Some("12334"), Some("ltd"), Some("active"), None)))
       when(
-        CHConnector.http.GET[CompanySearchResult](any(), any())(any(), any())
-      ).thenReturn(Future successful CompanySearchResult(expected))
+        CHConnector.http.GET[CompanyDetails](any(), any())(any(), any())
+      ).thenReturn(Future successful expected)
 
-      expected shouldBe Await.result(CHConnector.fuzzySearchCompany("COMPANY"), Duration.apply("10 seconds"))
+      implicit val hc = HeaderCarrier.fromHeadersAndSession(FakeRequest().headers)
+      expected shouldBe Await.result(CHConnector.lookupCompanyDetails()(hc), Duration.apply("10 seconds"))
     }
   }
-
-
-
 
 }

@@ -90,10 +90,8 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      println(s"=========\n\n\n2121212")
       authorised(authProvider).retrieve(allEnrolments) {
         userEnrolments ⇒ {
-          println(s"=========\n\n\n$userEnrolments")
           action(request)(userEnrolments)
         }
       } recover { case e ⇒ handleFailure(e) }
@@ -109,7 +107,7 @@ abstract class AppController(ds: CommonPlayDependencies)
           "continue" -> Seq(continueUrl),
           "origin" -> Seq(getString("appName"))
         )
-        println(s"=====$ggRedirectParms")
+
         Redirect(ggLoginUrl, ggRedirectParms)
       case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
