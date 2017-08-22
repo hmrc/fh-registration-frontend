@@ -43,18 +43,17 @@ class SoleTraderControllerSpec extends AppUnitGenerator {
         .thenReturn(Future.successful(new ~[Option[AffinityGroup], Enrolments](Some(AffinityGroup.Agent), Enrolments(fakeEnrolment))))
   }
 
+  //TODO more tests needed
   "SoleTraderController" should {
     soleTraderController.authorisedForUserMock()
-    "information return 303" in {
-      val result = csrfAddToken(soleTraderController.information("sole-trader-application"))(request)
-      status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result).get shouldBe routes.Application.start().url
+    "information return 400" in {
+      val result = csrfAddToken(soleTraderController.information("Individual"))(request)
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
-    "submitCheckResult return 303" in {
-      val result = csrfAddToken(soleTraderController.showForm("sole-trader-application"))(request)
-      status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result).get shouldBe routes.Application.start().url
+    "submitCheckResult return 400" in {
+      val result = csrfAddToken(soleTraderController.showForm("Individual"))(request)
+      status(result) shouldBe Status.BAD_REQUEST
     }
   }
 }
