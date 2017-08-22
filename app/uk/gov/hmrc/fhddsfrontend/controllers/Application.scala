@@ -46,17 +46,17 @@ class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsCon
   def information(formName: String): Action[AnyContent] = authorisedUser {
     implicit request ⇒
       implicit userEnrolments ⇒
-        val affinityGroup = request.session.get("affinityGroup")
-        if (affinityGroup.getOrElse("") == formName) {
+        val affinityGroup = request.session.get("affinityGroup").getOrElse("")
+        if (affinityGroup == formName) {
           fhddsConnector.lookupCompanyDetails().map {
             case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
                                                    Forms.confirmForm,
                                                    address.getOrElse(Address("")),
                                                    org.getOrElse(Company(title = "")).title))
-            case _ ⇒ Redirect(routes.Application.start())
           }
         }
-        else Future.successful(Redirect(routes.Application.start()))
+        else if (affinityGroup == "Agent") Future.successful(BadRequest("Not support agents yet"))
+        else Future.successful(BadRequest("Affinity group not match the form"))
   }
 
   def showForm(formName: String): Action[AnyContent] = authorisedUser {
@@ -69,12 +69,11 @@ class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsCon
                                                                  formWithErrors,
                                                                  address.getOrElse(Address("")),
                                                                  org.getOrElse(Company(title = "")).title))
-              case _ ⇒ Redirect(routes.Application.start())
             }
           },
           apply => {
             if (apply.value) Future.successful(Redirect(DFSURL.dfsURL(formName)))
-            else Future.successful(Redirect(routes.Application.start()))
+            else Future.successful(BadRequest("please update your address with company house"))
           }
         )
   }
@@ -116,7 +115,7 @@ abstract class AppController(ds: CommonPlayDependencies)
         Redirect(ggLoginUrl, ggRedirectParms)
       case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
-        Redirect(routes.Application.start())
+        BadRequest(s"$ex")
     }
 }
 
