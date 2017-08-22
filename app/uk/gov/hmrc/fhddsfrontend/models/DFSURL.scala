@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhddsfrontend.models
 import uk.gov.hmrc.play.config.ServicesConfig
 
 object DFSURL extends ServicesConfig {
-  val DFSHost: String = config("fhdds-dfs-frontend").getString("host").getOrElse("")
+  val DFSHost: String = baseUrl("fhdds-dfs-frontend")
   val DFServiceSoleTraderFormName: String = config("fhdds-dfs-frontend").getString("sole-trader-application").getOrElse("")
   val DFServiceLimitedCompanyFormName: String = config("fhdds-dfs-frontend").getString("limited-company-application").getOrElse("")
 
