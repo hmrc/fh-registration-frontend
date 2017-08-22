@@ -29,14 +29,13 @@ import scala.concurrent.Future
 
 class SoleTraderControllerSpec extends AppUnitGenerator {
 
-  object soleTraderController extends SoleTraderController(ds,dc) {
+  object soleTraderController extends Application(ds, mockFhddsConnector) {
 
     val fakeEnrolment = Set(
       Enrolment("", Seq(EnrolmentIdentifier("", "")), confidenceLevel = ConfidenceLevel.L200,
         state = "", delegatedAuthRule = Some(""))
     )
 
-    val mockAuthConnector: core.AuthConnector = mock[PlayAuthConnector]
     override val authConnector: core.AuthConnector = mockAuthConnector
 
     def authorisedForUserMock(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
@@ -47,13 +46,13 @@ class SoleTraderControllerSpec extends AppUnitGenerator {
   "SoleTraderController" should {
     soleTraderController.authorisedForUserMock()
     "information return 303" in {
-      val result = csrfAddToken(soleTraderController.information())(request)
+      val result = csrfAddToken(soleTraderController.information("sole-trader-application"))(request)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).get shouldBe routes.Application.start().url
     }
 
     "submitCheckResult return 303" in {
-      val result = csrfAddToken(soleTraderController.submitCheckResult())(request)
+      val result = csrfAddToken(soleTraderController.showForm("sole-trader-application"))(request)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).get shouldBe routes.Application.start().url
     }

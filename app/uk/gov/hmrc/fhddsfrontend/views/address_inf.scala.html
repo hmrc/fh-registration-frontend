@@ -14,11 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhddsfrontend.models.{Confirm, EtmpAddress}
-@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
-@import uk.gov.hmrc.fhddsfrontend.controllers.routes._
+@import uk.gov.hmrc.fhddsfrontend.models.{Address, Confirm}
+@import uk.gov.hmrc.play.views.html.helpers.{errorSummary, form, inputRadioGroup}
 
-@(confirmForm: Form[Confirm], address: EtmpAddress, orgName: String)(implicit request: Request[_], messages: Messages)
+@(formName: String, confirmForm: Form[Confirm], address: Address, orgName: String)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhddsfrontend.views.html.main_template(title = "fulfilment-house-due-diligence-scheme-sole-trader-application") {
 
@@ -34,16 +33,17 @@
             <p><span class="bold-small">@orgName</span></p>
 
             <p>
-                @{address.addressLine1}<br>
-                @{address.addressLine2}<br>
-                @{address.addressLine3}<br>
-                @{address.addressLine4}<br>
-                @{address.postalCode}<br>
-                @{address.countryCode}<br>
+              @{address.premises}<br>
+              @{address.addressLine1}<br>
+              @{address.addressLine2}<br>
+              @{address.locality}<br>
+              @{address.region}<br>
+              @{address.country}<br>
+              @{address.postalCode}<br>
             </p>
 
           @form(
-            action = SoleTraderController.submitCheckResult(),
+            action = uk.gov.hmrc.fhddsfrontend.controllers.routes.Application.showForm(formName),
             'class -> "form js-form") {
 
                 @inputRadioGroup(
