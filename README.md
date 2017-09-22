@@ -4,7 +4,7 @@
 
 ## Software Requirements
 *   Contact to team barzan if needed #team-barzan
-*   MongoDB 3.2 or later version
+*   MongoDB 3.2 (not later as of this time the platform is not compatible with higher versions)
 *   KEYSTORE and ASSETS_FRONTEND get the latest version via the service-manager
 
 ## Run the application locally
