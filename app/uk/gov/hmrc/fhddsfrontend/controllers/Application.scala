@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import play.api.Environment
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
@@ -104,8 +105,7 @@ abstract class AppController(ds: CommonPlayDependencies)
 }
 
 @Singleton
-final class CommonPlayDependencies @Inject()(val conf: Configuration, val messagesApi: MessagesApi)
-
+final class CommonPlayDependencies @Inject()(val conf: Configuration, val env: Environment, val messagesApi: MessagesApi)
 case class UnexpectedState(errorMsg: String, json: Option[JsValue] = None)
 
 object UnexpectedState {
