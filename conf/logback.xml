@@ -39,6 +39,7 @@
     <logger name="com.codahale.metrics.graphite.GraphiteReporter" level="ERROR"/>
 
     <logger name="play.core.netty" level="INFO"/>
+    <logger name="connector" level="INFO"/>
 
     <logger name="accesslog" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_LOG_FILE" />

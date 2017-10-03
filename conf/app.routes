@@ -1,6 +1,4 @@
 # microservice specific routes
 
 GET         /                          @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
-
-GET         /inf/:formName             @uk.gov.hmrc.fhddsfrontend.controllers.Application.information(formName: String)
-POST        /showForm/:formName        @uk.gov.hmrc.fhddsfrontend.controllers.Application.showForm(formName: String)
+GET         /continue                   @uk.gov.hmrc.fhddsfrontend.controllers.Application.continue()
