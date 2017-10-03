@@ -16,25 +16,36 @@
 
 package uk.gov.hmrc.fhddsfrontend.controllers
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core
+import uk.gov.hmrc.auth.core.Retrieval
 import uk.gov.hmrc.fhddsfrontend.AppUnitGenerator
+
+import scala.concurrent.Future
 
 
 class ApplicationControllerSpec extends AppUnitGenerator {
 
-  val applicationController = new Application(ds,mockFhddsConnector)
+  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector) {
+    override val authConnector: core.AuthConnector = mockAuthConnector
+  }
 
   "GET /" should {
+
+    when(mockAuthConnector.authorise(any(), any[Retrieval[Unit]]())(any()))
+      .thenReturn(Future.successful(()))
+
+    val expectedRedirect = "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
+
     "return 200" in {
       val result = applicationController.start().apply(request)
-      result.header.status shouldBe Status.OK
+      result.header.status shouldBe Status.SEE_OTHER
+      redirectLocation(result) shouldBe Some(expectedRedirect)
     }
 
-    "return HTML" in {
-      val result = applicationController.start().apply(request)
-      charset(result) shouldBe Some("utf-8")
-    }
   }
 
 }

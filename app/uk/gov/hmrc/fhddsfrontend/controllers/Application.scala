@@ -21,62 +21,37 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.mvc._
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.Retrievals.allEnrolments
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
-import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhddsfrontend.models._
+import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
+import uk.gov.hmrc.fhddsfrontend.models.DFSURL
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
-import uk.gov.hmrc.fhddsfrontend.views.html.address_inf
-import uk.gov.hmrc.fhddsfrontend.views.html.start_page
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
-class Application @Inject()(ds: CommonPlayDependencies, fhddsConnector: FhddsConnector) extends AppController(ds) {
+class Application @Inject()(
+  links: ExternalUrls,
+  ds: CommonPlayDependencies,
+  fhddsConnector: FhddsConnector) extends AppController(ds) {
 
-  def start(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(start_page()))
+  val businessCustomerConnector = BusinessCustomerFrontendConnector
+
+  def start = ggAuthorised { implicit request ⇒
+    Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def information(formName: String): Action[AnyContent] = authorisedUser {
-    implicit request ⇒
-      implicit userEnrolments ⇒
-        val affinityGroup = request.session.get("affinityGroup").getOrElse("")
-        if (affinityGroup == formName) {
-          fhddsConnector.lookupCompanyDetails().map {
-            case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
-                                                   Forms.confirmForm,
-                                                   address.getOrElse(Address("")),
-                                                   org.getOrElse(Company(title = "")).title))
-          }
-        }
-        else if (affinityGroup == "Agent") Future.successful(BadRequest("Not support agents yet"))
-        else Future.successful(BadRequest("Affinity group not match the form"))
+  def continue = ggAuthorised { implicit request ⇒
+      businessCustomerConnector.getReviewDetails.map(details ⇒
+        Redirect(DFSURL.dfsURL("Organisation"))
+      )
   }
 
-  def showForm(formName: String): Action[AnyContent] = authorisedUser {
-    implicit request ⇒
-      implicit userEnrolments ⇒
-        Forms.confirmForm.bindFromRequest().fold(
-          formWithErrors => {
-            fhddsConnector.lookupCompanyDetails().map {
-              case CompanyDetails(address, org) ⇒ Ok(address_inf(formName,
-                                                                 formWithErrors,
-                                                                 address.getOrElse(Address("")),
-                                                                 org.getOrElse(Company(title = "")).title))
-            }
-          },
-          apply => {
-            if (apply.value) Future.successful(Redirect(DFSURL.dfsURL(formName)))
-            else Future.successful(BadRequest("please update your address with company house"))
-          }
-        )
-  }
 }
 
 @Singleton
@@ -91,6 +66,15 @@ abstract class AppController(ds: CommonPlayDependencies)
   override def authConnector: uk.gov.hmrc.auth.core.AuthConnector = FrontendAuthConnector
 
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
+
+  def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
+    Action.async { implicit request ⇒
+      authorised(authProvider) {
+        action(request)
+      } recover { case e ⇒ handleFailure(e) }
+    }
+  }
+
 
   def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
