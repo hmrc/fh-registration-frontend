@@ -21,6 +21,7 @@ import javax.inject.Singleton
 import uk.gov.hmrc.fhddsfrontend.config.WSHttp
 import uk.gov.hmrc.fhddsfrontend.models.FhddsModels._
 import uk.gov.hmrc.fhddsfrontend.models._
+import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.ws.WSHttp
@@ -43,5 +44,14 @@ trait FhddsConnect extends ServicesConfig  {
   def lookupCompanyDetails()(implicit hc: HeaderCarrier): Future[CompanyDetails] = {
     http.GET[CompanyDetails](s"$FHDSSServiceUrl/$orgLookupURI")
   }
+
+  def saveBusinessRegistrationDetails(userId: String, formTypeRef: String, businessRegistrationDetails: BusinessRegistrationDetails)(implicit hc: HeaderCarrier): Future[_] = {
+    http.PUT[BusinessRegistrationDetails,String](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
+  }
+
+  private def saveBusinessRegistrationDetailsURI(userId: String, formTypeRef: String) = {
+    s"$FHDSSServiceUrl/fhdds/submission-extra-data/$userId/$formTypeRef/businessRegistrationDetails"
+  }
+
 
 }
