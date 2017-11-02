@@ -29,13 +29,13 @@ import uk.gov.hmrc.play.http.ws.WSHttp
 import scala.concurrent.Future
 
 @Singleton
-class FhddsConnector extends FhddsConnect {
+class FhddsConnector extends FhddsConnect with ServicesConfig {
   val FHDSSServiceUrl: String = baseUrl("fhdds")
   val orgLookupURI: String = "fhdds/companyDetails"
   val http = WSHttp
 }
 
-trait FhddsConnect extends ServicesConfig  {
+trait FhddsConnect {
 
   val FHDSSServiceUrl: String
   val orgLookupURI: String
