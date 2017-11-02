@@ -31,6 +31,7 @@ import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
 import uk.gov.hmrc.fhddsfrontend.models.DFSURL
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
+import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -47,10 +48,19 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def continue = ggAuthorised { implicit request ⇒
-      businessCustomerConnector.getReviewDetails.map(details ⇒
-        Redirect(DFSURL.dfsURL("Organisation"))
-      )
+  def continue = authorisedUser { implicit request ⇒ enrolments ⇒
+      businessCustomerConnector
+        .getReviewDetails
+        .map(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(getUserId(enrolments), formTypeRef(details), details))
+        .map(_ ⇒ Redirect(DFSURL.dfsURL("Organisation")))
+  }
+
+  private def formTypeRef(details: BusinessRegistrationDetails) = {
+    DFSURL.DFServiceLimitedCompanyFormName
+  }
+
+  private def getUserId(enrolments: Enrolments) = {
+    enrolments.getEnrolment("IR-CT").flatMap(_.getIdentifier("UTR")).map(_.value).get
   }
 
 }
@@ -67,10 +77,11 @@ abstract class AppController(ds: CommonPlayDependencies)
   override def authConnector: uk.gov.hmrc.auth.core.AuthConnector = FrontendAuthConnector
 
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
+  val hasCtUtr: Predicate = Enrolment("IR-CT")
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider) {
+      authorised(authProvider and hasCtUtr) {
         action(request)
       } recover { case e ⇒ handleFailure(e) }
     }
@@ -79,7 +90,7 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider).retrieve(allEnrolments) {
+      authorised(authProvider and hasCtUtr).retrieve(allEnrolments) {
         userEnrolments ⇒ {
           action(request)(userEnrolments)
         }
