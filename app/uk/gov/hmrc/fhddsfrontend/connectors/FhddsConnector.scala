@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhddsfrontend.connectors
 
 import javax.inject.Singleton
 
-import play.api.libs.json.JsObject
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhddsfrontend.config.WSHttp
 import uk.gov.hmrc.fhddsfrontend.models.FhddsModels._
 import uk.gov.hmrc.fhddsfrontend.models._
@@ -47,7 +47,7 @@ trait FhddsConnect {
   }
 
   def saveBusinessRegistrationDetails(userId: String, formTypeRef: String, businessRegistrationDetails: BusinessRegistrationDetails)(implicit hc: HeaderCarrier): Future[_] = {
-    http.PUT[BusinessRegistrationDetails,JsObject](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
+    http.PUT[BusinessRegistrationDetails,Option[JsValue]](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
   }
 
   private def saveBusinessRegistrationDetailsURI(userId: String, formTypeRef: String) = {
