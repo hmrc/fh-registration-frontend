@@ -51,7 +51,7 @@ class Application @Inject()(
   def continue = authorisedUser { implicit request ⇒ enrolments ⇒
       businessCustomerConnector
         .getReviewDetails
-        .map(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(getUserId(enrolments), formTypeRef(details), details))
+        .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(getUserId(enrolments), formTypeRef(details), details))
         .map(_ ⇒ Redirect(DFSURL.dfsURL("Organisation")))
   }
 

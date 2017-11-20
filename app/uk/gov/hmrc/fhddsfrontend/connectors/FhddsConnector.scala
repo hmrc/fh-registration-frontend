@@ -47,7 +47,7 @@ trait FhddsConnect {
   }
 
   def saveBusinessRegistrationDetails(userId: String, formTypeRef: String, businessRegistrationDetails: BusinessRegistrationDetails)(implicit hc: HeaderCarrier): Future[_] = {
-    http.PUT[BusinessRegistrationDetails,Option[JsValue]](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
+    http.PUT[BusinessRegistrationDetails,JsValue](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
   }
 
   private def saveBusinessRegistrationDetailsURI(userId: String, formTypeRef: String) = {
