@@ -25,8 +25,8 @@ import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
-import uk.gov.hmrc.auth.core.Retrievals.allEnrolments
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.Retrievals.{allEnrolments, externalId, internalId}
+import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
 import uk.gov.hmrc.fhddsfrontend.models.DFSURL
@@ -48,10 +48,10 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def continue = authorisedUser { implicit request ⇒ enrolments ⇒
+  def continue = authorisedUser { implicit request ⇒ internalId ⇒
       businessCustomerConnector
         .getReviewDetails
-        .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(getUserId(enrolments), formTypeRef(details), details))
+        .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details))
         .map(_ ⇒ Redirect(DFSURL.dfsURL("Organisation")))
   }
 
@@ -81,19 +81,20 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider and hasCtUtr) {
+      authorised(authProvider) {
         action(request)
       } recover { case e ⇒ handleFailure(e) }
     }
   }
 
 
-  def authorisedUser(action: Request[AnyContent] ⇒ Enrolments ⇒ Future[Result]): Action[AnyContent] = {
+  def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider and hasCtUtr).retrieve(allEnrolments) {
-        userEnrolments ⇒ {
-          action(request)(userEnrolments)
+      authorised(authProvider).retrieve(internalId ) {
+        case Some(iid)⇒ {
+          action(request)(iid)
         }
+        case None ⇒ throw AuthorisationException.fromString("Can not find user id")
       } recover { case e ⇒ handleFailure(e) }
     }
   }
