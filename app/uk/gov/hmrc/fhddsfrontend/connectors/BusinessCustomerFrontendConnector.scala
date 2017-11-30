@@ -21,12 +21,12 @@ import play.api.mvc.Request
 import uk.gov.hmrc.fhddsfrontend.config.WSHttp
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails.formats
+import uk.gov.hmrc.http.HttpGet
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.frontend.filters.SessionCookieCryptoFilter
-import uk.gov.hmrc.play.http.HttpGet
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 trait BusinessCustomerFrontendConnector extends ServicesConfig with HeaderCarrierForPartialsConverter {
@@ -42,11 +42,9 @@ trait BusinessCustomerFrontendConnector extends ServicesConfig with HeaderCarrie
     http.GET(getUrl).map(respone =>
       respone.status match {
         case Status.OK =>
-          println(s"***** OK got ${respone.status}\n ${respone.body}\n\n")
           val reviewDetails = respone.json.as[BusinessRegistrationDetails]
           reviewDetails
         case _ ⇒
-          println(s"***** got $respone")
           throw new IllegalArgumentException(respone.toString)
       })
 //    http.withTracing[BusinessRegistrationDetails]("GET", getUrl) (http.GET[BusinessRegistrationDetails](getUrl))

@@ -23,9 +23,9 @@ import uk.gov.hmrc.fhddsfrontend.config.WSHttp
 import uk.gov.hmrc.fhddsfrontend.models.FhddsModels._
 import uk.gov.hmrc.fhddsfrontend.models._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
 

@@ -30,7 +30,8 @@ import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhddsfrontend.controllers.CommonPlayDependencies
-import uk.gov.hmrc.play.http.{HeaderCarrier, HeaderNames}
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
+import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
@@ -47,10 +48,10 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
   implicit val messages: Messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
-  implicit val headerCarrier: HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers)
+  implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
-  val mockAuthConnector: PlayAuthConnector = mock[PlayAuthConnector]
+  val mockAuthConnector = mock[PlayAuthConnector]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
 
 }

@@ -25,7 +25,7 @@ import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
-import uk.gov.hmrc.auth.core.Retrievals.{allEnrolments, externalId, internalId}
+import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
@@ -33,6 +33,7 @@ import uk.gov.hmrc.fhddsfrontend.models.DFSURL
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -74,7 +75,7 @@ abstract class AppController(ds: CommonPlayDependencies)
   lazy val conf: Configuration = ds.conf
   implicit lazy val messagesApi: MessagesApi = ds.messagesApi
 
-  override def authConnector: uk.gov.hmrc.auth.core.AuthConnector = FrontendAuthConnector
+  override def authConnector: PlayAuthConnector = FrontendAuthConnector
 
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
   val hasCtUtr: Predicate = Enrolment("IR-CT")
