@@ -54,7 +54,7 @@ class Application @Inject()(
   def whitelisted(p: String) = Action {
     implicit request ⇒
       val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-      Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().absoluteURL()))
+      Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
   }
 
   def start = ggAuthorised { implicit request ⇒
