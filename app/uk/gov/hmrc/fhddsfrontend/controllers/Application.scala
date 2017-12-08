@@ -111,7 +111,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
       withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
-        authorised().retrieve(internalId) {
+        authorised(Ver).retrieve(internalId) {
           case Some(iid) ⇒ {
             action(request)(iid)
           }
