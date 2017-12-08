@@ -20,20 +20,23 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.Environment
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
-import uk.gov.hmrc.fhddsfrontend.config.FrontendAuthConnector
+import uk.gov.hmrc.fhddsfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
 import uk.gov.hmrc.fhddsfrontend.models.DFSURL
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
+import uk.gov.hmrc.auth.otac.OtacFailureThrowable
+import uk.gov.hmrc.fhddsfrontend.views.html.error_template_Scope0.error_template
+import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -41,9 +44,18 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 class Application @Inject()(
   links: ExternalUrls,
   ds: CommonPlayDependencies,
-  fhddsConnector: FhddsConnector) extends AppController(ds) {
+  fhddsConnector: FhddsConnector,
+  messagesApi: play.api.i18n.MessagesApi,
+  configuration: Configuration
+) extends AppController(ds, messagesApi) {
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
+
+  def whitelisted(p: String) = Action {
+    implicit request ⇒
+      val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
+      Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().absoluteURL()))
+  }
 
   def start = ggAuthorised { implicit request ⇒
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
@@ -67,8 +79,12 @@ class Application @Inject()(
 }
 
 @Singleton
-abstract class AppController(ds: CommonPlayDependencies)
-  extends FrontendController with I18nSupport with AuthorisedFunctions {
+abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n.MessagesApi)
+  extends FrontendController
+    with I18nSupport
+    with AuthorisedFunctions
+    with Whitelisting
+{
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
@@ -77,13 +93,16 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   override def authConnector: PlayAuthConnector = FrontendAuthConnector
 
+  override def otacAuthConnector = ConcreteOtacAuthConnector
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
   val hasCtUtr: Predicate = Enrolment("IR-CT")
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider) {
-        action(request)
+      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
+        authorised() {
+          action(request)
+        } recover { case e ⇒ handleFailure(e) }
       } recover { case e ⇒ handleFailure(e) }
     }
   }
@@ -91,16 +110,18 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised(authProvider).retrieve(internalId ) {
-        case Some(iid)⇒ {
-          action(request)(iid)
-        }
-        case None ⇒ throw AuthorisationException.fromString("Can not find user id")
+      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
+        authorised().retrieve(internalId) {
+          case Some(iid) ⇒ {
+            action(request)(iid)
+          }
+          case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
+        } recover { case e ⇒ handleFailure(e) }
       } recover { case e ⇒ handleFailure(e) }
     }
   }
 
-  def handleFailure(e: Throwable): Result =
+  def handleFailure(e: Throwable)(implicit request: Request[_], messages: Messages): Result =
     e match {
       case x: NoActiveSession ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
@@ -111,6 +132,9 @@ abstract class AppController(ds: CommonPlayDependencies)
         )
 
         Redirect(ggLoginUrl, ggRedirectParms)
+      case e: OtacFailureThrowable ⇒
+        val errorTemplate = new error_template()
+        Unauthorized(errorTemplate.render("Unauthorized", "Unauthorized", "You are not authorized to use this service", request, messages))
       case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
         BadRequest(s"$ex")

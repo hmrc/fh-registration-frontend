@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhddsfrontend.config
 
 import uk.gov.hmrc.auth.core.PlayAuthConnector
+import uk.gov.hmrc.auth.otac.PlayOtacAuthConnector
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.hooks.HttpHooks
 import uk.gov.hmrc.play.audit.http.HttpAuditing
@@ -27,7 +28,7 @@ import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
 import uk.gov.hmrc.play.http.ws._
 
 object FrontendAuditConnector extends AuditConnector with RunMode {
-  lazy val auditingConfig: AuditingConfig = LoadAuditingConfig(s"auditing")
+  lazy val auditingConfig: AuditingConfig = LoadAuditingConfig(s"$env.auditing")
 }
 
 trait Hooks extends HttpHooks with HttpAuditing {
@@ -53,5 +54,10 @@ object FrontendAuthConnector extends PlayAuthConnector with ServicesConfig with 
 //  override val serviceUrl: String = baseUrl("auth")
 //
 //  override def http = WSHttp
+}
+
+object ConcreteOtacAuthConnector extends PlayOtacAuthConnector with ServicesConfig  {
+  val serviceUrl: String = baseUrl("auth")
+  val http: CoreGet = WSHttp
 }
 
