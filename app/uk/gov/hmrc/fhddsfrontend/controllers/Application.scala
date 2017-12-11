@@ -50,10 +50,21 @@ class Application @Inject()(
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
 
-  def whitelisted(p: String) = Action {
+  def whitelisted(p: String) = Action.async {
     implicit request ⇒
-      val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-      Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
+      authorised() {
+          val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
+          Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
+      } recover {
+        case x: NoActiveSession ⇒
+          Logger.warn(s"could not authenticate user due to: No Active Session " + x)
+
+          val ggRedirectParms = Map(
+            "continue" -> Seq(s"$continueUrl/whitelisted?p=$p"),
+            "origin" -> Seq(getString("appName"))
+          )
+          Redirect(ggLoginUrl, ggRedirectParms)
+      }
   }
 
   def start = ggAuthorised { implicit request ⇒
@@ -98,8 +109,8 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
+      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised() {
-          withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
           action(request)
         }
       } recover { case e ⇒ handleFailure(e) }
@@ -109,14 +120,14 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      authorised().retrieve(internalId) {
-        case Some(iid) ⇒ {
-          withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
+      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
+        authorised().retrieve(internalId) {
+          case Some(iid) ⇒ {
             action(request)(iid)
           }
-        }
-        case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
-      } recover { case e ⇒ handleFailure(e) }
+          case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
+        } recover { case e ⇒ handleFailure(e) }
+      }
     }
   }
 
