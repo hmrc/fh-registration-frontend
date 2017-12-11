@@ -19,24 +19,23 @@ package uk.gov.hmrc.fhddsfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.Environment
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
-import play.api.{Configuration, Logger}
+import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
+import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhddsfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
 import uk.gov.hmrc.fhddsfrontend.models.DFSURL
 import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
-import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhddsfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -99,10 +98,10 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised() {
+          withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
           action(request)
-        } recover { case e ⇒ handleFailure(e) }
+        }
       } recover { case e ⇒ handleFailure(e) }
     }
   }
@@ -110,13 +109,13 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
-        authorised().retrieve(internalId) {
-          case Some(iid) ⇒ {
+      authorised().retrieve(internalId) {
+        case Some(iid) ⇒ {
+          withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
             action(request)(iid)
           }
-          case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
-        } recover { case e ⇒ handleFailure(e) }
+        }
+        case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
       } recover { case e ⇒ handleFailure(e) }
     }
   }
