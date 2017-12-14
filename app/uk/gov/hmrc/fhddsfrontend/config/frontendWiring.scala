@@ -51,9 +51,6 @@ object WSHttp extends WSHttp with HttpAuditing {
 object FrontendAuthConnector extends PlayAuthConnector with ServicesConfig with WSHttp {
   override val serviceUrl: String = baseUrl("auth")
   override def http: CorePost = WSHttp
-//  override val serviceUrl: String = baseUrl("auth")
-//
-//  override def http = WSHttp
 }
 
 object ConcreteOtacAuthConnector extends PlayOtacAuthConnector with ServicesConfig  {

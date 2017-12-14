@@ -29,9 +29,8 @@ import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhddsfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
-import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
-import uk.gov.hmrc.fhddsfrontend.models.DFSURL
-import uk.gov.hmrc.fhddsfrontend.models.FHDDSExternalUrls._
+import uk.gov.hmrc.fhddsfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
+import uk.gov.hmrc.fhddsfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhddsfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.http.SessionKeys
@@ -75,11 +74,11 @@ class Application @Inject()(
       businessCustomerConnector
         .getReviewDetails
         .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details))
-        .map(_ ⇒ Redirect(DFSURL.dfsURL("Organisation")))
+        .map(_ ⇒ Redirect(DFSUrls.dfsURL("Organisation")))
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
-    DFSURL.DFServiceLimitedCompanyFormName
+    DFSUrls.DFServiceLimitedCompanyFormName
   }
 
   private def getUserId(enrolments: Enrolments) = {

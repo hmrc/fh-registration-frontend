@@ -20,8 +20,6 @@ import javax.inject.Singleton
 
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhddsfrontend.config.WSHttp
-import uk.gov.hmrc.fhddsfrontend.models.FhddsModels._
-import uk.gov.hmrc.fhddsfrontend.models._
 import uk.gov.hmrc.fhddsfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -32,19 +30,13 @@ import scala.concurrent.Future
 @Singleton
 class FhddsConnector extends FhddsConnect with ServicesConfig {
   val FHDSSServiceUrl: String = baseUrl("fhdds")
-  val orgLookupURI: String = "fhdds/companyDetails"
   val http = WSHttp
 }
 
 trait FhddsConnect {
 
   val FHDSSServiceUrl: String
-  val orgLookupURI: String
   val http: WSHttp
-
-  def lookupCompanyDetails()(implicit hc: HeaderCarrier): Future[CompanyDetails] = {
-    http.GET[CompanyDetails](s"$FHDSSServiceUrl/$orgLookupURI")
-  }
 
   def saveBusinessRegistrationDetails(userId: String, formTypeRef: String, businessRegistrationDetails: BusinessRegistrationDetails)(implicit hc: HeaderCarrier): Future[_] = {
     http.PUT[BusinessRegistrationDetails,JsValue](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhddsfrontend.controllers
 
-import play.api.Logger
 import uk.gov.hmrc.auth.otac.{Authorised, OtacAuthConnector, OtacFailureThrowable}
 import uk.gov.hmrc.http.HeaderCarrier
 
