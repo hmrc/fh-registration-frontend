@@ -26,7 +26,7 @@ object FrontendBuild extends Build with MicroService {
     "com.github.tototoshi" %% "play-json-naming" % "1.1.0"
   )
 
-  def test(scope: String = "test") = Seq(
+  def test(scope: String = "test,it") = Seq(
     "uk.gov.hmrc" %% "hmrctest" % "2.3.0" % scope,
     "org.scalatest" % "scalatest_2.11" % "3.0.0" % scope,
     "org.pegdown" % "pegdown" % "1.6.0" % scope,
@@ -35,7 +35,8 @@ object FrontendBuild extends Build with MicroService {
     "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
     "org.scalacheck" %% "scalacheck" % "1.12.6" % scope,
     "org.mockito" % "mockito-core" % "2.7.22" % scope,
-    "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % scope
+    "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % scope,
+    "com.github.tomakehurst"  %  "wiremock"  % "2.6.0" % scope
   )
 
 }
