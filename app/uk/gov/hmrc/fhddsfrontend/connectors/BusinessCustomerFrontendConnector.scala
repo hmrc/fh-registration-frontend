@@ -34,20 +34,12 @@ trait BusinessCustomerFrontendConnector extends ServicesConfig with HeaderCarrie
   def serviceUrl = baseUrl("business-customer-frontend")
   val businessCustomerUri = "business-customer"
   val reviewDetailsUri = "fetch-review-details"
-  val service = "FHDDS"//TODO replace with FHDDS
+  val service = "FHDDS"
   val http: HttpGet
 
   def getReviewDetails(implicit request: Request[_]): Future[BusinessRegistrationDetails] = {
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"
-    http.GET(getUrl).map(respone =>
-      respone.status match {
-        case Status.OK =>
-          val reviewDetails = respone.json.as[BusinessRegistrationDetails]
-          reviewDetails
-        case _ ⇒
-          throw new IllegalArgumentException(respone.toString)
-      })
-//    http.withTracing[BusinessRegistrationDetails]("GET", getUrl) (http.GET[BusinessRegistrationDetails](getUrl))
+    http.GET[BusinessRegistrationDetails](getUrl)
   }
 }
 

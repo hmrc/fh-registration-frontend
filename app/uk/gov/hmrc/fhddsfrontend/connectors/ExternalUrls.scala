@@ -14,25 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhddsfrontend.models
+package uk.gov.hmrc.fhddsfrontend.connectors
 
-import uk.gov.hmrc.fhddsfrontend.controllers.routes
 import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.frontend.auth.connectors.domain.Accounts
-import uk.gov.hmrc.play.frontend.auth.{AuthenticationProvider, GovernmentGateway, TaxRegime}
 
-object FHDDSRegime extends TaxRegime {
-  override def isAuthorised(accounts: Accounts): Boolean = true
-
-  override def authenticationType: AuthenticationProvider = FHDDSAuthenticationProvider
-}
-
-object FHDDSAuthenticationProvider extends GovernmentGateway {
-  override val continueURL: String = FHDDSExternalUrls.continueUrl
-  override val loginURL: String = FHDDSExternalUrls.ggLoginUrl
-}
-
-object FHDDSExternalUrls extends RunMode with ServicesConfig {
+object ExternalUrls extends RunMode with ServicesConfig {
 
   val companyAuthHost: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
   val loginCallback: String = getConfString("auth.login-callback.url", "")
