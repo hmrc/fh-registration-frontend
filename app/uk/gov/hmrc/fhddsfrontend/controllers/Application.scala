@@ -85,6 +85,7 @@ class Application @Inject()(
     enrolments.getEnrolment("IR-CT").flatMap(_.getIdentifier("UTR")).map(_.value).get
   }
 
+  override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
 }
 
 @Singleton
@@ -108,6 +109,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
+      println(s"=====${request.session}")
       withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised() {
           action(request)

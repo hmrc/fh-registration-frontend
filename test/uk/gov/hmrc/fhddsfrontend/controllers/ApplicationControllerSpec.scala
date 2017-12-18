@@ -32,6 +32,7 @@ class ApplicationControllerSpec extends AppUnitGenerator {
 
   val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mock[MessagesApi], mock[Configuration]) {
     override val authConnector = mockAuthConnector
+    override val usewhiteListing = false
   }
 
   "GET /" should {
@@ -41,10 +42,10 @@ class ApplicationControllerSpec extends AppUnitGenerator {
 
     val expectedRedirect = "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
 
-    "return 401" in {
+    "return 303" in {
       val result = applicationController.start().apply(request)
-      result.header.status shouldBe Status.UNAUTHORIZED
-//      redirectLocation(result) shouldBe Some(expectedRedirect)
+      result.header.status shouldBe Status.SEE_OTHER
+      redirectLocation(result) shouldBe Some(expectedRedirect)
     }
 
   }
