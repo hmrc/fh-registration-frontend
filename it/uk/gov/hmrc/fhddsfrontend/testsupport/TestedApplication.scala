@@ -32,7 +32,7 @@ trait TestedApplication
       timeout = Span(4, Seconds),
       interval = Span(50, Millis))
 
-  def when() = new PreconditionBuilder
+  def given() = new PreconditionBuilder
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .configure(replaceWithWiremock(Seq(
@@ -48,8 +48,8 @@ trait TestedApplication
   private def replaceWithWiremock(services: Seq[String]) =
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap + (
-        s"microservice.services.$service.host" -> wiremockHost,
-        s"microservice.services.$service.port" -> wiremockPort)
+        s"Test.microservice.services.$service.host" -> wiremockHost,
+        s"Test.microservice.services.$service.port" -> wiremockPort)
     } +
       (s"Test.auditing.consumer.baseUri.host" -> wiremockHost, s"Test.auditing.consumer.baseUri.port" -> wiremockPort)
 

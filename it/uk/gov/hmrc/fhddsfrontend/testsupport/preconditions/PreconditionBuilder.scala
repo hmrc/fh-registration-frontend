@@ -5,5 +5,7 @@ class PreconditionBuilder {
 
   def audit = AuditStub()
   def user = UserStub()
+  def businessCustomerFrontend = BusinessCustomerFrontendStub()
+  def fhddsBackend = FhddsBackendStub()
 
 }

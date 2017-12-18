@@ -21,17 +21,24 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/** TODO remove this when private beta ends*/
 trait Whitelisting {
 
   def otacAuthConnector: OtacAuthConnector
 
+  def usewhiteListing: Boolean
+
   def withVerifiedPasscode[T](serviceName: String, otacToken: Option[String])(body: => Future[T])
     (implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Future[T] = {
 
-    otacAuthConnector.authorise(serviceName, headerCarrier, otacToken).flatMap {
-      case Authorised => body
-      case otherResult => Future.failed(OtacFailureThrowable(otherResult))
-    }
+    if (usewhiteListing)
+
+      otacAuthConnector.authorise(serviceName, headerCarrier, otacToken).flatMap {
+        case Authorised  => body
+        case otherResult => Future.failed(OtacFailureThrowable(otherResult))
+      }
+    else
+      body
   }
 
 }

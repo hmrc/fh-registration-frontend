@@ -7,9 +7,6 @@ import play.api.http.HeaderNames
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhddsfrontend.testsupport.TestedApplication
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
-
 class ApplicationControllerIntegrationSpec
   extends WordSpec
     with OptionValues
@@ -21,27 +18,32 @@ class ApplicationControllerIntegrationSpec
 
 
   "Application" should {
+    val baseUrl = s"http://localhost:$port/fhdds"
     "be reachable" in {
-      when()
+      given()
         .audit.writesAuditOrMerged()
       WsTestClient.withClient { client ⇒
-        Await.result(client.url(s"http://localhost:$port/ping/ping").get(), 10 seconds).status shouldBe (200)
-      }
-    }
-
-    "not authorize w/o the whitelisting token" in {
-      when()
-        .audit.writesAuditOrMerged()
-      WsTestClient.withClient { client ⇒
-        whenReady(client.url(s"http://localhost:$port/fhdds").get()) { res ⇒
-          res.status shouldBe 401
+        whenReady(client.url(s"http://localhost:$port/ping/ping").get()) {result ⇒
+          result.status shouldBe 200
         }
       }
     }
 
+//    //This test is used only useful when whitelisting is enabled
+//    //TODO remove togheter with whitelisting
+//    "not authorize w/o the whitelisting token" in {
+//      when()
+//        .audit.writesAuditOrMerged()
+//      WsTestClient.withClient { client ⇒
+//        whenReady(client.url(s"http://localhost:$port/fhdds").get()) { res ⇒
+//          res.status shouldBe 401
+//        }
+//      }
+//    }
 
-    "redirect to the login page if the user is not logged in" in {
-      when()
+
+    "/ redirects to the login page if the user is not logged in" in {
+      given()
         .audit.writesAuditOrMerged()
         .user.isNotAuthorised()
 
@@ -53,8 +55,8 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "redirect to the verification FE if logged in" in {
-      when()
+    "/whitelisted redirects to the verification FE if logged in" in {
+      given()
         .audit.writesAuditOrMerged()
         .user.isAuthorised()
 
@@ -65,6 +67,45 @@ class ApplicationControllerIntegrationSpec
         }
       }
     }
+
+    "/ route will redirect to business customer FE when authorised" in {
+      given()
+        .audit.writesAuditOrMerged()
+        .user.isAuthorised()
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl")
+          .withFollowRedirects(false)
+          .get()
+        whenReady(result) { res ⇒
+          res.status shouldBe 303
+          res.header(HeaderNames.LOCATION) shouldBe Some("http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue")
+        }
+      }
+    }
+
+    "/continue will redirect to dfs frontend when the user has a correct BPR" in {
+      given()
+        .audit.writesAuditOrMerged()
+        .user.isAuthorised()
+        .fhddsBackend.hasBusinessDetails()
+        .businessCustomerFrontend.hasBusinessPartnerRecord()
+
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
+          .get()
+
+        whenReady(result) { res ⇒
+          res.status shouldBe 303
+          res.header(HeaderNames.LOCATION) shouldBe Some(s"http://$wiremockHost:$wiremockPort/fhdds-forms/forms/form/fhdds-limited-company/new")
+        }
+      }
+
+
+    }
+
   }
 
 }
