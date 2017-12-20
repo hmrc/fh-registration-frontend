@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhddsfrontend
+package uk.gov.hmrc.fhregistrationfrontend
 
 import akka.stream.Materializer
 import org.scalatest.BeforeAndAfterEach
@@ -28,8 +28,8 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.auth.core.PlayAuthConnector
-import uk.gov.hmrc.fhddsfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhddsfrontend.controllers.CommonPlayDependencies
+import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.test.UnitSpec

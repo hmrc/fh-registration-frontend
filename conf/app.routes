@@ -1,5 +1,5 @@
 # microservice specific routes
 
-GET         /                          @uk.gov.hmrc.fhddsfrontend.controllers.Application.start()
-GET         /continue                  @uk.gov.hmrc.fhddsfrontend.controllers.Application.continue()
-GET         /whitelisted               @uk.gov.hmrc.fhddsfrontend.controllers.Application.whitelisted(p: String)
+GET         /                          @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET         /continue                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
+GET         /whitelisted               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
