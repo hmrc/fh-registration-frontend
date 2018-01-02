@@ -4,7 +4,7 @@ import sbt._
 
 object FrontendBuild extends Build with MicroService {
 
-  val appName = "fhdds-frontend"
+  val appName = "fh-registration-frontend"
 
   override lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
