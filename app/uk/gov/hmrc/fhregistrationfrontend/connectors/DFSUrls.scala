@@ -23,8 +23,8 @@ object DFSUrls extends ServicesConfig {
   val DFServiceSoleTraderFormName: String = config("fhdds-dfs-frontend").getString("sole-trader-application").getOrElse("")
   val DFServiceLimitedCompanyFormName: String = config("fhdds-dfs-frontend").getString("fhdds-limited-company").getOrElse("")
 
-  val soleTraderUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceSoleTraderFormName/new"
-  val limitedCompanyUrl:String = s"$DFSHost/fhdds-forms/forms/form/$DFServiceLimitedCompanyFormName/new"
+  val soleTraderUrl:String = s"$DFSHost/fhdds-forms/$DFServiceSoleTraderFormName/new"
+  val limitedCompanyUrl:String = s"$DFSHost/fhdds-forms/$DFServiceLimitedCompanyFormName/new"
 
   def dfsURL(formName: String): String = {
     formName match {
