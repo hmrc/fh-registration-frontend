@@ -21,7 +21,7 @@ import javax.inject.Singleton
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
@@ -46,5 +46,7 @@ trait FhddsConnect {
     s"$FHDSSServiceUrl/fhdds/submission-extra-data/$userId/$formTypeRef/businessRegistrationDetails"
   }
 
-
+  def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/fulfilment-diligence/subscription/$fhddsRegistrationNumber/status")
+  }
 }
