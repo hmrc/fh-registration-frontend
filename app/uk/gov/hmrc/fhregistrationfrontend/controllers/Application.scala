@@ -73,8 +73,11 @@ class Application @Inject()(
   def continue = authorisedUser { implicit request ⇒ internalId ⇒
       businessCustomerConnector
         .getReviewDetails
-        .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details))
-        .map(_ ⇒ Redirect(DFSUrls.dfsURL("Organisation")))
+        .map(details ⇒ {
+          fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
+          if (details.businessType.contains("Sole Trader")) Redirect(DFSUrls.dfsURL("Individual"))
+          else Redirect(DFSUrls.dfsURL("Organisation"))
+        })
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
