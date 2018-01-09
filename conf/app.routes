@@ -1,5 +1,11 @@
 # microservice specific routes
 
-GET         /                          @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
-GET         /continue                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
-GET         /whitelisted               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
+GET   /                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET   /continue                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
+GET   /whitelisted                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
+
+GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                                   controllers.Assets.at(path="/public", file)

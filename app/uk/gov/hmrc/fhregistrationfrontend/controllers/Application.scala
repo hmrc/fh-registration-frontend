@@ -35,6 +35,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -75,6 +76,14 @@ class Application @Inject()(
         .getReviewDetails
         .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details))
         .map(_ ⇒ Redirect(DFSUrls.dfsURL("Organisation")))
+  }
+
+  def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
+    fhddsConnector
+      .getStatus(fhddsRegistrationNumber: String)(hc)
+      .map(statusResp ⇒ {
+        Ok(status(statusResp.body,fhddsRegistrationNumber))
+      })
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
