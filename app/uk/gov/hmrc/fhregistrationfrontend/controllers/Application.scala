@@ -51,7 +51,7 @@ class Application @Inject()(
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
 
-  val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-propritor").getOrElse("fhdds-sole-propritor")
+  val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor").getOrElse("fhdds-sole-proprietor")
   val limitedCompanyFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-limited-company").getOrElse("fhdds-limited-company")
 
   def whitelisted(p: String) = Action.async {

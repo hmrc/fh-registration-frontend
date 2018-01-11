@@ -32,7 +32,7 @@ class ApplicationControllerSpec extends AppUnitGenerator {
   when(mockAuthConnector.authorise(any(), any[Retrieval[Unit]]())(any(),any()))
     .thenReturn(Future.successful(()))
 
-  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-sole-propritor"))
+  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor"))
     .thenReturn(None)
   when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-limited-company"))
     .thenReturn(Some("fhdds-limited-company"))
