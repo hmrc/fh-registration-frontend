@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.Configuration
 import play.api.http.Status
 import play.api.i18n.MessagesApi
 import play.api.test.Helpers._
@@ -30,15 +29,20 @@ import scala.concurrent.Future
 
 class ApplicationControllerSpec extends AppUnitGenerator {
 
-  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mock[MessagesApi], mock[Configuration]) {
+  when(mockAuthConnector.authorise(any(), any[Retrieval[Unit]]())(any(),any()))
+    .thenReturn(Future.successful(()))
+
+  when(mockConfiguration.getString(s"fhdds-dfs-frontend.sole-trader-application"))
+    .thenReturn(None)
+  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-limited-company"))
+    .thenReturn(Some("fhdds-limited-company"))
+
+  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mock[MessagesApi], mockConfiguration) {
     override val authConnector = mockAuthConnector
     override val usewhiteListing = false
   }
 
   "GET /" should {
-
-    when(mockAuthConnector.authorise(any(), any[Retrieval[Unit]]())(any(),any()))
-      .thenReturn(Future.successful(()))
 
     val expectedRedirect = "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
 
