@@ -29,6 +29,7 @@ import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
+import uk.gov.hmrc.fhregistrationfrontend.connectors.DFSUrls.config
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -41,20 +42,23 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links: ExternalUrls,
-  ds: CommonPlayDependencies,
+  links         : ExternalUrls,
+  ds            : CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
-  messagesApi: play.api.i18n.MessagesApi,
-  configuration: Configuration
+  messagesApi   : play.api.i18n.MessagesApi,
+  configuration : Configuration
 ) extends AppController(ds, messagesApi) {
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
 
+  val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor").getOrElse("fhdds-sole-proprietor")
+  val limitedCompanyFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-limited-company").getOrElse("fhdds-limited-company")
+
   def whitelisted(p: String) = Action.async {
     implicit request ⇒
       authorised() {
-          val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-          Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
+        val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
+        Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
       } recover {
         case x: NoActiveSession ⇒
           Logger.warn(s"could not authenticate user due to: No Active Session " + x)
@@ -71,27 +75,31 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def continue = authorisedUser { implicit request ⇒ internalId ⇒
+  def continue = authorisedUser { implicit request ⇒
+    internalId ⇒
       businessCustomerConnector
         .getReviewDetails
-        .flatMap(details ⇒ fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details))
-        .map(_ ⇒ Redirect(DFSUrls.dfsURL("Organisation")))
+        .map(details ⇒ {
+          fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
+          Redirect(DFSUrls.dfsURL(formTypeRef(details)))
+        })
   }
 
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
     fhddsConnector
       .getStatus(fhddsRegistrationNumber: String)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body,fhddsRegistrationNumber))
+        Ok(status(statusResp.body, fhddsRegistrationNumber))
       })
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
-    DFSUrls.DFServiceLimitedCompanyFormName
-  }
 
-  private def getUserId(enrolments: Enrolments) = {
-    enrolments.getEnrolment("IR-CT").flatMap(_.getIdentifier("UTR")).map(_.value).get
+    details.businessType match {
+      case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
+      case Some("corporate body") ⇒ limitedCompanyFormTypeRef
+      case _                      ⇒ limitedCompanyFormTypeRef
+    }
   }
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
@@ -102,8 +110,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
   extends FrontendController
     with I18nSupport
     with AuthorisedFunctions
-    with Whitelisting
-{
+    with Whitelisting {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
@@ -113,12 +120,12 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
   override def authConnector: PlayAuthConnector = FrontendAuthConnector
 
   override def otacAuthConnector = ConcreteOtacAuthConnector
+
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
   val hasCtUtr: Predicate = Enrolment("IR-CT")
 
   def ggAuthorised(action: Request[AnyContent] ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
-      println(s"=====${request.session}")
       withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised() {
           action(request)
@@ -143,7 +150,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   def handleFailure(e: Throwable)(implicit request: Request[_], messages: Messages): Result =
     e match {
-      case x: NoActiveSession ⇒
+      case x: NoActiveSession      ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
 
         val ggRedirectParms = Map(
@@ -155,7 +162,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
       case e: OtacFailureThrowable ⇒
         val errorTemplate = new error_template()
         Unauthorized(errorTemplate.render("Unauthorized", "Unauthorized", "You are not authorized to use this service", request, messages))
-      case ex ⇒
+      case ex                      ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
         BadRequest(s"$ex")
     }
@@ -163,6 +170,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
 @Singleton
 final class CommonPlayDependencies @Inject()(val conf: Configuration, val env: Environment, val messagesApi: MessagesApi)
+
 case class UnexpectedState(errorMsg: String, json: Option[JsValue] = None)
 
 object UnexpectedState {

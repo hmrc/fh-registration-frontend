@@ -22,6 +22,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.play.OneAppPerSuite
+import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
@@ -52,6 +53,7 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
   val mockAuthConnector = mock[PlayAuthConnector]
+  val mockConfiguration = mock[Configuration]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
 
 }
