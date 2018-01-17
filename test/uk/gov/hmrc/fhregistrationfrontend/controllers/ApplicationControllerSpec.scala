@@ -36,6 +36,9 @@ class ApplicationControllerSpec extends AppUnitGenerator {
     .thenReturn(None)
   when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-limited-company"))
     .thenReturn(Some("fhdds-limited-company"))
+  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-partnership"))
+    .thenReturn(Some("fhdds-partnership"))
+
 
   val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mock[MessagesApi], mockConfiguration) {
     override val authConnector = mockAuthConnector

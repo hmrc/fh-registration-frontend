@@ -18,9 +18,9 @@ case class FhddsBackendStub()
     postcode = Some("NE98 1ZZ"),
     country = "GB")
 
-  private def mkBusinessPartnerRecord() = {
+  private def mkBusinessPartnerRecord(businessType: String) = {
     BusinessRegistrationDetails(businessName = "Real Business Inc",
-      businessType = Some("corporate body"),
+      businessType = Some(businessType),
       businessAddress = aFakeAddress,
       sapNumber = "1234567890",
       safeId = "XE0001234567890",
@@ -31,13 +31,13 @@ case class FhddsBackendStub()
       identification = None)
   }
 
-  def hasBusinessDetails() = {
+  def hasBusinessDetails(formType: String, businessType: String) = {
     stubFor(
       put(urlPathEqualTo(
-        s"/fhdds/submission-extra-data/some-id/fhdds-limited-company/businessRegistrationDetails")
+        s"/fhdds/submission-extra-data/some-id/$formType/businessRegistrationDetails")
       )
       .willReturn(ok(
-        Json.toJson(mkBusinessPartnerRecord()).toString()
+        Json.toJson(mkBusinessPartnerRecord(businessType)).toString()
       ))
     )
     builder
