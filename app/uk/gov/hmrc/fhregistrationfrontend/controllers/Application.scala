@@ -53,6 +53,7 @@ class Application @Inject()(
 
   val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor").getOrElse("fhdds-sole-proprietor")
   val limitedCompanyFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-limited-company").getOrElse("fhdds-limited-company")
+  val partnershipFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-partnership").getOrElse("fhdds-partnership")
 
   def whitelisted(p: String) = Action.async {
     implicit request ⇒
@@ -77,12 +78,12 @@ class Application @Inject()(
 
   def continue = authorisedUser { implicit request ⇒
     internalId ⇒
-      businessCustomerConnector
-        .getReviewDetails
-        .map(details ⇒ {
-          fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
-          Redirect(DFSUrls.dfsURL(formTypeRef(details)))
-        })
+      for {
+        details ← businessCustomerConnector.getReviewDetails
+        _ ← fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
+      } yield {
+        Redirect(DFSUrls.dfsURL(formTypeRef(details)))
+      }
   }
 
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
@@ -98,6 +99,7 @@ class Application @Inject()(
     details.businessType match {
       case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
       case Some("corporate body") ⇒ limitedCompanyFormTypeRef
+      case Some("Partnership")    ⇒ partnershipFormTypeRef
       case _                      ⇒ limitedCompanyFormTypeRef
     }
   }

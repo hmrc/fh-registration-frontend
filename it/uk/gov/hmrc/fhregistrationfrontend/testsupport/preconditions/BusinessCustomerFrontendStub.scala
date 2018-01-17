@@ -18,9 +18,9 @@ case class BusinessCustomerFrontendStub()
     postcode = Some("NE98 1ZZ"),
     country = "GB")
 
-  private def mkBusinessPartnerRecord() = {
+  private def mkBusinessPartnerRecord(businessType: String) = {
     BusinessRegistrationDetails(businessName = "Real Business Inc",
-      businessType = Some("corporate body"),
+      businessType = Some(businessType),
       businessAddress = aFakeAddress,
       sapNumber = "1234567890",
       safeId = "XE0001234567890",
@@ -31,11 +31,11 @@ case class BusinessCustomerFrontendStub()
       identification = None)
   }
 
-  def hasBusinessPartnerRecord() = {
+  def hasBusinessPartnerRecord(businessType: String) = {
     stubFor(
       get(urlPathEqualTo("/business-customer/fetch-review-details/FHDDS"))
       .willReturn(ok(
-        Json.toJson(mkBusinessPartnerRecord()).toString()
+        Json.toJson(mkBusinessPartnerRecord(businessType)).toString()
       ))
     )
     builder

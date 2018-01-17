@@ -22,6 +22,7 @@ class ApplicationControllerIntegrationSpec
     "be reachable" in {
       given()
         .audit.writesAuditOrMerged()
+
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"http://localhost:$port/ping/ping").get()) {result ⇒
           result.status shouldBe 200
@@ -84,12 +85,12 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "/continue will redirect to dfs frontend when the user has a correct BPR" in {
+    "/continue will redirect to dfs frontend when the user has a correct BPR for limited company" in {
       given()
         .audit.writesAuditOrMerged()
         .user.isAuthorised()
-        .fhddsBackend.hasBusinessDetails()
-        .businessCustomerFrontend.hasBusinessPartnerRecord()
+        .fhddsBackend.hasBusinessDetails("fhdds-limited-company", "corporate body")
+        .businessCustomerFrontend.hasBusinessPartnerRecord("corporate body")
 
 
       WsTestClient.withClient { client ⇒
@@ -102,9 +103,48 @@ class ApplicationControllerIntegrationSpec
           res.header(HeaderNames.LOCATION) shouldBe Some(s"http://$wiremockHost:$wiremockPort/fhdds-forms/forms/form/fhdds-limited-company/new")
         }
       }
-
-
     }
+
+    "/continue will redirect to dfs frontend when the user has a correct BPR for sole trader" in {
+      given()
+        .audit.writesAuditOrMerged()
+        .user.isAuthorised()
+        .fhddsBackend.hasBusinessDetails("fhdds-sole-proprietor", "Sole Trader")
+        .businessCustomerFrontend.hasBusinessPartnerRecord("Sole Trader")
+
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
+          .get()
+
+        whenReady(result) { res ⇒
+          res.status shouldBe 303
+          res.header(HeaderNames.LOCATION) shouldBe Some(s"http://$wiremockHost:$wiremockPort/fhdds-forms/forms/form/fhdds-sole-proprietor/new")
+        }
+      }
+    }
+
+    "/continue will redirect to dfs frontend when the user has a correct BPR for Partnership" in {
+      given()
+        .audit.writesAuditOrMerged()
+        .user.isAuthorised()
+        .fhddsBackend.hasBusinessDetails("fhdds-partnership", "Parnership")
+        .businessCustomerFrontend.hasBusinessPartnerRecord("Partnership")
+
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
+          .get()
+
+        whenReady(result) { res ⇒
+          res.status shouldBe 303
+          res.header(HeaderNames.LOCATION) shouldBe Some(s"http://$wiremockHost:$wiremockPort/fhdds-forms/forms/form/fhdds-partnership/new")
+        }
+      }
+    }
+
 
   }
 
