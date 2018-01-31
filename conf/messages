@@ -56,7 +56,7 @@ fh.generic.status.person.value=person
 fh.generic.status.company=Company
 fh.generic.status.company.value=company
 
-# Page specific messages
+# Common Page specific messages (All entities)
 #============================================================
 
 # - Main Business Address
@@ -72,7 +72,7 @@ fh.main_business_address.0to3years.value=Less than 3 years
 fh.main_business_address.3to5years.value=3 to 5 years
 fh.main_business_address.5to10years.value=5 to 10 years
 fh.main_business_address.10plusYears.value=over 10 years
-fh.main_business_address.previous.label=Has the business operated from a different address before that?
+fh.main_business_address.previous.label=Has the business operated from a different address in the last 3 years?
 fh.main_business_address.previous.error=Select whether the business has operated from a different address in the last 3 years
 fh.main_business_address.enter_previous.label=What was the previous address?
 fh.main_business_address.enter_previous.error=Enter a valid previous address
@@ -103,24 +103,6 @@ fh.contact_person.contact_address_in_uk.error=Enter whether the contact address 
 fh.contact_person.contact_address_new.label=Enter your contact address
 fh.contact_person.contact_address_new.error=Enter a valid contact address
 
-# - Company Registration Number (Corporate Body)
-#===========================================================
-fh.company_registration_number.title=Company registration number
-fh.company_registration_number.label=Company registration number
-fh.company_registration_number.hint_text=For example, 12345678 or SC123456
-fh.company_registration_number.empty.error=Enter a valid company registration number
-fh.company_registration_number.invalid.error=Enter a valid company registration number
-fh.company_registration_number.summary=Where do I find my company registration number?
-fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on Companies House
-
-# - Date of incorporation (Corporate Body)
-#===========================================================
-fh.date_of_incorporation.title=Date of incorporation
-fh.date_of_incorporation.label=Date of incorporation
-fh.date_of_incorporation.hint_text=For example, 31/07/201
-fh.date_of_incorporation.empty.error=Enter the date of incorporation
-fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
-
 # - Trading name
 #===========================================================
 fh.trading_name.title=Trading name
@@ -139,6 +121,100 @@ fh.vat_registration.label=Enter the VAT registration number
 fh.vat_registration.empty.error=Enter the VAT registration number
 fh.vat_registration.invalid.error=Enter a valid VAT registration number
 
+# - Business status
+#===========================================================
+fh.business_status.title=Business status
+fh.business_status.label=Are you setting up a new fulfilment business?
+fh.business_status.error=Select whether the business is setting up a new fulfilment business
+fh.business_status.new_business.label=Enter the date the business intends to start operating as a fulfilment business
+fh.business_status.new_business.hint_text=For example, 31/07/2019
+fh.business_status.new_business.empty.error=Enter the date the business intends to start operating as a fulfilment business
+fh.business_status.new_business.invalid.error=Enter a valid date for when the business intends to start operating as a fulfilment business
+
+# - Importing activities
+#===========================================================
+fh.importing_activities.title=Importing activities
+fh.importing_activities.eori.confirm.label=Does the business have any EORI numbers?
+fh.importing_activities.eori.confirm.error=Select whether the business has any EORI numbers
+fh.importing_activities.eori.label=Enter the EORI number
+fh.importing_activities.eori.hint_text=For example, GB123456789000
+fh.importing_activities.eori.empty.error=Enter the EORI number
+fh.importing_activities.eori.invalid.error=Enter a valid EORI number
+fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under any of its EORI numbers?
+fh.importing_activities.eori_used_for_others.confirm.error=Select whether the business imports goods not belonging to it under any of its EORI numbers
+
+# - Business Customers
+#===========================================================
+fh.business_customers.title=Business customers
+fh.business_customers.label=How many sellers established outside the EU does the business store goods for?
+fh.business_customers.error=Select how many sellers established outside the EU the business stores goods for
+fh.business_customers.none.label=None
+fh.business_customers.none.value=None
+fh.business_customers.1_10.label=1 to 10
+fh.business_customers.1_10.value=1 to 10
+fh.business_customers.11_50.label=11 to 50
+fh.business_customers.11_50.value=11 to 50
+fh.business_customers.51_100.label=51 to 100
+fh.business_customers.51_100.value=51 to 100
+fh.business_customers.101_plus.label=More than 100
+fh.business_customers.101_plus.value=More than 100
+
+# - Other storage premises
+#===========================================================
+fh.other_storage_premises.title=Other storage premises
+fh.other_storage_premises.confirm.label=Other than the main business address, does the business use any other premises to store third-party goods imported from outside the EU?
+fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
+fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
+
+# - Summary
+#===========================================================
+fh.summary.title=Check your answers before sending your application
+
+# - Declaration
+#===========================================================
+fh.declaration.title=Declaration
+fh.declaration.person_name.label=Full name
+fh.declaration.person_name.empty.error=Enter the full name of who is submitting this application
+fh.declaration.person_name.invalid.error=Enter only valid characters for a name
+fh.declaration.person_status.label=Job title
+fh.declaration.person_status.empty.error=Enter the job title of who is submitting this application
+fh.declaration.person_status.invalid.error=Enter only valid characters for a job title
+fh.declaration.has_gg_email=We will send a confirmation email to:
+fh.declaration.use_gg_email.confirm.label=Is this the email address you want to use?
+fh.declaration.use_gg_email.confirm.error=Select whether this is the correct email address to use
+fh.declaration.alternative_email.label=Enter an alternative email address
+fh.declaration.alternative_email.empty.error=Enter an alternative email address
+fh.declaration.alternative_email.invalid.error=Enter a valid email address for the alternative email address
+fh.declaration.alternative_email_confirmation.label=Re-enter the alternative email address
+fh.declaration.alternative_email_confirmation.empty.error=Re-enter the alternative email address
+fh.declaration.alternative_email_confirmation.no_match.error=The email addresses are not the same
+fh.declaration.declaration.title=By submitting this application you confirm that:
+fh.declaration.declaration.point1=the information you have provided is correct and complete
+fh.declaration.declaration.point2=you have authority to submit this form on behalf of {0}
+fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
+
+# Corporate Body Page specific messages
+#============================================================
+
+# - Company Registration Number (Corporate Body)
+#===========================================================
+fh.company_registration_number.title=Company registration number
+fh.company_registration_number.label=Company registration number
+fh.company_registration_number.hint_text=For example, 12345678 or SC123456
+fh.company_registration_number.empty.error=Enter a valid company registration number
+fh.company_registration_number.invalid.error=Enter a valid company registration number
+fh.company_registration_number.summary=Where do I find my company registration number?
+fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on Companies House
+
+# - Date of incorporation (Corporate Body)
+#===========================================================
+fh.date_of_incorporation.title=Date of incorporation
+fh.date_of_incorporation.label=Date of incorporation
+fh.date_of_incorporation.hint_text=For example, 31/07/201
+fh.date_of_incorporation.empty.error=Enter the date of incorporation
+fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
+
+
 # - Company Officers (Corporate Body)
 #===========================================================
 fh.company_officers.title=Company officers
@@ -146,10 +222,21 @@ fh.company_officers.intro=You must tell us about all the directors and company s
 fh.company_officers.each.title=Add company officer {0}
 fh.company_officers.entity_type.label=Is company officer {0} an individual or a company?
 fh.company_officers.entity_type.error=Select whether company officer {0} is an invidual or a company
+
+fh.company_officers.status.label=What is their role?
+fh.company_officers.status.error=Select what role company officer {0} has in the company
+fh.company_officers.add_another.label=Add another company officer
+fh.company_officers.status.director=Director
+fh.company_officers.status.director.value=Director
+fh.company_officers.status.company_secretary=Company secretary
+fh.company_officers.status.company_secretary.value=Company Secretary
+fh.company_officers.status.both=Both a director and a company secretary
+fh.company_officers.status.both.value=Director and Company Secretary
+fh.company_officers.status.member=Member
+fh.company_officers.status.member.value=Member
+
 fh.company_officers.individual.label=An individual
-fh.company_officers.company.label=A company
 fh.company_officers.individual.title=Enter their details
-fh.company_officers.company.title=Enter the company details
 fh.company_officers.individual.first_name.label=First name
 fh.company_officers.individual.first_name.empty.error=Enter a first name for company officer {0}
 fh.company_officers.individual.last_name.label=Last name
@@ -162,10 +249,14 @@ fh.company_officers.individual.nino.hint_text=For example, QQ123456C
 fh.company_officers.individual.nino.empty.error=Enter the National Insurance number for company officer {0}
 fh.company_officers.individual.passport.label=Enter their passport number
 fh.company_officers.individual.passport.empty.error=Enter the passport number for company officer {0}
-fh.company_officers.status.label=What is their role?
-fh.company_officers.status.error=Select what role company officer {0} has in the company
-fh.company_officers.add_another.label=Add another company officer
+
+fh.company_officers.company.label=A company
+fh.company_officers.company.title=Enter the company details
 fh.company_officers.company.company_name.label=Company name
 fh.company_officers.company.company_name.empty.error=Enter a company name for company officer {0}
 fh.company_officers.company.vat_registration.confirm.label=Does the company have a VAT registration number?
 fh.company_officers.company.vat_registration.confirm.error=Select whether company officer {0} has a VAT registration number
+fh.company_officers.company.company_registration_number.label=Enter the company registration number
+fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
+fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
+
