@@ -39,7 +39,7 @@ object MainBusinessAddress {
   )
 
   def hideField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("period").hasErrors) ""
+    if (mainBusinessAddress("period").hasErrors) "hidden"
     else {
       mainBusinessAddress.value match {
         case Some(v) => if (v.period == "Less than 3 years") "" else "hidden"

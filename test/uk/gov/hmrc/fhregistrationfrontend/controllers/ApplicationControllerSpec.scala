@@ -20,14 +20,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.i18n.MessagesApi
-import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.fhregistrationfrontend.AppUnitGenerator
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 
 import scala.concurrent.Future
-import scala.io.Source
 
 
 class ApplicationControllerSpec extends AppUnitGenerator {
