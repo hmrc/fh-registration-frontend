@@ -59,20 +59,5 @@ class ApplicationControllerSpec extends AppUnitGenerator {
     }
 
   }
-
-  "dfgdf" should {
-    "ok" in {
-      val LIMITED_COMPANIES_SUBMISSION =
-        Json.parse(getClass.getResourceAsStream("/01-NewSubmissionLtdCompany.json"))
-          .as[SubScriptionCreate]
-
-
-
-      println(s"\n\n${LIMITED_COMPANIES_SUBMISSION}\n\n")
-
-      "a" shouldBe "a"
-    }
-
-  }
-
+  
 }
