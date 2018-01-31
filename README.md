@@ -10,9 +10,8 @@ This service allow a customer to apply for apply for the Fulfilment House Regist
 
 ## Requirements
 
-This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE] to run.
-*   MongoDB 3.2 (not later as of this time the platform is not compatible with higher versions)
-*   KEYSTORE and ASSETS_FRONTEND get the latest version via the service-manager
+This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE] to run. It also
+requires [MongoDB 3.2](https://www.mongodb.com/).
 
 ## Run the application locally
 
@@ -32,11 +31,6 @@ sbt run
 ```
 GET   	/fhdds-frontend/
 ```
-
-## Authentication
-
-This customer logs into this service using [GOV.UK Verify](https://www.gov.uk/government/publications/introducing-govuk-verify/introducing-govuk-verify).
-
 
 ## Acronyms
 
