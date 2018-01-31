@@ -1,0 +1,139 @@
+{
+  "requestType": "Create",
+  "subScriptionCreate": {
+    "organizationType": "Corporate Body",
+    "FHbusinessDetail": {
+      "isNewFulfilmentBusiness": true,
+      "proposedStartDate": "2018-06-30"
+    },
+    "additionalBusinessInformation": {
+      "partnerCorporateBody": {
+        "numberOfOtherOfficials": "3",
+        "companyOfficials": [
+          {
+            "role": "Company Secretary",
+            "name": {
+              "firstName": "Cosmin",
+              "lastName": "M"
+            },
+            "identification": {
+              "nino": "AA123123A"
+            }
+          },
+          {
+            "role": "Director",
+            "name": {
+              "firstName": "Vlad",
+              "lastName": "M"
+            },
+            "identification": {
+              "nino": "AA123231"
+            }
+          },
+          {
+            "role": "Company Secretary",
+            "name": {
+              "companyName": "Some Company"
+            },
+            "identification": {
+              "vatRegistrationNumber": "123456789"
+            }
+          }
+        ]
+      },
+      "allOtherInformation": {
+        "numberOfCustomers": "Over 100",
+        "doesEORIExist": true,
+        "EORINumber": {
+          "EORIVat": "1234123132",
+          "goodsImportedOutEORI": true
+        },
+        "numberOfpremises": "2",
+        "premises": [
+          {
+            "address": {
+              "line1": "1 Some High Street",
+              "line4": "Sometown",
+              "postalCode": "Z99 2YY",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": false
+          },
+          {
+            "address": {
+              "line1": "25 Testing Close",
+              "line4": "Othertown",
+              "postalCode": "Z9 3WW",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": false
+          }
+        ]
+      }
+    },
+    "businessDetail": {
+      "nonProprietor": {
+        "tradingName": "DodgyCo",
+        "identification": {
+          "vatRegistrationNumber": "123456789",
+          "uniqueTaxpayerReference": "1111111111"
+        }
+      },
+      "limitedLiabilityPartnershipCorporateBody": {
+        "incorporationDetails": {
+          "companyRegistrationNumber": "12345678",
+          "dateOfIncorporation": "2014-03-20"
+        }
+      }
+    },
+    "businessAddressForFHDDS": {
+      "currentAddress": {
+        "line1": "23 High Street",
+        "line2": "Park View",
+        "line3": "Gloucester",
+        "line4": "Gloucestershire",
+        "postalCode": "NE98 1ZZ",
+        "countryCode": "GB"
+      },
+      "commonDetails": {},
+      "timeOperatedAtCurrentAddress": "Less than 3 years",
+      "previousOperationalAddress": {
+        "anyPreviousOperatingAddress": true,
+        "previousOperationalAddressDetail": [
+          {
+            "previousAddress": {
+              "line1": "Flat 1A",
+              "line4": "Testtown",
+              "postalCode": "ZZ11 1ZZ",
+              "countryCode": "GB"
+            },
+            "previousAddressStartdate": "2015-03-20"
+          }
+        ]
+      }
+    },
+    "contactDetail": {
+      "names": {
+        "firstName": "Cosmin",
+        "lastName": "Marian"
+      },
+      "usingSameContactAddress": false,
+      "address": {
+        "line1": "Flat 1B",
+        "line4": "Testtown",
+        "postalCode": "ZZ11 1ZZ",
+        "countryCode": "GB"
+      },
+      "commonDetails": {
+        "telephone": "11123",
+        "email": "a@w.ro"
+      }
+    },
+    "declaration": {
+      "personName": "C",
+      "personStatus": "D",
+      "email": "a@b.co",
+      "isInformationAccurate": true
+    }
+  }
+}

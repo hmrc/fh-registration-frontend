@@ -1,0 +1,154 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
+@periodLabels = @{List("Less than 3 years","3-5 years","5-10 years","10 or more years")}
+
+@main_template(title = "FHDDS MainBusinessAddress", mainClass = Some("full-width")) {
+
+  @if(mainBusinessAddressForm.hasErrors) {
+    <div class="flash error-summary error-summary--show"
+    id="error-summary-display"
+    role="alert"
+    aria-labelledby="error-summary-heading"
+    tabindex="-1">
+      <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
+      <ul>
+        @if(mainBusinessAddressForm("period").hasErrors){
+          <li id="period-error-link"><a href="#period-inline-error">@{
+            "Required to choose one"
+          }
+          </a></li>
+        }
+      </ul>
+    </div>
+  }
+
+  <h1 class="heading-large">Main business address</h1>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.mainBusinessAddress) {
+    <h3>How long has the business operated from its current address?</h3>
+
+    <div class="form-group">
+      <fieldset class="form-field-group js-visible js-aria-show js-toggle"
+      id="over-three-years"
+      data-target="over-three-years-no-target"
+      data-trigger="js-toggle-trigger"
+      data-open="over-three-years-no"
+      data-close="over-three-years-yes"
+      data-close="over-three-years-yess"
+      data-close="over-three-years-yesss">
+
+      @if(mainBusinessAddressForm("period").hasErrors){
+        <fieldset class="form-field--error">
+          <div class="error-notification" id="period-inline-error">
+          @{mainBusinessAddressForm("period").errors.head.message}
+          </div>
+          } else {<fieldset>}
+
+          @for(label <- periodLabels) {
+            <label class="block-label selection-button-radio"
+                   for=@{if (label=="Less than 3 years") {"over-three-years-no"}
+                           else if(label=="5-10 years"){"over-three-years-yess"}
+                             else if(label=="10 or more years"){"over-three-years-yesss"}
+                               else {"over-three-years-yes"}}>
+              @label
+            <input
+              type="radio"
+              class="js-toggle-trigger"
+              id=@{if(label=="Less than 3 years"){"over-three-years-no"}
+                    else if(label=="5-10 years"){"over-three-years-yess"}
+                      else if(label=="10 or more years"){"over-three-years-yesss"}
+                        else {"over-three-years-yes"}}
+              name="period"
+              value="@label"
+            />
+            </label>
+          }
+
+        </fieldset>
+
+        <div class="form-field-group @if(!mainBusinessAddressForm("hasOtherAddress").errors){panel-indent} @MainBusinessAddress.hideField(mainBusinessAddressForm)"
+        id="over-three-years-no-target">
+
+          <fieldset class="inline form-field-group js-visible js-aria-show js-toggle"
+                    id="has-other-address"
+                    data-target="has-other-address-yes-target"
+                    data-trigger="js-toggle-trigger"
+                    data-open="has-other-address-yes"
+                    data-close="has-other-address-no">
+
+            Has the business operated from any other address in the last 3 years?<br>
+            @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
+              <fieldset class="form-field--error">
+                <div class="error-notification" id="has-other-address-inline-error">
+                @{mainBusinessAddressForm("hasOtherAddress").errors.head.message}
+                </div>
+                } else {<fieldset>}
+
+              <label class="block-label selection-button-radio" for="has-other-address-yes">Yes
+                <input type="radio"
+                id="has-other-address-yes"
+                class="js-toggle-trigger"
+                name="hasOtherAddress"
+                value="true"
+              />
+              </label>
+
+              <label class="block-label selection-button-radio" for="has-other-address-no">No
+                <input type="radio"
+                id="has-other-address-no"
+                class="js-toggle-trigger"
+                name="hasOtherAddress"
+                value="false"
+                />
+              </label>
+
+            </fieldset>
+
+              <div class="form-field-group @if(!mainBusinessAddressForm("previousAddress").errors){panel-indent} @MainBusinessAddress.hideAddressField(mainBusinessAddressForm)"
+              id="has-other-address-yes-target">
+
+                @if(mainBusinessAddressForm("previousAddress").errors){
+                  <fieldset class="form-field--error">
+                    <div class="error-notification" id="has-other-address-inline-error">
+                    @mainBusinessAddressForm("previousAddress").errors.head.message
+                    </div>
+                    } else {<fieldset>}
+                Enter the previous business address<br>
+                <input type="text" id="previous-address" name="previousAddress" value="">
+
+              </fieldset>
+
+              </div>
+
+          </fieldset>
+
+        </div>
+
+      </fieldset>
+    </div>
+
+    <div class="form-group">
+      <input type="submit" id="p-continue" class="button" value="continue">
+    </div>
+  }
+
+
+}

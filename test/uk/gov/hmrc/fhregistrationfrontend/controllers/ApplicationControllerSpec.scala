@@ -20,11 +20,14 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.i18n.MessagesApi
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.fhregistrationfrontend.AppUnitGenerator
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 
 import scala.concurrent.Future
+import scala.io.Source
 
 
 class ApplicationControllerSpec extends AppUnitGenerator {
@@ -53,6 +56,21 @@ class ApplicationControllerSpec extends AppUnitGenerator {
       val result = applicationController.start().apply(request)
       result.header.status shouldBe Status.SEE_OTHER
       redirectLocation(result) shouldBe Some(expectedRedirect)
+    }
+
+  }
+
+  "dfgdf" should {
+    "ok" in {
+      val LIMITED_COMPANIES_SUBMISSION =
+        Json.parse(getClass.getResourceAsStream("/01-NewSubmissionLtdCompany.json"))
+          .as[SubScriptionCreate]
+
+
+
+      println(s"\n\n${LIMITED_COMPANIES_SUBMISSION}\n\n")
+
+      "a" shouldBe "a"
     }
 
   }

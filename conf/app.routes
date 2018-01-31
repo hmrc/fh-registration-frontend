@@ -7,5 +7,10 @@ GET   /whitelisted                                                         @uk.g
 GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
 
 
+GET   /summary                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
+GET   /start                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
+GET   /mainBusinessAddress                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                   controllers.Assets.at(path="/public", file)

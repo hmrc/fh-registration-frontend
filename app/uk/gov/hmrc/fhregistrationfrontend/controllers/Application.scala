@@ -29,14 +29,16 @@ import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
-import uk.gov.hmrc.fhregistrationfrontend.connectors.DFSUrls.config
-import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
+import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.fh_registration_amend.ltd_company._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -86,12 +88,34 @@ class Application @Inject()(
       }
   }
 
+  def summary = Action.async { implicit request ⇒
+    //todo get details from des
+    val LIMITED_COMPANIES_SUBMISSION: SubScriptionCreate =
+      Json.parse(getClass.getResourceAsStream("/01-NewSubmissionLtdCompany.json"))
+        .as[SubScriptionCreate]
+
+    Future.successful(Ok(ltd_summary(LIMITED_COMPANIES_SUBMISSION)))
+  }
+
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
     fhddsConnector
       .getStatus(fhddsRegistrationNumber: String)(hc)
       .map(statusResp ⇒ {
         Ok(status(statusResp.body, fhddsRegistrationNumber))
       })
+  }
+
+  def startApp = Action.async { implicit request ⇒
+    Future.successful(Ok(Main_business_address(mainBusinessAddressForm)))
+  }
+
+  def mainBusinessAddress = Action.async { implicit request =>
+    mainBusinessAddressForm.bindFromRequest().fold(
+      formWithErrors => Future(BadRequest(Main_business_address(formWithErrors))),
+      salaryAmount => {
+        Future(Ok(""))
+      }
+    )
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
