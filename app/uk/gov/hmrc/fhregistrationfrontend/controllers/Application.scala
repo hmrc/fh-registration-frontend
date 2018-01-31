@@ -32,13 +32,13 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.fhregistrationfrontend.views.html.fh_registration_amend.ltd_company._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -89,12 +89,8 @@ class Application @Inject()(
   }
 
   def summary = Action.async { implicit request ⇒
-    //todo get details from des
-    val LIMITED_COMPANIES_SUBMISSION: SubScriptionCreate =
-      Json.parse(getClass.getResourceAsStream("/01-NewSubmissionLtdCompany.json"))
-        .as[SubScriptionCreate]
 
-    Future.successful(Ok(ltd_summary(LIMITED_COMPANIES_SUBMISSION)))
+    Future.successful(Ok(ltd_summary("ok")))
   }
 
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
@@ -106,12 +102,12 @@ class Application @Inject()(
   }
 
   def startApp = Action.async { implicit request ⇒
-    Future.successful(Ok(Main_business_address(mainBusinessAddressForm)))
+    Future.successful(Ok(main_business_address(mainBusinessAddressForm)))
   }
 
   def mainBusinessAddress = Action.async { implicit request =>
     mainBusinessAddressForm.bindFromRequest().fold(
-      formWithErrors => Future(BadRequest(Main_business_address(formWithErrors))),
+      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
       salaryAmount => {
         Future(Ok(""))
       }

@@ -14,9 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
-
-@(items: SubScriptionCreate)(implicit request: Request[_], messages: Messages)
+@(items: String)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "FHDDS Check Summary", mainClass = Some("full-width")) {
 
@@ -41,7 +39,7 @@
 
         <tr>
           <td style="width: 50%">How long has the business operated from its current address?</td>
-          <td>@items.subScriptionCreate.businessAddressForFHDDS.timeOperatedAtCurrentAddress</td>
+          <td>???</td>
           <td><a href="">Edit</a></td>
         </tr>
 

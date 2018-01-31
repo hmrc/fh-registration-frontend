@@ -19,9 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.Address
 
-case class MainBusinessAddress(period: String, hasOtherAddress: Option[Boolean], previousAddress: Option[Address])
+case class MainBusinessAddress(period: String, hasOtherAddress: Option[Boolean], previousAddress: Option[String])
 
 object MainBusinessAddress {
 
@@ -35,7 +34,7 @@ object MainBusinessAddress {
     mapping(
       PERIOD -> nonEmptyText,
       HAS_OTHER_ADDRESS -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      PREVIOUS_ADDRESS -> optional(Address.addressMapping)
+      PREVIOUS_ADDRESS -> optional(text)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
