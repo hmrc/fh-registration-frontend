@@ -146,10 +146,21 @@ fh.company_officers.intro=You must tell us about all the directors and company s
 fh.company_officers.each.title=Add company officer {0}
 fh.company_officers.entity_type.label=Is company officer {0} an individual or a company?
 fh.company_officers.entity_type.error=Select whether company officer {0} is an invidual or a company
+
+fh.company_officers.status.label=What is their role?
+fh.company_officers.status.error=Select what role company officer {0} has in the company
+fh.company_officers.add_another.label=Add another company officer
+fh.company_officers.status.director=Director
+fh.company_officers.status.director.value=Director
+fh.company_officers.status.company_secretary=Company secretary
+fh.company_officers.status.company_secretary.value=Company Secretary
+fh.company_officers.status.both=Both a director and a company secretary
+fh.company_officers.status.both.value=Director and Company Secretary
+fh.company_officers.status.member=Member
+fh.company_officers.status.member.value=Member
+
 fh.company_officers.individual.label=An individual
-fh.company_officers.company.label=A company
 fh.company_officers.individual.title=Enter their details
-fh.company_officers.company.title=Enter the company details
 fh.company_officers.individual.first_name.label=First name
 fh.company_officers.individual.first_name.empty.error=Enter a first name for company officer {0}
 fh.company_officers.individual.last_name.label=Last name
@@ -162,10 +173,14 @@ fh.company_officers.individual.nino.hint_text=For example, QQ123456C
 fh.company_officers.individual.nino.empty.error=Enter the National Insurance number for company officer {0}
 fh.company_officers.individual.passport.label=Enter their passport number
 fh.company_officers.individual.passport.empty.error=Enter the passport number for company officer {0}
-fh.company_officers.status.label=What is their role?
-fh.company_officers.status.error=Select what role company officer {0} has in the company
-fh.company_officers.add_another.label=Add another company officer
+
+fh.company_officers.company.label=A company
+fh.company_officers.company.title=Enter the company details
 fh.company_officers.company.company_name.label=Company name
 fh.company_officers.company.company_name.empty.error=Enter a company name for company officer {0}
 fh.company_officers.company.vat_registration.confirm.label=Does the company have a VAT registration number?
 fh.company_officers.company.vat_registration.confirm.error=Select whether company officer {0} has a VAT registration number
+fh.company_officers.company.company_registration_number.label=Enter the company registration number
+fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
+fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
+
