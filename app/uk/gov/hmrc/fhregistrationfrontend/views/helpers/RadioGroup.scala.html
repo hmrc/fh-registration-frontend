@@ -1,0 +1,25 @@
+@(params: views.helpers.RadioGroupParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+
+@import views.html.helpers._
+@import views.helpers._
+@import forms.validation.util._
+
+@legend = {
+    @params.legend match {
+        case Some(legend) => {
+            Html(<legend class="form-label-bold"><h3 class="heading-medium">@legend</h3></legend>)
+        }
+        case _ => {}
+    }
+}
+
+<div class="form-group">
+    <fieldset @if(inline) {class="inline"} id="fieldset_@params.name">
+        @legend
+        @radios.map( radio =>
+            Html(s"<div class="multiple-choice" @if(${radio.dataTarget}){data-target="${radio.dataTarget}"}>
+                        <input id="${name}_${radio.value}" type="radio" name="${name}" value="${radio.value}" required>
+                        <label for="${name}_${radio.value}">${radio.label}</label>
+                    </div>)
+    </fieldset>
+</div>
