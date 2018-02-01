@@ -38,26 +38,6 @@ object MainBusinessAddress {
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
-  def hideField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("timeAtCurrentAddress").hasErrors) "hidden"
-    else {
-      mainBusinessAddress.value match {
-        case Some(v) => if (v.timeAtCurrentAddress == "Less than 3 years") "" else "hidden"
-        case _ => "hidden"
-      }
-    }
-  }
-
-  def hideAddressField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("hasOtherAddress").hasErrors) ""
-    else {
-      mainBusinessAddress.value match {
-        case Some(v) => if (v.hasOtherAddress == "true") "" else "hidden"
-        case _ => "hidden"
-      }
-    }
-  }
-
 }
 
 

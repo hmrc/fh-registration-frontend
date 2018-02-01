@@ -114,6 +114,15 @@ class Application @Inject()(
     )
   }
 
+  def submitMainBusinessAddress = Action.async { implicit request =>
+    mainBusinessAddressForm.bindFromRequest().fold(
+      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
+      salaryAmount => {
+        Future(Ok(""))
+      }
+    )
+  }
+
   private def formTypeRef(details: BusinessRegistrationDetails) = {
 
     details.businessType match {

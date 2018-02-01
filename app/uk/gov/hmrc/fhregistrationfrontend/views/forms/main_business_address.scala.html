@@ -16,9 +16,8 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.RadioGroup
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -56,7 +55,10 @@
 
   <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.mainBusinessAddress) {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
     @RadioGroup(
         RadioGroupParams(
             name = Some("timeAtCurrentAddress"),
@@ -87,41 +89,15 @@
     )
 
     <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
-
-        <div class="inline" id="group_hasPreviousAddress">
-
-            <h3 class=" small-heading">
-                @Messages("fh.main_business_address.previous.label")
-            </h3>
-
-            <div class="multiple-choice" data-target="enterPreviousAddress">
-
-                <input id="hasPreviousAddress_yes" type="radio" name="hasPreviousAddress" value="Yes" required>
-
-                <label class="block-label" for="hasPreviousAddress_yes" >
-                    Yes
-                </label>
-
-            </div>
-
-            <div class="multiple-choice">
-
-                <input id="hasPreviousAddress_no" type="radio" name="hasPreviousAddress" value="No">
-
-                <label class="block-label" for="hasPreviousAddress_no">
-                    No
-                </label>
-
-            </div>
-
-            <div id="enterPreviousAddress" class="js-hidden panel-indent">
-                <input type="text" name="previousAddress" />
-            </div>
-
-        </div>
-
+        @YesNoText(
+            YesNoTextParams(
+                name = "previousAddress",
+                label = Messages("fh.main_business_address.previous.label"),
+                yesInputLabel = "Enter your previous address",
+                formHasErrors = false
+            )
+        )
     </div>
-
 
     <div class="form-group">
       <input type="submit" id="p-continue" class="button" value="continue">

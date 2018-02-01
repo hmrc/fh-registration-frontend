@@ -10,6 +10,7 @@ GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.g
 GET   /summary                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 GET   /start                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
 GET   /mainBusinessAddress                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
+POST  /mainBusinessAddress                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
 
 
 # Map static resources from the /public folder to the /assets URL path
