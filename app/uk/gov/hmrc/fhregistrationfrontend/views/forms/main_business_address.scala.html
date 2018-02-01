@@ -15,9 +15,10 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
   List(
     Messages("fh.main_business_address.3to5years.label"),
@@ -25,7 +26,10 @@
     Messages("fh.main_business_address.10plusYears.label"))
 }
 
+
 @main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
+
+
 
   @if(mainBusinessAddressForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -58,6 +62,15 @@
   }
 
   <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
+
+  <div id="review-details" class="form-group">
+    <strong>@Messages("fh.registered_address")</strong><br>
+    @bpr.businessAddress.line1<br>
+    @bpr.businessAddress.line2<br>
+    @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
+    @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
+    @bpr.businessAddress.postcode<br>
+  </div>
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.mainBusinessAddress) {
     <h3>@Messages("fh.main_business_address.time_at_address.label")</h3>

@@ -26,15 +26,15 @@ object MainBusinessAddress {
 
   implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
 
-  val PERIOD = "period"
-  val HAS_OTHER_ADDRESS = "hasOtherAddress"
-  val PREVIOUS_ADDRESS = "previousAddress"
+  val period = "period"
+  val hasOtherAddress = "hasOtherAddress"
+  val previousAddress = "previousAddress"
 
   def mainBusinessAddressForm = Form(
     mapping(
-      PERIOD -> nonEmptyText,
-      HAS_OTHER_ADDRESS -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      PREVIOUS_ADDRESS -> optional(text)
+      period -> nonEmptyText,
+      hasOtherAddress -> optional(of(CustomFormatters.requiredBooleanFormatter)),
+      previousAddress -> optional(text)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
