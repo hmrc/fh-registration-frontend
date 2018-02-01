@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
-case class RadioGroupParams(
-                      name: Option[String] = None,
-                      radios: List[RadioParams],
-                      inline: Boolean = true,
-                      legend: Option[String] = None,
-                      legendSize: Option[String] = None,
-                      required: Boolean = false,
-                      error: Option[String] = None,
-                      formHasErrors: Boolean = false
-                      )
+
+
+<div class="multiple-choice" @if(!params.dataTarget.isEmpty){data-target="{params.dataTarget}"}>
+    <input id="{params.radioId}" type="radio" name="{params.name}" value={params.value} required="required" />
+    <label for="{params.radioId}">{params.label}</label>
+</div>

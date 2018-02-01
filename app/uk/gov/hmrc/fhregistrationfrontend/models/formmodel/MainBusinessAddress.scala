@@ -20,29 +20,29 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Json, OFormat}
 
-case class MainBusinessAddress(period: String, hasOtherAddress: Option[Boolean], previousAddress: Option[String])
+case class MainBusinessAddress(timeAtCurrentAddress: String, hasOtherAddress: Option[Boolean], previousAddress: Option[String])
 
 object MainBusinessAddress {
 
   implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
 
-  val PERIOD = "period"
+  val TIME_AT_CURRENT_ADDRESS = "timeAtCurrentAddress"
   val HAS_OTHER_ADDRESS = "hasOtherAddress"
   val PREVIOUS_ADDRESS = "previousAddress"
 
   def mainBusinessAddressForm = Form(
     mapping(
-      PERIOD -> nonEmptyText,
+      TIME_AT_CURRENT_ADDRESS -> nonEmptyText,
       HAS_OTHER_ADDRESS -> optional(of(CustomFormatters.requiredBooleanFormatter)),
       PREVIOUS_ADDRESS -> optional(text)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
   def hideField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("period").hasErrors) "hidden"
+    if (mainBusinessAddress("timeAtCurrentAddress").hasErrors) "hidden"
     else {
       mainBusinessAddress.value match {
-        case Some(v) => if (v.period == "Less than 3 years") "" else "hidden"
+        case Some(v) => if (v.timeAtCurrentAddress == "Less than 3 years") "" else "hidden"
         case _ => "hidden"
       }
     }

@@ -1,25 +1,38 @@
-@(params: views.helpers.RadioGroupParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
 
-@import views.html.helpers._
-@import views.helpers._
-@import forms.validation.util._
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
 @legend = {
     @params.legend match {
         case Some(legend) => {
-            Html(<legend class="form-label-bold"><h3 class="heading-medium">@legend</h3></legend>)
+            <legend class="form-label-bold"><h3 class="heading-medium">@legend</h3></legend>
         }
         case _ => {}
     }
 }
 
 <div class="form-group">
-    <fieldset @if(inline) {class="inline"} id="fieldset_@params.name">
+    <fieldset @if(params.inline){class="inline"} id="{params.name}_fieldset">
         @legend
-        @radios.map( radio =>
-            Html(s"<div class="multiple-choice" @if(${radio.dataTarget}){data-target="${radio.dataTarget}"}>
-                        <input id="${name}_${radio.value}" type="radio" name="${name}" value="${radio.value}" required>
-                        <label for="${name}_${radio.value}">${radio.label}</label>
-                    </div>)
+        @for(radio <- params.radios){
+            <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
+                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" />
+                <label for="@params.name@radio.value">@radio.label</label>
+            </div>
+        }
     </fieldset>
 </div>

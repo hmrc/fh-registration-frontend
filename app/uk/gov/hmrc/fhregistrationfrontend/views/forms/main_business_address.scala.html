@@ -16,16 +16,13 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.RadioGroup
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioParams
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
-@overThreeYearsPeriodLabels = @{
-  List(
-    Messages("fh.main_business_address.3to5years.label"),
-    Messages("fh.main_business_address.5to10years.label"),
-    Messages("fh.main_business_address.10plusYears.label"))
-}
-
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@main_template(title = Messages("fh.main_business_address.title"), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
   @if(mainBusinessAddressForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -60,148 +57,71 @@
   <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.mainBusinessAddress) {
-    <h3>@Messages("fh.main_business_address.time_at_address.label")</h3>
+    @RadioGroup(
+        RadioGroupParams(
+            name = Some("timeAtCurrentAddress"),
+            legend = Some(Messages("fh.main_business_address.time_at_address.label")),
+            inline = false,
+            required = true,
+            formHasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
+            radios = List(
+                RadioParams(
+                    Messages("fh.main_business_address.0to3years.value"),
+                    Messages("fh.main_business_address.0to3years.label"),
+                    Some("lessThan3Years")
+                ),
+                RadioParams(
+                    Messages("fh.main_business_address.3to5years.value"),
+                    Messages("fh.main_business_address.3to5years.label")
+                ),
+                RadioParams(
+                    Messages("fh.main_business_address.5to10years.value"),
+                    Messages("fh.main_business_address.5to10years.label")
+                ),
+                RadioParams(
+                    Messages("fh.main_business_address.10plusYears.value"),
+                    Messages("fh.main_business_address.10plusYears.label")
+                )
+            )
+        )
+    )
 
-    <div class="form-group">
-      <fieldset class="form-field-group js-visible js-aria-show js-toggle"
-                id="over-three-years"
-                data-target="over-three-years-no-target"
-                data-trigger="js-toggle-trigger"
-                data-open="over-three-years-no"
-                data-close="over-three-years-yes">
+    <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
 
-        <fieldset class="form-field-group js-visible js-aria-show js-toggle"
-                  id="over-five-years"
-                  data-target="over-three-years-no-target"
-                  data-trigger="js-toggle-trigger"
-                  data-open="over-three-years-no"
-                  data-close="over-five-years-yes">
+        <div class="inline" id="group_hasPreviousAddress">
 
-          <fieldset class="form-field-group js-visible js-aria-show js-toggle"
-                    id="over-ten-years"
-                    data-target="over-three-years-no-target"
-                    data-trigger="js-toggle-trigger"
-                    data-open="over-three-years-no"
-                    data-close="over-ten-years-yes">
+            <h3 class=" small-heading">
+                @Messages("fh.main_business_address.previous.label")
+            </h3>
 
-          @if(mainBusinessAddressForm("period").hasErrors){
-            <fieldset class="form-field--error">
-              <div class="error-notification" id="period-inline-error">
-                @Messages("fh.main_business_address.time_at_address.error")
-              </div>
-          } else {
-            <fieldset>}
+            <div class="multiple-choice" data-target="enterPreviousAddress">
 
-              <label class="block-label"
-                for="over-three-years-no">
-                  @Messages("fh.main_business_address.0to3years.label")
-                  <input
-                  type="radio"
-                  class="js-toggle-trigger"
-                  id="over-three-years-no"
-                  name="period"
-                  value="@Messages("fh.main_business_address.0to3years.value")"
-                  />
-              </label>
+                <input id="hasPreviousAddress_yes" type="radio" name="hasPreviousAddress" value="Yes" required>
 
-              @for(label <- overThreeYearsPeriodLabels) {
-                <label class="block-label"
-                       for=@{
-                         if(label==Messages("fh.main_business_address.5to10years.label")){
-                           "over-five-years-yes"
-                         } else if(label==Messages("fh.main_business_address.10plusYears.label")){
-                           "over-ten-years-yes"
-                         } else {
-                           "over-three-years-yes"
-                         }
-                       }>
-                  @label
-                  <input
-                    type="radio"
-                    class="js-toggle-trigger"
-                    id=@{
-                      if(label==Messages("fh.main_business_address.5to10years.label")){
-                        "over-five-years-yes"
-                      } else if(label==Messages("fh.main_business_address.10plusYears.label")){
-                        "over-ten-years-yes"
-                      } else {
-                        "over-three-years-yes"
-                      }
-                    }
-                    name="period"
-                    value="@{
-                      if(label==Messages("fh.main_business_address.5to10years.label")){
-                        Messages("fh.main_business_address.5to10years.value")
-                      } else if(label==Messages("fh.main_business_address.10plusYears.label")){
-                        Messages("fh.main_business_address.10plusYears.value")
-                      } else {
-                        Messages("fh.main_business_address.3to5years.value")}
-                    }"
-                  />
+                <label class="block-label" for="hasPreviousAddress_yes" >
+                    Yes
                 </label>
-              }
 
-            </fieldset>
-
-            <div class="form-field-group @if(!mainBusinessAddressForm("hasOtherAddress").hasErrors){panel-indent} @MainBusinessAddress.hideField(mainBusinessAddressForm)"
-                 id="over-three-years-no-target">
-
-              <fieldset class="inline form-field-group js-visible js-aria-show js-toggle"
-                        id="has-other-address"
-                        data-target="has-other-address-yes-target"
-                        data-trigger="js-toggle-trigger"
-                        data-open="has-other-address-yes"
-                        data-close="has-other-address-no">
-
-                @Messages("fh.main_business_address.previous.label")<br>
-                @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
-                  <fieldset class="form-field--error">
-                    <div class="error-notification" id="has-other-address-inline-error">
-                    @Messages("fh.main_business_address.previous.error")
-                    </div>
-                    } else {<fieldset>}
-
-                  <label class="block-label selection-button-radio" for="has-other-address-yes">Yes
-                    <input type="radio"
-                    id="has-other-address-yes"
-                    class="js-toggle-trigger"
-                    name="hasOtherAddress"
-                    value="true"
-                  />
-                  </label>
-
-                  <label class="block-label selection-button-radio" for="has-other-address-no">No
-                    <input type="radio"
-                    id="has-other-address-no"
-                    class="js-toggle-trigger"
-                    name="hasOtherAddress"
-                    value="false"
-                    />
-                  </label>
-
-                </fieldset>
-
-                <div class="form-field-group @if(!mainBusinessAddressForm("previousAddress").hasErrors){panel-indent} @MainBusinessAddress.hideAddressField(mainBusinessAddressForm)"
-                id="has-other-address-yes-target">
-
-                  @if(mainBusinessAddressForm("previousAddress").hasErrors){
-                    <fieldset class="form-field--error">
-                      <div class="error-notification" id="other-address-inline-error">
-                      @Messages("fh.main_business_address.enter_previous.error")
-                      </div>
-                      } else {<fieldset>}
-                  @Messages("fh.main_business_address.enter_previous.label")<br>
-                  <input type="text" id="previous-address" name="previousAddress" value="">
-
-                  </fieldset>
-
-                </div>
-              </fieldset>
             </div>
-          </fieldset>
-        </fieldset>
-      </fieldset>
+
+            <div class="multiple-choice">
+
+                <input id="hasPreviousAddress_no" type="radio" name="hasPreviousAddress" value="No">
+
+                <label class="block-label" for="hasPreviousAddress_no">
+                    No
+                </label>
+
+            </div>
+
+            <div id="enterPreviousAddress" class="js-hidden panel-indent">
+                <input type="text" name="previousAddress" />
+            </div>
+
+        </div>
+
     </div>
+
 
     <div class="form-group">
       <input type="submit" id="p-continue" class="button" value="continue">

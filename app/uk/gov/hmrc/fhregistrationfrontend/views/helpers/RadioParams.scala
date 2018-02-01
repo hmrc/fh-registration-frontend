@@ -20,5 +20,5 @@ import play.api.data.Field
 
 case class RadioParams(value: String,
                        label: String,
-                       dataTarget: String
+                       dataTarget: Option[String] = None
                       )
