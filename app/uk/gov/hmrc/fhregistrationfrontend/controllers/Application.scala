@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import app.Routes
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
@@ -29,24 +30,28 @@ import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
-import uk.gov.hmrc.fhregistrationfrontend.connectors.DFSUrls.config
-import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
+import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
+import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links         : ExternalUrls,
+  links: ExternalUrls,
   ds            : CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
   messagesApi   : play.api.i18n.MessagesApi,
-  configuration : Configuration
+  configuration : Configuration,
+  save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
@@ -80,10 +85,15 @@ class Application @Inject()(
     internalId ⇒
       for {
         details ← businessCustomerConnector.getReviewDetails
-        _ ← fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
+        _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
       } yield {
-        Redirect(DFSUrls.dfsURL(formTypeRef(details)))
+        Redirect(routes.Application.startApp())
       }
+  }
+
+  def summary = Action.async { implicit request ⇒
+
+    Future.successful(Ok(ltd_summary("ok")))
   }
 
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
@@ -94,6 +104,25 @@ class Application @Inject()(
       })
   }
 
+  def startApp = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(main_business_address(mainBusinessAddressForm, bpr))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def mainBusinessAddress = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒
+          mainBusinessAddressForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
+            _ ⇒ Ok("Ok"))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+  
   private def formTypeRef(details: BusinessRegistrationDetails) = {
 
     details.businessType match {

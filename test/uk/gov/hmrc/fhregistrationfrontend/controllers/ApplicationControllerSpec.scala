@@ -40,7 +40,8 @@ class ApplicationControllerSpec extends AppUnitGenerator {
     .thenReturn(Some("fhdds-partnership"))
 
 
-  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mock[MessagesApi], mockConfiguration) {
+  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector,
+    mock[MessagesApi], mockConfiguration, mockSave4Later) {
     override val authConnector = mockAuthConnector
     override val usewhiteListing = false
   }
