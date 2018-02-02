@@ -32,25 +32,27 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.http.{BadRequestException, SessionKeys}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
+import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.http.{BadRequestException, SessionKeys}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links: ExternalUrls,
-  ds: CommonPlayDependencies,
+  links         : ExternalUrls,
+  ds            : CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
   addressLookupConnector: AddressLookupConnector,
   messagesApi: play.api.i18n.MessagesApi,
-  configuration : Configuration
+  configuration: Configuration,
+  save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
 
   val businessCustomerConnector = BusinessCustomerFrontendConnector
@@ -84,9 +86,9 @@ class Application @Inject()(
     internalId ⇒
       for {
         details ← businessCustomerConnector.getReviewDetails
-        _ ← fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
+        _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
       } yield {
-        Redirect(DFSUrls.dfsURL(formTypeRef(details)))
+        Redirect(routes.Application.startApp())
       }
   }
 
@@ -103,27 +105,47 @@ class Application @Inject()(
       })
   }
 
-  def startApp = Action.async { implicit request ⇒
-    Future.successful(Ok(main_business_address(mainBusinessAddressForm)))
+  def startApp = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(main_business_address(mainBusinessAddressForm, bpr))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
   }
 
-  def mainBusinessAddress = Action.async { implicit request =>
-    mainBusinessAddressForm.bindFromRequest().fold(
-      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
-      mainBusinessAddress => {
-        Future(Ok(""))
+  def mainBusinessAddress = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒
+          mainBusinessAddressForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
+            _ ⇒ Ok("Ok"))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
-    )
   }
 
-  def submitMainBusinessAddress = Action.async { implicit request =>
-    mainBusinessAddressForm.bindFromRequest().fold(
-      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
-      mainBusinessAddress => {
-        Future(Ok(s"$mainBusinessAddress"))
+  def submitMainBusinessAddress = authorisedUser { implicit request =>
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒
+          mainBusinessAddressForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
+            mainBusinessAddress => {
+              Ok(s"$mainBusinessAddress")
+            }
+          )
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
-    )
   }
+
+//  def submitMainBusinessAddress1 = Action.async { implicit request =>
+//    mainBusinessAddressForm.bindFromRequest().fold(
+//      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
+//      mainBusinessAddress => {
+//        Future(Ok(s"$mainBusinessAddress"))
+//      }
+//    )
+//  }
 
   def addressLookup(postcode: String) = Action.async {
     implicit request =>

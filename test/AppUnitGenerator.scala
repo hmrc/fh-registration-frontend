@@ -31,6 +31,7 @@ import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.test.UnitSpec
@@ -55,5 +56,6 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   val mockAuthConnector = mock[PlayAuthConnector]
   val mockConfiguration = mock[Configuration]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
+  val mockSave4Later = mock[Save4LaterService]
 
 }
