@@ -27,7 +27,6 @@
 }
 
 @pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fhdds.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/dropdowns-enhancement.js")'></script>
 }
@@ -69,7 +68,10 @@
 
   <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.mainBusinessAddress) {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress) {
+
+    @helper.CSRF.formField
+
     <h3>@Messages("fh.main_business_address.time_at_address.label")</h3>
 
     <div class="form-group">
@@ -218,13 +220,13 @@
                         <h3>@Messages("fh.main_business_address.enter_previous.label")</h3>
 
 
-                      <div>
-                      @fhddsAddressHelper(
-                        mainBusinessAddressForm("address"),
-                        wrapperClassP = "panel-indent",
-                        number = "1",
-                        isUK = true)
-                      </div>
+                        <div>
+                        @fhddsAddressHelper(
+                          mainBusinessAddressForm("address"),
+                          wrapperClassP = "panel-indent",
+                          number = "1",
+                          isUK = true)
+                        </div>
 
                       </fieldset>
                     </fieldset>

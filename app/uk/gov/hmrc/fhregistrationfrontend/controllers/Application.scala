@@ -110,19 +110,17 @@ class Application @Inject()(
   def mainBusinessAddress = Action.async { implicit request =>
     mainBusinessAddressForm.bindFromRequest().fold(
       formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
-      salaryAmount => {
+      mainBusinessAddress => {
         Future(Ok(""))
       }
     )
   }
 
   def submitMainBusinessAddress = Action.async { implicit request =>
-
-    println(s"\n\n===========\n\n")
     mainBusinessAddressForm.bindFromRequest().fold(
       formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
-      salaryAmount => {
-        Future(Ok(""))
+      mainBusinessAddress => {
+        Future(Ok(s"$mainBusinessAddress"))
       }
     )
   }

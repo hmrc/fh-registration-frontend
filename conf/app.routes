@@ -9,9 +9,11 @@ GET         /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status  
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
+
 GET         /mainBusinessAddress                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
+POST        /submitMainBusinessAddress                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
 
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.addressLookup(postcode: String)
-POST        /submitMainBusinessAddress                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

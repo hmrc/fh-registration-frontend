@@ -22,12 +22,12 @@
 
 @addressContainerDataAttribute = {data-attribute=@wrapperClassP}
 
-<div id="address-@number" class="address-container" @addressContainerDataAttribute>
-  <div class="address-lines">
+<div id="address-@number" @addressContainerDataAttribute>
+  <div style="width:300px;">
     @inputTypeText(
       InputTypeTextParams(
-        field("line1"),
-        inputId = field("line1").value,
+        field("addressLine1"),
+        inputId = field("addressLine1").value,
         label = Some("line1"),
         wrapperClass = Some(wrapperClassP),
         labelHighlight = true,
@@ -36,8 +36,8 @@
     )
     @inputTypeText(
       InputTypeTextParams(
-        field("line2"),
-        inputId = field("line2").value,
+        field("addressLine2"),
+        inputId = field("addressLine2").value,
         label = Some("line2"),
         wrapperClass = Some(wrapperClassP),
         labelHighlight = true,
@@ -46,8 +46,8 @@
     )
     @inputTypeText(
       InputTypeTextParams(
-        field("line3"),
-        inputId = field("line3").value,
+        field("addressLine3"),
+        inputId = field("addressLine3").value,
         label = Some("line3"),
         wrapperClass = Some(wrapperClassP),
         labelHighlight = true,
@@ -56,8 +56,8 @@
     )
     @inputTypeText(
       InputTypeTextParams(
-        field("line4"),
-        inputId = field("line4").value,
+        field("addressLine4"),
+        inputId = field("addressLine4").value,
         label = Some("line4"),
         wrapperClass = Some(wrapperClassP),
         labelHighlight = true,
@@ -65,7 +65,7 @@
       )
     )
   </div>
-  <div class="uk-address">
+  <div>
   @inputTypeText(
     InputTypeTextParams(
       field("postcode"),
@@ -81,10 +81,10 @@
   )
   </div>
   <div id="manual-address-@number" class="font-small form-group @wrapperClassP">
-    <span id="manual-address-span-@number" class="link-style" tabindex="0" role="link">@Messages("awrs.generic.enter_address_manually")</span>
+    <span id="manual-address-span-@number" class="link-style" tabindex="0" role="link">Enter address manually</span>
   </div>
   @if(!isUK) {
-    <div class="non-uk-address">
+    <div>
     @inputTypeText(
       InputTypeTextParams(
         field("countryCode"),

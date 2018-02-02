@@ -25,8 +25,8 @@ case class BusinessAddress(
   addressLine2: String,
   addressLine3: Option[String] = None,
   addressLine4: Option[String] = None,
-  postcode: Option[String] = None,
-  countryCode: Option[String] = None
+  postcode: String,
+  countryCode: Option[String] = Some("GB")
 )
 
 object BusinessAddress {
@@ -34,11 +34,11 @@ object BusinessAddress {
 
   def addressMapping: Mapping[BusinessAddress] =
     mapping(
-      "line1" -> nonEmptyText,
-      "line2" -> nonEmptyText,
-      "line3" -> optional(nonEmptyText),
-      "line4" -> optional(nonEmptyText),
-      "postalCode" -> optional(nonEmptyText),
+      "addressLine1" -> nonEmptyText,
+      "addressLine2" -> nonEmptyText,
+      "addressLine3" -> optional(nonEmptyText),
+      "addressLine4" -> optional(nonEmptyText),
+      "postcode" -> nonEmptyText,
       "countryCode" -> optional(nonEmptyText)
     )(BusinessAddress.apply)(BusinessAddress.unapply)
 

@@ -350,10 +350,10 @@
                 ajaxSuccess = false;
                 doError(jqXHR, num);
             },
-            headers: {"X-Hmrc-Origin": "awrs"}
+            headers: {"X-Hmrc-Origin": "fhdds"}
         });
     }
-    
+
     function auditEvents(url, data, form) {
         $.ajax({
             type: 'POST',
@@ -367,7 +367,7 @@
             error: function() {
                 form.submit();
             },
-            headers: {"X-Hmrc-Origin": "awrs"}
+            headers: {"X-Hmrc-Origin": "fhdds"}
         });
     }
 

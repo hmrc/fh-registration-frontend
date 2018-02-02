@@ -18,3 +18,10 @@
 
 ##.dropdown-menu > li {    border-style: solid;
 ##                        border-width: 1px; }
+
+.loading {
+  display: none;
+  margin-top: 10px;
+  padding: 5px 0 0 39px;
+  background: url("/alcohol-wholesale-scheme/assets/images/loading.gif") no-repeat;
+}
