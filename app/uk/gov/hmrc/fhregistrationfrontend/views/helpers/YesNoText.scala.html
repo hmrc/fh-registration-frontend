@@ -34,18 +34,20 @@
             @params.label
         </h3>
 
-        @if(!params.hintText.isEmpty){<span class="form-hint">@params.hintText</span>}
+        @if(!params.hintText.isEmpty){
+            <span class="form-hint">@params.hintText</span>
+        }
 
         <div class="inline form-group" id="@{fieldName}_yesNo">
 
             <div class="multiple-choice" data-target="@{fieldName}_container" >
-                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}.yesNo" value="Yes">
+                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="Yes">
                 <label class="block-label" for="@{fieldName}_yes" >
                     Yes
                 </label>
             </div>
             <div class="multiple-choice">
-                <input id="@{fieldName}_no" type="radio" name="@{fieldName}.yesNo" value="No">
+                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="No">
                 <label for="@{fieldName}_no">
                     No
                 </label>
@@ -54,8 +56,14 @@
         </div>
 
         <div class="form-group panel js-hidden" id="@{fieldName}_container">
-            <label class="form-label" for="@{fieldName}_value">@params.yesInputLabel</label>
-            @if(!params.yesInputHintText.isEmpty){<span class="form-hint">@params.yesInputHintText</span>}
+            <label class="form-label" for="@{fieldName}_value">
+                @params.yesInputLabel
+            </label>
+
+            @if(!params.yesInputHintText.isEmpty){
+                <span class="form-hint">@params.yesInputHintText</span>
+            }
+
             <input type="text" class="form-control" id="@{fieldName}_value" name="@{fieldName}_value">
         </div>
 
