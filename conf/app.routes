@@ -13,7 +13,7 @@ GET         /start                                                              
 GET         /mainBusinessAddress                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
 POST        /submitMainBusinessAddress                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
 
-GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.addressLookup(postcode: String)
+GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

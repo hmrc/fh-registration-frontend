@@ -33,13 +33,12 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.http.{BadRequestException, SessionKeys}
+import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -49,7 +48,6 @@ class Application @Inject()(
   links         : ExternalUrls,
   ds            : CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
-  addressLookupConnector: AddressLookupConnector,
   messagesApi: play.api.i18n.MessagesApi,
   configuration: Configuration,
   save4LaterService: Save4LaterService
@@ -131,34 +129,11 @@ class Application @Inject()(
           mainBusinessAddressForm.bindFromRequest().fold(
             formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
             mainBusinessAddress => {
+              save4LaterService.saveFormDetails(internalId, mainBusinessAddress, "mainBusinessAddress")
               Ok(s"$mainBusinessAddress")
             }
           )
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
-  }
-
-//  def submitMainBusinessAddress1 = Action.async { implicit request =>
-//    mainBusinessAddressForm.bindFromRequest().fold(
-//      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
-//      mainBusinessAddress => {
-//        Future(Ok(s"$mainBusinessAddress"))
-//      }
-//    )
-//  }
-
-  def addressLookup(postcode: String) = Action.async {
-    implicit request =>
-      implicit val writes = Json.format[RecordSet]
-      val validPostcodeCharacters = "^[A-z0-9 ]*$"
-      if (postcode.matches(validPostcodeCharacters)) {
-        addressLookupConnector.lookup(postcode) map {
-          case AddressLookupErrorResponse(e: BadRequestException) => BadRequest(e.message)
-          case AddressLookupErrorResponse(e)                      => InternalServerError
-          case AddressLookupSuccessResponse(recordSet)            => Ok(writes.writes(recordSet))
-        }
-      } else {
-        Future.successful(BadRequest("missing or badly-formed postcode parameter"))
       }
   }
 

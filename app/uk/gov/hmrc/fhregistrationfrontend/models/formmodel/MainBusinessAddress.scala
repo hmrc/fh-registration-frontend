@@ -16,38 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
 
+import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.{Form, Mapping}
 import play.api.libs.json.{Json, OFormat}
 
-case class BusinessAddress(
-  addressLine1: String,
-  addressLine2: String,
-  addressLine3: Option[String] = None,
-  addressLine4: Option[String] = None,
-  postcode: String,
-  countryCode: Option[String] = Some("GB")
-)
 
-object BusinessAddress {
-  implicit val addressFormat: OFormat[BusinessAddress] = Json.format[BusinessAddress]
-
-  def addressMapping: Mapping[BusinessAddress] =
-    mapping(
-      "addressLine1" -> nonEmptyText,
-      "addressLine2" -> nonEmptyText,
-      "addressLine3" -> optional(nonEmptyText),
-      "addressLine4" -> optional(nonEmptyText),
-      "postcode" -> nonEmptyText,
-      "countryCode" -> optional(nonEmptyText)
-    )(BusinessAddress.apply)(BusinessAddress.unapply)
-
-}
-
-case class MainBusinessAddress(
+case class MainBusinessAddress (
   period: String,
   hasOtherAddress: Option[Boolean],
-  address: Option[BusinessAddress])
+  address: Option[AddressModel]
+) extends FormDetails
 
 object MainBusinessAddress {
 
@@ -57,7 +35,7 @@ object MainBusinessAddress {
     mapping(
       "period" -> nonEmptyText,
       "hasOtherAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      "address" -> optional(BusinessAddress.addressMapping)
+      "address" -> optional(AddressModel.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
