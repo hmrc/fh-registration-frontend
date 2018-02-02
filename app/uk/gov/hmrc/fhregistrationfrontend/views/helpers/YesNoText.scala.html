@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
 @fieldName = @{
@@ -31,23 +33,23 @@
     <fieldset class="inline">
 
         <h3 class="small-heading">
-            @params.label
+            @params.yesNoLabel
         </h3>
 
-        @if(!params.hintText.isEmpty){
-            <span class="form-hint">@params.hintText</span>
+        @if(!params.yesNoHintText.isEmpty){
+            <span class="form-hint">@params.yesNoHintText</span>
         }
 
         <div class="inline form-group" id="@{fieldName}_yesNo">
 
             <div class="multiple-choice" data-target="@{fieldName}_container" >
-                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="Yes">
+                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="true">
                 <label class="block-label" for="@{fieldName}_yes" >
                     Yes
                 </label>
             </div>
-            <div class="multiple-choice">
-                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="No">
+            <div class="multiple-choice" @if(!params.targetForNo.isEmpty){data-target="@{params.targetForNo}"}>
+                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="false">
                 <label for="@{fieldName}_no">
                     No
                 </label>
@@ -56,23 +58,25 @@
         </div>
 
         <div class="form-group panel js-hidden" id="@{fieldName}_container">
-            <label class="form-label" for="@{fieldName}_value">
-                @params.yesInputLabel
-            </label>
-
-            @if(!params.yesInputHintText.isEmpty){
-                <span class="form-hint">@params.yesInputHintText</span>
-            }
-
-            <input type="text" class="form-control" id="@{fieldName}_value" name="@{fieldName}_value">
+            @TextInput(
+                TextInputParams(
+                    name = "@{fieldName}_value",
+                    label = params.valueLabel,
+                    hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
+                )
+            )
         </div>
 
         @if(!params.targetForNo.isEmpty){
-        <div class="form-group panel js-hidden" id="@{params.targetForNo}_no_container">
-            <label class="form-label" for="@{params.targetForNo}">@params.noInputLabel</label>
-            @if(!params.noInputHintText.isEmpty){<span class="form-hint">@params.noInputHintText</span>}
-            <input type="text" class="form-control" id="@{params.targetForNo}" name="@{params.targetForNo}">
-        </div>
+            <div class="form-group panel js-hidden" id="@{params.targetForNo}_no_container">
+                @TextInput(
+                    TextInputParams(
+                        name = "@{params.targetForNo}",
+                        label = "@{params.noInputLabel}",
+                        hintText = if(!params.noInputHintText.isEmpty){ params.noInputHintText } else { None }
+                    )
+                )
+            </div>
         }
 
     </fieldset>
