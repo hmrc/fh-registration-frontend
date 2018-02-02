@@ -16,25 +16,48 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
 
-import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.{Form, Mapping}
 import play.api.libs.json.{Json, OFormat}
 
-case class MainBusinessAddress(period: String, hasOtherAddress: Option[Boolean], previousAddress: Option[String])
+case class BusinessAddress(
+  addressLine1: String,
+  addressLine2: String,
+  addressLine3: Option[String] = None,
+  addressLine4: Option[String] = None,
+  postcode: Option[String] = None,
+  countryCode: Option[String] = None
+)
+
+object BusinessAddress {
+  implicit val addressFormat: OFormat[BusinessAddress] = Json.format[BusinessAddress]
+
+  def addressMapping: Mapping[BusinessAddress] =
+    mapping(
+      "line1" -> nonEmptyText,
+      "line2" -> nonEmptyText,
+      "line3" -> optional(nonEmptyText),
+      "line4" -> optional(nonEmptyText),
+      "postalCode" -> optional(nonEmptyText),
+      "countryCode" -> optional(nonEmptyText)
+    )(BusinessAddress.apply)(BusinessAddress.unapply)
+
+}
+
+case class MainBusinessAddress(
+  period: String,
+  hasOtherAddress: Option[Boolean],
+  address: Option[BusinessAddress])
 
 object MainBusinessAddress {
 
   implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
 
-  val PERIOD = "period"
-  val HAS_OTHER_ADDRESS = "hasOtherAddress"
-  val PREVIOUS_ADDRESS = "previousAddress"
-
   def mainBusinessAddressForm = Form(
     mapping(
-      PERIOD -> nonEmptyText,
-      HAS_OTHER_ADDRESS -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      PREVIOUS_ADDRESS -> optional(text)
+      "period" -> nonEmptyText,
+      "hasOtherAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
+      "address" -> optional(BusinessAddress.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 

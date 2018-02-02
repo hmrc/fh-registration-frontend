@@ -30,24 +30,26 @@ import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
-import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
+import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.http.{BadRequestException, SessionKeys}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links         : ExternalUrls,
-  ds            : CommonPlayDependencies,
+  links: ExternalUrls,
+  ds: CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
-  messagesApi   : play.api.i18n.MessagesApi,
+  addressLookupConnector: AddressLookupConnector,
+  messagesApi: play.api.i18n.MessagesApi,
   configuration : Configuration
 ) extends AppController(ds, messagesApi) {
 
@@ -112,6 +114,32 @@ class Application @Inject()(
         Future(Ok(""))
       }
     )
+  }
+
+  def submitMainBusinessAddress = Action.async { implicit request =>
+
+    println(s"\n\n===========\n\n")
+    mainBusinessAddressForm.bindFromRequest().fold(
+      formWithErrors => Future(BadRequest(main_business_address(formWithErrors))),
+      salaryAmount => {
+        Future(Ok(""))
+      }
+    )
+  }
+
+  def addressLookup(postcode: String) = Action.async {
+    implicit request =>
+      implicit val writes = Json.format[RecordSet]
+      val validPostcodeCharacters = "^[A-z0-9 ]*$"
+      if (postcode.matches(validPostcodeCharacters)) {
+        addressLookupConnector.lookup(postcode) map {
+          case AddressLookupErrorResponse(e: BadRequestException) => BadRequest(e.message)
+          case AddressLookupErrorResponse(e)                      => InternalServerError
+          case AddressLookupSuccessResponse(recordSet)            => Ok(writes.writes(recordSet))
+        }
+      } else {
+        Future.successful(BadRequest("missing or badly-formed postcode parameter"))
+      }
   }
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {

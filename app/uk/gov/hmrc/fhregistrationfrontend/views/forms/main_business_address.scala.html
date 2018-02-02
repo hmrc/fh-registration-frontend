@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
@@ -25,7 +26,16 @@
     Messages("fh.main_business_address.10plusYears.label"))
 }
 
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fhdds.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/dropdowns-enhancement.js")'></script>
+}
+
+
+@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
 
   @if(mainBusinessAddressForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -153,7 +163,7 @@
                         data-open="has-other-address-yes"
                         data-close="has-other-address-no">
 
-                @Messages("fh.main_business_address.previous.label")<br>
+                <h3>@Messages("fh.main_business_address.previous.label")</h3><br>
                 @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
                   <fieldset class="form-field--error">
                     <div class="error-notification" id="has-other-address-inline-error">
@@ -184,17 +194,41 @@
                 <div class="form-field-group @if(!mainBusinessAddressForm("previousAddress").hasErrors){panel-indent} @MainBusinessAddress.hideAddressField(mainBusinessAddressForm)"
                 id="has-other-address-yes-target">
 
-                  @if(mainBusinessAddressForm("previousAddress").hasErrors){
-                    <fieldset class="form-field--error">
-                      <div class="error-notification" id="other-address-inline-error">
-                      @Messages("fh.main_business_address.enter_previous.error")
+                  <fieldset class="inline form-field-group js-visible js-aria-show js-toggle"
+                            id="enter-address-address"
+                            data-target="enter-address-yes-target"
+                            data-trigger="js-toggle-trigger"
+                            data-open="enter-address-yes"
+                            data-close="enter-address-no">
+
+                    <fieldset class="inline form-field-group js-visible js-aria-show js-toggle"
+                              id="find-address-address"
+                              data-target="find-address-yes-target"
+                              data-trigger="js-toggle-trigger"
+                              data-open="find-address-yes"
+                              data-close="find-address-no">
+
+                      @if(mainBusinessAddressForm("previousAddress").hasErrors){
+                        <fieldset class="form-field--error">
+                          <div class="error-notification" id="other-address-inline-error">
+                          @Messages("fh.main_business_address.enter_previous.error")
+                          </div>
+                          } else {<fieldset>}
+
+                        <h3>@Messages("fh.main_business_address.enter_previous.label")</h3>
+
+
+                      <div>
+                      @fhddsAddressHelper(
+                        mainBusinessAddressForm("address"),
+                        wrapperClassP = "panel-indent",
+                        number = "1",
+                        isUK = true)
                       </div>
-                      } else {<fieldset>}
-                  @Messages("fh.main_business_address.enter_previous.label")<br>
-                  <input type="text" id="previous-address" name="previousAddress" value="">
 
+                      </fieldset>
+                    </fieldset>
                   </fieldset>
-
                 </div>
               </fieldset>
             </div>
