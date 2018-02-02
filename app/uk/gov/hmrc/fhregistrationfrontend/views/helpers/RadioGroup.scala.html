@@ -25,9 +25,25 @@
     }
 }
 
-<div class="form-group">
+@formGroupClass = @{
+    params.formHasErrors match {
+        case true => {
+            "form-group form-group-error"
+        }
+        case _ => {
+            "form-group"
+        }
+    }
+}
+
+<div class="@{formGroupClass}">
     <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
         @legend
+        @if(params.formHasErrors) {
+            <span class="error-message">
+              @params.error
+            </span>
+        }
         @for(radio <- params.radios){
             <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
                 <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" />

@@ -39,13 +39,18 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 case class YesNoTextParams (
                             name: String,
                             context: Option[String] = None,
+                            value: Option[String] = None,
+                            yesNoValue: Option[String] = None,
                             yesNoLabel: String,
                             yesNoHintText: Option[String] = None,
+                            yesNoError: String,
                             valueLabel: String,
                             valueHintText: Option[String] = None,
+                            valueError: String,
                             targetForNo: Option[String] = None,
                             noInputLabel: Option[String] = None,
                             noInputHintText: Option[String] = None,
+                            noInputError: Option[String] = None,
                             formHasErrors: Boolean = false
                             )
 

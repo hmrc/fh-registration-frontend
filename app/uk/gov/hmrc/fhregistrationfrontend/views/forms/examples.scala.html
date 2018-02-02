@@ -14,82 +14,51 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-@main_template(title = Messages("fh.main_business_address.title"), pageScripts = Some(scripts), mainClass = Some("full-width")) {
+@main_template(title = "FH Component Examples", pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
-  @if(mainBusinessAddressForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
-      <ul>
-        @if(mainBusinessAddressForm("period").hasErrors){
-          <li id="period-error-link"><a href="#period-inline-error">@{
-            Messages("fh.main_business_address.time_at_address.error")
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
-          <li id="period-error-link"><a href="#has-other-address-inline-error">@{
-            Messages("fh.main_business_address.previous.error")
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm("previousAddress").hasErrors){
-          <li id="period-error-link"><a href="#other-address-inline-error">@{
-            Messages("fh.main_business_address.enter_previous.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+<h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
 
-  <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
+@helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
+@helper.CSRF.formField
 
-    @helper.CSRF.formField
+<h1 style="border-bottom: 1px solid black">RadioGroup component with conditional reveal</h1>
 
-    <h1 style="border-bottom: 1px solid black">RadioGroup component with conditional reveal</h1>
-
-    @RadioGroup(
-        RadioGroupParams(
-            name = Some("timeAtCurrentAddress"),
-            legend = Some(Messages("fh.main_business_address.time_at_address.label")),
-            inline = false,
-            required = true,
-            error = Some(Messages("fh.main_business_address.time_at_address.error")),
-            formHasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
-            radios = List(
-                RadioParams(
-                    Messages("fh.main_business_address.0to3years.value"),
-                    Messages("fh.main_business_address.0to3years.label"),
-                    Some("lessThan3Years")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.3to5years.value"),
-                    Messages("fh.main_business_address.3to5years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.5to10years.value"),
-                    Messages("fh.main_business_address.5to10years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.10plusYears.value"),
-                    Messages("fh.main_business_address.10plusYears.label")
-                )
+@RadioGroup(
+    RadioGroupParams(
+        name = Some("timeAtCurrentAddress"),
+        legend = Some(Messages("fh.main_business_address.time_at_address.label")),
+        inline = false,
+        required = true,
+        error = Some(Messages("fh.main_business_address.time_at_address.error")),
+        formHasErrors = false,
+        radios = List(
+            RadioParams(
+                Messages("fh.main_business_address.0to3years.value"),
+                Messages("fh.main_business_address.0to3years.label"),
+                Some("lessThan3Years")
+            ),
+            RadioParams(
+                Messages("fh.main_business_address.3to5years.value"),
+                Messages("fh.main_business_address.3to5years.label")
+            ),
+            RadioParams(
+                Messages("fh.main_business_address.5to10years.value"),
+                Messages("fh.main_business_address.5to10years.label")
+            ),
+            RadioParams(
+                Messages("fh.main_business_address.10plusYears.value"),
+                Messages("fh.main_business_address.10plusYears.label")
             )
         )
     )
+)
 
     <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
         @YesNoText(
@@ -165,7 +134,7 @@
         )
     )
 
-    <h1 style="border-bottom: 1px solid black">YesNoText component prepop with value error</h1>
+    <h1 style="border-bottom: 1px solid black">YesNoText component prepop</h1>
 
     @YesNoText(
         YesNoTextParams(
@@ -174,6 +143,7 @@
             yesNoLabel = Messages("fh.company_officers.individual.nino.confirm.label"),
             yesNoError = Messages("fh.company_officers.individual.nino.confirm.error"),
             valueLabel = Messages("fh.company_officers.individual.nino.label"),
+            valueHintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
             valueError = Messages("fh.company_officers.individual.nino.empty.error"),
             yesNoHintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
             formHasErrors = false
@@ -202,10 +172,22 @@
         )
     )
 
+    <h1 style="border-bottom: 1px solid black">TextInput component with prepop</h1>
+
+    @TextInput(
+        TextInputParams(
+            name = "lastName",
+            label = Messages("fh.contact_person.last_name.label"),
+            error = Messages("fh.contact_person.last_name.empty.error"),
+            value = Some("Macdonald"),
+            formHasErrors = false
+        )
+    )
+
     <div class="form-group">
-      <input type="submit" id="p-continue" class="button" value="continue">
+        <input type="submit" id="p-continue" class="button" value="continue">
     </div>
-  }
+}
 
 
 }

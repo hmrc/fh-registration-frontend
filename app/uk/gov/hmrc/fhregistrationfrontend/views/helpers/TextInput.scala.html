@@ -27,7 +27,18 @@
     }
 }
 
-<div class="form-group" id="@{fieldName}_group">
+@formGroupClass = @{
+    params.formHasErrors match {
+        case true => {
+            "form-group form-group-error"
+        }
+        case _ => {
+            "form-group"
+        }
+    }
+}
+
+<div class="@{formGroupClass}" id="@{fieldName}_group">
 
     <label class="form-label" for="@{fieldName}_value">
         @params.label
@@ -37,6 +48,12 @@
         <span class="form-hint">@params.hintText</span>
     }
 
-    <input type="text" class="form-control" id="@{fieldName}_value" name="@{fieldName}_value">
+    @if(params.formHasErrors){
+        <span class="error-message">
+          @params.error
+        </span>
+    }
+
+    <input type="text" class="form-control" id="@{fieldName}_value" name="@{fieldName}_value" @if(!params.value.isEmpty){value="@{params.value}"}>
 
 </div>

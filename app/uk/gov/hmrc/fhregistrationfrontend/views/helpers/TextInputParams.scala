@@ -34,8 +34,10 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 case class TextInputParams (
                              name: String,
                              context: Option[String] = None,
+                             value: Option[String] = None,
                              label: String,
                              hintText: Option[String] = None,
+                             error: String,
                              formHasErrors: Boolean = false
                            )
 

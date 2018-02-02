@@ -29,7 +29,30 @@
     }
 }
 
-<div class="form-group" id="@{fieldName}_group">
+@formGroupClass = @{
+    params.formHasErrors match {
+        case true => {
+            "form-group form-group-error"
+        }
+        case _ => {
+            "form-group"
+        }
+    }
+}
+
+@checked(testVal:String) = @{
+    params.yesNoValue match {
+        case Some(x) => {
+            if(x == testVal){"checked"}
+        }
+        case _ => {
+            ""
+        }
+    }
+
+}
+
+<div class="@{formGroupClass}" id="@{fieldName}_group">
     <fieldset class="inline">
 
         <h3 class="small-heading">
@@ -40,16 +63,22 @@
             <span class="form-hint">@params.yesNoHintText</span>
         }
 
+        @if(params.formHasErrors){
+            <span class="error-message">
+              @params.yesNoError
+            </span>
+        }
+
         <div class="inline form-group" id="@{fieldName}_yesNo">
 
             <div class="multiple-choice" data-target="@{fieldName}_container" >
-                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="true">
+                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="true" @checked("true")>
                 <label class="block-label" for="@{fieldName}_yes" >
                     Yes
                 </label>
             </div>
             <div class="multiple-choice" @if(!params.targetForNo.isEmpty){data-target="@{params.targetForNo}"}>
-                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="false">
+                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="false" @checked("false")>
                 <label for="@{fieldName}_no">
                     No
                 </label>
@@ -62,6 +91,7 @@
                 TextInputParams(
                     name = "@{fieldName}_value",
                     label = params.valueLabel,
+                    error = params.valueError,
                     hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
                 )
             )
@@ -73,6 +103,7 @@
                     TextInputParams(
                         name = "@{params.targetForNo}",
                         label = "@{params.noInputLabel}",
+                        error = "@{params.noInputError}",
                         hintText = if(!params.noInputHintText.isEmpty){ params.noInputHintText } else { None }
                     )
                 )

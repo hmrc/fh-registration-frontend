@@ -24,5 +24,6 @@ case class RadioGroupParams(
                       legendSize: Option[String] = None,
                       required: Boolean = false,
                       error: Option[String] = None,
+                      value: Option[String] = None,
                       formHasErrors: Boolean = false
                       )

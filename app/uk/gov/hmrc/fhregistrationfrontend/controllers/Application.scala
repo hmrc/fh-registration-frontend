@@ -38,7 +38,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.{examples, main_business_address}
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -122,6 +122,12 @@ class Application @Inject()(
       }
     )
   }
+
+  def componentExamples = Action.async { implicit request =>
+    Future(Ok(examples()))
+
+  }
+
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
 
