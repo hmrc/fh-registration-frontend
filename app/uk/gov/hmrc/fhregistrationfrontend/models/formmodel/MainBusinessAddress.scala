@@ -34,7 +34,7 @@ object MainBusinessAddress {
   def mainBusinessAddressForm = Form(
     mapping(
       "period" -> nonEmptyText,
-      "hasOtherAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
+      "hasOtherAddress" -> optional(of(CustomFormatters.radioButton)),
       "address" -> optional(AddressModel.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
