@@ -1,19 +1,23 @@
 # microservice specific routes
 
-GET   /                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
-GET   /continue                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
-GET   /whitelisted                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
+GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
+GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
-GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
+GET         /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
 
+GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
+GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
 
-GET   /summary                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
-GET   /start                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
-GET   /mainBusinessAddress                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
-POST  /mainBusinessAddress                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
+GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
 
-GET  /examples                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
+GET         /mainBusinessAddress                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
+POST        /submitMainBusinessAddress                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
 
+GET         /contactPerson                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.contactPerson
+POST        /submitContactPerson                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitContactPerson
+
+GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                   controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

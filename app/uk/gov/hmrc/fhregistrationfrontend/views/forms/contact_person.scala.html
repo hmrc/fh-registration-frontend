@@ -14,13 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
   List(
     Messages("fh.main_business_address.3to5years.label"),
@@ -39,7 +39,7 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
 
-  @if(mainBusinessAddressForm.hasErrors) {
+  @if(contactPersonForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
     id="error-summary-display"
     role="alert"
@@ -47,19 +47,19 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(mainBusinessAddressForm("period").hasErrors){
+        @if(contactPersonForm("period").hasErrors){
           <li id="period-error-link"><a href="#period-inline-error">@{
             Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
+        @if(contactPersonForm("hasOtherAddress").hasErrors){
           <li id="period-error-link"><a href="#has-other-address-inline-error">@{
             Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("previousAddress").hasErrors){
+        @if(contactPersonForm("previousAddress").hasErrors){
           <li id="period-error-link"><a href="#other-address-inline-error">@{
             Messages("fh.main_business_address.enter_previous.error")
           }
@@ -69,7 +69,7 @@
     </div>
   }
 
-  <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
+  <h1 class="heading-large">@Messages("fh.contact_person.title")</h1>
 
   <div id="review-details" class="form-group">
     @bpr.businessAddress.line1<br>
@@ -79,53 +79,73 @@
     @bpr.businessAddress.postcode<br>
   </div>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitContactPerson, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
-    @RadioGroup(
-        RadioGroupParams(
-            name = Some("timeAtCurrentAddress"),
-            legend = Some(Messages("fh.main_business_address.time_at_address.label")),
-            inline = false,
-            required = true,
-            error = Some(Messages("fh.main_business_address.time_at_address.error")),
-            hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
-            radios = List(
-                RadioParams(
-                    Messages("fh.main_business_address.0to3years.value"),
-                    Messages("fh.main_business_address.0to3years.label"),
-                    Some("lessThan3Years")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.3to5years.value"),
-                    Messages("fh.main_business_address.3to5years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.5to10years.value"),
-                    Messages("fh.main_business_address.5to10years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.10plusYears.value"),
-                    Messages("fh.main_business_address.10plusYears.label")
-                )
-            )
-        )
+    @TextInput(
+      TextInputParams(
+        name = "firstName",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
     )
 
-    <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
-        @YesNoText(
-            mainBusinessAddressForm("previousAddress"),
-            YesNoTextParams(
-                name = "previousAddress",
-                yesNoLabel = Messages("fh.main_business_address.previous.label"),
-                yesNoError = Messages("fh.main_business_address.previous.error"),
-                valueLabel = "Enter your previous address",
-                valueError = "You must enter your address",
-                hasErrors = false
-            )
-        )
-    </div>
+    @TextInput(
+      TextInputParams(
+        name = "lastName",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "jobTitle",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "telephone",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "email",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "firstName",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "firstName",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = "firstName",
+        label = Messages("fh.contact_person.first_name.label"),
+        error = Messages("fh.contact_person.first_name.empty.error")
+      )
+    )
 
     <div class="form-group">
       <input type="submit" id="p-continue" class="button" value="continue">

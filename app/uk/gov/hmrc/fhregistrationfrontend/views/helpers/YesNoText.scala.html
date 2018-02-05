@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(field: Field, params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages)
 
 @fieldName = @{
     params.context match {
@@ -85,7 +85,6 @@
             </div>
 
         </div>
-
 
         @TextInput(
             TextInputParams(
