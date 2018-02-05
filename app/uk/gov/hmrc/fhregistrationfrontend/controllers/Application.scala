@@ -162,7 +162,7 @@ class Application @Inject()(
   }
 
   def componentExamples = Action.async { implicit request =>
-    Future(Ok(examples()))
+    Future(Ok(examples(mainBusinessAddressForm)))
   }
 
 

@@ -14,13 +14,14 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@()(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[MainBusinessAddress])(implicit request: Request[_], messages: Messages)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script><script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>}
 @main_template(title = "FH Component Examples", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
     @PageHeading(
@@ -197,6 +198,32 @@
                 error = Messages("fh.contact_person.last_name.empty.error"),
                 value = Some("Macdonald"),
                 hasErrors = false
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">Yes/No Address</h2>
+
+        @RadioGroup(
+            RadioGroupParams(
+                name=Some("contactAddress"),
+                radios = List(
+                    RadioParams(
+                        "true",
+                        "Yes",
+                        Some("contactAddress_value")
+                    ),
+                    RadioParams(
+                        "false",
+                        "No"
+                    )
+                )
+            )
+        )
+
+        @NestedPanel(
+            NestedPanelParams(
+                "contactAddress_value",
+                AddressUK()
             )
         )
 

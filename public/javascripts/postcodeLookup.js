@@ -113,6 +113,18 @@
         var address = data.addresses.length != 1 ? "addresses" : "address";
         var options = '<legend>' + data.addresses.length + ' ' + address + ' found...</legend>';
         jQuery.map(data.addresses, function(results,index) {
+
+
+        options += '<div class="multiple-choice"><input class="postcode-lookup-results-entry" type="radio" id="result-' + num + 'choice' + index + '" name="res" value="' + index + '"><label for="result-' + num + 'choice' + index + '">' +
+                jQuery.map(results.address.lines, function( line,index ) {
+                    return index == 0 ? line : ' ' + line;
+                }) + ', ' +
+                results.address.town + ', ' +
+                results.address.postcode +
+            '</label></div>';
+
+
+            /*
             options += '<label id="result-' + num + 'choi' + index + '" class="block-label" for="result-' + num + 'choice' + index + '" value="' + index + '"><input class="postcode-lookup-results-entry" type="radio" id="result-' + num + 'choice' + index + '" name="res" value="' + index + '">' +
                 jQuery.map(results.address.lines, function( line,index ) {
                     return index == 0 ? line : ' ' + line;
@@ -120,12 +132,13 @@
                 results.address.town + ', ' +
                 results.address.postcode +
                 '</label>';
+            */
             return options;
         });
 
 
 
-        $('#result-' + num).html(options);
+        $('#result-1').html(options);
 
 
 
