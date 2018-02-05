@@ -15,6 +15,7 @@
  *@
 
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@import uk.gov.hmrc.fhregistrationfrontend.controllers._
 
 <div class="form-group margin-top-30">
     <p>
@@ -23,7 +24,7 @@
 
     @if(params.summaryLink){
     <p>
-        <a href="/fhdds/summary">
+        <a href="@{routes.Application.summary}">
             Go back to summary
         </a>
     </p>
