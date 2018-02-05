@@ -34,6 +34,8 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CompanyRegistrationNumber._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.DateOfIncorporation._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
@@ -46,11 +48,11 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links         : ExternalUrls,
-  ds            : CommonPlayDependencies,
-  fhddsConnector: FhddsConnector,
-  messagesApi: play.api.i18n.MessagesApi,
-  configuration: Configuration,
+  links            : ExternalUrls,
+  ds               : CommonPlayDependencies,
+  fhddsConnector   : FhddsConnector,
+  messagesApi      : play.api.i18n.MessagesApi,
+  configuration    : Configuration,
   save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
 
@@ -148,18 +150,56 @@ class Application @Inject()(
 
   def submitContactPerson = authorisedUser { implicit request =>
     internalId ⇒
-      println(s"\n\n${contactPersonForm.bindFromRequest()}\n\n")
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒
           contactPersonForm.bindFromRequest().fold(
             formWithErrors => BadRequest(contact_person(formWithErrors, bpr)),
             contactPerson => {
               save4LaterService.saveFormDetails(internalId, contactPerson, "contactPerson")
-              Ok(contactPerson.toString)
+              Redirect(routes.Application.companyRegistrationNumber())
             }
           )
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
+  }
+
+  def companyRegistrationNumber = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(company_registration_number(companyRegistrationNumberForm))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def submitCompanyRegistrationNumber = authorisedUser { implicit request =>
+    internalId ⇒
+      companyRegistrationNumberForm.bindFromRequest().fold(
+        formWithErrors => Future successful BadRequest(company_registration_number(formWithErrors)),
+        companyRegistrationNumber => {
+          save4LaterService.saveFormDetails(internalId, companyRegistrationNumber, "companyRegistrationNumber")
+          Future successful Redirect(routes.Application.dateOfIncorporation())
+        }
+      )
+  }
+
+  def dateOfIncorporation = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(date_of_incorporation(dateOfIncorporationForm))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def submitDateOfIncorporation = authorisedUser { implicit request =>
+    internalId ⇒
+      dateOfIncorporationForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future successful BadRequest(date_of_incorporation(formWithErrors))},
+        dateOfIncorporation => {
+          save4LaterService.saveFormDetails(internalId, dateOfIncorporation, "dateOfIncorporation")
+          Future successful Ok(dateOfIncorporation.toString)
+        }
+      )
   }
 
   def componentExamples = Action.async { implicit request =>

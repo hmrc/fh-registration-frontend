@@ -211,7 +211,7 @@ fh.company_registration_number.details=You can find your company registration nu
 #===========================================================
 fh.date_of_incorporation.title=Date of incorporation
 fh.date_of_incorporation.label=Date of incorporation
-fh.date_of_incorporation.hint_text=For example, 31/07/201
+fh.date_of_incorporation.hint_text=For example, 31/07/2015
 fh.date_of_incorporation.empty.error=Enter the date of incorporation
 fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
 

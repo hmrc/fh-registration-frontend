@@ -21,16 +21,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
-@overThreeYearsPeriodLabels = @{
-  List(
-    Messages("fh.main_business_address.3to5years.label"),
-    Messages("fh.main_business_address.5to10years.label"),
-    Messages("fh.main_business_address.10plusYears.label"))
-}
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/dropdowns-enhancement.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
