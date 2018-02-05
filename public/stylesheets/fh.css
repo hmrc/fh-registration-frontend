@@ -1,0 +1,12 @@
+legend.form-label-bold {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+}
+
+.panel-border-narrow, .panel {
+    padding-top: 0;
+}
+
+span.error-message, .form-hint {
+    margin-bottom: 0.5em;
+}

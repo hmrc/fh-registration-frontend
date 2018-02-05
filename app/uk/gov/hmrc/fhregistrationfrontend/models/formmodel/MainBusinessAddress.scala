@@ -33,31 +33,11 @@ object MainBusinessAddress {
 
   def mainBusinessAddressForm = Form(
     mapping(
-      "period" -> nonEmptyText,
+      "timeAtCurrentAddress" -> nonEmptyText,
       "hasOtherAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      "address" -> optional(AddressModel.addressMapping)
+      "previousAddress" -> optional(AddressModel.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
-
-  def hideField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("period").hasErrors) "hidden"
-    else {
-      mainBusinessAddress.value match {
-        case Some(v) => if (v.period == "Less than 3 years") "" else "hidden"
-        case _ => "hidden"
-      }
-    }
-  }
-
-  def hideAddressField(mainBusinessAddress: Form[MainBusinessAddress]): String = {
-    if (mainBusinessAddress("hasOtherAddress").hasErrors) ""
-    else {
-      mainBusinessAddress.value match {
-        case Some(v) => if (v.hasOtherAddress == "true") "" else "hidden"
-        case _ => "hidden"
-      }
-    }
-  }
 
 }
 

@@ -118,6 +118,7 @@ fh.vat_registration.title=VAT registration
 fh.vat_registration.confirm.label=Does the business have a VAT registration number?
 fh.vat_registration.confirm.error=Select whether the business has a VAT registration number
 fh.vat_registration.label=Enter the VAT registration number
+fh.vat_registration.hintText=For example, 123456789
 fh.vat_registration.empty.error=Enter the VAT registration number
 fh.vat_registration.invalid.error=Enter a valid VAT registration number
 
