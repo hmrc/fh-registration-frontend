@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import app.Routes
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
@@ -31,7 +30,7 @@ import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
-import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
+import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -46,11 +45,11 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links: ExternalUrls,
+  links         : ExternalUrls,
   ds            : CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
-  messagesApi   : play.api.i18n.MessagesApi,
-  configuration : Configuration,
+  messagesApi: play.api.i18n.MessagesApi,
+  configuration: Configuration,
   save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
 
@@ -122,7 +121,22 @@ class Application @Inject()(
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
-  
+
+  def submitMainBusinessAddress = authorisedUser { implicit request =>
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒
+          mainBusinessAddressForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
+            mainBusinessAddress => {
+              save4LaterService.saveFormDetails(internalId, mainBusinessAddress, "mainBusinessAddress")
+              Ok(s"$mainBusinessAddress")
+            }
+          )
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
   private def formTypeRef(details: BusinessRegistrationDetails) = {
 
     details.businessType match {

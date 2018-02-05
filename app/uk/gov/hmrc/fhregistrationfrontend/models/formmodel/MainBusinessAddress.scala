@@ -20,21 +20,22 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Json, OFormat}
 
-case class MainBusinessAddress(period: String, hasOtherAddress: Option[Boolean], previousAddress: Option[String])
+
+case class MainBusinessAddress (
+  period: String,
+  hasOtherAddress: Option[Boolean],
+  address: Option[AddressModel]
+) extends FormDetails
 
 object MainBusinessAddress {
 
   implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
 
-  val period = "period"
-  val hasOtherAddress = "hasOtherAddress"
-  val previousAddress = "previousAddress"
-
   def mainBusinessAddressForm = Form(
     mapping(
-      period -> nonEmptyText,
-      hasOtherAddress -> optional(of(CustomFormatters.requiredBooleanFormatter)),
-      previousAddress -> optional(text)
+      "period" -> nonEmptyText,
+      "hasOtherAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
+      "address" -> optional(AddressModel.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 
