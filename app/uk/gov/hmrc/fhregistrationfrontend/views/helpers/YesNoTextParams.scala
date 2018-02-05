@@ -30,10 +30,12 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
   * @param yesNoHintText any hint text for the Yes/No question
   * @param valueLabel the label for the target value if Yes has been answered
   * @param valueHintText any hint text for the revealed target value field
+  * @param hasValueError boolean to say whether target field has errors
   * @param targetForNo an optional field name to be required if No is answered
   * @param noInputLabel label for field required if No is answered
   * @param noInputHintText hint text for the field required if No is answered
-  * @param formHasErrors boolean to inform styling of component
+  * @param hasNoValueError boolean to say whether the target field for No has errors
+  * @param hasErrors boolean to say whether the yes/no radio has errors (e.g. is empty)
   */
 
 case class YesNoTextParams (
@@ -47,10 +49,12 @@ case class YesNoTextParams (
                             valueLabel: String,
                             valueHintText: Option[String] = None,
                             valueError: String,
+                            hasValueError: Boolean = false,
                             targetForNo: Option[String] = None,
                             noInputLabel: Option[String] = None,
                             noInputHintText: Option[String] = None,
                             noInputError: Option[String] = None,
-                            formHasErrors: Boolean = false
+                            hasNoValueError: Boolean = false,
+                            hasErrors: Boolean = false
                             )
 

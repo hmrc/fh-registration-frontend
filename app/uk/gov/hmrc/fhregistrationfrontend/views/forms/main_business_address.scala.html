@@ -68,7 +68,7 @@
             inline = false,
             required = true,
             error = Some(Messages("fh.main_business_address.time_at_address.error")),
-            formHasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
+            hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
             radios = List(
                 RadioParams(
                     Messages("fh.main_business_address.0to3years.value"),
@@ -99,7 +99,7 @@
                 yesNoError = Messages("fh.main_business_address.previous.error"),
                 valueLabel = "Enter your previous address",
                 valueError = "You must enter your address",
-                formHasErrors = false
+                hasErrors = false
             )
         )
     </div>
@@ -113,7 +113,7 @@
             inline = false,
             required = true,
             error = Some(Messages("fh.business_customers.error")),
-            formHasErrors = true,
+            hasErrors = true,
             radios = List(
                 RadioParams(
                     Messages("fh.business_customers.none.value"),
@@ -161,7 +161,7 @@
             yesNoError = Messages("fh.trading_name.confirm.error"),
             valueLabel = Messages("fh.trading_name.label"),
             valueError = Messages("Enter the trading name"),
-            formHasErrors = true
+            hasErrors = true
         )
     )
 
@@ -176,7 +176,7 @@
             valueLabel = Messages("fh.company_officers.individual.nino.label"),
             valueError = Messages("fh.company_officers.individual.nino.empty.error"),
             yesNoHintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
-            formHasErrors = false
+            hasErrors = false
         )
     )
 
@@ -198,7 +198,7 @@
             name = "lastName",
             label = Messages("fh.contact_person.last_name.label"),
             error = Messages("fh.contact_person.last_name.empty.error"),
-            formHasErrors = true
+            hasErrors = true
         )
     )
 
