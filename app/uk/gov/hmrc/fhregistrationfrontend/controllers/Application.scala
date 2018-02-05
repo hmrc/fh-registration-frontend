@@ -33,16 +33,14 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.{examples, main_business_address}
-
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -133,7 +131,30 @@ class Application @Inject()(
             formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
             mainBusinessAddress => {
               save4LaterService.saveFormDetails(internalId, mainBusinessAddress, "mainBusinessAddress")
-              Ok(s"$mainBusinessAddress")
+              Ok(contact_person(contactPersonForm, bpr))
+            }
+          )
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def contactPerson = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(contact_person(contactPersonForm, bpr))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def submitContactPerson = authorisedUser { implicit request =>
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒
+          contactPersonForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(contact_person(formWithErrors, bpr)),
+            contactPerson => {
+              save4LaterService.saveFormDetails(internalId, contactPerson, "contactPerson")
+              Ok(contactPerson.toString)
             }
           )
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
