@@ -16,7 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-case class RadioParams(value: String,
-                       label: String,
-                       dataTarget: Option[String] = None
-                      )
+/**
+  * Created by ali on 05/02/18.
+  */
+case class SubmitButtonsParams(
+                             label: String = "Save and continue",
+                             summaryLink: Boolean = false
+                           )

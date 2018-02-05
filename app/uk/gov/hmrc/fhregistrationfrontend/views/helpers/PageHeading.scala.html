@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.PageHeadingParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
-case class RadioParams(value: String,
-                       label: String,
-                       dataTarget: Option[String] = None
-                      )
+@headingClasses = @{
+    params.classNames match {
+        case Some(classNames) => {
+            params.classNames
+        }
+        case _ => {
+            "headingClasses"
+        }
+    }
+}
+
+<h1 class="@{headingClasses}">@{params.heading}</h1>

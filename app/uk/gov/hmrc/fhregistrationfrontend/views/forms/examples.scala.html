@@ -22,172 +22,189 @@
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 @main_template(title = "FH Component Examples", pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
-<h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
-
-@helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
-
-@helper.CSRF.formField
-
-<h1 style="border-bottom: 1px solid black">RadioGroup component with conditional reveal</h1>
-
-@RadioGroup(
-    RadioGroupParams(
-        name = Some("timeAtCurrentAddress"),
-        legend = Some(Messages("fh.main_business_address.time_at_address.label")),
-        inline = false,
-        required = true,
-        error = Some(Messages("fh.main_business_address.time_at_address.error")),
-        formHasErrors = false,
-        radios = List(
-            RadioParams(
-                Messages("fh.main_business_address.0to3years.value"),
-                Messages("fh.main_business_address.0to3years.label"),
-                Some("lessThan3Years")
-            ),
-            RadioParams(
-                Messages("fh.main_business_address.3to5years.value"),
-                Messages("fh.main_business_address.3to5years.label")
-            ),
-            RadioParams(
-                Messages("fh.main_business_address.5to10years.value"),
-                Messages("fh.main_business_address.5to10years.label")
-            ),
-            RadioParams(
-                Messages("fh.main_business_address.10plusYears.value"),
-                Messages("fh.main_business_address.10plusYears.label")
-            )
+    @PageHeading(
+        PageHeadingParams(
+            heading = "FH Component Examples"
         )
     )
-)
 
-    <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
-        @YesNoText(
-            YesNoTextParams(
-                name = "previousAddress",
-                yesNoLabel = Messages("fh.main_business_address.previous.label"),
-                yesNoError = Messages("fh.main_business_address.previous.error"),
-                valueLabel = "Enter your previous address",
-                valueError = "You must enter your address",
-                formHasErrors = false
-            )
-        )
-    </div>
+    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
 
-    <h1 style="border-bottom: 1px solid black">RadioGroup component with error</h1>
+        @helper.CSRF.formField
 
-    @RadioGroup(
-        RadioGroupParams(
-            name = Some("businessCustomers"),
-            legend = Some(Messages("fh.business_customers.label")),
-            inline = false,
-            required = true,
-            error = Some(Messages("fh.business_customers.error")),
-            formHasErrors = true,
-            radios = List(
-                RadioParams(
-                    Messages("fh.business_customers.none.value"),
-                    Messages("fh.business_customers.none.label")
-                ),
-                RadioParams(
-                    Messages("fh.business_customers.1_10.value"),
-                    Messages("fh.business_customers.1_10.label")
-                ),
-                RadioParams(
-                    Messages("fh.business_customers.11_50.value"),
-                    Messages("fh.business_customers.11_50.label")
-                ),
-                RadioParams(
-                    Messages("fh.business_customers.51_100.label"),
-                    Messages("fh.business_customers.51_100.value")
-                ),
-                RadioParams(
-                    Messages("fh.business_customers.101_plus.label"),
-                    Messages("fh.business_customers.101_plus.value")
+        <h2 style="border-bottom: 1px solid black">RadioGroup with conditional reveal</h2>
+
+        @RadioGroup(
+            RadioGroupParams(
+                name = Some("timeAtCurrentAddress"),
+                legend = Some(Messages("fh.main_business_address.time_at_address.label")),
+                inline = false,
+                required = true,
+                error = Some(Messages("fh.main_business_address.time_at_address.error")),
+                formHasErrors = false,
+                radios = List(
+                    RadioParams(
+                        Messages("fh.main_business_address.0to3years.value"),
+                        Messages("fh.main_business_address.0to3years.label"),
+                        Some("lessThan3Years")
+                    ),
+                    RadioParams(
+                        Messages("fh.main_business_address.3to5years.value"),
+                        Messages("fh.main_business_address.3to5years.label")
+                    ),
+                    RadioParams(
+                        Messages("fh.main_business_address.5to10years.value"),
+                        Messages("fh.main_business_address.5to10years.label")
+                    ),
+                    RadioParams(
+                        Messages("fh.main_business_address.10plusYears.value"),
+                        Messages("fh.main_business_address.10plusYears.label")
+                    )
                 )
             )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">YesNoText component</h1>
+        <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
+            @YesNoText(
+                YesNoTextParams(
+                    name = "previousAddress",
+                    yesNoLabel = Messages("fh.main_business_address.previous.label"),
+                    yesNoError = Messages("fh.main_business_address.previous.error"),
+                    valueLabel = "Enter your previous address",
+                    valueError = "You must enter your address",
+                    formHasErrors = false
+                )
+            )
+        </div>
 
-    @YesNoText(
-        YesNoTextParams(
-            name = "vatRegistrationNumber",
-            yesNoLabel = Messages("fh.vat_registration.confirm.label"),
-            yesNoError = Messages("fh.vat_registration.confirm.error"),
-            valueLabel = Messages("fh.vat_registration.label"),
-            valueHintText = Some(Messages("fh.vat_registration.hintText")),
-            valueError = Messages("fh.vat_registration.empty.error")
+        <h2 style="border-bottom: 1px solid black">RadioGroup with error</h2>
+
+        @RadioGroup(
+            RadioGroupParams(
+                name = Some("businessCustomers"),
+                legend = Some(Messages("fh.business_customers.label")),
+                inline = false,
+                required = true,
+                error = Some(Messages("fh.business_customers.error")),
+                formHasErrors = true,
+                radios = List(
+                    RadioParams(
+                        Messages("fh.business_customers.none.value"),
+                        Messages("fh.business_customers.none.label")
+                    ),
+                    RadioParams(
+                        Messages("fh.business_customers.1_10.value"),
+                        Messages("fh.business_customers.1_10.label")
+                    ),
+                    RadioParams(
+                        Messages("fh.business_customers.11_50.value"),
+                        Messages("fh.business_customers.11_50.label")
+                    ),
+                    RadioParams(
+                        Messages("fh.business_customers.51_100.label"),
+                        Messages("fh.business_customers.51_100.value")
+                    ),
+                    RadioParams(
+                        Messages("fh.business_customers.101_plus.label"),
+                        Messages("fh.business_customers.101_plus.value")
+                    )
+                )
+            )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">YesNoText component with yes/no error</h1>
+        <h2 style="border-bottom: 1px solid black">YesNoText</h2>
 
-    @YesNoText(
-        YesNoTextParams(
-            name = "tradingName",
-            yesNoLabel = Messages("fh.trading_name.confirm.label"),
-            yesNoError = Messages("fh.trading_name.confirm.error"),
-            valueLabel = Messages("fh.trading_name.label"),
-            valueError = Messages("Enter the trading name"),
-            formHasErrors = true
+        @YesNoText(
+            YesNoTextParams(
+                name = "vatRegistrationNumber",
+                yesNoLabel = Messages("fh.vat_registration.confirm.label"),
+                yesNoError = Messages("fh.vat_registration.confirm.error"),
+                valueLabel = Messages("fh.vat_registration.label"),
+                valueHintText = Some(Messages("fh.vat_registration.hintText")),
+                valueError = Messages("fh.vat_registration.empty.error")
+            )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">YesNoText component prepop</h1>
+        <h2 style="border-bottom: 1px solid black">YesNoText with yes/no error</h2>
 
-    @YesNoText(
-        YesNoTextParams(
-            name = "nino",
-            yesNoValue = Some("true"),
-            yesNoLabel = Messages("fh.company_officers.individual.nino.confirm.label"),
-            yesNoError = Messages("fh.company_officers.individual.nino.confirm.error"),
-            valueLabel = Messages("fh.company_officers.individual.nino.label"),
-            valueHintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
-            valueError = Messages("fh.company_officers.individual.nino.empty.error"),
-            yesNoHintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
-            formHasErrors = false
+        @YesNoText(
+            YesNoTextParams(
+                name = "tradingName",
+                yesNoLabel = Messages("fh.trading_name.confirm.label"),
+                yesNoError = Messages("fh.trading_name.confirm.error"),
+                valueLabel = Messages("fh.trading_name.label"),
+                valueError = Messages("Enter the trading name"),
+                formHasErrors = true
+            )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">TextInput component</h1>
+        <h2 style="border-bottom: 1px solid black">YesNoText with yes/no prepop</h2>
 
-    @TextInput(
-        TextInputParams(
-            name = "firstName",
-            label = Messages("fh.contact_person.first_name.label"),
-            error = Messages("fh.contact_person.first_name.empty.error"),
-            hintText = Some("here's a hint")
+        @YesNoText(
+            YesNoTextParams(
+                name = "nino",
+                yesNoValue = Some("true"),
+                yesNoLabel = Messages("fh.company_officers.individual.nino.confirm.label"),
+                yesNoError = Messages("fh.company_officers.individual.nino.confirm.error"),
+                valueLabel = Messages("fh.company_officers.individual.nino.label"),
+                valueHintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
+                valueError = Messages("fh.company_officers.individual.nino.empty.error"),
+                yesNoHintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
+                formHasErrors = false
+            )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">TextInput component with error</h1>
+        <h2 style="border-bottom: 1px solid black">TextInput</h2>
 
-    @TextInput(
-        TextInputParams(
-            name = "lastName",
-            label = Messages("fh.contact_person.last_name.label"),
-            error = Messages("fh.contact_person.last_name.empty.error"),
-            formHasErrors = true
+        @TextInput(
+            TextInputParams(
+                name = "firstName",
+                label = Messages("fh.contact_person.first_name.label"),
+                error = Messages("fh.contact_person.first_name.empty.error"),
+                hintText = Some("here's a hint")
+            )
         )
-    )
 
-    <h1 style="border-bottom: 1px solid black">TextInput component with prepop</h1>
+        <h2 style="border-bottom: 1px solid black">TextInput with error</h2>
 
-    @TextInput(
-        TextInputParams(
-            name = "lastName",
-            label = Messages("fh.contact_person.last_name.label"),
-            error = Messages("fh.contact_person.last_name.empty.error"),
-            value = Some("Macdonald"),
-            formHasErrors = false
+        @TextInput(
+            TextInputParams(
+                name = "lastName",
+                label = Messages("fh.contact_person.last_name.label"),
+                error = Messages("fh.contact_person.last_name.empty.error"),
+                formHasErrors = true
+            )
         )
-    )
 
-    <div class="form-group">
-        <input type="submit" id="p-continue" class="button" value="continue">
-    </div>
-}
+        <h2 style="border-bottom: 1px solid black">TextInput with prepop</h2>
+
+        @TextInput(
+            TextInputParams(
+                name = "lastName",
+                label = Messages("fh.contact_person.last_name.label"),
+                error = Messages("fh.contact_person.last_name.empty.error"),
+                value = Some("Macdonald"),
+                formHasErrors = false
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid black">SubmitButtons</h2>
+
+        @SubmitButtons(
+            SubmitButtonsParams(
+                summaryLink = false
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid black">SubmitButtons with summary link enabled</h2>
+
+        @SubmitButtons(
+            SubmitButtonsParams(
+                summaryLink = true
+            )
+        )
+
+    }
 
 
 }
