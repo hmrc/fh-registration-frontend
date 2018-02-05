@@ -30,7 +30,6 @@
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/dropdowns-enhancement.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
@@ -114,7 +113,7 @@
     )
 
     <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
-        @YesNoText(
+        @YesNoAddress(
             mainBusinessAddressForm("previousAddress"),
             YesNoTextParams(
                 name = "previousAddress",
@@ -123,7 +122,8 @@
                 valueLabel = "Enter your previous address",
                 valueError = "You must enter your address",
                 formHasErrors = false
-            )
+            ),
+            true
         )
     </div>
 

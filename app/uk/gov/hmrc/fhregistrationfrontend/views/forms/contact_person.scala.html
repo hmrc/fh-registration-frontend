@@ -71,81 +71,129 @@
 
   <h1 class="heading-large">@Messages("fh.contact_person.title")</h1>
 
-  <div id="review-details" class="form-group">
-    @bpr.businessAddress.line1<br>
-    @bpr.businessAddress.line2<br>
-    @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
-    @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
-    @bpr.businessAddress.postcode<br>
-  </div>
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitContactPerson, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
+
+
+    <h2>This is the person we will contact if we need to discuss your application.</h2>
 
     @TextInput(
       TextInputParams(
         name = "firstName",
         label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+        error = contactPersonForm("firstName").error.getOrElse("").toString
       )
     )
 
     @TextInput(
       TextInputParams(
         name = "lastName",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+        label = Messages("fh.contact_person.last_name.label"),
+        error = contactPersonForm("lastName").error.getOrElse("").toString
       )
     )
 
     @TextInput(
       TextInputParams(
         name = "jobTitle",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+        label = Messages("fh.contact_person.job_title.label"),
+        error = contactPersonForm("jobTitle").error.getOrElse("").toString
       )
     )
 
     @TextInput(
       TextInputParams(
         name = "telephone",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+        label = Messages("fh.contact_person.telephone.label"),
+        error = contactPersonForm("telephone").error.getOrElse("").toString
       )
     )
 
     @TextInput(
       TextInputParams(
         name = "email",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+        label = Messages("fh.contact_person.email.label"),
+        error = contactPersonForm("email").error.getOrElse("").toString
       )
     )
 
-    @TextInput(
-      TextInputParams(
-        name = "firstName",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+    <h2>@Messages("fh.main_business_address.title")</h2>
+
+    <div id="review-details" class="form-group">
+      @bpr.businessAddress.line1<br>
+      @bpr.businessAddress.line2<br>
+      @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
+      @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
+      @bpr.businessAddress.postcode<br>
+    </div>
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some("sameContractAddress"),
+        legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
+        inline = true,
+        required = true,
+        error = Some(Messages("fh.contact_person.contact_address_correct.error")),
+        formHasErrors = contactPersonForm("sameContractAddress").hasErrors,
+        radios = List(
+          RadioParams(
+            Messages("true"),
+            Messages("fh.generic.yes.value")
+          ),
+          RadioParams(
+            Messages("false"),
+            Messages("fh.generic.no.value"),
+            Some("diffContactAddress")
+          )
+        )
       )
     )
 
-    @TextInput(
-      TextInputParams(
-        name = "firstName",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
-      )
-    )
+    <div class="panel panel-border-narrow js-hidden" id="diffContactAddress">
 
-    @TextInput(
-      TextInputParams(
-        name = "firstName",
-        label = Messages("fh.contact_person.first_name.label"),
-        error = Messages("fh.contact_person.first_name.empty.error")
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some("isUkAddress"),
+          legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
+          inline = true,
+          required = true,
+          error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
+          formHasErrors = contactPersonForm("isUkAddress").hasErrors,
+          radios = List(
+            RadioParams(
+              Messages("true"),
+              Messages("fh.generic.yes.value"),
+              Some("ukAddress")
+            ),
+            RadioParams(
+              Messages("false"),
+              Messages("fh.generic.no.value"),
+              Some("internationalAddress")
+            )
+          )
+        )
       )
-    )
+
+      <div class="panel panel-border-narrow js-hidden" id="ukAddress">
+        @fhddsAddressHelper(
+          contactPersonForm("contactAddress"),
+          wrapperClassP = "panel-indent",
+          number = "1",
+          isUK = true)
+      </div>
+
+
+      <div class="panel panel-border-narrow js-hidden" id="internationalAddress">
+      @fhddsAddressHelper(
+        contactPersonForm("contactAddress"),
+        wrapperClassP = "panel-indent",
+        number = "1",
+        isUK = false)
+      </div>
+
+    </div>
+
 
     <div class="form-group">
       <input type="submit" id="p-continue" class="button" value="continue">

@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(field: Field, params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams, isInUK: Boolean)(implicit message : Messages)
 
 @fieldName = @{
     params.context match {
@@ -87,14 +87,13 @@
         </div>
 
         <div class="form-group panel js-hidden" id="@{fieldName}_container">
-            @TextInput(
-                TextInputParams(
-                    name = "@{fieldName}_value",
-                    label = params.valueLabel,
-                    error = params.valueError,
-                    hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
-                )
-            )
+            <div>
+            @fhddsAddressHelper(
+                field,
+                wrapperClassP = "panel-indent",
+                number = "1",
+                isUK = isInUK)
+            </div>
         </div>
 
         @if(!params.targetForNo.isEmpty){

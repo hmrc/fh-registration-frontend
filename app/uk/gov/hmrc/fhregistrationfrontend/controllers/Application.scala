@@ -131,7 +131,7 @@ class Application @Inject()(
             formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
             mainBusinessAddress => {
               save4LaterService.saveFormDetails(internalId, mainBusinessAddress, "mainBusinessAddress")
-              Ok(contact_person(contactPersonForm, bpr))
+              Redirect(routes.Application.contactPerson())
             }
           )
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
@@ -148,6 +148,7 @@ class Application @Inject()(
 
   def submitContactPerson = authorisedUser { implicit request =>
     internalId ⇒
+      println(s"\n\n${contactPersonForm.bindFromRequest()}\n\n")
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒
           contactPersonForm.bindFromRequest().fold(
