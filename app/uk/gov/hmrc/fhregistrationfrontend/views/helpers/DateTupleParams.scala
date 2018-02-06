@@ -21,6 +21,7 @@ case class DateTupleParams(
                               context: Option[String] = None,
                               name: String,
                               label: String,
+                              hintText: Option[String] = None,
                               error: String,
                               day: String,
                               month: String,
