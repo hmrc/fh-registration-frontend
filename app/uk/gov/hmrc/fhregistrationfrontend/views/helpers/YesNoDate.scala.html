@@ -16,40 +16,39 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoDateParams)(implicit message : Messages)
 
 @fieldName = @{
-params.context match {
-case Some(context) => {
-context + "_" + params.name
-}
-case _ => {
-params.name
-}
-}
+    params.context match {
+        case Some(context) => {
+            context + "_" + params.name
+        }
+        case _ => {
+            params.name
+        }
+    }
 }
 
 @formGroupClass = @{
-params.hasErrors || params.hasValueError match {
-case true => {
-"form-group form-group-error"
-}
-case _ => {
-"form-group"
-}
-}
+    params.hasErrors || params.hasValueError match {
+        case true => {
+            "form-group form-group-error"
+        }
+        case _ => {
+            "form-group"
+        }
+    }
 }
 
 @checked(testVal:String) = @{
-params.yesNoValue match {
-case Some(x) => {
-if(x == testVal){"checked"}
-}
-case _ => {
-""
-}
-}
-
+    params.yesNoValue match {
+        case Some(x) => {
+            if(x == testVal){"checked"}
+        }
+        case _ => {
+            ""
+        }
+    }
 }
 
 <div class="@{formGroupClass}" id="@{fieldName}_group">
@@ -94,7 +93,10 @@ case _ => {
                         name=fieldName,
                         label=params.valueLabel,
                         error=params.valueError,
-                        hintText=params.valueHintText
+                        hintText=params.valueHintText,
+                        day=if(!params.day.isEmpty) { params.day } else { None },
+                        month=if(!params.month.isEmpty) { params.month } else { None },
+                        year=if(!params.year.isEmpty) { params.year } else { None }
                     )
                 )
             )
