@@ -34,6 +34,14 @@
 
         @helper.CSRF.formField
 
+        <h2 style="border-bottom: 1px solid #777; color: #777">PageHeading</h2>
+
+        @PageHeading(
+            PageHeadingParams(
+                heading = "Page Heading"
+            )
+        )
+
         <h2 style="border-bottom: 1px solid #777; color: #777">RadioGroup with conditional reveal</h2>
 
         @RadioGroup(
@@ -221,7 +229,7 @@
                     RadioParams(
                         "true",
                         "Yes",
-                        Some("contactAddress_value")
+                        Some("contactAddressUK")
                     ),
                     RadioParams(
                         "false",
@@ -234,7 +242,7 @@
 
         @NestedPanel(
             NestedPanelParams(
-                "contactAddress_value",
+                "contactAddressUK",
                 AddressUK(
                     AddressUKParams(
                         context = "example",
