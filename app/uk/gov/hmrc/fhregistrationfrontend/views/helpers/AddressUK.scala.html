@@ -31,7 +31,7 @@
 
 <legend class="form-label-bold">@{params.label}</legend>
 
-<div id="@{fieldName}-lookup-container" class="address-lookup-container">
+<div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display:none">
     <label>Enter postcode to lookup</label>
     <input type="text" class="postcode-value" style="width: 200px;" />
     <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
@@ -87,7 +87,7 @@
         error = "Enter a valid UK postcode"
     )
 )
-    <div class="form-group" style="margin-top:1em">
+    <div class="form-group" style="margin-top:1em; display:none;">
         <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Lookup address with postcode</a>
     </div>
 </div>

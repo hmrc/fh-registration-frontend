@@ -1,4 +1,7 @@
 (function($) {
+    // initialise the display of js-only controls
+    $('.address-lookup-container').show();
+
     var lookUpPath = '/fhdds/address-lookup?postcode=';
 
     function populateAddress(address, context) {
@@ -32,21 +35,18 @@
         var resultsArray = [];
         jQuery.each(data.addresses, function(i, result) {
             var address = result.address;
-            resultsArray.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result">');
+            resultsArray.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result" name="' + context + '-result-' + i + '" value="' + i + '"><label for="' + context + '-result-' + i + '">');
             resultsArray.push(address.lines.join(', '));
             resultsArray.push(address.town + ', ');
             resultsArray.push(address.postcode);
             resultsArray.push('</label></div>');
         });
 
-        console.log('attempting to populate #' + context + '-results');
-
         $('#' + context + '-results')
             .html(legend + resultsArray.join(''))
             .focus()
             .on('click', '.postcode-lookup-result', function (e) {
                 var index = $(e.currentTarget).val()
-                console.log('address selected for index ' + index, data.addresses[index])
                 populateAddress(data.addresses[index].address, context)
             });
 
@@ -83,6 +83,7 @@
     var manualMode = function (context) {
         $('#' + context + '-manual-container').removeClass('js-hidden');
         $('#' + context + '-lookup-container').addClass('js-hidden');
+        $('.lookup-address-mode').parent().show();
     }
 
     var lookupMode = function (context) {
