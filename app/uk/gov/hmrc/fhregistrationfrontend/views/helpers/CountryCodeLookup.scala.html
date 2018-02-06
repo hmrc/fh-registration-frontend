@@ -21,7 +21,7 @@
 @fieldName = @{
     params.context match {
         case Some(context) => {
-            context + "_" + params.name
+            context + "." + params.name
         }
         case _ => {
             params.name
@@ -32,7 +32,7 @@
 @countryCodeName = @{
     params.context match {
         case Some(context) => {
-            context + "_countryCode"
+            context + ".countryCode"
         }
         case _ => {
             "countryCode"
@@ -41,7 +41,7 @@
 }
 
 <script type="text/javascript">
-  var countries = [
+  window.countries = window.countries || [
 {"title":"Andorra","value":"AD"},
 {"title":"United Arab Emirates ","value":"AE"},
 {"title":"Afghanistan","value":"AF"},
@@ -294,7 +294,7 @@
 ];
 </script>
 
-<input type="hidden" name="@{countryCodeName}" id="@{countryCodeName}" />
+<input type="hidden" name="@{countryCodeName}" id="@{countryCodeName}" value="" />
 
 <label class="form-label">@{params.label}</label>
 <div class="suggestions-input-container">
@@ -310,9 +310,9 @@
             data-rule-suggestion="true"
             aria-autocomplete="list"
             aria-haspopup="true"
-            aria-controls="suggestions-list-container"
+            aria-controls="@{countryCodeName}-suggestions-list-container"
             aria-activedescendant />
     <i class="suggestions-clear js-suggestions-clear"></i>
     <span role="status" aria-live="assertive" aria-relevant="additions" class="visuallyhidden js-suggestions-status-message" id="autoCompleteSuggestionStatus"></span>
-    <div class="suggestions js-suggestions" id="suggestions-list-container" aria-describedby="autoCompleteSuggestionStatus"></div>
+    <div class="suggestions js-suggestions" id="@{countryCodeName}-suggestions-list-container" aria-describedby="autoCompleteSuggestionStatus"></div>
 </div>
