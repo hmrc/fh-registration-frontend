@@ -2,28 +2,28 @@
     var lookUpPath = '/fhdds/address-lookup?postcode=';
 
     function populateAddress(address, context) {
-        $('[name="' + context + '_' + 'Line1').val(address.lines[0]);
+        $('[name="' + context + '.' + 'Line1').val(address.lines[0]);
         if (address.lines[1]) {
-            $('[name="' + context + '_' + 'Line2').val(address.lines[1]);
+            $('[name="' + context + '.' + 'Line2').val(address.lines[1]);
         } else {
-            $('[name="' + context + '_' + 'Line2').val('')
+            $('[name="' + context + '.' + 'Line2').val('')
         }
         if (address.lines[2]) {
-            $('[name="' + context + '_' + 'Line3').val(address.lines[2]);
+            $('[name="' + context + '.' + 'Line3').val(address.lines[2]);
         } else {
-            $('[name="' + context + '_' + 'Line3').val('')
+            $('[name="' + context + '.' + 'Line3').val('')
         }
 
-        $('[name="' + context + '_' + 'Line4').val(address.town);
-        $('[name="' + context + '_' + 'postcode').val(address.postcode);
+        $('[name="' + context + '.' + 'Line4').val(address.town);
+        $('[name="' + context + '.' + 'postcode').val(address.postcode);
     }
 
     function clearAddressFields(context) {
-        $('[name="' + context + '_' + 'Line1').val('');
-        $('[name="' + context + '_' + 'Line2').val('')
-        $('[name="' + context + '_' + 'Line3').val('')
-        $('[name="' + context + '_' + 'Line4').val('');
-        $('[name="' + context + '_' + 'postcode').val('');
+        $('[name="' + context + '.' + 'Line1').val('');
+        $('[name="' + context + '.' + 'Line2').val('')
+        $('[name="' + context + '.' + 'Line3').val('')
+        $('[name="' + context + '.' + 'Line4').val('');
+        $('[name="' + context + '.' + 'postcode').val('');
     }
 
     function showResult(data, context) {
@@ -38,6 +38,8 @@
             resultsArray.push(address.postcode);
             resultsArray.push('</label></div>');
         });
+
+        console.log('attempting to populate #' + context + '-results');
 
         $('#' + context + '-results')
             .html(legend + resultsArray.join(''))
