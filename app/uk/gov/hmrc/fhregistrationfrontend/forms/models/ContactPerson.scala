@@ -22,7 +22,7 @@ case class ContactPerson (
   jobTitle: String,
   telephone: String,
   emailAddress: String,
-  hasOtherContactAddress: Option[Boolean],
+  hasOtherContactAddress: Boolean,
   ukOtherAddress: Option[Boolean],
   otherContactAddress: Option[Address]
 )

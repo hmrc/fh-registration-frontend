@@ -32,7 +32,7 @@ object ContactPersonForm {
       "jobTitle" → nonEmptyText,
       "telephone" → nonEmptyText,
       "emailAddress" → nonEmptyText,
-      "hasOtherContactAddress" → optional(of(radioButton)),
+      "hasOtherContactAddress" → of(radioButton),
       "isUkAddress" → optional(of(radioButton)),
       "otherContactAddress_contactAddress" → optional(address)
     )(ContactPerson.apply)(ContactPerson.unapply)
