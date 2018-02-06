@@ -19,5 +19,5 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import java.time.LocalDate
 
 case class DateOfIncorporation (
-  value: LocalDate
+  dateOfIncorporation: LocalDate
 )

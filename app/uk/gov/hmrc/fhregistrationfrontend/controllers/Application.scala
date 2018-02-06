@@ -166,10 +166,7 @@ class Application @Inject()(
 
   def companyRegistrationNumber = authorisedUser { implicit request ⇒
     internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒ Ok(company_registration_number(companyRegistrationNumberForm))
-        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
+      Future successful Ok(company_registration_number(companyRegistrationNumberForm))
   }
 
   def submitCompanyRegistrationNumber = authorisedUser { implicit request =>
@@ -185,10 +182,7 @@ class Application @Inject()(
 
   def dateOfIncorporation = authorisedUser { implicit request ⇒
     internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒ Ok(date_of_incorporation(dateOfIncorporationForm))
-        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
+      Future successful Ok(date_of_incorporation(dateOfIncorporationForm))
   }
 
   def submitDateOfIncorporation = authorisedUser { implicit request =>
@@ -205,10 +199,7 @@ class Application @Inject()(
 
   def tradingName = authorisedUser { implicit request ⇒
     internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒ Ok(trading_name(tradingNameForm))
-        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
+      Future successful Ok(trading_name(tradingNameForm))
   }
 
   def submitTradingName = authorisedUser { implicit request =>

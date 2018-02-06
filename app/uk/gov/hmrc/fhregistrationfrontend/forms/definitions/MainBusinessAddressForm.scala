@@ -29,7 +29,7 @@ object MainBusinessAddressForm {
     mapping(
       "timeAtCurrentAddress" → (nonEmptyText verifying oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)),
       "previousAddress" → optional(of(radioButton)),
-      "mainPreviousAddressUK_previousAddress" → optional(address) //TODO check for yes/no
+      "mainPreviousAddressUK_previousAddress" → optional(address)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 }

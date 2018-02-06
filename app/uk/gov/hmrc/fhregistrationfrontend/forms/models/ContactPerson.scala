@@ -24,5 +24,6 @@ case class ContactPerson (
   emailAddress: String,
   hasOtherContactAddress: Boolean,
   ukOtherAddress: Option[Boolean],
-  otherContactAddress: Option[Address]
+  otherUkContactAddress: Option[Address],
+  otherInternationalContactAddress: Option[InternationalAddress]
 )

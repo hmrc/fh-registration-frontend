@@ -14,22 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(dateOfIncorporationForm: Form[DateOfIncorporation])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
-
-
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
-
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
+@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
 
   @if(dateOfIncorporationForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -39,7 +30,7 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
       <ul>
-        @if(dateOfIncorporationForm("dateOfIncorporation_value").hasErrors){
+        @if(dateOfIncorporationForm("dateOfIncorporation").hasErrors){
           <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
             Messages("fh.date_of_incorporation.invalid.error")
           }

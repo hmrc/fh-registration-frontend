@@ -1,6 +1,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.play.test.UnitSpec
 
 class VatNumberFormSpecs extends UnitSpec {

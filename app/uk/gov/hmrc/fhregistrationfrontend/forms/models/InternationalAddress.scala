@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-//TODO add proper fields
-case class InternationalAddress(
-  value: String
+case class InternationalAddress (
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: Option[String],
+  countryCode: String
 )

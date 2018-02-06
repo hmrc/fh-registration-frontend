@@ -1,9 +1,10 @@
-package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm
 import uk.gov.hmrc.play.test.UnitSpec
 
 class MainBusinessAddressSpecs extends UnitSpec {
-  val form = MainBusinessAddress.mainBusinessAddressForm
+  val form = MainBusinessAddressForm.mainBusinessAddressForm
 
   "MainBusinessAddress form binding" should {
 
@@ -37,14 +38,19 @@ class MainBusinessAddressSpecs extends UnitSpec {
       result shouldBe MainBusinessAddress(
         "Less than 3 years",
         Some(true),
-        Some(AddressModel("line1","line2",None,None, "postcode", Some("countryCode"))))
+        Some(Address("line1", "line2", None, None, "postcode", Some("countryCode"))))
     }
   }
 
   "MainBusinessAddress form unbinding" should {
     "unbind a form wtih address" in {
-      val data = form.fill(MainBusinessAddress("Less than 3 years", Some(true), Some(AddressModel("line1","line2",None,None, "postcode", Some("countryCode")))))
-
+      val data = form.fill(
+        MainBusinessAddress(
+          "Less than 3 years",
+          Some(true),
+          Some(Address("line1", "line2", None, None, "postcode", Some("countryCode")))
+        )
+      )
       data shouldBe Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
         "previousAddress_yesNo" → "true",

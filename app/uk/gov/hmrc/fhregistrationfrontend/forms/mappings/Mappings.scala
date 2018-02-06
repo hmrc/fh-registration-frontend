@@ -17,15 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import play.api.data.Forms._
 import play.api.data.Mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters
+
+import scala.util.Try
 
 object Mappings {
 
   type Condition = Map[String, String] ⇒ Boolean
+
+  val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
   //TODO use regexes where applicable
   def address: Mapping[Address] = mapping(
@@ -37,12 +42,31 @@ object Mappings {
     "countryCode" -> optional(nonEmptyText)
   )(Address.apply)(Address.unapply)
 
+  def internationalAddress: Mapping[InternationalAddress] = mapping(
+    "Line1" -> nonEmptyText,
+    "Line2" -> optional(nonEmptyText),
+    "Line3" -> optional(nonEmptyText),
+    "Line4" -> nonEmptyText
+  )(InternationalAddress.apply)(InternationalAddress.unapply)
 
-  //TODO implement
-  def internationalAddress: Mapping[Address] = ???
+  def localDate = tuple(
+    "day" -> number(min = 1, max = 31),
+    "month" -> number(min = 1, max = 12),
+    "year" -> number(min = 1900, max = 2999)
+  ) verifying ("invalid.date", x ⇒ localDateTimeConstraint(x)) transform (
+    x ⇒ localDateTime(x),
+    (d: LocalDate) ⇒ (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
+  )
 
-  def localDate: Mapping[LocalDate] = ???
+  def localDateTime(d: (Int, Int, Int)) = {
+    LocalDate.of(d._1, d._2, d._3)
+  }
 
+  def localDateTimeConstraint(d: (Int, Int, Int)) = {
+    Try(localDateTime(d)).isSuccess
+  }
+
+  //LocalDate.parse(panelProposedStartDate.proposedStartDate, dtf)
 
   def optionalFromYesAndNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying("todo.provide.a.value", y) transform (z, t)

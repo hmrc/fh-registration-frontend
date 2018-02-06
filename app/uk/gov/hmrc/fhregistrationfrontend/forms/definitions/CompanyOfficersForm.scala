@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Forms.{list, mapping, nonEmptyText, optional}
 import play.api.data.{Form, Mapping}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object CompanyOfficersForm {
 

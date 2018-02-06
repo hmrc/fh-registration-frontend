@@ -14,22 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
-
-
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
-
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
+@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
 
   @if(companyRegistrationNumberForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
