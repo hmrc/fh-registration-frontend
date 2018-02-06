@@ -23,6 +23,9 @@ POST        /submitCompanyRegistrationNumber                                    
 GET         /dateOfIncorporation                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.dateOfIncorporation
 POST        /submitDateOfIncorporation                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDateOfIncorporation
 
+GET         /tradingName                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.tradingName
+POST        /submitTradingName                                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitTradingName
+
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 
 # Map static resources from the /public folder to the /assets URL path

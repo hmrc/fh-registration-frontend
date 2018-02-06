@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
-
-import play.api.data.Form
-import play.api.data.Forms._
-import play.api.libs.json.{Json, OFormat}
-
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 case class MainBusinessAddress (
-  period: String,
-  hasOtherAddress: Option[Boolean],
-  address: Option[AddressModel]
-) extends FormDetails
+  timeAtCurrentAddress: String,
+  hasPreviousAddress: Boolean,
+  previousAddress: Option[Address]
+)
 
 object MainBusinessAddress {
 
-  implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
-
-  def mainBusinessAddressForm = Form(
-    mapping(
-      "timeAtCurrentAddress" -> nonEmptyText,
-      "previousAddress_yesNo" -> optional(of(CustomFormatters.radioButton)),
-      "previousAddress" -> optional(AddressModel.addressMapping)
-    )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
+  val TimeAtCurrentAddressOptions = Seq(
+    "Less than 3 years",
+    "3 to 5 years",
+    "5 to 10 years",
+    "10 or more years"
   )
-
 }

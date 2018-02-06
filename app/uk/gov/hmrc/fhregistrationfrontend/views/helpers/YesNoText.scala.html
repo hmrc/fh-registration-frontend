@@ -89,7 +89,7 @@
         <div class="form-group panel js-hidden" id="@{fieldName}_container">
             @TextInput(
                 TextInputParams(
-                    name = "@{fieldName}_value",
+                    name = fieldName,
                     label = params.valueLabel,
                     error = params.valueError,
                     hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }

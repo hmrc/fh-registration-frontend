@@ -26,6 +26,7 @@ object FormDetails {
   implicit val contactPersonFormat: OFormat[ContactPerson] = Json.format[ContactPerson]
   implicit val companyRegistrationNumberFormat: OFormat[CompanyRegistrationNumber] = Json.format[CompanyRegistrationNumber]
   implicit val dateOfIncorporationFormat: OFormat[DateOfIncorporation] = Json.format[DateOfIncorporation]
+  implicit val tradingNameFormat: OFormat[TradingName] = Json.format[TradingName]
 
   val writes = new Writes[FormDetails] {
     override def writes(o: FormDetails) = o match {
@@ -34,12 +35,15 @@ object FormDetails {
       case obj: CompanyRegistrationNumber ⇒ Json toJson obj
       case obj: CompanyRegistrationNumber ⇒ Json toJson obj
       case obj: DateOfIncorporation ⇒ Json toJson obj
+      case obj: TradingName ⇒ Json toJson obj
     }
   }
 
   val reads: Reads[FormDetails] = new Reads[FormDetails] {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o ⇒
-      if ((o \ "dateOfIncorporation_value").toOption.isDefined) {
+      if ((o \ "tradingName_value").toOption.isDefined) {
+        tradingNameFormat reads json
+      } else if ((o \ "dateOfIncorporation_value").toOption.isDefined) {
         dateOfIncorporationFormat reads json
       } else if ((o \ "companyRegistrationNumber_value").toOption.isDefined) {
         companyRegistrationNumberFormat reads json

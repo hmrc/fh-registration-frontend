@@ -42,8 +42,8 @@ object ContactPerson {
       "jobTitle_value" -> nonEmptyText,
       "telephone_value" -> nonEmptyText,
       "email_value" -> nonEmptyText,
-      "sameContractAddress" -> of(CustomFormatters.requiredBooleanFormatter),
-      "isUkAddress" -> optional(of(CustomFormatters.requiredBooleanFormatter)),
+      "sameContractAddress" -> of(CustomFormatters.radioButton),
+      "isUkAddress" -> optional(of(CustomFormatters.radioButton)),
       "contactAddress" -> optional(AddressModel.addressMapping)
     )(ContactPerson.apply)(ContactPerson.unapply)
   )

@@ -36,6 +36,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CompanyRegistrationNumber._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.DateOfIncorporation._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.TradingName.{tradingNameForm, _}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
@@ -197,7 +198,28 @@ class Application @Inject()(
           Future successful BadRequest(date_of_incorporation(formWithErrors))},
         dateOfIncorporation => {
           save4LaterService.saveFormDetails(internalId, dateOfIncorporation, "dateOfIncorporation")
-          Future successful Ok(dateOfIncorporation.toString)
+          Future successful Redirect(routes.Application.tradingName())
+        }
+      )
+  }
+
+  def tradingName = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Ok(trading_name(tradingNameForm))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def submitTradingName = authorisedUser { implicit request =>
+    internalId ⇒
+      println(s"\n\n${tradingNameForm.bindFromRequest()}\n\n")
+      tradingNameForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future successful BadRequest(trading_name(formWithErrors))},
+        tradingName => {
+          save4LaterService.saveFormDetails(internalId, tradingName, "tradingName")
+          Future successful Ok(tradingName.toString)
         }
       )
   }
