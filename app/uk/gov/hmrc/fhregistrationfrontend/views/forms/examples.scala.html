@@ -220,7 +220,7 @@
         )
 
         <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
-
+        <p>Note: only a single autocomplete is possible per form (Assets frontend constraints)</p>
         @AddressInternational(
             AddressUKParams(
                 name = "AddressInternational",
@@ -265,11 +265,11 @@
         @NestedPanel(
             NestedPanelParams(
                 "contactAddressInternational",
-                AddressInternational(
-                    AddressUKParams(
-                        context = Some("example"),
-                        name = "ContactAddressInternational",
-                        label = "International Contact address"
+                TextInput(
+                    TextInputParams(
+                        name = "contactAddressInternational",
+                        label = "International Address",
+                        error = "You must supply an international address"
                     )
                 )
             )
