@@ -201,6 +201,16 @@
             )
         )
 
+        <h2 style="border-bottom: 1px solid #777; color: #777">Address UK Lookup</h2>
+
+        @AddressUK(
+            AddressUKParams(
+                context = "example",
+                name = "StorageAddress",
+                label = "Storage Premises"
+            )
+        )
+
         <h2 style="border-bottom: 1px solid #777; color: #777">Yes/No Address</h2>
 
         @RadioGroup(
@@ -226,7 +236,8 @@
                 AddressUK(
                     AddressUKParams(
                         context = "example",
-                        name = "ContactAddress"
+                        name = "ContactAddress",
+                        label = "Contact address"
                     )
                 )
             )

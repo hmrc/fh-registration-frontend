@@ -29,7 +29,10 @@
     }
 }
 
+<legend class="form-label-bold">@{params.label}</legend>
+
 <div id="@{fieldName}-lookup-container" class="address-lookup-container">
+    <label>Enter postcode to lookup</label>
     <input type="text" class="postcode-value" style="width: 200px;" />
     <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
     <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup"></fieldset>
