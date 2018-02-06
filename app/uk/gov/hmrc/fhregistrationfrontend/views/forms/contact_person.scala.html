@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
@@ -23,10 +23,9 @@
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
-
 
 @main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
@@ -40,19 +39,19 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(contactPersonForm("period").hasErrors){
+        @if(contactPersonForm("period").hasErrors) {
           <li id="period-error-link"><a href="#period-inline-error">@{
             Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
-        @if(contactPersonForm("hasOtherAddress").hasErrors){
+        @if(contactPersonForm("hasOtherAddress").hasErrors) {
           <li id="period-error-link"><a href="#has-other-address-inline-error">@{
             Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
-        @if(contactPersonForm("previousAddress").hasErrors){
+        @if(contactPersonForm("previousAddress").hasErrors) {
           <li id="period-error-link"><a href="#other-address-inline-error">@{
             Messages("fh.main_business_address.enter_previous.error")
           }
@@ -105,7 +104,7 @@
 
     @TextInput(
       TextInputParams(
-        name = "email",
+        name = "emailAddress",
         label = Messages("fh.contact_person.email.label"),
         error = contactPersonForm("email").error.getOrElse("").toString
       )
@@ -114,83 +113,89 @@
     <h2>@Messages("fh.main_business_address.title")</h2>
 
     <div id="review-details" class="form-group">
-      @bpr.businessAddress.line1<br>
-      @bpr.businessAddress.line2<br>
+      @bpr.businessAddress.line1 <br>
+      @bpr.businessAddress.line2 <br>
       @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
       @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
-      @bpr.businessAddress.postcode<br>
+      @bpr.businessAddress.postcode <br>
     </div>
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("sameContractAddress"),
+        name = Some("hasOtherContactAddress"),
         legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
-        inline = true,
-        required = true,
-        error = Some(Messages("fh.contact_person.contact_address_correct.error")),
-        hasErrors = contactPersonForm("sameContractAddress").hasErrors,
         radios = List(
           RadioParams(
-            Messages("true"),
-            Messages("fh.generic.yes.value")
+            "false",
+            "Yes"
           ),
           RadioParams(
-            Messages("false"),
-            Messages("fh.generic.no.value"),
-            Some("diffContactAddress")
+            "true",
+            "No",
+            Some("hasOtherContactAddress")
           )
         )
       )
     )
 
-    <div class="panel panel-border-narrow js-hidden" id="diffContactAddress">
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some("isUkAddress"),
-          legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
-          inline = true,
-          required = true,
-          error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
-          hasErrors = contactPersonForm("isUkAddress").hasErrors,
-          radios = List(
-            RadioParams(
-              Messages("true"),
-              Messages("fh.generic.yes.value"),
-              Some("ukAddress")
-            ),
-            RadioParams(
-              Messages("false"),
-              Messages("fh.generic.no.value"),
-              Some("internationalAddress")
+    @NestedPanel(
+      NestedPanelParams(
+        "hasOtherContactAddress",
+        RadioGroup(
+          RadioGroupParams(
+            name = Some("isUkAddress"),
+            legend = Some("Is the address in the UK?"),
+            radios = List(
+              RadioParams(
+                "true",
+                "Yes",
+                Some("contactAddressUK")
+              ),
+              RadioParams(
+                "false",
+                "No",
+                Some("contactAddressInternational")
+              )
             )
           )
         )
       )
+    )
 
-      <div class="panel panel-border-narrow js-hidden" id="ukAddress">
-        @fhddsAddressHelper(
-          contactPersonForm("contactAddress"),
-          wrapperClassP = "panel-indent",
-          number = "1",
-          isUK = true)
-      </div>
+    @NestedPanel(
+      NestedPanelParams(
+        "contactAddressUK",
+        AddressUK(
+          AddressUKParams(
+            context = Some("otherContactAddress"),
+            name = "contactAddress",
+            label = "UK Contact address"
+          )
+        )
+      )
+    )
 
-
-      <div class="panel panel-border-narrow js-hidden" id="internationalAddress">
-      @fhddsAddressHelper(
-        contactPersonForm("contactAddress"),
-        wrapperClassP = "panel-indent",
-        number = "1",
-        isUK = false)
-      </div>
-
-    </div>
-
+    @NestedPanel(
+      NestedPanelParams(
+        "contactAddressInternational",
+        AddressInternational(
+          AddressUKParams(
+            context = Some("otherContactAddress"),
+            name = "contactAddress",
+            label = "International Contact address"
+          )
+        )
+      )
+    )
 
     <div class="form-group">
       <input type="submit" id="p-continue" class="button" value="continue">
     </div>
+
+    </div>
+
+
+
   }
 
 

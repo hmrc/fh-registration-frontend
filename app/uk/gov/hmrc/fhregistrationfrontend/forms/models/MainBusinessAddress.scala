@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 case class MainBusinessAddress (
   timeAtCurrentAddress: String,
-  hasPreviousAddress: Boolean,
+  hasPreviousAddress: Option[Boolean],
   previousAddress: Option[Address]
 )
 

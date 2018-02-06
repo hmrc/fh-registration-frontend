@@ -25,11 +25,11 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radi
 
 object MainBusinessAddressForm {
 
-  val mainBusinessAddress = Form(
+  val mainBusinessAddressForm = Form(
     mapping(
       "timeAtCurrentAddress" → (nonEmptyText verifying oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)),
-      "previousAddress.yesNo" → of(radioButton),
-      "previousAddress.value" → optional(address) //TODO check for yes/no
+      "previousAddress" → optional(of(radioButton)),
+      "mainPreviousAddressUK_previousAddress" → optional(address) //TODO check for yes/no
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 }
