@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
+    
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -213,9 +213,18 @@
 
         @AddressUK(
             AddressUKParams(
-                context = "example",
+                context = Some("example"),
                 name = "StorageAddress",
                 label = "Storage Premises"
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
+        <p>Note: only a single autocomplete is possible per form (Assets frontend constraints)</p>
+        @AddressInternational(
+            AddressUKParams(
+                name = "AddressInternational",
+                label = "International address"
             )
         )
 
@@ -245,7 +254,7 @@
                 "contactAddressUK",
                 AddressUK(
                     AddressUKParams(
-                        context = "example",
+                        context = Some("example"),
                         name = "ContactAddress",
                         label = "UK Contact address"
                     )
@@ -256,11 +265,11 @@
         @NestedPanel(
             NestedPanelParams(
                 "contactAddressInternational",
-                AddressInternational(
-                    AddressUKParams(
-                        context = "example",
-                        name = "ContactAddressInternational",
-                        label = "International Contact address"
+                TextInput(
+                    TextInputParams(
+                        name = "contactAddressInternational",
+                        label = "International Address",
+                        error = "You must supply an international address"
                     )
                 )
             )

@@ -20,7 +20,7 @@
 
 @fieldName = @{
     params.context match {
-        case context => {
+        case Some(context) => {
             context + "_" + params.name
         }
         case _ => {
@@ -32,37 +32,37 @@
 <legend class="form-label-bold">@{params.label}</legend>
 
     @TextInput(
-    TextInputParams(
-    name = "Line1",
-    context = Some(fieldName),
-    label = "Address Line 1",
-    error = "You must enter line 1 of the address"
-    )
-    )
-
-    @TextInput(
-    TextInputParams(
-    name = "Line2",
-    context = Some(fieldName),
-    label = "Address Line 2 (optional)",
-    error = "Address lines must not be longer than 35 characters and contain illegal characters"
-    )
+        TextInputParams(
+            name = "Line1",
+            context = Some(fieldName),
+            label = "Address Line 1",
+            error = "You must enter line 1 of the address"
+        )
     )
 
     @TextInput(
-    TextInputParams(
-    name = "Line3",
-    context = Some(fieldName),
-    label = "Address Line 3 (optional)",
-    error = "Address lines must not be longer than 35 characters and contain illegal characters"
-    )
+        TextInputParams(
+            name = "Line2",
+            context = Some(fieldName),
+            label = "Address Line 2 (optional)",
+            error = "Address lines must not be longer than 35 characters and contain illegal characters"
+        )
     )
 
     @TextInput(
-    TextInputParams(
-    name = "Line4",
-    context = Some(fieldName),
-    label = "Country",
-    error = "Address lines must not be longer than 35 characters and contain illegal characters"
+        TextInputParams(
+            name = "Line3",
+            context = Some(fieldName),
+            label = "Address Line 3 (optional)",
+            error = "Address lines must not be longer than 35 characters and contain illegal characters"
+        )
     )
+
+    @CountryCodeLookup(
+        CountryCodeParams(
+            name="Line4",
+            context=Some(fieldName),
+            label="Country",
+            error="Please start typing a country and select from the list"
+        )
     )

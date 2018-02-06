@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
@@ -116,13 +116,13 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name=Some("previousAddress"),
+          name=Some("hasPreviousAddress"),
           legend=Some(Messages("fh.main_business_address.previous.label")),
           radios = List(
             RadioParams(
               "true",
               "Yes",
-              Some("mainPreviousAddressUK")
+              Some("hasPreviousAddress")
             ),
             RadioParams(
               "false",
@@ -134,10 +134,10 @@
 
       @NestedPanel(
         NestedPanelParams(
-          "mainPreviousAddressUK",
+          "hasPreviousAddress",
           AddressUK(
             AddressUKParams(
-              context = "mainPreviousAddressUK",
+              context = Some("mainPreviousAddressUK"),
               name = "previousAddress",
               label = "Previous Address"
             )

@@ -17,14 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 case class ContactPerson (
-  firtName: String,
+  firstName: String,
   lastName: String,
   jobTitle: String,
   telephone: String,
   emailAddress: String,
   hasOtherContactAddress: Boolean,
   ukOtherAddress: Option[Boolean],
-  otherContactAddress: Option[Address],
-  otherContactInternationalAddress: Option[Address]
-
+  otherContactAddress: Option[Address]
 )

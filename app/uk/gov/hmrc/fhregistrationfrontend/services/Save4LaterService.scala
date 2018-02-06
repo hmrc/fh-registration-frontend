@@ -18,10 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 
 import com.google.inject.ImplementedBy
 import play.api.libs.json
-import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.fhregistrationfrontend.cache.ShortLivedCache
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{FormDetails, MainBusinessAddress}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.ShortLivedCache
 
@@ -42,12 +40,6 @@ trait Save4LaterService {
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
     saveData4Later(userId, businessRegistrationDetailsKey, brd)
-  }
-
-  def saveFormDetails(userId: String, formDetails: FormDetails, key: String)(implicit hc: HeaderCarrier) = {
-    implicit val format = FormDetails.format
-    println(s"\n\n${formDetails}\n\n")
-    saveData4Later(userId, key, formDetails)
   }
 
   def fetchBusinessRegistrationDetails(userId: String)(implicit hc: HeaderCarrier) = {

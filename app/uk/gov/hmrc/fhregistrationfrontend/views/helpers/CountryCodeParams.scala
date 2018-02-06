@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
+package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-import play.api.data.Form
-import play.api.data.Forms._
-import play.api.libs.json.{Json, OFormat}
 
-case class CompanyRegistrationNumber(
-  nationalInsuranceNumber: String
-) extends FormDetails
+case class CountryCodeParams(
+                            context: Option[String] = None,
+                            name: String,
+                            label: String,
+                            error: String
+                          )
 
-object CompanyRegistrationNumber {
-
-  implicit val format: OFormat[CompanyRegistrationNumber] = Json.format[CompanyRegistrationNumber]
-
-  def companyRegistrationNumberForm = Form(
-    mapping(
-      "companyRegistrationNumber" -> nonEmptyText
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
-  )
-
-}

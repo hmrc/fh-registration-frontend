@@ -32,11 +32,11 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.ContactPerson._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CompanyRegistrationNumber._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.DateOfIncorporation._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.TradingName.{tradingNameForm, _}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
@@ -134,7 +134,6 @@ class Application @Inject()(
           mainBusinessAddressForm.bindFromRequest().fold(
             formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
             mainBusinessAddress => {
-              save4LaterService.saveFormDetails(internalId, mainBusinessAddress, "mainBusinessAddress")
               Redirect(routes.Application.contactPerson())
             }
           )
@@ -158,7 +157,6 @@ class Application @Inject()(
           contactPersonForm.bindFromRequest().fold(
             formWithErrors => BadRequest(contact_person(formWithErrors, bpr)),
             contactPerson => {
-              save4LaterService.saveFormDetails(internalId, contactPerson, "contactPerson")
               Redirect(routes.Application.companyRegistrationNumber())
             }
           )
@@ -180,7 +178,6 @@ class Application @Inject()(
       companyRegistrationNumberForm.bindFromRequest().fold(
         formWithErrors => Future successful BadRequest(company_registration_number(formWithErrors)),
         companyRegistrationNumber => {
-          save4LaterService.saveFormDetails(internalId, companyRegistrationNumber, "companyRegistrationNumber")
           Future successful Redirect(routes.Application.dateOfIncorporation())
         }
       )
@@ -201,7 +198,6 @@ class Application @Inject()(
         formWithErrors => {
           Future successful BadRequest(date_of_incorporation(formWithErrors))},
         dateOfIncorporation => {
-          save4LaterService.saveFormDetails(internalId, dateOfIncorporation, "dateOfIncorporation")
           Future successful Redirect(routes.Application.tradingName())
         }
       )
@@ -222,7 +218,6 @@ class Application @Inject()(
         formWithErrors => {
           Future successful BadRequest(trading_name(formWithErrors))},
         tradingName => {
-          save4LaterService.saveFormDetails(internalId, tradingName, "tradingName")
           Future successful Ok(tradingName.toString)
         }
       )

@@ -29,10 +29,10 @@ object Mappings {
 
   //TODO use regexes where applicable
   def address: Mapping[Address] = mapping(
-    "addressLine1" -> nonEmptyText,
-    "addressLine2" -> nonEmptyText,
-    "addressLine3" -> optional(nonEmptyText),
-    "addressLine4" -> optional(nonEmptyText),
+    "Line1" -> nonEmptyText,
+    "Line2" -> nonEmptyText,
+    "Line3" -> optional(nonEmptyText),
+    "Line4" -> optional(nonEmptyText),
     "postcode" -> nonEmptyText,
     "countryCode" -> optional(nonEmptyText)
   )(Address.apply)(Address.unapply)
