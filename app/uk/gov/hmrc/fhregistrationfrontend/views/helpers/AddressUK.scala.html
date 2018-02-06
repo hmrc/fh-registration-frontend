@@ -14,14 +14,77 @@
  * limitations under the License.
  *@
 
-@()(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
-<div class="address-lookup-container">
-    <input type="text" class="postcode-value" name="postcode-1" style="width: 200px;" />
-    <a id="postcode-lookup-button-1" class="button button-default address-lookup" role="button" tabindex="0">Find address</a>
-    <fieldset id="results-1" class="postcode-results-fieldset" aria-required="true" role="radiogroup">
-    </fieldset>
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+
+@fieldName = @{
+    params.context match {
+        case context => {
+            context + "_" + params.name
+        }
+        case _ => {
+            params.name
+        }
+    }
+}
+
+<div id="@{fieldName}-lookup-container" class="address-lookup-container">
+    <input type="text" class="postcode-value" style="width: 200px;" />
+    <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
+    <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup"></fieldset>
     <div class="form-group" style="margin-top:1em">
-        <a href="#">Enter address manually</a>
+        <a href="#" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
+    </div>
+</div>
+
+<div id="@{fieldName}-manual-container" class="js-hidden">
+
+@TextInput(
+    TextInputParams(
+        name = "Line1",
+        context = Some(fieldName),
+        label = "Address Line 1",
+        error = "You must enter line 1 of the address"
+    )
+)
+
+@TextInput(
+    TextInputParams(
+        name = "Line2",
+        context = Some(fieldName),
+        label = "Address Line 2 (optional)",
+        error = "Address lines must not be longer than 35 characters and contain illegal characters"
+    )
+)
+
+@TextInput(
+    TextInputParams(
+        name = "Line3",
+        context = Some(fieldName),
+        label = "Address Line 3 (optional)",
+        error = "Address lines must not be longer than 35 characters and contain illegal characters"
+    )
+)
+
+@TextInput(
+    TextInputParams(
+        name = "Line4",
+        context = Some(fieldName),
+        label = "Address Line 4 (optional)",
+        error = "Address lines must not be longer than 35 characters and contain illegal characters"
+    )
+)
+
+@TextInput(
+    TextInputParams(
+        name = "postcode",
+        context = Some(fieldName),
+        label = "Postcode",
+        error = "Enter a valid UK postcode"
+    )
+)
+    <div class="form-group" style="margin-top:1em">
+        <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Lookup address with postcode</a>
     </div>
 </div>

@@ -14,3 +14,7 @@ span.error-message, .form-hint {
 .form-label {
     font-weight: bold;
 }
+
+.lookup-results-fieldset {
+    margin-top: 30px;
+}
