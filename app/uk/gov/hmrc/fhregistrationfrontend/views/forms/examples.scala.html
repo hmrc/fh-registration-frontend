@@ -216,6 +216,7 @@
         @RadioGroup(
             RadioGroupParams(
                 name=Some("contactAddress"),
+                legend=Some("Is the address in the UK?"),
                 radios = List(
                     RadioParams(
                         "true",
@@ -224,7 +225,8 @@
                     ),
                     RadioParams(
                         "false",
-                        "No"
+                        "No",
+                        Some("contactAddressInternational")
                     )
                 )
             )
@@ -237,7 +239,20 @@
                     AddressUKParams(
                         context = "example",
                         name = "ContactAddress",
-                        label = "Contact address"
+                        label = "UK Contact address"
+                    )
+                )
+            )
+        )
+
+        @NestedPanel(
+            NestedPanelParams(
+                "contactAddressInternational",
+                AddressInternational(
+                    AddressUKParams(
+                        context = "example",
+                        name = "ContactAddressInternational",
+                        label = "International Contact address"
                     )
                 )
             )
