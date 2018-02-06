@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
+
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
 @fieldName = @{
@@ -30,7 +31,7 @@
 }
 
 @formGroupClass = @{
-    params.formHasErrors match {
+    params.hasErrors || params.hasValueError match {
         case true => {
             "form-group form-group-error"
         }
@@ -63,7 +64,7 @@
             <span class="form-hint">@params.yesNoHintText</span>
         }
 
-        @if(params.formHasErrors){
+        @if(params.hasErrors){
             <span class="error-message">
               @params.yesNoError
             </span>
@@ -71,7 +72,7 @@
 
         <div class="inline form-group" id="@{fieldName}_yesNo">
 
-            <div class="multiple-choice" data-target="@{fieldName}_container" >
+            <div class="multiple-choice" data-target="@{fieldName}_value_container" >
                 <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="true" @checked("true")>
                 <label class="block-label" for="@{fieldName}_yes" >
                     Yes
@@ -86,24 +87,26 @@
 
         </div>
 
-        <div class="form-group panel js-hidden" id="@{fieldName}_container">
-            @TextInput(
-                TextInputParams(
-                    name = fieldName,
-                    label = params.valueLabel,
-                    error = params.valueError,
-                    hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
-                )
+        @TextInput(
+            TextInputParams(
+                name = fieldName + "_value",
+                hiddenNested = true,
+                label = params.valueLabel,
+                error = params.valueError,
+                hasErrors = params.hasValueError,
+                hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
             )
-        </div>
+        )
 
         @if(!params.targetForNo.isEmpty){
             <div class="form-group panel js-hidden" id="@{params.targetForNo}_no_container">
                 @TextInput(
                     TextInputParams(
                         name = "@{params.targetForNo}",
+                        hiddenNested = true,
                         label = "@{params.noInputLabel}",
                         error = "@{params.noInputError}",
+                        hasErrors = params.hasNoValueError,
                         hintText = if(!params.noInputHintText.isEmpty){ params.noInputHintText } else { None }
                     )
                 )

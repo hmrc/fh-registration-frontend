@@ -28,17 +28,18 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
   *                the same name in the same form e.g. repeating sections
   * @param label the label for the actual question
   * @param hintText any hint text for the question
-  * @param formHasErrors boolean to inform styling of component
+  * @param hasErrors boolean to inform styling of component and use of error msg
   */
 
 case class TextInputParams (
                              name: String,
                              context: Option[String] = None,
+                             hiddenNested: Boolean = false,
                              value: Option[String] = None,
                              label: String,
                              hintText: Option[String] = None,
                              error: String,
-                             formHasErrors: Boolean = false
+                             hasErrors: Boolean = false
                            )
 
 

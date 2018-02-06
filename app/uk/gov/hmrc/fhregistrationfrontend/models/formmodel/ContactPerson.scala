@@ -37,11 +37,11 @@ object ContactPerson {
 
   def contactPersonForm = Form(
     mapping(
-      "firstName_value" -> nonEmptyText,
-      "lastName_value" -> nonEmptyText,
-      "jobTitle_value" -> nonEmptyText,
-      "telephone_value" -> nonEmptyText,
-      "email_value" -> nonEmptyText,
+      "firstName" -> nonEmptyText,
+      "lastName" -> nonEmptyText,
+      "jobTitle" -> nonEmptyText,
+      "telephone" -> nonEmptyText,
+      "email" -> nonEmptyText,
       "sameContractAddress" -> of(CustomFormatters.radioButton),
       "isUkAddress" -> optional(of(CustomFormatters.radioButton)),
       "contactAddress" -> optional(AddressModel.addressMapping)

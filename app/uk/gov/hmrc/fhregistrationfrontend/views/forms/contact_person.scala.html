@@ -128,7 +128,7 @@
         inline = true,
         required = true,
         error = Some(Messages("fh.contact_person.contact_address_correct.error")),
-        formHasErrors = contactPersonForm("sameContractAddress").hasErrors,
+        hasErrors = contactPersonForm("sameContractAddress").hasErrors,
         radios = List(
           RadioParams(
             Messages("true"),
@@ -152,7 +152,7 @@
           inline = true,
           required = true,
           error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
-          formHasErrors = contactPersonForm("isUkAddress").hasErrors,
+          hasErrors = contactPersonForm("isUkAddress").hasErrors,
           radios = List(
             RadioParams(
               Messages("true"),

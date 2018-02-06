@@ -10,3 +10,11 @@ legend.form-label-bold {
 span.error-message, .form-hint {
     margin-bottom: 0.5em;
 }
+
+.form-label {
+    font-weight: bold;
+}
+
+.lookup-results-fieldset {
+    margin-top: 30px;
+}

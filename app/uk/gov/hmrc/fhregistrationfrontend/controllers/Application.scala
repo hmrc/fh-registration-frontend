@@ -128,6 +128,7 @@ class Application @Inject()(
 
   def submitMainBusinessAddress = authorisedUser { implicit request =>
     internalId ⇒
+      println(s"\n\n${mainBusinessAddressForm.bindFromRequest()}\n\n")
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒
           mainBusinessAddressForm.bindFromRequest().fold(
@@ -151,6 +152,7 @@ class Application @Inject()(
 
   def submitContactPerson = authorisedUser { implicit request =>
     internalId ⇒
+      println(s"\n\n${contactPersonForm.bindFromRequest()}\n\n")
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒
           contactPersonForm.bindFromRequest().fold(
@@ -174,6 +176,7 @@ class Application @Inject()(
 
   def submitCompanyRegistrationNumber = authorisedUser { implicit request =>
     internalId ⇒
+      println(s"\n\n${companyRegistrationNumberForm.bindFromRequest()}\n\n")
       companyRegistrationNumberForm.bindFromRequest().fold(
         formWithErrors => Future successful BadRequest(company_registration_number(formWithErrors)),
         companyRegistrationNumber => {
@@ -193,6 +196,7 @@ class Application @Inject()(
 
   def submitDateOfIncorporation = authorisedUser { implicit request =>
     internalId ⇒
+      println(s"\n\n${dateOfIncorporationForm.bindFromRequest()}\n\n")
       dateOfIncorporationForm.bindFromRequest().fold(
         formWithErrors => {
           Future successful BadRequest(date_of_incorporation(formWithErrors))},

@@ -41,11 +41,11 @@ object FormDetails {
 
   val reads: Reads[FormDetails] = new Reads[FormDetails] {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o ⇒
-      if ((o \ "tradingName_value").toOption.isDefined) {
+      if ((o \ "tradingName").toOption.isDefined) {
         tradingNameFormat reads json
-      } else if ((o \ "dateOfIncorporation_value").toOption.isDefined) {
+      } else if ((o \ "dateOfIncorporation").toOption.isDefined) {
         dateOfIncorporationFormat reads json
-      } else if ((o \ "companyRegistrationNumber_value").toOption.isDefined) {
+      } else if ((o \ "companyRegistrationNumber").toOption.isDefined) {
         companyRegistrationNumberFormat reads json
       } else if ((o \ "firstName_value").toOption.isDefined) {
         contactPersonFormat reads json

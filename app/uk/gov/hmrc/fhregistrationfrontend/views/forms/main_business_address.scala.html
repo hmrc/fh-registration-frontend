@@ -29,7 +29,7 @@
 }
 
 @pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/postcodeLookup.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
@@ -89,7 +89,7 @@
             inline = false,
             required = true,
             error = Some(Messages("fh.main_business_address.time_at_address.error")),
-            formHasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
+            hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
             radios = List(
                 RadioParams(
                     Messages("fh.main_business_address.0to3years.value"),
@@ -113,18 +113,37 @@
     )
 
     <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
-        @YesNoAddress(
-            mainBusinessAddressForm("previousAddress"),
-            YesNoTextParams(
-                name = "previousAddress",
-                yesNoLabel = "Does the business trade under a different name to its registered one?",
-                yesNoError = Messages("fh.main_business_address.previous.error"),
-                valueLabel = "Enter the trading name",
-                valueError = "Enter the trading name",
-                formHasErrors = false
+
+      @RadioGroup(
+        RadioGroupParams(
+          name=Some("previousAddress"),
+          legend=Some(Messages("fh.main_business_address.previous.label")),
+          radios = List(
+            RadioParams(
+              "true",
+              "Yes",
+              Some("mainPreviousAddressUK")
             ),
-            true
+            RadioParams(
+              "false",
+              "No"
+            )
+          )
         )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "mainPreviousAddressUK",
+          AddressUK(
+            AddressUKParams(
+              context = "mainPreviousAddressUK",
+              name = "previousAddress",
+              label = "Previous Address"
+            )
+          )
+        )
+      )
     </div>
 
     <div class="form-group">

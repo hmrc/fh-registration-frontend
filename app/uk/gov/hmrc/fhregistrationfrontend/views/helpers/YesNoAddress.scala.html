@@ -30,7 +30,7 @@
 }
 
 @formGroupClass = @{
-    params.formHasErrors match {
+    params.hasErrors match {
         case true => {
             "form-group form-group-error"
         }
@@ -63,7 +63,7 @@
             <span class="form-hint">@params.yesNoHintText</span>
         }
 
-        @if(params.formHasErrors){
+        @if(params.hasErrors){
             <span class="error-message">
               @params.yesNoError
             </span>

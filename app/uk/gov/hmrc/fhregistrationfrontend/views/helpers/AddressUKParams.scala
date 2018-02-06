@@ -16,14 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-case class RadioGroupParams(
-                      name: Option[String] = None,
-                      radios: List[RadioParams],
-                      inline: Boolean = true,
-                      legend: Option[String] = None,
-                      legendSize: Option[String] = None,
-                      required: Boolean = false,
-                      error: Option[String] = None,
-                      value: Option[String] = None,
-                      hasErrors: Boolean = false
-                      )
+
+case class AddressUKParams(
+                              context: String,
+                              name: String,
+                              label: String
+                            )

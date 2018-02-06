@@ -34,8 +34,8 @@ object MainBusinessAddress {
   def mainBusinessAddressForm = Form(
     mapping(
       "timeAtCurrentAddress" -> nonEmptyText,
-      "previousAddress_yesNo" -> optional(of(CustomFormatters.radioButton)),
-      "previousAddress" -> optional(AddressModel.addressMapping)
+      "previousAddress" -> optional(of(CustomFormatters.radioButton)),
+      "mainPreviousAddressUK_previousAddress" -> optional(AddressModel.addressMapping)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
 

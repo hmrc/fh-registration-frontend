@@ -30,7 +30,7 @@ object CompanyRegistrationNumber {
 
   def companyRegistrationNumberForm = Form(
     mapping(
-      "companyRegistrationNumber_value" -> nonEmptyText
+      "companyRegistrationNumber" -> nonEmptyText
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 

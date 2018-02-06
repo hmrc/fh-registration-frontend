@@ -30,7 +30,7 @@ object DateOfIncorporation {
 
   def dateOfIncorporationForm = Form(
     mapping(
-      "dateOfIncorporation_value" -> nonEmptyText
+      "dateOfIncorporation" -> nonEmptyText
     )(DateOfIncorporation.apply)(DateOfIncorporation.unapply)
   )
 

@@ -26,7 +26,7 @@
 }
 
 @formGroupClass = @{
-    params.formHasErrors match {
+    params.hasErrors match {
         case true => {
             "form-group form-group-error"
         }
@@ -39,7 +39,7 @@
 <div class="@{formGroupClass}">
     <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
         @legend
-        @if(params.formHasErrors) {
+        @if(params.hasErrors) {
             <span class="error-message">
               @params.error
             </span>

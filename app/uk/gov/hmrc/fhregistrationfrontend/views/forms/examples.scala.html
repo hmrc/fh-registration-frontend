@@ -14,13 +14,14 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @()(implicit request: Request[_], messages: Messages)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script><script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>}
 @main_template(title = "FH Component Examples", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
     @PageHeading(
@@ -33,6 +34,14 @@
 
         @helper.CSRF.formField
 
+        <h2 style="border-bottom: 1px solid #777; color: #777">PageHeading</h2>
+
+        @PageHeading(
+            PageHeadingParams(
+                heading = "Page Heading"
+            )
+        )
+
         <h2 style="border-bottom: 1px solid #777; color: #777">RadioGroup with conditional reveal</h2>
 
         @RadioGroup(
@@ -42,11 +51,13 @@
                 inline = false,
                 required = true,
                 error = Some(Messages("fh.main_business_address.time_at_address.error")),
-                formHasErrors = false,
+                hasErrors = false,
                 radios = List(
                     RadioParams(
                         Messages("fh.main_business_address.0to3years.value"),
                         Messages("fh.main_business_address.0to3years.label"),
+                        // id for the nested panel containing further question
+                        // if this option is selected by user
                         Some("lessThan3Years")
                     ),
                     RadioParams(
@@ -65,6 +76,23 @@
             )
         )
 
+        @NestedPanel(
+            NestedPanelParams(
+                //the nested panel for the further question must contain id as targeted by above radio
+                "lessThan3Years",
+                YesNoText(
+                    YesNoTextParams(
+                        name = "previousAddress",
+                        yesNoLabel = Messages("fh.main_business_address.previous.label"),
+                        yesNoError = Messages("fh.main_business_address.previous.error"),
+                        valueLabel = "Enter your previous address",
+                        valueError = "You must enter your address",
+                        hasErrors = false
+                    )
+                )
+            )
+        )
+
         <h2 style="border-bottom: 1px solid #777; color: #777">RadioGroup with error</h2>
 
         @RadioGroup(
@@ -74,7 +102,7 @@
                 inline = false,
                 required = true,
                 error = Some(Messages("fh.business_customers.error")),
-                formHasErrors = true,
+                hasErrors = true,
                 radios = List(
                     RadioParams(
                         Messages("fh.business_customers.none.value"),
@@ -105,9 +133,47 @@
 
         <h2 style="border-bottom: 1px solid #777; color: #777">YesNoText with yes/no error</h2>
 
+        @YesNoText(
+            YesNoTextParams(
+                name = "tradingName",
+                yesNoLabel = Messages("fh.trading_name.confirm.label"),
+                yesNoError = Messages("fh.trading_name.confirm.error"),
+                valueLabel = Messages("fh.trading_name.label"),
+                valueError = Messages("Enter the trading name"),
+                hasErrors = true
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">YesNoText with value error</h2>
+
+        @YesNoText(
+            YesNoTextParams(
+                name = "tradingName",
+                context = Some("example2"),
+                yesNoValue = Some("true"),
+                yesNoLabel = Messages("fh.trading_name.confirm.label"),
+                yesNoError = Messages("fh.trading_name.confirm.error"),
+                valueLabel = Messages("fh.trading_name.label"),
+                valueError = Messages("Enter the trading name"),
+                hasValueError = true
+            )
+        )
 
         <h2 style="border-bottom: 1px solid #777; color: #777">YesNoText with yes/no prepop</h2>
 
+        @YesNoText(
+            YesNoTextParams(
+                name = "nino",
+                yesNoValue = Some("true"),
+                yesNoLabel = Messages("fh.company_officers.individual.nino.confirm.label"),
+                yesNoError = Messages("fh.company_officers.individual.nino.confirm.error"),
+                valueLabel = Messages("fh.company_officers.individual.nino.label"),
+                valueHintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
+                valueError = Messages("fh.company_officers.individual.nino.empty.error"),
+                yesNoHintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
+                hasErrors = false
+            )
+        )
 
         <h2 style="border-bottom: 1px solid #777; color: #777">TextInput</h2>
 
@@ -127,7 +193,7 @@
                 name = "lastName",
                 label = Messages("fh.contact_person.last_name.label"),
                 error = Messages("fh.contact_person.last_name.empty.error"),
-                formHasErrors = true
+                hasErrors = true
             )
         )
 
@@ -139,7 +205,64 @@
                 label = Messages("fh.contact_person.last_name.label"),
                 error = Messages("fh.contact_person.last_name.empty.error"),
                 value = Some("Macdonald"),
-                formHasErrors = false
+                hasErrors = false
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">Address UK Lookup</h2>
+
+        @AddressUK(
+            AddressUKParams(
+                context = "example",
+                name = "StorageAddress",
+                label = "Storage Premises"
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">Yes/No Address</h2>
+
+        @RadioGroup(
+            RadioGroupParams(
+                name=Some("contactAddress"),
+                legend=Some("Is the address in the UK?"),
+                radios = List(
+                    RadioParams(
+                        "true",
+                        "Yes",
+                        Some("contactAddressUK")
+                    ),
+                    RadioParams(
+                        "false",
+                        "No",
+                        Some("contactAddressInternational")
+                    )
+                )
+            )
+        )
+
+        @NestedPanel(
+            NestedPanelParams(
+                "contactAddressUK",
+                AddressUK(
+                    AddressUKParams(
+                        context = "example",
+                        name = "ContactAddress",
+                        label = "UK Contact address"
+                    )
+                )
+            )
+        )
+
+        @NestedPanel(
+            NestedPanelParams(
+                "contactAddressInternational",
+                AddressInternational(
+                    AddressUKParams(
+                        context = "example",
+                        name = "ContactAddressInternational",
+                        label = "International Contact address"
+                    )
+                )
             )
         )
 
