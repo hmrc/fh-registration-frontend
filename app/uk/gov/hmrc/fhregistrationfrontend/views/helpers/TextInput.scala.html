@@ -19,7 +19,7 @@
 @fieldName = @{
     params.context match {
         case Some(context) => {
-            context + "_" + params.name
+            context + "." + params.name
         }
         case _ => {
             params.name

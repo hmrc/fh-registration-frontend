@@ -213,9 +213,18 @@
 
         @AddressUK(
             AddressUKParams(
-                context = "example",
+                context = Some("example"),
                 name = "StorageAddress",
                 label = "Storage Premises"
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
+
+        @AddressInternational(
+            AddressUKParams(
+                name = "AddressInternational",
+                label = "International address"
             )
         )
 
@@ -245,7 +254,7 @@
                 "contactAddressUK",
                 AddressUK(
                     AddressUKParams(
-                        context = "example",
+                        context = Some("example"),
                         name = "ContactAddress",
                         label = "UK Contact address"
                     )
@@ -258,7 +267,7 @@
                 "contactAddressInternational",
                 AddressInternational(
                     AddressUKParams(
-                        context = "example",
+                        context = Some("example"),
                         name = "ContactAddressInternational",
                         label = "International Contact address"
                     )
