@@ -35,7 +35,7 @@
         var resultsArray = [];
         jQuery.each(data.addresses, function(i, result) {
             var address = result.address;
-            resultsArray.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result" name="' + context + '-result-' + i + '" value="' + i + '"><label for="' + context + '-result-' + i + '">');
+            resultsArray.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result-' + i + '" value="' + i + '"><label for="' + context + '-result-' + i + '">');
             resultsArray.push(address.lines.join(', '));
             resultsArray.push(address.town + ', ');
             resultsArray.push(address.postcode);
