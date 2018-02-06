@@ -300,13 +300,30 @@
         <h2 style="border-bottom: 1px solid #777; color: #777">YesNoDate</h2>
 
         @YesNoDate(
-            YesNoTextParams(
+            YesNoDateParams(
                 name="isNewFulfilmentBusiness",
                 yesNoLabel=Messages("fh.business_status.label"),
                 yesNoError=Messages("fh.business_status.error"),
                 valueLabel=Messages("fh.business_status.new_business.label"),
                 valueError=Messages("fh.business_status.new_business.empty.error"),
                 valueHintText=Some(Messages("fh.business_status.new_business.hint_text"))
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">YesNoDate with prepop</h2>
+
+        @YesNoDate(
+            YesNoDateParams(
+                name="isNewFulfilmentBusiness2",
+                yesNoLabel=Messages("fh.business_status.label"),
+                yesNoValue=Some("true"),
+                yesNoError=Messages("fh.business_status.error"),
+                valueLabel=Messages("fh.business_status.new_business.label"),
+                valueError=Messages("fh.business_status.new_business.empty.error"),
+                valueHintText=Some(Messages("fh.business_status.new_business.hint_text")),
+                day=Some("12"),
+                month=Some("12"),
+                year=Some("2015")
             )
         )
 
