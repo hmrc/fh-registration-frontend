@@ -118,6 +118,7 @@ fh.vat_registration.title=VAT registration
 fh.vat_registration.confirm.label=Does the business have a VAT registration number?
 fh.vat_registration.confirm.error=Select whether the business has a VAT registration number
 fh.vat_registration.label=Enter the VAT registration number
+fh.vat_registration.hintText=For example, 123456789
 fh.vat_registration.empty.error=Enter the VAT registration number
 fh.vat_registration.invalid.error=Enter a valid VAT registration number
 
@@ -210,7 +211,7 @@ fh.company_registration_number.details=You can find your company registration nu
 #===========================================================
 fh.date_of_incorporation.title=Date of incorporation
 fh.date_of_incorporation.label=Date of incorporation
-fh.date_of_incorporation.hint_text=For example, 31/07/201
+fh.date_of_incorporation.hint_text=For example, 31/07/2015
 fh.date_of_incorporation.empty.error=Enter the date of incorporation
 fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
 

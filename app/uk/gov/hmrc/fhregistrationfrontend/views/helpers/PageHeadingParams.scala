@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{TradingName, VatNumber}
-
-
-object VatNumberForm {
-
-  val vatNumberForm = Form(
-    mapping(
-      "value" → optional(nonEmptyText)
-    )(VatNumber.apply)(VatNumber.unapply)
-  )
-}
+case class PageHeadingParams(
+                              heading: String,
+                              classNames: Option[String] = None
+                            )

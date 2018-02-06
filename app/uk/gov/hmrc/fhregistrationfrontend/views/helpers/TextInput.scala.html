@@ -1,0 +1,70 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.TextInputParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+
+@fieldName = @{
+    params.context match {
+        case Some(context) => {
+            context + "_" + params.name
+        }
+        case _ => {
+            params.name
+        }
+    }
+}
+
+@formGroupClass = @{
+    params.hasErrors match {
+        case true => {
+            "form-group form-group-error"
+        }
+        case _ => {
+            "form-group"
+        }
+    }
+}
+
+@nestedClass = @{
+    params.hiddenNested match {
+        case (x) => {
+            if(x == true){" panel js-hidden"} else { "" }
+        }
+        case _ => {
+            ""
+        }
+    }
+}
+
+<div class="@{formGroupClass}@{nestedClass}" id="@{fieldName}_container">
+
+    <label class="form-label" for="@{fieldName}">
+        @params.label
+    </label>
+
+    @if(!params.hintText.isEmpty){
+        <span class="form-hint">@params.hintText</span>
+    }
+
+    @if(params.hasErrors){
+        <span class="error-message">
+          @params.error
+        </span>
+    }
+
+    <input type="text" class="form-control" id="@{fieldName}" name="@{fieldName}" @if(!params.value.isEmpty){value="@{params.value}"}>
+
+</div>

@@ -6,12 +6,25 @@ GET         /whitelisted                                                        
 
 GET         /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
 
-
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
 
+GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
+
 GET         /mainBusinessAddress                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.mainBusinessAddress
 POST        /submitMainBusinessAddress                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitMainBusinessAddress
+
+GET         /contactPerson                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.contactPerson
+POST        /submitContactPerson                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitContactPerson
+
+GET         /companyRegistrationNumber                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.companyRegistrationNumber
+POST        /submitCompanyRegistrationNumber                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitCompanyRegistrationNumber
+
+GET         /dateOfIncorporation                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.dateOfIncorporation
+POST        /submitDateOfIncorporation                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDateOfIncorporation
+
+GET         /tradingName                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.tradingName
+POST        /submitTradingName                                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitTradingName
 
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 

@@ -22,6 +22,7 @@
   sidebar: Html = HtmlFormat.empty,
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
+  linkElement : Option[Html] = None,
   serviceInfoContent: Html = HtmlFormat.empty,
   scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
 
@@ -31,7 +32,7 @@
 
 @head = {
     @uiLayouts.head(
-      linkElem = None,
+      linkElem = linkElement,
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
 }

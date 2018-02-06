@@ -20,23 +20,32 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.{Json, OFormat}
 
-
-case class MainBusinessAddress (
-  period: String,
-  hasOtherAddress: Option[Boolean],
-  address: Option[AddressModel]
+case class ContactPerson(
+  firstName: String,
+  lastName: String,
+  jobTitle: String,
+  telephone: String,
+  email: String,
+  sameContractAddress: Boolean,
+  isUkAddress: Option[Boolean],
+  contactAddress: Option[AddressModel]
 ) extends FormDetails
 
-object MainBusinessAddress {
+object ContactPerson {
 
-  implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
+  implicit val format: OFormat[ContactPerson] = Json.format[ContactPerson]
 
-  def mainBusinessAddressForm = Form(
+  def contactPersonForm = Form(
     mapping(
-      "timeAtCurrentAddress" -> nonEmptyText,
-      "previousAddress" -> optional(of(CustomFormatters.radioButton)),
-      "mainPreviousAddressUK_previousAddress" -> optional(AddressModel.addressMapping)
-    )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
+      "firstName" -> nonEmptyText,
+      "lastName" -> nonEmptyText,
+      "jobTitle" -> nonEmptyText,
+      "telephone" -> nonEmptyText,
+      "email" -> nonEmptyText,
+      "sameContractAddress" -> of(CustomFormatters.radioButton),
+      "isUkAddress" -> optional(of(CustomFormatters.radioButton)),
+      "contactAddress" -> optional(AddressModel.addressMapping)
+    )(ContactPerson.apply)(ContactPerson.unapply)
   )
 
 }
