@@ -23,8 +23,8 @@ case class DateTupleParams(
                               label: String,
                               hintText: Option[String] = None,
                               error: String,
-                              day: String,
-                              month: String,
-                              year: String,
+                              day: Option[String] = None,
+                              month: Option[String] = None,
+                              year: Option[String] = None,
                               hasErrors: Boolean = false
                             )
