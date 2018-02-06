@@ -35,7 +35,7 @@ class MainBusinessAddressSpecs extends UnitSpec {
     "validate a form lese than three years but without previous address" in {
       val data = Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
-        "previousAddress_yesNo" → "false"
+        "previousAddress" → "false"
       )
       val result = form.bind(data).value.get
       result shouldBe MainBusinessAddress("Less than 3 years", Some(false), None)
@@ -44,11 +44,11 @@ class MainBusinessAddressSpecs extends UnitSpec {
     "validate a form less than three years and with previous address" in {
       val data = Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
-        "previousAddress_yesNo" → "true",
-        "previousAddress.addressLine1" → "line1",
-        "previousAddress.addressLine2" → "line2",
-        "previousAddress.postcode" → "postcode",
-        "previousAddress.countryCode" → "countryCode"
+        "previousAddress" → "true",
+        "mainPreviousAddressUK_previousAddress.Line1" → "line1",
+        "mainPreviousAddressUK_previousAddress.Line2" → "line2",
+        "mainPreviousAddressUK_previousAddress.postcode" → "postcode",
+        "mainPreviousAddressUK_previousAddress.countryCode" → "countryCode"
       )
       val result = form.bind(data).value.get
       result shouldBe MainBusinessAddress(
@@ -69,11 +69,11 @@ class MainBusinessAddressSpecs extends UnitSpec {
       )
       data shouldBe Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
-        "previousAddress_yesNo" → "true",
-        "previousAddress.addressLine1" → "line1",
-        "previousAddress.addressLine2" → "line2",
-        "previousAddress.postcode" → "postcode",
-        "previousAddress.countryCode" → "countryCode"
+        "previousAddress" → "true",
+        "mainPreviousAddressUK_previousAddress.Line1" → "line1",
+        "mainPreviousAddressUK_previousAddress.Line2" → "line2",
+        "mainPreviousAddressUK_previousAddress.postcode" → "postcode",
+        "mainPreviousAddressUK_previousAddress.countryCode" → "countryCode"
       )
     }
 
