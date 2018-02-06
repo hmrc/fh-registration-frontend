@@ -21,7 +21,7 @@ import play.api.data.format.Formatter
 
 object CustomFormatters {
 
-  def requiredBooleanFormatter: Formatter[Boolean] = new Formatter[Boolean] {
+  val radioButton: Formatter[Boolean] = new Formatter[Boolean] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] = {
       Right(data.getOrElse(key, "")).right.flatMap {
         case "true"  => Right(true)
@@ -32,5 +32,6 @@ object CustomFormatters {
 
     override def unbind(key: String, value: Boolean) = Map(key -> value.toString)
   }
+
 
 }
