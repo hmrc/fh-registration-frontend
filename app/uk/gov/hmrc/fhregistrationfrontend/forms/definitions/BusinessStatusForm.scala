@@ -17,9 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{list, mapping, nonEmptyText, optional, of}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
+import play.api.data.Forms.{mapping, of, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
 object BusinessStatusForm {
 
