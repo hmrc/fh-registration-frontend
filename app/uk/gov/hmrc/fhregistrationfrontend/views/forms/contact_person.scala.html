@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -167,7 +167,7 @@
         "contactAddressUK",
         AddressUK(
           AddressUKParams(
-            context = Some("otherContactAddress"),
+            context = Some("otherUkContactAddress"),
             name = "contactAddress",
             label = "UK Contact address"
           )
@@ -180,7 +180,7 @@
         "contactAddressInternational",
         AddressInternational(
           AddressUKParams(
-            context = Some("otherContactAddress"),
+            context = Some("otherInternationalContactAddress"),
             name = "contactAddress",
             label = "International Contact address"
           )

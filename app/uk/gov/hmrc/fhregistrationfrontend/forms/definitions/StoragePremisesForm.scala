@@ -18,10 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 
 import play.api.data.Form
-import play.api.data.Forms.{list, mapping, nonEmptyText, optional, of}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import play.api.data.Forms.{list, mapping, of}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{StoragePremise, StoragePremises}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{localDate, address}
 
 object StoragePremisesForm {
 

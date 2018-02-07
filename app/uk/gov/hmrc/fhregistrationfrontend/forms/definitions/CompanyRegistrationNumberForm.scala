@@ -26,7 +26,7 @@ object CompanyRegistrationNumberForm {
   //TODO use regex
   val companyRegistrationNumberForm = Form(
     mapping(
-      "crn" → nonEmptyText
+      "companyRegistrationNumber" → nonEmptyText
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 

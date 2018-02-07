@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -116,7 +116,7 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name=Some("hasPreviousAddress"),
+          name=Some("previousAddress"),
           legend=Some(Messages("fh.main_business_address.previous.label")),
           radios = List(
             RadioParams(

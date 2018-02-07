@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
-object BusinessStatusForm {
-
-  val businessStatusForm = Form(
-    mapping(
-      "isNewFulfimentBusiness" → of(radioButton),
-      "proposedStartDate" → optional(localDate)
-    )(BusinessStatus.apply)(BusinessStatus.unapply)
-  )
-}
+case class DateTupleParams(
+                              context: Option[String] = None,
+                              name: String,
+                              label: String,
+                              hintText: Option[String] = None,
+                              error: String,
+                              day: String,
+                              month: String,
+                              year: String,
+                              hasErrors: Boolean = false
+                            )
