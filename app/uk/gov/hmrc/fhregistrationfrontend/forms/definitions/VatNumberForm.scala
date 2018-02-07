@@ -25,7 +25,7 @@ object VatNumberForm {
 
   val vatNumberForm = Form(
     mapping(
-      "value" → optional(nonEmptyText)
+      "vatNumber_value" → optional(nonEmptyText)
     )(VatNumber.apply)(VatNumber.unapply)
   )
 }

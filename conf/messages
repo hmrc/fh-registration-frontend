@@ -4,6 +4,9 @@ error.summary.heading=Something’s wrong
 button.save.continue=Save and continue
 link.signout=Sign out
 link.businessTaxAccount=Business tax account home
+link.goBackToSummary=Go back to summary
+link.saveForLater=Save and come back later
+link.back=Back
 
 #CONFORM CORRECT BUSINESS
 confirm.legend=Is this the business you want to register?
@@ -80,6 +83,7 @@ fh.main_business_address.enter_previous.error=Enter a valid previous address
 # - Contact Person
 #============================================================
 fh.contact_person.title=Contact person
+fh.contact_person.intro=This is the person we will contact if we need to discuss your application
 fh.contact_person.first_name.label=First name
 fh.contact_person.first_name.empty.error=Enter a first name for contact
 fh.contact_person.first_name.invalid.error=Enter only valid characters for a first name
@@ -128,7 +132,7 @@ fh.business_status.title=Business status
 fh.business_status.label=Are you setting up a new fulfilment business?
 fh.business_status.error=Select whether the business is setting up a new fulfilment business
 fh.business_status.new_business.label=Enter the date the business intends to start operating as a fulfilment business
-fh.business_status.new_business.hint_text=For example, 31/07/2019
+fh.business_status.new_business.hint_text=For example, 31 07 2019
 fh.business_status.new_business.empty.error=Enter the date the business intends to start operating as a fulfilment business
 fh.business_status.new_business.invalid.error=Enter a valid date for when the business intends to start operating as a fulfilment business
 
@@ -211,7 +215,7 @@ fh.company_registration_number.details=You can find your company registration nu
 #===========================================================
 fh.date_of_incorporation.title=Date of incorporation
 fh.date_of_incorporation.label=Date of incorporation
-fh.date_of_incorporation.hint_text=For example, 31/07/2015
+fh.date_of_incorporation.hint_text=For example, 31 07 2017
 fh.date_of_incorporation.empty.error=Enter the date of incorporation
 fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
 
@@ -220,7 +224,7 @@ fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorp
 #===========================================================
 fh.company_officers.title=Company officers
 fh.company_officers.intro=You must tell us about all the directors and company secretaries. We will use this information to check their identity
-fh.company_officers.each.title=Add company officer {0}
+fh.company_officers.each.title=Add company officer
 fh.company_officers.entity_type.label=Is company officer {0} an individual or a company?
 fh.company_officers.entity_type.error=Select whether company officer {0} is an invidual or a company
 

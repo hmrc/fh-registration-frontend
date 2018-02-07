@@ -17,5 +17,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 case class CompanyOfficers (
-  value: List[CompanyOfficer]
+  companyOfficers: List[CompanyOfficer]
 )

@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-/**
-  * Created by ali on 05/02/18.
-  */
 case class SubmitButtonsParams(
-                             label: String = "Save and continue",
-                             summaryLink: Boolean = false
-                           )
+  label      : String,
+  summaryLink: Boolean = false
+)
