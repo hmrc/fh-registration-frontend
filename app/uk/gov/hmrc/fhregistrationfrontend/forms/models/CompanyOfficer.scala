@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json._
+
 
 case class CompanyOfficer(
-  officialType: String,
+  officialType: String,//TODO use enum
   identification: CompanyOfficerIdentification
 )
 
@@ -43,3 +45,36 @@ case class CompanyOfficerCompany(
 ) extends CompanyOfficerIdentification
 
 
+object CompanyOfficer {
+  implicit val companyOfficerCompanyFormat = Json.format[CompanyOfficerCompany]
+  implicit val companyOfficerIndividualFormat = Json.format[CompanyOfficerIndividual]
+
+  implicit val companyOfficerIdentificationWrites = new Writes[CompanyOfficerIdentification] {
+    override def writes(o: CompanyOfficerIdentification): JsValue = {
+      o match {
+        case i: CompanyOfficerIndividual ⇒ Json toJson i
+        case c: CompanyOfficerCompany    ⇒ Json toJson c
+      }
+    }
+  }
+
+  implicit val writes = Json.writes[CompanyOfficer]
+  implicit val reads = new Reads[CompanyOfficer] {
+    override def reads(value: JsValue): JsResult[CompanyOfficer] = {
+      value.validate[JsObject].flatMap { json ⇒
+        (json \ "officialType") match {
+          case JsDefined(JsString("individual")) ⇒ (json \ "identification").validate[CompanyOfficerIndividual].map(CompanyOfficer("individual", _))
+          case JsDefined(JsString("company")) ⇒ (json \ "identification").validate[CompanyOfficerCompany].map(CompanyOfficer("company", _))
+          case e: JsError => e
+          case _ ⇒ JsError("unknown official type")
+        }
+      }
+
+    }
+  }
+
+  implicit val format = Format(reads, writes)
+
+
+
+}

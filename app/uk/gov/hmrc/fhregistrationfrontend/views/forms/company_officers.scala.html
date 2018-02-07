@@ -16,10 +16,11 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficers
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(companyOfficersForm: Form[CompanyOfficers])(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[CompanyOfficer])(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -37,7 +38,7 @@
 
   <p>@Messages("fh.company_officers.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitCompanyOfficers, 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 

@@ -21,8 +21,8 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{CompanyRegistrationNumberForm, ContactPersonForm, DateOfIncorporationForm, MainBusinessAddressForm}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, MainBusinessAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 
@@ -85,9 +85,24 @@ object Page {
     override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
       date_of_incorporation(form)
     }
-
   }
 
+  val tradingNamePage = new BasicPage[TradingName]("tradingName", TradingNameForm.tradingNameForm) {
+    override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      trading_name(form)
+    }
+  }
 
+  val vatNumberPage = new BasicPage[VatNumber]("vatNumber", VatNumberForm.vatNumberForm) {
+    override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      vat_registration(form)
+    }
+  }
+
+  val companyOfficerPage = new BasicPage[CompanyOfficer]("companyOfficers", CompanyOfficersForm.companyOfficerForm) {
+    override def render(form: Form[CompanyOfficer], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      company_officers(form)
+    }
+  }
 
 }

@@ -22,7 +22,10 @@ class LinearJourney {
     Page.mainBusinessAddressPage,
     Page.contactPersonPage,
     Page.companyRegistrationNumberPage,
-    Page.dateOfIncorporationPage
+    Page.dateOfIncorporationPage,
+    Page.tradingNamePage,
+    Page.vatNumberPage,
+    Page.companyOfficerPage
   )
 
   def get[T](pageId: String): Option[Page[T]] = {
