@@ -25,19 +25,20 @@
     @if(params.summaryLink){
     <p>
         <a href="@{routes.Application.summary}">
-            Go back to summary
+            @Messages("link.goBackToSummary")
         </a>
     </p>
     }
 
     <p>
-        <a class="" href="/fhdds/save-for-later">Save and come
-            back later</a>
+        <a class="" href="/fhdds/save-for-later">
+            @Messages("link.saveForLater")
+        </a>
     </p>
 
     <p>
         <a id="back" class="back-link print-hidden" href="javascript:history.go(-1)">
-            Back
+            @Messages("link.back")
         </a>
     </p>
 
