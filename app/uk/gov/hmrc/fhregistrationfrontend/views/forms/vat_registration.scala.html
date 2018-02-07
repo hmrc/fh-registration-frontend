@@ -15,17 +15,21 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(dateOfIncorporationForm: Form[DateOfIncorporation])(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: Form[VatNumber])(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("fh.date_of_incorporation.title"), mainClass = Some("full-width")) {
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@main_template(title = Messages("fh.vat_registration.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(dateOfIncorporationForm.hasErrors) {
+  @if(vatNumberForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
     id="error-summary-display"
     role="alert"
@@ -33,7 +37,7 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
       <ul>
-        @if(dateOfIncorporationForm("dateOfIncorporation").hasErrors){
+        @if(vatNumberForm("hasTradingName_value").hasErrors){
           <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
             Messages("fh.date_of_incorporation.invalid.error")
           }
@@ -45,20 +49,24 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.date_of_incorporation.title")
+      heading = Messages("fh.vat_registration.title")
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitVatNumber, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
-    @DateTuple(
-      DateTupleParams(
-        name="dateOfIncorporation",
-        label=Messages("fh.date_of_incorporation.label"),
-        error=Messages("fh.date_of_incorporation.empty.error"),
-        hintText=Some(Messages("fh.date_of_incorporation.hint_text"))
+    @YesNoText(
+      YesNoTextParams(
+        name = "vatNumber",
+        yesNoValue = Some("true"),
+        yesNoLabel = Messages("fh.vat_registration.confirm.label"),
+        yesNoError = Messages("fh.vat_registration.confirm.error"),
+        valueLabel = Messages("fh.vat_registration.empty.error"),
+        valueError = Messages("fh.main_business_address.previous.error"),
+        valueHintText = Some(Messages("fh.vat_registration.hintText")),
+        hasErrors = false
       )
     )
 

@@ -36,6 +36,17 @@
     }
 }
 
+@checked(testVal:String) = @{
+    params.value match {
+        case Some(x) => {
+            if(x == testVal){"checked"}
+        }
+        case _ => {
+            ""
+        }
+    }
+}
+
 <div class="@{formGroupClass}">
     <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
         @legend
@@ -46,10 +57,7 @@
         }
         @for(radio <- params.radios){
             <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
-                <input id="@params.name@radio.value"
-                       type="radio" name="@params.name" value="@radio.value" required="required"
-                       @{if(params.value.filter(_ == radio.value).isDefined) "checked=\"checked\""}
-                >
+                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value) />
                 <label for="@params.name@radio.value">@radio.label</label>
             </div>
         }

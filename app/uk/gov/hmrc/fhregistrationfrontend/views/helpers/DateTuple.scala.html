@@ -38,15 +38,49 @@
     }
 }
 
-<div class="@{formGroupClass}" id="@{fieldName}_container">
-
-    <label class="form-label" for="@{fieldName}">
-        @params.label
-    </label>
-
-    @if(!params.hintText.isEmpty){
-    <span class="form-hint">@params.hintText</span>
+@dayValue = @{
+    params.day match {
+        case Some(day) => {
+            day
+        }
+        case _ => {
+            ""
+        }
     }
+}
+
+@monthValue = @{
+    params.month match {
+        case Some(month) => {
+            month
+        }
+        case _ => {
+            ""
+        }
+    }
+}
+
+@yearValue = @{
+    params.year match {
+        case Some(year) => {
+            year
+        }
+        case _ => {
+            ""
+        }
+    }
+}
+
+<fieldset class="@{formGroupClass}" id="@{fieldName}_container">
+
+    <legend>
+        <span class="form-label-bold">
+          @params.label
+        </span>
+        @if(!params.hintText.isEmpty){
+        <span class="form-hint">@params.hintText</span>
+        }
+    </legend>
 
     @if(params.hasErrors){
         <span class="error-message">
@@ -54,6 +88,19 @@
         </span>
     }
 
-    <input type="text" class="form-control" id="@{fieldName}" name="@{fieldName}" @if(!params.day.isEmpty){value="@{params.day}"}>
+    <div class="form-date">
+        <div class="form-group form-group-day">
+            <label class="form-label" for="@{fieldName}.day">Day</label>
+            <input class="form-control" id="@{fieldName}.day" name="@{fieldName}.day" type="number" pattern="[0-9]*" min="0" max="31" value="@{dayValue}">
+        </div>
+        <div class="form-group form-group-month">
+            <label class="form-label" for="@{fieldName}.month">Month</label>
+            <input class="form-control" id="@{fieldName}.month" name="@{fieldName}.month" type="number" pattern="[0-9]*" min="0" max="12" value="@{monthValue}">
+        </div>
+        <div class="form-group form-group-year">
+            <label class="form-label" for="@{fieldName}.year">Year</label>
+            <input class="form-control" id="@{fieldName}.year" name="@{fieldName}.year" type="number" pattern="[0-9]*" min="0" max="2050" value="@{yearValue}">
+        </div>
+    </div>
 
-</div>
+</fieldset>

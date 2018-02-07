@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 import play.twirl.api.Html
 
 case class NestedPanelParams(
-                              id: String,
-                              content: Html
-                            )
-
+  id     : String,
+  content: Html
+)

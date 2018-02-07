@@ -21,7 +21,9 @@
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width")) {
+@main_template(title = Messages("fh.company_registration_number.title"), mainClass = Some("full-width")) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @if(companyRegistrationNumberForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -41,7 +43,11 @@
     </div>
   }
 
-  <h1 class="heading-large">@Messages("fh.company_registration_number.title")</h1>
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.company_registration_number.title")
+    )
+  )
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyRegistrationNumber"), 'novalidate -> "novalidate") {
 
@@ -67,10 +73,11 @@
       </details>
     </div>
 
-    <div class="form-group">
-      <input type="submit" id="p-continue" class="button" value="continue">
-    </div>
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      )
+    )
   }
-
-
 }

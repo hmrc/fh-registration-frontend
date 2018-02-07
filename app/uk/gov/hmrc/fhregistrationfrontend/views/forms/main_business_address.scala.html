@@ -36,7 +36,7 @@
 
 @main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @if(mainBusinessAddressForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -68,7 +68,11 @@
     </div>
   }
 
-  <h1 class="heading-large">@Messages("fh.main_business_address.title")</h1>
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.main_business_address.title")
+    )
+  )
 
   <div id="review-details" class="form-group">
     @bpr.businessAddress.line1<br>
@@ -147,10 +151,11 @@
       )
     </div>
 
-    <div class="form-group">
-      <input type="submit" id="p-continue" class="button" value="continue">
-    </div>
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      )
+    )
   }
-
-
 }
