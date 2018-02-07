@@ -59,7 +59,7 @@ class MainBusinessAddressSpecs extends UnitSpec {
   }
 
   "MainBusinessAddress form unbinding" should {
-    "unbind a form wtih address" in {
+    "unbind a form with address" in {
       val testForm = form.fill(
         MainBusinessAddress(
           "Less than 3 years",
