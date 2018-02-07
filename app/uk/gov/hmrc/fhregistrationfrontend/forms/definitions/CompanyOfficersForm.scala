@@ -52,6 +52,8 @@ object CompanyOfficersForm {
     }
   }
 
+  val companyOfficerForm = Form(companyOfficerMapping)
+
   val companyOfficersForm = Form(
     mapping(
       "companyOfficers" → list(companyOfficerMapping)

@@ -16,6 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
+
 case class VatNumber (
   value: Option[String]
 )
+
+object VatNumber {
+  implicit val format = Json.format[VatNumber]
+}

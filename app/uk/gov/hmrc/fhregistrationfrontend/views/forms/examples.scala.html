@@ -29,7 +29,7 @@
         )
     )
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitMainBusinessAddress, 'novalidate -> "novalidate") {
+    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
 
         @helper.CSRF.formField
 

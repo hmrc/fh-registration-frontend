@@ -16,6 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
 case class TradingName (
   value: Option[String]
 )
+
+object TradingName {
+  implicit val format = Json.format[TradingName]
+}
