@@ -265,13 +265,65 @@
         @NestedPanel(
             NestedPanelParams(
                 "contactAddressInternational",
-                TextInput(
-                    TextInputParams(
-                        name = "contactAddressInternational",
-                        label = "International Address",
-                        error = "You must supply an international address"
+                AddressInternational(
+                    AddressUKParams(
+                        name = "ContactAddressInternational",
+                        label = "International contact address"
                     )
                 )
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">DateTuple</h2>
+
+        @DateTuple(
+            DateTupleParams(
+                name="dateOfIncorporation",
+                label=Messages("fh.date_of_incorporation.label"),
+                error=Messages("fh.date_of_incorporation.empty.error"),
+                hintText=Some(Messages("fh.date_of_incorporation.hint_text"))
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">DateTuple with error</h2>
+
+        @DateTuple(
+            DateTupleParams(
+                name="dateStartTrading",
+                label=Messages("fh.business_status.new_business.label"),
+                error=Messages("fh.business_status.new_business.empty.error"),
+                hintText=Some(Messages("fh.business_status.new_business.hint_text")),
+                hasErrors=true
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">YesNoDate</h2>
+
+        @YesNoDate(
+            YesNoDateParams(
+                name="isNewFulfilmentBusiness",
+                yesNoLabel=Messages("fh.business_status.label"),
+                yesNoError=Messages("fh.business_status.error"),
+                valueLabel=Messages("fh.business_status.new_business.label"),
+                valueError=Messages("fh.business_status.new_business.empty.error"),
+                valueHintText=Some(Messages("fh.business_status.new_business.hint_text"))
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">YesNoDate with prepop</h2>
+
+        @YesNoDate(
+            YesNoDateParams(
+                name="isNewFulfilmentBusiness2",
+                yesNoLabel=Messages("fh.business_status.label"),
+                yesNoValue=Some("true"),
+                yesNoError=Messages("fh.business_status.error"),
+                valueLabel=Messages("fh.business_status.new_business.label"),
+                valueError=Messages("fh.business_status.new_business.empty.error"),
+                valueHintText=Some(Messages("fh.business_status.new_business.hint_text")),
+                day=Some("12"),
+                month=Some("12"),
+                year=Some("2015")
             )
         )
 
