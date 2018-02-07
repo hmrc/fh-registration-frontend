@@ -16,10 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import play.api.i18n.Messages
+
 /**
   * Created by ali on 05/02/18.
   */
+
 case class SubmitButtonsParams(
-                             label: String = "Save and continue",
+                             label: String,
                              summaryLink: Boolean = false
                            )
