@@ -80,6 +80,7 @@ fh.main_business_address.enter_previous.error=Enter a valid previous address
 # - Contact Person
 #============================================================
 fh.contact_person.title=Contact person
+fh.contact_person.intro=This is the person we will contact if we need to discuss your application
 fh.contact_person.first_name.label=First name
 fh.contact_person.first_name.empty.error=Enter a first name for contact
 fh.contact_person.first_name.invalid.error=Enter only valid characters for a first name
