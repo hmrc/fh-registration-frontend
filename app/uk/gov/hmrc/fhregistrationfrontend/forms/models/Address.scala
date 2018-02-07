@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
 case class Address (
   addressLine1: String,
   addressLine2: String,
@@ -24,3 +26,7 @@ case class Address (
   postcode: String,
   countryCode: Option[String]
 )
+
+object Address {
+  implicit val format = Json.format[Address]
+}

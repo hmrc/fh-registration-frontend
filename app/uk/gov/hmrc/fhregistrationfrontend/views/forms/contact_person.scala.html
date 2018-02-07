@@ -63,7 +63,7 @@
 
   <h1 class="heading-large">@Messages("fh.contact_person.title")</h1>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitContactPerson, 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 

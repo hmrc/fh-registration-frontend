@@ -53,7 +53,7 @@ object Mappings {
     "day" -> number(min = 1, max = 31),
     "month" -> number(min = 1, max = 12),
     "year" -> number(min = 1900, max = 2999)
-  ) verifying ("invalid.date", x ⇒ localDateTimeConstraint(x)) transform (
+  ) verifying ("error.invalid", x ⇒ localDateTimeConstraint(x)) transform (
     x ⇒ localDateTime(x),
     (d: LocalDate) ⇒ (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
   )
@@ -66,7 +66,6 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
   }
 
-  //LocalDate.parse(panelProposedStartDate.proposedStartDate, dtf)
 
   def optionalFromYesAndNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying("todo.provide.a.value", y) transform (z, t)

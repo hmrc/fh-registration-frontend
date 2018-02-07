@@ -18,6 +18,14 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import java.time.LocalDate
 
+import play.api.libs.json.Json
+
 case class DateOfIncorporation (
   dateOfIncorporation: LocalDate
 )
+
+object DateOfIncorporation {
+  implicit val format = Json.format[DateOfIncorporation]
+}
+
+
