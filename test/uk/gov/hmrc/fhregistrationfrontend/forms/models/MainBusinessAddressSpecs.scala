@@ -60,14 +60,14 @@ class MainBusinessAddressSpecs extends UnitSpec {
 
   "MainBusinessAddress form unbinding" should {
     "unbind a form wtih address" in {
-      val data = form.fill(
+      val testForm = form.fill(
         MainBusinessAddress(
           "Less than 3 years",
           Some(true),
           Some(Address("line1", "line2", None, None, "postcode", Some("countryCode")))
         )
       )
-      data shouldBe Map(
+      testForm.data shouldBe Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
         "previousAddress" → "true",
         "mainPreviousAddressUK_previousAddress.Line1" → "line1",

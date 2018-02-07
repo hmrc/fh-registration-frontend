@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
 case class MainBusinessAddress (
   timeAtCurrentAddress: String,
   hasPreviousAddress: Option[Boolean],
@@ -24,6 +26,8 @@ case class MainBusinessAddress (
 
 object MainBusinessAddress {
 
+  implicit val format = Json.format[MainBusinessAddress]
+
   val TimeAtCurrentAddressOptions = Seq(
     "Less than 3 years",
     "3 to 5 years",
@@ -31,3 +35,4 @@ object MainBusinessAddress {
     "10 or more years"
   )
 }
+

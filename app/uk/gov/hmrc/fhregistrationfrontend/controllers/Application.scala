@@ -274,6 +274,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
+  override def usewhiteListing: Boolean = false
   lazy val conf: Configuration = ds.conf
   implicit lazy val messagesApi: MessagesApi = ds.messagesApi
 

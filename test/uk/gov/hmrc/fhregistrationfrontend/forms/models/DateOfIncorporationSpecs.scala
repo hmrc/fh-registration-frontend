@@ -43,18 +43,37 @@ class DateOfIncorporationSpecs extends UnitSpec {
         "dateOfIncorporation.month" -> "7",
         "dateOfIncorporation.year" -> "2015"
       )
-      val result = form.bind(data).value
-      result shouldBe None
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain ("dateOfIncorporation.day" → "error.required")
+
+      result.value shouldBe None
     }
 
     "validate a form with invalid date" in {
+      val data = Map(
+        "dateOfIncorporation.day" -> "30",
+        "dateOfIncorporation.month" -> "2",
+        "dateOfIncorporation.year" -> "2015"
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain ("dateOfIncorporation" → "error.invalid")
+
+      result.value shouldBe None
+    }
+
+    "validate a form with out of range dates" in {
       val data = Map(
         "dateOfIncorporation.day" -> "311",
         "dateOfIncorporation.month" -> "7",
         "dateOfIncorporation.year" -> "2015"
       )
-      val result = form.bind(data).value
-      result shouldBe None
+      val result = form.bind(data)
+
+      val errors = result.errors.flatMap(v ⇒ v.messages)
+      errors should contain ("error.max")
+      result.value shouldBe None
     }
 
   }
