@@ -4,46 +4,37 @@
 
     var lookUpPath = '/fhdds/address-lookup?postcode=';
 
+    // address mapping is custom given the different fieldnames
+    // in ETMP and DES schemas and the ADDRESS_LOOKUP response:
     function populateAddress(address, context) {
-        $('[name="' + context + '.' + 'Line1').val(address.lines[0]);
-        if (address.lines[1]) {
-            $('[name="' + context + '.' + 'Line2').val(address.lines[1]);
-        } else {
-            $('[name="' + context + '.' + 'Line2').val('')
-        }
-        if (address.lines[2]) {
-            $('[name="' + context + '.' + 'Line3').val(address.lines[2]);
-        } else {
-            $('[name="' + context + '.' + 'Line3').val('')
-        }
-
+        $.each([1, 2, 3], function (i, lineNum) {
+            var line = address.lines[i] || '';
+            $('[name="' + context + '.' + 'Line' + (lineNum)).val(line);
+        })
         $('[name="' + context + '.' + 'Line4').val(address.town);
         $('[name="' + context + '.' + 'postcode').val(address.postcode);
     }
 
     function clearAddressFields(context) {
-        $('[name="' + context + '.' + 'Line1').val('');
-        $('[name="' + context + '.' + 'Line2').val('')
-        $('[name="' + context + '.' + 'Line3').val('')
-        $('[name="' + context + '.' + 'Line4').val('');
-        $('[name="' + context + '.' + 'postcode').val('');
+        $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode'], function (i, line) {
+            $('[name="' + context + '.' + line).val('');
+        });
     }
 
     function showResult(data, context) {
-        var address = data.addresses.length != 1 ? "addresses" : "address";
-        var legend = '<legend class="form-label-bold">' + data.addresses.length + ' ' + address + ' found...</legend>';
-        var resultsArray = [];
+        var count = data.addresses.length;
+        var addressStringBuilder = ['<legend class="form-label-bold">' + count + ' ' + (count == 1 ? 'address' : 'addresses') + ' found...</legend>'];
         jQuery.each(data.addresses, function(i, result) {
             var address = result.address;
-            resultsArray.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
-            resultsArray.push(address.lines.join(', '));
-            resultsArray.push(address.town + ', ');
-            resultsArray.push(address.postcode);
-            resultsArray.push('</label></div>');
+            addressStringBuilder.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
+            addressStringBuilder.push(address.lines.join(', '));
+            addressStringBuilder.push(address.town + ', ');
+            addressStringBuilder.push(address.postcode);
+            addressStringBuilder.push('</label></div>');
         });
 
         $('#' + context + '-results')
-            .html(legend + resultsArray.join(''))
+            .html(addressStringBuilder.join(''))
             .focus()
             .on('click', '.postcode-lookup-result', function (e) {
                 var index = $(e.currentTarget).val()
