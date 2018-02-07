@@ -27,9 +27,9 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+@main_template(title = Messages("fh.contact_person.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dropdowns-enhancement.min.css")'/>
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @if(contactPersonForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
@@ -61,14 +61,17 @@
     </div>
   }
 
-  <h1 class="heading-large">@Messages("fh.contact_person.title")</h1>
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.contact_person.title")
+    )
+  )
+
+  <p>@Messages("fh.contact_person.intro")</p>
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitContactPerson, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
-
-
-    <h2>This is the person we will contact if we need to discuss your application.</h2>
 
     @TextInput(
       TextInputParams(
@@ -188,15 +191,12 @@
       )
     )
 
-    <div class="form-group">
-      <input type="submit" id="p-continue" class="button" value="continue">
-    </div>
-
-    </div>
-
-
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      )
+    )
 
   }
-
-
 }
