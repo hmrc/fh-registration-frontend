@@ -66,8 +66,6 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
   }
 
-  //LocalDate.parse(panelProposedStartDate.proposedStartDate, dtf)
-
   def optionalFromYesAndNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying("todo.provide.a.value", y) transform (z, t)
 

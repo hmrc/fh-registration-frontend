@@ -25,7 +25,7 @@ object TradingNameForm {
 
   val tradingNameForm = Form(
     mapping(
-      "value" → optional(nonEmptyText) //TODO regex and just in case the answer is yes
+      "tradingName_value" → optional(nonEmptyText) //TODO regex and just in case the answer is yes
     )(TradingName.apply)(TradingName.unapply)
   )
 }

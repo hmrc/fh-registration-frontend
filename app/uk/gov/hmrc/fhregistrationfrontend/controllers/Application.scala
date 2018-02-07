@@ -37,6 +37,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
@@ -110,7 +112,7 @@ class Application @Inject()(
   def startApp = authorisedUser { implicit request ⇒
     internalId ⇒
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒ Ok(main_business_address(mainBusinessAddressForm, bpr))
+        case Some(bpr) ⇒ Redirect(routes.Application.mainBusinessAddress())
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
@@ -118,10 +120,7 @@ class Application @Inject()(
   def mainBusinessAddress = authorisedUser { implicit request ⇒
     internalId ⇒
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒
-          mainBusinessAddressForm.bindFromRequest().fold(
-            formWithErrors => BadRequest(main_business_address(formWithErrors, bpr)),
-            _ ⇒ Ok("Ok"))
+        case Some(bpr) ⇒ Ok(main_business_address(mainBusinessAddressForm, bpr))
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
@@ -209,7 +208,41 @@ class Application @Inject()(
         formWithErrors => {
           Future successful BadRequest(trading_name(formWithErrors))},
         tradingName => {
-          Future successful Ok(tradingName.toString)
+          Future successful Redirect(routes.Application.vatNumber())
+        }
+      )
+  }
+
+  def vatNumber = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future successful Ok(vat_registration(vatNumberForm))
+  }
+
+  def submitVatNumber = authorisedUser { implicit request =>
+    internalId ⇒
+      println(s"\n\n${vatNumberForm.bindFromRequest()}\n\n")
+      vatNumberForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future successful BadRequest(vat_registration(formWithErrors))},
+        tradingName => {
+          Future successful Redirect(routes.Application.companyOfficers())
+        }
+      )
+  }
+
+  def companyOfficers = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future successful Ok(company_officers(companyOfficersForm))
+  }
+
+  def submitCompanyOfficers = authorisedUser { implicit request =>
+    internalId ⇒
+      println(s"\n\n${companyOfficersForm.bindFromRequest()}\n\n")
+      companyOfficersForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future successful BadRequest(company_officers(formWithErrors))},
+        tradingName => {
+          Future successful Ok(companyOfficersForm.toString)
         }
       )
   }

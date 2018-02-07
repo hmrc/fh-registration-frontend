@@ -22,26 +22,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyO
 
 object CompanyOfficersForm {
 
-  val companyOfficersForm = Form(
-    mapping(
-      "value" → list(companyOfficerMapping)
-    )(CompanyOfficers.apply)(CompanyOfficers.unapply)
-  )
-
-  val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
-    "identificationType" → nonEmptyText,
-    "companyIdentification" → optional(companyOfficerCompanyMapping),
-    "individualIdentification" → optional(companyOfficerIndividualMapping)
-  ) {
-    case (identificationType, company, individual) ⇒
-      CompanyOfficer(identificationType, company getOrElse individual.get)
-  } {
-    case CompanyOfficer(identificationType, identification) ⇒ identification match {
-      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
-      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
-    }
-  }
-
   val companyOfficerIndividualMapping = mapping(
     "firstName" → nonEmptyText,
     "lastName" → nonEmptyText,
@@ -58,4 +38,23 @@ object CompanyOfficersForm {
     "role" → nonEmptyText
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
+  val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
+    "identificationType" → nonEmptyText,
+    "companyIdentification" → optional(companyOfficerCompanyMapping),
+    "individualIdentification" → optional(companyOfficerIndividualMapping)
+  ) {
+    case (identificationType, company, individual) ⇒
+      CompanyOfficer(identificationType, company getOrElse individual.get)
+  } {
+    case CompanyOfficer(identificationType, identification) ⇒ identification match {
+      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
+      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
+    }
+  }
+
+  val companyOfficersForm = Form(
+    mapping(
+      "companyOfficers" → list(companyOfficerMapping)
+    )(CompanyOfficers.apply)(CompanyOfficers.unapply)
+  )
 }
