@@ -21,14 +21,14 @@ import play.api.data.Forms.{mapping, nonEmptyText, of, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOf
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.requiredRadioButton
 
 object MainBusinessAddressForm {
 
   val mainBusinessAddressForm = Form(
     mapping(
       "timeAtCurrentAddress" → (nonEmptyText verifying oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)),
-      "previousAddress" → optional(of(radioButton)),
+      "previousAddress" → of(requiredRadioButton("timeAtCurrentAddress", "Less than 3 years")),
       "mainPreviousAddressUK_previousAddress" → optional(address)
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )

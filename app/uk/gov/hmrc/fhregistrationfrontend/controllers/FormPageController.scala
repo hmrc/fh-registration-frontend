@@ -19,14 +19,11 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.data.Form
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Request, Result}
-import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.mainBusinessAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{LinearJourney, Page}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, Save4LaterServiceImpl}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
@@ -36,7 +33,7 @@ class FormPageController @Inject()(
   messagesApi      : play.api.i18n.MessagesApi,
   links            : ExternalUrls,
   save4LaterService: Save4LaterService
-) extends AppController(ds, messagesApi) {
+) extends AppController(ds, messagesApi) with I18nSupport {
 
   val journey = new LinearJourney
 

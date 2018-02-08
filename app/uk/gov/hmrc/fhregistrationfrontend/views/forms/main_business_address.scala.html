@@ -45,20 +45,20 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(mainBusinessAddressForm("period").hasErrors){
-          <li id="period-error-link"><a href="#period-inline-error">@{
+        @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors){
+          <li id="period-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
             Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
-          <li id="period-error-link"><a href="#has-other-address-inline-error">@{
+        @if(mainBusinessAddressForm("previousAddress").hasErrors){
+          <li id="period-error-link"><a href="#previousAddress-inline-error">@{
             Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("previousAddress").hasErrors){
-          <li id="period-error-link"><a href="#other-address-inline-error">@{
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors){
+          <li id="period-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
             Messages("fh.main_business_address.enter_previous.error")
           }
           </a></li>
@@ -122,6 +122,7 @@
         RadioGroupParams(
           name=Some("previousAddress"),
           legend=Some(Messages("fh.main_business_address.previous.label")),
+          hasErrors = mainBusinessAddressForm("previousAddress").hasErrors,
           radios = List(
             RadioParams(
               "true",

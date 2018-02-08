@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Format
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{ImportingActivitiesForm, _}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
@@ -54,10 +54,10 @@ abstract class BasicPage[T](val id: String, val form: Form[T])(implicit val form
     with Rendering[T]
 
 object Page {
-  import MainBusinessAddress.format
   import CompanyRegistrationNumber.format
-  import DateOfIncorporation.format
   import ContactPerson.format
+  import DateOfIncorporation.format
+  import MainBusinessAddress.format
 
   val mainBusinessAddressPage = new BasicPage[MainBusinessAddress](
     "mainBusinessAddress",

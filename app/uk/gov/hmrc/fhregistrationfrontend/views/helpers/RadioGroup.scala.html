@@ -51,7 +51,7 @@
     <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
         @legend
         @if(params.hasErrors) {
-            <span class="error-message">
+            <span class="error-message" id="@{params.name}-inline-error">
               @params.error
             </span>
         }
