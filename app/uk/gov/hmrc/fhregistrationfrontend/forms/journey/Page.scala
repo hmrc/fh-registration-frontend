@@ -21,11 +21,10 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{ImportingActivitiesForm, _}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
-
 
 
 trait Rendering[T] {
