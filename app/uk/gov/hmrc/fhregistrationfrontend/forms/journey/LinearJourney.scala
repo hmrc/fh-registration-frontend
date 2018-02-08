@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-class LinearJourney {
+
+
+class LinearJourney extends Journey {
 
   val sequence = List[Page[_]](
     Page.mainBusinessAddressPage,
@@ -32,18 +34,18 @@ class LinearJourney {
     Page.otherStoragePremisesPage
   )
 
-  def get[T](pageId: String): Option[Page[T]] = {
+  override def get[T](pageId: String): Option[Page[T]] = {
     sequence find ( _.id == pageId) map (_.asInstanceOf[Page[T]])
   }
 
-  def next(pageId: String): Option[Page[_]] = {
+  override def next[_](pageId: String): Option[Page[_]] = {
     sequence dropWhile (_.id != pageId) match {
       case page :: next :: rest ⇒ Some(next)
       case _                    ⇒ None
     }
   }
 
-  def previous(pageId: String): Option[Page[_]] = {
+  override def previous(pageId: String): Option[Page[_]] = {
     sequence takeWhile (_.id != pageId) lastOption
   }
 
