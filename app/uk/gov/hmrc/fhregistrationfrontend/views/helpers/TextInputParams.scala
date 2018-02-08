@@ -23,23 +23,23 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
   * we can ask if the value is to be supplied using Yes/No radio buttons
   * these params are required to use the component:
   *
-  * @param name will be the name of that value
-  * @param context is optional and will separate many components of
-  *                the same name in the same form e.g. repeating sections
-  * @param label the label for the actual question
-  * @param hintText any hint text for the question
+  * @param name      will be the name of that value
+  * @param context   is optional and will separate many components of
+  *                  the same name in the same form e.g. repeating sections
+  * @param label     the label for the actual question
+  * @param hintText  any hint text for the question
   * @param hasErrors boolean to inform styling of component and use of error msg
   */
 
-case class TextInputParams (
-                             name: String,
-                             context: Option[String] = None,
-                             hiddenNested: Boolean = false,
-                             value: Option[String] = None,
-                             label: String,
-                             hintText: Option[String] = None,
-                             error: String,
-                             hasErrors: Boolean = false
-                           )
+case class TextInputParams(
+  name        : String,
+  context     : Option[String] = None,
+  hiddenNested: Boolean = false,
+  value       : Option[String] = None,
+  label       : String,
+  hintText    : Option[String] = None,
+  error       : String,
+  hasErrors   : Boolean = false
+)
 
 

@@ -23,16 +23,15 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radi
 
 object ImportingActivitiesForm {
 
+  val eoriNumberMapping = mapping(
+    "eoriNumber" → nonEmptyText,
+    "goodsImportedOutsideEori" → of(radioButton)
+  )(EoriNumber.apply)(EoriNumber.unapply)
+
   val importingActivitiesForm = Form(
     mapping(
       "hasEori" → of(radioButton),
       "eoriNumber" → optional(eoriNumberMapping)
     )(ImportingActivities.apply)(ImportingActivities.unapply)
   )
-
-  val eoriNumberMapping = mapping(
-    "eoriNumber" → nonEmptyText,
-    "goodsImportedOutsideEori" → of(radioButton)
-  )(EoriNumber.apply)(EoriNumber.unapply)
-
 }

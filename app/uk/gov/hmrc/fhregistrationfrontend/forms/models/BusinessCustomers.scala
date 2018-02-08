@@ -16,6 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-case class BusinessCustomer (
+import play.api.libs.json.Json
+
+case class BusinessCustomers (
   numberOfCustomers: String
 )
+
+object BusinessCustomers {
+  implicit val format = Json.format[BusinessCustomers]
+}

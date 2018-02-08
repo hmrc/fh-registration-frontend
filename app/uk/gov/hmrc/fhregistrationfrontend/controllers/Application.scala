@@ -97,7 +97,6 @@ class Application @Inject()(
   }
 
   def summary = Action.async { implicit request ⇒
-
     Future.successful(Ok(ltd_summary("ok")))
   }
 

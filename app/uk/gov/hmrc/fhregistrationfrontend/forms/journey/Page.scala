@@ -19,13 +19,12 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Format
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
-
 
 
 trait Rendering[T] {
@@ -54,10 +53,10 @@ abstract class BasicPage[T](val id: String, val form: Form[T])(implicit val form
     with Rendering[T]
 
 object Page {
-  import MainBusinessAddress.format
   import CompanyRegistrationNumber.format
-  import DateOfIncorporation.format
   import ContactPerson.format
+  import DateOfIncorporation.format
+  import MainBusinessAddress.format
 
   val mainBusinessAddressPage = new BasicPage[MainBusinessAddress](
     "mainBusinessAddress",
@@ -99,10 +98,35 @@ object Page {
     }
   }
 
+  //todo: should use CompanyOfficersForm.companyOfficersForm. When repeat component ready, replace companyOfficerForm with companyOfficersForm
   val companyOfficerPage = new BasicPage[CompanyOfficer]("companyOfficers", CompanyOfficersForm.companyOfficerForm) {
     override def render(form: Form[CompanyOfficer], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
       company_officers(form)
     }
   }
 
+  val businessStatusPage = new BasicPage[BusinessStatus]("businessStatus", BusinessStatusForm.businessStatusForm) {
+    override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      business_status(form)
+    }
+  }
+
+  val importingActivitiesPage = new BasicPage[ImportingActivities]("importingActivities", ImportingActivitiesForm.importingActivitiesForm) {
+    override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      importing_activities(form)
+    }
+  }
+
+  val businessCustomersPage = new BasicPage[BusinessCustomers]("businessCustomers", BusinessCustomersForm.businessCustomersForm) {
+    override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      business_customers(form)
+    }
+  }
+
+  //todo: should use StoragePremisesForm.storagePremisesForm. When repeat component ready, replace storagePremiseForm with storagePremisesForm
+  val otherStoragePremisesPage = new BasicPage[StoragePremise]("otherStoragePremises", StoragePremisesForm.storagePremiseForm) {
+    override def render(form: Form[StoragePremise], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+      other_storage_premises(form)
+    }
+  }
 }

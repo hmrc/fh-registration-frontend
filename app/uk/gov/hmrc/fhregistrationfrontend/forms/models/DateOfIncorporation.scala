@@ -27,5 +27,3 @@ case class DateOfIncorporation (
 object DateOfIncorporation {
   implicit val format = Json.format[DateOfIncorporation]
 }
-
-

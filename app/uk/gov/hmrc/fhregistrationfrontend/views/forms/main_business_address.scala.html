@@ -33,7 +33,6 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-
 @main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -46,20 +45,20 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(mainBusinessAddressForm("period").hasErrors){
-          <li id="period-error-link"><a href="#period-inline-error">@{
+        @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors){
+          <li id="period-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
             Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("hasOtherAddress").hasErrors){
-          <li id="period-error-link"><a href="#has-other-address-inline-error">@{
+        @if(mainBusinessAddressForm("previousAddress").hasErrors){
+          <li id="period-error-link"><a href="#previousAddress-inline-error">@{
             Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("previousAddress").hasErrors){
-          <li id="period-error-link"><a href="#other-address-inline-error">@{
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors){
+          <li id="period-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
             Messages("fh.main_business_address.enter_previous.error")
           }
           </a></li>
@@ -123,15 +122,16 @@
         RadioGroupParams(
           name=Some("previousAddress"),
           legend=Some(Messages("fh.main_business_address.previous.label")),
+          hasErrors = mainBusinessAddressForm("previousAddress").hasErrors,
           radios = List(
             RadioParams(
               "true",
-              "Yes",
+              Messages("fh.generic.yes"),
               Some("hasPreviousAddress")
             ),
             RadioParams(
               "false",
-              "No"
+              Messages("fh.generic.no")
             )
           )
         )
@@ -144,7 +144,7 @@
             AddressUKParams(
               context = Some("mainPreviousAddressUK"),
               name = "previousAddress",
-              label = "Previous Address"
+              label = Messages("fh.main_business_address.enter_previous.label")
             )
           )
         )

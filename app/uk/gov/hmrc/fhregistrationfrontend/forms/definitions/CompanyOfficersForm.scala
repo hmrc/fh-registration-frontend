@@ -25,16 +25,16 @@ object CompanyOfficersForm {
   val companyOfficerIndividualMapping = mapping(
     "firstName" → nonEmptyText,
     "lastName" → nonEmptyText,
-    "nino" → optional(nonEmptyText),
-    "passport" → optional(nonEmptyText),
-    "nationalId" → optional(nonEmptyText),
+    "nationalInsuranceNumber" → optional(nonEmptyText),
+    "passportNumber" → optional(nonEmptyText),
+    "nationalID" → optional(nonEmptyText),
     "role" → optional(nonEmptyText)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
   val companyOfficerCompanyMapping = mapping(
     "companyName" → nonEmptyText,
-    "vat" → optional(nonEmptyText),
-    "crn" → optional(nonEmptyText),
+    "vatRegistration" → optional(nonEmptyText),
+    "companyRegistration" → optional(nonEmptyText),
     "role" → nonEmptyText
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 

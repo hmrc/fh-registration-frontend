@@ -44,51 +44,247 @@
 
     <h2>@Messages("fh.company_officers.each.title")</h2>
 
-
     @RadioGroup(
       RadioGroupParams(
-        name = Some("companyOfficers"),
+        name = Some("identificationType"),
         legend = Some(Messages("fh.company_officers.entity_type.label")),
         radios = List(
           RadioParams(
             "individual",
-            "IndividualOfficers",
+            Messages("fh.company_officers.individual.label"),
             Some("individualOfficers")
           ),
           RadioParams(
             "company",
-            "Company",
+            Messages("fh.company_officers.company.label"),
             Some("companyOfficers")
           )
         )
       )
     )
 
-    @NestedPanel(
-      NestedPanelParams(
-        "individualOfficers",
-        AddressUK(
-          AddressUKParams(
-            context = Some("otherUkContactAddress"),
-            name = "contactAddress",
-            label = "UK Contact address"
-          )
-        )
-      )
-    )
+    <div class="form-group panel js-hidden" id="individualOfficers">
 
-    @NestedPanel(
-      NestedPanelParams(
-        "companyOfficers",
-        AddressInternational(
-          AddressUKParams(
-            context = Some("otherInternationalContactAddress"),
-            name = "contactAddress",
-            label = "International Contact address"
+      <h2>@Messages("fh.company_officers.individual.title")</h2>
+
+      @TextInput(
+        TextInputParams(
+          name = "individualIdentification.firstName",
+          label = Messages("fh.contact_person.first_name.label"),
+          error = companyOfficersForm("firstName").error.getOrElse("").toString
+        )
+      )
+
+      @TextInput(
+        TextInputParams(
+          name = "individualIdentification.lastName",
+          label = Messages("fh.contact_person.last_name.label"),
+          error = companyOfficersForm("lastName").error.getOrElse("").toString
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some("identity"),
+          legend = Some(Messages("fh.company_officers.individual.nino.confirm.label")),
+          hintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
+          radios = List(
+            RadioParams(
+              "nationalInsuranceNumber",
+              Messages("fh.generic.yes"),
+              Some("nationalInsuranceNumber")
+            ),
+            RadioParams(
+              "passportNumber",
+              Messages("fh.generic.no"),
+              Some("other")
+            )
           )
         )
       )
-    )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "nationalInsuranceNumber",
+          TextInput(
+            TextInputParams(
+              name = "individualIdentification.nationalInsuranceNumber",
+              label = Messages("fh.company_officers.individual.nino.label"),
+              hintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
+              error = Messages("fh.company_officers.individual.nino.empty.error")
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "other",
+          RadioGroup(
+            RadioGroupParams(
+              name = Some("otherIdentity"),
+              legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
+              error = Some(Messages("fh.company_officers.individual.passport.empty.error")),
+              radios = List(
+                RadioParams(
+                  "passportNumber",
+                  Messages("fh.generic.yes"),
+                  Some("passportNumber")
+                ),
+                RadioParams(
+                  "nationalID",
+                  Messages("fh.generic.no"),
+                  Some("nationalID")
+                )
+              )
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "passportNumber",
+          TextInput(
+            TextInputParams(
+              name = "individualIdentification.passportNumber",
+              label = Messages("fh.company_officers.individual.passport.label"),
+              error = companyOfficersForm("passportNumber").error.getOrElse("").toString
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "nationalID",
+          TextInput(
+            TextInputParams(
+              name = "individualIdentification.nationalID",
+              label = Messages("fh.company_officers.individual.nationalID.label"),
+              error = companyOfficersForm("nationalID").error.getOrElse("").toString,
+              hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text"))
+            )
+          )
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some("role"),
+          legend = Some(Messages("fh.company_officers.status.label")),
+          inline = false,
+          required = true,
+          error = Some(Messages("fh.company_officers.status.error")),
+          radios = List(
+            RadioParams(
+              Messages("fh.company_officers.status.director.value"),
+              Messages("fh.company_officers.status.director")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.company_secretary.value"),
+              Messages("fh.company_officers.status.company_secretary")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.both.value"),
+              Messages("fh.company_officers.status.both")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.member.value"),
+              Messages("fh.company_officers.status.member")
+            )
+          )
+        )
+      )
+    </div>
+
+    <div class="form-group panel js-hidden" id="companyOfficers">
+      <h2>@Messages("fh.company_officers.company.title")</h2>
+
+      @TextInput(
+        TextInputParams(
+          name = "companyIdentification.companyName",
+          label = Messages("fh.company_officers.company.company_name.label"),
+          error = companyOfficersForm("companyName").error.getOrElse("").toString
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some("vatRegistration"),
+          legend = Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              Some("hasVatRegistration")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some("hasCompanyRegistration")
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "hasVatRegistration",
+          TextInput(
+            TextInputParams(
+              name = "companyIdentification.vatRegistration",
+              label = Messages("fh.vat_registration.label"),
+              hintText = Some(Messages("fh.vat_registration.hintText")),
+              error = Messages("fh.vat_registration.invalid.error")
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "hasCompanyRegistration",
+          TextInput(
+            TextInputParams(
+              name = "companyIdentification.companyRegistration",
+              label = Messages("fh.company_officers.company.company_registration_number.label"),
+              hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
+              error = Messages("fh.company_officers.company.company_registration_number.empty.error")
+            )
+          )
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some("companyIdentification.role"),
+          legend = Some(Messages("fh.company_officers.status.label")),
+          inline = false,
+          required = true,
+          error = Some(Messages("fh.company_officers.status.error")),
+          radios = List(
+            RadioParams(
+              Messages("fh.company_officers.status.director.value"),
+              Messages("fh.company_officers.status.director")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.company_secretary.value"),
+              Messages("fh.company_officers.status.company_secretary")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.both.value"),
+              Messages("fh.company_officers.status.both")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.member.value"),
+              Messages("fh.company_officers.status.member")
+            )
+          )
+        )
+      )
+    </div>
+
 
     @SubmitButtons(
       SubmitButtonsParams(

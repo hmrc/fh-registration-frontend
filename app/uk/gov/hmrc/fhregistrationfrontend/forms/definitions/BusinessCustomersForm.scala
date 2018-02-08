@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-case class RadioGroupParams(
-  name: Option[String] = None,
-  radios: List[RadioParams],
-  inline: Boolean = true,
-  legend: Option[String] = None,
-  legendSize: Option[String] = None,
-  required: Boolean = false,
-  error: Option[String] = None,
-  value: Option[String] = None,
-  hintText: Option[String] = None,
-  hasErrors: Boolean = false
-)
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
+
+object BusinessCustomersForm {
+
+  val businessCustomersForm = Form(
+    mapping(
+      "numberOfCustomers" → nonEmptyText
+    )(BusinessCustomers.apply)(BusinessCustomers.unapply)
+  )
+}

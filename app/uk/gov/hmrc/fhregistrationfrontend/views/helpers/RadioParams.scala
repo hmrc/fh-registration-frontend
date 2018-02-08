@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-case class RadioParams(value: String,
-                       label: String,
-                       dataTarget: Option[String] = None
-                      )
+case class RadioParams(
+  value: String,
+  label: String,
+  dataTarget: Option[String] = None
+)

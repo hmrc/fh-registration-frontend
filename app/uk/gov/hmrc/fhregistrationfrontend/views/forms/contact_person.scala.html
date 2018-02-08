@@ -151,12 +151,12 @@
             radios = List(
               RadioParams(
                 "true",
-                "Yes",
+                Messages("fh.generic.yes"),
                 Some("contactAddressUK")
               ),
               RadioParams(
                 "false",
-                "No",
+                Messages("fh.generic.no"),
                 Some("contactAddressInternational")
               )
             )
@@ -172,7 +172,7 @@
           AddressUKParams(
             context = Some("otherUkContactAddress"),
             name = "contactAddress",
-            label = "UK Contact address"
+            label = Messages("fh.contact_person.contact_address_new.label")
           )
         )
       )

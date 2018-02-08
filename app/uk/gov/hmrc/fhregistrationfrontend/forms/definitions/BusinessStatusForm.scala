@@ -21,12 +21,13 @@ import play.api.data.Forms.{mapping, of, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
+import play.api.i18n.Messages
 
 object BusinessStatusForm {
 
   val businessStatusForm = Form(
     mapping(
-      "isNewFulfimentBusiness" → of(radioButton),
+      "isNewFulfilmentBusiness" → of(radioButton),
       "proposedStartDate" → optional(localDate)
     )(BusinessStatus.apply)(BusinessStatus.unapply)
   )
