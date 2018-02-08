@@ -33,7 +33,6 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-
 @main_template(title = Messages("fh.main_business_address.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -126,12 +125,12 @@
           radios = List(
             RadioParams(
               "true",
-              "Yes",
+              Messages("fh.generic.yes"),
               Some("hasPreviousAddress")
             ),
             RadioParams(
               "false",
-              "No"
+              Messages("fh.generic.no")
             )
           )
         )
@@ -144,7 +143,7 @@
             AddressUKParams(
               context = Some("mainPreviousAddressUK"),
               name = "previousAddress",
-              label = "Previous Address"
+              label = Messages("fh.main_business_address.enter_previous.label")
             )
           )
         )

@@ -18,22 +18,28 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 
 import play.api.data.Form
-import play.api.data.Forms.{list, mapping, of}
+import play.api.data.Forms.{list, mapping, of, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{StoragePremise, StoragePremises}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises, StoragePremise}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
 object StoragePremisesForm {
 
+  val storagePremiseMapping = mapping(
+    "address" → optional(address),
+    "isThirdParty" → optional(of(radioButton))
+  )(StoragePremise.apply)(StoragePremise.unapply)
+
   val storagePremisesForm = Form(
     mapping(
-     "premises" → list(storagePrmiseMapping)
-    )(StoragePremises.apply)(StoragePremises.unapply)
+      "premises" → list(storagePremiseMapping)
+    )(OtherStoragePremises.apply)(OtherStoragePremises.unapply)
   )
 
-
-  val storagePrmiseMapping = mapping(
-    "address" → address,
-    "isThirdParty" → of(radioButton)
-  )(StoragePremise.apply)(StoragePremise.unapply)
+  val storagePremiseForm = Form(
+    mapping(
+      "storagePremise_address" → optional(address),
+      "isThirdParty" → optional(of(radioButton))
+    )(StoragePremise.apply)(StoragePremise.unapply)
+  )
 }

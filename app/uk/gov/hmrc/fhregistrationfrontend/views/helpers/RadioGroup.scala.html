@@ -55,6 +55,11 @@
               @params.error
             </span>
         }
+
+        @if(!params.hintText.isEmpty){
+          <span class="form-hint">@params.hintText</span>
+        }
+
         @for(radio <- params.radios){
             <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
                 <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value) />

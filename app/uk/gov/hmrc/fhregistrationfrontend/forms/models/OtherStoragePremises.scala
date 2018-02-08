@@ -16,7 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-case class StoragePremises (
-  premises: List[StoragePremise]
+import play.api.libs.json.Json
 
+case class OtherStoragePremises (
+  premises: List[StoragePremise]
 )
+
+object OtherStoragePremises {
+  implicit val format = Json.format[OtherStoragePremises]
+}

@@ -26,7 +26,7 @@ object BusinessStatusForm {
 
   val businessStatusForm = Form(
     mapping(
-      "isNewFulfimentBusiness" → of(radioButton),
+      "isNewFulfilmentBusiness" → of(radioButton),
       "proposedStartDate" → optional(localDate)
     )(BusinessStatus.apply)(BusinessStatus.unapply)
   )

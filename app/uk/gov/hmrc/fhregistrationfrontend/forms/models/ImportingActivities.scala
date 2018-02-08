@@ -16,8 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
 case class ImportingActivities (
   hasEori: Boolean,
   eoriNumber: Option[EoriNumber]
-
 )
+
+object ImportingActivities {
+  implicit val format = Json.format[ImportingActivities]
+}

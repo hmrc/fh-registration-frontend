@@ -142,7 +142,7 @@ fh.importing_activities.title=Importing activities
 fh.importing_activities.eori.confirm.label=Does the business have any EORI numbers?
 fh.importing_activities.eori.confirm.error=Select whether the business has any EORI numbers
 fh.importing_activities.eori.label=Enter the EORI number
-fh.importing_activities.eori.hint_text=For example, GB123456789000
+fh.importing_activities.eori.hint_text=The business should have an EORI number if it imports goods with sellers outside the EU. If the business does not have an EORI number, answer 'No'.
 fh.importing_activities.eori.empty.error=Enter the EORI number
 fh.importing_activities.eori.invalid.error=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under any of its EORI numbers?
@@ -170,6 +170,8 @@ fh.other_storage_premises.title=Other storage premises
 fh.other_storage_premises.confirm.label=Other than the main business address, does the business use any other premises to store third-party goods imported from outside the EU?
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
+fh.other_storage_premises.enter.label=Enter the address of storage premises
+fh.other_storage_premises.third_party.label=Are these third party premises?
 
 # - Summary
 #===========================================================
@@ -225,7 +227,7 @@ fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorp
 fh.company_officers.title=Company officers
 fh.company_officers.intro=You must tell us about all the directors and company secretaries. We will use this information to check their identity
 fh.company_officers.each.title=Add company officer
-fh.company_officers.entity_type.label=Is company officer {0} an individual or a company?
+fh.company_officers.entity_type.label=Is company officer an individual or a company?
 fh.company_officers.entity_type.error=Select whether company officer {0} is an invidual or a company
 
 fh.company_officers.status.label=What is their role?
@@ -252,8 +254,12 @@ fh.company_officers.individual.nino.confirm.error=Select whether company officer
 fh.company_officers.individual.nino.label=National Insurance number
 fh.company_officers.individual.nino.hint_text=For example, QQ123456C
 fh.company_officers.individual.nino.empty.error=Enter the National Insurance number for company officer {0}
+fh.company_officers.individual.passport.confirm=Do they have a passport number?
 fh.company_officers.individual.passport.label=Enter their passport number
 fh.company_officers.individual.passport.empty.error=Enter the passport number for company officer {0}
+fh.company_officers.individual.nationalID.label=Enter their national ID
+fh.company_officers.individual.nationalID.empty.error=Enter the national ID for company officer {0}
+fh.company_officers.individual.nationalID.hint_text=You must enter at least one form of identification for this person
 
 fh.company_officers.company.label=A company
 fh.company_officers.company.title=Enter the company details

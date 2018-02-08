@@ -16,7 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.Json
+
 case class EoriNumber (
   eoriNumber: String,
   goodsImportedOutsideEori: Boolean
 )
+
+object EoriNumber {
+  implicit val format = Json.format[EoriNumber]
+}

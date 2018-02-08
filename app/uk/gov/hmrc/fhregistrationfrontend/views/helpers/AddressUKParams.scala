@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 
 case class AddressUKParams(
-                              context: Option[String] = None,
-                              name: String,
-                              label: String
-                            )
+  context: Option[String] = None,
+  name   : String,
+  label  : String
+)

@@ -18,13 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomer
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
 
 object NumberOfCustomersForm {
 
   val numberOfCustomersForm = Form(
     mapping(
       "numberOfCustomers" → nonEmptyText
-    )(BusinessCustomer.apply)(BusinessCustomer.unapply)
+    )(BusinessCustomers.apply)(BusinessCustomers.unapply)
   )
 }
