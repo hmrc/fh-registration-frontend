@@ -35,7 +35,7 @@ object CustomFormatters {
 
   def requiredRadioButton(requiredKey: String, condition: String): Formatter[Option[Boolean]] = new Formatter[Option[Boolean]] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[Boolean]] = {
-      if (data(requiredKey) == condition) {
+      if (data.getOrElse(requiredKey, "") == condition) {
         Right(data.getOrElse(key, "")).right.flatMap {
           case "true"  => Right(Some(true))
           case "false" => Right(Some(false))
