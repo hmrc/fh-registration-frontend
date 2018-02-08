@@ -63,7 +63,6 @@ object Page {
     MainBusinessAddressForm.mainBusinessAddressForm
   ) {
     override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
-      println(s"rendering form $form")
       main_business_address(form, bpr)
     }
   }
