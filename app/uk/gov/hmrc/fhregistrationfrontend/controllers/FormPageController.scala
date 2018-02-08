@@ -19,21 +19,24 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.data.Form
-import play.api.i18n.I18nSupport
 import play.api.mvc.{Request, Result}
+import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.mainBusinessAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{LinearJourney, Page}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, Save4LaterServiceImpl}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class FormPageController @Inject()(
-  ds               : CommonPlayDependencies,
-  messagesApi      : play.api.i18n.MessagesApi,
+  ds            : CommonPlayDependencies,
+  messagesApi: play.api.i18n.MessagesApi,
   links            : ExternalUrls,
   save4LaterService: Save4LaterService
-) extends AppController(ds, messagesApi) with I18nSupport {
+) extends AppController (ds, messagesApi) {
 
   val journey = new LinearJourney
 
@@ -41,22 +44,22 @@ class FormPageController @Inject()(
     implicit internalId ⇒
       (journey get[T] pageId) match {
         case Some(page: Page[T]) ⇒
-          save4LaterService.fetchData4Later[T](internalId, page.id)(hc, page.format) flatMap {
+          save4LaterService.fetchData4Later[T](internalId, page.id)(hc, page.format) flatMap  {
             case Some(data) ⇒
               println(s"found data $data")
               renderForm(page, page.form.fill(data))
-            case None       ⇒
+            case None ⇒
               println(s"no data found")
               renderForm(page, page.form)
           }
-        case None                ⇒ Future successful NotFound("Not found")
+        case None ⇒ Future successful NotFound("Not found")
       }
   }
 
   def fetchData[T](bpr: BusinessRegistrationDetails, page: Page[T])(implicit request: Request[_], internalId: String): Future[Result] = {
     save4LaterService.fetchData4Later[T](internalId, page.id)(hc, page.format) map {
       case Some(data) ⇒ Ok(page.render(page.form.fill(data), bpr))
-      case None       ⇒ Ok(page.render(page.form, bpr))
+      case None ⇒ Ok(page.render(page.form, bpr))
     }
   }
 
@@ -75,22 +78,21 @@ class FormPageController @Inject()(
   }
 
   def save[T](pageId: String) = authorisedUser { implicit request ⇒
-    implicit internalId ⇒
+   implicit internalId ⇒
       (journey get[T] pageId) match {
         case Some(page: Page[T]) ⇒
-          println(s"\n\n ${page.form.bindFromRequest()}\n\n")
-          page.form.bindFromRequest() fold(
+          page.form.bindFromRequest() fold (
             formWithErrors => renderForm[T](page, formWithErrors),
             mainBusinessAddress => {
               save4LaterService.saveData4Later[T](internalId, page.id, mainBusinessAddress)(hc, page.format)
               journey next pageId match {
                 case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
-                case None           ⇒ Future successful Redirect(routes.Application.summary())
+                case None ⇒ Future successful Ok("All done")
               }
 
             }
           )
-        case None                ⇒ Future successful NotFound("Not found")
+        case None ⇒ Future successful NotFound("Not found")
       }
   }
 }
