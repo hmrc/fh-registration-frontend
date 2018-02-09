@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import play.api.data.{Form, Forms}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc._
@@ -35,7 +36,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
-import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.http.{BadRequestException, SessionKeys}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registration_status_views._
 
@@ -77,24 +78,27 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
+  val businessTypeForm = Form("businessType" → Forms.nonEmptyText)
 
-  def selectEntityType = authorisedUser { implicit request ⇒
+  def continue = authorisedUser { implicit request ⇒
     internalId ⇒
-      Future  successful Ok(business_type("Processing", "123"))
-//???
+      Future successful Ok(business_type(businessTypeForm))
   }
 
   def submitEntityType = authorisedUser { implicit request ⇒
     internalId ⇒
-      Future  successful Ok(business_type("Processing", "123"))
-    //???
+      Future successful {
+        businessTypeForm.bindFromRequest() fold (
+          formWithErrors ⇒ BadRequest(business_type(formWithErrors)),
+          value ⇒ Redirect(routes.Application.continueWithEntityType()).withSession(request.session + ("entityType" → value))
+        )
+      }
   }
 
-
-  def continue = authorisedUser { implicit request ⇒
+  def continueWithEntityType = authorisedUser { implicit request ⇒
     internalId ⇒
       for {
-        details ← businessCustomerConnector.getReviewDetails
+        details ← businessCustomerConnector.getReviewDetails map (_ copy (businessType = request.session.get("entityType")))
         _ ← fhddsConnector.saveBusinessRegistrationDetails(internalId, formTypeRef(details), details)
       } yield {
         Redirect(DFSUrls.dfsURL(formTypeRef(details)))
@@ -115,7 +119,7 @@ class Application @Inject()(
       case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
       case Some("corporate body") ⇒ limitedCompanyFormTypeRef
       case Some("Partnership")    ⇒ partnershipFormTypeRef
-      case _                      ⇒ limitedCompanyFormTypeRef
+      case _                      ⇒ throw new BadRequestException("Entity type not defined")
     }
   }
 
