@@ -20,10 +20,8 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession, PlayAuthConnector}
-import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{continueUrl, getString, ggLoginUrl}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 
 import scala.concurrent.Future
 

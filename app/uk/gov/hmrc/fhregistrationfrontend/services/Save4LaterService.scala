@@ -28,7 +28,7 @@ import scala.concurrent.Future
 
 object Save4LaterKeys {
   val businessRegistrationDetailsKey = "businessRegistrationDetails"
-
+  val businessTypeKey = "businessType"
 }
 
 @ImplementedBy(classOf[Save4LaterServiceImpl])
@@ -37,6 +37,10 @@ trait Save4LaterService {
   import Save4LaterKeys._
 
   val shortLivedCache: ShortLivedCache
+
+  def saveBusinessType(userId: String, businessType: String)(implicit hc: HeaderCarrier) = {
+    saveData4Later(userId, businessTypeKey, businessType)
+  }
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
     saveData4Later(userId, businessRegistrationDetailsKey, brd)

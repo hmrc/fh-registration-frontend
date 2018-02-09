@@ -62,6 +62,14 @@ fh.generic.status.company.value=company
 # Common Page specific messages (All entities)
 #============================================================
 
+# - Select your business type
+#============================================================
+fh.business_type.title=Select your business type
+fh.business_type.error=Select your business type
+fh.business_type.limited_company=Limited company
+fh.business_type.sole_trader=Sole Trader self-employed
+fh.business_type.business_partnership=Business partnership
+
 # - Main Business Address
 #============================================================
 fh.main_business_address.title=Main business address
