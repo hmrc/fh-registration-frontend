@@ -49,16 +49,4 @@ object CustomFormatters {
     override def unbind(key: String, value: Option[Boolean]) = Map(key -> value.toString)
   }
 
-  def businessTypeCheck(businessTypeFromGGId: String): Formatter[String] = new Formatter[String] {
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] = {
-      Right(data.getOrElse(key, "")).right.flatMap { businessType ⇒
-        if (businessType == businessTypeFromGGId) Right(businessType)
-        else if (businessType.isEmpty) Left(Seq(FormError(key, s"")))
-        else Left(Seq(FormError(key, s"fh.business_type.type_not_match")))
-      }
-    }
-
-    override def unbind(key: String, value: String) = Map(key -> value)
-  }
-
 }

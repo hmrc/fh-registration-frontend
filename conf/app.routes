@@ -3,8 +3,8 @@
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
 
-GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType(businessTypeFromGGId: String)
-POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType(businessTypeFromGGId: String)
+GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
+POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
 GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 

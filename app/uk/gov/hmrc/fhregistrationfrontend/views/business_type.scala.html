@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(businessTypeForm: Form[BusinessType], businessTypeFromGGId: String)(implicit request: Request[_], messages: Messages)
+@(businessTypeForm: Form[BusinessType])(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(Messages("fh.business_type.title"), mainClass = Some("full-width")) {
 
@@ -42,7 +42,7 @@
     </div>
   }
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType(businessTypeFromGGId), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType(), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 

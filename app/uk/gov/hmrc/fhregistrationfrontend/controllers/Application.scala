@@ -87,20 +87,18 @@ class Application @Inject()(
         details ← businessCustomerConnector.getReviewDetails
         _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
       } yield {
-        Redirect(routes.Application.businessType(details.businessType.getOrElse("")))
+        Redirect(routes.Application.businessType())
       }
   }
 
-  def businessType(businessTypeFromGGId: String) = authorisedUser { implicit request ⇒ internalId ⇒
-    println(s"\n\n$businessTypeFromGGId\n\n")
-    Future.successful(Ok(business_type(businessTypeForm(businessTypeFromGGId), businessTypeFromGGId)))
+  def businessType = authorisedUser { implicit request ⇒ internalId ⇒
+    Future.successful(Ok(business_type(businessTypeForm)))
   }
 
-  def submitBusinessType(businessTypeFromGGId: String) = authorisedUser { implicit request ⇒
+  def submitBusinessType = authorisedUser { implicit request ⇒
     internalId ⇒
-      println(s"\n\n${businessTypeForm(businessTypeFromGGId).bindFromRequest()}\n\n")
-      businessTypeForm(businessTypeFromGGId).bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors, businessTypeFromGGId))),
+      businessTypeForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
         businessType => {
           for {
             _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)

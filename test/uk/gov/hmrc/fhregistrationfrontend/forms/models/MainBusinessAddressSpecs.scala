@@ -69,7 +69,7 @@ class MainBusinessAddressSpecs extends UnitSpec {
       )
       testForm.data shouldBe Map(
         "timeAtCurrentAddress" -> "Less than 3 years",
-        "previousAddress" → "true",
+        "previousAddress" → "Some(true)",
         "mainPreviousAddressUK_previousAddress.Line1" → "line1",
         "mainPreviousAddressUK_previousAddress.Line2" → "line2",
         "mainPreviousAddressUK_previousAddress.postcode" → "postcode",
