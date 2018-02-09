@@ -33,6 +33,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.DFSUrls.config
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, DFSUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -75,6 +76,20 @@ class Application @Inject()(
   def start = ggAuthorised { implicit request ⇒
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
+
+
+  def selectEntityType = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future  successful Ok(business_type("Processing", "123"))
+//???
+  }
+
+  def submitEntityType = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future  successful Ok(business_type("Processing", "123"))
+    //???
+  }
+
 
   def continue = authorisedUser { implicit request ⇒
     internalId ⇒

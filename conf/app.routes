@@ -2,6 +2,8 @@
 
 GET   /                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET   /continue                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
+GET   /select-entity-type                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.selectEntityType()
+POST  /select-entity-type                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitEntityType()
 GET   /whitelisted                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
 GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)

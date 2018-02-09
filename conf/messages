@@ -12,3 +12,13 @@ confirm.selectone=Answer ‘Yes’ or ‘No’
 confirm.yes=Yes
 confirm.no=No
 panel.signInCorrectAccount=You will need to sign in to the correct business tax account.
+
+
+# - Select your business type
+#============================================================
+fh.business_type.title=Select your business type
+fh.business_type.error=Select your business type
+fh.business_type.limited_company=Limited company
+fh.business_type.sole_trader=Sole Trader self-employed
+fh.business_type.business_partnership=Business partnership
+fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
