@@ -17,15 +17,16 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.{mapping, of}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.businessTypeCheck
 
 
 object BusinessTypeForm {
 
-  val businessTypeForm = Form(
+  def businessTypeForm(businessTypeFormId: String) = Form(
     mapping(
-      "businessType" → nonEmptyText
+      "businessType" → of(businessTypeCheck(businessTypeFormId))
     )(BusinessType.apply)(BusinessType.unapply)
   )
 }

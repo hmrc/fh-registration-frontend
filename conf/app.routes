@@ -1,10 +1,12 @@
 # microservice specific routes
 
-GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
-GET         /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
-
+GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
-GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startApp
+
+GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType(businessTypeFromGGId: String)
+POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType(businessTypeFromGGId: String)
+
+GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
 GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 

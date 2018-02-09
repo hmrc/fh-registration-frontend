@@ -26,7 +26,7 @@ object CustomFormatters {
       Right(data.getOrElse(key, "")).right.flatMap {
         case "true"  => Right(true)
         case "false" => Right(false)
-        case _       => Left(Seq(FormError(key, "Answer ‘Yes’ or ‘No’")))
+        case _       => Left(Seq(FormError(key, "confirm.selectone")))
       }
     }
 
@@ -39,7 +39,7 @@ object CustomFormatters {
         Right(data.getOrElse(key, "")).right.flatMap {
           case "true"  => Right(Some(true))
           case "false" => Right(Some(false))
-          case _       => Left(Seq(FormError(key, "Answer ‘Yes’ or ‘No’")))
+          case _       => Left(Seq(FormError(key, "confirm.selectone")))
         }
       } else {
         Right(None)
@@ -49,5 +49,16 @@ object CustomFormatters {
     override def unbind(key: String, value: Option[Boolean]) = Map(key -> value.toString)
   }
 
+  def businessTypeCheck(businessTypeFromGGId: String): Formatter[String] = new Formatter[String] {
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] = {
+      Right(data.getOrElse(key, "")).right.flatMap { businessType ⇒
+        if (businessType == businessTypeFromGGId) Right(businessType)
+        else if (businessType.isEmpty) Left(Seq(FormError(key, s"")))
+        else Left(Seq(FormError(key, s"fh.business_type.type_not_match")))
+      }
+    }
+
+    override def unbind(key: String, value: String) = Map(key -> value)
+  }
 
 }

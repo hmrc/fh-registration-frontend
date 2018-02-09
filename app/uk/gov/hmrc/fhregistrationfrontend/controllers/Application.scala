@@ -64,7 +64,7 @@ class Application @Inject()(
     implicit request ⇒
       authorised() {
         val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-        Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.businessType().url))
+        Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
       } recover {
         case x: NoActiveSession ⇒
           Logger.warn(s"could not authenticate user due to: No Active Session " + x)
@@ -77,23 +77,8 @@ class Application @Inject()(
       }
   }
 
-  def businessType = authorisedUser { implicit request ⇒ internalId ⇒
-    Future.successful(Ok(business_type(businessTypeForm)))
-  }
-
-  def submitBusinessType = authorisedUser { implicit request ⇒
-    internalId ⇒
-
-    businessTypeForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
-      businessType => {
-        for {
-          _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)
-        } yield {
-          Redirect(s"${links.businessCustomerVerificationUrl}")
-        }
-      }
-    )
+  def start = ggAuthorised { implicit request ⇒
+    Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
   def continue = authorisedUser { implicit request ⇒
@@ -102,11 +87,31 @@ class Application @Inject()(
         details ← businessCustomerConnector.getReviewDetails
         _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
       } yield {
-        Redirect(routes.Application.startApp())
+        Redirect(routes.Application.businessType(details.businessType.getOrElse("")))
       }
   }
 
-  def startApp = authorisedUser { implicit request ⇒
+  def businessType(businessTypeFromGGId: String) = authorisedUser { implicit request ⇒ internalId ⇒
+    println(s"\n\n$businessTypeFromGGId\n\n")
+    Future.successful(Ok(business_type(businessTypeForm(businessTypeFromGGId), businessTypeFromGGId)))
+  }
+
+  def submitBusinessType(businessTypeFromGGId: String) = authorisedUser { implicit request ⇒
+    internalId ⇒
+      println(s"\n\n${businessTypeForm(businessTypeFromGGId).bindFromRequest()}\n\n")
+      businessTypeForm(businessTypeFromGGId).bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors, businessTypeFromGGId))),
+        businessType => {
+          for {
+            _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)
+          } yield {
+            Redirect(routes.Application.startForm())
+          }
+        }
+      )
+  }
+
+  def startForm = authorisedUser { implicit request ⇒
     internalId ⇒
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
