@@ -40,6 +40,7 @@ class FormPageController @Inject()(
   }
 
   def save[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
+    println(s"\n\n${request.page[T].form.bindFromRequest()}\n\n")
         request.page[T].form.bindFromRequest() fold (
           formWithErrors => renderForm(request.page, formWithErrors),
           mainBusinessAddress => {

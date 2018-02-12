@@ -38,12 +38,10 @@
 
 @checked(testVal:String) = @{
     params.value match {
-        case Some(x) => {
-            if(x == testVal){"checked"}
-        }
-        case _ => {
-            ""
-        }
+        case Some(x) =>
+          if(x == testVal) "checked"
+          else if (x == s"Some($testVal)") "checked"
+        case _ =>
     }
 }
 
@@ -62,7 +60,7 @@
 
         @for(radio <- params.radios){
             <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
-                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value) />
+                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
                 <label for="@params.name@radio.value">@radio.label</label>
             </div>
         }
