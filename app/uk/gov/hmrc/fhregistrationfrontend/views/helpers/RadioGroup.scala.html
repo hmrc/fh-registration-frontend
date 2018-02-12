@@ -34,13 +34,13 @@
 }
 
 
-@checked(testVal:String) = @{
-    params.value match {
-        case Some(x) =>
-          if(x == testVal) "checked"
-          else if (x == s"Some($testVal)") "checked"
-        case _ =>
-    }
+@checked(testVal: String) = @{
+  params.value match {
+    case Some(x) =>
+      if(x == testVal) "checked"
+      else if(x == s"Some($testVal)") "checked"
+    case _ =>
+  }
 }
 
 <div class="@{formGroupClass}">

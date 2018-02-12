@@ -59,70 +59,96 @@ object Page {
   import MainBusinessAddress.format
 
   val mainBusinessAddressPage = new BasicPage[MainBusinessAddress](
-    "mainBusinessAddress",
-    MainBusinessAddressForm.mainBusinessAddressForm
+    "mainBusinessAddress", MainBusinessAddressForm.mainBusinessAddressForm
   ) {
-    override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+    override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       main_business_address(form, bpr)
     }
   }
 
-  val contactPersonPage = new BasicPage[ContactPerson]("contactPerson", ContactPersonForm.contactPersonForm) {
-    override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val contactPersonPage = new BasicPage[ContactPerson](
+    "contactPerson", ContactPersonForm.contactPersonForm
+  ) {
+    override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       contact_person(form, bpr)
     }
   }
 
-  val companyRegistrationNumberPage = new BasicPage[CompanyRegistrationNumber]("companyRegistrationNumber", CompanyRegistrationNumberForm.companyRegistrationNumberForm) {
-    override def render(form: Form[CompanyRegistrationNumber], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val companyRegistrationNumberPage = new BasicPage[CompanyRegistrationNumber](
+    "companyRegistrationNumber", CompanyRegistrationNumberForm.companyRegistrationNumberForm
+  ) {
+    override def render(form: Form[CompanyRegistrationNumber], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       company_registration_number(form)
     }
   }
 
-  val dateOfIncorporationPage = new BasicPage[DateOfIncorporation]("dateOfIncorporation", DateOfIncorporationForm.dateOfIncorporationForm) {
-    override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val dateOfIncorporationPage = new BasicPage[DateOfIncorporation](
+    "dateOfIncorporation", DateOfIncorporationForm.dateOfIncorporationForm
+  ) {
+    override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       date_of_incorporation(form)
     }
   }
 
-  val tradingNamePage = new BasicPage[TradingName]("tradingName", TradingNameForm.tradingNameForm) {
-    override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val tradingNamePage = new BasicPage[TradingName](
+    "tradingName", TradingNameForm.tradingNameForm
+  ) {
+    override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       trading_name(form)
     }
   }
 
   val vatNumberPage = new BasicPage[VatNumber]("vatNumber", VatNumberForm.vatNumberForm) {
-    override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+    override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       vat_registration(form)
     }
   }
 
   //todo: should use CompanyOfficersForm.companyOfficersForm. When repeat component ready, replace companyOfficerForm with companyOfficersForm
-  val companyOfficerPage = new BasicPage[CompanyOfficer]("companyOfficers", CompanyOfficersForm.companyOfficerForm) {
-    override def render(form: Form[CompanyOfficer], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val companyOfficerPage = new BasicPage[CompanyOfficer](
+    "companyOfficers", CompanyOfficersForm.companyOfficerForm
+  ) {
+    override def render(form: Form[CompanyOfficer], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       company_officers(form)
     }
   }
 
-  val businessStatusPage = new BasicPage[BusinessStatus]("businessStatus", BusinessStatusForm.businessStatusForm) {
-    override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val businessStatusPage = new BasicPage[BusinessStatus](
+    "businessStatus", BusinessStatusForm.businessStatusForm
+  ) {
+    override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       business_status(form)
     }
   }
 
-  val importingActivitiesPage = new BasicPage[ImportingActivities]("importingActivities", ImportingActivitiesForm.importingActivitiesForm) {
-    override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val importingActivitiesPage = new BasicPage[ImportingActivities](
+    "importingActivities", ImportingActivitiesForm.importingActivitiesForm
+  ) {
+    override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       importing_activities(form)
     }
   }
 
-  val businessCustomersPage = new BasicPage[BusinessCustomers]("businessCustomers", BusinessCustomersForm.businessCustomersForm) {
-    override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val businessCustomersPage = new BasicPage[BusinessCustomers](
+    "businessCustomers", BusinessCustomersForm.businessCustomersForm
+  ) {
+    override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails)
+      (implicit request: Request[_], messages: Messages): Html = {
       business_customers(form)
     }
   }
 
   //todo: should use StoragePremisesForm.storagePremisesForm. When repeat component ready, replace storagePremiseForm with storagePremisesForm
+
   val otherStoragePremisesPage = new BasicPage[OtherStoragePremises]("otherStoragePremises", StoragePremisesForm.storagePremisesForm) {
     override def render(form: Form[OtherStoragePremises], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
       other_storage_premises(form)

@@ -37,9 +37,9 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.trading_name.invalid.error")</h1>
       <ul>
-        @if(tradingNameForm("hasTradingName_value").hasErrors){
-          <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
-            Messages("fh.trading_name.invalid.error")
+        @if(tradingNameForm("tradingName_value").hasErrors){
+          <li id="tradingName_value-error-link"><a href="#tradingName_value-inline-error">@{
+            tradingNameForm("tradingName_value").errors.head.message
           }
           </a></li>
         }
@@ -60,6 +60,11 @@
     @YesNoText(
       YesNoTextParams(
         name = "tradingName",
+        value = tradingNameForm("tradingName_value").value,
+        yesNoValue = {
+          if(tradingNameForm("tradingName_value").value.nonEmpty) {Some("true")}
+          else Some("false")
+        },
         yesNoLabel = Messages("fh.trading_name.confirm.label"),
         yesNoError = Messages("fh.trading_name.confirm.error"),
         valueLabel = Messages("fh.trading_name.label"),
