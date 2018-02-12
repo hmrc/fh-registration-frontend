@@ -26,31 +26,19 @@
   }
 }
 
-<legend class="form-label-bold">@{
-  params.label
-}</legend>
+<legend class="form-label-bold">@{params.label}</legend>
 
-<div id="@{
-  fieldName
-}-lookup-container" class="address-lookup-container" style="display: none">
+<div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
   <label>Enter postcode to lookup</label>
   <input type="text" class="postcode-value" style="width: 200px;" />
-  <a data-context="@{
-    fieldName
-  }" class="button address-lookup" role="button" tabindex="0">Find address</a>
-  <fieldset id="@{
-    fieldName
-  }-results" class="lookup-results-fieldset" role="radiogroup"></fieldset>
+  <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
+  <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup"></fieldset>
   <div class="form-group" style="margin-top: 1em">
-    <a href="#" data-context="@{
-      fieldName
-    }" class="manual-address-mode">Enter address manually</a>
+    <a href="#" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
   </div>
 </div>
 
-<div id="@{
-  fieldName
-}-manual-container" class="js-hidden">
+<div id="@{fieldName}-manual-container" class="js-hidden">
 
   @TextInput(
     TextInputParams(
@@ -103,8 +91,6 @@
   )
   <div class="form-group" style="margin-top: 1em;
     display: none;">
-    <a href="#" data-context="@{
-      fieldName
-    }" class="lookup-address-mode">Lookup address with postcode</a>
+    <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Lookup address with postcode</a>
   </div>
 </div>

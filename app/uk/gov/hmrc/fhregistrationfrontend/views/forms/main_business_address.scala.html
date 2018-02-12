@@ -46,19 +46,19 @@
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
         @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors) {
-          <li id="period-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
+          <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
             Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("previousAddress").hasErrors) {
-          <li id="period-error-link"><a href="#previousAddress-inline-error">@{
+          <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
             Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors) {
-          <li id="period-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
+          <li id="mainPreviousAddressUK_previousAddress-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
             Messages("fh.main_business_address.enter_previous.error")
           }
           </a></li>
