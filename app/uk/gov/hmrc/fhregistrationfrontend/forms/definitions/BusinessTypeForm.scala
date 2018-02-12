@@ -17,17 +17,15 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
+import play.api.data.Forms.{mapping, nonEmptyText}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 
-object BusinessStatusForm {
 
-  val businessStatusForm = Form(
+object BusinessTypeForm {
+
+  def businessTypeForm = Form(
     mapping(
-      "isNewFulfilmentBusiness" → of(radioButton),
-      "proposedStartDate" → optional(localDate)
-    )(BusinessStatus.apply)(BusinessStatus.unapply)
+      "businessType" → nonEmptyText
+    )(BusinessType.apply)(BusinessType.unapply)
   )
 }

@@ -26,23 +26,18 @@ import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
-import uk.gov.hmrc.auth.core.{NoActiveSession, _}
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm._
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -92,7 +87,33 @@ class Application @Inject()(
         details ← businessCustomerConnector.getReviewDetails
         _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
       } yield {
-        Redirect(routes.Application.startApp())
+        Redirect(routes.Application.businessType())
+      }
+  }
+
+  def businessType = authorisedUser { implicit request ⇒ internalId ⇒
+    Future.successful(Ok(business_type(businessTypeForm)))
+  }
+
+  def submitBusinessType = authorisedUser { implicit request ⇒
+    internalId ⇒
+      businessTypeForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
+        businessType => {
+          for {
+            _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)
+          } yield {
+            Redirect(routes.Application.startForm())
+          }
+        }
+      )
+  }
+
+  def startForm = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+        case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
+        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
 
@@ -107,15 +128,6 @@ class Application @Inject()(
         Ok(status(statusResp.body, fhddsRegistrationNumber))
       })
   }
-
-  def startApp = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
-        case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
-        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
-  }
-
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
