@@ -211,13 +211,6 @@
 
         <h2 style="border-bottom: 1px solid #777; color: #777">Address UK Lookup</h2>
 
-        @AddressUK(
-            AddressUKParams(
-                context = Some("example"),
-                name = "StorageAddress",
-                label = "Storage Premises"
-            )
-        )
 
         <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
         <p>Note: only a single autocomplete is possible per form (Assets frontend constraints)</p>
@@ -249,18 +242,6 @@
             )
         )
 
-        @NestedPanel(
-            NestedPanelParams(
-                "contactAddressUK",
-                AddressUK(
-                    AddressUKParams(
-                        context = Some("example"),
-                        name = "ContactAddress",
-                        label = "UK Contact address"
-                    )
-                )
-            )
-        )
 
         @NestedPanel(
             NestedPanelParams(
