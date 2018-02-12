@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
@@ -39,21 +40,39 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(contactPersonForm("period").hasErrors) {
-          <li id="period-error-link"><a href="#period-inline-error">@{
-            Messages("fh.main_business_address.time_at_address.error")
+        @if(contactPersonForm("firstName").hasErrors) {
+          <li id="firstName-error-link"><a href="#firstName-inline-error">@{
+            Messages(s"${contactPersonForm("firstName").errors.head.message}")
           }
           </a></li>
         }
-        @if(contactPersonForm("hasOtherAddress").hasErrors) {
-          <li id="period-error-link"><a href="#has-other-address-inline-error">@{
-            Messages("fh.main_business_address.previous.error")
+        @if(contactPersonForm("lastName").hasErrors) {
+          <li id="lastName-error-link"><a href="#lastName-inline-error">@{
+            Messages(s"${contactPersonForm("lastName").errors.head.message}")
           }
           </a></li>
         }
-        @if(contactPersonForm("previousAddress").hasErrors) {
-          <li id="period-error-link"><a href="#other-address-inline-error">@{
-            Messages("fh.main_business_address.enter_previous.error")
+        @if(contactPersonForm("jobTitle").hasErrors) {
+          <li id="jobTitle-error-link"><a href="#jobTitle-inline-error">@{
+            Messages(s"${contactPersonForm("jobTitle").errors.head.message}")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("telephone").hasErrors) {
+          <li id="telephone-error-link"><a href="#telephone-inline-error">@{
+            Messages(s"${contactPersonForm("telephone").errors.head.message}")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("emailAddress").hasErrors) {
+          <li id="emailAddress-error-link"><a href="#emailAddress-inline-error">@{
+            Messages(s"${contactPersonForm("emailAddress").errors.head.message}")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("hasOtherContactAddress").hasErrors) {
+          <li id="hasOtherContactAddress-error-link"><a href="#hasOtherContactAddress-inline-error">@{
+            Messages(s"${contactPersonForm("hasOtherContactAddress").errors.head.message}")
           }
           </a></li>
         }
@@ -77,7 +96,9 @@
       TextInputParams(
         name = "firstName",
         label = Messages("fh.contact_person.first_name.label"),
-        error = contactPersonForm("firstName").error.getOrElse("").toString
+        value = contactPersonForm("firstName").value,
+        error = getError(contactPersonForm("firstName").error),
+        hasErrors = contactPersonForm("firstName").hasErrors
       )
     )
 
@@ -85,7 +106,9 @@
       TextInputParams(
         name = "lastName",
         label = Messages("fh.contact_person.last_name.label"),
-        error = contactPersonForm("lastName").error.getOrElse("").toString
+        value = contactPersonForm("lastName").value,
+        error = getError(contactPersonForm("lastName").error),
+        hasErrors = contactPersonForm("lastName").hasErrors
       )
     )
 
@@ -93,7 +116,9 @@
       TextInputParams(
         name = "jobTitle",
         label = Messages("fh.contact_person.job_title.label"),
-        error = contactPersonForm("jobTitle").error.getOrElse("").toString
+        value = contactPersonForm("jobTitle").value,
+        error = getError(contactPersonForm("jobTitle").error),
+        hasErrors = contactPersonForm("jobTitle").hasErrors
       )
     )
 
@@ -101,7 +126,9 @@
       TextInputParams(
         name = "telephone",
         label = Messages("fh.contact_person.telephone.label"),
-        error = contactPersonForm("telephone").error.getOrElse("").toString
+        value = contactPersonForm("telephone").value,
+        error = getError(contactPersonForm("telephone").error),
+        hasErrors = contactPersonForm("telephone").hasErrors
       )
     )
 
@@ -109,7 +136,9 @@
       TextInputParams(
         name = "emailAddress",
         label = Messages("fh.contact_person.email.label"),
-        error = contactPersonForm("email").error.getOrElse("").toString
+        value = contactPersonForm("emailAddress").value,
+        error = getError(contactPersonForm("emailAddress").error),
+        hasErrors = contactPersonForm("emailAddress").hasErrors
       )
     )
 
@@ -127,10 +156,13 @@
       RadioGroupParams(
         name = Some("hasOtherContactAddress"),
         legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
+        hasErrors = contactPersonForm("hasOtherContactAddress").hasErrors,
+        value = contactPersonForm("hasOtherContactAddress").value,
         radios = List(
           RadioParams(
             "false",
-            "Yes"
+            "Yes",
+            Some("noOtherContactAddress")
           ),
           RadioParams(
             "true",
@@ -148,6 +180,8 @@
           RadioGroupParams(
             name = Some("isUkAddress"),
             legend = Some("Is the address in the UK?"),
+            hasErrors = contactPersonForm("isUkAddress").hasErrors,
+            value = contactPersonForm("isUkAddress").value,
             radios = List(
               RadioParams(
                 "true",

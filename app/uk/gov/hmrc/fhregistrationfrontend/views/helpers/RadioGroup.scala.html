@@ -26,14 +26,11 @@
 }
 
 @formGroupClass = @{
-    params.hasErrors match {
-        case true => {
-            "form-group form-group-error"
-        }
-        case _ => {
-            "form-group"
-        }
-    }
+  if(params.hasErrors) {
+    "form-group form-group-error"
+  } else {
+    "form-group"
+  }
 }
 
 @checked(testVal:String) = @{
@@ -54,12 +51,12 @@
             </span>
         }
 
-        @if(!params.hintText.isEmpty){
+        @if(params.hintText.nonEmpty){
           <span class="form-hint">@params.hintText</span>
         }
 
         @for(radio <- params.radios){
-            <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
+            <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
                 <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
                 <label for="@params.name@radio.value">@radio.label</label>
             </div>
