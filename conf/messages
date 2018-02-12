@@ -220,7 +220,8 @@ fh.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.company_registration_number.empty.error=Enter a valid company registration number
 fh.company_registration_number.invalid.error=Enter a valid company registration number
 fh.company_registration_number.summary=Where do I find my company registration number?
-fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on Companies House
+fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on
+fh.company_registration_number.details_companies_house=Companies House
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
@@ -229,6 +230,9 @@ fh.date_of_incorporation.label=Date of incorporation
 fh.date_of_incorporation.hint_text=For example, 31 07 2017
 fh.date_of_incorporation.empty.error=Enter the date of incorporation
 fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
+fh.date_of_incorporation.day=Day
+fh.date_of_incorporation.month=Month
+fh.date_of_incorporation.year=Year
 
 
 # - Company Officers (Corporate Body)

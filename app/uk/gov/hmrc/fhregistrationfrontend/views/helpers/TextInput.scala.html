@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.TextInputParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.TextInputParams)(implicit message : Messages)
 
 @fieldName = @{
   params.context match {
@@ -51,6 +51,10 @@
     </span>
   }
 
-    <input type="text" class="form-control" id="@{fieldName}" name="@{fieldName}" @if(params.value.nonEmpty){value="@{params.value}"}>
+    <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
+    class="form-control"
+    id="@{fieldName}"
+    name="@{fieldName}"
+      @if(params.value.nonEmpty){value="@{params.value}"}>
 
 </div>

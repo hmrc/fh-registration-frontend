@@ -18,13 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 
 case class DateTupleParams(
-                              context: Option[String] = None,
-                              name: String,
-                              label: String,
-                              hintText: Option[String] = None,
-                              error: String,
-                              day: Option[String] = None,
-                              month: Option[String] = None,
-                              year: Option[String] = None,
-                              hasErrors: Boolean = false
-                            )
+  context  : Option[String] = None,
+  name     : String,
+  label    : String,
+  hintText : Option[String] = None,
+  error    : String,
+  day      : Option[String] = None,
+  month    : Option[String] = None,
+  year     : Option[String] = None,
+  hasErrors: Boolean = false
+)
