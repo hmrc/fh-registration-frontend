@@ -14,27 +14,20 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.DateTupleParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.DateTupleParams)(implicit message : Messages)
 
 @fieldName = @{
     params.context match {
-        case Some(context) => {
-            context + "." + params.name
-        }
-        case _ => {
-            params.name
-        }
+        case Some(context) => context + "." + params.name
+        case _ => params.name
     }
 }
 
 @formGroupClass = @{
-    params.hasErrors match {
-        case true => {
+    if(params.hasErrors) {
         "form-group form-group-error"
-        }
-        case _ => {
+    } else {
         "form-group"
-        }
     }
 }
 
@@ -77,29 +70,29 @@
         <span class="form-label-bold">
           @params.label
         </span>
-        @if(!params.hintText.isEmpty){
+        @if(params.hintText.nonEmpty){
         <span class="form-hint">@params.hintText</span>
         }
     </legend>
 
     @if(params.hasErrors){
-        <span class="error-message">
+        <span class="error-message" id="@{params.name}-inline-error">
           @params.error
         </span>
     }
 
     <div class="form-date">
         <div class="form-group form-group-day">
-            <label class="form-label" for="@{fieldName}.day">Day</label>
-            <input class="form-control" id="@{fieldName}.day" name="@{fieldName}.day" type="number" pattern="[0-9]*" min="0" max="31" value="@{dayValue}">
+            <label class="form-label" for="@{s"$fieldName.day"}">@Messages("fh.date_of_incorporation.day")</label>
+            <input class="form-control" id="@{s"$fieldName.day"}" name="@{s"$fieldName.day"}" type="number" value="@{dayValue}">
         </div>
         <div class="form-group form-group-month">
-            <label class="form-label" for="@{fieldName}.month">Month</label>
-            <input class="form-control" id="@{fieldName}.month" name="@{fieldName}.month" type="number" pattern="[0-9]*" min="0" max="12" value="@{monthValue}">
+            <label class="form-label" for="@{s"$fieldName.month"}">@Messages("fh.date_of_incorporation.month")</label>
+            <input class="form-control" id="@{s"$fieldName.month"}" name="@{s"$fieldName.month"}" type="number" value="@{monthValue}">
         </div>
         <div class="form-group form-group-year">
-            <label class="form-label" for="@{fieldName}.year">Year</label>
-            <input class="form-control" id="@{fieldName}.year" name="@{fieldName}.year" type="number" pattern="[0-9]*" min="0" max="2050" value="@{yearValue}">
+            <label class="form-label" for="@{s"$fieldName.year"}">@Messages("fh.date_of_incorporation.year")</label>
+            <input class="form-control" id="@{s"$fieldName.year"}" name="@{s"$fieldName.year"}" type="number" value="@{yearValue}">
         </div>
     </div>
 

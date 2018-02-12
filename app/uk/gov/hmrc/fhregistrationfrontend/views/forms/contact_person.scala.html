@@ -76,6 +76,12 @@
           }
           </a></li>
         }
+        @if(contactPersonForm("isUkAddress").hasErrors) {
+          <li id="isUkAddress-error-link"><a href="#isUkAddress-inline-error">@{
+            Messages(s"${contactPersonForm("isUkAddress").errors.head.message}")
+          }
+          </a></li>
+        }
       </ul>
     </div>
   }
@@ -128,7 +134,8 @@
         label = Messages("fh.contact_person.telephone.label"),
         value = contactPersonForm("telephone").value,
         error = getError(contactPersonForm("telephone").error),
-        hasErrors = contactPersonForm("telephone").hasErrors
+        hasErrors = contactPersonForm("telephone").hasErrors,
+        isNumber = true
       )
     )
 
@@ -138,7 +145,8 @@
         label = Messages("fh.contact_person.email.label"),
         value = contactPersonForm("emailAddress").value,
         error = getError(contactPersonForm("emailAddress").error),
-        hasErrors = contactPersonForm("emailAddress").hasErrors
+        hasErrors = contactPersonForm("emailAddress").hasErrors,
+        isEmail = true
       )
     )
 
@@ -179,7 +187,7 @@
         RadioGroup(
           RadioGroupParams(
             name = Some("isUkAddress"),
-            legend = Some("Is the address in the UK?"),
+            legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
             hasErrors = contactPersonForm("isUkAddress").hasErrors,
             value = contactPersonForm("isUkAddress").value,
             radios = List(

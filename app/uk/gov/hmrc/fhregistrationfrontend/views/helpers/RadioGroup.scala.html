@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages)
 
 @legend = {
     @params.legend match {
@@ -32,6 +32,7 @@
     "form-group"
   }
 }
+
 
 @checked(testVal:String) = @{
     params.value match {
