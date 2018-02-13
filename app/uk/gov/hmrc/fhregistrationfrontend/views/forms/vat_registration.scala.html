@@ -61,7 +61,7 @@
       YesNoTextParams(
         name = "vatNumber",
         value = vatNumberForm("vatNumber_value").value,
-        yesNoValue = Some(vatNumberForm("vatNumber_value").value.nonEmpty.toString),
+        yesNoValue = vatNumberForm("vatNumber_yesNo").value,
         yesNoLabel = Messages("fh.vat_registration.confirm.label"),
         yesNoError = Messages("fh.vat_registration.confirm.error"),
         valueLabel = Messages("fh.vat_registration.label"),
