@@ -35,11 +35,11 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.vat_registration.invalid.error")</h1>
       <ul>
-        @if(vatNumberForm("hasTradingName_value").hasErrors){
-          <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
-            Messages("fh.date_of_incorporation.invalid.error")
+        @if(vatNumberForm("vatNumber_value").hasErrors){
+          <li id="vatNumber-error-link"><a href="#vatNumber-inline-error">@{
+            vatNumberForm("vatNumber_value").errors.head.message
           }
           </a></li>
         }
@@ -60,13 +60,14 @@
     @YesNoText(
       YesNoTextParams(
         name = "vatNumber",
-        yesNoValue = Some("true"),
+        value = vatNumberForm("vatNumber_value").value,
+        yesNoValue = Some(vatNumberForm("vatNumber_value").value.nonEmpty.toString),
         yesNoLabel = Messages("fh.vat_registration.confirm.label"),
         yesNoError = Messages("fh.vat_registration.confirm.error"),
         valueLabel = Messages("fh.vat_registration.label"),
         valueError = Messages("fh.vat_registration.invalid.error"),
         valueHintText = Some(Messages("fh.vat_registration.hintText")),
-        hasErrors = false
+        hasErrors = vatNumberForm.hasErrors
       )
     )
 
