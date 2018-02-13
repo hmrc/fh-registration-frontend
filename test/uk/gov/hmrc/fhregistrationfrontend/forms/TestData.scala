@@ -14,22 +14,31 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.forms
 
-import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.companyRegistrationNumber
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
+object TestData {
 
-object CompanyRegistrationNumberForm {
+  private val addressData = Map(
+    "Line1" → "line one",
+    "Line2" → "line two",
+    "postcode" → "AA11 1AA"
+  )
 
-  val companyRegistrationNumberKey = "companyRegistrationNumber"
+  def addressDataUk(prefix: String) = {
+    addressData map { case (k, v) ⇒
+      s"$prefix.$k" -> v
+    }
+  }
 
-  val companyRegistrationNumberForm = Form(
-    mapping(
-      companyRegistrationNumberKey → companyRegistrationNumber
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
+  val addressUk = Address(
+    "line one",
+    "line two",
+    None,
+    None,
+    "AA11 1AA",
+    None
   )
 
 }

@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
+import play.api.data.Mapping
 
-object NumberOfCustomersForm {
+trait Condition {
 
-  val numberOfCustomersForm = Form(
-    mapping(
-      "numberOfCustomers" → nonEmptyText
-    )(BusinessCustomers.apply)(BusinessCustomers.unapply)
+  def eval(data: Map[String, String]): Boolean
+  def withPrefix(prefix: String): Condition
+}
+
+
+class ConditionIs[T](mapping: Mapping[T], value: T) extends Condition {
+  override def eval(data: Map[String, String]): Boolean = mapping.bind(data).fold(
+    _ ⇒ false,
+    _ == value
   )
+
+  override def withPrefix(prefix: String): Condition = new ConditionIs(mapping withPrefix prefix, value)
 }

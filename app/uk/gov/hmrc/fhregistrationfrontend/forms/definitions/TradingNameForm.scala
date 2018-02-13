@@ -18,14 +18,23 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, optional}
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{tradingName, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 
 object TradingNameForm {
 
+  val hasTradingNameKey = "tradingName_yesNo"
+  val tradingNameKey = "tradingName_value"
+
+  private val hasTradingNameMapping = hasTradingNameKey → yesOrNo
+  private val tradingNameMapping = tradingNameKey → (tradingName onlyWhen (hasTradingNameMapping is true))
+
   val tradingNameForm = Form(
     mapping(
-      "tradingName_value" → optional(nonEmptyText) //TODO regex and just in case the answer is yes
+      hasTradingNameMapping,
+      tradingNameMapping
     )(TradingName.apply)(TradingName.unapply)
   )
 }

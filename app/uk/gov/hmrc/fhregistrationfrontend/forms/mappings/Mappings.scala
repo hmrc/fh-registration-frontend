@@ -22,7 +22,8 @@ import java.time.format.DateTimeFormatter
 import play.api.data.Forms._
 import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.yesOrNoFormatter
+import Constraints.oneOfConstraint
 
 import scala.util.Try
 
@@ -32,21 +33,36 @@ object Mappings {
 
   val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-  //TODO use regexes where applicable
+
+  def yesOrNo = of(yesOrNoFormatter)
+
   def address: Mapping[Address] = mapping(
-    "Line1" -> nonEmptyText,
-    "Line2" -> nonEmptyText,
-    "Line3" -> optional(nonEmptyText),
-    "Line4" -> optional(nonEmptyText),
-    "postcode" -> nonEmptyText,
+    "Line1" -> addressLine,
+    "Line2" -> addressLine,
+    "Line3" -> optional(addressLine),
+    "Line4" -> optional(addressLine),
+    "postcode" -> postcode,
     "countryCode" -> optional(nonEmptyText)
   )(Address.apply)(Address.unapply)
 
+  def postcode: Mapping[String] = nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$".r))
+  def addressLine: Mapping[String] = text(1, 35) verifying Constraints.pattern("^[A-Za-z0-9 !'‘’\"“”(),./—–‐-]{1,35}$".r)
+  def personTitle: Mapping[String] = text(2, 30) verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
+  def roleInOrganization: Mapping[String] = text(1, 40) verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
+
+  def personName: Mapping[String] = text(1, 35) verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
+  def telephone: Mapping[String] = text(1, 24) verifying Constraints.pattern("^[0-9 ()+‐-]{1,24}$".r)
+
+  def companyRegistrationNumber = text(8,8) verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
+  def vatRegistrationNumber = text(9,9) verifying Constraints.pattern("^[0-9]{9}$".r)
+  def tradingName = text(1,120) verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,120}$".r)
+  def eoriNumber = text(1,15) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+
   def internationalAddress: Mapping[InternationalAddress] = mapping(
-    "Line1" -> nonEmptyText,
-    "Line2" -> optional(nonEmptyText),
-    "Line3" -> optional(nonEmptyText),
-    "Line4" -> nonEmptyText
+    "Line1" -> addressLine,
+    "Line2" -> optional(addressLine),
+    "Line3" -> optional(addressLine),
+    "Line4" -> addressLine
   )(InternationalAddress.apply)(InternationalAddress.unapply)
 
   def localDate = tuple(
@@ -66,14 +82,16 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
   }
 
+  def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
 
-  def optionalFromYesAndNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
+
+  def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying("todo.provide.a.value", y) transform (z, t)
 
-  private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = mapping(
-    "yesNo" → of(CustomFormatters.radioButton),
+  private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
+    "yesNo" → of(yesOrNoFormatter),
     "value" → optional(wrapped)
-  )(Tuple2.apply)(Tuple2.unapply)
+  )
 
 
   private def y[T]: ((Boolean, Option[T])) ⇒ Boolean = {

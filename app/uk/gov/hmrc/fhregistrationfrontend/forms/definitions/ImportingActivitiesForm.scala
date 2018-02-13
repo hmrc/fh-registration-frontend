@@ -17,21 +17,24 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, of, optional}
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{eoriNumber, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
-
 object ImportingActivitiesForm {
 
   val eoriNumberMapping = mapping(
-    "eoriNumber" → nonEmptyText,
-    "goodsImportedOutsideEori" → of(radioButton)
+    "eoriNumber" → eoriNumber,
+    "goodsImportedOutsideEori" → yesOrNo
   )(EoriNumber.apply)(EoriNumber.unapply)
+
+  val hasEoriMapping = "hasEori" → yesOrNo
+  val optionalEoriNumberMapping = "eoriNumber" → (eoriNumberMapping onlyWhen (hasEoriMapping is true))
 
   val importingActivitiesForm = Form(
     mapping(
-      "hasEori" → of(radioButton),
-      "eoriNumber" → optional(eoriNumberMapping)
+      hasEoriMapping,
+      optionalEoriNumberMapping
     )(ImportingActivities.apply)(ImportingActivities.unapply)
   )
 }

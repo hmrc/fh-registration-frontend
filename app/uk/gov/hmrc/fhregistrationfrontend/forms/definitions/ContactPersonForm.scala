@@ -17,26 +17,47 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.internationalAddress
+import play.api.data.Forms._
+import play.api.data.validation.Constraints
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
+
 
 
 object ContactPersonForm {
 
+  val firstNameKey = "firstName"
+  val lastNameKey = "lastName"
+  val jobTitleKey = "jobTitle"
+  val telephoneKey = "telephone"
+  val emailAddressKey = "emailAddress"
+  val hasOtherContactAddressKey = "hasOtherContactAddress"
+  val ukAddressKey = "isUkAddress"
+  val otherUkContactAddressKey = "otherUkContactAddress_contactAddress"
+  val otherInternationalContactAddressKey = "otherInternationalContactAddress_contactAddress"
+
+
+  private val hasOtherContactAddressMapping = hasOtherContactAddressKey → yesOrNo
+  private val ukAddressMapping = ukAddressKey → (yesOrNo onlyWhen (hasOtherContactAddressMapping is true))
+
+  private val otherUkContactAddressMapping =
+    otherUkContactAddressKey → (address onlyWhen (ukAddressMapping is Some(true)))
+
+  private val otherInternationalContactAddressMapping =
+    otherInternationalContactAddressKey → (internationalAddress onlyWhen (ukAddressMapping is Some(false)))
+
   val contactPersonForm = Form(
     mapping(
-      "firstName" → nonEmptyText,
-      "lastName" → nonEmptyText,
-      "jobTitle" → nonEmptyText,
-      "telephone" → nonEmptyText,
-      "emailAddress" → nonEmptyText,
-      "hasOtherContactAddress" → of(radioButton),
-      "isUkAddress" → optional(of(radioButton)),
-      "otherUkContactAddress_contactAddress" → optional(address),
-      "otherInternationalContactAddress_contactAddress" → optional(internationalAddress)
+      firstNameKey → personName,
+      lastNameKey → personName,
+      jobTitleKey → roleInOrganization,
+      telephoneKey → telephone,
+      emailAddressKey → (nonEmptyText(0, 132) verifying Constraints.emailAddress),
+      hasOtherContactAddressMapping,
+      ukAddressMapping,
+      otherUkContactAddressMapping,
+      otherInternationalContactAddressMapping
     )(ContactPerson.apply)(ContactPerson.unapply)
   )
 

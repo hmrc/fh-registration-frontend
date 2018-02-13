@@ -21,12 +21,12 @@ import play.api.data.format.Formatter
 
 object CustomFormatters {
 
-  val radioButton: Formatter[Boolean] = new Formatter[Boolean] {
+  val yesOrNoFormatter: Formatter[Boolean] = new Formatter[Boolean] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] = {
       Right(data.getOrElse(key, "")).right.flatMap {
         case "true"  => Right(true)
         case "false" => Right(false)
-        case _       => Left(Seq(FormError(key, "confirm.selectone")))
+        case _       => Left(Seq(FormError(key, "error.required")))
       }
     }
 
@@ -39,7 +39,7 @@ object CustomFormatters {
         Right(data.getOrElse(key, "")).right.flatMap {
           case "true"  => Right(Some(true))
           case "false" => Right(Some(false))
-          case _       => Left(Seq(FormError(key, "confirm.selectone")))
+          case _       => Left(Seq(FormError(key, "error.required")))
         }
       } else {
         Right(None)

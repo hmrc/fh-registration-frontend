@@ -18,28 +18,25 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 
 import play.api.data.Form
-import play.api.data.Forms.{list, mapping, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises, StoragePremise}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
 object StoragePremisesForm {
 
   val storagePremiseMapping = mapping(
-    "address" → optional(address),
-    "isThirdParty" → optional(of(radioButton))
+    "address" → address,
+    "isThirdParty" → yesOrNo
   )(StoragePremise.apply)(StoragePremise.unapply)
+
+  val hasOtherStoragePremisesMapping = "hasOther" → yesOrNo
+  val optionalStoragePrimisesMapping = "premises" → (storagePremiseMapping onlyWhen (hasOtherStoragePremisesMapping is true))
 
   val storagePremisesForm = Form(
     mapping(
-      "premises" → list(storagePremiseMapping)
+      hasOtherStoragePremisesMapping,
+      optionalStoragePrimisesMapping
     )(OtherStoragePremises.apply)(OtherStoragePremises.unapply)
-  )
-
-  val storagePremiseForm = Form(
-    mapping(
-      "storagePremise_address" → optional(address),
-      "isThirdParty" → optional(of(radioButton))
-    )(StoragePremise.apply)(StoragePremise.unapply)
   )
 }

@@ -29,10 +29,12 @@ sealed trait CompanyOfficerIdentification
 case class CompanyOfficerIndividual(
   firstName: String,
   lastName: String,
+  hasNino: Boolean,
   nino: Option[String],
+  hasPassportNumber: Option[Boolean],
   passport: Option[String],
   nationalId: Option[String],
-  role: Option[String]
+  role: String
 
 ) extends CompanyOfficerIdentification
 

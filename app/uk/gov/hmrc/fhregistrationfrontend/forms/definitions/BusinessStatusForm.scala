@@ -17,17 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{localDate, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
 object BusinessStatusForm {
 
+  private val isNewFulfilmentHousMapping = "isNewFulfilmentBusiness" → yesOrNo
+  private val proposedStartDateMapping = "proposedStartDate" → (localDate onlyWhen (isNewFulfilmentHousMapping is true))
+
   val businessStatusForm = Form(
     mapping(
-      "isNewFulfilmentBusiness" → of(radioButton),
-      "proposedStartDate" → optional(localDate)
+      isNewFulfilmentHousMapping,
+      proposedStartDateMapping
     )(BusinessStatus.apply)(BusinessStatus.unapply)
   )
 }

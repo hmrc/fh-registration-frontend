@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 
-import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.companyRegistrationNumber
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+import play.api.data.Mapping
 
+object MappingsApi {
+  implicit class MappingOps[T](val m: Mapping[T]) {
 
-object CompanyRegistrationNumberForm {
+    def is(value: T) = new ConditionIs[T](m, value)
 
-  val companyRegistrationNumberKey = "companyRegistrationNumber"
+    def onlyWhen(condition: Condition) = OnlyWhen(m, condition)
+  }
 
-  val companyRegistrationNumberForm = Form(
-    mapping(
-      companyRegistrationNumberKey → companyRegistrationNumber
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
-  )
+  implicit class MappingWithKeyOps[T](val v: (String, Mapping[T])) {
+
+    def is(value: T) = new ConditionIs[T](v._2 withPrefix v._1, value)
+  }
 
 }

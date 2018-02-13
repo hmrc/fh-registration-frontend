@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
 import uk.gov.hmrc.play.test.UnitSpec
 
 class DateOfIncorporationSpecs extends UnitSpec {

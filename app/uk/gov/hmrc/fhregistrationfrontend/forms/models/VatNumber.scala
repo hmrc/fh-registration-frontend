@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 
 
 case class VatNumber (
+  hasValue: Boolean,
   value: Option[String]
 )
 

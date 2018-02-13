@@ -19,16 +19,20 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Forms.{list, mapping, nonEmptyText, optional}
 import play.api.data.{Form, Mapping}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerCompany, CompanyOfficerIndividual, CompanyOfficers}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 
 object CompanyOfficersForm {
 
   val companyOfficerIndividualMapping = mapping(
     "firstName" → nonEmptyText,
     "lastName" → nonEmptyText,
+    "hasNationalInsuranceNumber" → yesOrNo,
     "nationalInsuranceNumber" → optional(nonEmptyText),
+    "hasPassportNumber" → optional(yesOrNo),
     "passportNumber" → optional(nonEmptyText),
     "nationalID" → optional(nonEmptyText),
-    "role" → optional(nonEmptyText)
+    "role" → nonEmptyText
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
   val companyOfficerCompanyMapping = mapping(
