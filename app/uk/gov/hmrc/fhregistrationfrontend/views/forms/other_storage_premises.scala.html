@@ -68,8 +68,8 @@
       RadioGroupParams(
         name = Some("otherStoragePremises"),
         legend = Some(Messages("fh.other_storage_premises.confirm.label")),
-        hasErrors = otherStoragePremisesForm("previousAddress").hasErrors,
-        error = Some(getError(otherStoragePremisesForm("previousAddress").error)),
+        hasErrors = otherStoragePremisesForm("otherStoragePremises").hasErrors,
+        error = Some(getError(otherStoragePremisesForm("otherStoragePremises").error)),
         value = Some(otherStoragePremisesForm("storagePremise_address.Line1").value.nonEmpty.toString),
         radios = List(
           RadioParams(

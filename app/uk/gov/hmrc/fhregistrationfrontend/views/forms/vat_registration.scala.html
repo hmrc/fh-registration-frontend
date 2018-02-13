@@ -38,7 +38,7 @@
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.vat_registration.invalid.error")</h1>
       <ul>
         @if(vatNumberForm("vatNumber_value").hasErrors){
-          <li id="vatNumber-error-link"><a href="#vatNumber-inline-error">@{
+          <li id="vatNumber-error-link"><a href="#vatNumber_value-inline-error">@{
             Messages(vatNumberForm("vatNumber_value").errors.head.message)
           }
           </a></li>
@@ -67,6 +67,7 @@
         valueLabel = Messages("fh.vat_registration.label"),
         valueError = Messages("fh.vat_registration.invalid.error"),
         valueHintText = Some(Messages("fh.vat_registration.hintText")),
+        hasValueError = vatNumberForm("vatNumber_value").hasErrors,
         hasErrors = vatNumberForm.hasErrors
       )
     )

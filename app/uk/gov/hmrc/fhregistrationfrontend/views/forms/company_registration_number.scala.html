@@ -36,7 +36,8 @@
       <ul>
         @if(companyRegistrationNumberForm("companyRegistrationNumber").hasErrors){
           <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
-            Messages(companyRegistrationNumberForm("companyRegistrationNumber").error.head.message)
+            Messages(companyRegistrationNumberForm("companyRegistrationNumber").error.head.message,
+              companyRegistrationNumberForm("companyRegistrationNumber").error.head.args: _*)
           }
           </a></li>
         }
