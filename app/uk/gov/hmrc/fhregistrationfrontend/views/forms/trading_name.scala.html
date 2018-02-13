@@ -39,7 +39,7 @@
       <ul>
         @if(tradingNameForm("tradingName_value").hasErrors){
           <li id="tradingName_value-error-link"><a href="#tradingName_value-inline-error">@{
-            tradingNameForm("tradingName_value").errors.head.message
+            Messages(tradingNameForm("tradingName_value").errors.head.message)
           }
           </a></li>
         }

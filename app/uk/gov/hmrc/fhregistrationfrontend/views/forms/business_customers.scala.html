@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(businessCustomersForm: Form[BusinessCustomers])(implicit request: Request[_], messages: Messages)
 
@@ -35,11 +36,11 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.business_customers.error")</h1>
       <ul>
         @if(businessCustomersForm("numberOfCustomers").hasErrors){
-          <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
-            Messages("fh.date_of_incorporation.invalid.error")
+          <li id="numberOfCustomers-error-link"><a href="#numberOfCustomers-inline-error">@{
+            Messages(businessCustomersForm("numberOfCustomers").errors.head.message)
           }
           </a></li>
         }
@@ -63,8 +64,9 @@
         legend = Some(Messages("fh.business_customers.label")),
         inline = false,
         required = true,
-        error = Some(Messages("fh.business_customers.error")),
         hasErrors = businessCustomersForm("numberOfCustomers").hasErrors,
+        error = Some(Messages(getError(businessCustomersForm("numberOfCustomers").error))),
+        value = businessCustomersForm("numberOfCustomers").value,
         radios = List(
           RadioParams(
             Messages("fh.business_customers.none.value"),

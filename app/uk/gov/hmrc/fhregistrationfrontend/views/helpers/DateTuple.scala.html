@@ -17,51 +17,36 @@
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.DateTupleParams)(implicit message : Messages)
 
 @fieldName = @{
-    params.context match {
-        case Some(context) => context + "." + params.name
-        case _ => params.name
-    }
+  params.context match {
+    case Some(context) => context + "." + params.name
+    case _ => params.name
+  }
 }
 
 @formGroupClass = @{
-    if(params.hasErrors) {
-        "form-group form-group-error"
-    } else {
-        "form-group"
-    }
+  if(params.hasErrors) "form-group form-group-error"
+  else "form-group"
 }
 
 @dayValue = @{
-    params.day match {
-        case Some(day) => {
-            day
-        }
-        case _ => {
-            ""
-        }
-    }
+  params.day match {
+    case Some(day) => day
+    case _ => ""
+  }
 }
 
 @monthValue = @{
-    params.month match {
-        case Some(month) => {
-            month
-        }
-        case _ => {
-            ""
-        }
-    }
+  params.month match {
+    case Some(month) => month
+    case _ => ""
+  }
 }
 
 @yearValue = @{
-    params.year match {
-        case Some(year) => {
-            year
-        }
-        case _ => {
-            ""
-        }
-    }
+  params.year match {
+    case Some(year) => year
+    case _ => ""
+  }
 }
 
 <fieldset class="@{formGroupClass}" id="@{fieldName}_container">
