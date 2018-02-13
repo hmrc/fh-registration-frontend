@@ -33,12 +33,9 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
       <ul>
-        @if(dateOfIncorporationForm("dateOfIncorporation").hasErrors){
-          <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
-            Messages("fh.date_of_incorporation.invalid.error")
-          }
-          </a></li>
-        }
+        <li id="dateOfIncorporation-error-link"><a href="#dateOfIncorporation-inline-error">
+          @Messages("fh.date_of_incorporation.invalid.error")
+        </a></li>
       </ul>
     </div>
   }
@@ -55,10 +52,14 @@
 
     @DateTuple(
       DateTupleParams(
-        name="dateOfIncorporation",
-        label=Messages("fh.date_of_incorporation.label"),
-        error=Messages("fh.date_of_incorporation.empty.error"),
-        hintText=Some(Messages("fh.date_of_incorporation.hint_text"))
+        name = "dateOfIncorporation",
+        label = Messages("fh.date_of_incorporation.label"),
+        error = Messages("fh.date_of_incorporation.invalid.error"),
+        hasErrors = dateOfIncorporationForm.hasErrors,
+        hintText = Some(Messages("fh.date_of_incorporation.hint_text")),
+        day = dateOfIncorporationForm("dateOfIncorporation.day").value,
+        month = dateOfIncorporationForm("dateOfIncorporation.month").value,
+        year = dateOfIncorporationForm("dateOfIncorporation.year").value
       )
     )
 

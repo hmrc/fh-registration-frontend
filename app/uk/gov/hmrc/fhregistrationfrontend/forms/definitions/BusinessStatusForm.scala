@@ -23,7 +23,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.radioButton
 
 object BusinessStatusForm {
-
   val businessStatusForm = Form(
     mapping(
       "isNewFulfilmentBusiness" → of(radioButton),

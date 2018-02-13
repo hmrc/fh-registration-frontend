@@ -32,10 +32,8 @@ case class CompanyOfficerIndividual(
   nino: Option[String],
   passport: Option[String],
   nationalId: Option[String],
-  role: Option[String]
-
+  role: String
 ) extends CompanyOfficerIdentification
-
 
 case class CompanyOfficerCompany(
   companyName: String,

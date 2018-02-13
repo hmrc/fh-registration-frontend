@@ -16,15 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import play.api.data.FormError
 
-case class DateTupleParams(
-  context  : Option[String] = None,
-  name     : String,
-  label    : String,
-  hintText : Option[String] = None,
-  error    : String,
-  day      : Option[String] = None,
-  month    : Option[String] = None,
-  year     : Option[String] = None,
-  hasErrors: Boolean = false
-)
+object Helpers {
+  def getError(error: Option[FormError]) = {
+    if (error.nonEmpty) error.head.message
+    else ""
+  }
+}

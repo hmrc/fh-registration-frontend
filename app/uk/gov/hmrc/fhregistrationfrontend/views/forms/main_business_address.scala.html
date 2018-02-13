@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
@@ -45,21 +46,21 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
       <ul>
-        @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors){
-          <li id="period-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
-            Messages("fh.main_business_address.time_at_address.error")
+        @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors) {
+          <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
+            Messages(mainBusinessAddressForm("timeAtCurrentAddress").errors.head.message)
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("previousAddress").hasErrors){
-          <li id="period-error-link"><a href="#previousAddress-inline-error">@{
-            Messages("fh.main_business_address.previous.error")
+        @if(mainBusinessAddressForm("previousAddress").hasErrors) {
+          <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
+            Messages(mainBusinessAddressForm("previousAddress").errors.head.message)
           }
           </a></li>
         }
-        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors){
-          <li id="period-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
-            Messages("fh.main_business_address.enter_previous.error")
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors) {
+          <li id="mainPreviousAddressUK_previousAddress-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
+            Messages(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").errors.head.message)
           }
           </a></li>
         }
@@ -74,11 +75,11 @@
   )
 
   <div id="review-details" class="form-group">
-    @bpr.businessAddress.line1<br>
-    @bpr.businessAddress.line2<br>
+    @bpr.businessAddress.line1 <br>
+    @bpr.businessAddress.line2 <br>
     @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
     @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
-    @bpr.businessAddress.postcode<br>
+    @bpr.businessAddress.postcode <br>
   </div>
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
@@ -86,43 +87,44 @@
     @helper.CSRF.formField
 
     @RadioGroup(
-        RadioGroupParams(
-            name = Some("timeAtCurrentAddress"),
-            legend = Some(Messages("fh.main_business_address.time_at_address.label")),
-            inline = false,
-            required = true,
-            error = Some(Messages("fh.main_business_address.time_at_address.error")),
-            hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
-            value = mainBusinessAddressForm("timeAtCurrentAddress").value,
-            radios = List(
-                RadioParams(
-                    Messages("fh.main_business_address.0to3years.value"),
-                    Messages("fh.main_business_address.0to3years.label"),
-                    Some("lessThan3Years")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.3to5years.value"),
-                    Messages("fh.main_business_address.3to5years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.5to10years.value"),
-                    Messages("fh.main_business_address.5to10years.label")
-                ),
-                RadioParams(
-                    Messages("fh.main_business_address.10plusYears.value"),
-                    Messages("fh.main_business_address.10plusYears.label")
-                )
-            )
+      RadioGroupParams(
+        name = Some("timeAtCurrentAddress"),
+        legend = Some(Messages("fh.main_business_address.time_at_address.label")),
+        inline = false,
+        required = true,
+        error = Some(Messages(getError(mainBusinessAddressForm("timeAtCurrentAddress").error))),
+        hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
+        value = mainBusinessAddressForm("timeAtCurrentAddress").value,
+        radios = List(
+          RadioParams(
+            Messages("fh.main_business_address.0to3years.value"),
+            Messages("fh.main_business_address.0to3years.label"),
+            Some("lessThan3Years")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.3to5years.value"),
+            Messages("fh.main_business_address.3to5years.label")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.5to10years.value"),
+            Messages("fh.main_business_address.5to10years.label")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.10plusYears.value"),
+            Messages("fh.main_business_address.10plusYears.label")
+          )
         )
+      )
     )
 
     <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
 
       @RadioGroup(
         RadioGroupParams(
-          name=Some("previousAddress"),
-          legend=Some(Messages("fh.main_business_address.previous.label")),
+          name = Some("previousAddress"),
+          legend = Some(Messages("fh.main_business_address.previous.label")),
           hasErrors = mainBusinessAddressForm("previousAddress").hasErrors,
+          value = mainBusinessAddressForm("previousAddress").value,
           radios = List(
             RadioParams(
               "true",
@@ -141,6 +143,7 @@
         NestedPanelParams(
           "hasPreviousAddress",
           AddressUK(
+            mainBusinessAddressForm,
             AddressUKParams(
               context = Some("mainPreviousAddressUK"),
               name = "previousAddress",

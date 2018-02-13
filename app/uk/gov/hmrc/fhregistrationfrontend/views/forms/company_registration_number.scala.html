@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
 
@@ -33,9 +34,9 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.company_registration_number.invalid.error")</h1>
       <ul>
-        @if(companyRegistrationNumberForm("companyRegistrationNumber_value").hasErrors){
-          <li id="period-error-link"><a href="#company-registration-number-inline-error">@{
-            Messages("fh.company_registration_number.invalid.error")
+        @if(companyRegistrationNumberForm("companyRegistrationNumber").hasErrors){
+          <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
+            Messages(companyRegistrationNumberForm("companyRegistrationNumber").error.head.message)
           }
           </a></li>
         }
@@ -57,7 +58,9 @@
       TextInputParams(
         name = "companyRegistrationNumber",
         label = Messages("fh.company_registration_number.label"),
-        error = Messages("fh.company_registration_number.invalid.error"),
+        value = companyRegistrationNumberForm("companyRegistrationNumber").value,
+        error = Messages(getError(companyRegistrationNumberForm("companyRegistrationNumber").error)),
+        hasErrors = companyRegistrationNumberForm("companyRegistrationNumber").hasErrors,
         hintText = Some(Messages("fh.company_registration_number.hint_text"))
       )
     )
@@ -65,10 +68,14 @@
     <div class="form-group" style="margin-top:2em">
       <details id="company-registration-number-details">
         <summary class="summary">
-          @{Messages("fh.company_registration_number.summary")}
+          @Messages("fh.company_registration_number.summary")
         </summary>
         <div>
-          @{Messages("fh.company_registration_number.details")}
+          @Messages("fh.company_registration_number.details")
+          <a href="https://www.gov.uk/government/organisations/companies-house" id="companies-house">
+            @Messages("fh.company_registration_number.details_companies_house")
+            <span class="visuallyhidden">@Messages("fh.company_registration_number.details_companies_house")</span>
+          </a>
         </div>
       </details>
     </div>

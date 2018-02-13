@@ -28,7 +28,7 @@ object CompanyOfficersForm {
     "nationalInsuranceNumber" → optional(nonEmptyText),
     "passportNumber" → optional(nonEmptyText),
     "nationalID" → optional(nonEmptyText),
-    "role" → optional(nonEmptyText)
+    "role" → nonEmptyText
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
   val companyOfficerCompanyMapping = mapping(
@@ -41,14 +41,17 @@ object CompanyOfficersForm {
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
     "identificationType" → nonEmptyText,
     "companyIdentification" → optional(companyOfficerCompanyMapping),
-    "individualIdentification" → optional(companyOfficerIndividualMapping)
+    "individualIdentification" → companyOfficerIndividualMapping // todo make optional on identification
   ) {
     case (identificationType, company, individual) ⇒
-      CompanyOfficer(identificationType, company getOrElse individual.get)
+      CompanyOfficer(
+        identificationType,
+        company.getOrElse(individual)
+      )
   } {
     case CompanyOfficer(identificationType, identification) ⇒ identification match {
-      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
-      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
+      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, i))
+      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), null))
     }
   }
 
