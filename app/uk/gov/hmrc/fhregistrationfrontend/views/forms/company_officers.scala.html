@@ -169,14 +169,12 @@
         )
       )
 
-      @companyOfficersForm("individualIdentification.nationalInsuranceNumber").value.nonEmpty
-
       @RadioGroup(
         RadioGroupParams(
           name = Some("identity"),
           legend = Some(Messages("fh.company_officers.individual.nino.confirm.label")),
           hintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
-          value = Some(companyOfficersForm("individualIdentification.nationalInsuranceNumber").value.nonEmpty.toString),
+          value = companyOfficersForm("individualIdentification.hasNationalInsuranceNumber").value,
           radios = List(
             RadioParams(
               "true",
@@ -216,7 +214,7 @@
               name = Some("otherIdentity"),
               legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
               error = Some(Messages("fh.company_officers.individual.passport.empty.error")),
-              value = Some(companyOfficersForm("individualIdentification.passportNumber").value.nonEmpty.toString),
+              value = companyOfficersForm("individualIdentification.hasPassportNumber").value,
               radios = List(
                 RadioParams(
                   "true",

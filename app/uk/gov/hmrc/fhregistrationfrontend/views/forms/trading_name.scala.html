@@ -61,10 +61,7 @@
       YesNoTextParams(
         name = "tradingName",
         value = tradingNameForm("tradingName_value").value,
-        yesNoValue = {
-          if(tradingNameForm("tradingName_value").value.nonEmpty) {Some("true")}
-          else Some("false")
-        },
+        yesNoValue = tradingNameForm("tradingName_yesNo").value,
         yesNoLabel = Messages("fh.trading_name.confirm.label"),
         yesNoError = Messages("fh.trading_name.confirm.error"),
         valueLabel = Messages("fh.trading_name.label"),

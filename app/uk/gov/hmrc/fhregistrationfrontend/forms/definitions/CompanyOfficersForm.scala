@@ -64,16 +64,12 @@ object CompanyOfficersForm {
     case (identificationType, company, individual) ⇒
       CompanyOfficer(
         identificationType,
-        company.getOrElse(
-          individual.getOrElse(
-            CompanyOfficerIndividual("first","lastName",Some(""),Some(""),Some(""),"role")
-          )
-        )
+        company.getOrElse(individual)
       )
   } {
     case CompanyOfficer(identificationType, identification) ⇒ identification match {
-      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
-      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
+      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, i))
+      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), null))
     }
   }
 
