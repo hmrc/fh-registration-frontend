@@ -36,7 +36,7 @@
       <ul>
         @if(companyRegistrationNumberForm("companyRegistrationNumber").hasErrors){
           <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
-            Messages("fh.company_registration_number.invalid.error")
+            Messages(companyRegistrationNumberForm("companyRegistrationNumber").error.head.message)
           }
           </a></li>
         }
@@ -59,7 +59,7 @@
         name = "companyRegistrationNumber",
         label = Messages("fh.company_registration_number.label"),
         value = companyRegistrationNumberForm("companyRegistrationNumber").value,
-        error = getError(companyRegistrationNumberForm("companyRegistrationNumber").error),
+        error = Messages(getError(companyRegistrationNumberForm("companyRegistrationNumber").error)),
         hasErrors = companyRegistrationNumberForm("companyRegistrationNumber").hasErrors,
         hintText = Some(Messages("fh.company_registration_number.hint_text"))
       )

@@ -39,7 +39,7 @@
       <ul>
         @if(vatNumberForm("vatNumber_value").hasErrors){
           <li id="vatNumber-error-link"><a href="#vatNumber-inline-error">@{
-            vatNumberForm("vatNumber_value").errors.head.message
+            Messages(vatNumberForm("vatNumber_value").errors.head.message)
           }
           </a></li>
         }

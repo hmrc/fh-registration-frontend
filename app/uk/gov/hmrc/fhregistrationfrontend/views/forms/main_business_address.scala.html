@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
@@ -47,19 +48,19 @@
       <ul>
         @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors) {
           <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
-            mainBusinessAddressForm("timeAtCurrentAddress").errors.head.message
+            Messages(mainBusinessAddressForm("timeAtCurrentAddress").errors.head.message)
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("previousAddress").hasErrors) {
           <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
-            mainBusinessAddressForm("previousAddress").errors.head.message
+            Messages(mainBusinessAddressForm("previousAddress").errors.head.message)
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors) {
           <li id="mainPreviousAddressUK_previousAddress-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
-            mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").errors.head.message
+            Messages(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").errors.head.message)
           }
           </a></li>
         }
@@ -91,7 +92,7 @@
         legend = Some(Messages("fh.main_business_address.time_at_address.label")),
         inline = false,
         required = true,
-        error = Some(Messages("fh.main_business_address.time_at_address.error")),
+        error = Some(Messages(getError(mainBusinessAddressForm("timeAtCurrentAddress").error))),
         hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
         value = mainBusinessAddressForm("timeAtCurrentAddress").value,
         radios = List(

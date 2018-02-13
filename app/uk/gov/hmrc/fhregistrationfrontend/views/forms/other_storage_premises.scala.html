@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.OtherStoragePremises
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(otherStoragePremisesForm: Form[OtherStoragePremises])(implicit request: Request[_], messages: Messages)
 
@@ -30,6 +31,29 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
+  @if(otherStoragePremisesForm.hasErrors) {
+    <div class="flash error-summary error-summary--show"
+    id="error-summary-display"
+    role="alert"
+    aria-labelledby="error-summary-heading"
+    tabindex="-1">
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.other_storage_premises.confirm.error")</h1>
+      <ul>
+        @if(otherStoragePremisesForm("storagePremise_address").hasErrors) {
+          <li id="storagePremise_address-error-link"><a href="#storagePremise_address-inline-error">@{
+            Messages(otherStoragePremisesForm("storagePremise_address").errors.head.message)
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm("isThirdParty").hasErrors) {
+          <li id="isThirdParty-error-link"><a href="#isThirdParty-inline-error">@{
+            Messages(otherStoragePremisesForm("isThirdParty").errors.head.message)
+          }
+          </a></li>
+        }
+      </ul>
+    </div>
+  }
   @PageHeading(
     PageHeadingParams(
       heading = Messages("fh.other_storage_premises.title")
@@ -44,6 +68,9 @@
       RadioGroupParams(
         name = Some("otherStoragePremises"),
         legend = Some(Messages("fh.other_storage_premises.confirm.label")),
+        hasErrors = otherStoragePremisesForm("previousAddress").hasErrors,
+        error = Some(getError(otherStoragePremisesForm("previousAddress").error)),
+        value = Some(otherStoragePremisesForm("storagePremise_address.Line1").value.nonEmpty.toString),
         radios = List(
           RadioParams(
             "true",
@@ -75,6 +102,9 @@
         RadioGroupParams(
           name = Some("isThirdParty"),
           legend = Some(Messages("fh.other_storage_premises.third_party.label")),
+          hasErrors = otherStoragePremisesForm("isThirdParty").hasErrors,
+          error = Some(getError(otherStoragePremisesForm("isThirdParty").error)),
+          value = otherStoragePremisesForm("isThirdParty").value,
           radios = List(
             RadioParams(
               "true",

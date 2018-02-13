@@ -38,7 +38,7 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.check")</h1>
       <ul>
         @if(contactPersonForm("firstName").hasErrors) {
           <li id="firstName-error-link"><a href="#firstName-inline-error">@{
@@ -103,7 +103,7 @@
         name = "firstName",
         label = Messages("fh.contact_person.first_name.label"),
         value = contactPersonForm("firstName").value,
-        error = getError(contactPersonForm("firstName").error),
+        error = Messages(getError(contactPersonForm("firstName").error)),
         hasErrors = contactPersonForm("firstName").hasErrors
       )
     )
@@ -113,7 +113,7 @@
         name = "lastName",
         label = Messages("fh.contact_person.last_name.label"),
         value = contactPersonForm("lastName").value,
-        error = getError(contactPersonForm("lastName").error),
+        error = Messages(getError(contactPersonForm("lastName").error)),
         hasErrors = contactPersonForm("lastName").hasErrors
       )
     )
@@ -123,7 +123,7 @@
         name = "jobTitle",
         label = Messages("fh.contact_person.job_title.label"),
         value = contactPersonForm("jobTitle").value,
-        error = getError(contactPersonForm("jobTitle").error),
+        error = Messages(getError(contactPersonForm("jobTitle").error)),
         hasErrors = contactPersonForm("jobTitle").hasErrors
       )
     )
@@ -133,7 +133,7 @@
         name = "telephone",
         label = Messages("fh.contact_person.telephone.label"),
         value = contactPersonForm("telephone").value,
-        error = getError(contactPersonForm("telephone").error),
+        error = Messages(getError(contactPersonForm("telephone").error)),
         hasErrors = contactPersonForm("telephone").hasErrors,
         isNumber = true
       )
@@ -144,7 +144,7 @@
         name = "emailAddress",
         label = Messages("fh.contact_person.email.label"),
         value = contactPersonForm("emailAddress").value,
-        error = getError(contactPersonForm("emailAddress").error),
+        error = Messages(getError(contactPersonForm("emailAddress").error)),
         hasErrors = contactPersonForm("emailAddress").hasErrors,
         isEmail = true
       )
@@ -165,6 +165,7 @@
         name = Some("hasOtherContactAddress"),
         legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
         hasErrors = contactPersonForm("hasOtherContactAddress").hasErrors,
+        error = Some(Messages(getError(contactPersonForm("hasOtherContactAddress").error))),
         value = contactPersonForm("hasOtherContactAddress").value,
         radios = List(
           RadioParams(
@@ -189,6 +190,7 @@
             name = Some("isUkAddress"),
             legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
             hasErrors = contactPersonForm("isUkAddress").hasErrors,
+            error = Some(Messages(getError(contactPersonForm("isUkAddress").error))),
             value = contactPersonForm("isUkAddress").value,
             radios = List(
               RadioParams(
