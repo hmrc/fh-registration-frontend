@@ -47,19 +47,19 @@
       <ul>
         @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors) {
           <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
-            Messages("fh.main_business_address.time_at_address.error")
+            mainBusinessAddressForm("timeAtCurrentAddress").errors.head.message
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("previousAddress").hasErrors) {
           <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
-            Messages("fh.main_business_address.previous.error")
+            mainBusinessAddressForm("previousAddress").errors.head.message
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors) {
           <li id="mainPreviousAddressUK_previousAddress-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
-            Messages("fh.main_business_address.enter_previous.error")
+            mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").errors.head.message
           }
           </a></li>
         }

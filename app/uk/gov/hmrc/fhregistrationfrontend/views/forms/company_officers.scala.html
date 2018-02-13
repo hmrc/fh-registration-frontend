@@ -30,6 +30,84 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
+  @if(companyOfficersForm.hasErrors) {
+    <div class="flash error-summary error-summary--show"
+    id="error-summary-display"
+    role="alert"
+    aria-labelledby="error-summary-heading"
+    tabindex="-1">
+      <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
+      <ul>
+        @if(companyOfficersForm("identificationType").hasErrors) {
+          <li id="identificationType-error-link"><a href="#identificationType-inline-error">@{
+            companyOfficersForm("identificationType").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.firstName").hasErrors) {
+          <li id="firstName-error-link"><a href="#individualIdentification.firstName-inline-error">@{
+            companyOfficersForm("individualIdentification.firstName").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.lastName").hasErrors) {
+          <li id="lastName-error-link"><a href="#individualIdentification.lastName-inline-error">@{
+            companyOfficersForm("individualIdentification.lastName").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.nationalInsuranceNumber").hasErrors) {
+          <li id="nationalInsuranceNumber-error-link"><a href="#individualIdentification.nationalInsuranceNumber-inline-error">@{
+            companyOfficersForm("individualIdentification.nationalInsuranceNumber").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.passportNumber").hasErrors) {
+          <li id="passportNumber-error-link"><a href="#individualIdentification.passportNumber-inline-error">@{
+            companyOfficersForm("individualIdentification.passportNumber").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.nationalID").hasErrors) {
+          <li id="nationalID-error-link"><a href="#individualIdentification.nationalID-inline-error">@{
+            companyOfficersForm("individualIdentification.nationalID").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("individualIdentification.role").hasErrors) {
+          <li id="individualIdentificationRole-error-link"><a href="#individualIdentification.role-inline-error">@{
+            companyOfficersForm("individualIdentification.role").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("companyIdentification.companyName").hasErrors) {
+          <li id="companyName-error-link"><a href="#companyIdentification.companyName-inline-error">@{
+            companyOfficersForm("companyIdentification.companyName").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("companyIdentification.vatRegistration").hasErrors) {
+          <li id="passportNumber-error-link"><a href="#companyIdentification.vatRegistration-inline-error">@{
+            companyOfficersForm("companyIdentification.vatRegistration").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("companyIdentification.companyRegistration").hasErrors) {
+          <li id="nationalID-error-link"><a href="#companyIdentification.companyRegistration-inline-error">@{
+            companyOfficersForm("companyIdentification.companyRegistration").errors.head.message
+          }
+          </a></li>
+        }
+        @if(companyOfficersForm("companyIdentification.role").hasErrors) {
+          <li id="companyIdentificationRole-error-link"><a href="#companyIdentification.role-inline-error">@{
+            companyOfficersForm("companyIdentification.role").errors.head.message
+          }
+          </a></li>
+        }
+      </ul>
+    </div>
+  }
+
   @PageHeading(
     PageHeadingParams(
       heading = Messages("fh.company_officers.title")
@@ -48,6 +126,13 @@
       RadioGroupParams(
         name = Some("identificationType"),
         legend = Some(Messages("fh.company_officers.entity_type.label")),
+        hasErrors = companyOfficersForm("identificationType").hasErrors,
+        error = {
+          if (companyOfficersForm("identificationType").hasErrors) {
+            Some(companyOfficersForm("identificationType").error.head.message)
+          } else Some("")
+        },
+        value = companyOfficersForm("identificationType").value,
         radios = List(
           RadioParams(
             "individual",
@@ -71,7 +156,13 @@
         TextInputParams(
           name = "individualIdentification.firstName",
           label = Messages("fh.contact_person.first_name.label"),
-          error = companyOfficersForm("firstName").error.getOrElse("").toString
+          hasErrors = companyOfficersForm("individualIdentification.firstName").hasErrors,
+          value = companyOfficersForm("individualIdentification.firstName").value,
+          error = {
+            if (companyOfficersForm("individualIdentification.firstName").hasErrors) {
+              companyOfficersForm("individualIdentification.firstName").error.head.message
+            } else ""
+          }
         )
       )
 
@@ -79,23 +170,32 @@
         TextInputParams(
           name = "individualIdentification.lastName",
           label = Messages("fh.contact_person.last_name.label"),
-          error = companyOfficersForm("lastName").error.getOrElse("").toString
+          hasErrors = companyOfficersForm("individualIdentification.lastName").hasErrors,
+          value = companyOfficersForm("individualIdentification.lastName").value,
+          error = {
+            if (companyOfficersForm("individualIdentification.lastName").hasErrors) {
+              companyOfficersForm("individualIdentification.lastName").error.head.message
+            } else ""
+          }
         )
       )
+
+      @companyOfficersForm("individualIdentification.nationalInsuranceNumber").value.nonEmpty
 
       @RadioGroup(
         RadioGroupParams(
           name = Some("identity"),
           legend = Some(Messages("fh.company_officers.individual.nino.confirm.label")),
           hintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
+          value = Some(companyOfficersForm("individualIdentification.nationalInsuranceNumber").value.nonEmpty.toString),
           radios = List(
             RadioParams(
-              "nationalInsuranceNumber",
+              "true",
               Messages("fh.generic.yes"),
               Some("nationalInsuranceNumber")
             ),
             RadioParams(
-              "passportNumber",
+              "false",
               Messages("fh.generic.no"),
               Some("other")
             )
@@ -111,7 +211,13 @@
               name = "individualIdentification.nationalInsuranceNumber",
               label = Messages("fh.company_officers.individual.nino.label"),
               hintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
-              error = Messages("fh.company_officers.individual.nino.empty.error")
+              value = companyOfficersForm("individualIdentification.nationalInsuranceNumber").value,
+              hasErrors = companyOfficersForm("individualIdentification.nationalInsuranceNumber").hasErrors,
+              error = {
+                if (companyOfficersForm("individualIdentification.nationalInsuranceNumber").hasErrors) {
+                  companyOfficersForm("individualIdentification.nationalInsuranceNumber").error.head.message
+                } else ""
+              }
             )
           )
         )
@@ -125,14 +231,15 @@
               name = Some("otherIdentity"),
               legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
               error = Some(Messages("fh.company_officers.individual.passport.empty.error")),
+              value = Some(companyOfficersForm("individualIdentification.passportNumber").value.nonEmpty.toString),
               radios = List(
                 RadioParams(
-                  "passportNumber",
+                  "true",
                   Messages("fh.generic.yes"),
                   Some("passportNumber")
                 ),
                 RadioParams(
-                  "nationalID",
+                  "false",
                   Messages("fh.generic.no"),
                   Some("nationalID")
                 )
@@ -149,7 +256,13 @@
             TextInputParams(
               name = "individualIdentification.passportNumber",
               label = Messages("fh.company_officers.individual.passport.label"),
-              error = companyOfficersForm("passportNumber").error.getOrElse("").toString
+              value = companyOfficersForm("individualIdentification.passportNumber").value,
+              hasErrors = companyOfficersForm("individualIdentification.passportNumber").hasErrors,
+              error = {
+                if (companyOfficersForm("individualIdentification.passportNumber").hasErrors) {
+                  companyOfficersForm("individualIdentification.passportNumber").error.head.message
+                } else ""
+              }
             )
           )
         )
@@ -162,8 +275,14 @@
             TextInputParams(
               name = "individualIdentification.nationalID",
               label = Messages("fh.company_officers.individual.nationalID.label"),
-              error = companyOfficersForm("nationalID").error.getOrElse("").toString,
-              hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text"))
+              hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
+              value = companyOfficersForm("individualIdentification.nationalID").value,
+              hasErrors = companyOfficersForm("individualIdentification.nationalID").hasErrors,
+              error = {
+                if (companyOfficersForm("individualIdentification.nationalID").hasErrors) {
+                  companyOfficersForm("individualIdentification.nationalID").error.head.message
+                } else ""
+              }
             )
           )
         )
@@ -171,11 +290,17 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("role"),
+          name = Some("individualIdentification.role"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          error = Some(Messages("fh.company_officers.status.error")),
+          hasErrors = companyOfficersForm("individualIdentification.role").hasErrors,
+          value = companyOfficersForm("individualIdentification.role").value,
+          error = {
+            if (companyOfficersForm("individualIdentification.role").hasErrors) {
+              Some(companyOfficersForm("individualIdentification.role").error.head.message)
+            } else Some("")
+          },
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),
@@ -205,7 +330,12 @@
         TextInputParams(
           name = "companyIdentification.companyName",
           label = Messages("fh.company_officers.company.company_name.label"),
-          error = companyOfficersForm("companyName").error.getOrElse("").toString
+          hasErrors = companyOfficersForm("companyIdentification.companyName").hasErrors,
+          error = {
+            if (companyOfficersForm("companyIdentification.companyName").hasErrors) {
+              companyOfficersForm("companyIdentification.companyName").error.head.message
+            } else ""
+          }
         )
       )
 
@@ -236,7 +366,12 @@
               name = "companyIdentification.vatRegistration",
               label = Messages("fh.vat_registration.label"),
               hintText = Some(Messages("fh.vat_registration.hintText")),
-              error = Messages("fh.vat_registration.invalid.error")
+              hasErrors = companyOfficersForm("companyIdentification.vatRegistration").hasErrors,
+              error = {
+                if (companyOfficersForm("companyIdentification.vatRegistration").hasErrors) {
+                  companyOfficersForm("companyIdentification.vatRegistration").error.head.message
+                } else ""
+              }
             )
           )
         )
@@ -250,7 +385,12 @@
               name = "companyIdentification.companyRegistration",
               label = Messages("fh.company_officers.company.company_registration_number.label"),
               hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
-              error = Messages("fh.company_officers.company.company_registration_number.empty.error")
+              hasErrors = companyOfficersForm("companyIdentification.companyRegistration").hasErrors,
+              error = {
+                if (companyOfficersForm("companyIdentification.companyRegistration").hasErrors) {
+                  companyOfficersForm("companyIdentification.companyRegistration").error.head.message
+                } else ""
+              }
             )
           )
         )
@@ -262,7 +402,12 @@
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          error = Some(Messages("fh.company_officers.status.error")),
+          hasErrors = companyOfficersForm("companyIdentification.role").hasErrors,
+          error = {
+            if (companyOfficersForm("companyIdentification.role").hasErrors) {
+              Some(companyOfficersForm("companyIdentification.role").error.head.message)
+            } else Some("")
+          },
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),
