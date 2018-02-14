@@ -76,9 +76,9 @@
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors) {
           <li id="individualIdentificationRole-error-link"><a href="#individualIdentification.role-inline-error">@{
-            Messages(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$roleKey").errors.head.message)
           }
           </a></li>
         }
@@ -100,9 +100,9 @@
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").hasErrors) {
+        @if(companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors) {
           <li id="companyIdentificationRole-error-link"><a href="#companyIdentification.role-inline-error">@{
-            Messages(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").errors.head.message)
+            Messages(companyOfficersForm(s"$companyIdentificationKey.$roleKey").errors.head.message)
           }
           </a></li>
         }
@@ -133,12 +133,12 @@
         value = companyOfficersForm(identificationTypeKey).value,
         radios = List(
           RadioParams(
-            "individual",
+            "Individual",
             Messages("fh.company_officers.individual.label"),
             Some("individualOfficers")
           ),
           RadioParams(
-            "company",
+            "Company",
             Messages("fh.company_officers.company.label"),
             Some("companyOfficers")
           )
@@ -266,13 +266,13 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some(s"$individualIdentificationKey.$rolesKey"),
+          name = Some(s"$individualIdentificationKey.$roleKey"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$rolesKey").hasErrors,
-          value = companyOfficersForm(s"$individualIdentificationKey.$rolesKey").value,
-          error = Some(Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").error))),
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$roleKey").value,
+          error = Some(Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$roleKey").error))),
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),
@@ -349,12 +349,12 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some(s"$companyIdentificationKey.$rolesKey"),
+          name = Some(s"$companyIdentificationKey.$roleKey"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$rolesKey").hasErrors,
-          error = Some(Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").error))),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors,
+          error = Some(Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$roleKey").error))),
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),

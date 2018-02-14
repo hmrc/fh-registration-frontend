@@ -85,8 +85,8 @@ object CompanyOfficersForm {
       )
   } {
     case CompanyOfficer(identificationType, identification) ⇒ identification match {
-      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, i))
-      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), null))
+      case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
+      case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
     }
   }
 
