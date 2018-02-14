@@ -228,6 +228,7 @@
         <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
         <p>Note: only a single autocomplete is possible per form (Assets frontend constraints)</p>
         @AddressInternational(
+            form,
             AddressUKParams(
                 name = "AddressInternational",
                 label = "International address"
@@ -273,6 +274,7 @@
             NestedPanelParams(
                 "contactAddressInternational",
                 AddressInternational(
+                    form,
                     AddressUKParams(
                         name = "ContactAddressInternational",
                         label = "International contact address"

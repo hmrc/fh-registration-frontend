@@ -24,47 +24,64 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object CompanyOfficersForm {
 
-  val hasNinoMapping = "hasNationalInsuranceNumber" → yesOrNo
-  val ninoMapping = "nationalInsuranceNumber" → (nino onlyWhen (hasNinoMapping is true withPrefix "individualIdentification"))
-  val hasPassportNumberMapping = "hasPassportNumber" → (yesOrNo onlyWhen (hasNinoMapping is false withPrefix "individualIdentification"))
-  val passportNumberMapping = "passportNumber" → (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix "individualIdentification"))
-  val nationalIdMapping = "nationalID" → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix "individualIdentification") )
+  val firstNameKey = "firstName"
+  val lastNameKey = "lastName"
+  val hasNationalInsuranceNumberKey = "hasNationalInsuranceNumber"
+  val nationalInsuranceNumberKey = "nationalInsuranceNumber"
+  val hasPassportNumberKey = "hasPassportNumber"
+  val passportNumberKey = "passportNumber"
+  val nationalIDKey = "nationalID"
+  val companyNameKey = "companyName"
+  val vatRegistrationKey = "vatRegistration"
+  val companyRegistrationKey = "companyRegistration"
+  val roleKey = "role"
+
+  val identificationTypeKey = "identificationType"
+  val companyIdentificationKey = "companyIdentification"
+  val individualIdentificationKey = "individualIdentification"
+
+  val companyOfficersKey = "companyOfficers"
+
+  val hasNinoMapping = hasNationalInsuranceNumberKey → yesOrNo
+  val ninoMapping = nationalInsuranceNumberKey → (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
+  val hasPassportNumberMapping = hasPassportNumberKey → (yesOrNo onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
+  val passportNumberMapping = passportNumberKey → (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
+  val nationalIdMapping = "nationalID" → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey) )
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
-  val companyOfficerTypeMappig = "identificationType" → enum(CompanyOfficerType)
-
+  val companyOfficerTypeMapping = identificationTypeKey → enum(CompanyOfficerType)
 
   val companyOfficerIndividualMapping = mapping(
-    "firstName" → personName,
-    "lastName" → personName,
+    firstNameKey → personName,
+    lastNameKey → personName,
     hasNinoMapping,
     ninoMapping,
     hasPassportNumberMapping,
     passportNumberMapping,
     nationalIdMapping,
-    "role" → oneOf(roles)
+    roleKey → oneOf(roles)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
   val hasVatMapping = "hasVat" → yesOrNo
 
   val companyOfficerCompanyMapping = mapping(
-    "companyName" → nonEmptyText,
+    companyNameKey → nonEmptyText,
     hasVatMapping,
-    "vatRegistration" → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix "companyIdentification")),
-    "companyRegistration" → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix "companyIdentification")),
+    "vatRegistration" → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
+    "companyRegistration" → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
     "role" → oneOf(roles)
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
-    companyOfficerTypeMappig,
-    "companyIdentification" → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Company)),
-    "individualIdentification" → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Individual))
+    companyOfficerTypeMapping,
+    companyIdentificationKey → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
+    individualIdentificationKey → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
   ) {
     case (identificationType, company, individual) ⇒
       CompanyOfficer(
         identificationType,
-        company.getOrElse(individual)
+        company getOrElse individual.get
       )
   } {
     case CompanyOfficer(identificationType, identification) ⇒ identification match {
@@ -77,7 +94,7 @@ object CompanyOfficersForm {
 
   val companyOfficersForm = Form(
     mapping(
-      "companyOfficers" → list(companyOfficerMapping)
+      companyOfficersKey → list(companyOfficerMapping)
     )(CompanyOfficers.apply)(CompanyOfficers.unapply)
   )
 }

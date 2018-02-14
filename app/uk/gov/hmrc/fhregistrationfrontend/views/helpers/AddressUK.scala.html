@@ -29,6 +29,11 @@
 <legend class="form-label-bold">@{params.label}</legend>
 
 <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
+  @if(params.hasErrors) {
+    <span class="error-message" id="@{params.name}-inline-error">
+    @params.error
+    </span>
+  }
   <label>Enter postcode to lookup</label>
   <input type="text" class="postcode-value" style="width: 200px;" />
   <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
@@ -45,8 +50,9 @@
       name = "Line1",
       context = Some(fieldName),
       value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
-      label = "Address Line 1",
-      error = "You must enter line 1 of the address"
+      label = Messages("fh.address.line1.label"),
+      error = Messages("fh.address.line1." + formDate(s"$fieldName.Line1").error.map(_.message).getOrElse("")),
+      hasErrors = formDate(s"$fieldName.Line1").hasErrors
     )
   )
 
@@ -55,8 +61,9 @@
       name = "Line2",
       context = Some(fieldName),
       value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
-      label = "Address Line 2 (optional)",
-      error = "Address lines must not be longer than 35 characters and contain illegal characters"
+      label = Messages("fh.address.line2.label"),
+      error = Messages("fh.address.line2." + formDate(s"$fieldName.Line2").error.map(_.message).getOrElse("")),
+      hasErrors = formDate(s"$fieldName.Line2").hasErrors
     )
   )
 
@@ -65,8 +72,9 @@
       name = "Line3",
       context = Some(fieldName),
       value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
-      label = "Address Line 3 (optional)",
-      error = "Address lines must not be longer than 35 characters and contain illegal characters"
+      label = Messages("fh.address.line3.label"),
+      error = Messages("fh.address.other.error"),
+      hasErrors = formDate(s"$fieldName.Line3").hasErrors
     )
   )
 
@@ -75,8 +83,9 @@
       name = "Line4",
       context = Some(fieldName),
       value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
-      label = "Address Line 4 (optional)",
-      error = "Address lines must not be longer than 35 characters and contain illegal characters"
+      label = Messages("fh.address.line4.label"),
+      error = Messages("fh.address.other.error"),
+      hasErrors = formDate(s"$fieldName.Line4").hasErrors
     )
   )
 
@@ -85,8 +94,9 @@
       name = "postcode",
       context = Some(fieldName),
       value = Some(s"${formDate(s"$fieldName.postcode").value.getOrElse("")}"),
-      label = "Postcode",
-      error = "Enter a valid UK postcode"
+      label = Messages("fh.address.postcode.label"),
+      error = Messages("fh.address.postcode." + formDate(s"$fieldName.postcode").error.map(_.message).getOrElse("")),
+      hasErrors = formDate(s"$fieldName.postcode").hasErrors
     )
   )
   <div class="form-group" style="margin-top: 1em;

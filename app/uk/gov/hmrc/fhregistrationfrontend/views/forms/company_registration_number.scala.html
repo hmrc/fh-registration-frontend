@@ -32,12 +32,11 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.company_registration_number.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
         @if(companyRegistrationNumberForm("companyRegistrationNumber").hasErrors){
           <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
-            Messages(companyRegistrationNumberForm("companyRegistrationNumber").error.head.message,
-              companyRegistrationNumberForm("companyRegistrationNumber").error.head.args: _*)
+            Messages("fh.company_registration_number." + companyRegistrationNumberForm("companyRegistrationNumber").error.head.message)
           }
           </a></li>
         }
@@ -60,7 +59,7 @@
         name = "companyRegistrationNumber",
         label = Messages("fh.company_registration_number.label"),
         value = companyRegistrationNumberForm("companyRegistrationNumber").value,
-        error = Messages(getError(companyRegistrationNumberForm("companyRegistrationNumber").error)),
+        error = Messages("fh.company_registration_number." + getError(companyRegistrationNumberForm("companyRegistrationNumber").error)),
         hasErrors = companyRegistrationNumberForm("companyRegistrationNumber").hasErrors,
         hintText = Some(Messages("fh.company_registration_number.hint_text"))
       )

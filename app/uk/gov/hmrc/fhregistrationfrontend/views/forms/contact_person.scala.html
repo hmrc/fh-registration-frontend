@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
@@ -38,47 +37,98 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.check")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
         @if(contactPersonForm("firstName").hasErrors) {
           <li id="firstName-error-link"><a href="#firstName-inline-error">@{
-            Messages(s"${contactPersonForm("firstName").errors.head.message}")
+            Messages("fh.contact_person.first_name." + contactPersonForm("firstName").errors.head.message)
           }
           </a></li>
         }
         @if(contactPersonForm("lastName").hasErrors) {
           <li id="lastName-error-link"><a href="#lastName-inline-error">@{
-            Messages(s"${contactPersonForm("lastName").errors.head.message}")
+            Messages("fh.contact_person.last_name." + contactPersonForm("lastName").errors.head.message)
           }
           </a></li>
         }
         @if(contactPersonForm("jobTitle").hasErrors) {
           <li id="jobTitle-error-link"><a href="#jobTitle-inline-error">@{
-            Messages(s"${contactPersonForm("jobTitle").errors.head.message}")
+            Messages("fh.contact_person.job_title." + contactPersonForm("jobTitle").errors.head.message)
           }
           </a></li>
         }
         @if(contactPersonForm("telephone").hasErrors) {
           <li id="telephone-error-link"><a href="#telephone-inline-error">@{
-            Messages(s"${contactPersonForm("telephone").errors.head.message}")
+            Messages("fh.contact_person.telephone." + contactPersonForm("telephone").errors.head.message)
           }
           </a></li>
         }
         @if(contactPersonForm("emailAddress").hasErrors) {
           <li id="emailAddress-error-link"><a href="#emailAddress-inline-error">@{
-            Messages(s"${contactPersonForm("emailAddress").errors.head.message}")
+            Messages("fh.contact_person.email." + contactPersonForm("emailAddress").errors.head.message)
           }
           </a></li>
         }
         @if(contactPersonForm("hasOtherContactAddress").hasErrors) {
           <li id="hasOtherContactAddress-error-link"><a href="#hasOtherContactAddress-inline-error">@{
-            Messages(s"${contactPersonForm("hasOtherContactAddress").errors.head.message}")
+            Messages("fh.contact_person.contact_address_correct.error")
           }
           </a></li>
         }
         @if(contactPersonForm("isUkAddress").hasErrors) {
           <li id="isUkAddress-error-link"><a href="#isUkAddress-inline-error">@{
-            Messages(s"${contactPersonForm("isUkAddress").errors.head.message}")
+            Messages("fh.contact_person.contact_address_in_uk.error")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherUkContactAddress_contactAddress").hasErrors) {
+          <li id="contactAddress-error-link"><a href="#contactAddress-inline-error">@{
+            Messages("fh.contact_person.contact_address_new.error")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherInternationalContactAddress_contactAddress").hasErrors) {
+          <li id="contactAddress-error-link"><a href="#contactAddress-inline-error">@{
+            Messages("fh.contact_person.contact_address_new.error")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherUkContactAddress_contactAddress.Line1").hasErrors) {
+          <li id="otherUkContactAddressLine1-error-link"><a href="#Line1-inline-error">@{
+            Messages("fh.address.line1." + contactPersonForm("otherUkContactAddress_contactAddress.Line1").error.head.message)
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherUkContactAddress_contactAddress.Line2").hasErrors) {
+          <li id="otherUkContactAddressLine2-error-link"><a href="#Line2-inline-error">@{
+            Messages("fh.address.line2." + contactPersonForm("otherUkContactAddress_contactAddress.Line2").error.head.message)
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherUkContactAddress_contactAddress.postcode").hasErrors) {
+          <li id="otherUkContactAddressPostcode-error-link"><a href="#postcode-inline-error">@{
+            Messages("fh.address.postcode." + contactPersonForm("otherUkContactAddress_contactAddress.postcode").error.head.message)
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherInternationalContactAddress_contactAddress.Line1").hasErrors) {
+          <li id="otherInternationalContactAddressLine1-error-link"><a href="#Line1-inline-error">@{
+            Messages("fh.address.line1." + contactPersonForm("otherInternationalContactAddress_contactAddress.Line1").error.head.message)
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherUkContactAddress_contactAddress.Line3").hasErrors ||
+            contactPersonForm("otherUkContactAddress_contactAddress.Line4").hasErrors ||
+            contactPersonForm("otherInternationalContactAddress_contactAddress.Line2").hasErrors ||
+            contactPersonForm("otherInternationalContactAddress_contactAddress.Line3").hasErrors) {
+          <li id="previousAddressOther-error-link"><a href="#Line2-inline-error">@{
+            Messages("fh.address.other.error")
+          }
+          </a></li>
+        }
+        @if(contactPersonForm("otherInternationalContactAddress_contactAddress.Line4").hasErrors) {
+          <li id="otherInternationalContactAddressLine4-error-link"><a href="#Line4-inline-error">@{
+            Messages("fh.address.country.error")
           }
           </a></li>
         }
@@ -103,7 +153,7 @@
         name = "firstName",
         label = Messages("fh.contact_person.first_name.label"),
         value = contactPersonForm("firstName").value,
-        error = Messages(getError(contactPersonForm("firstName").error)),
+        error = Messages("fh.contact_person.first_name." + contactPersonForm("firstName").error.fold("")(_.message)),
         hasErrors = contactPersonForm("firstName").hasErrors
       )
     )
@@ -113,7 +163,7 @@
         name = "lastName",
         label = Messages("fh.contact_person.last_name.label"),
         value = contactPersonForm("lastName").value,
-        error = Messages(getError(contactPersonForm("lastName").error)),
+        error = Messages("fh.contact_person.last_name." + contactPersonForm("lastName").error.fold("")(_.message)),
         hasErrors = contactPersonForm("lastName").hasErrors
       )
     )
@@ -123,7 +173,7 @@
         name = "jobTitle",
         label = Messages("fh.contact_person.job_title.label"),
         value = contactPersonForm("jobTitle").value,
-        error = Messages(getError(contactPersonForm("jobTitle").error)),
+        error = Messages("fh.contact_person.job_title." + contactPersonForm("jobTitle").error.fold("")(_.message)),
         hasErrors = contactPersonForm("jobTitle").hasErrors
       )
     )
@@ -133,7 +183,7 @@
         name = "telephone",
         label = Messages("fh.contact_person.telephone.label"),
         value = contactPersonForm("telephone").value,
-        error = Messages(getError(contactPersonForm("telephone").error)),
+        error = Messages("fh.contact_person.telephone." + contactPersonForm("telephone").error.fold("")(_.message)),
         hasErrors = contactPersonForm("telephone").hasErrors,
         isNumber = true
       )
@@ -144,7 +194,8 @@
         name = "emailAddress",
         label = Messages("fh.contact_person.email.label"),
         value = contactPersonForm("emailAddress").value,
-        error = Messages(getError(contactPersonForm("emailAddress").error)),
+        hintText = Some(Messages("fh.contact_person.email.hintText")),
+        error = Messages("fh.contact_person.email." + contactPersonForm("emailAddress").error.fold("")(_.message)),
         hasErrors = contactPersonForm("emailAddress").hasErrors,
         isEmail = true
       )
@@ -165,7 +216,7 @@
         name = Some("hasOtherContactAddress"),
         legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
         hasErrors = contactPersonForm("hasOtherContactAddress").hasErrors,
-        error = Some(Messages(getError(contactPersonForm("hasOtherContactAddress").error))),
+        error = Some(Messages("fh.contact_person.contact_address_correct.error")),
         value = contactPersonForm("hasOtherContactAddress").value,
         radios = List(
           RadioParams(
@@ -190,7 +241,7 @@
             name = Some("isUkAddress"),
             legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
             hasErrors = contactPersonForm("isUkAddress").hasErrors,
-            error = Some(Messages(getError(contactPersonForm("isUkAddress").error))),
+            error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
             value = contactPersonForm("isUkAddress").value,
             radios = List(
               RadioParams(
@@ -217,7 +268,9 @@
           AddressUKParams(
             context = Some("otherUkContactAddress"),
             name = "contactAddress",
-            label = Messages("fh.contact_person.contact_address_new.label")
+            label = Messages("fh.contact_person.contact_address_new.label"),
+            hasErrors = contactPersonForm("otherUkContactAddress_contactAddress").hasErrors,
+            error = Some(Messages("fh.contact_person.contact_address_new.error"))
           )
         )
       )
@@ -227,10 +280,13 @@
       NestedPanelParams(
         "contactAddressInternational",
         AddressInternational(
+          contactPersonForm,
           AddressUKParams(
             context = Some("otherInternationalContactAddress"),
             name = "contactAddress",
-            label = "International Contact address"
+            label = "International Contact address",
+            hasErrors = contactPersonForm("otherInternationalContactAddress_contactAddress").hasErrors,
+            error = Some(Messages("fh.contact_person.contact_address_new.error"))
           )
         )
       )

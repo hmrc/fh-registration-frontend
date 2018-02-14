@@ -17,7 +17,26 @@ confirm.no=No
 panel.signInCorrectAccount=You will need to sign in to the correct business tax account.
 
 # Generic messages
+fh.generic.error=There's a problem
 #============================================================
+
+#Address
+fh.address.line1.label = Address Line 1
+fh.address.line2.label = Address Line 2
+fh.address.line2_optional.label = Address Line 2 (optional)
+fh.address.line3.label = Address Line 3 (optional)
+fh.address.line4.label = Address Line 4 (optional)
+fh.address.postcode.label = Postcode
+fh.address.country.label = Country
+fh.address.line1.error = You must enter line 1 of the address
+fh.address.line1.error.required = You must enter line 1 of the address
+fh.address.line1.error.pattern = Address lines must not be longer than 35 characters and contain illegal characters
+fh.address.line2.error.required = You must enter line 2 of the address
+fh.address.line2.error.pattern = Address lines must not be longer than 35 characters and contain illegal characters
+fh.address.postcode.error.required = Enter the postcode of the address
+fh.address.postcode.error.pattern = Enter a valid postcode
+fh.address.country.error = Please start typing a country and select from the list
+fh.address.other.error = Address lines must not be longer than 35 characters and contain illegal characters
 
 # Buttons & links
 fh.generic.save_continue=Save and continue
@@ -96,25 +115,26 @@ fh.main_business_address.enter_previous.error=Enter a valid previous address
 fh.contact_person.title=Contact person
 fh.contact_person.intro=This is the person we will contact if we need to discuss your application
 fh.contact_person.first_name.label=First name
-fh.contact_person.first_name.empty.error=Enter a first name for contact
-fh.contact_person.first_name.invalid.error=Enter only valid characters for a first name
+fh.contact_person.first_name.error.required=Enter your contact person's first name
+fh.contact_person.first_name.error.pattern=Enter only valid characters for a first name
 fh.contact_person.last_name.label=Last name
-fh.contact_person.last_name.empty.error=Enter a last name for contact
-fh.contact_person.last_name.invalid.error=Enter only valid characters for a last name
+fh.contact_person.last_name.error.required=Enter your contact person's last name
+fh.contact_person.last_name.error.pattern=Enter only valid characters for a last name
 fh.contact_person.job_title.label=Job title
-fh.contact_person.job_title.empty.error=Enter a job title for contact
-fh.contact_person.job_title.invalid.error=Enter only valid characters for a job title
+fh.contact_person.job_title.error.required=Enter your contact person's job title
+fh.contact_person.job_title.error.pattern=Enter only valid characters for a job title
 fh.contact_person.telephone.label=Telephone
-fh.contact_person.telephone.empty.error=Enter a telephone number for contact
-fh.contact_person.telephone.invalid.error=Enter only valid characters for a telephone number
+fh.contact_person.telephone.error.required=Enter your contact person's telephone number
+fh.contact_person.telephone.error.pattern=Enter only valid characters for a telephone number
 fh.contact_person.email.label=Email address
-fh.contact_person.email.empty.error=Enter an email address for contact
-fh.contact_person.email.invalid.error=Enter a valid email address
+fh.contact_person.email.hintText=Enter a valid email address, like yourname@example.com
+fh.contact_person.email.error.required=Enter your contact person's email address
+fh.contact_person.email.error.email=Enter a valid email address
 fh.contact_person.contact_address.title=Contact address
 fh.contact_person.contact_address_correct.label=Is this the contact address you want to use?
-fh.contact_person.contact_address_correct.error=Select whether the contact address is correct
+fh.contact_person.contact_address_correct.error=Select whether you want to use the contact address
 fh.contact_person.contact_address_in_uk.label=Is the contact address in the UK?
-fh.contact_person.contact_address_in_uk.error=Enter whether the contact address to be entered is in the UK
+fh.contact_person.contact_address_in_uk.error=Select whether the contact address you want to use in the UK
 fh.contact_person.contact_address_new.label=Enter your contact address
 fh.contact_person.contact_address_new.error=Enter a valid contact address
 
@@ -124,8 +144,8 @@ fh.trading_name.title=Trading name
 fh.trading_name.confirm.label=Does the business use a trading name
 fh.trading_name.confirm.error=Select whether the business has a different trading name
 fh.trading_name.label=Enter the trading name
-fh.trading_name.empty.error=Enter the trading name
-fh.trading_name.invalid.error=Enter only valid characters for a trading name
+fh.trading_name.error.required=Enter the trading name
+fh.trading_name.error.pattern=Enter only valid characters for a trading name
 
 # - VAT registration
 #===========================================================
@@ -134,8 +154,8 @@ fh.vat_registration.confirm.label=Does the business have a VAT registration numb
 fh.vat_registration.confirm.error=Select whether the business has a VAT registration number
 fh.vat_registration.label=Enter the VAT registration number
 fh.vat_registration.hintText=For example, 123456789
-fh.vat_registration.empty.error=Enter the VAT registration number
-fh.vat_registration.invalid.error=Enter a valid VAT registration number
+fh.vat_registration.error.required=Enter the VAT registration number
+fh.vat_registration.error.pattern=Enter a valid VAT registration number
 
 # - Business status
 #===========================================================
@@ -219,8 +239,8 @@ fh.declaration.warning=You could be prosecuted if you deliberately give untrue o
 fh.company_registration_number.title=Company registration number
 fh.company_registration_number.label=Company registration number
 fh.company_registration_number.hint_text=For example, 12345678 or SC123456
-fh.company_registration_number.empty.error=Enter a valid company registration number
-fh.company_registration_number.invalid.error=Enter a valid company registration number
+fh.company_registration_number.error.required=Enter the company registration number
+fh.company_registration_number.error.pattern=Enter a valid company registration number
 fh.company_registration_number.summary=Where do I find my company registration number?
 fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on
 fh.company_registration_number.details_companies_house=Companies House

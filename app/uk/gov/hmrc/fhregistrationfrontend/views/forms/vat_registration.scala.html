@@ -18,6 +18,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(vatNumberForm: Form[VatNumber])(implicit request: Request[_], messages: Messages)
 
@@ -35,11 +37,17 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.vat_registration.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(vatNumberForm("vatNumber_value").hasErrors){
+        @if(vatNumberForm(hasVatNumberKey).hasErrors){
+          <li id="hasVatNumber-error-link"><a href="#vatNumber-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(vatNumberForm(vatNumberKey).hasErrors){
           <li id="vatNumber-error-link"><a href="#vatNumber_value-inline-error">@{
-            Messages(vatNumberForm("vatNumber_value").errors.head.message)
+            Messages("fh.company_registration_number." + vatNumberForm(vatNumberKey).error.head.message)
           }
           </a></li>
         }
@@ -60,15 +68,15 @@
     @YesNoText(
       YesNoTextParams(
         name = "vatNumber",
-        value = vatNumberForm("vatNumber_value").value,
-        yesNoValue = vatNumberForm("vatNumber_yesNo").value,
+        value = vatNumberForm(vatNumberKey).value,
+        yesNoValue = vatNumberForm(hasVatNumberKey).value,
         yesNoLabel = Messages("fh.vat_registration.confirm.label"),
         yesNoError = Messages("fh.vat_registration.confirm.error"),
         valueLabel = Messages("fh.vat_registration.label"),
-        valueError = Messages("fh.vat_registration.invalid.error"),
+        valueError = Messages("fh.company_registration_number." + getError(vatNumberForm(vatNumberKey).error)),
         valueHintText = Some(Messages("fh.vat_registration.hintText")),
-        hasValueError = vatNumberForm("vatNumber_value").hasErrors,
-        hasErrors = vatNumberForm.hasErrors
+        hasValueError = vatNumberForm(vatNumberKey).hasErrors,
+        hasErrors = vatNumberForm(hasVatNumberKey).hasErrors
       )
     )
 

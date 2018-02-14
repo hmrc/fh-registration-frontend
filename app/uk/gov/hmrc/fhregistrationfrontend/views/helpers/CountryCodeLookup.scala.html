@@ -297,6 +297,11 @@
 <input type="hidden" name="@{countryCodeName}" id="@{countryCodeName}" value="" />
 
 <label class="form-label">@{params.label}</label>
+@if(params.hasErrors) {
+  <span class="error-message" id="@{params.name}-inline-error">
+  @params.error
+  </span>
+}
 <div class="suggestions-input-container">
     <input type="text"
             name="@{fieldName}"
@@ -311,7 +316,9 @@
             aria-autocomplete="list"
             aria-haspopup="true"
             aria-controls="@{countryCodeName}-suggestions-list-container"
-            aria-activedescendant />
+            aria-activedescendant
+            value="@params.value"
+    />
     <i class="suggestions-clear js-suggestions-clear"></i>
     <span role="status" aria-live="assertive" aria-relevant="additions" class="visuallyhidden js-suggestions-status-message" id="autoCompleteSuggestionStatus"></span>
     <div class="suggestions js-suggestions" id="@{countryCodeName}-suggestions-list-container" aria-describedby="autoCompleteSuggestionStatus"></div>

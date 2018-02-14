@@ -18,6 +18,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 
 @(tradingNameForm: Form[TradingName])(implicit request: Request[_], messages: Messages)
 
@@ -35,11 +37,17 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.trading_name.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(tradingNameForm("tradingName_value").hasErrors){
+        @if(tradingNameForm(hasTradingNameKey).hasErrors){
+          <li id="tradingName_yesNo-error-link"><a href="#tradingName-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(tradingNameForm(tradingNameKey).hasErrors){
           <li id="tradingName_value-error-link"><a href="#tradingName_value-inline-error">@{
-            Messages(tradingNameForm("tradingName_value").errors.head.message)
+            Messages("fh.company_registration_number." + tradingNameForm(tradingNameKey).error.head.message)
           }
           </a></li>
         }
@@ -60,13 +68,14 @@
     @YesNoText(
       YesNoTextParams(
         name = "tradingName",
-        value = tradingNameForm("tradingName_value").value,
-        yesNoValue = tradingNameForm("tradingName_yesNo").value,
+        value = tradingNameForm(tradingNameKey).value,
+        yesNoValue = tradingNameForm(hasTradingNameKey).value,
         yesNoLabel = Messages("fh.trading_name.confirm.label"),
         yesNoError = Messages("fh.trading_name.confirm.error"),
         valueLabel = Messages("fh.trading_name.label"),
-        valueError = Messages("fh.trading_name.empty.error"),
-        hasErrors = tradingNameForm("tradingName_value").hasErrors
+        valueError = Messages("fh.company_registration_number." + getError(tradingNameForm(tradingNameKey).error)),
+        hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
+        hasValueError= tradingNameForm(tradingNameKey).hasErrors
       )
     )
 

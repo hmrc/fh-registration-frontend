@@ -23,9 +23,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 
 object BusinessTypeForm {
 
+  val businessTypeKey = "businessType"
+
   def businessTypeForm = Form(
     mapping(
-      "businessType" → nonEmptyText
+      businessTypeKey → nonEmptyText
     )(BusinessType.apply)(BusinessType.unapply)
   )
 }

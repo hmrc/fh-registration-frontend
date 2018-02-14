@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 
 @(companyOfficersForm: Form[CompanyOfficer])(implicit request: Request[_], messages: Messages)
 
@@ -39,69 +40,69 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.company_officers.entity_type.error")</h1>
       <ul>
-        @if(companyOfficersForm("identificationType").hasErrors) {
+        @if(companyOfficersForm(identificationTypeKey).hasErrors) {
           <li id="identificationType-error-link"><a href="#identificationType-inline-error">@{
-            Messages(companyOfficersForm("identificationType").errors.head.message)
+            Messages(companyOfficersForm(identificationTypeKey).errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.firstName").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").hasErrors) {
           <li id="firstName-error-link"><a href="#individualIdentification.firstName-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.firstName").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.lastName").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").hasErrors) {
           <li id="lastName-error-link"><a href="#individualIdentification.lastName-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.lastName").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.nationalInsuranceNumber").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").hasErrors) {
           <li id="nationalInsuranceNumber-error-link"><a href="#individualIdentification.nationalInsuranceNumber-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.nationalInsuranceNumber").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.passportNumber").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors) {
           <li id="passportNumber-error-link"><a href="#individualIdentification.passportNumber-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.passportNumber").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.nationalID").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors) {
           <li id="nationalID-error-link"><a href="#individualIdentification.nationalID-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.nationalID").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("individualIdentification.role").hasErrors) {
+        @if(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").hasErrors) {
           <li id="individualIdentificationRole-error-link"><a href="#individualIdentification.role-inline-error">@{
-            Messages(companyOfficersForm("individualIdentification.role").errors.head.message)
+            Messages(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("companyIdentification.companyName").hasErrors) {
+        @if(companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors) {
           <li id="companyName-error-link"><a href="#companyIdentification.companyName-inline-error">@{
-            Messages(companyOfficersForm("companyIdentification.companyName").errors.head.message)
+            Messages(companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("companyIdentification.vatRegistration").hasErrors) {
+        @if(companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors) {
           <li id="passportNumber-error-link"><a href="#companyIdentification.vatRegistration-inline-error">@{
-            Messages(companyOfficersForm("companyIdentification.vatRegistration").errors.head.message)
+            Messages(companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("companyIdentification.companyRegistration").hasErrors) {
+        @if(companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors) {
           <li id="nationalID-error-link"><a href="#companyIdentification.companyRegistration-inline-error">@{
-            Messages(companyOfficersForm("companyIdentification.companyRegistration").errors.head.message)
+            Messages(companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").errors.head.message)
           }
           </a></li>
         }
-        @if(companyOfficersForm("companyIdentification.role").hasErrors) {
+        @if(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").hasErrors) {
           <li id="companyIdentificationRole-error-link"><a href="#companyIdentification.role-inline-error">@{
-            Messages(companyOfficersForm("companyIdentification.role").errors.head.message)
+            Messages(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").errors.head.message)
           }
           </a></li>
         }
@@ -125,11 +126,11 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("identificationType"),
+        name = Some(identificationTypeKey),
         legend = Some(Messages("fh.company_officers.entity_type.label")),
-        hasErrors = companyOfficersForm("identificationType").hasErrors,
-        error = Some(Messages(getError(companyOfficersForm("identificationType").error))),
-        value = companyOfficersForm("identificationType").value,
+        hasErrors = companyOfficersForm(identificationTypeKey).hasErrors,
+        error = Some(Messages(getError(companyOfficersForm(identificationTypeKey).error))),
+        value = companyOfficersForm(identificationTypeKey).value,
         radios = List(
           RadioParams(
             "individual",
@@ -151,21 +152,21 @@
 
       @TextInput(
         TextInputParams(
-          name = "individualIdentification.firstName",
+          name = s"$individualIdentificationKey.$firstNameKey",
           label = Messages("fh.contact_person.first_name.label"),
-          hasErrors = companyOfficersForm("individualIdentification.firstName").hasErrors,
-          value = companyOfficersForm("individualIdentification.firstName").value,
-          error = Messages(getError(companyOfficersForm("individualIdentification.firstName").error))
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").value,
+          error = Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").error))
         )
       )
 
       @TextInput(
         TextInputParams(
-          name = "individualIdentification.lastName",
+          name = s"$individualIdentificationKey.$lastNameKey",
           label = Messages("fh.contact_person.last_name.label"),
-          hasErrors = companyOfficersForm("individualIdentification.lastName").hasErrors,
-          value = companyOfficersForm("individualIdentification.lastName").value,
-          error = Messages(getError(companyOfficersForm("individualIdentification.lastName").error))
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").value,
+          error = Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").error))
         )
       )
 
@@ -195,12 +196,12 @@
           "nationalInsuranceNumber",
           TextInput(
             TextInputParams(
-              name = "individualIdentification.nationalInsuranceNumber",
+              name = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
               label = Messages("fh.company_officers.individual.nino.label"),
               hintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
-              value = companyOfficersForm("individualIdentification.nationalInsuranceNumber").value,
-              hasErrors = companyOfficersForm("individualIdentification.nationalInsuranceNumber").hasErrors,
-              error = Messages(getError(companyOfficersForm("individualIdentification.nationalInsuranceNumber").error))
+              value = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").value,
+              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").hasErrors,
+              error = Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").error))
             )
           )
         )
@@ -237,11 +238,11 @@
           "passportNumber",
           TextInput(
             TextInputParams(
-              name = "individualIdentification.passportNumber",
+              name = s"$individualIdentificationKey.$passportNumberKey",
               label = Messages("fh.company_officers.individual.passport.label"),
-              value = companyOfficersForm("individualIdentification.passportNumber").value,
-              hasErrors = companyOfficersForm("individualIdentification.passportNumber").hasErrors,
-              error = Messages(getError(companyOfficersForm("individualIdentification.passportNumber").error))
+              value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value,
+              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors,
+              error = Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").error))
             )
           )
         )
@@ -252,12 +253,12 @@
           "nationalID",
           TextInput(
             TextInputParams(
-              name = "individualIdentification.nationalID",
+              name = s"$individualIdentificationKey.$nationalIDKey",
               label = Messages("fh.company_officers.individual.nationalID.label"),
               hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
-              value = companyOfficersForm("individualIdentification.nationalID").value,
-              hasErrors = companyOfficersForm("individualIdentification.nationalID").hasErrors,
-              error = Messages(getError(companyOfficersForm("individualIdentification.nationalID").error))
+              value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value,
+              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors,
+              error = Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").error))
             )
           )
         )
@@ -265,13 +266,13 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("individualIdentification.role"),
+          name = Some(s"$individualIdentificationKey.$rolesKey"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          hasErrors = companyOfficersForm("individualIdentification.role").hasErrors,
-          value = companyOfficersForm("individualIdentification.role").value,
-          error = Some(Messages(getError(companyOfficersForm("individualIdentification.role").error))),
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$rolesKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$rolesKey").value,
+          error = Some(Messages(getError(companyOfficersForm(s"$individualIdentificationKey.$rolesKey").error))),
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),
@@ -299,22 +300,22 @@
 
       @TextInput(
         TextInputParams(
-          name = "companyIdentification.companyName",
+          name = s"$companyIdentificationKey.$companyNameKey",
           label = Messages("fh.company_officers.company.company_name.label"),
-          hasErrors = companyOfficersForm("companyIdentification.companyName").hasErrors,
-          error = Messages(getError(companyOfficersForm("companyIdentification.companyName").error))
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors,
+          error = Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").error))
         )
       )
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("vatRegistration"),
+          name = Some("companyIdentification.hasVat"),
           legend = Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
           radios = List(
             RadioParams(
               "true",
               Messages("fh.generic.yes"),
-              None //Some("hasVatRegistration")
+              None
             ),
             RadioParams(
               "false",
@@ -325,44 +326,35 @@
         )
       )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "hasVatRegistration",
-          TextInput(
-            TextInputParams(
-              name = "companyIdentification.vatRegistration",
-              label = Messages("fh.vat_registration.label"),
-              hintText = Some(Messages("fh.vat_registration.hintText")),
-              hasErrors = companyOfficersForm("companyIdentification.vatRegistration").hasErrors,
-              error = Messages(getError(companyOfficersForm("companyIdentification.vatRegistration").error))
-            )
-          )
+      @TextInput(
+        TextInputParams(
+          name = s"$companyIdentificationKey.$vatRegistrationKey",
+          label = Messages("fh.vat_registration.label"),
+          hintText = Some(Messages("fh.vat_registration.hintText")),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
+          error = Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").error))
         )
       )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "hasCompanyRegistration",
-          TextInput(
-            TextInputParams(
-              name = "companyIdentification.companyRegistration",
-              label = Messages("fh.company_officers.company.company_registration_number.label"),
-              hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
-              hasErrors = companyOfficersForm("companyIdentification.companyRegistration").hasErrors,
-              error = Messages(getError(companyOfficersForm("companyIdentification.companyRegistration").error))
-            )
-          )
+      @TextInput(
+        TextInputParams(
+          name = s"$companyIdentificationKey.$companyRegistrationKey",
+          label = Messages("fh.company_officers.company.company_registration_number.label"),
+          hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
+          error = Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").error))
         )
       )
+
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("companyIdentification.role"),
+          name = Some(s"$companyIdentificationKey.$rolesKey"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
-          hasErrors = companyOfficersForm("companyIdentification.role").hasErrors,
-          error = Some(Messages(getError(companyOfficersForm("companyIdentification.role").error))),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$rolesKey").hasErrors,
+          error = Some(Messages(getError(companyOfficersForm(s"$companyIdentificationKey.$rolesKey").error))),
           radios = List(
             RadioParams(
               Messages("fh.company_officers.status.director.value"),

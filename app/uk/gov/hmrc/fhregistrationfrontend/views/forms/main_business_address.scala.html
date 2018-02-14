@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
@@ -44,23 +43,48 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">Required to choose one</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
         @if(mainBusinessAddressForm("timeAtCurrentAddress").hasErrors) {
           <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
-            Messages(mainBusinessAddressForm("timeAtCurrentAddress").errors.head.message)
+            Messages("fh.main_business_address.time_at_address.error")
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("previousAddress").hasErrors) {
-          <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
-            Messages(mainBusinessAddressForm("previousAddress").errors.head.message)
+          <li id="hasPreviousAddress-error-link"><a href="#previousAddress-inline-error">@{
+            Messages("fh.main_business_address.previous.error")
           }
           </a></li>
         }
         @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors) {
-          <li id="mainPreviousAddressUK_previousAddress-error-link"><a href="#mainPreviousAddressUK_previousAddress-inline-error">@{
-            Messages(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").errors.head.message)
+          <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
+            Messages("fh.main_business_address.enter_previous.error")
+          }
+          </a></li>
+        }
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line1").hasErrors) {
+          <li id="previousAddressLine1-error-link"><a href="#Line1-inline-error">@{
+            Messages("fh.address.line1." + mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line1").error.head.message)
+          }
+          </a></li>
+        }
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line2").hasErrors) {
+          <li id="previousAddressLine2-error-link"><a href="#Line1-inline-error">@{
+            Messages("fh.address.line2." + mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line2").error.head.message)
+          }
+          </a></li>
+        }
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.postcode").hasErrors) {
+          <li id="previousAddressPostcode-error-link"><a href="#postcode-inline-error">@{
+            Messages("fh.address.postcode." + mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.postcode").error.head.message)
+          }
+          </a></li>
+        }
+        @if(mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line3").hasErrors ||
+            mainBusinessAddressForm("mainPreviousAddressUK_previousAddress.Line4").hasErrors) {
+          <li id="previousAddressOther-error-link"><a href="#Line2-inline-error">@{
+            Messages("fh.address.other.error")
           }
           </a></li>
         }
@@ -92,7 +116,7 @@
         legend = Some(Messages("fh.main_business_address.time_at_address.label")),
         inline = false,
         required = true,
-        error = Some(Messages(getError(mainBusinessAddressForm("timeAtCurrentAddress").error))),
+        error = Some(Messages("fh.main_business_address.time_at_address.error")),
         hasErrors = mainBusinessAddressForm("timeAtCurrentAddress").hasErrors,
         value = mainBusinessAddressForm("timeAtCurrentAddress").value,
         radios = List(
@@ -124,6 +148,7 @@
           name = Some("previousAddress"),
           legend = Some(Messages("fh.main_business_address.previous.label")),
           hasErrors = mainBusinessAddressForm("previousAddress").hasErrors,
+          error = Some(Messages("fh.main_business_address.previous.error")),
           value = mainBusinessAddressForm("previousAddress").value,
           radios = List(
             RadioParams(
@@ -147,7 +172,9 @@
             AddressUKParams(
               context = Some("mainPreviousAddressUK"),
               name = "previousAddress",
-              label = Messages("fh.main_business_address.enter_previous.label")
+              label = Messages("fh.main_business_address.enter_previous.label"),
+              hasErrors = mainBusinessAddressForm("mainPreviousAddressUK_previousAddress").hasErrors,
+              error = Some(Messages("fh.main_business_address.enter_previous.error"))
             )
           )
         )
