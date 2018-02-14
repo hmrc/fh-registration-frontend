@@ -44,7 +44,9 @@ class PageAction[T](sectionId: String) extends ActionRefiner[UserRequest, PageRe
     val journey = new LinearJourney
     Future successful {
       journey.get[T](sectionId) match {
-        case Some(page) ⇒  Right(new PageRequest[A](journey, page, input))
+        case Some(page) ⇒
+          //TODO check if allowed on this page and if not Left(Unauthorized)
+          Right(new PageRequest[A](journey, page, input))
         case None ⇒ Left(NotFound)
       }
     }

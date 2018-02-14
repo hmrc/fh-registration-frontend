@@ -53,14 +53,14 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     "reject data with other uk address but no address" in {
       formDataHasErrors(
         dataWithOtherAddress + (ukAddressKey → "true"),
-        List(otherUkContactAddressKey → "error.required")
+        List(s"$otherUkContactAddressKey.Line1"  → "error.required")
       )
     }
 
     "reject data with other international address but no address" in {
       formDataHasErrors(
         dataWithOtherAddress + (ukAddressKey → "false"),
-        List(otherInternationalContactAddressKey → "error.required")
+        List(s"$otherInternationalContactAddressKey.Line1" → "error.required")
       )
     }
 
@@ -79,26 +79,26 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     }
 
     "reject wrong fields" in {
-      fieldHasErrors(firstNameKey, "", "error.minLength", "error.pattern")
-      fieldHasErrors(lastNameKey, "", "error.minLength", "error.pattern")
+      fieldHasErrors(firstNameKey, "", "error.pattern")
+      fieldHasErrors(lastNameKey, "", "error.pattern")
 
-      fieldHasErrors(firstNameKey, Array.fill(36)('a').mkString, "error.maxLength")
-      fieldHasErrors(lastNameKey, Array.fill(36)('a').mkString, "error.maxLength")
+      fieldHasErrors(firstNameKey, Array.fill(36)('a').mkString, "error.pattern")
+      fieldHasErrors(lastNameKey, Array.fill(36)('a').mkString, "error.pattern")
 
       for (w ← Seq("@", "#")) {
         fieldHasErrors(firstNameKey, w, "error.pattern")
         fieldHasErrors(lastNameKey, w, "error.pattern")
       }
 
-      fieldHasErrors(jobTitleKey, "", "error.minLength")
-      fieldHasErrors(jobTitleKey, Array.fill(41)('a').mkString, "error.maxLength")
+      fieldHasErrors(jobTitleKey, "", "error.pattern")
+      fieldHasErrors(jobTitleKey, Array.fill(41)('a').mkString, "error.pattern")
       fieldHasErrors(jobTitleKey, "@", "error.pattern")
 
 
-      fieldHasErrors(telephoneKey, "", "error.minLength")
+      fieldHasErrors(telephoneKey, "", "error.pattern")
 
-      fieldHasErrors(telephoneKey, "", "error.minLength")
-      fieldHasErrors(telephoneKey, Array.fill(25)('7').mkString, "error.maxLength")
+      fieldHasErrors(telephoneKey, "", "error.pattern")
+      fieldHasErrors(telephoneKey, Array.fill(25)('7').mkString, "error.pattern")
       fieldHasErrors(telephoneKey, "a", "error.pattern")
 
       fieldHasErrors(emailAddressKey, "", "error.email")

@@ -31,7 +31,7 @@ trait FormSpecsHelper[T] extends Matchers {
     bound.value.get
   }
 
-  def formDataHasErrors(post: Map[String, String], expected: List[(String, String)]): Unit = {
+  def formDataHasErrors(post: Map[String, String], expected: Seq[(String, String)]): Unit = {
     val result = form bind post
     result.value.isDefined shouldBe false
     val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
@@ -44,5 +44,12 @@ trait FormSpecsHelper[T] extends Matchers {
     formDataHasErrors(
       Map(key → value),
       errors map { key → _} toList)
+  }
+
+  def formRequires(fields: String*) = {
+    formDataHasErrors(
+      Map.empty,
+      fields map { _ → "error.required"}
+    )
   }
 }

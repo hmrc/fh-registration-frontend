@@ -53,8 +53,9 @@ class OnlyWhenSpecs extends UnitSpec with MappingSpecsHelper[Option[String]] {
       formDataHasErrors(Map("yesNo" → "yes"), List("value" → "error.required"))
     }
 
-    "reject with no but value" in {
-      formDataHasErrors(Map("yesNo" → "no", "value" → "123"), List("value" → "error.unexpected"))
+    "accept with no but value as None" in {
+      val data = dataFromValidForm(Map("yesNo" → "no", "value" → "123"))
+      data shouldBe None
     }
 
   }

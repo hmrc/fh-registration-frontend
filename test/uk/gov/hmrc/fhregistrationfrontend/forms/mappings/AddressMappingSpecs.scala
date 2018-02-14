@@ -58,9 +58,7 @@ class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
           "postcode" → "123123"
         ),
         List(
-          "Line1" → "error.minLength",
           "Line1" → "error.pattern",
-          "Line2" → "error.maxLength",
           "Line2" → "error.pattern",
           "Line3" → "error.pattern",
           "postcode" → "error.pattern")

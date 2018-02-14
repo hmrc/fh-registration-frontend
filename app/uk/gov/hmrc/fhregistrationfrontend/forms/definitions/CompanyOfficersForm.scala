@@ -16,36 +16,50 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.Forms.{list, mapping, nonEmptyText, optional}
+import play.api.data.Forms.{list, mapping, nonEmptyText}
 import play.api.data.{Form, Mapping}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerCompany, CompanyOfficerIndividual, CompanyOfficers}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object CompanyOfficersForm {
 
+  val hasNinoMapping = "hasNationalInsuranceNumber" → yesOrNo
+  val ninoMapping = "nationalInsuranceNumber" → (nino onlyWhen (hasNinoMapping is true withPrefix "individualIdentification"))
+  val hasPassportNumberMapping = "hasPassportNumber" → (yesOrNo onlyWhen (hasNinoMapping is false withPrefix "individualIdentification"))
+  val passportNumberMapping = "passportNumber" → (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix "individualIdentification"))
+  val nationalIdMapping = "nationalID" → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix "individualIdentification") )
+
+  val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
+
+  val companyOfficerTypeMappig = "identificationType" → enum(CompanyOfficerType)
+
+
   val companyOfficerIndividualMapping = mapping(
-    "firstName" → nonEmptyText,
-    "lastName" → nonEmptyText,
-    "hasNationalInsuranceNumber" → yesOrNo,
-    "nationalInsuranceNumber" → optional(nonEmptyText),
-    "hasPassportNumber" → optional(yesOrNo),
-    "passportNumber" → optional(nonEmptyText),
-    "nationalID" → optional(nonEmptyText),
-    "role" → nonEmptyText
+    "firstName" → personName,
+    "lastName" → personName,
+    hasNinoMapping,
+    ninoMapping,
+    hasPassportNumberMapping,
+    passportNumberMapping,
+    nationalIdMapping,
+    "role" → oneOf(roles)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
+
+  val hasVatMapping = "hasVat" → yesOrNo
 
   val companyOfficerCompanyMapping = mapping(
     "companyName" → nonEmptyText,
-    "vatRegistration" → optional(nonEmptyText),
-    "companyRegistration" → optional(nonEmptyText),
-    "role" → nonEmptyText
+    hasVatMapping,
+    "vatRegistration" → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix "companyIdentification")),
+    "companyRegistration" → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix "companyIdentification")),
+    "role" → oneOf(roles)
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
-    "identificationType" → nonEmptyText,
-    "companyIdentification" → optional(companyOfficerCompanyMapping),
-    "individualIdentification" → optional(companyOfficerIndividualMapping)
+    companyOfficerTypeMappig,
+    "companyIdentification" → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Company)),
+    "individualIdentification" → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Individual))
   ) {
     case (identificationType, company, individual) ⇒
       CompanyOfficer(identificationType, company getOrElse individual.get)

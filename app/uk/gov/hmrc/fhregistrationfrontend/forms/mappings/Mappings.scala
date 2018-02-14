@@ -23,6 +23,7 @@ import play.api.data.Forms._
 import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.yesOrNoFormatter
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.enumFormat
 import Constraints.oneOfConstraint
 
 import scala.util.Try
@@ -46,17 +47,22 @@ object Mappings {
   )(Address.apply)(Address.unapply)
 
   def postcode: Mapping[String] = nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$".r))
-  def addressLine: Mapping[String] = text(1, 35) verifying Constraints.pattern("^[A-Za-z0-9 !'‘’\"“”(),./—–‐-]{1,35}$".r)
-  def personTitle: Mapping[String] = text(2, 30) verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
-  def roleInOrganization: Mapping[String] = text(1, 40) verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
+  def addressLine: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[A-Za-z0-9 !'‘’\"“”(),./—–‐-]{1,35}$".r)
+  def personTitle: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
+  def roleInOrganization: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
 
-  def personName: Mapping[String] = text(1, 35) verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
-  def telephone: Mapping[String] = text(1, 24) verifying Constraints.pattern("^[0-9 ()+‐-]{1,24}$".r)
+  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
+  def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+‐-]{1,24}$".r)
 
-  def companyRegistrationNumber = text(8,8) verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
-  def vatRegistrationNumber = text(9,9) verifying Constraints.pattern("^[0-9]{9}$".r)
-  def tradingName = text(1,120) verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,120}$".r)
-  def eoriNumber = text(1,15) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+  def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
+  def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
+  def tradingName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,120}$".r)
+  def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+
+  def nino = nonEmptyText verifying Constraints.pattern("^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]?$".r)
+  def nationalIdNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
+  def passportNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
+
 
   def internationalAddress: Mapping[InternationalAddress] = mapping(
     "Line1" -> addressLine,
@@ -83,10 +89,10 @@ object Mappings {
   }
 
   def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
-
+  def enum[E <: Enumeration](enum: E): Mapping[E#Value] = of(enumFormat(enum))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
-    x(wrapped) verifying("todo.provide.a.value", y) transform (z, t)
+    x(wrapped) verifying("error.invalid", y) transform (z, t)
 
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
     "yesNo" → of(yesOrNoFormatter),

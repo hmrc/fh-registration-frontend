@@ -17,15 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 
 
-import play.api.data.{FormError, Mapping}
 import play.api.data.validation.Constraint
-import play.api.data.Forms.optional
+import play.api.data.{FormError, Mapping}
 
 case class OnlyWhen[T](
   wrapped: Mapping[T],
   condition: Condition,
   val constraints: Seq[Constraint[Option[T]]] = Nil) extends Mapping[Option[T]] {
-
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
@@ -35,15 +33,13 @@ case class OnlyWhen[T](
 
   override def bind(data: Map[String, String]): Either[Seq[FormError], Option[T]] = {
     val required = condition eval data
-    optional(wrapped) bind data fold (
-      errors ⇒ Left(errors),
-      valid ⇒ (required, valid) match {
-        case (true, Some(v)) ⇒ Right(Some(v))
-        case (false, None) ⇒ Right(None)
-        case (false, Some(_)) ⇒ Left(Seq(FormError(key, "error.unexpected")))
-        case (true, None) ⇒ Left(Seq(FormError(key, "error.required")))
-      }
-    )
+    if (!required)
+      Right(None)
+    else
+      wrapped bind data fold (
+        errors ⇒ Left(errors),
+        valid ⇒  Right(Some(valid))
+      )
   }
 
   override def unbind(value: Option[T]): Map[String, String] = value.map(wrapped.unbind).getOrElse(Map.empty)

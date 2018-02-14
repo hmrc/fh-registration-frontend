@@ -61,7 +61,7 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
     "reject has previous address with no address" in {
       formDataHasErrors(
         validWithNoPreviousAddress + (previousAddressKey → "true"),
-        List(mainPreviousAddressKey → "error.required")
+        List(s"$mainPreviousAddressKey.Line1" → "error.required")
       )
     }
 
