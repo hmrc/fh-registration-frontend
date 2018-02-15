@@ -24,7 +24,7 @@ class MappingsSpecs extends UnitSpec with EitherValues {
 
   "OptionalWithYesAndNo" should {
     "work " in {
-      val test = Mappings.optionalFromYesAndNo(number).withPrefix("prefix")
+      val test = Mappings.optionalWithYesOrNo(number).withPrefix("prefix")
 
       test.bind(Map("prefix.value" → "123", "prefix.yesNo" → "true")) shouldEqual Right(Some(123))
       test.bind(Map("prefix.yesNo" → "false")) shouldEqual Right(None)

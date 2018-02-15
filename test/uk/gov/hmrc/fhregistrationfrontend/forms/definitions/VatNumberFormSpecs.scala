@@ -27,19 +27,19 @@ class VatNumberFormSpecs extends UnitSpec {
 
     "Bind w/o vat number" in {
       val data = Map(
-        "yesNo" → "false"
+        "vatNumber_yesNo" → "false"
       )
 
-      form.bind(data).get shouldBe VatNumber(None)
+      form.bind(data).get shouldBe VatNumber(false, None)
     }
 
     "Bind with vat number" in {
       val data = Map(
-        "yesNo" → "true",
+        "vatNumber_yesNo" → "true",
         "vatNumber_value" → "123456789"
       )
 
-      form.bind(data).get shouldBe VatNumber(Some("123456789"))
+      form.bind(data).get shouldBe VatNumber(true, Some("123456789"))
     }
   }
 

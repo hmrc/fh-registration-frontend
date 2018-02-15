@@ -17,16 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms._
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.companyRegistrationNumber
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 
 
 object CompanyRegistrationNumberForm {
 
-  //TODO use regex
+  val companyRegistrationNumberKey = "companyRegistrationNumber"
+
   val companyRegistrationNumberForm = Form(
     mapping(
-      "companyRegistrationNumber" → nonEmptyText
+      companyRegistrationNumberKey → companyRegistrationNumber
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 

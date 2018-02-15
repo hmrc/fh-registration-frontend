@@ -15,11 +15,11 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.OtherStoragePremises
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(otherStoragePremisesForm: Form[StoragePremise])(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[OtherStoragePremises])(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>

@@ -21,32 +21,29 @@ import play.api.data.format.Formatter
 
 object CustomFormatters {
 
-  val radioButton: Formatter[Boolean] = new Formatter[Boolean] {
+  val yesOrNoFormatter: Formatter[Boolean] = new Formatter[Boolean] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] = {
       Right(data.getOrElse(key, "")).right.flatMap {
         case "true"  => Right(true)
         case "false" => Right(false)
-        case _       => Left(Seq(FormError(key, "confirm.selectone")))
+        case _       => Left(Seq(FormError(key, "error.required")))
       }
     }
 
     override def unbind(key: String, value: Boolean) = Map(key -> value.toString)
   }
 
-  def requiredRadioButton(requiredKey: String, condition: String): Formatter[Option[Boolean]] = new Formatter[Option[Boolean]] {
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[Boolean]] = {
-      if (data.getOrElse(requiredKey, "") == condition) {
-        Right(data.getOrElse(key, "")).right.flatMap {
-          case "true"  => Right(Some(true))
-          case "false" => Right(Some(false))
-          case _       => Left(Seq(FormError(key, "confirm.selectone")))
-        }
-      } else {
-        Right(None)
+
+
+  def enumFormat[E <: Enumeration](enum: E): Formatter[E#Value] = new Formatter[E#Value] {
+    def bind(key: String, data: Map[String, String]) = {
+      play.api.data.format.Formats.stringFormat.bind(key, data).right.flatMap { s =>
+        scala.util.control.Exception.allCatch[E#Value]
+          .either(enum.withName(s))
+          .left.map(e => Seq(FormError(key, "error.invalid", Nil)))
       }
     }
-
-    override def unbind(key: String, value: Option[Boolean]) = Map(key -> value.toString)
+    def unbind(key: String, value: E#Value) = Map(key -> value.toString)
   }
 
 }

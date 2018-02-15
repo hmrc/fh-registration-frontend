@@ -14,17 +14,31 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
+package uk.gov.hmrc.fhregistrationfrontend.forms
 
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
-object Constraints extends play.api.data.validation.Constraints {
+object TestData {
 
-  def oneOfConstraint[T](options: Seq[T]): Constraint[T] = Constraint { v ⇒
-    if (options contains v)
-      Valid
-    else
-      Invalid("error.invalid")
+  private val addressData = Map(
+    "Line1" → "line one",
+    "Line2" → "line two",
+    "postcode" → "AA11 1AA"
+  )
+
+  def addressDataUk(prefix: String) = {
+    addressData map { case (k, v) ⇒
+      s"$prefix.$k" -> v
+    }
   }
+
+  val addressUk = Address(
+    "line one",
+    "line two",
+    None,
+    None,
+    "AA11 1AA",
+    None
+  )
 
 }

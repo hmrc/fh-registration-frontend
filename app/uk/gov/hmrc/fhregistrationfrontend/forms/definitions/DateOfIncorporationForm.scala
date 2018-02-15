@@ -24,9 +24,10 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
 
 object DateOfIncorporationForm {
 
+  val dateOfIncorporationKey = "dateOfIncorporation"
   val dateOfIncorporationForm = Form(
     mapping(
-      "dateOfIncorporation" → localDate
+      dateOfIncorporationKey → localDate
     )(DateOfIncorporation.apply)(DateOfIncorporation.unapply)
   )
 

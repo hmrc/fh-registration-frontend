@@ -123,8 +123,8 @@ object Page {
   }
 
   //todo: should use StoragePremisesForm.storagePremisesForm. When repeat component ready, replace storagePremiseForm with storagePremisesForm
-  val otherStoragePremisesPage = new BasicPage[StoragePremise]("otherStoragePremises", StoragePremisesForm.storagePremiseForm) {
-    override def render(form: Form[StoragePremise], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
+  val otherStoragePremisesPage = new BasicPage[OtherStoragePremises]("otherStoragePremises", StoragePremisesForm.storagePremisesForm) {
+    override def render(form: Form[OtherStoragePremises], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages): Html = {
       other_storage_premises(form)
     }
   }

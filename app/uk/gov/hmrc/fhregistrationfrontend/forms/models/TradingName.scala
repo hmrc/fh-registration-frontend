@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import play.api.libs.json.Json
 
 case class TradingName (
+  hasValue: Boolean,
   value: Option[String]
 )
 

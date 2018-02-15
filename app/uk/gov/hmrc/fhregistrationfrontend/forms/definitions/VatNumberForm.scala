@@ -17,15 +17,24 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, optional}
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{vatRegistrationNumber, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 
 
 object VatNumberForm {
 
+  val hasVatNumberKey = "vatNumber_yesNo"
+  val vatNumberKey = "vatNumber_value"
+
+  private val hasVatNumberMapping = hasVatNumberKey → yesOrNo
+  private val vatNumberMapping = vatNumberKey → (vatRegistrationNumber onlyWhen (hasVatNumberMapping is true))
+
   val vatNumberForm = Form(
     mapping(
-      "vatNumber_value" → optional(nonEmptyText)
+      hasVatNumberMapping,
+      vatNumberMapping
     )(VatNumber.apply)(VatNumber.unapply)
   )
 }

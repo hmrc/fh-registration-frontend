@@ -17,20 +17,29 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, of, optional}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOf
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.address
+import play.api.data.Forms.mapping
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, oneOf, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.requiredRadioButton
 
 object MainBusinessAddressForm {
 
+  val timeAtCurrentAddressKey = "timeAtCurrentAddress"
+  val previousAddressKey = "previousAddress"
+  val mainPreviousAddressKey = "mainPreviousAddressUK_previousAddress"
+
+  val timeAtCurrentAddressMapping = timeAtCurrentAddressKey → oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)
+  val previousAddressMapping = previousAddressKey → (yesOrNo onlyWhen (timeAtCurrentAddressMapping is "Less than 3 years"))
+  val mainPreviousAddressMapping = mainPreviousAddressKey → (address onlyWhen (previousAddressMapping is Some(true)))
+
   val mainBusinessAddressForm = Form(
     mapping(
-      "timeAtCurrentAddress" → (nonEmptyText verifying oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)),
-      "previousAddress" → of(requiredRadioButton("timeAtCurrentAddress", "Less than 3 years")),
-      "mainPreviousAddressUK_previousAddress" → optional(address)
+      timeAtCurrentAddressMapping,
+      previousAddressMapping,
+      mainPreviousAddressMapping
     )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
+
+
 }
 

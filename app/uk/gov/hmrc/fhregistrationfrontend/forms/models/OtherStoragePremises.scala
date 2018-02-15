@@ -19,7 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import play.api.libs.json.Json
 
 case class OtherStoragePremises (
-  premises: List[StoragePremise]
+  hasValue: Boolean,
+  value: Option[StoragePremise]
 )
 
 object OtherStoragePremises {

@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
+package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.Mapping
 
-object Constraints extends play.api.data.validation.Constraints {
+object MappingsApi {
+  implicit class MappingOps[T](val m: Mapping[T]) {
 
-  def oneOfConstraint[T](options: Seq[T]): Constraint[T] = Constraint { v ⇒
-    if (options contains v)
-      Valid
-    else
-      Invalid("error.invalid")
+    def is(value: T) = new ConditionIs[T](m, value)
+
+    def onlyWhen(condition: Condition) = OnlyWhen(m, condition)
+  }
+
+  implicit class MappingWithKeyOps[T](val v: (String, Mapping[T])) {
+
+    def is(value: T) = new ConditionIs[T](v._2 withPrefix v._1, value)
   }
 
 }
