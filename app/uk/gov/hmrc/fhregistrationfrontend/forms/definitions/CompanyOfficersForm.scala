@@ -32,7 +32,7 @@ object CompanyOfficersForm {
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
-  val companyOfficerTypeMappig = "identificationType" → enum(CompanyOfficerType)
+  val companyOfficerTypeMapping = "identificationType" → enum(CompanyOfficerType)
 
 
   val companyOfficerIndividualMapping = mapping(
@@ -57,9 +57,9 @@ object CompanyOfficersForm {
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
-    companyOfficerTypeMappig,
-    "companyIdentification" → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Company)),
-    "individualIdentification" → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMappig is CompanyOfficerType.Individual))
+    companyOfficerTypeMapping,
+    "companyIdentification" → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
+    "individualIdentification" → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
   ) {
     case (identificationType, company, individual) ⇒
       CompanyOfficer(identificationType, company getOrElse individual.get)
