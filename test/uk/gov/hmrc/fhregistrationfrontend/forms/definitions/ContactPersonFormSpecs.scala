@@ -38,7 +38,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     (hasOtherContactAddressKey → "true")
 
   val validWithUkAddress = dataWithOtherAddress +
-    (ukAddressKey → "true") ++
+    (isUkAddressKey → "true") ++
     TestData.addressDataUk(otherUkContactAddressKey)
 
   "Contact person form" should {
@@ -46,20 +46,20 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     "reject data with other address true but no address" in {
       formDataHasErrors(
         dataWithOtherAddress,
-        List(ukAddressKey → "error.required")
+        List(isUkAddressKey → "error.required")
       )
     }
 
     "reject data with other uk address but no address" in {
       formDataHasErrors(
-        dataWithOtherAddress + (ukAddressKey → "true"),
+        dataWithOtherAddress + (isUkAddressKey → "true"),
         List(s"$otherUkContactAddressKey.Line1"  → "error.required")
       )
     }
 
     "reject data with other international address but no address" in {
       formDataHasErrors(
-        dataWithOtherAddress + (ukAddressKey → "false"),
+        dataWithOtherAddress + (isUkAddressKey → "false"),
         List(s"$otherInternationalContactAddressKey.Line1" → "error.required")
       )
     }
@@ -129,7 +129,5 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       data.otherInternationalContactAddress shouldBe None
     }
   }
-
-
 
 }
