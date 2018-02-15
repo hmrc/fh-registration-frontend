@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(vatNumberForm: Form[VatNumber])(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: Form[VatNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -83,7 +84,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }

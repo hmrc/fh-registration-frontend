@@ -19,8 +19,10 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(otherStoragePremisesForm: Form[OtherStoragePremises])(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
@@ -155,7 +157,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }

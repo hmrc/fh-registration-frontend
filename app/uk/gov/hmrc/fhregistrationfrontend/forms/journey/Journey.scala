@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-trait Journey {
+import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
+trait Journey {
 
   def get[T](pageId: String): Option[Page[T]]
 
   def next[_](pageId: String): Option[Page[_]]
 
   def previous(pageId: String): Option[Page[_]]
+
+  def navigation(pageId: String): Navigation
 
 }

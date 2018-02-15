@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
   List(
     Messages("fh.main_business_address.3to5years.label"),
@@ -185,7 +186,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }

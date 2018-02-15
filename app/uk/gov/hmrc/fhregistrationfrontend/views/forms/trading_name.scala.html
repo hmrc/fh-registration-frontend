@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(tradingNameForm: Form[TradingName])(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -82,7 +83,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }

@@ -14,7 +14,16 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
+
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message : Messages)
+
+@backLink = @{
+    params.navigation.back.map {
+        case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
+        case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
+    }
+}
 
 <div class="form-group margin-top-30">
     <p>
@@ -35,10 +44,12 @@
         </a>
     </p>
 
-    <p>
-        <a id="back" class="back-link print-hidden" href="javascript:history.go(-1)">
-            @Messages("link.back")
-        </a>
-    </p>
+    @backLink.map { link =>
+        <p>
+            <a id="back" class="back-link print-hidden" href="@link">
+                @Messages("link.back")
+            </a>
+        </p>
+    }
 
 </div>

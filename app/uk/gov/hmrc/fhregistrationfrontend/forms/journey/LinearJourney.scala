@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
+import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{FormPage, Navigation}
 
 
 
@@ -49,5 +50,7 @@ class LinearJourney extends Journey {
     sequence takeWhile (_.id != pageId) lastOption
   }
 
-
+  override def navigation(pageId: String): Navigation = {
+    Navigation(previous(pageId) map {page ⇒ FormPage(page.id)})
+  }
 }

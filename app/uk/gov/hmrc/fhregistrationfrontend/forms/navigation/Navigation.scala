@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+package uk.gov.hmrc.fhregistrationfrontend.forms.navigation
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+case class Navigation(back: Option[Link])
 
-case class SubmitButtonsParams(
-  label      : String,
-  summaryLink: Boolean = false,
-  navigation: Navigation = Navigation(None)
-)
+

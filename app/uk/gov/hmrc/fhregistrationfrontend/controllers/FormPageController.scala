@@ -40,7 +40,7 @@ class FormPageController @Inject()(
   }
 
   def save[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
-    request.page[T].form.bindFromRequest() fold(
+    request.page[T].form.bindFromRequest() fold (
       formWithErrors => renderForm(request.page, formWithErrors),
       mainBusinessAddress => {
         save4LaterService
@@ -64,9 +64,9 @@ class FormPageController @Inject()(
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒
         if (form.hasErrors)
-          BadRequest(page.render(form, bpr))
+          BadRequest(page.render(form, bpr, request.journey.navigation(page.id)))
         else {
-          Ok(page.render(form, bpr))
+          Ok(page.render(form, bpr, request.journey.navigation(page.id)))
         }
       case None      ⇒
         Redirect(links.businessCustomerVerificationUrl)
