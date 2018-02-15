@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+package uk.gov.hmrc.fhregistrationfrontend.forms.navigation
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+trait Link
 
-case class SubmitButtonsParams(
-  label      : String,
-  summaryLink: Boolean = false,
-  navigation: Navigation = Navigation(None)
-)
+case object SummaryPage extends Link
+case class FormPage(pageId: String) extends Link
+
+

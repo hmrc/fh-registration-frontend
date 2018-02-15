@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm.companyRegistrationNumberKey
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
+@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = Messages("fh.company_registration_number.title"), mainClass = Some("full-width")) {
 
@@ -84,7 +85,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }

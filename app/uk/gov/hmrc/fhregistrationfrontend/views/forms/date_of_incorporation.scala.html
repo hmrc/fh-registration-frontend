@@ -19,8 +19,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(dateOfIncorporationForm: Form[DateOfIncorporation])(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = Messages("fh.date_of_incorporation.title"), mainClass = Some("full-width")) {
 
@@ -67,7 +68,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false
+        summaryLink = false,
+        navigation
       )
     )
   }
