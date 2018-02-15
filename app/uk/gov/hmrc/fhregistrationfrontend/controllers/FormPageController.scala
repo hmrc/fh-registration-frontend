@@ -28,11 +28,11 @@ import scala.concurrent.Future
 
 @Singleton
 class FormPageController @Inject()(
-  ds            : CommonPlayDependencies,
-  messagesApi: play.api.i18n.MessagesApi,
+  ds               : CommonPlayDependencies,
+  messagesApi      : play.api.i18n.MessagesApi,
   links            : ExternalUrls,
   save4LaterService: Save4LaterService
-) extends AppController (ds, messagesApi) {
+) extends AppController(ds, messagesApi) {
 
 
   def load[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
@@ -40,21 +40,20 @@ class FormPageController @Inject()(
   }
 
   def save[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
-    println(s"\n\n${request.page[T].form.bindFromRequest()}\n\n")
-        request.page[T].form.bindFromRequest() fold (
-          formWithErrors => renderForm(request.page, formWithErrors),
-          mainBusinessAddress => {
-            save4LaterService
-              .saveData4Later(request.userId, request.page.id, mainBusinessAddress)(hc, request.page.format)
-              .flatMap { _ ⇒
-                request.journey next pageId match {
-                  case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
-                  case None           ⇒ Future successful Ok("All done")
-                }
-              }
+    request.page[T].form.bindFromRequest() fold(
+      formWithErrors => renderForm(request.page, formWithErrors),
+      mainBusinessAddress => {
+        save4LaterService
+          .saveData4Later(request.userId, request.page.id, mainBusinessAddress)(hc, request.page.format)
+          .flatMap { _ ⇒
+            request.journey next pageId match {
+              case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
+              case None           ⇒ Future successful Ok("All done")
+            }
           }
-        )
-    }
+      }
+    )
+  }
 
   private def loadStoredFormData[T](uid: String, page: Page[T])(implicit r: Request[_]) =
     save4LaterService.fetchData4Later(uid, page.id)(hc, page.format) map {
