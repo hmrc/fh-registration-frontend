@@ -24,8 +24,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 
 object BusinessStatusForm {
 
-  private val isNewFulfilmentHouseMapping = "isNewFulfilmentBusiness" → yesOrNo
-  private val proposedStartDateMapping = "proposedStartDate" → (localDate onlyWhen (isNewFulfilmentHouseMapping is true))
+  val isNewFulfilmentBusinessKey = "isNewFulfilmentBusiness"
+  val proposedStartDateKey = "proposedStartDate"
+
+  private val isNewFulfilmentHouseMapping = isNewFulfilmentBusinessKey → yesOrNo
+  private val proposedStartDateMapping = proposedStartDateKey → (localDate onlyWhen (isNewFulfilmentHouseMapping is true))
 
   val businessStatusForm = Form(
     mapping(

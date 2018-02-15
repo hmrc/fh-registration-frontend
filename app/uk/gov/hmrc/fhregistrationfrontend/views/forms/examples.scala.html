@@ -19,6 +19,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @()(implicit request: Request[_], messages: Messages)
+
+@form = @{
+    Form("businessType" → Forms.nonEmptyText)
+}
+
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script><script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>}
 @main_template(title = "FH Component Examples", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
@@ -212,6 +217,7 @@
         <h2 style="border-bottom: 1px solid #777; color: #777">Address UK Lookup</h2>
 
         @AddressUK(
+            form,
             AddressUKParams(
                 context = Some("example"),
                 name = "StorageAddress",
@@ -222,6 +228,7 @@
         <h2 style="border-bottom: 1px solid #777; color: #777">International Address with countryCode Lookup</h2>
         <p>Note: only a single autocomplete is possible per form (Assets frontend constraints)</p>
         @AddressInternational(
+            form,
             AddressUKParams(
                 name = "AddressInternational",
                 label = "International address"
@@ -253,6 +260,7 @@
             NestedPanelParams(
                 "contactAddressUK",
                 AddressUK(
+                    form,
                     AddressUKParams(
                         context = Some("example"),
                         name = "ContactAddress",
@@ -266,6 +274,7 @@
             NestedPanelParams(
                 "contactAddressInternational",
                 AddressInternational(
+                    form,
                     AddressUKParams(
                         name = "ContactAddressInternational",
                         label = "International contact address"

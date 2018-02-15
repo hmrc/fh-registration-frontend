@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import play.api.data.FormError
 
-case class AddressUKParams(
-  context: Option[String] = None,
-  name   : String,
-  label  : String,
-  hasErrors: Boolean = false,
-  error: Option[String] = None
-)
+object Helpers {
+  def getError(error: Option[FormError]) = {
+    if (error.nonEmpty) error.head.message
+    else ""
+  }
+}

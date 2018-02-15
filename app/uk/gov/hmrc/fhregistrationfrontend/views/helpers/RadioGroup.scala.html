@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages)
 
 @legend = {
     @params.legend match {
@@ -26,25 +26,21 @@
 }
 
 @formGroupClass = @{
-    params.hasErrors match {
-        case true => {
-            "form-group form-group-error"
-        }
-        case _ => {
-            "form-group"
-        }
-    }
+  if(params.hasErrors) {
+    "form-group form-group-error"
+  } else {
+    "form-group"
+  }
 }
 
-@checked(testVal:String) = @{
-    params.value match {
-        case Some(x) => {
-            if(x == testVal){"checked"}
-        }
-        case _ => {
-            ""
-        }
-    }
+
+@checked(testVal: String) = @{
+  params.value match {
+    case Some(x) =>
+      if(x == testVal) "checked"
+      else if(x == s"Some($testVal)") "checked"
+    case _ =>
+  }
 }
 
 <div class="@{formGroupClass}">
@@ -56,13 +52,13 @@
             </span>
         }
 
-        @if(!params.hintText.isEmpty){
+        @if(params.hintText.nonEmpty){
           <span class="form-hint">@params.hintText</span>
         }
 
         @for(radio <- params.radios){
-            <div class="multiple-choice" @if(!radio.dataTarget.isEmpty){data-target="@radio.dataTarget"}>
-                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value) />
+            <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
+                <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
                 <label for="@params.name@radio.value">@radio.label</label>
             </div>
         }

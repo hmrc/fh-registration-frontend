@@ -22,9 +22,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
 
 object BusinessCustomersForm {
 
+  val numberOfCustomersKey = "numberOfCustomers"
+
   val businessCustomersForm = Form(
     mapping(
-      "numberOfCustomers" → nonEmptyText
+      numberOfCustomersKey → nonEmptyText
     )(BusinessCustomers.apply)(BusinessCustomers.unapply)
   )
 }

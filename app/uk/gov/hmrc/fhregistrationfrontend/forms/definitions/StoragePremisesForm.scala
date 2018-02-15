@@ -18,25 +18,41 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 
 import play.api.data.Form
-import play.api.data.Forms.mapping
+import play.api.data.Forms.tuple
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises, StoragePremise}
 
 object StoragePremisesForm {
 
-  val storagePremiseMapping = mapping(
-    "address" → address,
-    "isThirdParty" → yesOrNo
-  )(StoragePremise.apply)(StoragePremise.unapply)
+//  val storagePremiseMapping = mapping(
+//    "address" → address,
+//    "isThirdParty" → yesOrNo
+//  )(StoragePremise.apply)(StoragePremise.unapply)
 
-  val hasOtherStoragePremisesMapping = "hasOther" → yesOrNo
-  val optionalStoragePrimisesMapping = "premises" → (storagePremiseMapping onlyWhen (hasOtherStoragePremisesMapping is true))
+  val otherStoragePremisesKey = "otherStoragePremises"
+  val storagePremise_addressKey = "storagePremise_address"
+  val isThirdPartyKey = "isThirdParty"
+
+  val hasOtherStoragePremisesMapping = otherStoragePremisesKey → yesOrNo
+  val optionalStorageAddressMapping = storagePremise_addressKey → (address onlyWhen (hasOtherStoragePremisesMapping is true))
+  val isThirdPartyMapping = isThirdPartyKey → (yesOrNo onlyWhen (hasOtherStoragePremisesMapping is true))
 
   val storagePremisesForm = Form(
-    mapping(
+    tuple(
       hasOtherStoragePremisesMapping,
-      optionalStoragePrimisesMapping
-    )(OtherStoragePremises.apply)(OtherStoragePremises.unapply)
+      optionalStorageAddressMapping,
+      isThirdPartyMapping
+    ) transform[OtherStoragePremises](
+      {
+        case (true, Some(a), Some(t)) ⇒ OtherStoragePremises(true, Some(StoragePremise(a, t)))
+        case _ ⇒ OtherStoragePremises(false, None)
+      },
+      {
+        case OtherStoragePremises(true, Some(StoragePremise(a, t))) ⇒ (true, Some(a), Some(t))
+        case _ ⇒ (false, None, None)
+      }
+
+    )
   )
 }

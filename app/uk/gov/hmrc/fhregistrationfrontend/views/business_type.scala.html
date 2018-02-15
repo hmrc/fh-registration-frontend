@@ -56,6 +56,8 @@
       RadioGroupParams(
         name = Some("businessType"),
         inline = false,
+        hasErrors = businessTypeForm("businessType").hasErrors,
+        value = businessTypeForm("businessType").value,
         radios = List(
           RadioParams(
             "corporate body",

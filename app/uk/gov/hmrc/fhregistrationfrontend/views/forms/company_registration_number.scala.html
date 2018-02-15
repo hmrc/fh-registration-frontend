@@ -18,6 +18,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm.companyRegistrationNumberKey
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
 
@@ -31,11 +33,11 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.company_registration_number.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(companyRegistrationNumberForm("companyRegistrationNumber_value").hasErrors){
-          <li id="period-error-link"><a href="#company-registration-number-inline-error">@{
-            Messages("fh.company_registration_number.invalid.error")
+        @if(companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors){
+          <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
+            Messages("fh.company_registration_number." + companyRegistrationNumberForm(companyRegistrationNumberKey).error.head.message)
           }
           </a></li>
         }
@@ -49,15 +51,17 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyRegistrationNumber"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
     @TextInput(
       TextInputParams(
-        name = "companyRegistrationNumber",
+        name = companyRegistrationNumberKey,
         label = Messages("fh.company_registration_number.label"),
-        error = Messages("fh.company_registration_number.invalid.error"),
+        value = companyRegistrationNumberForm(companyRegistrationNumberKey).value,
+        error = Messages("fh.company_registration_number." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
+        hasErrors = companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors,
         hintText = Some(Messages("fh.company_registration_number.hint_text"))
       )
     )
@@ -65,10 +69,14 @@
     <div class="form-group" style="margin-top:2em">
       <details id="company-registration-number-details">
         <summary class="summary">
-          @{Messages("fh.company_registration_number.summary")}
+          @Messages("fh.company_registration_number.summary")
         </summary>
         <div>
-          @{Messages("fh.company_registration_number.details")}
+          @Messages("fh.company_registration_number.details")
+          <a href="https://www.gov.uk/government/organisations/companies-house" id="companies-house">
+            @Messages("fh.company_registration_number.details_companies_house")
+            <span class="visuallyhidden">@Messages("fh.company_registration_number.details_companies_house")</span>
+          </a>
         </div>
       </details>
     </div>

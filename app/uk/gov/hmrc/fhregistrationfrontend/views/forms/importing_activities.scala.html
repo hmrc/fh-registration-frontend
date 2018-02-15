@@ -18,6 +18,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 
 @(importingActivitiesForm: Form[ImportingActivities])(implicit request: Request[_], messages: Messages)
 
@@ -35,11 +37,25 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.date_of_incorporation.invalid.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(importingActivitiesForm("hasTradingName_value").hasErrors){
-          <li id="period-error-link"><a href="#date-of-incorporation-inline-error">@{
-            Messages("fh.date_of_incorporation.invalid.error")
+        @if(importingActivitiesForm(hasEoriKey).hasErrors){
+          <li id="hasEori-error-link"><a href="#hasEori-inline-error">@{
+            Messages("fh.importing_activities.eori.confirm.error")
+          }
+          </a></li>
+        }
+      </ul>
+      <ul>
+      @if(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors){
+        <li id="eoriNumber-error-link"><a href="#eoriNumber-inline-error">@{
+          Messages("fh.importing_activities.eori." + importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error.head.message)
+        }
+        </a></li>
+      }
+        @if(importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors){
+          <li id="goodsImportedOutsideEori-error-link"><a href="#goodsImportedOutsideEori-inline-error">@{
+            Messages("fh.importing_activities.eori_used_for_others.confirm.error")
           }
           </a></li>
         }
@@ -59,9 +75,12 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("hasEori"),
+        name = Some(hasEoriKey),
         legend = Some(Messages("fh.importing_activities.eori.confirm.label")),
         hintText = Some(Messages("fh.importing_activities.eori.hint_text")),
+        hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
+        error = Some(Messages("fh.importing_activities.eori.confirm.error")),
+        value = importingActivitiesForm(hasEoriKey).value,
         radios = List(
           RadioParams(
             "true",
@@ -80,16 +99,20 @@
 
       @TextInput(
         TextInputParams(
-          name = "eoriNumber.eoriNumber",
+          name = s"$eoriNumberKey.$eoriNumberKey",
           label = Messages("fh.importing_activities.eori.label"),
-          error = Messages("fh.importing_activities.eori.empty.error")
+          hasErrors = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors,
+          value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value,
+          error = Messages("fh.importing_activities.eori." + getError(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error))
         )
       )
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("eoriNumber.goodsImportedOutsideEori"),
+          name = Some(s"$eoriNumberKey.$goodsImportedOutsideEoriKey"),
           legend = Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
+          hasErrors = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors,
+          value = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value,
           error = Some(Messages("fh.importing_activities.eori_used_for_others.confirm.error")),
           radios = List(
             RadioParams(

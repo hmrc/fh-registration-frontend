@@ -14,43 +14,28 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
-
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages)
 
 @fieldName = @{
-    params.context match {
-        case Some(context) => {
-           context + "_" + params.name
-        }
-        case _ => {
-            params.name
-        }
-    }
+  params.context match {
+    case Some(context) => context + "_" + params.name
+    case _ => params.name
+  }
 }
 
 @formGroupClass = @{
-    params.hasErrors || params.hasValueError match {
-        case true => {
-            "form-group form-group-error"
-        }
-        case _ => {
-            "form-group"
-        }
-    }
+  if (params.hasErrors || params.hasValueError) {"form-group form-group-error"}
+  else {"form-group"}
 }
 
-@checked(testVal:String) = @{
-    params.yesNoValue match {
-        case Some(x) => {
-            if(x == testVal){"checked"}
-        }
-        case _ => {
-            ""
-        }
-    }
-
+@checked(testVal: String) = @{
+  params.yesNoValue match {
+    case Some(x) => if(x == testVal) "checked"
+    case _ => ""
+  }
 }
 
 <div class="@{formGroupClass}" id="@{fieldName}_group">
@@ -60,12 +45,12 @@
             @params.yesNoLabel
         </legend>
 
-        @if(!params.yesNoHintText.isEmpty){
+        @if(params.yesNoHintText.nonEmpty){
             <span class="form-hint">@params.yesNoHintText</span>
         }
 
         @if(params.hasErrors){
-            <span class="error-message">
+            <span class="error-message" id="@{params.name}-inline-error">
               @params.yesNoError
             </span>
         }
@@ -78,7 +63,7 @@
                     Yes
                 </label>
             </div>
-            <div class="multiple-choice" @if(!params.targetForNo.isEmpty){data-target="@{params.targetForNo}"}>
+            <div class="multiple-choice" @if(params.targetForNo.nonEmpty){data-target="@{params.targetForNo}"}>
                 <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="false" @checked("false")>
                 <label for="@{fieldName}_no">
                     No
@@ -94,11 +79,12 @@
                 label = params.valueLabel,
                 error = params.valueError,
                 hasErrors = params.hasValueError,
-                hintText = if(!params.valueHintText.isEmpty){ params.valueHintText } else { None }
+                hintText = if(params.valueHintText.nonEmpty){ params.valueHintText } else { None },
+                value = params.value
             )
         )
 
-        @if(!params.targetForNo.isEmpty){
+        @if(params.targetForNo.nonEmpty){
             <div class="form-group panel js-hidden" id="@{params.targetForNo}_no_container">
                 @TextInput(
                     TextInputParams(
@@ -107,7 +93,7 @@
                         label = "@{params.noInputLabel}",
                         error = "@{params.noInputError}",
                         hasErrors = params.hasNoValueError,
-                        hintText = if(!params.noInputHintText.isEmpty){ params.noInputHintText } else { None }
+                        hintText = if(params.noInputHintText.nonEmpty){ params.noInputHintText } else { None }
                     )
                 )
             </div>
