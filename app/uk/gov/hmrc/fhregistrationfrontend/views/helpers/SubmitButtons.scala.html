@@ -16,40 +16,44 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message : Messages)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message: Messages)
 
 @backLink = @{
-    params.navigation.back.map {
-        case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
-        case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
-    }
+  params.navigation.back.map {
+    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
+    case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
+  }
 }
 
 <div class="form-group margin-top-30">
-    <p>
-        <button type="submit" class="button">@{params.label}</button>
-    </p>
+  <p>
+    <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@{
+      params.label
+    }</button>
+  </p>
 
-    @if(params.summaryLink){
+  @if(params.summaryLink) {
     <p>
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary}">
-            @Messages("link.goBackToSummary")
-        </a>
+      <a href="@{
+        uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
+      }">
+      @Messages("link.goBackToSummary")
+      </a>
     </p>
-    }
+  }
 
+  <p>
+    <button class="button--link-style" type="submit" name="saveAction2" value="saveForLater">
+      @Messages("link.saveForLater")
+    </button>
+  </p>
+
+  @backLink.map { link =>
     <p>
-        <a class="" href="/fhdds/save-for-later">
-            @Messages("link.saveForLater")
-        </a>
+      <a id="back" class="back-link print-hidden" href="@link">
+      @Messages("link.back")
+      </a>
     </p>
-
-    @backLink.map { link =>
-        <p>
-            <a id="back" class="back-link print-hidden" href="@link">
-                @Messages("link.back")
-            </a>
-        </p>
-    }
+  }
 
 </div>

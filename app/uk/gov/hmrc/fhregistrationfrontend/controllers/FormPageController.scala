@@ -32,8 +32,7 @@ class FormPageController @Inject()(
   messagesApi      : play.api.i18n.MessagesApi,
   links            : ExternalUrls,
   save4LaterService: Save4LaterService
-) extends AppController(ds, messagesApi) {
-
+) extends AppController(ds, messagesApi) with SubmitForLater {
 
   def load[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
     loadStoredFormData[T](request.userId, request.page) flatMap (renderForm(request.page, _))
@@ -46,9 +45,13 @@ class FormPageController @Inject()(
         save4LaterService
           .saveData4Later(request.userId, request.page.id, mainBusinessAddress)(hc, request.page.format)
           .flatMap { _ ⇒
-            request.journey next pageId match {
-              case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
-              case None           ⇒ Future successful Ok("All done")
+            if (isSaveForLate)
+              Future successful Redirect(routes.Application.savedForLater)
+            else {
+              request.journey next pageId match {
+                case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
+                case None           ⇒ Future successful Ok("All done")
+              }
             }
           }
       }
