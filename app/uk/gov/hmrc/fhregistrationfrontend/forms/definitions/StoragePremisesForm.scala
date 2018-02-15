@@ -30,9 +30,13 @@ object StoragePremisesForm {
 //    "isThirdParty" → yesOrNo
 //  )(StoragePremise.apply)(StoragePremise.unapply)
 
-  val hasOtherStoragePremisesMapping = "otherStoragePremises" → yesOrNo
-  val optionalStorageAddressMapping = "storagePremise_address" → (address onlyWhen (hasOtherStoragePremisesMapping is true))
-  val isThirdPartyMapping = "isThirdParty" → (yesOrNo onlyWhen (hasOtherStoragePremisesMapping is true))
+  val otherStoragePremisesKey = "otherStoragePremises"
+  val storagePremise_addressKey = "storagePremise_address"
+  val isThirdPartyKey = "isThirdParty"
+
+  val hasOtherStoragePremisesMapping = otherStoragePremisesKey → yesOrNo
+  val optionalStorageAddressMapping = storagePremise_addressKey → (address onlyWhen (hasOtherStoragePremisesMapping is true))
+  val isThirdPartyMapping = isThirdPartyKey → (yesOrNo onlyWhen (hasOtherStoragePremisesMapping is true))
 
   val storagePremisesForm = Form(
     tuple(

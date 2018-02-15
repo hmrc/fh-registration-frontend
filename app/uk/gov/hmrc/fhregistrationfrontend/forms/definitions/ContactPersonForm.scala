@@ -23,8 +23,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 
-
-
 object ContactPersonForm {
 
   val firstNameKey = "firstName"
@@ -33,13 +31,13 @@ object ContactPersonForm {
   val telephoneKey = "telephone"
   val emailAddressKey = "emailAddress"
   val hasOtherContactAddressKey = "hasOtherContactAddress"
-  val ukAddressKey = "isUkAddress"
+  val isUkAddressKey = "isUkAddress"
   val otherUkContactAddressKey = "otherUkContactAddress_contactAddress"
   val otherInternationalContactAddressKey = "otherInternationalContactAddress_contactAddress"
 
 
   private val hasOtherContactAddressMapping = hasOtherContactAddressKey → yesOrNo
-  private val ukAddressMapping = ukAddressKey → (yesOrNo onlyWhen (hasOtherContactAddressMapping is true))
+  private val ukAddressMapping = isUkAddressKey → (yesOrNo onlyWhen (hasOtherContactAddressMapping is true))
 
   private val otherUkContactAddressMapping =
     otherUkContactAddressKey → (address onlyWhen (ukAddressMapping is Some(true)))

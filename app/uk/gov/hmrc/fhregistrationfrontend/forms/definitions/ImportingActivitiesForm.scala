@@ -23,13 +23,17 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{Mappin
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
 object ImportingActivitiesForm {
 
+  val eoriNumberKey = "eoriNumber"
+  val goodsImportedOutsideEoriKey = "goodsImportedOutsideEori"
+  val hasEoriKey = "hasEori"
+
   val eoriNumberMapping = mapping(
-    "eoriNumber" → eoriNumber,
-    "goodsImportedOutsideEori" → yesOrNo
+    eoriNumberKey → eoriNumber,
+    goodsImportedOutsideEoriKey → yesOrNo
   )(EoriNumber.apply)(EoriNumber.unapply)
 
-  val hasEoriMapping = "hasEori" → yesOrNo
-  val optionalEoriNumberMapping = "eoriNumber" → (eoriNumberMapping onlyWhen (hasEoriMapping is true))
+  val hasEoriMapping = hasEoriKey → yesOrNo
+  val optionalEoriNumberMapping = eoriNumberKey → (eoriNumberMapping onlyWhen (hasEoriMapping is true))
 
   val importingActivitiesForm = Form(
     mapping(

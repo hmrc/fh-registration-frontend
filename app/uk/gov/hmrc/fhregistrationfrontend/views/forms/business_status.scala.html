@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
 
 @(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages)
 
@@ -36,29 +37,35 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.business_status.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(businessStatusForm("isNewFulfilmentBusiness").hasErrors){
+        @if(businessStatusForm(isNewFulfilmentBusinessKey).hasErrors){
           <li id="isNewFulfilmentBusiness-error-link"><a href="#isNewFulfilmentBusiness-inline-error">@{
-            Messages(businessStatusForm("isNewFulfilmentBusiness").error.head.message)
+            Messages("fh.business_status.error")
           }
           </a></li>
         }
-        @if(businessStatusForm("proposedStartDate.day").hasErrors){
+        @if(businessStatusForm(s"$proposedStartDateKey").hasErrors){
           <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages(businessStatusForm("proposedStartDate.day").error.head.message)
+            Messages("fh.business_status.new_business.error.pattern")
           }
           </a></li>
         }
-        @if(businessStatusForm("proposedStartDate.month").hasErrors){
+        @if(businessStatusForm(s"$proposedStartDateKey.day").hasErrors){
           <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages(businessStatusForm("proposedStartDate.month").error.head.message)
+            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.day").error.head.message)
           }
           </a></li>
         }
-        @if(businessStatusForm("proposedStartDate.year").hasErrors){
+        @if(businessStatusForm(s"$proposedStartDateKey.month").hasErrors){
           <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages(businessStatusForm("proposedStartDate.year").error.head.message)
+            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.month").error.head.message)
+          }
+          </a></li>
+        }
+        @if(businessStatusForm(s"$proposedStartDateKey.year").hasErrors){
+          <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
+            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.year").error.head.message)
           }
           </a></li>
         }
@@ -78,11 +85,11 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("isNewFulfilmentBusiness"),
+        name = Some(isNewFulfilmentBusinessKey),
         legend = Some(Messages("fh.business_status.label")),
-        value = businessStatusForm("isNewFulfilmentBusiness").value,
-        hasErrors = businessStatusForm("isNewFulfilmentBusiness").hasErrors,
-        error = Some(Messages(getError(businessStatusForm("isNewFulfilmentBusiness").error))),
+        value = businessStatusForm(isNewFulfilmentBusinessKey).value,
+        hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
+        error = Some(Messages("fh.business_status.error")),
         radios = List(
           RadioParams(
             "true",
@@ -102,20 +109,19 @@
         "newBusiness",
         DateTuple(
           DateTupleParams(
-            name="proposedStartDate",
+            name=s"$proposedStartDateKey",
             label=Messages("fh.business_status.new_business.label"),
             hasErrors = {
-              businessStatusForm("proposedStartDate.day").hasErrors ||
-              businessStatusForm("proposedStartDate.month").hasErrors ||
-              businessStatusForm("proposedStartDate.year").hasErrors
+              businessStatusForm(s"$proposedStartDateKey").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.day").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.month").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.year").hasErrors
             },
-            error=s"${Messages(getError(businessStatusForm("proposedStartDate.day").error))}" +
-                s"\n${Messages(getError(businessStatusForm("proposedStartDate.month").error))}" +
-                s"\n${Messages(getError(businessStatusForm("proposedStartDate.year").error))}",
+            error=Messages("fh.business_status.new_business.error.pattern"),
             hintText=Some(Messages("fh.business_status.new_business.hint_text")),
-            day = businessStatusForm("proposedStartDate.day").value,
-            month = businessStatusForm("proposedStartDate.month").value,
-            year = businessStatusForm("proposedStartDate.year").value
+            day = businessStatusForm(s"$proposedStartDateKey.day").value,
+            month = businessStatusForm(s"$proposedStartDateKey.month").value,
+            year = businessStatusForm(s"$proposedStartDateKey.year").value
           )
         )
       )

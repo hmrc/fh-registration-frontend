@@ -24,6 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 
 object BusinessStatusForm {
 
+  val isNewFulfilmentBusinessKey = "isNewFulfilmentBusiness"
+  val proposedStartDateKey = "proposedStartDate"
+
   private val isNewFulfilmentHouseMapping = "isNewFulfilmentBusiness" → yesOrNo
   private val proposedStartDateMapping = "proposedStartDate" → (localDate onlyWhen (isNewFulfilmentHouseMapping is true))
 

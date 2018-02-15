@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.OtherStoragePremises
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
 
 @(otherStoragePremisesForm: Form[OtherStoragePremises])(implicit request: Request[_], messages: Messages)
 
@@ -37,17 +37,48 @@
     role="alert"
     aria-labelledby="error-summary-heading"
     tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.other_storage_premises.confirm.error")</h1>
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(otherStoragePremisesForm("storagePremise_address").hasErrors) {
+        @if(otherStoragePremisesForm(otherStoragePremisesKey).hasErrors) {
           <li id="storagePremise_address-error-link"><a href="#storagePremise_address-inline-error">@{
-            Messages(otherStoragePremisesForm("storagePremise_address").errors.head.message)
+            Messages("fh.other_storage_premises.confirm.error")
           }
           </a></li>
         }
-        @if(otherStoragePremisesForm("isThirdParty").hasErrors) {
+        @if(otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors) {
+          <li id="contactAddress-error-link"><a href="#contactAddress-inline-error">@{
+            Messages("fh.address.empty.error")
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm(s"$storagePremise_addressKey.Line1").hasErrors) {
+          <li id="otherUkContactAddressLine1-error-link"><a href="#Line1-inline-error">@{
+            Messages("fh.address.line1." + otherStoragePremisesForm(s"$storagePremise_addressKey.Line1").error.head.message)
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm(s"$storagePremise_addressKey.Line2").hasErrors) {
+          <li id="otherUkContactAddressLine2-error-link"><a href="#Line2-inline-error">@{
+            Messages("fh.address.line2." + otherStoragePremisesForm(s"$storagePremise_addressKey.Line2").error.head.message)
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm(s"$storagePremise_addressKey.postcode").hasErrors) {
+          <li id="otherUkContactAddressPostcode-error-link"><a href="#postcode-inline-error">@{
+            Messages("fh.address.postcode." + otherStoragePremisesForm(s"$storagePremise_addressKey.postcode").error.head.message)
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm(s"$storagePremise_addressKey.Line3").hasErrors ||
+            otherStoragePremisesForm(s"$storagePremise_addressKey.Line4").hasErrors ) {
+          <li id="previousAddressOther-error-link"><a href="#Line2-inline-error">@{
+            Messages("fh.address.other.error")
+          }
+          </a></li>
+        }
+        @if(otherStoragePremisesForm(isThirdPartyKey).hasErrors) {
           <li id="isThirdParty-error-link"><a href="#isThirdParty-inline-error">@{
-            Messages(otherStoragePremisesForm("isThirdParty").errors.head.message)
+            Messages("fh.other_storage_premises.third_party.error")
           }
           </a></li>
         }
@@ -66,11 +97,11 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("otherStoragePremises"),
+        name = Some(otherStoragePremisesKey),
         legend = Some(Messages("fh.other_storage_premises.confirm.label")),
-        hasErrors = otherStoragePremisesForm("otherStoragePremises").hasErrors,
-        error = Some(getError(otherStoragePremisesForm("otherStoragePremises").error)),
-        value = Some(otherStoragePremisesForm("storagePremise_address.Line1").value.nonEmpty.toString),
+        hasErrors = otherStoragePremisesForm(otherStoragePremisesKey).hasErrors,
+        error = Some(Messages("fh.other_storage_premises.confirm.error")),
+        value = otherStoragePremisesForm(otherStoragePremisesKey).value,
         radios = List(
           RadioParams(
             "true",
@@ -92,7 +123,9 @@
         AddressUKParams(
           context = Some("storagePremise"),
           name = "address",
-          label = Messages("fh.other_storage_premises.enter.label")
+          label = Messages("fh.other_storage_premises.enter.label"),
+          hasErrors = otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors,
+          error = Some(Messages("fh.contact_person.contact_address_new.error"))
         )
       )
 
@@ -100,11 +133,11 @@
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some("isThirdParty"),
+          name = Some(isThirdPartyKey),
           legend = Some(Messages("fh.other_storage_premises.third_party.label")),
-          hasErrors = otherStoragePremisesForm("isThirdParty").hasErrors,
-          error = Some(getError(otherStoragePremisesForm("isThirdParty").error)),
-          value = otherStoragePremisesForm("isThirdParty").value,
+          hasErrors = otherStoragePremisesForm(isThirdPartyKey).hasErrors,
+          error = Some(Messages("fh.other_storage_premises.third_party.error")),
+          value = otherStoragePremisesForm(isThirdPartyKey).value,
           radios = List(
             RadioParams(
               "true",

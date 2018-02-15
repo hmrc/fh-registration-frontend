@@ -32,6 +32,7 @@ object CompanyOfficersForm {
   val passportNumberKey = "passportNumber"
   val nationalIDKey = "nationalID"
   val companyNameKey = "companyName"
+  val hasVatKey = "hasVat"
   val vatRegistrationKey = "vatRegistration"
   val companyRegistrationKey = "companyRegistration"
   val roleKey = "role"
@@ -46,7 +47,7 @@ object CompanyOfficersForm {
   val ninoMapping = nationalInsuranceNumberKey → (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
   val hasPassportNumberMapping = hasPassportNumberKey → (yesOrNo onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
   val passportNumberMapping = passportNumberKey → (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
-  val nationalIdMapping = "nationalID" → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey) )
+  val nationalIdMapping = nationalIDKey → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey) )
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
@@ -63,14 +64,14 @@ object CompanyOfficersForm {
     roleKey → oneOf(roles)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
-  val hasVatMapping = "hasVat" → yesOrNo
+  val hasVatMapping = hasVatKey → yesOrNo
 
   val companyOfficerCompanyMapping = mapping(
     companyNameKey → nonEmptyText,
     hasVatMapping,
-    "vatRegistration" → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
-    "companyRegistration" → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
-    "role" → oneOf(roles)
+    vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
+    companyRegistrationKey → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
+    roleKey → oneOf(roles)
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(

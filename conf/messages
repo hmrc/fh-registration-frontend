@@ -17,7 +17,7 @@ confirm.no=No
 panel.signInCorrectAccount=You will need to sign in to the correct business tax account.
 
 # Generic messages
-fh.generic.error=There''s a problem
+fh.generic.error=There is a problem
 #============================================================
 
 #Address
@@ -37,6 +37,7 @@ fh.address.postcode.error.required = Enter the postcode of the address
 fh.address.postcode.error.pattern = Enter a valid postcode
 fh.address.country.error = Please start typing a country and select from the list
 fh.address.other.error = Address lines must not be longer than 35 characters and contain illegal characters
+fh.address.empty.error = What is the address?
 
 # Buttons & links
 fh.generic.save_continue=Save and continue
@@ -134,7 +135,7 @@ fh.contact_person.contact_address.title=Contact address
 fh.contact_person.contact_address_correct.label=Is this the contact address you want to use?
 fh.contact_person.contact_address_correct.error=Select whether you want to use the contact address
 fh.contact_person.contact_address_in_uk.label=Is the contact address in the UK?
-fh.contact_person.contact_address_in_uk.error=Select whether the contact address you want to use in the UK
+fh.contact_person.contact_address_in_uk.error=Select whether the contact address you want to use is in the UK
 fh.contact_person.contact_address_new.label=Enter your contact address
 fh.contact_person.contact_address_new.error=Enter a valid contact address
 
@@ -164,8 +165,10 @@ fh.business_status.label=Are you setting up a new fulfilment business?
 fh.business_status.error=Select whether the business is setting up a new fulfilment business
 fh.business_status.new_business.label=Enter the date the business intends to start operating as a fulfilment business
 fh.business_status.new_business.hint_text=For example, 31 07 2019
-fh.business_status.new_business.empty.error=Enter the date the business intends to start operating as a fulfilment business
-fh.business_status.new_business.invalid.error=Enter a valid date for when the business intends to start operating as a fulfilment business
+fh.business_status.new_business.error.number=Enter the intended start date
+fh.business_status.new_business.error.pattern=Enter a valid date for the intended start date
+fh.business_status.new_business.error.max=Enter a valid date for the intended start date
+fh.business_status.new_business.error.min=Enter a valid date for the intended start date
 
 # - Importing activities
 #===========================================================
@@ -174,8 +177,8 @@ fh.importing_activities.eori.confirm.label=Does the business have any EORI numbe
 fh.importing_activities.eori.confirm.error=Select whether the business has any EORI numbers
 fh.importing_activities.eori.label=Enter the EORI number
 fh.importing_activities.eori.hint_text=The business should have an EORI number if it imports goods with sellers outside the EU. If the business does not have an EORI number, answer 'No'.
-fh.importing_activities.eori.empty.error=Enter the EORI number
-fh.importing_activities.eori.invalid.error=Enter a valid EORI number
+fh.importing_activities.eori.error.required=Enter the EORI number
+fh.importing_activities.eori.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under any of its EORI numbers?
 fh.importing_activities.eori_used_for_others.confirm.error=Select whether the business imports goods not belonging to it under any of its EORI numbers
 
@@ -203,6 +206,7 @@ fh.other_storage_premises.confirm.hint_text=Include any storage premises owned b
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.third_party.label=Are these third party premises?
+fh.other_storage_premises.third_party.error=Select whether these premises are operated by a third party
 
 # - Summary
 #===========================================================
@@ -280,9 +284,9 @@ fh.company_officers.status.member.value=Member
 fh.company_officers.individual.label=An individual
 fh.company_officers.individual.title=Enter their details
 fh.company_officers.individual.first_name.label=First name
-fh.company_officers.individual.first_name.empty.error=Enter a first name for company officer {0}
+fh.company_officers.individual.first_name.empty.error=Enter a first name of company officer {0}
 fh.company_officers.individual.last_name.label=Last name
-fh.company_officers.individual.last_name.empty.error=Enter a last name for company officer {0}
+fh.company_officers.individual.last_name.empty.error=Enter a last name of company officer {0}
 fh.company_officers.individual.nino.confirm.label=Do they have a National Insurance number?
 fh.company_officers.individual.nino.confirm.hint_text=We need this information to verify their identity
 fh.company_officers.individual.nino.confirm.error=Select whether company officer {0} has a National Insurance number

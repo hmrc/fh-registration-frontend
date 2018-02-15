@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
 
 @(businessCustomersForm: Form[BusinessCustomers])(implicit request: Request[_], messages: Messages)
 
@@ -38,9 +38,9 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(businessCustomersForm("numberOfCustomers").hasErrors){
+        @if(businessCustomersForm(numberOfCustomersKey).hasErrors){
           <li id="numberOfCustomers-error-link"><a href="#numberOfCustomers-inline-error">@{
-            Messages(businessCustomersForm("numberOfCustomers").errors.head.message)
+            Messages("fh.business_customers.error")
           }
           </a></li>
         }
@@ -60,13 +60,13 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("numberOfCustomers"),
+        name = Some(numberOfCustomersKey),
         legend = Some(Messages("fh.business_customers.label")),
         inline = false,
         required = true,
-        hasErrors = businessCustomersForm("numberOfCustomers").hasErrors,
-        error = Some(Messages(getError(businessCustomersForm("numberOfCustomers").error))),
-        value = businessCustomersForm("numberOfCustomers").value,
+        hasErrors = businessCustomersForm(numberOfCustomersKey).hasErrors,
+        error = Some(Messages("fh.business_customers.error")),
+        value = businessCustomersForm(numberOfCustomersKey).value,
         radios = List(
           RadioParams(
             Messages("fh.business_customers.none.value"),
