@@ -19,8 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import org.joda.time.LocalDate
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.libs.json.{JsValue, Json, OFormat}
+import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
@@ -60,6 +61,8 @@ class Application @Inject()(
   val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor").getOrElse("fhdds-sole-proprietor")
   val limitedCompanyFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-limited-company").getOrElse("fhdds-limited-company")
   val partnershipFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-partnership").getOrElse("fhdds-partnership")
+
+  val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
 
   def whitelisted(p: String) = Action.async {
     implicit request ⇒
@@ -121,7 +124,12 @@ class Application @Inject()(
 
   def savedForLater = authorisedUser { implicit request ⇒
     internalId ⇒
-      Future.successful(Ok(saved("Saturday 17 March 2018")))
+      for {
+        userLestTimeUsedO ← save4LaterService.fetchTime(internalId)
+        expireDate = userLestTimeUsedO.getOrElse(new LocalDate()).plusDays(formMaxExpiryDays).toString()
+      } yield {
+        Ok(saved(expireDate))
+      }
   }
 
   def summary = Action.async { implicit request ⇒

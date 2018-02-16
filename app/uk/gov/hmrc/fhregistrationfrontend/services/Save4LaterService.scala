@@ -17,7 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import com.google.inject.ImplementedBy
+import org.joda.time.LocalDate
 import play.api.libs.json
+import play.api.libs.json.{Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.cache.ShortLivedCache
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,12 +31,16 @@ import scala.concurrent.Future
 object Save4LaterKeys {
   val businessRegistrationDetailsKey = "businessRegistrationDetails"
   val businessTypeKey = "businessType"
+  val userLestTimeUsedKey = "userLestTimeUsed"
 }
 
 @ImplementedBy(classOf[Save4LaterServiceImpl])
 trait Save4LaterService {
 
   import Save4LaterKeys._
+
+  implicit val dateReads: Reads[LocalDate] = Reads.jodaLocalDateReads("yyyy-MM-dd")
+  implicit val dateWrites: Writes[LocalDate] = Writes.jodaLocalDateWrites("yyyy-MM-dd")
 
   val shortLivedCache: ShortLivedCache
 
@@ -50,10 +56,24 @@ trait Save4LaterService {
     fetchData4Later[BusinessRegistrationDetails](userId, businessRegistrationDetailsKey)
   }
 
-  @inline def saveData4Later[T](id : String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
-    shortLivedCache.cache(id, formId, data) map {
-      data ⇒ data.getEntry[T](formId)
+  def saveTime(userId: String, userLestTimeUsed: LocalDate)(implicit hc: HeaderCarrier) = {
+    shortLivedCache.cache(userId, userLestTimeUsedKey, userLestTimeUsed) map {
+      data ⇒ data.getEntry(userId)
     }
+  }
+
+  def fetchTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[LocalDate]] = {
+    fetchData4Later[LocalDate](userId, userLestTimeUsedKey)
+  }
+
+  @inline def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+    val userLestTimeUsed: LocalDate = new LocalDate()
+    saveTime(id, userLestTimeUsed).flatMap { _ ⇒
+      shortLivedCache.cache(id, formId, data) map {
+        data ⇒ data.getEntry[T](formId)
+      }
+    }
+  }
 
   @inline def fetchData4Later[T](utr: String, formId: String)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
     shortLivedCache.fetchAndGetEntry[T](utr, formId)
