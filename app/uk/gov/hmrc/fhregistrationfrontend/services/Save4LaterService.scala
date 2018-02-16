@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import com.google.inject.ImplementedBy
-import org.joda.time.LocalDate
+import org.joda.time.DateTime
 import play.api.libs.json
 import play.api.libs.json.{Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.cache.ShortLivedCache
@@ -31,7 +31,7 @@ import scala.concurrent.Future
 object Save4LaterKeys {
   val businessRegistrationDetailsKey = "businessRegistrationDetails"
   val businessTypeKey = "businessType"
-  val userLestTimeUsedKey = "userLestTimeUsed"
+  val userLastTimeSavedKey = "userLastTimeSaved"
 }
 
 @ImplementedBy(classOf[Save4LaterServiceImpl])
@@ -39,8 +39,8 @@ trait Save4LaterService {
 
   import Save4LaterKeys._
 
-  implicit val dateReads: Reads[LocalDate] = Reads.jodaLocalDateReads("yyyy-MM-dd")
-  implicit val dateWrites: Writes[LocalDate] = Writes.jodaLocalDateWrites("yyyy-MM-dd")
+  implicit val dateReads: Reads[DateTime] = Reads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  implicit val dateWrites: Writes[DateTime] = Writes.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
   val shortLivedCache: ShortLivedCache
 
@@ -56,19 +56,13 @@ trait Save4LaterService {
     fetchData4Later[BusinessRegistrationDetails](userId, businessRegistrationDetailsKey)
   }
 
-  def saveTime(userId: String, userLestTimeUsed: LocalDate)(implicit hc: HeaderCarrier) = {
-    shortLivedCache.cache(userId, userLestTimeUsedKey, userLestTimeUsed) map {
-      data ⇒ data.getEntry(userId)
-    }
-  }
-
-  def fetchTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[LocalDate]] = {
-    fetchData4Later[LocalDate](userId, userLestTimeUsedKey)
+  def fetchLastTimeUserSaved(userId: String)(implicit hc: HeaderCarrier): Future[Option[DateTime]] = {
+    fetchData4Later[DateTime](userId, userLastTimeSavedKey)
   }
 
   @inline def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
-    val userLestTimeUsed: LocalDate = new LocalDate()
-    saveTime(id, userLestTimeUsed).flatMap { _ ⇒
+    val lastTimeUserSaved: DateTime = new DateTime()
+    shortLivedCache.cache(id, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
       shortLivedCache.cache(id, formId, data) map {
         data ⇒ data.getEntry[T](formId)
       }

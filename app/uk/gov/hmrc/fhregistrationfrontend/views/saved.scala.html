@@ -14,9 +14,11 @@
  * limitations under the License.
  *@
 
-@(heldDate: String)(implicit request: Request[_], messages: Messages)
+@import org.joda.time.DateTime
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "FHDDS Check Summary", mainClass = Some("full-width")) {
+@(expiryTime: DateTime)(implicit request: Request[_], messages: Messages)
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
 
   <div style="background-color : #28A197 ; text-align : center ; padding : 10 px ; color : #ffffff ;">
     <p>
@@ -29,7 +31,9 @@
       @Messages("fh.held_until")
     </p>
     <span id="subref" class="h1-heading" style="color : #ffffff ;">
-      @heldDate
+      @{
+        expiryTime.toLocalDate
+      }
     </span>
   </div>
 

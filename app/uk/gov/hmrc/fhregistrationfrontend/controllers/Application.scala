@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import org.joda.time.LocalDate
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
@@ -124,11 +123,9 @@ class Application @Inject()(
 
   def savedForLater = authorisedUser { implicit request ⇒
     internalId ⇒
-      for {
-        userLestTimeUsedO ← save4LaterService.fetchTime(internalId)
-        expireDate = userLestTimeUsedO.getOrElse(new LocalDate()).plusDays(formMaxExpiryDays).toString()
-      } yield {
-        Ok(saved(expireDate))
+      save4LaterService.fetchLastTimeUserSaved(internalId).map {
+        case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
+        case None            ⇒ NotFound("NotFound. Todo: NotFound page") //Todo: NotFound page
       }
   }
 
