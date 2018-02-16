@@ -18,6 +18,9 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 
 # Generic messages
 fh.generic.error=There is a problem
+fh.generic.not_found=Page not found
+fh.generic.not_found.label=This page can’t be found
+fh.generic.not_found.inf=Please check that you have entered the correct web address.
 #============================================================
 
 #Address
@@ -323,11 +326,10 @@ fh.held_until.delete = delete your progress and
 fh.held_until.delete.notice = start again
 fh.held_until.back = Back to your form
 
-# - Company Officers (Corporate Body)
+# - Delete Confirmation Page
 #===========================================================
 fh.delete_confirmation_page.header=Are you sure you want to delete your progress and start again?
-fh.company_officers.company.saved_on=Saved on
-fh.company_officers.company.partially_completed=Partially completed
-fh.company_officers.company.button=Delete and start again
-fh.company_officers.company.back=Back
-
+fh.delete_confirmation_page.saved_on=Saved on
+fh.delete_confirmation_page.partially_completed=Partially completed
+fh.delete_confirmation_page.button=Delete and start again
+fh.delete_confirmation_page.back=Back

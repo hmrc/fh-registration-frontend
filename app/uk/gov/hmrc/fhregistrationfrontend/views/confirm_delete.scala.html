@@ -28,16 +28,16 @@
       <img src="./assets/images/File.png" align="left" style="margin: 0px 20px">
     </p>
     <p>
-      @Messages("fh.company_officers.company.saved_on")
+      @Messages("fh.delete_confirmation_page.saved_on")
       @timeSaved
       <br>
-      @Messages("fh.company_officers.company.partially_completed")
+      @Messages("fh.delete_confirmation_page.partially_completed")
     </p>
 
-    <br><br><button class="button">@Messages("fh.company_officers.company.button")</button><br><br>
+    <br><br><button class="button">@Messages("fh.delete_confirmation_page.button")</button><br><br>
 
-    <p class="back-to-previous">
-      <a href="#">@Messages("fh.company_officers.company.back")</a>
+    <p class="back-to-previous print-hidden">
+      <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
     </p>
   </form>
 }

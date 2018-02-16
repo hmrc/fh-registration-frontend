@@ -19,15 +19,14 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import org.joda.time.DateTime
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
@@ -37,11 +36,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
-import uk.gov.hmrc.fhregistrationfrontend.views.html.saved
-import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -49,10 +45,10 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links            : ExternalUrls,
-  ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector,
-  messagesApi      : play.api.i18n.MessagesApi,
+  links: ExternalUrls,
+  ds: CommonPlayDependencies,
+  fhddsConnector: FhddsConnector,
+  messagesApi: play.api.i18n.MessagesApi,
   configuration    : Configuration,
   save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
@@ -125,15 +121,18 @@ class Application @Inject()(
 
   def savedForLater = authorisedUser { implicit request ⇒
     internalId ⇒
-      save4LaterService.fetchLastTimeUserSaved(internalId).map {
+      save4LaterService.fetchLastUpdateTime(internalId).map {
         case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-        case None            ⇒ NotFound("NotFound. Todo: NotFound page") //Todo: NotFound page
+        case None            ⇒ NotFound(pageNotFound)
       }
   }
 
   def delete = authorisedUser { implicit request ⇒
     internalId ⇒
-      Future.successful(Ok(confirm_delete(new DateTime())))
+      save4LaterService.fetchLastUpdateTime(internalId) map {
+        case Some(savedDate) ⇒ Ok(confirm_delete(savedDate))
+        case None            ⇒ NotFound(pageNotFound)
+      }
   }
 
   def summary = Action.async { implicit request ⇒
@@ -197,14 +196,11 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
     }
   }
 
-
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
       withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised().retrieve(internalId) {
-          case Some(iid) ⇒ {
-            action(request)(iid)
-          }
+          case Some(iid) ⇒ action(request)(iid)
           case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
         } recover { case e ⇒ handleFailure(e) }
       }
@@ -229,6 +225,15 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
         Logger.warn(s"could not authenticate user due to: $ex")
         BadRequest(s"$ex")
     }
+
+  def pageNotFound(implicit request: Request[_]) = {
+    error_template(
+      messages("fh.generic.not_found"),
+      messages("fh.generic.not_found.label"),
+      messages("fh.generic.not_found.inf")
+    )
+  }
+
 }
 
 @Singleton
