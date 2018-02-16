@@ -14,18 +14,20 @@
  * limitations under the License.
  *@
 
-@(timeSaved: String)(implicit request: Request[_], messages: Messages)
+@import org.joda.time.DateTime
+
+@(timeSaved: DateTime)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
 
-  <form action="#" method="POST">
+  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.start()}" method="GET">
+
     <h1>@Messages("fh.delete_confirmation_page.header")</h1>
 
     <p>
-      <img src="/images/File.png" align="left" style="margin: 0px 20px">
+      <img src="./assets/images/File.png" align="left" style="margin: 0px 20px">
     </p>
     <p>
-      <br>
       @Messages("fh.company_officers.company.saved_on")
       @timeSaved
       <br>

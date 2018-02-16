@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import org.joda.time.DateTime
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
@@ -132,7 +133,7 @@ class Application @Inject()(
 
   def delete = authorisedUser { implicit request ⇒
     internalId ⇒
-      Future.successful(Ok(confirm_delete("ok")))
+      Future.successful(Ok(confirm_delete(new DateTime())))
   }
 
   def summary = Action.async { implicit request ⇒
