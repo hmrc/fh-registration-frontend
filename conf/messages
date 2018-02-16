@@ -310,3 +310,15 @@ fh.company_officers.company.company_registration_number.label=Enter the company 
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
 
+# - save for later page
+#===========================================================
+fh.has_saved = ✓ Your progress has been saved
+fh.held_until = This will be held until midnight on
+fh.held_until.hint = If the form you are working on has a submission deadline you will need to return and complete the form before that deadline.
+fh.held_until.notice = Partially completed forms will not be processed by HMRC.
+fh.held_until.you_can = You can:
+fh.held_until.continue = continue
+fh.held_until.continue.notice = your form from where you left off
+fh.held_until.delete = delete your progress and
+fh.held_until.delete.notice = start again
+fh.held_until.back = Back to your form

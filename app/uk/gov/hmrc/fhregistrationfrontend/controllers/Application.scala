@@ -20,7 +20,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.libs.json.{JsValue, Json, OFormat}
+import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
@@ -38,6 +38,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
+import uk.gov.hmrc.fhregistrationfrontend.views.html.saved
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -59,6 +60,8 @@ class Application @Inject()(
   val soleTraderFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor").getOrElse("fhdds-sole-proprietor")
   val limitedCompanyFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-limited-company").getOrElse("fhdds-limited-company")
   val partnershipFormTypeRef: String = configuration.getString(s"fhdds-dfs-frontend.fhdds-partnership").getOrElse("fhdds-partnership")
+
+  val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
 
   def whitelisted(p: String) = Action.async {
     implicit request ⇒
@@ -91,8 +94,9 @@ class Application @Inject()(
       }
   }
 
-  def businessType = authorisedUser { implicit request ⇒ internalId ⇒
-    Future.successful(Ok(business_type(businessTypeForm)))
+  def businessType = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future.successful(Ok(business_type(businessTypeForm)))
   }
 
   def submitBusinessType = authorisedUser { implicit request ⇒
@@ -114,6 +118,14 @@ class Application @Inject()(
       save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
         case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      }
+  }
+
+  def savedForLater = authorisedUser { implicit request ⇒
+    internalId ⇒
+      save4LaterService.fetchLastTimeUserSaved(internalId).map {
+        case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
+        case None            ⇒ NotFound("NotFound. Todo: NotFound page") //Todo: NotFound page
       }
   }
 
@@ -157,6 +169,7 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
   override def usewhiteListing: Boolean = false
+
   lazy val conf: Configuration = ds.conf
   implicit lazy val messagesApi: MessagesApi = ds.messagesApi
 
