@@ -39,6 +39,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
 import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
 import uk.gov.hmrc.fhregistrationfrontend.views.html.saved
+import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -127,6 +128,11 @@ class Application @Inject()(
         case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
         case None            ⇒ NotFound("NotFound. Todo: NotFound page") //Todo: NotFound page
       }
+  }
+
+  def delete = authorisedUser { implicit request ⇒
+    internalId ⇒
+      Future.successful(Ok(confirm_delete("ok")))
   }
 
   def summary = Action.async { implicit request ⇒

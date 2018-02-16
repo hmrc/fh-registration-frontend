@@ -322,3 +322,12 @@ fh.held_until.continue.notice = your form from where you left off
 fh.held_until.delete = delete your progress and
 fh.held_until.delete.notice = start again
 fh.held_until.back = Back to your form
+
+# - Company Officers (Corporate Body)
+#===========================================================
+fh.delete_confirmation_page.header=Are you sure you want to delete your progress and start again?
+fh.company_officers.company.saved_on=Saved on
+fh.company_officers.company.partially_completed=Partially completed
+fh.company_officers.company.button=Delete and start again
+fh.company_officers.company.back=Back
+

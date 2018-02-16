@@ -19,6 +19,8 @@ GET         /examples                                                           
 GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
 
+GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.delete
+
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
