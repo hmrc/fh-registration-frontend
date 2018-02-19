@@ -16,11 +16,11 @@
 
 @import org.joda.time.DateTime
 
-@(timeSaved: DateTime)(implicit request: Request[_], messages: Messages)
+@(lastTimeSaved: DateTime)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
 
-  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData()}" method="GET">
+  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.start()}" method="GET">
 
     <h1>@Messages("fh.delete_confirmation_page.header")</h1>
 
@@ -29,7 +29,7 @@
     </p>
     <p>
       @Messages("fh.delete_confirmation_page.saved_on")
-      @timeSaved.toLocalDate
+      @lastTimeSaved
       <br>
       @Messages("fh.delete_confirmation_page.partially_completed")
     </p>

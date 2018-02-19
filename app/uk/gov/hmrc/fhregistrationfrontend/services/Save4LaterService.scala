@@ -48,6 +48,10 @@ trait Save4LaterService {
     saveData4Later(userId, businessTypeKey, businessType)
   }
 
+  def fetchBusinessType(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+    fetchData4Later[String](userId, businessTypeKey)
+  }
+
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
     saveData4Later(userId, businessRegistrationDetailsKey, brd)
   }
@@ -60,7 +64,11 @@ trait Save4LaterService {
     fetchData4Later[DateTime](userId, userLastTimeSavedKey)
   }
 
-  @inline def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+  def removeUserData(userId: String)(implicit hc: HeaderCarrier) = {
+    shortLivedCache.remove(userId)
+  }
+
+  def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
     val lastTimeUserSaved: DateTime = new DateTime()
     shortLivedCache.cache(id, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
       shortLivedCache.cache(id, formId, data) map {
@@ -69,7 +77,7 @@ trait Save4LaterService {
     }
   }
 
-  @inline def fetchData4Later[T](utr: String, formId: String)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
+  def fetchData4Later[T](utr: String, formId: String)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
     shortLivedCache.fetchAndGetEntry[T](utr, formId)
 
 }
