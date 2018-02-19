@@ -56,7 +56,7 @@ trait Save4LaterService {
     fetchData4Later[BusinessRegistrationDetails](userId, businessRegistrationDetailsKey)
   }
 
-  def fetchLastTimeUserSaved(userId: String)(implicit hc: HeaderCarrier): Future[Option[DateTime]] = {
+  def fetchLastUpdateTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[DateTime]] = {
     fetchData4Later[DateTime](userId, userLastTimeSavedKey)
   }
 

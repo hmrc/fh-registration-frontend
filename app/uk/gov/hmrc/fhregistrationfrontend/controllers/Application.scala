@@ -24,10 +24,11 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
+import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -36,10 +37,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.business_type
-import uk.gov.hmrc.fhregistrationfrontend.views.html.saved
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -47,10 +46,10 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links            : ExternalUrls,
-  ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector,
-  messagesApi      : play.api.i18n.MessagesApi,
+  links: ExternalUrls,
+  ds: CommonPlayDependencies,
+  fhddsConnector: FhddsConnector,
+  messagesApi: play.api.i18n.MessagesApi,
   configuration    : Configuration,
   save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
@@ -84,28 +83,25 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def continue = authorisedUser { implicit request ⇒
-    internalId ⇒
+  def continue = UserAction.async { implicit request ⇒
       for {
         details ← businessCustomerConnector.getReviewDetails
-        _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
+        _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
       } yield {
         Redirect(routes.Application.businessType())
       }
   }
 
-  def businessType = authorisedUser { implicit request ⇒
-    internalId ⇒
-      Future.successful(Ok(business_type(businessTypeForm)))
+  def businessType = UserAction { implicit request ⇒
+      Ok(business_type(businessTypeForm))
   }
 
-  def submitBusinessType = authorisedUser { implicit request ⇒
-    internalId ⇒
+  def submitBusinessType = UserAction.async { implicit request ⇒
       businessTypeForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
         businessType => {
           for {
-            _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)
+            _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
           } yield {
             Redirect(routes.Application.startForm())
           }
@@ -113,23 +109,28 @@ class Application @Inject()(
       )
   }
 
-  def startForm = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+  def startForm = UserAction.async { implicit request ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
         case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
 
-  def savedForLater = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchLastTimeUserSaved(internalId).map {
+  def savedForLater = UserAction.async { implicit request ⇒
+      save4LaterService.fetchLastUpdateTime(request.userId).map {
         case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-        case None            ⇒ NotFound("NotFound. Todo: NotFound page") //Todo: NotFound page
+        case None            ⇒ pageNotFound
       }
   }
 
-  def summary = Action.async { implicit request ⇒
+  def delete = UserAction.async { implicit request ⇒
+      save4LaterService.fetchLastUpdateTime(request.userId) map {
+        case Some(savedDate) ⇒ Ok(confirm_delete(savedDate))
+        case None            ⇒ pageNotFound
+      }
+  }
+
+  def summary = UserAction.async { implicit request ⇒
     Future.successful(Ok(ltd_summary("ok")))
   }
 
@@ -190,14 +191,11 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
     }
   }
 
-
   def authorisedUser(action: Request[AnyContent] ⇒ String ⇒ Future[Result]): Action[AnyContent] = {
     Action.async { implicit request ⇒
       withVerifiedPasscode("fhdds", request.session.get(SessionKeys.otacToken)) {
         authorised().retrieve(internalId) {
-          case Some(iid) ⇒ {
-            action(request)(iid)
-          }
+          case Some(iid) ⇒ action(request)(iid)
           case None      ⇒ throw AuthorisationException.fromString("Can not find user id")
         } recover { case e ⇒ handleFailure(e) }
       }
@@ -222,6 +220,15 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
         Logger.warn(s"could not authenticate user due to: $ex")
         BadRequest(s"$ex")
     }
+
+  def pageNotFound(implicit request: Request[_]) = {
+    NotFound(error_template(
+      messages("fh.generic.not_found"),
+      messages("fh.generic.not_found.label"),
+      messages("fh.generic.not_found.inf")
+    ))
+  }
+
 }
 
 @Singleton

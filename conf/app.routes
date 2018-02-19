@@ -23,5 +23,7 @@ GET         /summary                                                            
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
+GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.delete
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)
