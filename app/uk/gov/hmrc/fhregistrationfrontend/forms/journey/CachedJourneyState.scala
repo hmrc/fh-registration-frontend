@@ -15,24 +15,24 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{FormPage, Navigation}
 
-class LinearJourney(val journeyPages: JourneyPages) extends JourneyNavigation {
+import uk.gov.hmrc.http.cache.client.CacheMap
+
+class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends JourneyState {
 
   val pages = journeyPages.pages
 
-  override def next[_](pageId: String): Option[Page[_]] = {
-    pages dropWhile (_.id != pageId) match {
-      case page :: next :: rest ⇒ Some(next)
-      case _                    ⇒ None
-    }
+  override def isComplete: Boolean = pages forall isPageComplete
+
+  override def isAccessible(pageId: String): Boolean = pages indexWhere (_.id == pageId) match {
+    case -1 ⇒ false
+    case index ⇒ pages take index forall isPageComplete
   }
 
-  override def previous(pageId: String): Option[Page[_]] = {
-    pages takeWhile (_.id != pageId) lastOption
-  }
+  override def nextPageToComplete(): Option[String] = pages find { p ⇒ !(cacheMap.data contains p.id)} map (_.id)
 
-  override def navigation(pageId: String): Navigation = {
-    Navigation(previous(pageId) map {page ⇒ FormPage(page.id)})
-  }
+
+  override def isPageComplete(page: Page[_]) = cacheMap.data contains page.id
+
+
 }

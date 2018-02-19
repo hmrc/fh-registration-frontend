@@ -23,7 +23,9 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0",
     "uk.gov.hmrc" %% "domain" % "4.1.0",
     "org.typelevel" %% "cats" % "0.9.0",
-    "com.github.tototoshi" %% "play-json-naming" % "1.1.0"
+    "com.github.tototoshi" %% "play-json-naming" % "1.1.0",
+    "org.typelevel" %% "cats-core" % "1.0.1",
+    "org.typelevel" %% "cats-kernel" % "1.0.1"
   )
 
   def test(scope: String = "test,it") = Seq(

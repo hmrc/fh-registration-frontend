@@ -30,9 +30,9 @@ import scala.concurrent.Future
 class FormPageController @Inject()(
   ds               : CommonPlayDependencies,
   messagesApi      : play.api.i18n.MessagesApi,
-  links            : ExternalUrls,
-  save4LaterService: Save4LaterService
-) extends AppController(ds, messagesApi) with SubmitForLater {
+  links            : ExternalUrls
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) with SubmitForLater {
+
 
   def load[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
     loadStoredFormData[T](request.userId, request.page) flatMap (renderForm(request.page, _))
@@ -50,7 +50,7 @@ class FormPageController @Inject()(
             else {
               request.journey next pageId match {
                 case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
-                case None           ⇒ Future successful Ok("All done")
+                case None           ⇒ Future successful Redirect(routes.Application.summary())
               }
             }
           }
