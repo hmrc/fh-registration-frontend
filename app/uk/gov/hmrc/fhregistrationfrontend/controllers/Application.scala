@@ -28,6 +28,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
+import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -82,28 +83,25 @@ class Application @Inject()(
     Future.successful(Redirect(links.businessCustomerVerificationUrl))
   }
 
-  def continue = authorisedUser { implicit request ⇒
-    internalId ⇒
+  def continue = UserAction.async { implicit request ⇒
       for {
         details ← businessCustomerConnector.getReviewDetails
-        _ ← save4LaterService.saveBusinessRegistrationDetails(internalId, details)
+        _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
       } yield {
         Redirect(routes.Application.businessType())
       }
   }
 
-  def businessType = authorisedUser { implicit request ⇒
-    internalId ⇒
-      Future.successful(Ok(business_type(businessTypeForm)))
+  def businessType = UserAction { implicit request ⇒
+      Ok(business_type(businessTypeForm))
   }
 
-  def submitBusinessType = authorisedUser { implicit request ⇒
-    internalId ⇒
+  def submitBusinessType = UserAction.async { implicit request ⇒
       businessTypeForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
         businessType => {
           for {
-            _ ← save4LaterService.saveBusinessType(internalId, businessType.businessType)
+            _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
           } yield {
             Redirect(routes.Application.startForm())
           }
@@ -111,31 +109,28 @@ class Application @Inject()(
       )
   }
 
-  def startForm = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(internalId) map {
+  def startForm = UserAction.async { implicit request ⇒
+      save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
         case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
         case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
       }
   }
 
-  def savedForLater = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchLastUpdateTime(internalId).map {
+  def savedForLater = UserAction.async { implicit request ⇒
+      save4LaterService.fetchLastUpdateTime(request.userId).map {
         case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-        case None            ⇒ NotFound(pageNotFound)
+        case None            ⇒ pageNotFound
       }
   }
 
-  def delete = authorisedUser { implicit request ⇒
-    internalId ⇒
-      save4LaterService.fetchLastUpdateTime(internalId) map {
+  def delete = UserAction.async { implicit request ⇒
+      save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒ Ok(confirm_delete(savedDate))
-        case None            ⇒ NotFound(pageNotFound)
+        case None            ⇒ pageNotFound
       }
   }
 
-  def summary = Action.async { implicit request ⇒
+  def summary = UserAction.async { implicit request ⇒
     Future.successful(Ok(ltd_summary("ok")))
   }
 
@@ -227,11 +222,11 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
     }
 
   def pageNotFound(implicit request: Request[_]) = {
-    error_template(
+    NotFound(error_template(
       messages("fh.generic.not_found"),
       messages("fh.generic.not_found.label"),
       messages("fh.generic.not_found.inf")
-    )
+    ))
   }
 
 }
