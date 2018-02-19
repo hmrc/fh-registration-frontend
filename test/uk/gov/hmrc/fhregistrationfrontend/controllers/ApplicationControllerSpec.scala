@@ -39,6 +39,8 @@ class ApplicationControllerSpec extends AppUnitGenerator {
   when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-partnership"))
     .thenReturn(Some("fhdds-partnership"))
 
+  when(mockConfiguration.getInt(s"formMaxExpiryDays")).thenReturn(Some(27))
+
 
   val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector,
     mock[MessagesApi], mockConfiguration, mockSave4Later) {
