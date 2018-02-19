@@ -15,33 +15,48 @@
  *@
 
 @import org.joda.time.DateTime
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
 
-  <h1>@Messages("fh.continue_delete.header")</h1>
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.continue_delete.header")
+    )
+  )
+
+  <legend class="heading-medium">
+    @Messages("fh.continue_delete.to_do")
+  </legend>
 
   <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue()}" method="POST">
 
     @helper.CSRF.formField
 
-    <fieldset id="options">
-      <legend class="heading-medium">
-        @Messages("fh.continue_delete.to_do")
-      </legend>
-
-      <label for="continue" class="block-label selected" style="padding-top: 0.25em;">
-        <input id="continue" type="radio" name="deleteOrContinue" value="continue" checked="checked">
-        <h2 class="heading-medium">@Messages("fh.continue_delete.continue")</h2>
-        <p>@{Messages("fh.continue_delete.continue.hint") + s" ${expiryTime.plusDays(27).toLocalDate} " + Messages("fh.continue_delete.continue.hint_continue") }</p>
-      </label>
-
-      <label for="delete" class="block-label" style="padding-top: 0.25em;">
-        <input id="delete" type="radio" name="deleteOrContinue" value="delete">
-        <h2 class="heading-medium">@Messages("fh.continue_delete.delete")</h2>
-      </label>
-    </fieldset>
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some("deleteOrContinue"),
+        inline = false,
+        required = true,
+        hasErrors = act("act").hasErrors,
+        error = Some(Messages("fh.business_customers.error")),
+        value = Some("continue"),
+        hintText = Some(Messages("fh.continue_delete.continue.hint") + s" ${expiryTime.plusDays(27).toLocalDate} " + Messages("fh.continue_delete.continue.hint_continue")),
+        radios = List(
+          RadioParams(
+            "continue",
+            Messages("fh.continue_delete.continue")
+          ),
+          RadioParams(
+            "delete",
+            Messages("fh.continue_delete.delete")
+          )
+        )
+      )
+    )
 
     <br><br><button class="button">@Messages("fh.generic.continue")</button><br><br>
   </form>
