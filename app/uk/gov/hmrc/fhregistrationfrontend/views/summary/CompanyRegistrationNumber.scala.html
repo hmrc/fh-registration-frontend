@@ -14,18 +14,18 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyRegistrationNumber => CRNModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
-@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
+@(companyRegistrationNumberForm: CRNModel)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.company_registration_number.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.company_registration_number.label")),
-      companyRegistrationNumberForm(companyRegistrationNumberKey).value,
+      Some(companyRegistrationNumberForm.crn),
       Some("companyRegistrationNumber")
     )
   )

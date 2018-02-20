@@ -14,29 +14,29 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 
-@(importingActivitiesForm: Form[ImportingActivities])(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: ImportingActivitiesModel)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.importing_activities.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.importing_activities.eori.confirm.label")),
-      importingActivitiesForm(hasEoriKey).value,
+      Some(importingActivitiesForm.hasEori),
       Some("importingActivities")
     )
   )
 
-  @if(importingActivitiesForm(hasEoriKey).value == "true") {
+  @if(importingActivitiesForm.hasEori) {
 
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
-        importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value,
+        Some(importingActivitiesForm.eoriNumber),
         Some("importingActivities")
       )
     )
@@ -44,7 +44,7 @@
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
-        importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value,
+        Some("No"),
         Some("importingActivities")
       )
     )

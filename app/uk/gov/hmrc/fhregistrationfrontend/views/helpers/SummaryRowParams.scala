@@ -33,4 +33,12 @@ case class SummaryRowParams(
   changeLink: Option[String] = None
 )
 
+object SummaryRowParams {
+  def apply(label: Option[String], value: Option[Boolean], changeLink: Option[String]) = {
+    new SummaryRowParams(label, value.map( v => if(v) "Yes" else "No"), changeLink)
+  }
+
+
+}
+
 

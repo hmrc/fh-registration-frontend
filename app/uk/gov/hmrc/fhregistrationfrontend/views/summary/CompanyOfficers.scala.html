@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficers
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficers => CompanyOfficersModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 
-@(companyOfficersForm: Form[CompanyOfficer])(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: CompanyOfficersModel)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.company_officers.title"))

@@ -15,45 +15,47 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{MainBusinessAddress => MainBusinessAddressModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey}
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+
+@(mainBusinessAddressForm: MainBusinessAddressModel, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @SummarySectionHead(heading = Messages("fh.main_business_address.title"))
 
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.main_business_address.time_at_address.label")),
-        mainBusinessAddressForm(timeAtCurrentAddressKey).value,
+        Some(mainBusinessAddressForm.timeAtCurrentAddress),
         Some("main_business_address")
     )
 )
 
-@if(mainBusinessAddressForm(timeAtCurrentAddressKey).value == "Less than 3 years") {
+@if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
     @SummaryRow(
         SummaryRowParams(
             Some(Messages("fh.main_business_address.previous.label")),
-            mainBusinessAddressForm(previousAddressKey).value,
+            mainBusinessAddressForm.hasPreviousAddress,
             Some("main_business_address")
         )
     )
 
-    @if(mainBusinessAddressForm(previousAddressKey).value == "true") {
-        @SummaryAddress(
-            SummaryAddressParams(
-                Some(Messages("fh.main_business_address.previous.label")),
-                Some(SummaryAddressBlock(
-                    Line1 = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line1").value,
-                    Line2 = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line2").value,
-                    Line3 = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line3").value,
-                    Line4 = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line4").value,
-                    postcode = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.postcode").value
-                )),
-                Some("main_business_address")
-            )
-        )
+    @if(mainBusinessAddressForm.hasPreviousAddress) {
+        @mainBusinessAddressForm.previousAddress.map { address =>
+          @SummaryAddress(
+              SummaryAddressParams(
+                  Some(Messages("fh.main_business_address.previous.label")),
+                  SummaryAddressBlock(
+                      Line1 = Some(address.addressLine1),
+                      Line2 = Some(address.addressLine2),
+                      Line3 = address.addressLine3,
+                      Line4 = address.addressLine4,
+                      postcode = Some(address.postcode)
+                  ),
+                  Some("main_business_address")
+              )
+          )
+        }
     }
 }
 

@@ -15,18 +15,18 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @SummarySectionHead(heading = Messages("fh.contact_person.title"))
 
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.first_name.label")),
-        contactPersonForm(firstNameKey).value,
+        Some(contactPersonForm.firstName),
         Some("contactPerson")
     )
 )
@@ -34,7 +34,7 @@
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.last_name.label")),
-        contactPersonForm(lastNameKey).value,
+        Some(contactPersonForm.lastName),
         Some("contactPerson")
     )
 )
@@ -42,7 +42,7 @@
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.job_title.label")),
-        contactPersonForm(jobTitleKey).value,
+        Some(contactPersonForm.jobTitle),
         Some("contactPerson")
     )
 )
@@ -50,7 +50,7 @@
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.telephone.label")),
-        contactPersonForm(telephoneKey).value,
+        Some(contactPersonForm.telephone),
         Some("contactPerson")
     )
 )
@@ -58,7 +58,7 @@
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.email.label")),
-        contactPersonForm(emailAddressKey).value,
+        Some(contactPersonForm.emailAddress),
         Some("contactPerson")
     )
 )
@@ -66,7 +66,7 @@
 @SummaryRow(
     SummaryRowParams(
         Some(Messages("fh.contact_person.contact_address_correct.label")),
-        contactPersonForm(hasOtherContactAddressKey).value,
+        Some(contactPersonForm.hasOtherContactAddress),
         Some("contactPerson")
     )
 )
@@ -76,7 +76,7 @@
     @SummaryRow(
         SummaryRowParams(
             Some(Messages("fh.contact_person.contact_address_in_uk.label")),
-            contactPersonForm(isUkAddressKey).value,
+            Some(contactPersonForm.isUkAddress),
             Some("contactPerson")
         )
     )
@@ -86,13 +86,13 @@
         @SummaryAddress(
             SummaryAddressParams(
                 Some(Messages("fh.contact_person.contact_address_new.label")),
-                Some(SummaryAddressBlock(
-                    Line1 = contactPersonForm("otherUkContactAddress_contactAddress.Line1").value,
-                    Line2 = contactPersonForm("otherUkContactAddress_contactAddress.Line2").value,
-                    Line3 = contactPersonForm("otherUkContactAddress_contactAddress.Line3").value,
-                    Line4 = contactPersonForm("otherUkContactAddress_contactAddress.Line4").value,
-                    postcode = contactPersonForm("otherUkContactAddress_contactAddress.postcode").value
-                )),
+                SummaryAddressBlock(
+                    Line1 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine1,
+                    Line2 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine2,
+                    Line3 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine3,
+                    Line4 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine4,
+                    postcode = contactPersonForm.otherUkContactAddress_contactAddress.postcode
+                ),
                 Some("contactPerson")
             )
         )
@@ -101,12 +101,12 @@
         @SummaryAddress(
             SummaryAddressParams(
                 Some("International Contact address"),
-                Some(SummaryAddressBlock(
-                    Line1 = contactPersonForm("otherInternationalContactAddress_contactAddress.Line1").value,
-                    Line2 = contactPersonForm("otherInternationalContactAddress_contactAddress.Line2").value,
-                    Line3 = contactPersonForm("otherInternationalContactAddress_contactAddress.Line3").value,
-                    Line4 = contactPersonForm("otherInternationalContactAddress_contactAddress.Line4").value
-                )),
+                SummaryAddressBlock(
+                    Line1 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine1,
+                    Line2 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine2,
+                    Line3 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine3,
+                    Line4 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine4
+                ),
                 Some("contactPerson")
             )
         )
@@ -116,13 +116,13 @@
     @SummaryAddress(
         SummaryAddressParams(
             Some(Messages("fh.main_business_address.previous.label")),
-            Some(SummaryAddressBlock(
+            SummaryAddressBlock(
                 Line1 = Some(bpr.businessAddress.line1),
                 Line2 = Some(bpr.businessAddress.line2),
                 Line3 = Some(bpr.businessAddress.line3),
                 Line4 = Some(bpr.businessAddress.line4),
                 postcode = Some(bpr.businessAddress.postcode)
-            )),
+            ),
             Some("contactPerson")
         )
     )

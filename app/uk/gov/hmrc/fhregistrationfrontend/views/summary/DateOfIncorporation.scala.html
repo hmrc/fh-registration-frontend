@@ -14,24 +14,18 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{DateOfIncorporation => DateOfIncorporationModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
-@(dateOfIncorporationForm: Form[DateOfIncorporation])(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: DateOfIncorporationModel)(implicit request: Request[_], messages: Messages)
 
 @SummarySectionHead(heading = Messages("fh.date_of_incorporation.title"))
-
-@DateString = SummaryDateTuple(
-  dateOfIncorporationForm(s"$dateOfIncorporationKey.day").value,
-  dateOfIncorporationForm(s"$dateOfIncorporationKey.month").value,
-  dateOfIncorporationForm(s"$dateOfIncorporationKey.year").value
-)
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.date_of_incorporation.label")),
-      DateString,
+      Some(dateOfIncorporationForm.dataOfIncorporation.toString()),
       Some("dateOfIncorporation")
     )
   )

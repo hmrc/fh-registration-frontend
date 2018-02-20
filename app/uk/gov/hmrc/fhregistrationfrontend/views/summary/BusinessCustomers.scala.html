@@ -14,19 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers => BusinessCustomersModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
 
-@(businessCustomersForm: Form[BusinessCustomers])(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: BusinessCustomersModel)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.business_customers.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.business_customers.label")),
-      businessCustomersForm(numberOfCustomersKey).value,
+      Some(businessCustomersForm.numberOfCustomers),
       Some("businessCustomers")
     )
   )

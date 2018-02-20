@@ -19,23 +19,23 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
 
-@(vatNumberForm: Form[VatNumber])(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: VatNumber)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.trading_name.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.vat_registration.confirm.label")),
-      vatNumberForm(hasVatNumberKey).value,
+      Some(vatNumberForm.hasValue.toString()),
       Some("vatNumber")
     )
   )
 
-  @if(vatNumberForm(hasVatNumberKey).value == "true") {
+  @if(vatNumberForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.vat_registration.label")),
-        vatNumberForm(vatNumberKey).value,
+        vatNumberForm.value,
         Some("vatNumber")
       )
     )

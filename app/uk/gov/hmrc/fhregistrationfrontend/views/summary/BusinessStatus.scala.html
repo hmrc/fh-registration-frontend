@@ -14,35 +14,29 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
 
-@(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages)
+@(businessStatusForm: models.BusinessStatus)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.business_status.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.business_status.label")),
-      businessStatusForm(isNewFulfilmentBusinessKey).value,
+      Some(businessStatusForm.isNewFulfilmentBusiness),
       Some(isNewFulfilmentBusinessKey)
     )
   )
 
-  @if(businessStatusForm(isNewFulfilmentBusinessKey).value == "true") {
+  @if(businessStatusForm.isNewFulfilmentBusiness) {
 
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.business_status.new_business.label")),
-        Some(
-          SummaryDateTuple(
-            day = businessStatusForm(s"$proposedStartDateKey.day").value,
-            month = businessStatusForm(s"$proposedStartDateKey.month").value,
-            year = businessStatusForm(s"$proposedStartDateKey.year").value
-          )
-        ),
+        Some(businessStatusForm.proposedStartDate.toString()),
         Some(s"$proposedStartDateKey")
       )
     )

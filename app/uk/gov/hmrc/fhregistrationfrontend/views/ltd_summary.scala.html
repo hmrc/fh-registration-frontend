@@ -19,8 +19,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
-@(sections: Map[String, Form[_]], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", mainClass = Some("full-width")) {
 
@@ -33,17 +34,17 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(sections("mainBusinessAddress", bpr))
-      @ContactPerson(sections("contactPerson", bpr))
-      @CompanyRegistrationNumber(sections("companyRegistrationNumber"))
-      @DateOfIncorporation(sections("dateOfIncorporation"))
-      @TradingName(sections("tradingName"))
-      @VATRegistrationNumber(sections("vatNumber"))
-      @CompanyOfficers(sections("companyOfficers"))
-      @BusinessStatus(sections("businessStatus"))
-      @ImportingActivities(sections("importingActivities"))
-      @BusinessCustomers(sections("businessCustomers"))
-      @OtherStoragePremises(sections("otherStoragePremises"))
+      @MainBusinessAddress(applicationData.mainBusinessAddress, bpr)
+      @ContactPerson(applicationData.contactPerson, bpr)
+      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber)
+      @DateOfIncorporation(applicationData.dateOfIncorporation)
+      @TradingName(applicationData.tradingName)
+      @VATRegistrationNumber(applicationData.vatNumber)
+      @CompanyOfficers(applicationData.companyOfficers)
+      @BusinessStatus(applicationData.businessStatus)
+      @ImportingActivities(applicationData.importingActivities)
+      @BusinessCustomers(applicationData.businessCustomers)
+      @OtherStoragePremises(applicationData.otherStoragePremises)
 
     </tbody>
   </table>

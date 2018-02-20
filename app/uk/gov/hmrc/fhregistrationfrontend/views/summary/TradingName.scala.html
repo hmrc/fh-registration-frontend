@@ -14,28 +14,28 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{TradingName => TradingNameModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 
-@(tradingNameForm: Form[TradingName])(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: TradingNameModel)(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading = Messages("fh.trading_name.title"))
 
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.trading_name.confirm.label")),
-      tradingNameForm(hasTradingNameKey).value,
+      Some(tradingNameForm.hasValue),
       Some("tradingName")
     )
   )
 
-  @if(tradingNameForm(hasTradingNameKey).value == "true") {
+  @if(tradingNameForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.trading_name.label")),
-        tradingNameForm(tradingNameKey).value,
+        Some(tradingNameForm.value),
         Some("tradingName")
       )
     )
