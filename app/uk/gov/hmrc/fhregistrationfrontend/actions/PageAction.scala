@@ -50,9 +50,9 @@ class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterServic
     implicit val r = input
 
     val result: EitherT[Future, Result, PageRequest[A]] = for {
-      page <- EitherT(Future successful loadPage(input))
+      page <- loadPage(input).toEitherT[Future]
       journeyState ← EitherT(loadJourneyState(input))
-      _ ← accessiblePage(page, journeyState)
+      _ ← accessiblePage(page, journeyState).toEitherT[Future]
       journeyNavigation = loadJourneyNavigation(journeyState)
     } yield {
       new PageRequest(
@@ -65,13 +65,12 @@ class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterServic
     result.value
   }
 
-  def accessiblePage(page: Page[_], state: JourneyState): EitherT[Future, Result, Boolean] = {
-    val result: Either[Result, Boolean] = if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
+  def accessiblePage(page: Page[_], state: JourneyState):  Either[Result, Boolean] = {
+    if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
       Right(true)
     } else {
       Left(NotFound("Not found"))
     }
-    EitherT(Future successful result)
   }
 
 
