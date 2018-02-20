@@ -1,0 +1,52 @@
+@*
+* Copyright 2018 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
+
+@(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages)
+
+  @SummarySectionHead(heading: Messages("fh.business_status.title"))
+
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.business_status.label")),
+      Some(businessStatusForm(isNewFulfilmentBusinessKey).value),
+      Some(isNewFulfilmentBusinessKey)
+    )
+  )
+
+  @if(businessStatusForm(isNewFulfilmentBusinessKey).value == "true") {
+
+    @SummaryRow(
+      SummaryRowParams(
+        Some(Messages("fh.business_status.new_business.label")),
+        Some(
+          SummaryDateTuple(
+            day = businessStatusForm(s"$proposedStartDateKey.day").value,
+            month = businessStatusForm(s"$proposedStartDateKey.month").value,
+            year = businessStatusForm(s"$proposedStartDateKey.year").value
+          )
+        ),
+        Some(s"$proposedStartDateKey")
+      )
+    )
+
+  }
+
+}
