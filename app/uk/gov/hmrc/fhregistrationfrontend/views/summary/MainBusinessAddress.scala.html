@@ -1,0 +1,60 @@
+@*
+* Copyright 2018 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey}
+
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
+@SummarySectionHead(heading: Messages("fh.main_business_address.title"))
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.main_business_address.time_at_address.label")),
+        Some(mainBusinessAddressForm(timeAtCurrentAddressKey).value),
+        Some("main_business_address")
+    )
+)
+
+@if(mainBusinessAddressForm(timeAtCurrentAddressKey).value == "Less than 3 years") {
+    @SummaryRow(
+        SummaryRowParams(
+            Some(Messages("fh.main_business_address.previous.label")),
+            Some(mainBusinessAddressForm(previousAddressKey).value),
+            Some("main_business_address")
+        )
+    )
+
+    @if (mainBusinessAddressForm(previousAddressKey).value == "true") {
+        @SummaryAddress(
+            SummaryAddressParams(
+                Some(Messages("fh.main_business_address.previous.label")),
+                Some(SummaryAddressBlock(
+                    Line1 = mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line1").value,
+                    Line2 = Some(mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line2").value),
+                    Line3 = Some(mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line3").value),
+                    Line4 = Some(mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.Line4").value),
+                    postcode = Some(mainBusinessAddressForm(s"mainPreviousAddressUK_$previousAddressKey.postcode").value)
+                ),
+                Some("main_business_address")
+            )
+        )
+    }
+}
+

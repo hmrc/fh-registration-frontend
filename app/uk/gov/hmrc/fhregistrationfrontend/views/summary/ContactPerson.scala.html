@@ -1,0 +1,134 @@
+@*
+* Copyright 2018 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
+@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+
+@SummarySectionHead(heading: Messages("fh.contact_person.title"))
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.first_name.label")),
+        Some(contactPersonForm(firstNameKey).value),
+        Some("contactPerson")
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.last_name.label")),
+        Some(contactPersonForm(lastNameKey).value),
+        Some("contactPerson")
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.job_title.label")),
+        Some(contactPersonForm(jobTitleKey).value),
+        Some("contactPerson")
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.telephone.label")),
+        Some(contactPersonForm(telephoneKey).value),
+        Some("contactPerson")
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.email.label")),
+        Some(contactPersonForm(emailAddressKey).value),
+        Some("contactPerson")
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams(
+        Some(Messages("fh.contact_person.contact_address_correct.label")),
+        Some(contactPersonForm(hasOtherContactAddressKey).value),
+        Some("contactPerson")
+    )
+)
+
+@if(contactPersonForm(hasOtherContactAddressKey).value == "true") {
+
+    @SummaryRow(
+        SummaryRowParams(
+            Some(Messages("fh.contact_person.contact_address_in_uk.label")),
+            Some(contactPersonForm(isUkAddressKey).value),
+            Some("contactPerson")
+        )
+    )
+
+    @if(contactPersonForm(isUkAddressKey).value == "true"){
+
+        @SummaryAddress(
+            SummaryAddressParams(
+                Some(Messages("fh.contact_person.contact_address_new.label")),
+                Some(SummaryAddressBlock(
+                    Line1 = contactPersonForm("otherUkContactAddress_contactAddress.Line1").value,
+                    Line2 = Some(contactPersonForm("otherUkContactAddress_contactAddress.Line2").value),
+                    Line3 = Some(contactPersonForm("otherUkContactAddress_contactAddress.Line3").value),
+                    Line4 = Some(contactPersonForm("otherUkContactAddress_contactAddress.Line4").value),
+                    postcode = Some(contactPersonForm("otherUkContactAddress_contactAddress.postcode").value)
+                ),
+                Some("contactPerson")
+            )
+        )
+
+    } else {
+        @SummaryAddress(
+            SummaryAddressParams(
+                Some("International Contact address"),
+                Some(SummaryAddressBlock(
+                    Line1 = contactPersonForm("otherInternationalContactAddress_contactAddress.Line1").value,
+                    Line2 = Some(contactPersonForm("otherInternationalContactAddress_contactAddress.Line2").value),
+                    Line3 = Some(contactPersonForm("otherInternationalContactAddress_contactAddress.Line3").value),
+                    Line4 = Some(contactPersonForm("otherInternationalContactAddress_contactAddress.Line4").value)
+                ),
+                Some("contactPerson")
+            )
+        )
+    }
+
+} else {
+    @SummaryAddress(
+        SummaryAddressParams(
+            Some(Messages("fh.main_business_address.previous.label")),
+            Some(SummaryAddressBlock(
+                Line1 = bpr.businessAddress.line1,
+                Line2 = Some(bpr.businessAddress.line2),
+                Line3 = Some(bpr.businessAddress.line3),
+                Line4 = Some(bpr.businessAddress.line4),
+                postcode = Some(bpr.businessAddress.postcode)
+            ),
+            Some("contactPerson")
+        )
+    )
+}
+
+
+
+
+
