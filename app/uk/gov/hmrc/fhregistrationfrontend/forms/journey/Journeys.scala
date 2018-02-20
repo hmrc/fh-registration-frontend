@@ -54,9 +54,9 @@ object Journeys {
     Seq[Page[_]](
       Page.mainBusinessAddressPage,
       Page.contactPersonPage,
-      Page.nationalInsuranceNumberPage,
       Page.tradingNamePage,
       Page.vatNumberPage,
+      Page.businessPartnersPage,
       Page.businessStatusPage,
       Page.importingActivitiesPage,
       Page.businessCustomersPage,

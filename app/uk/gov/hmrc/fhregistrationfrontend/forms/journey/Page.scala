@@ -114,6 +114,14 @@ object Page {
     }
   }
 
+  val businessPartnersPage = new BasicPage[VatNumber]("vatNumber", VatNumberForm.vatNumberForm) {
+    override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation, formType: String)
+      (implicit request: Request[_], messages: Messages): Html = {
+      vat_registration(form, navigation, formType)
+    }
+  }
+
+
   //todo: should use CompanyOfficersForm.companyOfficersForm. When repeat component ready, replace companyOfficerForm with companyOfficersForm
   val companyOfficerPage = new BasicPage[CompanyOfficer](
     "companyOfficers", CompanyOfficersForm.companyOfficerForm

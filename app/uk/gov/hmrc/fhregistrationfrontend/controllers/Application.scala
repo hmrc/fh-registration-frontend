@@ -48,10 +48,10 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
 class Application @Inject()(
-  links: ExternalUrls,
-  ds: CommonPlayDependencies,
-  fhddsConnector: FhddsConnector,
-  messagesApi: play.api.i18n.MessagesApi,
+  links            : ExternalUrls,
+  ds               : CommonPlayDependencies,
+  fhddsConnector   : FhddsConnector,
+  messagesApi      : play.api.i18n.MessagesApi,
   configuration    : Configuration,
   save4LaterService: Save4LaterService
 ) extends AppController(ds, messagesApi) {
@@ -99,7 +99,7 @@ class Application @Inject()(
   val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
 
   def deleteOrContinue(isNewForm: Boolean) = UserAction.async { implicit request ⇒
-    if (isNewForm){
+    if (isNewForm) {
       Future successful Redirect(routes.Application.businessType())
     }
     else {
@@ -125,7 +125,7 @@ class Application @Inject()(
           save4LaterService.fetchBusinessType(request.userId) map {
             case Some(businessType) ⇒
               Redirect(routes.Application.startForm(businessType))
-            case None            ⇒ Redirect(routes.Application.businessType())
+            case None               ⇒ Redirect(routes.Application.businessType())
           }
         }
       }
@@ -139,34 +139,34 @@ class Application @Inject()(
   }
 
   def businessType = UserAction { implicit request ⇒
-      Ok(business_type(businessTypeForm))
+    Ok(business_type(businessTypeForm))
   }
 
   def submitBusinessType = UserAction.async { implicit request ⇒
-      businessTypeForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
-        businessType => {
-          for {
-            _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
-          } yield {
-            Redirect(routes.Application.startForm(businessType.businessType))
-          }
+    businessTypeForm.bindFromRequest().fold(
+      formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
+      businessType => {
+        for {
+          _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
+        } yield {
+          Redirect(routes.Application.startForm(businessType.businessType))
         }
-      )
+      }
+    )
   }
 
   def startForm(formType: String) = UserAction.async { implicit request ⇒
-      save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-        case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress", formType))
-        case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-      }
+    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
+      case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress", formType))
+      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+    }
   }
 
   def savedForLater = UserAction.async { implicit request ⇒
-      save4LaterService.fetchLastUpdateTime(request.userId).map {
-        case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-        case None            ⇒ pageNotFound
-      }
+    save4LaterService.fetchLastUpdateTime(request.userId).map {
+      case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
+      case None            ⇒ pageNotFound
+    }
   }
 
   def summary = UserAction.async { implicit request ⇒
@@ -187,7 +187,6 @@ class Application @Inject()(
 
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
-
     details.businessType match {
       case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
       case Some("corporate body") ⇒ limitedCompanyFormTypeRef
