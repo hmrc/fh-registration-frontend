@@ -16,14 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import cats.data.EitherT
+import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journey, LinearJourney, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
 
 class PageRequest[A](
-  val journey: Journey,
+  val journeyState: JourneyState,
+  val journey: JourneyNavigation,
   p: Page[_],
   request: UserRequest[A]) extends WrappedRequest[A](request)
 {
@@ -33,23 +37,64 @@ class PageRequest[A](
 }
 
 object PageAction {
-  def apply(sectionId: String) = (UserAction andThen new PageAction(sectionId))
+  def apply(pageId: String)(implicit save4LaterService: Save4LaterService) = (UserAction andThen new PageAction(pageId))
 }
 
-class PageAction[T](sectionId: String) extends ActionRefiner[UserRequest, PageRequest]
+class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
   with FrontendAction
 {
 
-  def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
-    val journey = new LinearJourney
-    Future successful {
-      journey.get[T](sectionId) match {
-        case Some(page) ⇒
-          //TODO check if allowed on this page and if not Left(Unauthorized)
-          Right(new PageRequest[A](journey, page, input))
-        case None ⇒ Left(NotFound)
-      }
+  val journeyPages = Journeys.limitedCompanyPages
+
+  override def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
+    implicit val r = input
+
+    val result: EitherT[Future, Result, PageRequest[A]] = for {
+      page <- loadPage(input).toEitherT[Future]
+      journeyState ← EitherT(loadJourneyState(input))
+      _ ← accessiblePage(page, journeyState).toEitherT[Future]
+      journeyNavigation = loadJourneyNavigation(journeyState)
+    } yield {
+      new PageRequest(
+        journeyState,
+        journeyNavigation,
+        page,
+        input
+      )
+    }
+    result.value
+  }
+
+  def accessiblePage(page: Page[_], state: JourneyState):  Either[Result, Boolean] = {
+    if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
+      Right(true)
+    } else {
+      Left(NotFound("Not found"))
     }
   }
+
+
+  def loadPage[A](request: UserRequest[A]): Either[Result, Page[_]] =
+    journeyPages.get(pageId) match {
+      case Some(page) ⇒ Right(page)
+      case None       ⇒ Left(NotFound)
+    }
+
+  def loadJourneyState(implicit request: UserRequest[_]): Future[Either[Result, JourneyState]] = {
+    save4LaterService.shortLivedCache.fetch(request.userId) map {
+      case Some(cacheMap) ⇒ Right(Journeys.limitedCompanyJourneyState(journeyPages, cacheMap))
+      case None ⇒ Left(NotFound)
+    } recover { case t ⇒
+      Left(BadGateway)
+    }
+  }
+
+  def loadJourneyNavigation(state: JourneyState) = {
+    if (state.isComplete)
+      Journeys.summaryJourney(journeyPages)
+    else
+      Journeys.linearJourney(journeyPages)
+  }
+
 
 }

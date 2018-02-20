@@ -124,6 +124,7 @@ class Application @Inject()(
           //todo goto the right page
           Future successful Redirect(routes.Application.startForm())
         }
+
       }
     )
   }
