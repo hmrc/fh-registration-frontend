@@ -235,64 +235,63 @@
       )
     )
 
-    @NestedPanel(
-      NestedPanelParams(
-        "hasOtherContactAddress",
-        RadioGroup(
-          RadioGroupParams(
-            name = Some(isUkAddressKey),
-            legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
-            hasErrors = contactPersonForm(isUkAddressKey).hasErrors,
-            error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
-            value = contactPersonForm(isUkAddressKey).value,
-            radios = List(
-              RadioParams(
-                "true",
-                Messages("fh.generic.yes"),
-                Some("contactAddressUK")
-              ),
-              RadioParams(
-                "false",
-                Messages("fh.generic.no"),
-                Some("contactAddressInternational")
-              )
+    <div id="@hasOtherContactAddressKey" class="js-hidden panel">
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(isUkAddressKey),
+          legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
+          hasErrors = contactPersonForm(isUkAddressKey).hasErrors,
+          error = Some(Messages("fh.contact_person.contact_address_in_uk.error")),
+          value = contactPersonForm(isUkAddressKey).value,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              Some("contactAddressUK")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some("contactAddressInternational")
             )
           )
         )
       )
-    )
 
-    @NestedPanel(
-      NestedPanelParams(
-        "contactAddressUK",
-        AddressUK(
-          contactPersonForm,
-          AddressUKParams(
-            context = Some("otherUkContactAddress"),
-            name = "contactAddress",
-            label = Messages("fh.contact_person.contact_address_new.label"),
-            hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
-            error = Some(Messages("fh.contact_person.contact_address_new.error"))
+      @NestedPanel(
+        NestedPanelParams(
+          "contactAddressUK",
+          AddressUK(
+            contactPersonForm,
+            AddressUKParams(
+              context = Some("otherUkContactAddress"),
+              name = "contactAddress",
+              label = Messages("fh.contact_person.contact_address_new.label"),
+              hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
+              error = Some(Messages("fh.contact_person.contact_address_new.error"))
+            )
           )
         )
       )
-    )
 
-    @NestedPanel(
-      NestedPanelParams(
-        "contactAddressInternational",
-        AddressInternational(
-          contactPersonForm,
-          AddressUKParams(
-            context = Some("otherInternationalContactAddress"),
-            name = "contactAddress",
-            label = "International Contact address",
-            hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
-            error = Some(Messages("fh.contact_person.contact_address_new.error"))
+      @NestedPanel(
+        NestedPanelParams(
+          "contactAddressInternational",
+          AddressInternational(
+            contactPersonForm,
+            AddressUKParams(
+              context = Some("otherInternationalContactAddress"),
+              name = "contactAddress",
+              label = "International Contact address",
+              hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
+              error = Some(Messages("fh.contact_person.contact_address_new.error"))
+            )
           )
         )
       )
-    )
+
+    </div>
 
     @SubmitButtons(
       SubmitButtonsParams(

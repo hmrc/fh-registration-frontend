@@ -19,6 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
@@ -34,7 +36,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
@@ -84,12 +86,52 @@ class Application @Inject()(
   }
 
   def continue = UserAction.async { implicit request ⇒
-      for {
-        details ← businessCustomerConnector.getReviewDetails
-        _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
-      } yield {
-        Redirect(routes.Application.businessType())
+    for {
+      details ← businessCustomerConnector.getReviewDetails
+      _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
+      businessType ← save4LaterService.fetchBusinessType(request.userId)
+      hasBusinessType = businessType.isEmpty
+    } yield {
+      Redirect(routes.Application.deleteOrContinue(hasBusinessType))
+    }
+  }
+
+  val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
+
+  def deleteOrContinue(isNewForm: Boolean) = UserAction.async { implicit request ⇒
+    if (isNewForm){
+      Future successful Redirect(routes.Application.businessType())
+    }
+    else {
+      save4LaterService.fetchLastUpdateTime(request.userId) map {
+        case Some(savedDate) ⇒
+          Ok(continue_delete(savedDate, deleteOrContinueForm))
+        case None            ⇒ Redirect(routes.Application.businessType())
       }
+    }
+  }
+
+  def submitDeleteOrContinue = UserAction.async { implicit request ⇒
+    deleteOrContinueForm.bindFromRequest().fold(
+      formWithErrors => Future successful ServiceUnavailable,
+      deleteOrContinue => {
+        if (deleteOrContinue == "delete") {
+          save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+            case Some(savedDate) ⇒ Future successful Ok(confirm_delete(savedDate))
+            case None            ⇒ Future successful ServiceUnavailable
+          }
+        } else {
+          //todo goto the right page
+          Future successful Redirect(routes.Application.startForm())
+        }
+      }
+    )
+  }
+
+  def deleteUserData = UserAction.async { implicit request ⇒
+    save4LaterService.removeUserData(request.userId) map {
+      _ ⇒ Redirect(routes.Application.start())
+    }
   }
 
   def businessType = UserAction { implicit request ⇒
@@ -119,13 +161,6 @@ class Application @Inject()(
   def savedForLater = UserAction.async { implicit request ⇒
       save4LaterService.fetchLastUpdateTime(request.userId).map {
         case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-        case None            ⇒ pageNotFound
-      }
-  }
-
-  def delete = UserAction.async { implicit request ⇒
-      save4LaterService.fetchLastUpdateTime(request.userId) map {
-        case Some(savedDate) ⇒ Ok(confirm_delete(savedDate))
         case None            ⇒ pageNotFound
       }
   }

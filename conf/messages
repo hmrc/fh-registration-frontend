@@ -333,3 +333,12 @@ fh.delete_confirmation_page.saved_on=Saved on
 fh.delete_confirmation_page.partially_completed=Partially completed
 fh.delete_confirmation_page.button=Delete and start again
 fh.delete_confirmation_page.back=Back
+
+# - Continue or Delete Confirmation
+#===========================================================
+fh.continue_delete.header=You can continue from where you left off last time
+fh.continue_delete.to_do=What would you like to do?
+fh.continue_delete.continue=Continue from where you left off
+fh.continue_delete.continue.hint=You have until midnight on
+fh.continue_delete.continue.hint_continue=to complete this form
+fh.continue_delete.delete=Delete your progress and start again
