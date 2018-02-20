@@ -21,7 +21,7 @@
 
 @(vatNumberForm: Form[VatNumber])(implicit request: Request[_], messages: Messages)
 
-@SummarySectionHead(heading: Messages("fh.trading_name.title"))
+  @SummarySectionHead(heading: Messages("fh.trading_name.title"))
 
   @SummaryRow(
     SummaryRowParams(
@@ -41,5 +41,4 @@
     )
   }
 
-}
 

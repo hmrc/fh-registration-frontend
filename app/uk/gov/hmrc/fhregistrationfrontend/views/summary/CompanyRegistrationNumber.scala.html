@@ -14,12 +14,11 @@
 * limitations under the License.
 *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
-@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber])(implicit request: Request[_], messages: Messages)
 
   @SummarySectionHead(heading: Messages("fh.company_registration_number.title"))
 
@@ -30,8 +29,6 @@
       Some("companyRegistrationNumber")
     )
   )
-
-}
 
 
 
