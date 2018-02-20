@@ -34,6 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
+
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
@@ -165,8 +166,12 @@ class Application @Inject()(
     }
   }
 
-  def summary = UserAction.async { implicit request ⇒
-    Future.successful(Ok(ltd_summary("ok")))
+  def summary = UserAction.async  { implicit request ⇒
+    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
+      case Some(bpr) ⇒ Ok(ltd_summary(Map("mainBusinessAddressForm" -> MainBusinessAddressForm.mainBusinessAddressForm), bpr))
+      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+    }
+
   }
 
   //todo link with summary page

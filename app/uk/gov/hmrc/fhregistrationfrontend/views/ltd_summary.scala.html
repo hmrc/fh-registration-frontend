@@ -14,26 +14,27 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 
-@(sections: Map[String, Form[_]])(implicit request: Request[_], messages: Messages)
+@(sections: Map[String, Form[_]], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", mainClass = Some("full-width")) {
 
   @PageHeading(
     PageHeadingParams(
-      heading = "Check your answers before sending your application"
+      heading = Messages("fh.generic.check")
     )
   )
 
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(sections("mainBusinessAddress"))
-      @ContactPerson(sections("contactPerson"))
+      @MainBusinessAddress(sections("mainBusinessAddress", bpr))
+      @ContactPerson(sections("contactPerson", bpr))
       @CompanyRegistrationNumber(sections("companyRegistrationNumber"))
       @DateOfIncorporation(sections("dateOfIncorporation"))
       @TradingName(sections("tradingName"))
@@ -47,8 +48,5 @@
     </tbody>
   </table>
 
-  @*<div class="form-group">*@
-    @*<a href="@routes.QuickCalcController.showResult()" id="get-results" role="button" class="button">@Messages("get_results")</a>*@
-  @*</div>*@
 
 }

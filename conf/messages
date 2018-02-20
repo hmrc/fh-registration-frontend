@@ -67,7 +67,7 @@ fh.generic.bta_link=Business tax account home
 
 fh.generic.create_new_application_link=Create a new application
 
-fh.generic.check=Check your answers
+fh.generic.check=Check your answers before sending your application
 
 # Generic Radio buttons
 fh.generic.yes=Yes
