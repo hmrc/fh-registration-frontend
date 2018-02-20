@@ -151,13 +151,23 @@ fh.trading_name.label=Enter the trading name
 fh.trading_name.error.required=Enter the trading name
 fh.trading_name.error.pattern=Enter only valid characters for a trading name
 
+# - National insurance number
+#===========================================================
+fh.national_insurance_number.title=National Insurance Number
+fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
+fh.national_insurance_number.confirm.error=Select whether you have a National Insurance number
+fh.national_insurance_number.label=Enter National Insurance number
+fh.national_insurance_number.hintText=For example, QQ123456C
+fh.national_insurance_number.error.required=Enter National Insurance number
+fh.national_insurance_number.error.pattern=Enter a valid National Insurance number
+
 # - VAT registration
 #===========================================================
 fh.vat_registration.title=VAT registration
-fh.vat_registration.confirm.label=Does the business have a VAT registration number?
+fh.vat_registration.confirm.label=Does the business have a UK VAT registration number?
 fh.vat_registration.confirm.error=Select whether the business has a VAT registration number
 fh.vat_registration.label=Enter the VAT registration number
-fh.vat_registration.hintText=For example, 123456789
+fh.vat_registration.hintText=For example, 123456789 or GB123456789
 fh.vat_registration.error.required=Enter the VAT registration number
 fh.vat_registration.error.pattern=Enter a valid VAT registration number
 

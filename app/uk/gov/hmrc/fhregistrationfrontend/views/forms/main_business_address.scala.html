@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
 @overThreeYearsPeriodLabels = @{
   List(
     Messages("fh.main_business_address.3to5years.label"),
@@ -108,7 +108,7 @@
     @bpr.businessAddress.postcode <br>
   </div>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress", formType), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -188,7 +188,8 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      )
+      ),
+      formType
     )
   }
 }

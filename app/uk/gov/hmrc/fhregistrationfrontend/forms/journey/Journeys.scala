@@ -20,7 +20,6 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 object Journeys {
 
-
   val limitedCompanyPages = new JourneyPages(
     Seq[Page[_]](
       Page.mainBusinessAddressPage,
@@ -30,6 +29,34 @@ object Journeys {
       Page.tradingNamePage,
       Page.vatNumberPage,
       Page.companyOfficerPage,
+      Page.businessStatusPage,
+      Page.importingActivitiesPage,
+      Page.businessCustomersPage,
+      Page.otherStoragePremisesPage
+    )
+  )
+
+  val soleTraderPages = new JourneyPages(
+    Seq[Page[_]](
+      Page.mainBusinessAddressPage,
+      Page.contactPersonPage,
+      Page.nationalInsuranceNumberPage,
+      Page.tradingNamePage,
+      Page.vatNumberPage,
+      Page.businessStatusPage,
+      Page.importingActivitiesPage,
+      Page.businessCustomersPage,
+      Page.otherStoragePremisesPage
+    )
+  )
+
+  val partnershipPages = new JourneyPages(
+    Seq[Page[_]](
+      Page.mainBusinessAddressPage,
+      Page.contactPersonPage,
+      Page.nationalInsuranceNumberPage,
+      Page.tradingNamePage,
+      Page.vatNumberPage,
       Page.businessStatusPage,
       Page.importingActivitiesPage,
       Page.businessCustomersPage,

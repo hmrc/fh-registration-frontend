@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.data.Form
-import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.oneOf
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import play.api.libs.json.Json
 
 
-object BusinessTypeForm {
+case class NationalInsuranceNumber (
+  hasValue: Boolean,
+  value: Option[String]
+)
 
-  val businessTypeKey = "businessType"
-
-  def businessTypeForm = Form(
-    mapping(
-      businessTypeKey → oneOf(BusinessType.businessTypeOptions)
-    )(BusinessType.apply)(BusinessType.unapply)
-  )
+object NationalInsuranceNumber {
+  implicit val format = Json.format[NationalInsuranceNumber]
 }

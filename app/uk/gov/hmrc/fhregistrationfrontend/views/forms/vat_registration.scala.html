@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(vatNumberForm: Form[VatNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: Form[VatNumber], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -48,7 +48,7 @@
         }
         @if(vatNumberForm(vatNumberKey).hasErrors){
           <li id="vatNumber-error-link"><a href="#vatNumber_value-inline-error">@{
-            Messages("fh.company_registration_number." + vatNumberForm(vatNumberKey).error.head.message)
+            Messages("fh.vat_registration." + vatNumberForm(vatNumberKey).error.head.message)
           }
           </a></li>
         }
@@ -62,7 +62,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber", formType), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -74,7 +74,7 @@
         yesNoLabel = Messages("fh.vat_registration.confirm.label"),
         yesNoError = Messages("fh.vat_registration.confirm.error"),
         valueLabel = Messages("fh.vat_registration.label"),
-        valueError = Messages("fh.company_registration_number." + getError(vatNumberForm(vatNumberKey).error)),
+        valueError = Messages("fh.vat_registration." + getError(vatNumberForm(vatNumberKey).error)),
         valueHintText = Some(Messages("fh.vat_registration.hintText")),
         hasValueError = vatNumberForm(vatNumberKey).hasErrors,
         hasErrors = vatNumberForm(hasVatNumberKey).hasErrors
@@ -86,7 +86,8 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      )
+      ),
+      formType
     )
   }
 }

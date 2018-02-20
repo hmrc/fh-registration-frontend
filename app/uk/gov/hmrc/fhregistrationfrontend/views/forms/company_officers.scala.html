@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyOfficersForm: Form[CompanyOfficer], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[CompanyOfficer], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -119,7 +119,7 @@
 
   <p>@Messages("fh.company_officers.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers", formType), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -384,7 +384,8 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      )
+      ),
+      formType
     )
   }
 }

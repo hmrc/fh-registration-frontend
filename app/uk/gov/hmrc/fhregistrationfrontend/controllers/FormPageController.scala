@@ -34,13 +34,13 @@ class FormPageController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) with SubmitForLater {
 
 
-  def load[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
-    loadStoredFormData[T](request.userId, request.page) flatMap (renderForm(request.page, _))
+  def load[T](pageId: String, formType: String) = PageAction(pageId, formType).async { implicit request ⇒
+    loadStoredFormData[T](request.userId, request.page) flatMap (renderForm(request.page, _, formType))
   }
 
-  def save[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
+  def save[T](pageId: String, formType: String) = PageAction(pageId, formType).async { implicit request ⇒
     request.page[T].form.bindFromRequest() fold (
-      formWithErrors => renderForm(request.page, formWithErrors),
+      formWithErrors => renderForm(request.page, formWithErrors, formType),
       mainBusinessAddress => {
         save4LaterService
           .saveData4Later(request.userId, request.page.id, mainBusinessAddress)(hc, request.page.format)
@@ -49,7 +49,7 @@ class FormPageController @Inject()(
               Future successful Redirect(routes.Application.savedForLater)
             else {
               request.journey next pageId match {
-                case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
+                case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id, formType))
                 case None           ⇒ Future successful Redirect(routes.Application.summary())
               }
             }
@@ -63,18 +63,17 @@ class FormPageController @Inject()(
       _ map page.form.fill getOrElse page.form
     }
 
-  private def renderForm[T](page: Page[T], form: Form[T])(implicit request: PageRequest[_]) = {
+  private def renderForm[T](page: Page[T], form: Form[T], formType: String)(implicit request: PageRequest[_]) = {
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒
         if (form.hasErrors)
-          BadRequest(page.render(form, bpr, request.journey.navigation(page.id)))
+          BadRequest(page.render(form, bpr, request.journey.navigation(page.id), formType))
         else {
-          Ok(page.render(form, bpr, request.journey.navigation(page.id)))
+          Ok(page.render(form, bpr, request.journey.navigation(page.id), formType))
         }
       case None      ⇒
         Redirect(links.businessCustomerVerificationUrl)
     }
   }
-
 
 }

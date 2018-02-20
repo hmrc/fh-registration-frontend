@@ -6,7 +6,7 @@ GET         /continue                                                           
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
-GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
+GET         /startForm/:formType                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm(formType: String)
 
 GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
@@ -16,8 +16,8 @@ GET         /address-lookup                                                     
 
 GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
 
-GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
-POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
+GET         /form/:formType/:page                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String, formType: String)
+POST        /form/:formType/:page                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String, formType: String)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 

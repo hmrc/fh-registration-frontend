@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm.companyRegistrationNumberKey
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = Messages("fh.company_registration_number.title"), mainClass = Some("full-width")) {
 
@@ -52,7 +52,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey, formType), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -87,7 +87,8 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      )
+      ),
+      formType
     )
   }
 }
