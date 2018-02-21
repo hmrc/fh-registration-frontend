@@ -24,49 +24,41 @@
 @SummarySectionHead(heading = Messages("fh.contact_person.title"))
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.first_name.label")),
-        Some(contactPersonForm.firstName),
+        contactPersonForm.firstName,
         Some("contactPerson")
     )
 )
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.last_name.label")),
-        Some(contactPersonForm.lastName),
+        contactPersonForm.lastName,
         Some("contactPerson")
     )
 )
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.job_title.label")),
-        Some(contactPersonForm.jobTitle),
+        contactPersonForm.jobTitle,
         Some("contactPerson")
     )
 )
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.telephone.label")),
-        Some(contactPersonForm.telephone),
+        contactPersonForm.telephone,
         Some("contactPerson")
     )
 )
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.email.label")),
-        Some(contactPersonForm.emailAddress),
-        Some("contactPerson")
-    )
-)
-
-@SummaryRow(
-    SummaryRowParams(
-        Some(Messages("fh.contact_person.contact_address_correct.label")),
-        Some(contactPersonForm.hasOtherContactAddress),
+        contactPersonForm.emailAddress,
         Some("contactPerson")
     )
 )
@@ -74,7 +66,7 @@
 @if(contactPersonForm.hasOtherContactAddress) {
 
     @SummaryRow(
-        SummaryRowParams(
+        SummaryRowParams.ofBoolean(
             Some(Messages("fh.contact_person.contact_address_in_uk.label")),
             contactPersonForm.ukOtherAddress,
             Some("contactPerson")
@@ -119,7 +111,7 @@
 
     @SummaryAddress(
         SummaryAddressParams(
-            Some(Messages("fh.main_business_address.previous.label")),
+            Some(Messages("fh.contact_person.contact_address.title")),
             SummaryAddressBlock(
                 Line1 = Some(bpr.businessAddress.line1),
                 Line2 = Some(bpr.businessAddress.line2),

@@ -16,20 +16,10 @@
 
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams)(implicit message : Messages)
 
-@yesNo(value: String) = @{
-    if(value == "true") {
-        "Yes"
-    } else if (value == "false") {
-        "No"
-    } else {
-        value
-    }
-}
-
 <tr>
-  <td>@if(params.label.nonEmpty){ @params.label }</td>
-  <td>@if(params.value.nonEmpty){ yesNo(params.value) }</td>
-  <td>
+  <td style="vertical-align: top" width="45%">@if(params.label.nonEmpty){ @params.label }</td>
+  <td width="45%">@if(params.value.nonEmpty){ @params.value }</td>
+  <td style="vertical-align: top">
     @if(params.changeLink.nonEmpty){
     <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
     }

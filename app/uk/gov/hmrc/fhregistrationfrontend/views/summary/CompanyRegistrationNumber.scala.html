@@ -23,9 +23,9 @@
   @SummarySectionHead(heading = Messages("fh.company_registration_number.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
       Some(Messages("fh.company_registration_number.label")),
-      Some(companyRegistrationNumberForm.crn),
+      companyRegistrationNumberForm.crn,
       Some("companyRegistrationNumber")
     )
   )

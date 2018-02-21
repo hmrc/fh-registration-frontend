@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import java.time.LocalDate
+
 /**
   * Created by ali on 20/02/18.
   *
@@ -34,10 +36,26 @@ case class SummaryRowParams(
 )
 
 object SummaryRowParams {
-  def apply(label: Option[String], value: Boolean, changeLink: Option[String]): SummaryRowParams = {
-    SummaryRowParams(label, Some(if(value) "Yes" else "No"), changeLink)
+
+  def ofString(label: Option[String], value: String, changeLink: Option[String]): SummaryRowParams = {
+    SummaryRowParams(label, Some(value), changeLink)
   }
 
+  def ofBoolean(label: Option[String], value: Option[Boolean], changeLink: Option[String]): SummaryRowParams = {
+    SummaryRowParams(label, value map (if(_) "Yes" else "No"), changeLink)
+  }
+
+  def ofBoolean(label: Option[String], value: Boolean, changeLink: Option[String]): SummaryRowParams = {
+    ofBoolean(label, Some(value), changeLink)
+  }
+
+  def ofDate(label: Option[String], value: Option[LocalDate], changeLink: Option[String]): SummaryRowParams = {
+    SummaryRowParams(label, value map (_.toString()), changeLink)
+  }
+
+  def ofDate(label: Option[String], value: LocalDate, changeLink: Option[String]): SummaryRowParams = {
+    ofDate(label, Some(value), changeLink)
+  }
 
 }
 

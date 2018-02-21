@@ -23,7 +23,7 @@
   @SummarySectionHead(heading = Messages("fh.importing_activities.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofBoolean(
       Some(Messages("fh.importing_activities.eori.confirm.label")),
       importingActivitiesForm.hasEori,
       Some("importingActivities")
@@ -41,9 +41,9 @@
     )
 
     @SummaryRow(
-      SummaryRowParams(
+      SummaryRowParams.ofBoolean(
         Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
-        Some("No"),
+        importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
         Some("importingActivities")
       )
     )

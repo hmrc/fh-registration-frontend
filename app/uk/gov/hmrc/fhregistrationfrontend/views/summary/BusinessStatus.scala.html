@@ -24,20 +24,20 @@
   @SummarySectionHead(heading = Messages("fh.business_status.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofBoolean(
       Some(Messages("fh.business_status.label")),
       Some(businessStatusForm.isNewFulfilmentBusiness),
-      Some(isNewFulfilmentBusinessKey)
+      Some("businessStatus")
     )
   )
 
   @if(businessStatusForm.isNewFulfilmentBusiness) {
 
     @SummaryRow(
-      SummaryRowParams(
+      SummaryRowParams.ofDate(
         Some(Messages("fh.business_status.new_business.label")),
-        Some(businessStatusForm.proposedStartDate.toString()),
-        Some(s"$proposedStartDateKey")
+        businessStatusForm.proposedStartDate,
+        Some("businessStatus")
       )
     )
 

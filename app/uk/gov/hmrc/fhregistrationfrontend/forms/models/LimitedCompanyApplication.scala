@@ -20,7 +20,6 @@ case class LimitedCompanyApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,
   companyRegistrationNumber: CompanyRegistrationNumber,
-  companyOfficerCompany: CompanyOfficerCompany,
   dateOfIncorporation: DateOfIncorporation,
   tradingName: TradingName,
   vatNumber: VatNumber,

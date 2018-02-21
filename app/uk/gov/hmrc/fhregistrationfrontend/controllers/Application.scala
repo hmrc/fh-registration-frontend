@@ -34,8 +34,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
-
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
+
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
@@ -44,7 +44,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -167,9 +167,11 @@ class Application @Inject()(
     }
   }
 
+
+
   def summary = UserAction.async  { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Ok(ltd_summary(LimitedCompanyApplication.apply(), bpr))
+      case Some(bpr) ⇒ Ok(ltd_summary(TestData.mockSummary, bpr))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
 

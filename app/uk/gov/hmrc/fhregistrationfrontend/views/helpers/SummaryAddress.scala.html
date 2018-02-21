@@ -17,9 +17,9 @@
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryAddressParams)(implicit message : Messages)
 
 <tr>
-  <td>@if(params.label.nonEmpty){ @params.label }</td>
+  <td style="vertical-align: top;">@if(params.label.nonEmpty){ @params.label }</td>
   <td>@params.value</td>
-  <td>
+  <td style="vertical-align: top">
     @if(params.changeLink.nonEmpty){
       <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
     }

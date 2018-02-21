@@ -14,29 +14,28 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{MainBusinessAddress => MainBusinessAddressModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(mainBusinessAddressForm: MainBusinessAddressModel, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: models.MainBusinessAddress)(implicit request: Request[_], messages: Messages)
 
 @SummarySectionHead(heading = Messages("fh.main_business_address.title"))
 
 @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofString(
         Some(Messages("fh.main_business_address.time_at_address.label")),
-        Some(mainBusinessAddressForm.timeAtCurrentAddress),
-        Some("main_business_address")
+        mainBusinessAddressForm.timeAtCurrentAddress,
+        Some("mainBusinessAddress")
     )
 )
 
 @if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
     @SummaryRow(
-        SummaryRowParams(
+        SummaryRowParams.ofBoolean(
             Some(Messages("fh.main_business_address.previous.label")),
             mainBusinessAddressForm.hasPreviousAddress,
-            Some("main_business_address")
+            Some("mainBusinessAddress")
         )
     )
 
@@ -52,7 +51,7 @@
                       Line4 = address.addressLine4,
                       postcode = Some(address.postcode)
                   ),
-                  Some("main_business_address")
+                  Some("mainBusinessAddress")
               )
           )
         }

@@ -24,9 +24,9 @@
   @SummarySectionHead(heading = Messages("fh.trading_name.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofBoolean(
       Some(Messages("fh.trading_name.confirm.label")),
-      Some(tradingNameForm.hasValue),
+      tradingNameForm.hasValue,
       Some("tradingName")
     )
   )

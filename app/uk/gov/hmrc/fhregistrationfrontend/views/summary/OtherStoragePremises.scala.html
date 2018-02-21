@@ -24,9 +24,9 @@
   @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofBoolean(
       Some(Messages("fh.other_storage_premises.confirm.label")),
-      Some(otherStoragePremisesForm.hasValue),
+      otherStoragePremisesForm.hasValue,
       Some("otherStoragePremises")
     )
   )

@@ -21,12 +21,12 @@
 
 @(vatNumberForm: VatNumber)(implicit request: Request[_], messages: Messages)
 
-  @SummarySectionHead(heading = Messages("fh.trading_name.title"))
+  @SummarySectionHead(heading = Messages("fh.vat_registration.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofBoolean(
       Some(Messages("fh.vat_registration.confirm.label")),
-      Some(vatNumberForm.hasValue.toString()),
+      vatNumberForm.hasValue,
       Some("vatNumber")
     )
   )

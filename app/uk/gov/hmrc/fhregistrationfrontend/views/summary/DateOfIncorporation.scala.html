@@ -23,9 +23,9 @@
 @SummarySectionHead(heading = Messages("fh.date_of_incorporation.title"))
 
   @SummaryRow(
-    SummaryRowParams(
+    SummaryRowParams.ofDate(
       Some(Messages("fh.date_of_incorporation.label")),
-      Some(dateOfIncorporationForm.dateOfIncorporation.toString()),
+      dateOfIncorporationForm.dateOfIncorporation,
       Some("dateOfIncorporation")
     )
   )
