@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = Messages("fh.date_of_incorporation.title"), mainClass = Some("full-width")) {
 
@@ -48,7 +48,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -70,8 +70,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

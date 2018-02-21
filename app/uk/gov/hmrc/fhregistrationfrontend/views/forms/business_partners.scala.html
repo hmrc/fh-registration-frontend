@@ -19,20 +19,21 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(BusinessPartnerForm: Form[BusinessPartner], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(businessPartnerForm: Form[BusinessPartner], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
 
-@main_template(title = Messages("fh.company_officers.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+@main_template(title = Messages("fh.business_partners.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(companyOfficersForm.hasErrors) {
+  @if(businessPartnerForm.hasErrors) {
     <div class="flash error-summary error-summary--show"
     id="error-summary-display"
     role="alert"
@@ -40,69 +41,311 @@
     tabindex="-1">
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
-        @if(companyOfficersForm(identificationTypeKey).hasErrors) {
-          <li id="identificationType-error-link"><a href="#identificationType-inline-error">@{
-            Messages("fh.company_officers.entity_type.error", 1)
+        @if(businessPartnerForm(businessPartnersTypeKey).hasErrors) {
+          <li id="identificationType-error-link"><a href="#@{businessPartnersTypeKey}-inline-error">@{
+            Messages("fh.business_partners.entity_type.error", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").hasErrors) {
-          <li id="firstName-error-link"><a href="#individualIdentification.firstName-inline-error">@{
+
+
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerIndividualKey.$firstNameKey"}-inline-error">@{
             Messages("fh.company_officers.individual.first_name.empty.error", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").hasErrors) {
-          <li id="lastName-error-link"><a href="#individualIdentification.lastName-inline-error">@{
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").hasErrors) {
+          <li id="lastName-error-link"><a href="#@{s"$businessPartnerIndividualKey.$lastNameKey"}-inline-error">@{
             Messages("fh.company_officers.individual.last_name.empty.error", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").hasErrors) {
-          <li id="nationalInsuranceNumber-error-link"><a href="#individualIdentification.nationalInsuranceNumber-inline-error">@{
-            Messages("fh.company_officers.individual.nino.confirm.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$hasNationalInsuranceNumberKey").hasErrors) {
+          <li id="hasNationalInsurance-error-link"><a href="#@{s"$businessPartnerIndividualKey.$nationalInsuranceNumber"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.confirm.error", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors) {
-          <li id="passportNumber-error-link"><a href="#individualIdentification.passportNumber-inline-error">@{
-            Messages("fh.company_officers.individual.passport.empty.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey").hasErrors) {
+          <li id="nationalInsuranceNumber-error-link"><a href="#@{s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.error.required", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors) {
-          <li id="nationalID-error-link"><a href="#individualIdentification.nationalID-inline-error">@{
-            Messages("fh.company_officers.individual.nationalID.empty.error", 1)
+
+
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$firstNameKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.first_name.error.required", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors) {
-          <li id="individualIdentificationRole-error-link"><a href="#individualIdentification.role-inline-error">@{
-            Messages("fh.company_officers.status.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").hasErrors) {
+          <li id="lastName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$lastNameKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.last_name.error.required")
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors) {
-          <li id="companyName-error-link"><a href="#companyIdentification.companyName-inline-error">@{
-            Messages("fh.company_officers.company.company_name.empty.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors) {
-          <li id="passportNumber-error-link"><a href="#companyIdentification.vatRegistration-inline-error">@{
-            Messages("fh.company_officers.company.vat_registration.confirm.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors) {
-          <li id="nationalID-error-link"><a href="#companyIdentification.companyRegistration-inline-error">@{
-            Messages("fh.company_officers.company.company_registration_number.empty.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey").hasErrors) {
+          <li id="hasNationalInsurance-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumber"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.confirm.error", 1)
           }
           </a></li>
         }
-        @if(companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors) {
-          <li id="companyIdentificationRole-error-link"><a href="#companyIdentification.role-inline-error">@{
-            Messages("fh.company_officers.status.error", 1)
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey").hasErrors) {
+          <li id="nationalInsuranceNumber-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.error.required", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern", 1)
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$partnershipNameKey").hasErrors) {
+          <li id="partnershipName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$partnershipNameKey"}-inline-error">@{
+            Messages("fh.business_partners.partnership.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasTradeNameKey").hasErrors) {
+          <li id="hasTradeName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasUniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="hasUtr-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$limitedLiabilityPartnershipNameKey").hasErrors) {
+          <li id="limitedLiabilityPartnershipName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$limitedLiabilityPartnershipNameKey"}-inline-error">@{
+            Messages("fh.business_partners.liability_partnership.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$companyRegistrationNumberKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$companyRegistrationNumberKey"}-inline-error">@{
+            Messages("fh.company_registration_number.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$hasVatKey"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").hasErrors) {
+          <li id="companyName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$companyNameKey"}-inline-error">@{
+            Messages("fh.business_partners.corporate_body.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").hasErrors) {
+          <li id="hasTradeName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").hasErrors) {
+          <li id="companyRegistrationNumber-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey"}-inline-error">@{
+            Messages("fh.company_registration_number.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$hasVatKey"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").hasErrors) {
+          <li id="unincorporatedBodyName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey"}-inline-error">@{
+            Messages("fh.business_partners.unincorporate_body.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasUniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReference"}-inline-error">@{
+            Messages("fh.business_partners.utr.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerIndividualKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
           }
           </a></li>
         }
@@ -112,279 +355,102 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.company_officers.title")
+      heading = Messages("fh.business_partners.title")
     )
   )
 
-  <p>@Messages("fh.company_officers.intro")</p>
+  <p>@Messages("fh.business_partners.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers", formType), 'novalidate -> "novalidate") {
+  <div class="form-group" style="margin-top:2em">
+    <details id="business-partners-details">
+      <summary class="summary">
+      @Messages("fh.business_partners.entity")
+      </summary>
+      <div>
+        @Messages("fh.business_partners.entity_intro")
+      </div>
+    </details>
+  </div>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessPartners"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
-    <h2>@Messages("fh.company_officers.each.title")</h2>
+    <h2>@Messages("fh.business_partners.add_a_partner")</h2>
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some(identificationTypeKey),
-        legend = Some(Messages("fh.company_officers.entity_type.label")),
-        hasErrors = companyOfficersForm(identificationTypeKey).hasErrors,
-        error = Some(Messages("fh.company_officers.entity_type.error", 1)),
-        value = companyOfficersForm(identificationTypeKey).value,
+        inline = false,
+        name = Some(businessPartnersTypeKey),
+        legend = Some(Messages("fh.business_partners.entity_type.label")),
+        hasErrors = businessPartnerForm(businessPartnersTypeKey).hasErrors,
+        error = Some(Messages("fh.business_partners.entity_type.error", 1)),
+        value = businessPartnerForm(businessPartnersTypeKey).value,
         radios = List(
           RadioParams(
-            "Individual",
-            Messages("fh.company_officers.individual.label"),
-            Some("individualOfficers")
+            Messages("fh.business_partners.entity_type.individual.value"),
+            Messages("fh.business_partners.entity_type.individual.label"),
+            Some(Messages("fh.business_partners.entity_type.individual.value"))
           ),
           RadioParams(
-            "Company",
-            Messages("fh.company_officers.company.label"),
-            Some("companyOfficers")
+            Messages("fh.business_partners.entity_type.sole_proprietor.value"),
+            Messages("fh.business_partners.entity_type.sole_proprietor.label"),
+            Some(Messages("fh.business_partners.entity_type.sole_proprietor.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.partnership.value"),
+            Messages("fh.business_partners.entity_type.partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.value"),
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.corporate_body.value"),
+            Messages("fh.business_partners.entity_type.corporate_body.label"),
+            Some(Messages("fh.business_partners.entity_type.corporate_body.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.unincorporated_body.value"),
+            Messages("fh.business_partners.entity_type.unincorporated_body.label"),
+            Some(Messages("fh.business_partners.entity_type.unincorporated_body.value"))
           )
         )
       )
     )
 
-    <div class="form-group panel js-hidden" id="individualOfficers">
-
-      <h2>@Messages("fh.company_officers.individual.title")</h2>
-
-      @TextInput(
-        TextInputParams(
-          name = s"$individualIdentificationKey.$firstNameKey",
-          label = Messages("fh.contact_person.first_name.label"),
-          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").hasErrors,
-          value = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").value,
-          error = Messages(Messages("fh.company_officers.individual.first_name.empty.error", 1))
-        )
-      )
-
-      @TextInput(
-        TextInputParams(
-          name = s"$individualIdentificationKey.$lastNameKey",
-          label = Messages("fh.contact_person.last_name.label"),
-          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").hasErrors,
-          value = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").value,
-          error = Messages("fh.company_officers.individual.last_name.empty.error", 1)
-        )
-      )
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey"),
-          legend = Some(Messages("fh.company_officers.individual.nino.confirm.label")),
-          hintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
-          value = companyOfficersForm(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey").value,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              Some("nationalInsuranceNumber")
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              Some("other")
-            )
-          )
-        )
-      )
-
-      @NestedPanel(
-        NestedPanelParams(
-          "nationalInsuranceNumber",
-          TextInput(
-            TextInputParams(
-              name = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
-              label = Messages("fh.company_officers.individual.nino.label"),
-              hintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
-              value = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").value,
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").hasErrors,
-              error = Messages("fh.company_officers.individual.nino.confirm.error", 1)
-            )
-          )
-        )
-      )
-
-      @NestedPanel(
-        NestedPanelParams(
-          "other",
-          RadioGroup(
-            RadioGroupParams(
-              name = Some("otherIdentity"),
-              legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
-              error = Some(Messages("fh.company_officers.individual.passport.empty.error")),
-              value = companyOfficersForm("individualIdentification.hasPassportNumber").value,
-              radios = List(
-                RadioParams(
-                  "true",
-                  Messages("fh.generic.yes"),
-                  Some("passportNumber")
-                ),
-                RadioParams(
-                  "false",
-                  Messages("fh.generic.no"),
-                  Some("nationalID")
-                )
-              )
-            )
-          )
-        )
-      )
-
-      @NestedPanel(
-        NestedPanelParams(
-          "passportNumber",
-          TextInput(
-            TextInputParams(
-              name = s"$individualIdentificationKey.$passportNumberKey",
-              label = Messages("fh.company_officers.individual.passport.label"),
-              value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value,
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors,
-              error = Messages("fh.company_officers.individual.passport.empty.error", 1)
-            )
-          )
-        )
-      )
-
-      @NestedPanel(
-        NestedPanelParams(
-          "nationalID",
-          TextInput(
-            TextInputParams(
-              name = s"$individualIdentificationKey.$nationalIDKey",
-              label = Messages("fh.company_officers.individual.nationalID.label"),
-              hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
-              value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value,
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors,
-              error = Messages("fh.company_officers.individual.nationalID.empty.error", 1)
-            )
-          )
-        )
-      )
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"$individualIdentificationKey.$roleKey"),
-          legend = Some(Messages("fh.company_officers.status.label")),
-          inline = false,
-          required = true,
-          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors,
-          value = companyOfficersForm(s"$individualIdentificationKey.$roleKey").value,
-          error = Some(Messages("fh.company_officers.status.error", 1)),
-          radios = List(
-            RadioParams(
-              Messages("fh.company_officers.status.director.value"),
-              Messages("fh.company_officers.status.director")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.company_secretary.value"),
-              Messages("fh.company_officers.status.company_secretary")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.both.value"),
-              Messages("fh.company_officers.status.both")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.member.value"),
-              Messages("fh.company_officers.status.member")
-            )
-          )
-        )
-      )
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.individual.value")">
+      @business_partners_individual(businessPartnerForm)
     </div>
 
-    <div class="form-group panel js-hidden" id="companyOfficers">
-      <h2>@Messages("fh.company_officers.company.title")</h2>
-
-      @TextInput(
-        TextInputParams(
-          name = s"$companyIdentificationKey.$companyNameKey",
-          label = Messages("fh.company_officers.company.company_name.label"),
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors,
-          error = Messages("fh.company_officers.company.company_name.empty.error", 1)
-        )
-      )
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"$companyIdentificationKey.$hasVatKey"),
-          legend = Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None //Some("hasCompanyRegistration")
-            )
-          )
-        )
-      )
-
-      @TextInput(
-        TextInputParams(
-          name = s"$companyIdentificationKey.$vatRegistrationKey",
-          label = Messages("fh.vat_registration.label"),
-          hintText = Some(Messages("fh.vat_registration.hintText")),
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
-          error = Messages("fh.company_officers.company.vat_registration.confirm.error", 1)
-        )
-      )
-
-      @TextInput(
-        TextInputParams(
-          name = s"$companyIdentificationKey.$companyRegistrationKey",
-          label = Messages("fh.company_officers.company.company_registration_number.label"),
-          hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
-          error = Messages("fh.company_officers.company.company_registration_number.empty.error", 1)
-        )
-      )
-
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"$companyIdentificationKey.$roleKey"),
-          legend = Some(Messages("fh.company_officers.status.label")),
-          inline = false,
-          required = true,
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors,
-          error = Some(Messages("fh.company_officers.status.error", 1)),
-          radios = List(
-            RadioParams(
-              Messages("fh.company_officers.status.director.value"),
-              Messages("fh.company_officers.status.director")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.company_secretary.value"),
-              Messages("fh.company_officers.status.company_secretary")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.both.value"),
-              Messages("fh.company_officers.status.both")
-            ),
-            RadioParams(
-              Messages("fh.company_officers.status.member.value"),
-              Messages("fh.company_officers.status.member")
-            )
-          )
-        )
-      )
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.sole_proprietor.value")">
+      @business_partners_sole_proprietor(businessPartnerForm)
     </div>
 
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.partnership.value")">
+      @business_partners_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.limited_liability_partnership.value")">
+      @business_partners_liability_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.corporate_body.value")">
+      @business_partners_corporate_body(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporated_body.value")">
+      @business_partners_unincorporated_body(businessPartnerForm)
+    </div>
 
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

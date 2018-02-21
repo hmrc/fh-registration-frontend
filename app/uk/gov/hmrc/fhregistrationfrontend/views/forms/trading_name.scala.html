@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(tradingNameForm: Form[TradingName], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -62,7 +62,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -85,8 +85,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

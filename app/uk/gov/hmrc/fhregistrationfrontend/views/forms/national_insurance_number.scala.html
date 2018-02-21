@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -41,13 +41,13 @@
       <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
       <ul>
         @if(nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors){
-          <li id="hasVatNumber-error-link"><a href="#vatNumber-inline-error">@{
+          <li id="hasNationalInsuranceNumber-error-link"><a href="#@{hasNationalInsuranceNumberKey}-inline-error">@{
             Messages("fh.national_insurance_number.confirm.error")
           }
           </a></li>
         }
         @if(nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors){
-          <li id="vatNumber-error-link"><a href="#vatNumber_value-inline-error">@{
+          <li id="nationalInsuranceNumber-error-link"><a href="#{hasNationalInsuranceNumberKey}_value-inline-error">@{
             Messages("fh.national_insurance_number." + nationalInsuranceNumberForm(nationalInsuranceNumberKey).error.head.message)
           }
           </a></li>
@@ -62,7 +62,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("nationalInsuranceNumber", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("nationalInsuranceNumber"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -86,8 +86,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

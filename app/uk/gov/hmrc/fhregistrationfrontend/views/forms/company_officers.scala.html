@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyOfficersForm: Form[CompanyOfficer], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[CompanyOfficer], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -118,7 +118,7 @@
 
   <p>@Messages("fh.company_officers.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -315,34 +315,44 @@
             RadioParams(
               "true",
               Messages("fh.generic.yes"),
-              None
+              Some("hasVatRegistration")
             ),
             RadioParams(
               "false",
               Messages("fh.generic.no"),
-              None //Some("hasCompanyRegistration")
+              Some("hasCompanyRegistration")
             )
           )
         )
       )
 
-      @TextInput(
-        TextInputParams(
-          name = s"$companyIdentificationKey.$vatRegistrationKey",
-          label = Messages("fh.vat_registration.label"),
-          hintText = Some(Messages("fh.vat_registration.hintText")),
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
-          error = Messages("fh.company_officers.company.vat_registration.confirm.error", 1)
+      @NestedPanel(
+        NestedPanelParams(
+          "hasVatRegistration",
+          TextInput(
+            TextInputParams(
+              name = s"$companyIdentificationKey.$vatRegistrationKey",
+              label = Messages("fh.vat_registration.label"),
+              hintText = Some(Messages("fh.vat_registration.hintText")),
+              hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
+              error = Messages("fh.company_officers.company.vat_registration.confirm.error", 1)
+            )
+          )
         )
       )
 
-      @TextInput(
-        TextInputParams(
-          name = s"$companyIdentificationKey.$companyRegistrationKey",
-          label = Messages("fh.company_officers.company.company_registration_number.label"),
-          hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
-          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
-          error = Messages("fh.company_officers.company.company_registration_number.empty.error", 1)
+      @NestedPanel(
+        NestedPanelParams(
+          "hasCompanyRegistration",
+          TextInput(
+            TextInputParams(
+              name = s"$companyIdentificationKey.$companyRegistrationKey",
+              label = Messages("fh.company_officers.company.company_registration_number.label"),
+              hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
+              hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
+              error = Messages("fh.company_officers.company.company_registration_number.empty.error", 1)
+            )
+          )
         )
       )
 
@@ -383,8 +393,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

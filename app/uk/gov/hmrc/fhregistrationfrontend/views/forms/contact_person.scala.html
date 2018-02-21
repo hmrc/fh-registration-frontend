@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
@@ -146,7 +146,7 @@
 
   <p>@Messages("fh.contact_person.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -298,8 +298,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
 
   }

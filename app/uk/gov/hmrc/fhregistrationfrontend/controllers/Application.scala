@@ -157,7 +157,7 @@ class Application @Inject()(
 
   def startForm(formType: String) = UserAction.async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress", formType))
+      case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
   }

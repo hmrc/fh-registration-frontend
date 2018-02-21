@@ -273,7 +273,6 @@ fh.date_of_incorporation.day=Day
 fh.date_of_incorporation.month=Month
 fh.date_of_incorporation.year=Year
 
-
 # - Company Officers (Corporate Body)
 #===========================================================
 fh.company_officers.title=Company officers
@@ -322,6 +321,68 @@ fh.company_officers.company.vat_registration.confirm.error=Select whether compan
 fh.company_officers.company.company_registration_number.label=Enter the company registration number
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
+
+# - Business partners
+#============================================================
+fh.business_partners.title=Business partners
+fh.business_partners.intro=A partner can be a person, company or organisation who shares responsibility for the partnership. You must tell us about all the partners, including what type of legal entity they are. We will use this information to check their identity.
+
+fh.business_partners.entity=What is a legal entity?
+fh.business_partners.entity_intro=A legal entity is an individual, company or other organisation that can legally enter into an agreement or contract. Select the option that best describes how each partner is represented in the partnership.
+
+fh.business_partners.add_a_partner=Add a partner
+fh.business_partners.entity_type.label=What type of legal entity is this partner?
+fh.business_partners.entity_type.error=Select the type of legal entity for the partner {0}
+
+fh.business_partners.entity_type.individual.value=Individual
+fh.business_partners.entity_type.individual.label=Individual
+fh.business_partners.entity_type.sole_proprietor.value=SoleProprietor
+fh.business_partners.entity_type.sole_proprietor.label=Sole Proprietor
+fh.business_partners.entity_type.partnership.value=Partnership
+fh.business_partners.entity_type.partnership.label=Partnership
+fh.business_partners.entity_type.limited_liability_partnership.value=LimitedLiabilityPartnership
+fh.business_partners.entity_type.limited_liability_partnership.label=Limited Liability Partnership
+fh.business_partners.entity_type.corporate_body.value=CorporateBody
+fh.business_partners.entity_type.corporate_body.label=Corporate Body
+fh.business_partners.entity_type.unincorporated_body.value=UnincorporatedBody
+fh.business_partners.entity_type.unincorporated_body.label=Unincorporated Body
+
+fh.business_partners.enter.title=Enter partner details
+fh.business_partners.enter.partner_address=Tell us the address of this partner
+fh.business_partners.enter.partner_address.error=Enter the address of this partner
+
+fh.business_partners.individual.first_name.label=First name
+fh.business_partners.individual.first_name.error.required=Enter the person''s first name
+fh.business_partners.individual.first_name.error.pattern=Enter only valid characters for a first name
+fh.business_partners.individual.last_name.label=Last name
+fh.business_partners.individual.last_name.error.required=Enter the person''s last name
+fh.business_partners.individual.last_name.error.pattern=Enter only valid characters for a last name
+
+fh.business_partners.individual.nino.confirm.label=Do they have a National Insurance number?
+fh.business_partners.individual.nino.confirm.hint_text=We need this information to verify their identity
+fh.business_partners.individual.nino.confirm.error=Select whether the business partner has a National Insurance number
+fh.business_partners.individual.nino.label=National Insurance number
+fh.business_partners.individual.nino.hint_text=For example, QQ123456C
+fh.business_partners.individual.nino.error.required=Enter National Insurance number for business partner {0}
+fh.business_partners.individual.nino.error.pattern=Enter a valid National Insurance number for business partner {0}
+
+fh.business_partners.partnership.name.label=Partnership name
+fh.business_partners.partnership.name.error.pattern=Enter valid partnership name
+
+fh.business_partners.corporate_body.name.label=Company name
+fh.business_partners.corporate_body.name.error.pattern=Enter valid company name
+
+fh.business_partners.unincorporate_body.name.label=Unincorporated body name
+fh.business_partners.unincorporate_body.name.error.pattern=Enter valid unincorporated body name
+
+fh.business_partners.liability_partnership.name.label=Limited Liability Partnership name
+fh.business_partners.liability_partnership.name.error.pattern=Enter valid Limited Liability Partnership name
+
+fh.business_partners.utr.confirm.label=Do they have a Self Assessment Unique Taxpayer reference?
+fh.business_partners.utr.confirm.error=Select whether the business partner has a unique Taxpayer reference?
+fh.business_partners.utr.label=Self Assessment Unique Taxpayer reference
+fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer reference
+fh.business_partners.utr.hintText=For example, 1234567890
 
 # - save for later page
 #===========================================================

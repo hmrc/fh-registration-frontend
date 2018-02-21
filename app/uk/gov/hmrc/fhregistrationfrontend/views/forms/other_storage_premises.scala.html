@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
@@ -93,7 +93,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -159,8 +159,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }

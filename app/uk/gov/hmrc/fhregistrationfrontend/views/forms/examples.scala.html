@@ -35,7 +35,7 @@
         )
     )
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress",""), 'novalidate -> "novalidate") {
+    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
 
         @helper.CSRF.formField
 
@@ -343,8 +343,7 @@
             SubmitButtonsParams(
                 label = Messages("button.save.continue"),
                 summaryLink = false
-            ),
-            ""
+            )
         )
 
         <h2 style="border-bottom: 1px solid #777; color: #777">SubmitButtons with summary link enabled</h2>
@@ -353,8 +352,7 @@
             SubmitButtonsParams(
                 label = Messages("button.save.continue"),
                 summaryLink = true
-            ),
-            ""
+            )
         )
 
     }

@@ -37,12 +37,14 @@ class PageRequest[A](
 }
 
 object PageAction {
-  def apply(pageId: String, formType: String)(implicit save4LaterService: Save4LaterService) = (UserAction andThen new PageAction(pageId, formType))
+  def apply(pageId: String)(implicit save4LaterService: Save4LaterService) = (UserAction andThen new PageAction(pageId))
 }
 
-class PageAction[T](pageId: String, formType: String)(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
-  with FrontendAction
-{
+class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
+  with FrontendAction {
+
+  //todo replace this formType
+  val formType = "Partnership"
 
   val journeyPages = {
     formType match {

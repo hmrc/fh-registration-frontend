@@ -16,12 +16,12 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams, formType: String)(implicit message: Messages)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message: Messages)
 
 @backLink = @{
   params.navigation.back.map {
     case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
-    case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId, formType)
+    case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
   }
 }
 

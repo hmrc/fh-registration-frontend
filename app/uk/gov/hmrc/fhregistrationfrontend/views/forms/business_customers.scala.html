@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation, formType: String)(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -56,7 +56,7 @@
     )
   )
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers", formType), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -99,8 +99,7 @@
         label = Messages("button.save.continue"),
         summaryLink = false,
         navigation
-      ),
-      formType
+      )
     )
   }
 }
