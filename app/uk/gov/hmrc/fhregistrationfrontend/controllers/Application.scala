@@ -44,6 +44,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -168,7 +169,7 @@ class Application @Inject()(
 
   def summary = UserAction.async  { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Ok(ltd_summary(???, bpr))
+      case Some(bpr) ⇒ Ok(ltd_summary(LimitedCompanyApplication.apply(), bpr))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
 

@@ -76,7 +76,8 @@ object Mappings {
     "Line1" -> addressLine,
     "Line2" -> optional(addressLine),
     "Line3" -> optional(addressLine),
-    "Line4" -> addressLine
+    "Line4" -> addressLine,
+    "countryCode" -> optional(nonEmptyText)
   )(InternationalAddress.apply)(InternationalAddress.unapply)
 
   def localDate = tuple(

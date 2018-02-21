@@ -71,57 +71,61 @@
     )
 )
 
-@if(contactPersonForm(hasOtherContactAddressKey).value == "true") {
+@if(contactPersonForm.hasOtherContactAddress) {
 
     @SummaryRow(
         SummaryRowParams(
             Some(Messages("fh.contact_person.contact_address_in_uk.label")),
-            Some(contactPersonForm.isUkAddress),
+            contactPersonForm.ukOtherAddress,
             Some("contactPerson")
         )
     )
 
-    @if(contactPersonForm(isUkAddressKey).value == "true"){
-
-        @SummaryAddress(
-            SummaryAddressParams(
-                Some(Messages("fh.contact_person.contact_address_new.label")),
-                SummaryAddressBlock(
-                    Line1 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine1,
-                    Line2 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine2,
-                    Line3 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine3,
-                    Line4 = contactPersonForm.otherUkContactAddress_contactAddress.addressLine4,
-                    postcode = contactPersonForm.otherUkContactAddress_contactAddress.postcode
-                ),
-                Some("contactPerson")
+    @if(contactPersonForm.ukOtherAddress){
+        @contactPersonForm.otherUkContactAddress.map { address =>
+            @SummaryAddress(
+                SummaryAddressParams(
+                    Some(Messages("fh.contact_person.contact_address_new.label")),
+                    SummaryAddressBlock(
+                        Line1 = Some(address.addressLine1),
+                        Line2 = Some(address.addressLine2),
+                        Line3 = address.addressLine3,
+                        Line4 = address.addressLine4,
+                        postcode = Some(address.postcode)
+                    ),
+                    Some("contactPerson")
+                )
             )
-        )
+        }
 
     } else {
-        @SummaryAddress(
-            SummaryAddressParams(
-                Some("International Contact address"),
-                SummaryAddressBlock(
-                    Line1 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine1,
-                    Line2 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine2,
-                    Line3 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine3,
-                    Line4 = contactPersonForm.otherInternationalContactAddress_contactAddress.addressLine4
-                ),
-                Some("contactPerson")
+        @contactPersonForm.otherInternationalContactAddress.map { address =>
+            @SummaryAddress(
+                SummaryAddressParams(
+                    Some("International Contact address"),
+                    SummaryAddressBlock(
+                        Line1 = Some(address.addressLine1),
+                        Line2 = address.addressLine2,
+                        Line3 = address.addressLine3,
+                        Line4 = Some(address.addressLine4)
+                    ),
+                    Some("contactPerson")
+                )
             )
-        )
+        }
     }
 
 } else {
+
     @SummaryAddress(
         SummaryAddressParams(
             Some(Messages("fh.main_business_address.previous.label")),
             SummaryAddressBlock(
                 Line1 = Some(bpr.businessAddress.line1),
                 Line2 = Some(bpr.businessAddress.line2),
-                Line3 = Some(bpr.businessAddress.line3),
-                Line4 = Some(bpr.businessAddress.line4),
-                postcode = Some(bpr.businessAddress.postcode)
+                Line3 = bpr.businessAddress.line3,
+                Line4 = bpr.businessAddress.line4,
+                postcode = bpr.businessAddress.postcode
             ),
             Some("contactPerson")
         )

@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 
 @(importingActivitiesForm: ImportingActivitiesModel)(implicit request: Request[_], messages: Messages)
 
@@ -26,7 +25,7 @@
   @SummaryRow(
     SummaryRowParams(
       Some(Messages("fh.importing_activities.eori.confirm.label")),
-      Some(importingActivitiesForm.hasEori),
+      importingActivitiesForm.hasEori,
       Some("importingActivities")
     )
   )
@@ -36,7 +35,7 @@
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
-        Some(importingActivitiesForm.eoriNumber),
+        importingActivitiesForm.eoriNumber.map(_.eoriNumber),
         Some("importingActivities")
       )
     )
