@@ -68,6 +68,7 @@ fh.generic.bta_link=Business tax account home
 fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
+fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
