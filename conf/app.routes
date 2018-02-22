@@ -6,7 +6,7 @@ GET         /continue                                                           
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
-GET         /startForm/:formType                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm(formType: String)
+GET         /startForm/                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
 GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
@@ -20,6 +20,9 @@ GET         /form/:page                                                         
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
+GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.showDeclaration
+
+POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitForm
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
