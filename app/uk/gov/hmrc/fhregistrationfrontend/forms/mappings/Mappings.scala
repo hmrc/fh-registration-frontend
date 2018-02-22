@@ -21,10 +21,10 @@ import java.time.format.DateTimeFormatter
 
 import play.api.data.Forms._
 import play.api.data.Mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.yesOrNoFormatter
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.enumFormat
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 import Constraints.oneOfConstraint
+import play.api.data.validation.Constraints
 
 import scala.util.Try
 
@@ -54,6 +54,7 @@ object Mappings {
 
   def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
   def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+‐-]{1,24}$".r)
+  def email: Mapping[String] = nonEmptyText(0, 132) verifying Constraints.emailAddress
 
   def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
@@ -66,6 +67,10 @@ object Mappings {
   def nationalIdNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
   def passportNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
 
+  def alternativeEmail: Mapping[AlternativeEmail] = mapping(
+    "email" → email,
+    "emailConfirmation" → of(emailConfirmationFormat)
+  )(AlternativeEmail.apply)(AlternativeEmail.unapply)
 
   def internationalAddress: Mapping[InternationalAddress] = mapping(
     "Line1" -> addressLine,
