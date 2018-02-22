@@ -17,7 +17,7 @@
 @(heading:String, changeLink: Option[String] = None)(implicit message : Messages)
 
 <tr>
-  <th colspan="2"><span class="bold-medium">{heading}</span></th>
+  <th colspan="2"><span class="bold-small">@{heading}</span></th>
   <td>
     @if(changeLink.nonEmpty){
       <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(changeLink.get)}">Change</a>

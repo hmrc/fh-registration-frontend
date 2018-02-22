@@ -52,7 +52,36 @@ object TestData {
       true,
       Some("19911234")
     ),
-    null,
+    CompanyOfficers(
+      List(
+        CompanyOfficer(
+          CompanyOfficerType.Individual,
+          CompanyOfficerIndividual(
+            "Alistair",
+            "Macdonald",
+            true,
+            Some("NL019207B"),
+            None,
+            None,
+            None,
+            "Director"
+          )
+        ),
+        CompanyOfficer(
+          CompanyOfficerType.Individual,
+          CompanyOfficerIndividual(
+            "Cosmin",
+            "Marian",
+            true,
+            Some("NC019207D"),
+            None,
+            None,
+            None,
+            "Director"
+          )
+        )
+      )
+    ),
     BusinessStatus(
       true,
       Some(LocalDate.now())
