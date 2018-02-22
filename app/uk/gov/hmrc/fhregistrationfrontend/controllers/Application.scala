@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -35,6 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
@@ -167,6 +167,18 @@ class Application @Inject()(
 
   def summary = UserAction.async { implicit request ⇒
     Future.successful(Ok(ltd_summary("ok")))
+  }
+
+  //todo link with summary page
+  def showDeclaration = UserAction.async { implicit request ⇒
+    Future successful Ok(declaration(declarationForm, Some("dsff@mm")))
+  }
+
+  def submitForm = UserAction.async { implicit request ⇒
+    declarationForm.bindFromRequest().fold(
+      formWithErrors => Future.successful(BadRequest(declaration(formWithErrors, Some("dsff@mm")))),
+      declaration => Future.successful(Redirect(routes.Application.startForm())) //todo link with final page
+    )
   }
 
   def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒

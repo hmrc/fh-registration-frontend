@@ -54,7 +54,7 @@
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
     class="form-control"
     id="@{fieldName}"
-    name="@{fieldName}"
+    name="@{s"$fieldName.email"}"
         @if(params.value.nonEmpty){value="@{params.value}"}>
 
     <label class="form-label" for="@{fieldName}-confirmation">
@@ -64,6 +64,6 @@
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
     class="form-control"
     id="@{fieldName}-confirmation"
-    name="@{fieldName}.confirmation">
+    name="@{s"$fieldName.emailConfirmation"}">
 
 </div>
