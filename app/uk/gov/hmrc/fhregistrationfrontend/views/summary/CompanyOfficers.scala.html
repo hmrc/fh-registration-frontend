@@ -18,9 +18,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficerIndividual
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficerCompany
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 
 @(companyOfficersForm: CompanyOfficersModel)(implicit request: Request[_], messages: Messages)
 
@@ -29,21 +29,16 @@
 
     @for((companyOfficer:CompanyOfficer, index) <- companyOfficersForm.companyOfficers.zipWithIndex) {
 
-        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers/"))
+        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"))
 
         @{companyOfficer.identification match {
-            case individual: CompanyOfficerIndividual ⇒
+            case individual: CompanyOfficerIndividualModel ⇒
 
-                SummaryCompanyOfficerIndividual(individual)
+                CompanyOfficerIndividual(individual)
 
-            case company: CompanyOfficerCompany ⇒
-                SummaryRow(
-                    SummaryRowParams(
-                        Some(Messages("fh.company_officers.entity_type.label")),
-                        Some("Company"),
-                        None
-                    )
-                )
+            case company: CompanyOfficerCompanyModel ⇒
+
+                CompanyOfficerCompany(company)
 
         }}
 

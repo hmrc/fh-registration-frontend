@@ -79,6 +79,16 @@ object TestData {
             None,
             "Director"
           )
+        ),
+        CompanyOfficer(
+          CompanyOfficerType.Company,
+          CompanyOfficerCompany(
+            "Secretarial 4 U",
+            true,
+            Some("19911234"),
+            Some("5656983766"),
+            "Company Secretary"
+          )
         )
       )
     ),
