@@ -220,6 +220,7 @@ fh.other_storage_premises.confirm.label=Other than the main business address, do
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
+fh.other_storage_premises.each.title=Storage Premises {0}
 fh.other_storage_premises.third_party.label=Are these third party premises?
 fh.other_storage_premises.third_party.error=Select whether these premises are operated by a third party
 fh.other_storage_premises.company.addMore = Add more premises?

@@ -103,8 +103,31 @@ object TestData {
     BusinessCustomers(
       "11 to 50"
     ),
-    OtherStoragePremises(
-      false,
-      None
+    StoragePremises(
+      true,
+      List(
+        StoragePremise(
+          Address(
+            "8 Oxford Road",
+            "Worthing",
+            None,
+            None,
+            "BN11 1XG",
+            Some("GB")
+          ),
+          false
+        ),
+        StoragePremise(
+          Address(
+            "12 Cambridge House",
+            "Lancing Business Park",
+            Some("Lancing"),
+            None,
+            "BN14 2HB",
+            Some("GB")
+          ),
+          false
+        )
+      )
     ))
 }

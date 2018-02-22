@@ -14,19 +14,49 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises => OtherStoragePremisesModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{StoragePremises => StoragePremisesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
 
-@(otherStoragePremisesForm: OtherStoragePremisesModel)(implicit request: Request[_], messages: Messages)
+@(data: StoragePremisesModel)(implicit request: Request[_], messages: Messages)
 
-  @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
+    @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
 
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.other_storage_premises.confirm.label")),
-      otherStoragePremisesForm.hasValue,
-      Some("otherStoragePremises")
+    @SummaryRow(
+        SummaryRowParams.ofBoolean(
+            Some(Messages("fh.other_storage_premises.confirm.label")),
+            data.hasValue,
+            Some("otherStoragePremises")
+        )
     )
-  )
+
+    @if(data.hasValue) {
+
+        @for((storagePremise:StoragePremise, index) <- data.premises.zipWithIndex) {
+
+            @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"))
+
+            @SummaryAddress(
+                SummaryAddressParams(
+                    Some(Messages("fh.other_storage_premises.enter.label")),
+                    SummaryAddressBlock(
+                        Line1 = Some(storagePremise.address.addressLine1),
+                        Line2 = Some(storagePremise.address.addressLine2),
+                        Line3 = storagePremise.address.addressLine3,
+                        Line4 = storagePremise.address.addressLine4,
+                        postcode = Some(storagePremise.address.postcode)
+                    ),
+                    Some("otherStoragePremises")
+                )
+            )
+
+            @SummaryRow(
+                SummaryRowParams.ofBoolean(
+                    Some(Messages("fh.other_storage_premises.third_party.label")),
+                    storagePremise.isThirdParty,
+                    None
+                )
+            )
+        }
+    }
