@@ -337,6 +337,32 @@
             )
         )
 
+        <h2 style="border-bottom: 1px solid #777; color: #777">Email confirmation fields</h2>
+
+        @EmailConfirmation(
+            EmailConfirmationParams(
+                name = "email",
+                label= "Enter an alternative email address",
+                labelConfirmation="Re-enter the alternative email address",
+                error= "",
+                isEmail=true
+            )
+        )
+
+        <h2 style="border-bottom: 1px solid #777; color: #777">Email confirmation fields with error and prepop</h2>
+
+        @EmailConfirmation(
+            EmailConfirmationParams(
+                name="alternativeEmail",
+                value=Some("a@b.c"),
+                label="Enter an email address",
+                labelConfirmation="Re-enter the email address",
+                error="The email is not valid",
+                hasErrors=true,
+                isEmail=true
+            )
+        )
+
         <h2 style="border-bottom: 1px solid #777; color: #777">SubmitButtons</h2>
 
         @SubmitButtons(
@@ -354,6 +380,7 @@
                 summaryLink = true
             )
         )
+
 
     }
 
