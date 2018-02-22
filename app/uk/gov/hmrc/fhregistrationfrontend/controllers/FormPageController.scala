@@ -18,13 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.data.Form
-import play.api.mvc.Request
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{PageAction, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Rendering
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-
-import scala.concurrent.Future
 
 @Singleton
 class FormPageController @Inject()(
@@ -34,42 +31,47 @@ class FormPageController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) with SubmitForLater {
 
 
-  def load[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
-    loadStoredFormData[T](request.userId, request.page) flatMap (renderForm(request.page, _))
+  def load(pageId: String) = PageAction(pageId).async { implicit request ⇒
+    renderForm(request.page, false)
   }
 
-  def save[T](pageId: String) = PageAction(pageId).async { implicit request ⇒
-    request.page[T].form.bindFromRequest() fold (
-      formWithErrors => renderForm(request.page, formWithErrors),
-      mainBusinessAddress => {
+  def loadWithSection(pageId: String, sectionId: String) = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    renderForm(request.page, false)
+  }
+
+  def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
+  def saveWithSection[T,V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
+
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = PageAction(pageId, sectionId).async { implicit request ⇒
+    request.page[T].parseFromRequest (
+      pageWithErrors => renderForm(pageWithErrors, true),
+      page => {
         save4LaterService
-          .saveData4Later(request.userId, request.page.id, mainBusinessAddress)(hc, request.page.format)
-          .flatMap { _ ⇒
+          .saveData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+          .map { _ ⇒
             if (isSaveForLate)
-              Future successful Redirect(routes.Application.savedForLater)
+              Redirect(routes.Application.savedForLater)
             else {
-              request.journey next pageId match {
-                case Some(nextPage) ⇒ Future successful Redirect(routes.FormPageController.load(nextPage.id))
-                case None           ⇒ Future successful Redirect(routes.Application.summary())
-              }
+              if (page.nextSubsection.isDefined)
+                Redirect(routes.FormPageController.loadWithSection(page.id, page.nextSubsection.get))
+              else
+                request.journey next pageId match {
+                  case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
+                  case None           ⇒ Redirect(routes.Application.summary())
+                }
             }
           }
       }
     )
   }
 
-  private def loadStoredFormData[T](uid: String, page: Page[T])(implicit r: Request[_]) =
-    save4LaterService.fetchData4Later(uid, page.id)(hc, page.format) map {
-      _ map page.form.fill getOrElse page.form
-    }
-
-  private def renderForm[T](page: Page[T], form: Form[T])(implicit request: PageRequest[_]) = {
+  private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) = {
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒
-        if (form.hasErrors)
-          BadRequest(page.render(form, bpr, request.journey.navigation(page.id)))
+        if (hasErrors)
+          BadRequest(page.render(bpr, request.journey.navigation(request.page.id)))
         else {
-          Ok(page.render(form, bpr, request.journey.navigation(page.id)))
+          Ok(page.render(bpr, request.journey.navigation(request.page.id)))
         }
       case None      ⇒
         Redirect(links.businessCustomerVerificationUrl)

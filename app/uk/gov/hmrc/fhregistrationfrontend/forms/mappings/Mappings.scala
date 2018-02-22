@@ -34,6 +34,7 @@ object Mappings {
 
   val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
+  def skippingOnePrefix[T](mapping: Mapping[T]) = new SkippingOnePrefixMapping(mapping)
 
   def yesOrNo = of(yesOrNoFormatter)
 

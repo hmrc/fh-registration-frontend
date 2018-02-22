@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 object Journeys {
 
   val limitedCompanyPages = new JourneyPages(
-    Seq[Page[_]](
+    Seq[AnyPage](
       Page.mainBusinessAddressPage,
       Page.contactPersonPage,
       Page.companyRegistrationNumberPage,
@@ -68,7 +69,7 @@ object Journeys {
   def linearJourney(journeyPages: JourneyPages) = new LinearJourney(journeyPages)
   def summaryJourney(journeyPages: JourneyPages) = new SummaryJourney()
 
-  def limitedCompanyJourneyState(journeyPages: JourneyPages, cachedMap: CacheMap) = new CachedJourneyState(cachedMap, journeyPages)
+  def journeyState(journeyPages: JourneyPages, cachedMap: CacheMap) = new CachedJourneyState(cachedMap, journeyPages)
 
 
 }

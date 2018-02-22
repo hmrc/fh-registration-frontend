@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyOfficersForm: Form[CompanyOfficer], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -118,7 +118,7 @@
 
   <p>@Messages("fh.company_officers.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("companyOfficers"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -301,6 +301,7 @@
       @TextInput(
         TextInputParams(
           name = s"$companyIdentificationKey.$companyNameKey",
+          value = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").value,
           label = Messages("fh.company_officers.company.company_name.label"),
           hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors,
           error = Messages("fh.company_officers.company.company_name.empty.error", 1)
@@ -310,6 +311,7 @@
       @RadioGroup(
         RadioGroupParams(
           name = Some(s"$companyIdentificationKey.$hasVatKey"),
+          value = companyOfficersForm(s"$companyIdentificationKey.$hasVatKey").value,
           legend = Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
           radios = List(
             RadioParams(
@@ -332,6 +334,7 @@
           TextInput(
             TextInputParams(
               name = s"$companyIdentificationKey.$vatRegistrationKey",
+              value = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").value,
               label = Messages("fh.vat_registration.label"),
               hintText = Some(Messages("fh.vat_registration.hintText")),
               hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
@@ -347,6 +350,7 @@
           TextInput(
             TextInputParams(
               name = s"$companyIdentificationKey.$companyRegistrationKey",
+              value = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").value,
               label = Messages("fh.company_officers.company.company_registration_number.label"),
               hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
               hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
@@ -360,6 +364,7 @@
       @RadioGroup(
         RadioGroupParams(
           name = Some(s"$companyIdentificationKey.$roleKey"),
+          value = companyOfficersForm(s"$companyIdentificationKey.$roleKey").value,
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
           required = true,
@@ -387,6 +392,25 @@
       )
     </div>
 
+    @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = companyOfficersForm(s"addMore").value,
+          legend = Some(Messages("fh.company_officers.company.addMore")),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None 
+            )
+          )
+        )
+      )
 
     @SubmitButtons(
       SubmitButtonsParams(

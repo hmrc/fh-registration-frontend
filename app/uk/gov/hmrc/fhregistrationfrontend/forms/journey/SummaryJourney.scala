@@ -15,13 +15,14 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{Navigation, SummaryPage}
 
 class SummaryJourney extends JourneyNavigation {
 
-  override def next[_](pageId: String): Option[Page[_]] = None
+  override def next[_](pageId: String): Option[AnyPage] = None
 
-  override def previous(pageId: String): Option[Page[_]] = None
+  override def previous(pageId: String): Option[AnyPage] = None
 
   override def navigation(pageId: String): Navigation = Navigation(Some(SummaryPage))
 }

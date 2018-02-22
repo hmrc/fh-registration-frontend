@@ -17,7 +17,9 @@ GET         /address-lookup                                                     
 GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
 
 GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
+GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
+POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 
