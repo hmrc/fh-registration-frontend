@@ -23,7 +23,9 @@
 
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", mainClass = Some("full-width")) {
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), mainClass = Some("full-width")) {
 
   @PageHeading(
     PageHeadingParams(
@@ -49,5 +51,21 @@
     </tbody>
   </table>
 
+    <div class="form-group hidden-print margin-top-30">
+        <p>
+            <a href="javascript:window.print()">Print a copy of this summary</a>
+        </p>
+        <p>
+            <a class="button" href="#">
+                Save and continue
+            </a>
+        </p>
+
+        <p>
+            <a class="" href="#">
+                Save and come back later
+            </a>
+        </p>
+    </div>
 
 }

@@ -25,3 +25,9 @@ span.error-message, .form-hint {
     padding: 5px 0 0 39px;
     background: url("/fhdds/assets/images/loading.gif") no-repeat;
 }
+
+/* application.min.css is overriding this to 0 after declaring it! */
+
+table {
+    margin-bottom: 1.57895em;
+}
