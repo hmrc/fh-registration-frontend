@@ -16,19 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Reads, Writes}
 
+object BusinessType extends Enumeration {
+  type BusinessType = Value
+  val CorporateBody, SoleTrader, Partnership = Value
 
-case class BusinessType (
-  businessType: String
-)
-
-object BusinessType {
-  implicit val format = Json.format[BusinessType]
-
-  val businessTypeOptions = Seq(
-    "corporate body",
-    "Sole Trader",
-    "Partnership"
-  )
+  implicit val businessTypeFormat = Format(
+    Reads.enumNameReads(BusinessType),
+    Writes.enumNameWrites[this.type ])
 }
+

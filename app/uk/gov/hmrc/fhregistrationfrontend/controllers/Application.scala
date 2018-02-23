@@ -145,7 +145,7 @@ class Application @Inject()(
       formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
       businessType => {
         for {
-          _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
+          _ ← save4LaterService.saveBusinessType(request.userId, businessType)
         } yield {
           Redirect(routes.Application.startForm())
         }

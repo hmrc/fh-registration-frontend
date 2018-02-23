@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(businessPartnerForm: Form[BusinessPartner], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -444,6 +444,26 @@
     <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporated_body.value")">
       @business_partners_unincorporated_body(businessPartnerForm)
     </div>
+
+    @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = businessPartnerForm(s"addMore").value,
+          legend = Some(Messages("fh.business_partners.addMore")),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None 
+            )
+          )
+        )
+      )
 
     @SubmitButtons(
       SubmitButtonsParams(

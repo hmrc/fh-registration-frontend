@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartners => BusinessPartnersModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -26,12 +25,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
 
-@(businessPartnersForm: BusinessPartnersModel)(implicit request: Request[_], messages: Messages)
+@(businessPartners: List[BusinessPartner])(implicit request: Request[_], messages: Messages)
 
 
 @SummarySectionHead(heading = Messages("fh.business_partners.title"))
 
-@for((businessPartner:BusinessPartner, index) <- businessPartnersForm.businessPartners.zipWithIndex) {
+@for((businessPartner:BusinessPartner, index) <- businessPartners.zipWithIndex) {
 
     @SummaryRepeatingHead(heading = Messages("fh.business_partners.add_a_partner",{index+1}), changeLink = Some("businessPartners"), section = {index+1}.toString())
 
