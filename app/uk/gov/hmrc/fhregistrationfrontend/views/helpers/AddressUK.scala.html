@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div id="@{fieldName}-manual-container" class="js-hidden">
+<div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
 
   @TextInput(
     TextInputParams(
@@ -99,7 +99,7 @@
       hasErrors = formDate(s"$fieldName.postcode").hasErrors
     )
   )
-  <div class="form-group" style="margin-top: 1em;
+  <div class="form-group lookup-link-container" style="margin-top: 1em;
     display: none;">
     <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Lookup address with postcode</a>
   </div>

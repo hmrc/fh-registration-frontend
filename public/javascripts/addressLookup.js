@@ -1,6 +1,13 @@
 (function($) {
     // initialise the display of js-only controls
-    $('.address-lookup-container').show();
+    // initialise the display of js-only controls
+    if ($('.address-line-postcode').val() == '') {
+        $('.address-lookup-container').show();
+    } else {
+        $('.address-manual-container').removeClass('js-hidden');
+        $('.lookup-link-container').show()
+        $('.address-lookup-container').show().addClass('js-hidden');
+    }
 
     var lookUpPath = '/fhdds/address-lookup?postcode=';
 
