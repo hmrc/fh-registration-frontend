@@ -18,7 +18,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
@@ -32,47 +31,9 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(businessStatusForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(businessStatusForm(isNewFulfilmentBusinessKey).hasErrors){
-          <li id="isNewFulfilmentBusiness-error-link"><a href="#isNewFulfilmentBusiness-inline-error">@{
-            Messages("fh.business_status.error")
-          }
-          </a></li>
-        }
-        @if(businessStatusForm(s"$proposedStartDateKey").hasErrors){
-          <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages("fh.business_status.new_business.error.pattern")
-          }
-          </a></li>
-        }
-        @if(businessStatusForm(s"$proposedStartDateKey.day").hasErrors){
-          <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.day").error.head.message)
-          }
-          </a></li>
-        }
-        @if(businessStatusForm(s"$proposedStartDateKey.month").hasErrors){
-          <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.month").error.head.message)
-          }
-          </a></li>
-        }
-        @if(businessStatusForm(s"$proposedStartDateKey.year").hasErrors){
-          <li id="proposedStartDate-error-link"><a href="#proposedStartDate-inline-error">@{
-            Messages("fh.business_status.new_business." + businessStatusForm(s"$proposedStartDateKey.year").error.head.message)
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(businessStatusForm)
 
   @PageHeading(
     PageHeadingParams(
@@ -90,7 +51,7 @@
         legend = Some(Messages("fh.business_status.label")),
         value = businessStatusForm(isNewFulfilmentBusinessKey).value,
         hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
-        error = Some(Messages("fh.business_status.error")),
+        error = Some(Messages("fh.isNewFulfilmentBusiness.error.required")),
         radios = List(
           RadioParams(
             "true",
@@ -131,8 +92,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

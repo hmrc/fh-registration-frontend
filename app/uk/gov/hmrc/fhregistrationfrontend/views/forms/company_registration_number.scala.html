@@ -24,31 +24,17 @@
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("fh.company_registration_number.title"), mainClass = Some("full-width")) {
+@main_template(title = Messages("fh.companyRegistrationNumber.title"), mainClass = Some("full-width")) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(companyRegistrationNumberForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors){
-          <li id="companyRegistrationNumber-error-link"><a href="#companyRegistrationNumber-inline-error">@{
-            Messages("fh.company_registration_number." + companyRegistrationNumberForm(companyRegistrationNumberKey).error.head.message)
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(companyRegistrationNumberForm)
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.company_registration_number.title")
+      heading = Messages("fh.companyRegistrationNumber.title")
     )
   )
 
@@ -59,24 +45,24 @@
     @TextInput(
       TextInputParams(
         name = companyRegistrationNumberKey,
-        label = Messages("fh.company_registration_number.label"),
+        label = Messages("fh.companyRegistrationNumber.label"),
         value = companyRegistrationNumberForm(companyRegistrationNumberKey).value,
-        error = Messages("fh.company_registration_number." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
+        error = Messages("fh.companyRegistrationNumber." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
         hasErrors = companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors,
-        hintText = Some(Messages("fh.company_registration_number.hint_text"))
+        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text"))
       )
     )
 
     <div class="form-group" style="margin-top:2em">
       <details id="company-registration-number-details">
         <summary class="summary">
-          @Messages("fh.company_registration_number.summary")
+          @Messages("fh.companyRegistrationNumber.summary")
         </summary>
         <div>
-          @Messages("fh.company_registration_number.details")
+          @Messages("fh.companyRegistrationNumber.details")
           <a href="https://www.gov.uk/government/organisations/companies-house" id="companies-house">
-            @Messages("fh.company_registration_number.details_companies_house")
-            <span class="visuallyhidden">@Messages("fh.company_registration_number.details_companies_house")</span>
+            @Messages("fh.companyRegistrationNumber.details_companies_house")
+            <span class="visuallyhidden">@Messages("fh.companyRegistrationNumber.details_companies_house")</span>
           </a>
         </div>
       </details>
@@ -85,8 +71,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

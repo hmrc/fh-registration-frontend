@@ -25,13 +25,9 @@
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @if(businessTypeForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.business_type.error")</h1>
-      <ul>
+    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
+      <ul class="error-summary-list">
       @if(businessTypeForm("businessType").hasErrors){
         <li id="period-error-link">@{
           Messages(businessTypeForm("businessType").errors.seq.head.message)

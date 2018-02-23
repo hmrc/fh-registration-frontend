@@ -14,29 +14,26 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
+
+@(navigation: Navigation = Navigation(None))(implicit message: Messages)
+
+@backLink = @{
+  navigation.back.map {
+    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+    case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
+  }
+}
 
 <div class="form-group margin-top-30">
-  <p>
-    <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@{
-      params.label
-    }</button>
-  </p>
 
-  @if(params.summaryLink) {
+  @backLink.map { link =>
     <p>
-      <a href="@{
-        uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-      }">
-      @Messages("link.goBackToSummary")
+      <a id="back" class="back-link print-hidden" href="@link">
+      @Messages("link.back")
       </a>
     </p>
   }
-
-  <p>
-    <button class="button--link-style" type="submit" name="saveAction2" value="saveForLater">
-      @Messages("link.saveForLater")
-    </button>
-  </p>
 
 </div>

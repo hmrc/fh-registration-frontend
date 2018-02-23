@@ -32,37 +32,9 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(importingActivitiesForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(importingActivitiesForm(hasEoriKey).hasErrors){
-          <li id="hasEori-error-link"><a href="#hasEori-inline-error">@{
-            Messages("fh.importing_activities.eori.confirm.error")
-          }
-          </a></li>
-        }
-      </ul>
-      <ul>
-      @if(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors){
-        <li id="eoriNumber-error-link"><a href="#eoriNumber-inline-error">@{
-          Messages("fh.importing_activities.eori." + importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error.head.message)
-        }
-        </a></li>
-      }
-        @if(importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors){
-          <li id="goodsImportedOutsideEori-error-link"><a href="#goodsImportedOutsideEori-inline-error">@{
-            Messages("fh.importing_activities.eori_used_for_others.confirm.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(importingActivitiesForm)
 
   @PageHeading(
     PageHeadingParams(
@@ -80,7 +52,7 @@
         legend = Some(Messages("fh.importing_activities.eori.confirm.label")),
         hintText = Some(Messages("fh.importing_activities.eori.hint_text")),
         hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
-        error = Some(Messages("fh.importing_activities.eori.confirm.error")),
+        error = Some(Messages("fh.hasEori.error.required")),
         value = importingActivitiesForm(hasEoriKey).value,
         radios = List(
           RadioParams(
@@ -104,7 +76,7 @@
           label = Messages("fh.importing_activities.eori.label"),
           hasErrors = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors,
           value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value,
-          error = Messages("fh.importing_activities.eori." + getError(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error))
+          error = Messages("fh.eoriNumber.eoriNumber." + getError(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error))
         )
       )
 
@@ -114,7 +86,7 @@
           legend = Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
           hasErrors = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors,
           value = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value,
-          error = Some(Messages("fh.importing_activities.eori_used_for_others.confirm.error")),
+          error = Some(Messages("fh.eoriNumber.goodsImportedOutsideEori.error.required")),
           radios = List(
             RadioParams(
               "true",
@@ -133,8 +105,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

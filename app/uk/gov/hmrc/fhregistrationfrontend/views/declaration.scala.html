@@ -30,13 +30,9 @@
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @if(declarationForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
+    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
+      <ul class="error-summary-list">
         @if(declarationForm(fullNameKey).hasErrors) {
           <li id="@fullNameKey-error-link"><a href="#@fullNameKey-inline-error">@{
             Messages("fh.declaration.person_name." + declarationForm(fullNameKey).errors.head.message)

@@ -19,6 +19,14 @@
 
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.YesNoTextParams)(implicit message : Messages)
 
+@fieldNamePure = @{
+  val name = params.name.replace("_yesNo","")
+  params.context match {
+    case Some(context) => context + "_" + name
+    case _ => name
+  }
+}
+
 @fieldName = @{
   params.context match {
     case Some(context) => context + "_" + params.name
@@ -38,7 +46,7 @@
   }
 }
 
-<div class="@{formGroupClass}" id="@{fieldName}_group">
+<div class="@{formGroupClass}" id="@{fieldNamePure}_group">
     <fieldset class="inline">
 
         <legend class="form-label-bold">
@@ -50,22 +58,22 @@
         }
 
         @if(params.hasErrors){
-            <span class="error-message" id="@{params.name}-inline-error">
+            <span class="error-message" id="@{fieldName}-inline-error">
               @params.yesNoError
             </span>
         }
 
-        <div class="inline form-group" id="@{fieldName}_yesNo">
+        <div class="inline form-group" id="@{fieldNamePure}_yesNo">
 
-            <div class="multiple-choice" data-target="@{fieldName}_value_container" >
-                <input id="@{fieldName}_yes" type="radio" name="@{fieldName}_yesNo" value="true" @checked("true")>
-                <label class="block-label" for="@{fieldName}_yes" >
+            <div class="multiple-choice" data-target="@{fieldNamePure}_value_container" >
+                <input id="@{fieldNamePure}_yes" type="radio" name="@{fieldNamePure}_yesNo" value="true" @checked("true")>
+                <label class="block-label" for="@{fieldNamePure}_yes" >
                     Yes
                 </label>
             </div>
             <div class="multiple-choice" @if(params.targetForNo.nonEmpty){data-target="@{params.targetForNo}"}>
-                <input id="@{fieldName}_no" type="radio" name="@{fieldName}_yesNo" value="false" @checked("false")>
-                <label for="@{fieldName}_no">
+                <input id="@{fieldNamePure}_no" type="radio" name="@{fieldNamePure}_yesNo" value="false" @checked("false")>
+                <label for="@{fieldNamePure}_no">
                     No
                 </label>
             </div>
@@ -74,7 +82,7 @@
 
         @TextInput(
             TextInputParams(
-                name = fieldName + "_value",
+                name = fieldNamePure + "_value",
                 hiddenNested = true,
                 label = params.valueLabel,
                 error = params.valueError,
