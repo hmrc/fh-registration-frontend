@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams)(implicit message : Messages)
 
-case class LimitedCompanyApplication(
-  mainBusinessAddress: MainBusinessAddress,
-  contactPerson: ContactPerson,
-  companyRegistrationNumber: CompanyRegistrationNumber,
-  dateOfIncorporation: DateOfIncorporation,
-  tradingName: TradingName,
-  vatNumber: VatNumber,
-  companyOfficers: CompanyOfficers,
-  businessStatus: BusinessStatus,
-  importingActivities: ImportingActivities,
-  businessCustomers: BusinessCustomers,
-  otherStoragePremises: OtherStoragePremises
-)
+<tr>
+  <td style="vertical-align: top" width="45%">@if(params.label.nonEmpty){ @params.label }</td>
+  <td width="45%">@if(params.value.nonEmpty){ @params.value }</td>
+  <td style="vertical-align: top">
+    @if(params.changeLink.nonEmpty){
+    <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
+    }
+  </td>
+</tr>

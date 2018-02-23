@@ -16,16 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-case class LimitedCompanyApplication(
-  mainBusinessAddress: MainBusinessAddress,
-  contactPerson: ContactPerson,
-  companyRegistrationNumber: CompanyRegistrationNumber,
-  dateOfIncorporation: DateOfIncorporation,
-  tradingName: TradingName,
-  vatNumber: VatNumber,
-  companyOfficers: CompanyOfficers,
-  businessStatus: BusinessStatus,
-  importingActivities: ImportingActivities,
-  businessCustomers: BusinessCustomers,
-  otherStoragePremises: OtherStoragePremises
+import play.api.libs.json.Json
+
+case class StoragePremises (
+  hasValue: Boolean,
+  premises: List[StoragePremise]
 )
+
+object StoragePremises {
+  implicit val format = Json.format[StoragePremises]
+}

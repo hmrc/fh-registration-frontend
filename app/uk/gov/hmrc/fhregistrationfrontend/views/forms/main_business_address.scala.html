@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
 @overThreeYearsPeriodLabels = @{
   List(
     Messages("fh.main_business_address.3to5years.label"),

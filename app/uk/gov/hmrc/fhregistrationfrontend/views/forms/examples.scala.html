@@ -198,7 +198,7 @@
             TextInputParams(
                 name = "lastName",
                 label = Messages("fh.contact_person.last_name.label"),
-                error = Messages("fh.contact_person.last_name.empty.error"),
+                error = Messages("fh.contact_person.last_name.error.required"),
                 hasErrors = true
             )
         )
@@ -209,7 +209,7 @@
             TextInputParams(
                 name = "lastName",
                 label = Messages("fh.contact_person.last_name.label"),
-                error = Messages("fh.contact_person.last_name.empty.error"),
+                error = Messages("fh.contact_person.last_name.error.required"),
                 value = Some("Macdonald"),
                 hasErrors = false
             )
@@ -301,7 +301,7 @@
             DateTupleParams(
                 name="dateStartTrading",
                 label=Messages("fh.business_status.new_business.label"),
-                error=Messages("fh.business_status.new_business.empty.error"),
+                error=Messages("fh.business_status.new_business.error.pattern"),
                 hintText=Some(Messages("fh.business_status.new_business.hint_text")),
                 hasErrors=true
             )

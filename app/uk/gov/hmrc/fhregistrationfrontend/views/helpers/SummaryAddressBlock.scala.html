@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+@(Line1: Option[String] = None, Line2: Option[String] = None, Line3: Option[String] = None, Line4: Option[String] = None, postcode: Option[String] = None )(implicit message : Messages)
 
-case class LimitedCompanyApplication(
-  mainBusinessAddress: MainBusinessAddress,
-  contactPerson: ContactPerson,
-  companyRegistrationNumber: CompanyRegistrationNumber,
-  dateOfIncorporation: DateOfIncorporation,
-  tradingName: TradingName,
-  vatNumber: VatNumber,
-  companyOfficers: CompanyOfficers,
-  businessStatus: BusinessStatus,
-  importingActivities: ImportingActivities,
-  businessCustomers: BusinessCustomers,
-  otherStoragePremises: OtherStoragePremises
-)
+@if(Line2.nonEmpty){ @Line1,<br /> }
+@if(Line2.nonEmpty){ @Line2,<br /> }
+@if(Line3.nonEmpty){ @Line3,<br /> }
+@if(Line4.nonEmpty){ @Line4,<br /> }
+@if(postcode.nonEmpty){ @postcode }

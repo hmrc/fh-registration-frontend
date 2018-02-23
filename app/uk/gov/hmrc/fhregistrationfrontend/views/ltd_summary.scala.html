@@ -14,90 +14,60 @@
  * limitations under the License.
  *@
 
-@(items: String)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "FHDDS Check Summary", mainClass = Some("full-width")) {
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
-  <h1 class="heading-large">Check your answers before sending your application</h1>
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
-  <div class="form-group">
-    <table class="check-your-answers">
-      <thead>
-        <tr>
-          <th>
-            <span class="visuallyhidden">We asked</span>
-          </th>
-          <th>
-            <span class="visuallyhidden">You answered</span>
-          </th>
-          <th>
-            <span class="visuallyhidden">You can</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.generic.check")
+    )
+  )
 
-        <tr>
-          <td style="width: 50%">@Messages("fh.main_business_address.title")</td>
-          <td>  </td>
-          <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("mainBusinessAddress")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.contact_person.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("contactPerson")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.company_registration_number.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("companyRegistrationNumber")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.date_of_incorporation.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("dateOfIncorporation")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.trading_name.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("tradingName")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.vat_registration.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("vatNumber")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.company_officers.each.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("companyOfficer")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.business_status.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("businessStatus")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.importing_activities.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("importingActivities")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.business_customers.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("businessCustomers")">Edit</a></td>
-        </tr>
-        <tr>
-            <td style="width: 50%">@Messages("fh.other_storage_premises.title")</td>
-            <td>  </td>
-            <td><a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load("otherStoragePremises")">Edit</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="table-font-xsmall">
+    <tbody>
 
-  @*<div class="form-group">*@
-    @*<a href="@routes.QuickCalcController.showResult()" id="get-results" role="button" class="button">@Messages("get_results")</a>*@
-  @*</div>*@
+      @MainBusinessAddress(applicationData.mainBusinessAddress)
+      @ContactPerson(applicationData.contactPerson, bpr)
+      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber)
+      @DateOfIncorporation(applicationData.dateOfIncorporation)
+      @TradingName(applicationData.tradingName)
+      @VATRegistrationNumber(applicationData.vatNumber)
+      @CompanyOfficers(applicationData.companyOfficers)
+      @BusinessStatus(applicationData.businessStatus)
+      @ImportingActivities(applicationData.importingActivities)
+      @BusinessCustomers(applicationData.businessCustomers)
+      @OtherStoragePremises(applicationData.otherStoragePremises)
+
+    </tbody>
+  </table>
+
+    <div class="form-group hidden-print margin-top-30">
+        <p class="js-show">
+            <a href="javascript:window.print()">@Messages("link.printSummary")</a>
+        </p>
+        <p>
+            <a class="button" href="@{
+                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.showDeclaration()
+            }">
+                @Messages("button.save.continue")
+            </a>
+        </p>
+
+        <p>
+            <a class="" href="#">
+                @Messages("link.saveForLater")
+            </a>
+        </p>
+    </div>
 
 }
