@@ -35,7 +35,7 @@
 
         @for((storagePremise:StoragePremise, index) <- data.premises.zipWithIndex) {
 
-            @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"))
+            @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"), section = {index+1}.toString())
 
             @SummaryAddress(
                 SummaryAddressParams(
@@ -47,7 +47,7 @@
                         Line4 = storagePremise.address.addressLine4,
                         postcode = Some(storagePremise.address.postcode)
                     ),
-                    Some("otherStoragePremises")
+                    None
                 )
             )
 

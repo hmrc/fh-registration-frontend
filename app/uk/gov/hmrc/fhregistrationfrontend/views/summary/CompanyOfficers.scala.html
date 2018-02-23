@@ -27,9 +27,9 @@
 
     @SummarySectionHead(heading = Messages("fh.company_officers.title"))
 
-    @for((companyOfficer:CompanyOfficer, index) <- companyOfficersForm.companyOfficers.zipWithIndex) {
+    @for((companyOfficer:CompanyOfficer, index) <- companyOfficersForm.values.zipWithIndex) {
 
-        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"))
+        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"), section = {index+1}.toString())
 
         @{companyOfficer.identification match {
             case individual: CompanyOfficerIndividualModel ⇒

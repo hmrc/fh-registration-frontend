@@ -14,13 +14,13 @@
  * limitations under the License.
  *@
 
-@(heading:String, changeLink: Option[String] = None)(implicit message : Messages)
+@(heading:String, changeLink: Option[String] = None, section: String)(implicit message : Messages)
 
 <tr>
   <th colspan="2"><span class="bold-small">@{heading}</span></th>
   <td>
     @if(changeLink.nonEmpty){
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(changeLink.get)}">Change</a>
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(changeLink.get, section)}">Change</a>
     }
   </td>
 </tr>
