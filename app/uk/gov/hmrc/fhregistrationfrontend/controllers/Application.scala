@@ -122,11 +122,7 @@ class Application @Inject()(
           }
         } else {
           //todo goto the right page
-          save4LaterService.fetchBusinessType(request.userId) map {
-            case Some(businessType) ⇒
-              Redirect(routes.Application.startForm(businessType))
-            case None               ⇒ Redirect(routes.Application.businessType())
-          }
+          Future successful Redirect(routes.Application.startForm())
         }
       }
     )
@@ -149,13 +145,13 @@ class Application @Inject()(
         for {
           _ ← save4LaterService.saveBusinessType(request.userId, businessType.businessType)
         } yield {
-          Redirect(routes.Application.startForm(businessType.businessType))
+          Redirect(routes.Application.startForm())
         }
       }
     )
   }
 
-  def startForm(formType: String) = UserAction.async { implicit request ⇒
+  def startForm = UserAction.async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)

@@ -6,7 +6,7 @@ GET         /continue                                                           
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
-GET         /startForm/:formType                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm(formType: String)
+GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
 GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
