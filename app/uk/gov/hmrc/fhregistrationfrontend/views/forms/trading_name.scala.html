@@ -28,37 +28,17 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.trading_name.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+@main_template(title = Messages("fh.tradingName.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(tradingNameForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(tradingNameForm(hasTradingNameKey).hasErrors){
-          <li id="tradingName_yesNo-error-link"><a href="#tradingName-inline-error">@{
-            Messages("fh.trading_name.confirm.error")
-          }
-          </a></li>
-        }
-        @if(tradingNameForm(tradingNameKey).hasErrors){
-          <li id="tradingName_value-error-link"><a href="#tradingName_value-inline-error">@{
-            Messages("fh.company_registration_number." + tradingNameForm(tradingNameKey).error.head.message)
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(tradingNameForm)
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.trading_name.title")
+      heading = Messages("fh.tradingName.title")
     )
   )
 
@@ -68,13 +48,13 @@
 
     @YesNoText(
       YesNoTextParams(
-        name = "tradingName",
+        name = hasTradingNameKey,
         value = tradingNameForm(tradingNameKey).value,
         yesNoValue = tradingNameForm(hasTradingNameKey).value,
-        yesNoLabel = Messages("fh.trading_name.confirm.label"),
-        yesNoError = Messages("fh.trading_name.confirm.error"),
-        valueLabel = Messages("fh.trading_name.label"),
-        valueError = Messages("fh.company_registration_number." + getError(tradingNameForm(tradingNameKey).error)),
+        yesNoLabel = Messages("fh.tradingName.confirm.label"),
+        yesNoError = Messages("fh.tradingName_yesNo.error.required"),
+        valueLabel = Messages("fh.tradingName.label"),
+        valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
         hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
         hasValueError= tradingNameForm(tradingNameKey).hasErrors
       )
@@ -83,8 +63,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

@@ -32,23 +32,9 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(businessCustomersForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(businessCustomersForm(numberOfCustomersKey).hasErrors){
-          <li id="numberOfCustomers-error-link"><a href="#numberOfCustomers-inline-error">@{
-            Messages("fh.business_customers.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(businessCustomersForm)
 
   @PageHeading(
     PageHeadingParams(
@@ -67,7 +53,7 @@
         inline = false,
         required = true,
         hasErrors = businessCustomersForm(numberOfCustomersKey).hasErrors,
-        error = Some(Messages("fh.business_customers.error")),
+        error = Some(Messages("fh.numberOfCustomers.error.required")),
         value = businessCustomersForm(numberOfCustomersKey).value,
         radios = List(
           RadioParams(
@@ -97,8 +83,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

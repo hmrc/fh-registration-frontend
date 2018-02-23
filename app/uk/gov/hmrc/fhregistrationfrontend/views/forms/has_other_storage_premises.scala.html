@@ -33,14 +33,12 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
+  @Back(navigation)
+
   @if(hasOtherStoragePremisesForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
+    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
+      <ul class="error-summary-list">
         @if(hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors) {
           <li id="storagePremise_address-error-link"><a href="#storagePremise_address-inline-error">@{
             Messages("fh.other_storage_premises.confirm.error")
@@ -84,8 +82,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

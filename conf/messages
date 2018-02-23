@@ -103,7 +103,7 @@ fh.business_type.type_not_match=Your Government Gateway ID does not match the bu
 #============================================================
 fh.main_business_address.title=Main business address
 fh.main_business_address.time_at_address.label=How long has the business operated at its current address?
-fh.main_business_address.time_at_address.error=Select how long the business has operated at this address
+fh.timeAtCurrentAddress.error.required=Select how long the business has operated at this address
 fh.main_business_address.0to3years.label=Less than 3 years
 fh.main_business_address.3to5years.label=3 to 5 years
 fh.main_business_address.5to10years.label=5 to 10 years
@@ -113,46 +113,69 @@ fh.main_business_address.3to5years.value=3 to 5 years
 fh.main_business_address.5to10years.value=5 to 10 years
 fh.main_business_address.10plusYears.value=10 or more years
 fh.main_business_address.previous.label=Has the business operated from a different address in the last 3 years?
-fh.main_business_address.previous.error=Select whether the business has operated from a different address in the last 3 years
+fh.previousAddress.error.required=Select whether the business has operated from a different address in the last 3 years
 fh.main_business_address.enter_previous.label=What was the previous address?
 fh.main_business_address.enter_previous.error=Enter a valid previous address
+fh.mainPreviousAddressUK_previousAddress.Line1.error.required=You must enter line 1 of the address
+fh.mainPreviousAddressUK_previousAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.mainPreviousAddressUK_previousAddress.Line2.error.required=You must enter line 2 of the address
+fh.mainPreviousAddressUK_previousAddress.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.mainPreviousAddressUK_previousAddress.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.mainPreviousAddressUK_previousAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.mainPreviousAddressUK_previousAddress.postcode.error.required=Enter the postcode of the address
+fh.mainPreviousAddressUK_previousAddress.postcode.error.pattern=Enter a valid postcode
 
 # - Contact Person
 #============================================================
 fh.contact_person.title=Contact person
 fh.contact_person.intro=This is the person we will contact if we need to discuss your application
 fh.contact_person.first_name.label=First name
-fh.contact_person.first_name.error.required=Enter your contact person''s first name
-fh.contact_person.first_name.error.pattern=Enter only valid characters for a first name
+fh.contact_person.firstName.error.required=Enter your contact person''s first name
+fh.contact_person.firstName.error.pattern=Enter only valid characters for a first name
 fh.contact_person.last_name.label=Last name
-fh.contact_person.last_name.error.required=Enter your contact person''s last name
-fh.contact_person.last_name.error.pattern=Enter only valid characters for a last name
+fh.contact_person.lastName.error.required=Enter your contact person''s last name
+fh.contact_person.lastName.error.pattern=Enter only valid characters for a last name
 fh.contact_person.job_title.label=Job title
-fh.contact_person.job_title.error.required=Enter your contact person''s job title
-fh.contact_person.job_title.error.pattern=Enter only valid characters for a job title
+fh.contact_person.jobTitle.error.required=Enter your contact person''s job title
+fh.contact_person.jobTitle.error.pattern=Enter only valid characters for a job title
 fh.contact_person.telephone.label=Telephone
 fh.contact_person.telephone.error.required=Enter your contact person''s telephone number
 fh.contact_person.telephone.error.pattern=Enter only valid characters for a telephone number
 fh.contact_person.email.label=Email address
 fh.contact_person.email.hintText=Enter a valid email address, like yourname@example.com
-fh.contact_person.email.error.required=Enter your contact person''s email address
-fh.contact_person.email.error.email=Enter a valid email address
+fh.contact_person.emailAddress.error.required=Enter your contact person''s email address
+fh.contact_person.emailAddress.error.email=Enter a valid email address
 fh.contact_person.contact_address.title=Contact address
 fh.contact_person.contact_address_correct.label=Is this the contact address you want to use?
-fh.contact_person.contact_address_correct.error=Select whether you want to use the contact address
+fh.contact_person.hasOtherContactAddress.error.required=Select whether you want to use the contact address
 fh.contact_person.contact_address_in_uk.label=Is the contact address in the UK?
-fh.contact_person.contact_address_in_uk.error=Select whether the contact address you want to use is in the UK
+fh.contact_person.isUkAddress.error.required=Select whether the contact address you want to use is in the UK
 fh.contact_person.contact_address_new.label=Enter your contact address
 fh.contact_person.contact_address_new.error=Enter a valid contact address
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line1.error.required=You must enter line 1 of the address
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line4.error.required=Please start typing a country and select from the list
+fh.contact_person.otherInternationalContactAddress_contactAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherUkContactAddress_contactAddress.Line1.error.required=You must enter line 1 of the address
+fh.contact_person.otherUkContactAddress_contactAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherUkContactAddress_contactAddress.Line2.error.required=You must enter line 2 of the address
+fh.contact_person.otherUkContactAddress_contactAddress.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherUkContactAddress_contactAddress.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherUkContactAddress_contactAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.required=Enter the postcode of the address
+fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=Enter a valid postcode
 
 # - Trading name
 #===========================================================
 fh.trading_name.title=Trading name
-fh.trading_name.confirm.label=Does the business use a trading name
-fh.trading_name.confirm.error=Select whether the business has a different trading name
-fh.trading_name.label=Enter the trading name
-fh.trading_name.error.required=Enter the trading name
-fh.trading_name.error.pattern=Enter only valid characters for a trading name
+fh.tradingName.title=Trading name
+fh.tradingName.confirm.label=Does the business use a trading name
+fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
+fh.tradingName.label=Enter the trading name
+fh.tradingName_value.error.required=Enter the trading name
+fh.tradingName_value.error.pattern=Enter only valid characters for a trading name
 
 # - National insurance number
 #===========================================================
@@ -167,42 +190,51 @@ fh.national_insurance_number.error.pattern=Enter a valid National Insurance numb
 # - VAT registration
 #===========================================================
 fh.vat_registration.title=VAT registration
-fh.vat_registration.confirm.label=Does the business have a UK VAT registration number?
-fh.vat_registration.confirm.error=Select whether the business has a VAT registration number
-fh.vat_registration.label=Enter the VAT registration number
-fh.vat_registration.hintText=For example, 123456789 or GB123456789
-fh.vat_registration.error.required=Enter the VAT registration number
-fh.vat_registration.error.pattern=Enter a valid VAT registration number
+fh.vatNumber.title=VAT registration
+fh.vatNumber.confirm.label=Does the business have a UK VAT registration number?
+fh.vatNumber_yesNo.error.required=Select whether the business has a VAT registration number
+fh.vatNumber.label=Enter the VAT registration number
+fh.vatNumber.hintText=For example, 123456789 or GB123456789
+fh.vatNumber_value.error.required=Enter the VAT registration number
+fh.vatNumber_value.error.pattern=Enter a valid VAT registration number
 
 # - Business status
 #===========================================================
 fh.business_status.title=Business status
 fh.business_status.label=Are you setting up a new fulfilment business?
-fh.business_status.error=Select whether the business is setting up a new fulfilment business
+fh.isNewFulfilmentBusiness.error.required=Select whether the business is setting up a new fulfilment business
 fh.business_status.new_business.label=Enter the date the business intends to start operating as a fulfilment business
 fh.business_status.new_business.hint_text=For example, 31 07 2019
 fh.business_status.new_business.error.number=Enter the intended start date
 fh.business_status.new_business.error.pattern=Enter a valid date for the intended start date
-fh.business_status.new_business.error.max=Enter a valid date for the intended start date
-fh.business_status.new_business.error.min=Enter a valid date for the intended start date
+fh.proposedStartDate.day.error.max=Enter a valid day for the intended start date
+fh.proposedStartDate.day.error.mix=Enter a valid day for the intended start date
+fh.proposedStartDate.month.error.max=Enter a valid month for the intended start date
+fh.proposedStartDate.month.error.mix=Enter a valid month for the intended start date
+fh.proposedStartDate.year.error.max=Enter a valid year for the intended start date
+fh.proposedStartDate.year.error.mix=Enter a valid year for the intended start date
+fh.proposedStartDate.day.error.number=Enter the day for the intended start date
+fh.proposedStartDate.month.error.number=Enter the month for the intended start date
+fh.proposedStartDate.year.error.number=Enter the year for the intended start date
+fh.proposedStartDate.error.invalid=Enter a valid date for the intended start date
 
 # - Importing activities
 #===========================================================
 fh.importing_activities.title=Importing activities
 fh.importing_activities.eori.confirm.label=Does the business have any EORI numbers?
-fh.importing_activities.eori.confirm.error=Select whether the business has any EORI numbers
+fh.hasEori.error.required=Select whether the business has any EORI numbers
 fh.importing_activities.eori.label=Enter the EORI number
 fh.importing_activities.eori.hint_text=The business should have an EORI number if it imports goods with sellers outside the EU. If the business does not have an EORI number, answer ''No''.
-fh.importing_activities.eori.error.required=Enter the EORI number
-fh.importing_activities.eori.error.pattern=Enter a valid EORI number
+fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
+fh.eoriNumber.eoriNumber.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under any of its EORI numbers?
-fh.importing_activities.eori_used_for_others.confirm.error=Select whether the business imports goods not belonging to it under any of its EORI numbers
+fh.eoriNumber.goodsImportedOutsideEori.error.required=Select whether the business imports goods not belonging to it under any of its EORI numbers
 
 # - Business Customers
 #===========================================================
 fh.business_customers.title=Business customers
 fh.business_customers.label=How many sellers established outside the EU does the business store goods for?
-fh.business_customers.error=Select how many sellers established outside the EU the business stores goods for
+fh.numberOfCustomers.error.required=Select how many sellers established outside the EU the business stores goods for
 fh.business_customers.none.label=None
 fh.business_customers.none.value=None
 fh.business_customers.1_10.label=1 to 10
@@ -223,8 +255,18 @@ fh.other_storage_premises.confirm.error=Select whether the business uses other p
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.each.title=Storage Premises {0}
 fh.other_storage_premises.third_party.label=Are these third party premises?
-fh.other_storage_premises.third_party.error=Select whether these premises are operated by a third party
-fh.other_storage_premises.company.addMore = Add more premises?
+fh.other_storage_premises.company.addMore = Have more premises to add?
+fh.storagePremise_address.storagePremise_address.Line1.error.required=You must enter line 1 of the address
+fh.storagePremise_address.storagePremise_address.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.storagePremise_address.storagePremise_address.Line2.error.required=You must enter line 2 of the address
+fh.storagePremise_address.storagePremise_address.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.storagePremise_address.storagePremise_address.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.storagePremise_address.storagePremise_address.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.storagePremise_address.storagePremise_address.postcode.error.required=Enter the postcode of the address
+fh.storagePremise_address.storagePremise_address.postcode.error.pattern=Enter a valid postcode
+fh.storagePremise_address.isThirdParty.error.required=Select whether these premises are operated by a third party
+fh.storagePremise_address.addMore.error.required=Select whether have more premises to add
+
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
@@ -262,24 +304,29 @@ fh.declaration.warning=You could be prosecuted if you deliberately give untrue o
 # - Company Registration Number (Corporate Body)
 #===========================================================
 fh.company_registration_number.title=Company registration number
-fh.company_registration_number.label=Company registration number
-fh.company_registration_number.hint_text=For example, 12345678 or SC123456
-fh.company_registration_number.error.required=Enter the company registration number
-fh.company_registration_number.error.pattern=Enter a valid company registration number
-fh.company_registration_number.summary=Where do I find my company registration number?
-fh.company_registration_number.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on
-fh.company_registration_number.details_companies_house=Companies House
+fh.companyRegistrationNumber.title=Company registration number
+fh.companyRegistrationNumber.label=Company registration number
+fh.companyRegistrationNumber.hint_text=For example, 12345678 or SC123456
+fh.companyRegistrationNumber.error.required=Enter the company registration number
+fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
+fh.companyRegistrationNumber.summary=Where do I find my company registration number?
+fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on
+fh.companyRegistrationNumber.details_companies_house=Companies House
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
 fh.date_of_incorporation.title=Date of incorporation
-fh.date_of_incorporation.label=Date of incorporation
-fh.date_of_incorporation.hint_text=For example, 31 07 2017
-fh.date_of_incorporation.empty.error=Enter the date of incorporation
-fh.date_of_incorporation.invalid.error=Enter a valid date for the date of incorporation
-fh.date_of_incorporation.day=Day
-fh.date_of_incorporation.month=Month
-fh.date_of_incorporation.year=Year
+fh.dateOfIncorporation.title=Date of incorporation
+fh.dateOfIncorporation.label=Date of incorporation
+fh.dateOfIncorporation.hint_text=For example, 31 07 2017
+fh.dateOfIncorporation.empty.error=Enter the date of incorporation
+fh.dateOfIncorporation.error.invalid=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.day=Day
+fh.dateOfIncorporation.month=Month
+fh.dateOfIncorporation.year=Year
+fh.dateOfIncorporation.day.error.number=Enter the day of incorporation
+fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
+fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
 
 # - Company Officers (Corporate Body)
 #===========================================================
@@ -287,10 +334,11 @@ fh.company_officers.title=Company officers
 fh.company_officers.intro=You must tell us about all the directors and company secretaries. We will use this information to check their identity
 fh.company_officers.each.title=Company officer {0}
 fh.company_officers.entity_type.label=Is company officer an individual or a company?
-fh.company_officers.entity_type.error=Select whether company officer {0} is an invidual or a company
+fh.identificationType.error.required=Select whether company officer {0} is an invidual or a company
+fh.addMore.error.required=Select whether have more company officers
 
 fh.company_officers.status.label=What is their role?
-fh.company_officers.status.error=Select what role company officer {0} has in the company
+fh.individualIdentification.role.error.required=Select what role company officer {0} has in the company
 fh.company_officers.add_another.label=Add another company officer
 fh.company_officers.status.director=Director
 fh.company_officers.status.director.value=Director
@@ -304,33 +352,44 @@ fh.company_officers.status.member.value=Member
 fh.company_officers.individual.label=An individual
 fh.company_officers.individual.title=Enter their details
 fh.company_officers.individual.first_name.label=First name
-fh.company_officers.individual.first_name.empty.error=Enter a first name of company officer {0}
+fh.individualIdentification.firstName.error.required=Enter a first name of company officer {0}
+fh.individualIdentification.firstName.error.pattern=Enter only valid characters for a first name of company officer {0}
 fh.company_officers.individual.last_name.label=Last name
-fh.company_officers.individual.last_name.empty.error=Enter a last name of company officer {0}
+fh.individualIdentification.lastName.error.required=Enter a last name of company officer {0}
+fh.individualIdentification.lastName.error.pattern=Enter only valid characters for a last name of company officer {0}
 fh.company_officers.individual.nino.confirm.label=Do they have a National Insurance number?
 fh.company_officers.individual.nino.confirm.hint_text=We need this information to verify their identity
-fh.company_officers.individual.nino.confirm.error=Select whether company officer {0} has a National Insurance number
+fh.individualIdentification.hasNationalInsuranceNumber.error.required=Select whether company officer {0} has a National Insurance number
 fh.company_officers.individual.nino.label=National Insurance number
 fh.company_officers.individual.nino.hint_text=For example, QQ123456C
-fh.company_officers.individual.nino.empty.error=Enter the National Insurance number for company officer {0}
+fh.individualIdentification.nationalInsuranceNumber.error.required=Enter the National Insurance number for company officer {0}
+fh.individualIdentification.nationalInsuranceNumber.error.pattern=Enter a valid National Insurance number for company officer {0}
 fh.company_officers.individual.passport.confirm=Do they have a passport number?
+fh.individualIdentification.hasPassportNumber.error.required=Select whether company officer {0} has a passport number?
 fh.company_officers.individual.passport.label=Enter their passport number
-fh.company_officers.individual.passport.empty.error=Enter the passport number for company officer {0}
+fh.individualIdentification.passportNumber.error.required=Enter the passport number for company officer {0}
+fh.individualIdentification.passportNumber.error.pattern=Enter a valid passport number for company officer {0}
 fh.company_officers.individual.nationalID.label=Enter their national ID
-fh.company_officers.individual.nationalID.empty.error=Enter the national ID for company officer {0}
+fh.individualIdentification.nationalID.error.required=Enter the national ID for company officer {0}
+fh.individualIdentification.nationalID.error.pattern=Enter a national ID for company officer {0}
 fh.company_officers.individual.nationalID.hint_text=You must enter at least one form of identification for this person
 
 fh.company_officers.company.label=A company
 fh.company_officers.company.title=Enter the company details
 fh.company_officers.company.company_name.label=Company name
-fh.company_officers.company.company_name.empty.error=Enter a company name for company officer {0}
+fh.companyIdentification.companyName.error.required=Enter a company name for company officer {0}
 fh.company_officers.company.vat_registration.confirm.label=Does the company have a VAT registration number?
 fh.company_officers.company.vat_registration.confirm.error=Select whether company officer {0} has a VAT registration number
 fh.company_officers.company.vat_registration.error=Enter a valid VAT registration number
+fh.companyIdentification.hasVat.error.required=Select whether company officer {0} has a VAT registration number
+fh.companyIdentification.vatRegistration.error.required=Enter a VAT registration number for company officer {0}
+fh.companyIdentification.vatRegistration.error.pattern=Enter a valid VAT registration number for company officer {0}
 fh.company_officers.company.company_registration_number.label=Enter the company registration number
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
-fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
-fh.company_officers.company.addMore= Add more officers?
+fh.companyIdentification.companyRegistration.error.required=Enter the company registration number for company officer {0}
+fh.companyIdentification.companyRegistration.error.pattern=Enter a valid company registration number for company officer {0}
+fh.companyIdentification.role.error.required=Select what role company officer {0} has in the company
+fh.company_officers.company.addMore= Have more officers to add?
 
 # - Business partners
 #============================================================

@@ -40,60 +40,9 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(mainBusinessAddressForm.hasErrors) {
-    <div class="flash error-summary error-summary--show"
-    id="error-summary-display"
-    role="alert"
-    aria-labelledby="error-summary-heading"
-    tabindex="-1">
-      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
-      <ul>
-        @if(mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors) {
-          <li id="timeAtCurrentAddress-error-link"><a href="#timeAtCurrentAddress-inline-error">@{
-            Messages("fh.main_business_address.time_at_address.error")
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(previousAddressKey).hasErrors) {
-          <li id="hasPreviousAddress-error-link"><a href="#previousAddress-inline-error">@{
-            Messages("fh.main_business_address.previous.error")
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors) {
-          <li id="previousAddress-error-link"><a href="#previousAddress-inline-error">@{
-            Messages("fh.main_business_address.enter_previous.error")
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(s"$mainPreviousAddressKey.Line1").hasErrors) {
-          <li id="previousAddressLine1-error-link"><a href="#Line1-inline-error">@{
-            Messages("fh.address.line1." + mainBusinessAddressForm(s"$mainPreviousAddressKey.Line1").error.head.message)
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(s"$mainPreviousAddressKey.Line2").hasErrors) {
-          <li id="previousAddressLine2-error-link"><a href="#Line1-inline-error">@{
-            Messages("fh.address.line2." + mainBusinessAddressForm(s"$mainPreviousAddressKey.Line2").error.head.message)
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(s"$mainPreviousAddressKey.postcode").hasErrors) {
-          <li id="previousAddressPostcode-error-link"><a href="#postcode-inline-error">@{
-            Messages("fh.address.postcode." + mainBusinessAddressForm(s"$mainPreviousAddressKey.postcode").error.head.message)
-          }
-          </a></li>
-        }
-        @if(mainBusinessAddressForm(s"$mainPreviousAddressKey.Line3").hasErrors ||
-            mainBusinessAddressForm(s"$mainPreviousAddressKey.Line4").hasErrors) {
-          <li id="previousAddressOther-error-link"><a href="#Line2-inline-error">@{
-            Messages("fh.address.other.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @Back(navigation)
+
+  @error_box(mainBusinessAddressForm)
 
   @PageHeading(
     PageHeadingParams(
@@ -119,7 +68,7 @@
         legend = Some(Messages("fh.main_business_address.time_at_address.label")),
         inline = false,
         required = true,
-        error = Some(Messages("fh.main_business_address.time_at_address.error")),
+        error = Some(Messages("fh.timeAtCurrentAddress.error.required")),
         hasErrors = mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors,
         value = mainBusinessAddressForm(timeAtCurrentAddressKey).value,
         radios = List(
@@ -151,7 +100,7 @@
           name = Some(previousAddressKey),
           legend = Some(Messages("fh.main_business_address.previous.label")),
           hasErrors = mainBusinessAddressForm(previousAddressKey).hasErrors,
-          error = Some(Messages("fh.main_business_address.previous.error")),
+          error = Some(Messages("fh.previousAddress.error.required")),
           value = mainBusinessAddressForm(previousAddressKey).value,
           radios = List(
             RadioParams(
@@ -187,8 +136,7 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue"),
-        summaryLink = false,
-        navigation
+        summaryLink = false
       )
     )
   }

@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-
 case class SubmitButtonsParams(
   label      : String,
-  summaryLink: Boolean = false,
-  navigation: Navigation = Navigation(None)
+  summaryLink: Boolean = false
 )
