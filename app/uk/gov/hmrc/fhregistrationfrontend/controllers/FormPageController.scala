@@ -57,7 +57,7 @@ class FormPageController @Inject()(
               else
                 request.journey next pageId match {
                   case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
-                  case None           ⇒ Redirect(routes.Application.summary())
+                  case None           ⇒ Redirect(routes.SummaryController.summary())
                 }
             }
           }

@@ -21,11 +21,10 @@ import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
-
 
 class PageRequest[A](
   val journeyState: JourneyState,
@@ -44,20 +43,23 @@ object PageAction {
 }
 
 
-class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
-  with FrontendAction
+//TODO all exceptional results need to be reviewed
+class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit val save4LaterService: Save4LaterService)
+  extends JourneyAction
+    with ActionRefiner[UserRequest, PageRequest]
 {
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
     implicit val r: UserRequest[A] = input
-    val journeyPages = Journeys.limitedCompanyPages
 
     val result: EitherT[Future, Result, PageRequest[A]] = for {
-      page <- loadPage(input, journeyPages).toEitherT[Future]
       cacheMap ← EitherT(loadCacheMap)
+      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      page <- loadPage(input, journeyPages).toEitherT[Future]
+
       journeyState = loadJourneyState(journeyPages, cacheMap)
       _ ← accessiblePage(page, journeyState).toEitherT[Future]
-      pageWithData = loadPageData(cacheMap, page)
+      pageWithData = loadPageWithData(cacheMap, page)
       pageWithSection ← loadPageSection(pageWithData).toEitherT[Future]
       journeyNavigation = loadJourneyNavigation(journeyPages, journeyState)
     } yield {
@@ -71,6 +73,8 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit save4
     result.value
   }
 
+
+
   def accessiblePage(page: AnyPage, state: JourneyState):  Either[Result, Boolean] = {
     if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
       Right(true)
@@ -79,8 +83,12 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit save4
     }
   }
 
-  def loadPageData(cacheMap: CacheMap, page: Page[T]) = {
-    cacheMap.getEntry[T](page.id)(page.format).fold (page) { data ⇒
+  def loadPageData(cacheMap: CacheMap, page: Page[T]): Option[T] =
+    cacheMap.getEntry[T](page.id)(page.format)
+
+
+  def loadPageWithData(cacheMap: CacheMap, page: Page[T]) = {
+    loadPageData(cacheMap, page).fold (page) { data ⇒
       page withData data
     }
   }
@@ -97,19 +105,6 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit save4
       case Some(page) ⇒ Right(page)
       case None       ⇒ Left(NotFound("Not Found"))
     }
-
-  def loadJourneyState(journeyPages: JourneyPages, cacheMap: CacheMap): JourneyState = {
-    Journeys.journeyState(journeyPages, cacheMap)
-  }
-
-  def loadCacheMap(implicit request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
-    save4LaterService.shortLivedCache.fetch(request.userId) map {
-      case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒ Left(NotFound)
-    } recover { case t ⇒
-      Left(BadGateway)
-    }
-  }
 
   def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) = {
     if (state.isComplete)

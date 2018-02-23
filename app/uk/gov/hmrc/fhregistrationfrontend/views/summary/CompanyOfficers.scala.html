@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficers => CompanyOfficersModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -22,12 +21,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 
-@(companyOfficersForm: CompanyOfficersModel)(implicit request: Request[_], messages: Messages)
+@(companyOfficers: List[CompanyOfficer])(implicit request: Request[_], messages: Messages)
 
 
     @SummarySectionHead(heading = Messages("fh.company_officers.title"))
 
-    @for((companyOfficer:CompanyOfficer, index) <- companyOfficersForm.values.zipWithIndex) {
+    @for((companyOfficer:CompanyOfficer, index) <- companyOfficers.zipWithIndex) {
 
         @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"), section = {index+1}.toString())
 

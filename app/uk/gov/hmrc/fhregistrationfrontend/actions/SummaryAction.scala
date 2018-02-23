@@ -1,0 +1,72 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.fhregistrationfrontend.actions
+
+import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.http.cache.client.CacheMap
+import cats.data.EitherT
+import cats.implicits._
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+
+import scala.concurrent.Future
+
+class SummaryRequest[A](
+  cacheMap: CacheMap,
+  request: UserRequest[A],
+  val bpr: BusinessRegistrationDetails
+) extends WrappedRequest[A](request)
+{
+  def userId: String = request.userId
+
+  def pageData[T](page: Page[T]): T =
+    cacheMap.getEntry[T](page.id)(page.format).get
+
+}
+
+object SummaryAction {
+  def apply(implicit save4LaterService: Save4LaterService) = UserAction andThen new SummaryAction
+}
+
+class SummaryAction(implicit val save4LaterService: Save4LaterService)
+  extends JourneyAction
+    with ActionRefiner[UserRequest, SummaryRequest]{
+
+  override protected def refine[A](input: UserRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
+    implicit val r: UserRequest[A] = input
+    val result: EitherT[Future, Result, SummaryRequest[A]] = for {
+      cacheMap ← EitherT(loadCacheMap)
+      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      _ ← journeyIsComplete(journeyPages, cacheMap).toEitherT[Future]
+      bpr ← findBpr(cacheMap).toEitherT[Future]
+    } yield {
+      new SummaryRequest[A](cacheMap, input, bpr)
+    }
+
+    result.value
+  }
+
+  def journeyIsComplete(journeyPages: JourneyPages, cacheMap: CacheMap): Either[Result, Boolean] = {
+    if(loadJourneyState(journeyPages, cacheMap).isComplete)
+      Right(true)
+    else
+      Left(BadRequest("Bad request"))
+  }
+
+
+}
