@@ -29,7 +29,7 @@ object Journeys {
       Page.dateOfIncorporationPage,
       Page.tradingNamePage,
       Page.vatNumberPage,
-      Page.companyOfficerPage,
+      Page.companyOfficersPage,
       Page.businessStatusPage,
       Page.importingActivitiesPage,
       Page.businessCustomersPage,
@@ -70,6 +70,5 @@ object Journeys {
   def summaryJourney(journeyPages: JourneyPages) = new SummaryJourney()
 
   def journeyState(journeyPages: JourneyPages, cachedMap: CacheMap) = new CachedJourneyState(cachedMap, journeyPages)
-
 
 }

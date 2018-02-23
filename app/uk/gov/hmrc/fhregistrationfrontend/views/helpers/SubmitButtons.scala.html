@@ -20,7 +20,7 @@
 
 @backLink = @{
   params.navigation.back.map {
-    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
+    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
     case FormPage(pageId) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
   }
 }
@@ -35,7 +35,7 @@
   @if(params.summaryLink) {
     <p>
       <a href="@{
-        uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.summary
+        uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
       }">
       @Messages("link.goBackToSummary")
       </a>

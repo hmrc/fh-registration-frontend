@@ -24,7 +24,6 @@ import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 import Constraints.oneOfConstraint
-import play.api.data.validation.Constraints
 
 import scala.util.Try
 

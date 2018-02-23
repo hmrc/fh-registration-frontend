@@ -65,7 +65,7 @@ object Page {
 
   type AnyPage = Page[_]
 
-  val mainBusinessAddressPage = BasicPage[MainBusinessAddress](
+  val mainBusinessAddressPage: Page[MainBusinessAddress] = BasicPage[MainBusinessAddress](
     "mainBusinessAddress",
     MainBusinessAddressForm.mainBusinessAddressForm,
     new FormRendering[MainBusinessAddress] {
@@ -75,7 +75,7 @@ object Page {
       }
     })
 
-  val contactPersonPage = new BasicPage[ContactPerson](
+  val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
     "contactPerson",
     ContactPersonForm.contactPersonForm,
     new FormRendering[ContactPerson] {
@@ -85,7 +85,7 @@ object Page {
       }
     })
 
-  val companyRegistrationNumberPage = new BasicPage[CompanyRegistrationNumber](
+  val companyRegistrationNumberPage: Page[CompanyRegistrationNumber] = new BasicPage[CompanyRegistrationNumber](
     "companyRegistrationNumber",
     CompanyRegistrationNumberForm.companyRegistrationNumberForm,
     new FormRendering[CompanyRegistrationNumber] {
@@ -95,7 +95,7 @@ object Page {
       }
     })
 
-  val nationalInsuranceNumberPage = new BasicPage[NationalInsuranceNumber](
+  val nationalInsuranceNumberPage: Page[NationalInsuranceNumber] = new BasicPage[NationalInsuranceNumber](
     "nationalInsuranceNumber",
     NationalInsuranceNumberForm.nationalInsuranceNumberForm,
     new FormRendering[NationalInsuranceNumber] {
@@ -148,7 +148,7 @@ object Page {
 
 
 
-  val companyOfficerPage = RepeatingPage[CompanyOfficer](
+  val companyOfficersPage = RepeatingPage[CompanyOfficer](
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
       override def render(form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)

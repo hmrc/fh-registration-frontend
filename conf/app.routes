@@ -21,7 +21,8 @@ GET         /form/:page/:section                                                
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
 POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
 
-GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
+#GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
+GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.showDeclaration
 
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitForm

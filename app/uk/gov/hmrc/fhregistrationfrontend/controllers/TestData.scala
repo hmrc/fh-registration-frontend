@@ -52,45 +52,44 @@ object TestData {
       true,
       Some("19911234")
     ),
-    CompanyOfficers(
-      List(
-        CompanyOfficer(
-          CompanyOfficerType.Individual,
-          CompanyOfficerIndividual(
-            "Alistair",
-            "Macdonald",
-            true,
-            Some("NL019207B"),
-            None,
-            None,
-            None,
-            "Director"
-          )
-        ),
-        CompanyOfficer(
-          CompanyOfficerType.Individual,
-          CompanyOfficerIndividual(
-            "Cosmin",
-            "Marian",
-            true,
-            Some("NC019207D"),
-            None,
-            None,
-            None,
-            "Director"
-          )
-        ),
-        CompanyOfficer(
-          CompanyOfficerType.Company,
-          CompanyOfficerCompany(
-            "Secretarial 4 U",
-            true,
-            Some("19911234"),
-            Some("5656983766"),
-            "Company Secretary"
-          )
+    List(
+      CompanyOfficer(
+        CompanyOfficerType.Individual,
+        CompanyOfficerIndividual(
+          "Alistair",
+          "Macdonald",
+          true,
+          Some("NL019207B"),
+          None,
+          None,
+          None,
+          "Director"
+        )
+      ),
+      CompanyOfficer(
+        CompanyOfficerType.Individual,
+        CompanyOfficerIndividual(
+          "Cosmin",
+          "Marian",
+          true,
+          Some("NC019207D"),
+          None,
+          None,
+          None,
+          "Director"
+        )
+      ),
+      CompanyOfficer(
+        CompanyOfficerType.Company,
+        CompanyOfficerCompany(
+          "Secretarial 4 U",
+          true,
+          Some("19911234"),
+          Some("5656983766"),
+          "Company Secretary"
         )
       )
+
     ),
     BusinessStatus(
       true,
