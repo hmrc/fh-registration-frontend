@@ -340,7 +340,7 @@ fh.business_partners.intro=A partner can be a person, company or organisation wh
 fh.business_partners.entity=What is a legal entity?
 fh.business_partners.entity_intro=A legal entity is an individual, company or other organisation that can legally enter into an agreement or contract. Select the option that best describes how each partner is represented in the partnership.
 
-fh.business_partners.add_a_partner=Add a partner
+fh.business_partners.add_a_partner=Partner {0}
 fh.business_partners.entity_type.label=What type of legal entity is this partner?
 fh.business_partners.entity_type.error=Select the type of legal entity for the partner {0}
 
