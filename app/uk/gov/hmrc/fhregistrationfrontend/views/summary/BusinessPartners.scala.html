@@ -1,0 +1,66 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartners => BusinessPartnersModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerCorporateBody
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerLimitedLiabilityPartnership
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
+
+@(businessPartnersForm: BusinessPartnersModel)(implicit request: Request[_], messages: Messages)
+
+
+@SummarySectionHead(heading = Messages("fh.business_partners.title"))
+
+@for((businessPartner:BusinessPartner, index) <- businessPartnersForm.businessPartners.zipWithIndex) {
+
+    @SummaryRepeatingHead(heading = Messages("fh.business_partners.add_a_partner",{index+1}), changeLink = Some("businessPartners"), section = {index+1}.toString())
+
+    @{businessPartner.identification match {
+
+        case partner: BusinessPartnerIndividualModel ⇒
+
+            BusinessPartnerIndividual(partner)
+
+        case partner: BusinessPartnerSoleProprietorModel ⇒
+
+            BusinessPartnerSoleProprietor(partner)
+
+        case partner: BusinessPartnerCorporateBody ⇒
+
+            BusinessPartnerCompany(partner)
+
+        case partner: BusinessPartnerLimitedLiabilityPartnership ⇒
+
+            BusinessPartnerLLP(partner)
+
+        case partner: BusinessPartnerPartnershipModel ⇒
+
+            BusinessPartnerPartnership(partner)
+
+        case partner: BusinessPartnerUnincorporatedBodyModel ⇒
+
+            BusinessPartnerUnincorporatedBody(partner)
+
+    }}
+
+}
