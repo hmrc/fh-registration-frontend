@@ -325,6 +325,7 @@ fh.company_officers.company.company_name.label=Company name
 fh.company_officers.company.company_name.empty.error=Enter a company name for company officer {0}
 fh.company_officers.company.vat_registration.confirm.label=Does the company have a VAT registration number?
 fh.company_officers.company.vat_registration.confirm.error=Select whether company officer {0} has a VAT registration number
+fh.company_officers.company.vat_registration.error=Enter a valid VAT registration number
 fh.company_officers.company.company_registration_number.label=Enter the company registration number
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
