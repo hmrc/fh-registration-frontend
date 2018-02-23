@@ -24,8 +24,8 @@
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
-
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), mainClass = Some("full-width")) {
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
   @PageHeading(
     PageHeadingParams(
@@ -52,14 +52,14 @@
   </table>
 
     <div class="form-group hidden-print margin-top-30">
-        <p>
-            <a href="javascript:window.print()">Print a copy of this summary</a>
+        <p class="js-show">
+            <a href="javascript:window.print()">@Messages("link.printSummary")</a>
         </p>
         <p>
             <a class="button" href="@{
                 uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.showDeclaration()
             }">
-                Save and continue
+                @Messages("button.save.continue")
             </a>
         </p>
 

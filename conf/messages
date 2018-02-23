@@ -8,6 +8,7 @@ link.businessTaxAccount=Business tax account home
 link.goBackToSummary=Go back to summary
 link.saveForLater=Save and come back later
 link.back=Back
+link.printSummary=Print a copy of this summary
 
 #CONFORM CORRECT BUSINESS
 confirm.legend=Is this the business you want to register?

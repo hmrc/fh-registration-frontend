@@ -31,3 +31,7 @@ span.error-message, .form-hint {
 table {
     margin-bottom: 1.57895em;
 }
+
+.js-show {
+    display: none;
+}
