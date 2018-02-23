@@ -76,6 +76,4 @@ object CompanyOfficer {
 
   implicit val format = Format(reads, writes)
 
-
-
 }

@@ -80,6 +80,15 @@ object Page {
     }
   }
 
+  val nationalInsuranceNumberPage = new BasicPage[NationalInsuranceNumber](
+    "nationalInsuranceNumber", NationalInsuranceNumberForm.nationalInsuranceNumberForm
+  ) {
+    override def render(form: Form[NationalInsuranceNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)
+      (implicit request: Request[_], messages: Messages): Html = {
+      national_insurance_number(form, navigation)
+    }
+  }
+
   val dateOfIncorporationPage = new BasicPage[DateOfIncorporation](
     "dateOfIncorporation", DateOfIncorporationForm.dateOfIncorporationForm
   ) {
@@ -102,6 +111,14 @@ object Page {
     override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)
       (implicit request: Request[_], messages: Messages): Html = {
       vat_registration(form, navigation)
+    }
+  }
+
+  //todo: should use BusinessPartnersForm.businessPartnersForm. When repeat component ready, replace businessPartnerForm with businessPartnersForm
+  val businessPartnersPage = new BasicPage[BusinessPartner]("businessPartners", BusinessPartnersForm.businessPartnerForm) {
+    override def render(form: Form[BusinessPartner], bpr: BusinessRegistrationDetails, navigation: Navigation)
+      (implicit request: Request[_], messages: Messages): Html = {
+      business_partners(form, navigation)
     }
   }
 
@@ -145,7 +162,8 @@ object Page {
   //todo: should use StoragePremisesForm.storagePremisesForm. When repeat component ready, replace storagePremiseForm with storagePremisesForm
 
   val otherStoragePremisesPage = new BasicPage[OtherStoragePremises]("otherStoragePremises", StoragePremisesForm.storagePremisesForm) {
-    override def render(form: Form[OtherStoragePremises], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
+    override def render(form: Form[OtherStoragePremises], bpr: BusinessRegistrationDetails, navigation: Navigation)
+      (implicit request: Request[_], messages: Messages): Html = {
       other_storage_premises(form, navigation)
     }
   }

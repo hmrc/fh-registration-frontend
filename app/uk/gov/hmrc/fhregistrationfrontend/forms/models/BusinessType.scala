@@ -25,4 +25,10 @@ case class BusinessType (
 
 object BusinessType {
   implicit val format = Json.format[BusinessType]
+
+  val businessTypeOptions = Seq(
+    "corporate body",
+    "Sole Trader",
+    "Partnership"
+  )
 }

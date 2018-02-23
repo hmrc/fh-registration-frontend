@@ -16,13 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+object BusinessPartnersType extends Enumeration {
+  type BusinessPartnerTypes = Value
 
-case class CompanyOfficers (
-  companyOfficers: List[CompanyOfficer]
-)
-
-object CompanyOfficers {
-  implicit val companyOfficerFormat = CompanyOfficer.format
-  implicit val CompanyOfficersFormat = Json.format[CompanyOfficers]
+  val Individual, SoleProprietor, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody = Value
 }

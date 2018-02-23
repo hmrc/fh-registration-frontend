@@ -41,10 +41,18 @@ object PageAction {
 }
 
 class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
-  with FrontendAction
-{
+  with FrontendAction {
 
-  val journeyPages = Journeys.limitedCompanyPages
+  //todo replace this formType
+  val formType = "Partnership"
+
+  val journeyPages = {
+    formType match {
+      case "corporate body" ⇒ Journeys.limitedCompanyPages
+      case "Sole Trader" ⇒ Journeys.soleTraderPages
+      case "Partnership" ⇒ Journeys.partnershipPages
+    }
+  }
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
     implicit val r = input

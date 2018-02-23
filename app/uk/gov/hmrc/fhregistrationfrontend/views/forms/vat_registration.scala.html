@@ -48,7 +48,7 @@
         }
         @if(vatNumberForm(vatNumberKey).hasErrors){
           <li id="vatNumber-error-link"><a href="#vatNumber_value-inline-error">@{
-            Messages("fh.company_registration_number." + vatNumberForm(vatNumberKey).error.head.message)
+            Messages("fh.vat_registration." + vatNumberForm(vatNumberKey).error.head.message)
           }
           </a></li>
         }
@@ -74,7 +74,7 @@
         yesNoLabel = Messages("fh.vat_registration.confirm.label"),
         yesNoError = Messages("fh.vat_registration.confirm.error"),
         valueLabel = Messages("fh.vat_registration.label"),
-        valueError = Messages("fh.company_registration_number." + getError(vatNumberForm(vatNumberKey).error)),
+        valueError = Messages("fh.vat_registration." + getError(vatNumberForm(vatNumberKey).error)),
         valueHintText = Some(Messages("fh.vat_registration.hintText")),
         hasValueError = vatNumberForm(vatNumberKey).hasErrors,
         hasErrors = vatNumberForm(hasVatNumberKey).hasErrors

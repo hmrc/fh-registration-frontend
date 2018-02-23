@@ -1,0 +1,456 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(businessPartnerForm: Form[BusinessPartner], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@main_template(title = Messages("fh.business_partners.title"), mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @if(businessPartnerForm.hasErrors) {
+    <div class="flash error-summary error-summary--show"
+    id="error-summary-display"
+    role="alert"
+    aria-labelledby="error-summary-heading"
+    tabindex="-1">
+      <h1 id="error-summary-heading" class="h2-heading">@Messages("fh.generic.error")</h1>
+      <ul>
+        @if(businessPartnerForm(businessPartnersTypeKey).hasErrors) {
+          <li id="identificationType-error-link"><a href="#@{businessPartnersTypeKey}-inline-error">@{
+            Messages("fh.business_partners.entity_type.error", 1)
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerIndividualKey.$firstNameKey"}-inline-error">@{
+            Messages("fh.company_officers.individual.first_name.empty.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").hasErrors) {
+          <li id="lastName-error-link"><a href="#@{s"$businessPartnerIndividualKey.$lastNameKey"}-inline-error">@{
+            Messages("fh.company_officers.individual.last_name.empty.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$hasNationalInsuranceNumberKey").hasErrors) {
+          <li id="hasNationalInsurance-error-link"><a href="#@{s"$businessPartnerIndividualKey.$nationalInsuranceNumber"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey").hasErrors) {
+          <li id="nationalInsuranceNumber-error-link"><a href="#@{s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.error.required", 1)
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$firstNameKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.first_name.error.required", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").hasErrors) {
+          <li id="lastName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$lastNameKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.last_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey").hasErrors) {
+          <li id="hasNationalInsurance-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumber"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey").hasErrors) {
+          <li id="nationalInsuranceNumber-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey"}-inline-error">@{
+            Messages("fh.business_partners.individual.nino.error.required", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern", 1)
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$partnershipNameKey").hasErrors) {
+          <li id="partnershipName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$partnershipNameKey"}-inline-error">@{
+            Messages("fh.business_partners.partnership.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasTradeNameKey").hasErrors) {
+          <li id="hasTradeName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$hasUniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="hasUtr-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$limitedLiabilityPartnershipNameKey").hasErrors) {
+          <li id="limitedLiabilityPartnershipName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$limitedLiabilityPartnershipNameKey"}-inline-error">@{
+            Messages("fh.business_partners.liability_partnership.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$companyRegistrationNumberKey").hasErrors) {
+          <li id="firstName-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$companyRegistrationNumberKey"}-inline-error">@{
+            Messages("fh.company_registration_number.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$hasVatKey"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").hasErrors) {
+          <li id="companyName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$companyNameKey"}-inline-error">@{
+            Messages("fh.business_partners.corporate_body.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").hasErrors) {
+          <li id="hasTradeName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").hasErrors) {
+          <li id="companyRegistrationNumber-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey"}-inline-error">@{
+            Messages("fh.company_registration_number.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$hasVatKey"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="utr-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").hasErrors) {
+          <li id="unincorporatedBodyName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey"}-inline-error">@{
+            Messages("fh.business_partners.unincorporate_body.name.error.pattern")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasTradeNameKey").hasErrors) {
+          <li id="hastradeName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$tradeName"}-inline-error">@{
+            Messages("fh.trading_name.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey").hasErrors) {
+          <li id="tradeName-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey"}-inline-error">@{
+            Messages("fh.trading_name.error.required")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasVatKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$vat"}-inline-error">@{
+            Messages("fh.vat_registration.confirm.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey"}-inline-error">@{
+            Messages("fh.vat_registration.error.pattern", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasUniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="hasVat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReference"}-inline-error">@{
+            Messages("fh.business_partners.utr.confirm.error")
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey").hasErrors) {
+          <li id="vat-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey"}-inline-error">@{
+            Messages("fh.business_partners.utr.error")
+          }
+          </a></li>
+        }
+
+
+        @if(businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerIndividualKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerIndividualKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerSoleProprietorKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerPartnershipKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerPartnershipKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerLimitedLiabilityPartnershipKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerCorporateBodyKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+        @if(businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.postcode").hasErrors ||
+            businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.Line1").hasErrors ||
+            businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.Line2").hasErrors) {
+          <li id="address-error-link"><a href="#@{s"$businessPartnerUnincorporatedBodyKey.$addressKey"}-inline-error">@{
+            Messages("fh.business_partners.enter.partner_address.error", 1)
+          }
+          </a></li>
+        }
+      </ul>
+    </div>
+  }
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.business_partners.title")
+    )
+  )
+
+  <p>@Messages("fh.business_partners.intro")</p>
+
+  <div class="form-group" style="margin-top:2em">
+    <details id="business-partners-details">
+      <summary class="summary">
+      @Messages("fh.business_partners.entity")
+      </summary>
+      <div>
+        @Messages("fh.business_partners.entity_intro")
+      </div>
+    </details>
+  </div>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessPartners"), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    <h2>@Messages("fh.business_partners.add_a_partner")</h2>
+
+    @RadioGroup(
+      RadioGroupParams(
+        inline = false,
+        name = Some(businessPartnersTypeKey),
+        legend = Some(Messages("fh.business_partners.entity_type.label")),
+        hasErrors = businessPartnerForm(businessPartnersTypeKey).hasErrors,
+        error = Some(Messages("fh.business_partners.entity_type.error", 1)),
+        value = businessPartnerForm(businessPartnersTypeKey).value,
+        radios = List(
+          RadioParams(
+            Messages("fh.business_partners.entity_type.individual.value"),
+            Messages("fh.business_partners.entity_type.individual.label"),
+            Some(Messages("fh.business_partners.entity_type.individual.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.sole_proprietor.value"),
+            Messages("fh.business_partners.entity_type.sole_proprietor.label"),
+            Some(Messages("fh.business_partners.entity_type.sole_proprietor.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.partnership.value"),
+            Messages("fh.business_partners.entity_type.partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.value"),
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.corporate_body.value"),
+            Messages("fh.business_partners.entity_type.corporate_body.label"),
+            Some(Messages("fh.business_partners.entity_type.corporate_body.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.unincorporated_body.value"),
+            Messages("fh.business_partners.entity_type.unincorporated_body.label"),
+            Some(Messages("fh.business_partners.entity_type.unincorporated_body.value"))
+          )
+        )
+      )
+    )
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.individual.value")">
+      @business_partners_individual(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.sole_proprietor.value")">
+      @business_partners_sole_proprietor(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.partnership.value")">
+      @business_partners_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.limited_liability_partnership.value")">
+      @business_partners_liability_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.corporate_body.value")">
+      @business_partners_corporate_body(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporated_body.value")">
+      @business_partners_unincorporated_body(businessPartnerForm)
+    </div>
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false,
+        navigation
+      )
+    )
+  }
+}

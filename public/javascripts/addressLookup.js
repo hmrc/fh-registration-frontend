@@ -66,7 +66,7 @@
     $('.address-lookup').on('click', function() {
         var postcode = $(this).parents('.address-lookup-container').find('.postcode-value').val().replace(/\s/g,''),
             url = lookUpPath + postcode,
-            context = $(this).data('context');
+            context = CSS.escape($(this).data('context'));
 
         searchAddress(url, context);
     });
@@ -84,12 +84,12 @@
 
     $('.manual-address-mode').on('click', function (e) {
         e.preventDefault();
-        manualMode($(this).data('context'));
+        manualMode(CSS.escape($(this).data('context')));
     })
 
     $('.lookup-address-mode').on('click', function (e) {
         e.preventDefault();
-        lookupMode($(this).data('context'));
+        lookupMode(CSS.escape($(this).data('context')));
     })
 
 })(jQuery);

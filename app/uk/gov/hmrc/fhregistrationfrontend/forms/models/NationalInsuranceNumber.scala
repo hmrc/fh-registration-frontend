@@ -18,11 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class CompanyOfficers (
-  companyOfficers: List[CompanyOfficer]
+
+case class NationalInsuranceNumber (
+  hasValue: Boolean,
+  value: Option[String]
 )
 
-object CompanyOfficers {
-  implicit val companyOfficerFormat = CompanyOfficer.format
-  implicit val CompanyOfficersFormat = Json.format[CompanyOfficers]
+object NationalInsuranceNumber {
+  implicit val format = Json.format[NationalInsuranceNumber]
 }
