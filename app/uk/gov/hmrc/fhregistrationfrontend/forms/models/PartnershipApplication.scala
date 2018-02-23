@@ -21,7 +21,7 @@ case class PartnershipApplication(
   contactPerson: ContactPerson,
   tradingName: TradingName,
   vatNumber: VatNumber,
-  businessPartners: BusinessPartners,
+  businessPartners: List[BusinessPartner],
   businessStatus: BusinessStatus,
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,

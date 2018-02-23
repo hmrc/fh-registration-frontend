@@ -18,10 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.SummaryAction
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+import play.api.mvc.AnyContent
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.sole_proprietor_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.partnership_summary
 
 @Inject
 class SummaryController @Inject()(
@@ -30,7 +33,53 @@ class SummaryController @Inject()(
   links            : ExternalUrls
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
+
+
   def summary() = SummaryAction(save4LaterService) { implicit request ⇒
+    request.businessType match {
+      case BusinessType.CorporateBody ⇒ ltdSummary(request)
+      case BusinessType.SoleTrader ⇒ soleTrader(request)
+      case BusinessType.Partnership ⇒ partnership(request)
+    }
+  }
+
+
+  def partnership(implicit request: SummaryRequest[AnyContent]) = {
+    import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
+    val application = PartnershipApplication(
+      request pageData mainBusinessAddressPage,
+      request pageData contactPersonPage,
+      request pageData tradingNamePage,
+      request pageData vatNumberPage,
+      request pageData businessPartnersPage,
+      request pageData businessStatusPage,
+      request pageData importingActivitiesPage,
+      request pageData businessCustomersPage,
+      request pageData otherStoragePremisesPage
+    )
+
+    Ok(partnership_summary(application, request.bpr))
+  }
+
+
+  def soleTrader(implicit request: SummaryRequest[AnyContent]) = {
+    import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
+    val application = SoleProprietorApplication(
+      request pageData mainBusinessAddressPage,
+      request pageData contactPersonPage,
+      request pageData nationalInsuranceNumberPage,
+      request pageData tradingNamePage,
+      request pageData vatNumberPage,
+      request pageData businessStatusPage,
+      request pageData importingActivitiesPage,
+      request pageData businessCustomersPage,
+      request pageData otherStoragePremisesPage
+    )
+
+    Ok(sole_proprietor_summary(application, request.bpr))
+  }
+
+  private def ltdSummary(implicit request: SummaryRequest[AnyContent]) = {
     import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
     val application = LimitedCompanyApplication(
       request pageData mainBusinessAddressPage,
@@ -47,7 +96,5 @@ class SummaryController @Inject()(
     )
 
     Ok(ltd_summary(application, request.bpr))
-
   }
-
 }

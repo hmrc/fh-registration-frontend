@@ -18,6 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.mvc.Result
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys.businessRegistrationDetailsKey
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
@@ -44,15 +46,22 @@ trait JourneyAction extends FrontendAction {
     }
   }
 
+  def getBusinessType(cacheMap: CacheMap): Either[Result, BusinessType] = {
+    cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
+      case Some(bt) ⇒ Right(bt)
+      case None ⇒ Left(NotFound("Not found: business type"))
+    }
+  }
+
   def getJourneyPages(cacheMap: CacheMap): Either[Result, JourneyPages] = {
-    cacheMap.getEntry[String](Save4LaterKeys.businessTypeKey) map {
+    getBusinessType(cacheMap).right flatMap {
       _ match {
-        case "corporate body" ⇒ Right(Journeys.limitedCompanyPages)
-        case "Sole Trader"    ⇒ Right(Journeys.soleTraderPages)
-        case "Partnership"    ⇒ Right(Journeys.partnershipPages)
-        case _                ⇒ Left(NotFound("Not found: wrong business type"))
+        case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
+        case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages)
+        case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
+        case _                          ⇒ Left(NotFound("Not found: wrong business type"))
       }
-    } getOrElse Left(NotFound("Not found: business type"))
+    }
   }
 
   def loadJourneyState(journeyPages: JourneyPages, cacheMap: CacheMap): JourneyState = {

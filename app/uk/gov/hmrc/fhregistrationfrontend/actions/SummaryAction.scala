@@ -22,6 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import cats.data.EitherT
 import cats.implicits._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 import scala.concurrent.Future
@@ -29,7 +30,8 @@ import scala.concurrent.Future
 class SummaryRequest[A](
   cacheMap: CacheMap,
   request: UserRequest[A],
-  val bpr: BusinessRegistrationDetails
+  val bpr: BusinessRegistrationDetails,
+  val businessType: BusinessType
 ) extends WrappedRequest[A](request)
 {
   def userId: String = request.userId
@@ -54,8 +56,9 @@ class SummaryAction(implicit val save4LaterService: Save4LaterService)
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
       _ ← journeyIsComplete(journeyPages, cacheMap).toEitherT[Future]
       bpr ← findBpr(cacheMap).toEitherT[Future]
+      bt ← getBusinessType(cacheMap).toEitherT[Future]
     } yield {
-      new SummaryRequest[A](cacheMap, input, bpr)
+      new SummaryRequest[A](cacheMap, input, bpr, bt)
     }
 
     result.value

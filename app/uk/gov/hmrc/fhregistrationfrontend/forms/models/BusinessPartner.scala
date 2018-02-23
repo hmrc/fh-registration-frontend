@@ -136,6 +136,6 @@ object BusinessPartner {
     }
   }
 
-  implicit val format = Format(reads, writes)
+  implicit val businessPartnerFormat = Format(reads, writes)
 
 }

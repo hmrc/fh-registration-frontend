@@ -394,6 +394,8 @@ fh.business_partners.utr.label=Self Assessment Unique Taxpayer reference
 fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer reference
 fh.business_partners.utr.hintText=For example, 1234567890
 
+fh.business_partners.addMore = Add more partners?
+
 # - save for later page
 #===========================================================
 fh.has_saved = ✓ Your progress has been saved

@@ -62,6 +62,7 @@ object Page {
   import ContactPerson.format
   import DateOfIncorporation.format
   import MainBusinessAddress.format
+  import BusinessPartner.businessPartnerFormat
 
   type AnyPage = Page[_]
 
@@ -136,15 +137,16 @@ object Page {
   })
 
   //todo: should use BusinessPartnersForm.businessPartnersForm. When repeat component ready, replace businessPartnerForm with businessPartnersForm
-  val businessPartnersPage = new BasicPage[BusinessPartner](
+  val businessPartnersPage = new RepeatingPage[BusinessPartner](
     "businessPartners",
-    BusinessPartnersForm.businessPartnerForm,
-    new FormRendering[BusinessPartner] {
-    override def render(form: Form[BusinessPartner], bpr: BusinessRegistrationDetails, navigation: Navigation)
-      (implicit request: Request[_], messages: Messages): Html = {
-      business_partners(form, navigation)
-    }
-  })
+    new RepeatedFormRendering[(BusinessPartner, Boolean)] {
+      override def render(form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+        (implicit request: Request[_], messages: Messages): Html = {
+        business_partners(form, navigation, sectionId)
+      }
+    },
+    BusinessPartnersForm.businessPartnerMapping
+  )
 
 
 

@@ -23,6 +23,6 @@ case class BusinessPartners (
 )
 
 object BusinessPartners {
-  implicit val businessPartnerFormat = BusinessPartner.format
+  implicit val businessPartnerFormat = BusinessPartner.businessPartnerFormat
   implicit val format = Json.format[BusinessPartners]
 }

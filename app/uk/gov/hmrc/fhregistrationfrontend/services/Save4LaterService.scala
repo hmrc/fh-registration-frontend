@@ -21,6 +21,7 @@ import org.joda.time.DateTime
 import play.api.libs.json
 import play.api.libs.json.{Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.cache.ShortLivedCache
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.ShortLivedCache
@@ -44,7 +45,7 @@ trait Save4LaterService {
 
   val shortLivedCache: ShortLivedCache
 
-  def saveBusinessType(userId: String, businessType: String)(implicit hc: HeaderCarrier) = {
+  def saveBusinessType(userId: String, businessType: BusinessType)(implicit hc: HeaderCarrier) = {
     saveData4Later(userId, businessTypeKey, businessType)
   }
 
