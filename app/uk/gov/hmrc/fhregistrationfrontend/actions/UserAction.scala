@@ -18,14 +18,14 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.{internalId, email}
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession, PlayAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{continueUrl, getString, ggLoginUrl}
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, request: Request[A]) extends WrappedRequest(request)
+class UserRequest[A](val userId: String, val email: Option[String], request: Request[A]) extends WrappedRequest(request)
 
 object UserAction extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
@@ -36,7 +36,10 @@ object UserAction extends ActionBuilder[UserRequest]
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
     authorised().retrieve(internalId) {
-      case Some(id) ⇒ Future successful Right(new UserRequest(id, request))
+      case Some(id) ⇒ authorised().retrieve(email) {
+        case Some(email) ⇒ Future successful Right(new UserRequest(id, Some(email), request))
+        case _ ⇒ Future successful Right(new UserRequest(id, None, request))
+      }
       case None     ⇒ throw AuthorisationException.fromString("Can not find user id")
     } recover { case e ⇒
       Left(handleFailure(e))
