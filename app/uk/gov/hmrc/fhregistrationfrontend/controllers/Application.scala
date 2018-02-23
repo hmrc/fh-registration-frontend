@@ -171,12 +171,12 @@ class Application @Inject()(
 
   //todo link with summary page
   def showDeclaration = UserAction.async { implicit request ⇒
-    Future successful Ok(declaration(declarationForm, Some("dsff@mm")))
+    Future successful Ok(declaration(declarationForm, request.email))
   }
 
   def submitForm = UserAction.async { implicit request ⇒
     declarationForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(declaration(formWithErrors, Some("dsff@mm")))),
+      formWithErrors => Future.successful(BadRequest(declaration(formWithErrors, request.email))),
       declaration => Future.successful(Redirect(routes.Application.startForm())) //todo link with final page
     )
   }
