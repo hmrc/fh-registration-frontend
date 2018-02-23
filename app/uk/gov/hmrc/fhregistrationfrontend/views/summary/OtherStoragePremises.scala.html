@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{StoragePremises => StoragePremisesModel}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises => StoragePremisesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
@@ -33,7 +33,7 @@
 
     @if(data.hasValue) {
 
-        @for((storagePremise:StoragePremise, index) <- data.premises.zipWithIndex) {
+        @for((storagePremise:StoragePremise, index) <- data.value.zipWithIndex) {
 
             @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"), section = {index+1}.toString())
 

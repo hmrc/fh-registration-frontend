@@ -103,7 +103,7 @@ object TestData {
     BusinessCustomers(
       "11 to 50"
     ),
-    StoragePremises(
+    OtherStoragePremises(
       true,
       List(
         StoragePremise(

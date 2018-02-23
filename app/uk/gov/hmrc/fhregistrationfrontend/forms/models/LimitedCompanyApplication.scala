@@ -27,5 +27,5 @@ case class LimitedCompanyApplication(
   businessStatus: BusinessStatus,
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,
-  otherStoragePremises: StoragePremises
+  otherStoragePremises: OtherStoragePremises
 )
