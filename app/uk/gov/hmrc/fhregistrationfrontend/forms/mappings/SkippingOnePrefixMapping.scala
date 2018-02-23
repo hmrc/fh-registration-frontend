@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
-import play.api.libs.json.Json
+import play.api.data.{Mapping, WrappedMapping}
 
-case class OtherStoragePremises (
-  hasValue: Boolean,
-  value: List[StoragePremise]
-)
+class SkippingOnePrefixMapping[T](mapping: Mapping[T]) extends WrappedMapping(mapping, identity[T], identity[T]) {
 
-object OtherStoragePremises {
-  implicit val format = Json.format[OtherStoragePremises]
+  override def withPrefix(prefix: String) = mapping
+
 }

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends JourneyState {
@@ -32,7 +33,7 @@ class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends
   override def nextPageToComplete(): Option[String] = pages find { p ⇒ !(cacheMap.data contains p.id)} map (_.id)
 
 
-  override def isPageComplete(page: Page[_]) = cacheMap.data contains page.id
+  override def isPageComplete(page: AnyPage) = cacheMap.data contains page.id
 
 
 }

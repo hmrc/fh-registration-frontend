@@ -108,7 +108,7 @@ fh.main_business_address.10plusYears.label=10 or more years
 fh.main_business_address.0to3years.value=Less than 3 years
 fh.main_business_address.3to5years.value=3 to 5 years
 fh.main_business_address.5to10years.value=5 to 10 years
-fh.main_business_address.10plusYears.value=over 10 years
+fh.main_business_address.10plusYears.value=10 or more years
 fh.main_business_address.previous.label=Has the business operated from a different address in the last 3 years?
 fh.main_business_address.previous.error=Select whether the business has operated from a different address in the last 3 years
 fh.main_business_address.enter_previous.label=What was the previous address?
@@ -220,7 +220,7 @@ fh.other_storage_premises.confirm.error=Select whether the business uses other p
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.third_party.label=Are these third party premises?
 fh.other_storage_premises.third_party.error=Select whether these premises are operated by a third party
-
+fh.other_storage_premises.company.addMore = Add more premises?
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
@@ -321,6 +321,7 @@ fh.company_officers.company.vat_registration.confirm.error=Select whether compan
 fh.company_officers.company.company_registration_number.label=Enter the company registration number
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.company_officers.company.company_registration_number.empty.error=Enter the company registration number for company officer {0}
+fh.company_officers.company.addMore= Add more officers?
 
 # - Business partners
 #============================================================

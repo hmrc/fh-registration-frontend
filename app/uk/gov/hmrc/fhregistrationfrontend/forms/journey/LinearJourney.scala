@@ -15,20 +15,21 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{FormPage, Navigation}
 
 class LinearJourney(val journeyPages: JourneyPages) extends JourneyNavigation {
 
   val pages = journeyPages.pages
 
-  override def next[_](pageId: String): Option[Page[_]] = {
+  override def next[_](pageId: String): Option[AnyPage] = {
     pages dropWhile (_.id != pageId) match {
       case page :: next :: rest ⇒ Some(next)
       case _                    ⇒ None
     }
   }
 
-  override def previous(pageId: String): Option[Page[_]] = {
+  override def previous(pageId: String): Option[AnyPage] = {
     pages takeWhile (_.id != pageId) lastOption
   }
 

@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-class JourneyPages(val pages: Seq[Page[_]]) {
+class JourneyPages(val pages: Seq[AnyPage]) {
 
   def get[T](pageId: String): Option[Page[T]] = {
     pages find ( _.id == pageId) map (_.asInstanceOf[Page[T]])
@@ -27,9 +28,9 @@ class JourneyPages(val pages: Seq[Page[_]]) {
 
 trait JourneyNavigation {
 
-  def next[_](pageId: String): Option[Page[_]]
+  def next[_](pageId: String): Option[AnyPage]
 
-  def previous(pageId: String): Option[Page[_]]
+  def previous(pageId: String): Option[AnyPage]
 
   def navigation(pageId: String): Navigation
 
@@ -40,5 +41,5 @@ trait JourneyState {
   def isAccessible(pageId: String): Boolean
 
   def nextPageToComplete(): Option[String]
-  def isPageComplete(page: Page[_]): Boolean
+  def isPageComplete(page: AnyPage): Boolean
 }

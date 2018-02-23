@@ -19,8 +19,10 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -28,52 +30,48 @@ import scala.concurrent.Future
 class PageRequest[A](
   val journeyState: JourneyState,
   val journey: JourneyNavigation,
-  p: Page[_],
+  p: AnyPage,
   request: UserRequest[A]) extends WrappedRequest[A](request)
 {
 
-  def page[T] = p.asInstanceOf[Page[T]]
-  def userId = request.userId
+  def page[T]: Page[T] = p.asInstanceOf[Page[T]]
+  def userId: String = request.userId
 }
 
 object PageAction {
-  def apply(pageId: String)(implicit save4LaterService: Save4LaterService) = (UserAction andThen new PageAction(pageId))
+  def apply(pageId: String)(implicit save4LaterService: Save4LaterService) = UserAction andThen new PageAction(pageId, None)
+  def apply(pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService) = UserAction andThen new PageAction(pageId, sectionId)
 }
 
-class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
-  with FrontendAction {
 
-  //todo replace this formType
-  val formType = "Partnership"
-
-  val journeyPages = {
-    formType match {
-      case "corporate body" ⇒ Journeys.limitedCompanyPages
-      case "Sole Trader" ⇒ Journeys.soleTraderPages
-      case "Partnership" ⇒ Journeys.partnershipPages
-    }
-  }
+class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService) extends ActionRefiner[UserRequest, PageRequest]
+  with FrontendAction
+{
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
-    implicit val r = input
+    implicit val r: UserRequest[A] = input
+    val journeyPages = Journeys.limitedCompanyPages
 
     val result: EitherT[Future, Result, PageRequest[A]] = for {
-      page <- loadPage(input).toEitherT[Future]
-      journeyState ← EitherT(loadJourneyState(input))
+      page <- loadPage(input, journeyPages).toEitherT[Future]
+      cacheMap ← EitherT(loadCacheMap)
+      journeyState = loadJourneyState(journeyPages, cacheMap)
       _ ← accessiblePage(page, journeyState).toEitherT[Future]
-      journeyNavigation = loadJourneyNavigation(journeyState)
+      pageWithData = loadPageData(cacheMap, page)
+      pageWithSection ← loadPageSection(pageWithData).toEitherT[Future]
+      journeyNavigation = loadJourneyNavigation(journeyPages, journeyState)
     } yield {
       new PageRequest(
         journeyState,
         journeyNavigation,
-        page,
+        pageWithSection,
         input
       )
     }
     result.value
   }
 
-  def accessiblePage(page: Page[_], state: JourneyState):  Either[Result, Boolean] = {
+  def accessiblePage(page: AnyPage, state: JourneyState):  Either[Result, Boolean] = {
     if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
       Right(true)
     } else {
@@ -81,23 +79,39 @@ class PageAction[T](pageId: String)(implicit save4LaterService: Save4LaterServic
     }
   }
 
+  def loadPageData(cacheMap: CacheMap, page: Page[T]) = {
+    cacheMap.getEntry[T](page.id)(page.format).fold (page) { data ⇒
+      page withData data
+    }
+  }
 
-  def loadPage[A](request: UserRequest[A]): Either[Result, Page[_]] =
-    journeyPages.get(pageId) match {
+  def loadPageSection(page: Page[T]): Either[Result, Page[T]] = {
+    if (page.withSubsection isDefinedAt sectionId)
+      Right(page withSubsection sectionId)
+    else
+      Left(NotFound("Not found"))
+  }
+
+  def loadPage[A](request: UserRequest[A], journeyPages: JourneyPages): Either[Result, Page[T]] =
+    journeyPages.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
-      case None       ⇒ Left(NotFound)
+      case None       ⇒ Left(NotFound("Not Found"))
     }
 
-  def loadJourneyState(implicit request: UserRequest[_]): Future[Either[Result, JourneyState]] = {
+  def loadJourneyState(journeyPages: JourneyPages, cacheMap: CacheMap): JourneyState = {
+    Journeys.journeyState(journeyPages, cacheMap)
+  }
+
+  def loadCacheMap(implicit request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.shortLivedCache.fetch(request.userId) map {
-      case Some(cacheMap) ⇒ Right(Journeys.limitedCompanyJourneyState(journeyPages, cacheMap))
+      case Some(cacheMap) ⇒ Right(cacheMap)
       case None ⇒ Left(NotFound)
     } recover { case t ⇒
       Left(BadGateway)
     }
   }
 
-  def loadJourneyNavigation(state: JourneyState) = {
+  def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) = {
     if (state.isComplete)
       Journeys.summaryJourney(journeyPages)
     else
