@@ -1,7 +1,6 @@
 (function($) {
     // initialise the display of js-only controls
-    // initialise the display of js-only controls
-    if ($('.address-line-postcode').val() == '') {
+    if ($('[name$="postcode"]').val() == '') {
         $('.address-lookup-container').show();
     } else {
         $('.address-manual-container').removeClass('js-hidden');
@@ -44,7 +43,8 @@
             .html(addressStringBuilder.join(''))
             .focus()
             .on('click', '.postcode-lookup-result', function (e) {
-                var index = $(e.currentTarget).val()
+                var index = $(e.currentTarget).val();
+                console.log('address with index ' + index, data.addresses[index].address);
                 populateAddress(data.addresses[index].address, context)
             });
 
