@@ -44,7 +44,6 @@
             .focus()
             .on('click', '.postcode-lookup-result', function (e) {
                 var index = $(e.currentTarget).val();
-                console.log('address with index ' + index, data.addresses[index].address);
                 populateAddress(data.addresses[index].address, context)
             });
 
@@ -60,7 +59,6 @@
             url: url,
             dataType: "json",
             success: function(data) {
-                console.log('results', data);
                 showResult(data, context);
             },
             error: function(jqXHR) {
