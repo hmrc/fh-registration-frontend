@@ -57,6 +57,7 @@
         hasErrors = companyOfficersForm(identificationTypeKey).hasErrors,
         error = Some(Messages("fh.identificationType.error.required", section)),
         value = companyOfficersForm(identificationTypeKey).value,
+        inline = false,
         radios = List(
           RadioParams(
             "Individual",
