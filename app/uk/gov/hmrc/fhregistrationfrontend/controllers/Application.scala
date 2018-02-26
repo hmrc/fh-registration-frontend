@@ -46,6 +46,7 @@ import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
+
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 @Singleton
@@ -177,6 +178,8 @@ class Application @Inject()(
 
   }
 
+
+
   //todo link with summary page
   def showDeclaration = UserAction.async { implicit request ⇒
     Future successful Ok(declaration(declarationForm, request.email))
@@ -199,6 +202,11 @@ class Application @Inject()(
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
+  }
+
+  def testAcknowledgement = Action.async { implicit request =>
+    import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
+    Future(Ok(acknowledgement(Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true,ggEmail = Some("test@example.com")))))
   }
 
 

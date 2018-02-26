@@ -1,3 +1,12 @@
+h4 {
+    font-weight: normal;
+    margin-bottom: 1em;
+}
+
+strong {
+    font-weight: 700;
+}
+
 legend.form-label-bold {
     font-size: 1.1em;
     margin-bottom: 0.5em;
@@ -34,4 +43,8 @@ table {
 
 .js-show {
     display: none;
+}
+
+.with-icon {
+    text-indent: 2em
 }
