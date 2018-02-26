@@ -14,17 +14,25 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.PageHeadingParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
+@()(implicit request: Request[_], messages: Messages)
 
-@headingClasses = @{
-    params.classNames match {
-        case Some(classNames) => {
-            s"""class=${classNames}"""
-        }
-        case _ => {
-            ""
-        }
-    }
-}
+<div class="form-group hidden-print margin-top-30">
+  <p class="js-show">
+    <a href="javascript:window.print()">@Messages("link.printSummary")</a>
+  </p>
+  <p>
+    <a class="button" href="@{
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.showDeclaration()
+    }">
+    @Messages("button.save.continue")
+    </a>
+  </p>
 
-<h1 @{headingClasses}>@{params.heading}</h1>
+  <p>
+    <a class="" href="@{
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater()
+    }">
+    @Messages("link.saveForLater")
+    </a>
+  </p>
+</div>
