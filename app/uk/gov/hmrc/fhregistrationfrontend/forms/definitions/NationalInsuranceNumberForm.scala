@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{vatRegistrationNumber, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{nino, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 
@@ -30,7 +30,7 @@ object NationalInsuranceNumberForm {
 
   private val hasNationalInsuranceNumberMapping = hasNationalInsuranceNumberKey → yesOrNo
   private val nationalInsuranceNumberMapping = nationalInsuranceNumberKey →
-    (vatRegistrationNumber onlyWhen (hasNationalInsuranceNumberMapping is true))
+    (nino onlyWhen (hasNationalInsuranceNumberMapping is true))
 
   val nationalInsuranceNumberForm = Form(
     mapping(

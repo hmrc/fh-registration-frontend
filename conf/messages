@@ -181,11 +181,11 @@ fh.tradingName_value.error.pattern=Enter only valid characters for a trading nam
 #===========================================================
 fh.national_insurance_number.title=National Insurance Number
 fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
-fh.national_insurance_number.confirm.error=Select whether you have a National Insurance number
+fh.nationalInsuranceNumber_yesNo.error.required=Select whether you have a National Insurance number
 fh.national_insurance_number.label=Enter National Insurance number
 fh.national_insurance_number.hintText=For example, QQ123456C
-fh.national_insurance_number.error.required=Enter National Insurance number
-fh.national_insurance_number.error.pattern=Enter a valid National Insurance number
+fh.nationalInsuranceNumber_value.error.required=Enter National Insurance number
+fh.nationalInsuranceNumber_value.error.pattern=Enter a valid National Insurance number
 
 # - VAT registration
 #===========================================================

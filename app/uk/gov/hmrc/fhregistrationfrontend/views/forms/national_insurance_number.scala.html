@@ -34,25 +34,7 @@
 
   @Back(navigation)
 
-  @if(nationalInsuranceNumberForm.hasErrors) {
-    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
-      <ul class="error-summary-list">
-        @if(nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors){
-          <li id="hasNationalInsuranceNumber-error-link"><a href="#@{hasNationalInsuranceNumberKey}-inline-error">@{
-            Messages("fh.national_insurance_number.confirm.error")
-          }
-          </a></li>
-        }
-        @if(nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors){
-          <li id="nationalInsuranceNumber-error-link"><a href="#{hasNationalInsuranceNumberKey}_value-inline-error">@{
-            Messages("fh.national_insurance_number." + nationalInsuranceNumberForm(nationalInsuranceNumberKey).error.head.message)
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @error_box(nationalInsuranceNumberForm)
 
   @PageHeading(
     PageHeadingParams(
@@ -66,13 +48,13 @@
 
     @YesNoText(
       YesNoTextParams(
-        name = "nationalInsuranceNumber",
+        name = hasNationalInsuranceNumberKey,
         value = nationalInsuranceNumberForm(nationalInsuranceNumberKey).value,
         yesNoValue = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).value,
         yesNoLabel = Messages("fh.national_insurance_number.confirm.label"),
-        yesNoError = Messages("fh.national_insurance_number.confirm.error"),
+        yesNoError = Messages("fh.nationalInsuranceNumber_yesNo.error.required"),
         valueLabel = Messages("fh.national_insurance_number.label"),
-        valueError = Messages("fh.national_insurance_number." + getError(nationalInsuranceNumberForm(nationalInsuranceNumberKey).error)),
+        valueError = Messages("fh.nationalInsuranceNumber_value." + getError(nationalInsuranceNumberForm(nationalInsuranceNumberKey).error)),
         valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
         hasValueError = nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors,
         hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors
