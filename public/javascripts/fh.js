@@ -221,6 +221,12 @@
 function init() {
   // show js-enabled items
   $('.js-show').show()
+  // enable save4later routing on all forms
+  $('[name="saveAction2"]').click(function (event) {
+
+    $('[name="saveAction"]').val($(this).val());
+
+  })
   // Use GOV.UK shim-links-with-button-role.js to trigger a link styled to look like a button,
   // with role="button" when the space key is pressed.
   GOVUK.shimLinksWithButtonRole.init()
