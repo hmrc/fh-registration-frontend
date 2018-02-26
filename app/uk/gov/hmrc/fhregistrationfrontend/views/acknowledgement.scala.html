@@ -28,7 +28,9 @@
     }
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
     <div class="transaction-banner--complete">
         <h1 class="transaction-banner__heading">
@@ -38,7 +40,7 @@
 
     <h4>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h4>
 
-    <div class="s-show notice margin-top-30 margin-bottom-30">
+    <div class="js-show notice margin-top-30 margin-bottom-30">
         <i class="icon icon-file-download"></i>
         <p>
             <a href="javascript:window.print()">@Messages("fh.generic.print_application_status")</a>
