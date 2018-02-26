@@ -17,6 +17,9 @@
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message: Messages)
 
 <div class="form-group margin-top-30">
+
+  <input type="hidden" name="saveAction" value="saveAndContinue" />
+
   <p>
     <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@{
       params.label
@@ -33,7 +36,7 @@
     </p>
   }
 
-  <p>
+  <p class="js-show">
     <button class="button--link-style" type="submit" name="saveAction2" value="saveForLater">
       @Messages("link.saveForLater")
     </button>
