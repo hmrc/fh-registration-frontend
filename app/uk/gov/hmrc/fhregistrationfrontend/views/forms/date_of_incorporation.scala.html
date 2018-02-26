@@ -23,7 +23,11 @@
 
 @(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("fh.dateOfIncorporation.title"), mainClass = Some("full-width")) {
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@main_template(title = Messages("fh.dateOfIncorporation.title"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
