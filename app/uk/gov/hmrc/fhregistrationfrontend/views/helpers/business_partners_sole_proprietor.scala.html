@@ -30,7 +30,7 @@
     label = Messages("fh.business_partners.individual.first_name.label"),
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").hasErrors,
     value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").value,
-    error = Messages("fh.business_partners.individual.first_name.error.required")
+    error = Messages("fh.businessPartnerSoleProprietor.firstName." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").error.fold("")(_.message))
   )
 )
 
@@ -40,19 +40,19 @@
     label = Messages("fh.contact_person.last_name.label"),
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").hasErrors,
     value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").value,
-    error = Messages("fh.business_partners.individual.last_name.error.required")
+    error = Messages("fh.businessPartnerSoleProprietor.lastName." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").error.fold("")(_.message))
   )
 )
 
 @YesNoText(
   YesNoTextParams(
-    name = s"$businessPartnerSoleProprietorKey.$tradeName",
+    name = s"$businessPartnerSoleProprietorKey.$hasTradeNameKey",
     value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$tradeNameKey").value,
     yesNoValue = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasTradeNameKey").value,
     yesNoLabel = Messages("fh.trading_name.confirm.label"),
-    yesNoError = Messages("fh.trading_name.confirm.error"),
-    valueLabel = Messages("fh.trading_name.label"),
-    valueError = Messages("fh.trading_name.error.required"),
+    yesNoError = Messages("fh.businessPartnerSoleProprietor.tradeName_yesNo." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasTradeNameKey").error.fold("")(_.message)),
+    valueLabel = Messages("fh.tradingName.label"),
+    valueError = Messages("fh.businessPartnerSoleProprietor.tradeName_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$tradeNameKey").error.fold("")(_.message)),
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasTradeNameKey").hasErrors,
     hasValueError= businessPartnerForm(s"$businessPartnerSoleProprietorKey.$tradeNameKey").hasErrors
   )
@@ -60,14 +60,14 @@
 
 @YesNoText(
   YesNoTextParams(
-    name = s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumber",
+    name = s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey",
     value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey").value,
     yesNoValue = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey").value,
     yesNoLabel = Messages("fh.national_insurance_number.confirm.label"),
-    yesNoError = Messages("fh.national_insurance_number.confirm.error"),
+    yesNoError = Messages("fh.businessPartnerSoleProprietor.nationalInsuranceNumber_yesNo.error.required"),
     yesNoHintText = Some(Messages("fh.business_partners.individual.nino.confirm.hint_text")),
     valueLabel = Messages("fh.national_insurance_number.label"),
-    valueError = Messages("fh.business_partners.individual.nino.error.pattern"),
+    valueError = Messages("fh.businessPartnerSoleProprietor.nationalInsuranceNumber_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey").error.fold("")(_.message)),
     valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
     hasValueError = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey").hasErrors,
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasNationalInsuranceNumberKey").hasErrors
@@ -76,14 +76,14 @@
 
 @YesNoText(
   YesNoTextParams(
-    name = s"$businessPartnerSoleProprietorKey.$vat",
+    name = s"$businessPartnerSoleProprietorKey.$hasVatKey",
     value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").value,
     yesNoValue = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").value,
     yesNoLabel = Messages("fh.vat_registration.confirm.label"),
-    yesNoError = Messages("fh.vat_registration.confirm.error"),
-    valueLabel = Messages("fh.vat_registration.label"),
-    valueError = Messages("fh.vat_registration.error.pattern"),
-    valueHintText = Some(Messages("fh.vat_registration.hintText")),
+    yesNoError = Messages("fh.businessPartnerSoleProprietor.vat_yesNo.error.required"),
+    valueLabel = Messages("fh.vatNumber.label"),
+    valueError = Messages("fh.businessPartnerSoleProprietor.vat_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").error.fold("")(_.message)),
+    valueHintText = Some(Messages("fh.vatNumber.hintText")),
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").hasErrors,
     hasValueError= businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors
   )

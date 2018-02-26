@@ -15,12 +15,13 @@
  *@
 
 @(form: Form[_], context: String=".", sectionP: String="")(implicit message: Messages)
-
+@defining(new scala.collection.mutable.HashSet[String]()) { set =>
+  @if(form.hasErrors) {
     <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
       <ul class="error-summary-list">
       @for(error <- form.errors) {
-
+        @if(!set.contains(error.key)) {
           <li id="@{
             error.key
           }-error-link">
@@ -28,12 +29,14 @@
               error.key.replace(".day", "").replace(".month", "").replace(".year", "")
             }-inline-error">
             @{
-              Messages("fh" + context + error.key + "." + error.message, sectionP)
+              Messages("fh" + context + error.key + "." + error.message)
             }
             </a>
           </li>
-
+            <!-- @set.add(error.key) -->
         }
-
+      }
       </ul>
     </div>
+  }
+}
