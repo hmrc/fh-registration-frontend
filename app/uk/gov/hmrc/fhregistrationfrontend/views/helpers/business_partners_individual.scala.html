@@ -30,7 +30,7 @@
     label = Messages("fh.business_partners.individual.first_name.label"),
     hasErrors = businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").hasErrors,
     value = businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").value,
-    error = Messages("fh.business_partners.individual.first_name.error.required")
+    error = Messages("fh.businessPartnerIndividual.firstName." + businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").error.fold("")(_.message))
   )
 )
 
@@ -40,20 +40,21 @@
     label = Messages("fh.contact_person.last_name.label"),
     hasErrors = businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").hasErrors,
     value = businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").value,
-    error = Messages("fh.business_partners.individual.last_name.error.required")
+    error = Messages("fh.businessPartnerIndividual.lastName." + businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").error.fold("")(_.message))
   )
 )
 
 @YesNoText(
   YesNoTextParams(
-    name = s"$businessPartnerIndividualKey.$nationalInsuranceNumber",
+    name = s"$businessPartnerIndividualKey.$hasNationalInsuranceNumberKey",
     value = businessPartnerForm(s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey").value,
     yesNoValue = businessPartnerForm(s"$businessPartnerIndividualKey.$hasNationalInsuranceNumberKey").value,
     yesNoLabel = Messages("fh.national_insurance_number.confirm.label"),
-    yesNoError = Messages("fh.national_insurance_number.confirm.error"),
+    yesNoError = Messages("fh.nationalInsuranceNumber_yesNo.error.required"),
     yesNoHintText = Some(Messages("fh.business_partners.individual.nino.confirm.hint_text")),
     valueLabel = Messages("fh.national_insurance_number.label"),
-    valueError = Messages("fh.business_partners.individual.nino.error.pattern"),
+    valueError = Messages("fh.businessPartnerIndividual.nationalInsuranceNumber_value." +
+        businessPartnerForm(s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey").error.fold("")(_.message)),
     valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
     hasValueError = businessPartnerForm(s"$businessPartnerIndividualKey.$nationalInsuranceNumberKey").hasErrors,
     hasErrors = businessPartnerForm(s"$businessPartnerIndividualKey.$hasNationalInsuranceNumberKey").hasErrors

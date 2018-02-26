@@ -35,6 +35,8 @@
 
   @Back(navigation)
 
+  @error_box(businessPartnerForm, sectionP=section)
+
   @if(businessPartnerForm.hasErrors) {
     <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
@@ -353,7 +355,7 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.business_partners.title")
+      heading = Messages("fh.business_partners.title", section)
     )
   )
 
@@ -374,7 +376,7 @@
 
     @helper.CSRF.formField
 
-    <h2>@Messages("fh.business_partners.add_a_partner")</h2>
+    <h2>@Messages("fh.business_partners.add_a_partner", section)</h2>
 
     @RadioGroup(
       RadioGroupParams(
@@ -382,7 +384,7 @@
         name = Some(businessPartnersTypeKey),
         legend = Some(Messages("fh.business_partners.entity_type.label")),
         hasErrors = businessPartnerForm(businessPartnersTypeKey).hasErrors,
-        error = Some(Messages("fh.business_partners.entity_type.error", 1)),
+        error = Some(Messages("fh.businessPartnersType.error.required", section)),
         value = businessPartnerForm(businessPartnersTypeKey).value,
         radios = List(
           RadioParams(
@@ -448,6 +450,8 @@
           name = Some(s"addMore"),
           value = businessPartnerForm(s"addMore").value,
           legend = Some(Messages("fh.business_partners.addMore")),
+          error = Some(Messages("fh.addMore.error.required")),
+          hasErrors = businessPartnerForm(s"addMore").hasErrors,
           radios = List(
             RadioParams(
               "true",

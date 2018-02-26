@@ -172,6 +172,7 @@ fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=En
 fh.trading_name.title=Trading name
 fh.tradingName.title=Trading name
 fh.tradingName.confirm.label=Does the business use a trading name
+fh.trading_name.confirm.label=Does the business use a trading name
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
 fh.tradingName.label=Enter the trading name
 fh.tradingName_value.error.required=Enter the trading name
@@ -181,7 +182,7 @@ fh.tradingName_value.error.pattern=Enter only valid characters for a trading nam
 #===========================================================
 fh.national_insurance_number.title=National Insurance Number
 fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
-fh.nationalInsuranceNumber_yesNo.error.required=Select whether you have a National Insurance number
+fh.nationalInsuranceNumber_yesNo.error.required=Select whether have a National Insurance number
 fh.national_insurance_number.label=Enter National Insurance number
 fh.national_insurance_number.hintText=For example, QQ123456C
 fh.nationalInsuranceNumber_value.error.required=Enter National Insurance number
@@ -192,9 +193,10 @@ fh.nationalInsuranceNumber_value.error.pattern=Enter a valid National Insurance 
 fh.vat_registration.title=VAT registration
 fh.vatNumber.title=VAT registration
 fh.vatNumber.confirm.label=Does the business have a UK VAT registration number?
+fh.vat_registration.confirm.label=Does the business have a UK VAT registration number?
 fh.vatNumber_yesNo.error.required=Select whether the business has a VAT registration number
 fh.vatNumber.label=Enter the VAT registration number
-fh.vatNumber.hintText=For example, 123456789 or GB123456789
+fh.vatNumber.hintText=For example, 123456789
 fh.vatNumber_value.error.required=Enter the VAT registration number
 fh.vatNumber_value.error.pattern=Enter a valid VAT registration number
 
@@ -335,7 +337,7 @@ fh.company_officers.intro=You must tell us about all the directors and company s
 fh.company_officers.each.title=Company officer {0}
 fh.company_officers.entity_type.label=Is company officer an individual or a company?
 fh.identificationType.error.required=Select whether company officer {0} is an invidual or a company
-fh.addMore.error.required=Select whether have more company officers
+fh.addMore.error.required=Select whether have more to add
 
 fh.company_officers.status.label=What is their role?
 fh.individualIdentification.role.error.required=Select what role company officer {0} has in the company
@@ -401,7 +403,7 @@ fh.business_partners.entity_intro=A legal entity is an individual, company or ot
 
 fh.business_partners.add_a_partner=Partner {0}
 fh.business_partners.entity_type.label=What type of legal entity is this partner?
-fh.business_partners.entity_type.error=Select the type of legal entity for the partner {0}
+fh.businessPartnersType.error.required=Select the type of legal entity for the partner {0}
 
 fh.business_partners.entity_type.individual.value=Individual
 fh.business_partners.entity_type.individual.label=Individual
@@ -421,19 +423,38 @@ fh.business_partners.enter.partner_address=Tell us the address of this partner
 fh.business_partners.enter.partner_address.error=Enter the address of this partner
 
 fh.business_partners.individual.first_name.label=First name
-fh.business_partners.individual.first_name.error.required=Enter the person''s first name
-fh.business_partners.individual.first_name.error.pattern=Enter only valid characters for a first name
+fh.businessPartnerIndividual.firstName.error.required=Enter the person''s first name
+fh.businessPartnerIndividual.firstName.error.pattern=Enter only valid characters for a last name
+
 fh.business_partners.individual.last_name.label=Last name
-fh.business_partners.individual.last_name.error.required=Enter the person''s last name
-fh.business_partners.individual.last_name.error.pattern=Enter only valid characters for a last name
+fh.businessPartnerIndividual.lastName.error.required=Enter the person''s last name
+fh.businessPartnerIndividual.lastName.error.pattern=Enter only valid characters for a last name
 
 fh.business_partners.individual.nino.confirm.label=Do they have a National Insurance number?
 fh.business_partners.individual.nino.confirm.hint_text=We need this information to verify their identity
-fh.business_partners.individual.nino.confirm.error=Select whether the business partner has a National Insurance number
+fh.businessPartnerIndividual.nationalInsuranceNumber_yesNo.error.required=Select whether the business partner has a National Insurance number
 fh.business_partners.individual.nino.label=National Insurance number
 fh.business_partners.individual.nino.hint_text=For example, QQ123456C
-fh.business_partners.individual.nino.error.required=Enter National Insurance number for business partner {0}
-fh.business_partners.individual.nino.error.pattern=Enter a valid National Insurance number for business partner {0}
+fh.businessPartnerIndividual.nationalInsuranceNumber_value.error.required=Enter National Insurance number for the business partner
+fh.businessPartnerIndividual.nationalInsuranceNumber_value.error.pattern=Enter a valid National Insurance number for the business partner
+
+fh.businessPartnerIndividual.partnerAddress.Line1.error.required=You must enter line 1 of the address
+fh.businessPartnerIndividual.partnerAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerIndividual.partnerAddress.Line2.error.required=You must enter line 2 of the address
+fh.businessPartnerIndividual.partnerAddress.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerIndividual.partnerAddress.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerIndividual.partnerAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerIndividual.partnerAddress.postcode.error.required=Enter the postcode of the address
+fh.businessPartnerIndividual.partnerAddress.postcode.error.pattern=Enter a valid postcode
+
+fh.businessPartnerSoleProprietor.partnerAddress.Line1.error.required=You must enter line 1 of the address
+fh.businessPartnerSoleProprietor.partnerAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerSoleProprietor.partnerAddress.Line2.error.required=You must enter line 2 of the address
+fh.businessPartnerSoleProprietor.partnerAddress.Line2.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerSoleProprietor.partnerAddress.Line3.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerSoleProprietor.partnerAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
+fh.businessPartnerSoleProprietor.partnerAddress.postcode.error.required=Enter the postcode of the address
+fh.businessPartnerSoleProprietor.partnerAddress.postcode.error.pattern=Enter a valid postcode
 
 fh.business_partners.partnership.name.label=Partnership name
 fh.business_partners.partnership.name.error.pattern=Enter valid partnership name
