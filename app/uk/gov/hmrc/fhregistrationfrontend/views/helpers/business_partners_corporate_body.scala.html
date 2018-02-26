@@ -30,19 +30,19 @@
     label = Messages("fh.business_partners.corporate_body.name.label"),
     hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").hasErrors,
     value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").value,
-    error = Messages("fh.business_partners.corporate_body.name.error.pattern")
+    error = Messages("fh.businessPartnerCorporateBody.companyName." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").error.fold("")(_.message))
   )
 )
 
 @YesNoText(
   YesNoTextParams(
-    name = s"$businessPartnerCorporateBodyKey.$tradeName",
+    name = s"$businessPartnerCorporateBodyKey.$hasTradeNameKey",
     value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").value,
     yesNoValue = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").value,
     yesNoLabel = Messages("fh.trading_name.confirm.label"),
-    yesNoError = Messages("fh.trading_name.confirm.error"),
-    valueLabel = Messages("fh.trading_name.label"),
-    valueError = Messages("fh.trading_name.error.required"),
+    yesNoError = Messages("fh.tradingName_yesNo.error.required"),
+    valueLabel = Messages("fh.tradingName.label"),
+    valueError = Messages("fh.businessPartnerCorporateBody.tradeName_value." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").error.fold("")(_.message)),
     hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").hasErrors,
     hasValueError= businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").hasErrors
   )
@@ -51,11 +51,11 @@
 @TextInput(
   TextInputParams(
     name = s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey",
-    label = Messages("fh.company_registration_number.label"),
+    label = Messages("fh.company_registration_number.title"),
     value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").value,
-    error = Messages("fh.company_registration_number.error.pattern"),
+    error = Messages("fh.businessPartnerCorporateBody.companyRegistrationNumber." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").error.fold("")(_.message)),
     hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").hasErrors,
-    hintText = Some(Messages("fh.company_registration_number.hint_text"))
+    hintText = Some(Messages("fh.companyRegistrationNumber.hint_text"))
   )
 )
 
@@ -63,7 +63,7 @@
   RadioGroupParams(
     name = Some(s"$businessPartnerCorporateBodyKey.$hasVatKey"),
     legend = Some(Messages("fh.vat_registration.confirm.label")),
-    error = Some(Messages("fh.vat_registration.confirm.error")),
+    error = Some(Messages("fh.vatNumber_yesNo.error.required")),
     value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").value,
     hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").hasErrors,
     radios = List(
@@ -87,10 +87,10 @@
     TextInput(
       TextInputParams(
         name = s"$businessPartnerCorporateBodyKey.$vatRegistrationKey",
-        label = Messages("fh.vat_registration.label"),
+        label = Messages("fh.vatNumber.label"),
         value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").value,
         hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").hasErrors,
-        error = Messages("fh.vat_registration.error.pattern", 1)
+        error = Messages("fh.businessPartnerCorporateBody.vat_value." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").error.fold("")(_.message))
       )
     )
   )
@@ -106,7 +106,7 @@
         hintText = Some(Messages("fh.business_partners.utr.hintText")),
         value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").value,
         hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").hasErrors,
-        error = Messages("fh.business_partners.utr.error", 1)
+        error = Messages("fh.businessPartnerCorporateBody.uniqueTaxpayerReference_value." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").error.fold("")(_.message))
       )
     )
   )
