@@ -47,7 +47,7 @@
 @if(company.hasTradeName) {
     @SummaryRow(
         SummaryRowParams(
-            Some(Messages("fh.trading_name.label")),
+            Some(Messages("fh.tradingName.label")),
             company.tradeName,
             None
         )
@@ -65,7 +65,7 @@
 @if(company.hasVat) {
     @SummaryRow(
         SummaryRowParams(
-            Some(Messages("fh.vat_registration.label")),
+            Some(Messages("fh.vatNumber.label")),
             company.vat,
             None
         )
@@ -73,7 +73,7 @@
 } else {
     @SummaryRow(
         SummaryRowParams(
-            Some(Messages("fh.vat_registration.label")),
+            Some(Messages("fh.vatNumber.label")),
             company.uniqueTaxpayerReference,
             None
         )
