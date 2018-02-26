@@ -26,14 +26,10 @@
   }
 }
 
-<div class="form-group margin-top-30">
-
-  @backLink.map { link =>
-    <p>
-      <a id="back" class="back-link print-hidden" href="@link">
-      @Messages("link.back")
-      </a>
-    </p>
-  }
-
-</div>
+@backLink.map { link =>
+  <p>
+    <a id="back" class="back-link print-hidden" href="@link">
+    @Messages("link.back")
+    </a>
+  </p>
+}
