@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
   * Created by ali on 20/02/18.
@@ -50,7 +51,7 @@ object SummaryRowParams {
   }
 
   def ofDate(label: Option[String], value: Option[LocalDate], changeLink: Option[String]): SummaryRowParams = {
-    SummaryRowParams(label, value map (_.toString()), changeLink)
+    SummaryRowParams(label, value map (_.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))), changeLink)
   }
 
   def ofDate(label: Option[String], value: LocalDate, changeLink: Option[String]): SummaryRowParams = {
