@@ -51,23 +51,6 @@
     </tbody>
   </table>
 
-    <div class="form-group hidden-print margin-top-30">
-        <p class="js-show">
-            <a href="javascript:window.print()">@Messages("link.printSummary")</a>
-        </p>
-        <p>
-            <a class="button" href="@{
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.showDeclaration()
-            }">
-                @Messages("button.save.continue")
-            </a>
-        </p>
-
-        <p>
-            <a class="" href="#">
-                @Messages("link.saveForLater")
-            </a>
-        </p>
-    </div>
+  @SummaryButtons()
 
 }
