@@ -484,3 +484,22 @@ fh.continue_delete.continue=Continue from where you left off
 fh.continue_delete.continue.hint=You have until midnight on
 fh.continue_delete.continue.hint_continue=to complete this form
 fh.continue_delete.delete=Delete your progress and start again
+
+# - Acknowledgement Page
+#============================================================
+fh.ack.application_submitted=Application submitted
+fh.ack.confirmation_email_sent=We have sent a confirmation email to
+fh.ack.what_happens_next=What happens next
+fh.ack.what_happens_next_1=We will review your application. We may get in touch with your contact person to discuss your application
+fh.ack.what_happens_next_2=We will let you know when a decision has been made.
+fh.ack.help_using_service=Help using this service
+fh.ack.guidance_link_text=See the guidance
+fh.ack.to_find_out=to find out:
+fh.ack.help_bullet_1=what you need to do while HMRC processes your application
+fh.ack.help_bullet_2=how to make changes to your application
+fh.ack.help_bullet_3=how to contact HMRC about your application
+fh.survey_link_text=What did you think of this service?
+fh.survey_hint=(takes 30 seconds)
+
+link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
+
