@@ -1,0 +1,88 @@
+strong {
+    font-weight: 700;
+}
+.appstatus {
+    background-color: #005ea5;
+    color: #fff;
+    margin-bottom: 1.05263em;
+    padding: 2em 2em .94737em 2em;
+    margin-top: 1.7em;
+}
+.sidebar {
+    margin-top:0px;
+    border-top: 0;
+}
+
+.govuk-related-items {
+    margin-top: 30px;
+    border-top: 10px solid #005ea5;
+    padding-top: 5px;
+}
+.govuk-related-items h2 {
+    margin-top: 0.55556em;
+}
+h1.appstatus-title {
+    color: #fff;
+}
+p.lede, .lede {
+    font-family: "nta", Arial, sans-serif;
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 400;
+    text-transform: none;
+}
+.appstatus-title {
+    font-family: "nta", Arial, sans-serif;
+    line-height: 1.04167;
+    font-weight: 700;
+    text-transform: none;
+    margin-bottom: .625em;
+}
+.appstatus-steps {
+    margin-bottom: 1.05263em;
+}
+
+.appstatus-steps {
+    list-style-type: none;
+    border-collapse: collapse;
+    width: 100%;
+    display: inline-block;
+}
+.appstatus-steps .appstatus-processing {
+    color: #fff;
+}
+.appstatus-steps .appstatus-complete {
+    border-color: #fff;
+    border-bottom-width: 6px;
+    color: #fff;
+    padding-bottom: 7px;
+}
+.appstatus-steps li {
+    display: inline-block;
+    width: 28%;
+    margin-right: 4%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.appstatus-steps span {
+    border-bottom: 3px solid #2b8cc4;
+    color: #2b8cc4;
+    display: block;
+    font-weight: bold;
+    padding: 10px 26px 10px 0;
+    vertical-align: middle;
+}
+.tick {
+    font-family: "nta",Arial,sans-serif;
+    font-size: 19px;
+    line-height: 1.31579;
+    font-weight: 400;
+    text-transform: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+.service-info {
+    border-top: 0px solid #005ea5;
+}

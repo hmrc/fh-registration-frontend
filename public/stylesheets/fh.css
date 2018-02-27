@@ -1,5 +1,13 @@
+h1 {
+    margin-top: 0.55556em;
+}
+
 h4 {
     font-weight: normal;
+    margin-bottom: 1em;
+}
+
+#back, a.back-link {
     margin-bottom: 1em;
 }
 
@@ -9,7 +17,7 @@ strong {
 
 legend.form-label-bold {
     font-size: 1.1em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.55556em;
 }
 
 .panel-border-narrow, .panel {
@@ -17,7 +25,7 @@ legend.form-label-bold {
 }
 
 span.error-message, .form-hint {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.55556em;
 }
 
 .form-label {
