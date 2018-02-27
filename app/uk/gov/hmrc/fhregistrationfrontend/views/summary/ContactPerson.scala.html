@@ -73,7 +73,7 @@
         )
     )
 
-    @if(contactPersonForm.ukOtherAddress){
+    @if(contactPersonForm.ukOtherAddress == Some(true)){
         @contactPersonForm.otherUkContactAddress.map { address =>
             @SummaryAddress(
                 SummaryAddressParams(
@@ -91,6 +91,7 @@
         }
 
     } else {
+
         @contactPersonForm.otherInternationalContactAddress.map { address =>
             @SummaryAddress(
                 SummaryAddressParams(
