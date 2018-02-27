@@ -82,8 +82,11 @@ class Application @Inject()(
       }
   }
 
-  def start = ggAuthorised { implicit request ⇒
-    Future.successful(Redirect(links.businessCustomerVerificationUrl))
+  def start = UserAction { implicit request ⇒
+    request.registrationNumber match {
+      case Some(_) ⇒ Redirect(routes.Application.checkStatus())
+      case None ⇒ Redirect(links.businessCustomerVerificationUrl)
+    }
   }
 
   def continue = UserAction.async { implicit request ⇒
@@ -186,12 +189,18 @@ class Application @Inject()(
     )
   }
 
-  def checkStatus(fhddsRegistrationNumber: String) = Action.async { implicit request ⇒
-    fhddsConnector
-      .getStatus(fhddsRegistrationNumber: String)(hc)
-      .map(statusResp ⇒ {
-        Ok(status(statusResp.body, fhddsRegistrationNumber))
-      })
+  def checkStatus() = UserAction.async { implicit request ⇒
+    request.registrationNumber match {
+      case Some(registrationNumber) ⇒
+        fhddsConnector
+          .getStatus(registrationNumber)(hc)
+          .map(statusResp ⇒ {
+            Ok(status(statusResp.body, registrationNumber))
+          })
+      case None ⇒
+        Future successful NotFound("Not found: registration number")
+    }
+
   }
 
   def componentExamples = Action.async { implicit request =>

@@ -38,7 +38,8 @@ object FrontendBuild extends Build with MicroService {
     "org.scalacheck" %% "scalacheck" % "1.12.6" % scope,
     "org.mockito" % "mockito-core" % "2.7.22" % scope,
     "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % scope,
-    "com.github.tomakehurst"  %  "wiremock"  % "2.6.0" % scope
+    "com.github.tomakehurst"  %  "wiremock"  % "2.6.0" % scope,
+    "com.eclipsesource" %% "play-json-schema-validator" % "0.8.9" % scope
   )
 
 }

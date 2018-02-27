@@ -19,6 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import play.api.libs.json._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficerType._
 
+
+//TODO add enum for role
 case class CompanyOfficer(
   officialType: CompanyOfficialType,
   identification: CompanyOfficerIdentification

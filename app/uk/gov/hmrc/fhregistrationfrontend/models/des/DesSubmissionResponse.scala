@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json.Json
 
+case class DesSubmissionResponse(processingDate: String, etmpFormBundleNumber: String, registrationNumberFHDDS: String)
 
-case class CompanyOfficers (
-  values: List[CompanyOfficer]
-)
-
-object CompanyOfficers {
-  implicit val companyOfficerFormat = CompanyOfficer.companyOfficerFormat
-  implicit val CompanyOfficersFormat = Json.format[CompanyOfficers]
+object DesSubmissionResponse {
+  implicit val submissionResponseFormat = Json.format[DesSubmissionResponse]
 }

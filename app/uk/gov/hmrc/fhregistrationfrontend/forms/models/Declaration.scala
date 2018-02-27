@@ -29,7 +29,15 @@ case class Declaration(
   isUseGgEmail: Boolean,
   ggEmail: Option[String],
   alternativeEmail: Option[AlternativeEmail]
-)
+) {
+
+  def email: Option[String] = {
+    if (isUseGgEmail)
+      ggEmail
+    else
+      alternativeEmail map (_.email)
+  }
+}
 
 object Declaration {
   implicit val alternativeEmailFormat = Json.format[AlternativeEmail]

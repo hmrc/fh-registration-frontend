@@ -1,0 +1,87 @@
+{
+  "requestType": "Create",
+  "subScriptionCreate": {
+    "organizationType": "Sole Proprietor",
+    "FHbusinessDetail": {
+      "isNewFulfilmentBusiness": false
+    },
+    "additionalBusinessInformation": {
+      "allOtherInformation": {
+        "numberOfCustomers": "11-50",
+        "doesEORIExist": true,
+        "EORINumber": {
+          "EORIVat": "2459872577",
+          "goodsImportedOutEORI": false
+        },
+        "numberOfpremises": "1",
+        "premises": [
+          {
+            "address": {
+              "line1": "109 Westcourt Road",
+              "line4": "Worthing",
+              "postalCode": "BN14 7DP",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": true
+          }
+        ]
+      }
+    },
+    "businessDetail": {
+      "soleProprietor": {
+        "tradingName": "Stuff2U",
+        "identification": {
+          "nino": "NL019207B",
+          "vatRegistrationNumber": "123456789",
+          "uniqueTaxpayerReference": "1111111112"
+        }
+      }
+    },
+    "businessAddressForFHDDS": {
+      "currentAddress": {
+        "line1": "LINE 1",
+        "line2": "LINE 2",
+        "line3": "LINE 3",
+        "line4": "LINE 4",
+        "postalCode": "M46 0PT",
+        "countryCode": "GB"
+      },
+      "commonDetails": {},
+      "timeOperatedAtCurrentAddress": "3-5 years"
+    },
+    "contactDetail": {
+      "names": {
+        "firstName": "Alistair",
+        "lastName": "Macdonald"
+      },
+      "usingSameContactAddress": false,
+      "address": {
+        "line1": "12 Goose Green",
+        "line2": "Georgetown",
+        "line4": "Falkland Islands (the) (Malvinas)",
+        "countryCode": "FK"
+      },
+      "commonDetails": {
+        "telephone": "07817777841",
+        "email": "ali@nubz.com"
+      },
+      "roleInOrganization": {
+        "beneficialShareHolder": false,
+        "director": false,
+        "partner": false,
+        "internalAccountant": false,
+        "soleProprietor": false,
+        "nominatedOfficer": false,
+        "designatedmember": false,
+        "otherRoleType": true,
+        "otherRoleDescription": "Head of Accounts"
+      }
+    },
+    "declaration": {
+      "personName": "Barry Smith",
+      "personStatus": "CEO",
+      "email": "barry@test.com",
+      "isInformationAccurate": true
+    }
+  }
+}

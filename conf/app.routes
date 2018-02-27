@@ -10,7 +10,7 @@ GET         /startForm                                                          
 
 GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
-GET         /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
+GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 
