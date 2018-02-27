@@ -36,6 +36,10 @@ span.error-message, .form-hint {
     margin-top: 30px;
 }
 
+.address-manual-container {
+    margin-bottom: 1.57895em;
+}
+
 .loading {
     display: none;
     margin-top: 10px;

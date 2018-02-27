@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
@@ -116,21 +116,33 @@
         )
       )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "hasPreviousAddress",
-          AddressUK(
-            mainBusinessAddressForm,
-            AddressUKParams(
-              context = Some("mainPreviousAddressUK"),
-              name = previousAddressKey,
-              label = Messages("fh.main_business_address.enter_previous.label"),
-              hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
-              error = Some(Messages("fh.main_business_address.enter_previous.error"))
-            )
+      <div class="panel panel-border-narrow js-hidden" id="hasPreviousAddress">
+
+        @AddressUK(
+          mainBusinessAddressForm,
+          AddressUKParams(
+            context = Some("mainPreviousAddressUK"),
+            name = previousAddressKey,
+            label = Messages("fh.main_business_address.enter_previous.label"),
+            hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
+            error = Some(Messages("fh.main_business_address.enter_previous.error"))
           )
         )
-      )
+
+        @DateTuple(
+          DateTupleParams(
+            name = previousAddressStartdateKey,
+            label = Messages("fh.previousAddressStartdate.label"),
+            error = Messages("fh.previousAddressStartdate.error.invalid"),
+            hasErrors = mainBusinessAddressForm.hasErrors,
+            hintText = Some(Messages("fh.previousAddressStartdate.hint_text")),
+            day = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").value,
+            month = mainBusinessAddressForm(s"$previousAddressStartdateKey.month").value,
+            year = mainBusinessAddressForm(s"$previousAddressStartdateKey.year").value
+          )
+        )
+
+      </div>
     </div>
 
     @SubmitButtons(
