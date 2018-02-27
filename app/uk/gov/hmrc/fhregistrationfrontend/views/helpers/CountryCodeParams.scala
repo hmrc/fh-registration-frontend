@@ -23,6 +23,7 @@ case class CountryCodeParams(
   label  : String,
   error  : String,
   value: Option[String] = None,
+  countryCode: Option[String] = None,
   hasErrors: Boolean = false
 )
 
