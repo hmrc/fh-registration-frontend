@@ -25,6 +25,7 @@ object TestData {
     MainBusinessAddress(
       "Less than 3 years",
       Some(false),
+      None,
       None
     ),
     ContactPerson(

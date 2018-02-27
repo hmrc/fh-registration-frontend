@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import java.time.LocalDate
+
 import play.api.libs.json.Json
 
 case class MainBusinessAddress (
   timeAtCurrentAddress: String,
   hasPreviousAddress: Option[Boolean],
-  previousAddress: Option[Address]
+  previousAddress: Option[Address],
+  previousAddressStartdate: Option[LocalDate]
 )
 
 object MainBusinessAddress {

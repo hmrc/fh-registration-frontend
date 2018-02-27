@@ -125,6 +125,17 @@ fh.mainPreviousAddressUK_previousAddress.Line3.error.pattern=Address lines must 
 fh.mainPreviousAddressUK_previousAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
 fh.mainPreviousAddressUK_previousAddress.postcode.error.required=Enter the postcode of the address
 fh.mainPreviousAddressUK_previousAddress.postcode.error.pattern=Enter a valid postcode
+fh.previousAddressStartdate.label=When did the business start operating from this previous address?
+fh.previousAddressStartdate.hint_text=For example, 31 07 2017
+fh.previousAddressStartdate.empty.error=Enter the date when the business started operating from the previous address
+fh.previousAddressStartdate.error.invalid=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.day=Day
+fh.previousAddressStartdate.month=Month
+fh.previousAddressStartdate.year=Year
+fh.previousAddressStartdate.day.error.number=Enter the day of when the business started operating from the previous address
+fh.previousAddressStartdate.month.error.number=Enter the month of when the business started operating from the previous address
+fh.previousAddressStartdate.year.error.number=Enter the year of when the business started operating from the previous address
+
 
 # - Contact Person
 #============================================================
