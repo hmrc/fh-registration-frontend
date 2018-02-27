@@ -36,7 +36,7 @@ span.error-message, .form-hint {
     margin-top: 30px;
 }
 
-.address-manual-container {
+.address-manual-container, .address-lookup-container {
     margin-bottom: 1.57895em;
 }
 
