@@ -27,11 +27,11 @@
     <div>
       <div class="appstatus" role="alert">
         <h1 class="heading-xlarge appstatus-title">
-          Fulfilment House Due Diligence scheme
+          @Messages("app.name")
         </h1>
 
         <p class="lede">
-          Your application id @id has status: <strong>@status</strong>
+          @Messages("fh.status.lede") <strong>@status</strong>
         </p>
         <ul class="appstatus-steps" aria-hidden="true">
           <li>
@@ -55,42 +55,48 @@
       <div>
 
         <h2 class="heading-large">
-          What happens next
+        @Messages("fh.ack.what_happens_next")
         </h2>
 
         <p>
-          We will review your application. We may get in touch with your contact person to discuss your application.
+        @Messages("fh.ack.what_happens_next_1")
         </p>
 
         <p>
-          We will let you know when a decision has been made.
+        @Messages("fh.ack.what_happens_next_2")
         </p>
+
 
         <h2 class="heading-medium">
-          Help using this service
+        @Messages("fh.ack.help_using_service")
         </h2>
 
         <p>
-          <a href="#">See the guidance</a> to find out:
+          <a href="@Messages("link.guidance_page")">
+          @Messages("fh.ack.guidance_link_text")
+          </a>
+          @Messages("fh.ack.to_find_out")
         </p>
 
         <ul class="bullets">
           <li>
-            what you need to do while HMRC processes your application
+          @Messages("fh.ack.help_bullet_1")
           </li>
           <li>
-            how to make changes to your application
+          @Messages("fh.ack.help_bullet_2")
           </li>
           <li>
-            how to contact HMRC about your application
+          @Messages("fh.ack.help_bullet_3")
           </li>
         </ul>
 
-        <a class="button" href="@{
-          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-        }">
-          View or change application
-        </a>
+        <p>
+          <a class="button" href="@{
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+          }">
+            @Messages("fh.generic.application_status_continue")
+          </a>
+        </p>
 
       </div>
 
