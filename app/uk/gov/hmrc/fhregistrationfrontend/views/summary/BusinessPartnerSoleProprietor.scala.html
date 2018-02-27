@@ -23,7 +23,7 @@
 @SummaryRow(
     SummaryRowParams.ofString(
         Some(Messages("fh.business_partners.entity_type.label")),
-        Messages("fh.business_partners.entity_type.individual.label"),
+        Messages("fh.business_partners.entity_type.sole_proprietor.label"),
         None
     )
 )
@@ -45,6 +45,24 @@
 )
 
 @SummaryRow(
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.tradingName.confirm.label")),
+    partner.hasTradeName,
+    None
+  )
+)
+
+@if(partner.hasTradeName) {
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.tradingName.label")),
+      partner.tradeName,
+      None
+    )
+  )
+}
+
+@SummaryRow(
     SummaryRowParams.ofBoolean(
         Some(Messages("fh.business_partners.individual.nino.confirm.label")),
         partner.hasNino,
@@ -60,6 +78,24 @@
             None
         )
     )
+}
+
+@SummaryRow(
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.vatNumber.confirm.label")),
+    partner.hasVat,
+    None
+  )
+)
+
+@if(partner.hasVat) {
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.vatNumber.label")),
+      partner.vat,
+      None
+    )
+  )
 }
 
 

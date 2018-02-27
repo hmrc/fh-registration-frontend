@@ -53,7 +53,7 @@
         AddressUKParams(
           context = Some("storagePremise"),
           name = "address",
-          label = Messages("fh.other_storage_premises.enter.label"),
+          label = Messages("fh.other_storage_premises.each.title", sectionId),
           hasErrors = otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors,
           error = Some(Messages("fh.contact_person.contact_address_new.error"))
         )
