@@ -24,14 +24,6 @@
       }
   });
 
-  if ($('[name$="postcode"]').val() == '') {
-      $('.address-lookup-container').show();
-  } else {
-      $('.address-manual-container').removeClass('js-hidden');
-      $('.lookup-link-container').show()
-      $('.address-lookup-container').show().addClass('js-hidden');
-  }
-
   var lookUpPath = '/fhdds/address-lookup?postcode=';
 
   // address mapping is custom given the different fieldnames
