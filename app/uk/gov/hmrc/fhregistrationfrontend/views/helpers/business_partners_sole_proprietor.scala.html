@@ -74,18 +74,56 @@
   )
 )
 
-@YesNoText(
-  YesNoTextParams(
-    name = s"$businessPartnerSoleProprietorKey.$hasVatKey",
-    value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").value,
-    yesNoValue = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").value,
-    yesNoLabel = Messages("fh.vat_registration.confirm.label"),
-    yesNoError = Messages("fh.businessPartnerSoleProprietor.vat_yesNo.error.required"),
-    valueLabel = Messages("fh.vatNumber.label"),
-    valueError = Messages("fh.businessPartnerSoleProprietor.vat_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").error.fold("")(_.message)),
-    valueHintText = Some(Messages("fh.vatNumber.hintText")),
+@RadioGroup(
+  RadioGroupParams(
+    name = Some(s"$businessPartnerSoleProprietorKey.$hasVatKey"),
+    legend = Some(Messages("fh.vat_registration.confirm.label")),
+    error = Some(Messages("fh.vatNumber_yesNo.error.required")),
+    value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").value,
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$hasVatKey").hasErrors,
-    hasValueError= businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors
+    radios = List(
+      RadioParams(
+        "true",
+        Messages("fh.generic.yes"),
+        Some("vat")
+      ),
+      RadioParams(
+        "false",
+        Messages("fh.generic.no"),
+        Some("utr")
+      )
+    )
+  )
+)
+
+@NestedPanel(
+  NestedPanelParams(
+    "vat",
+    TextInput(
+      TextInputParams(
+        name = s"$businessPartnerSoleProprietorKey.$vatRegistrationKey",
+        label = Messages("fh.vatNumber.label"),
+        value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").value,
+        hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors,
+        error = Messages("fh.businessPartnerSoleProprietor.vat_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").error.fold("")(_.message))
+      )
+    )
+  )
+)
+
+@NestedPanel(
+  NestedPanelParams(
+    "utr",
+    TextInput(
+      TextInputParams(
+        name = s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey",
+        label = Messages("fh.ct_utr.label"),
+        hintText = Some(Messages("fh.business_partners.utr.hintText")),
+        value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey").value,
+        hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey").hasErrors,
+        error = Messages("fh.businessPartnerSoleProprietor.uniqueTaxpayerReference_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey").error.fold("")(_.message))
+      )
+    )
   )
 )
 

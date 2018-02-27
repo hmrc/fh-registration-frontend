@@ -94,6 +94,10 @@ object BusinessPartnersForm {
   val hasVatUnincorporatedBodyMapping = hasVatKey → yesOrNo
   val vatUnincorporatedBodyMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
+  val hasVatSoleProprietorMapping = hasVatKey → yesOrNo
+  val vatSoleProprietorMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
+  val uniqueTaxpayerReferenceSoleProprietorMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasVatSoleProprietorMapping is false withPrefix businessPartnerSoleProprietorKey))
+
   val hasVatLimitedLiabilityMapping = hasVatKey → yesOrNo
   val vatLimitedLiabilityMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
   val uniqueTaxpayerReferenceLimitedLiabilityMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasVatLimitedLiabilityMapping is false withPrefix businessPartnerLimitedLiabilityPartnershipKey))
@@ -127,8 +131,9 @@ object BusinessPartnersForm {
     tradeNameMapping,
     hasNinoSoleProprietorMapping,
     ninoSoleProprietorMapping,
-    hasVatMapping,
-    vatMapping,
+    hasVatSoleProprietorMapping,
+    vatSoleProprietorMapping,
+    uniqueTaxpayerReferenceSoleProprietorMapping,
     addressMapping
   )(BusinessPartnerSoleProprietor.apply)(BusinessPartnerSoleProprietor.unapply)
 

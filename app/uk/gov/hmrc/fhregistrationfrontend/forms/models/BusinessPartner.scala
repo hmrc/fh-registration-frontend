@@ -43,6 +43,7 @@ case class BusinessPartnerSoleProprietor(
   nino: Option[String],
   hasVat: Boolean,
   vat: Option[String],
+  uniqueTaxpayerReference: Option[String],
   address: Address
 ) extends BusinessPartnerIdentification
 
