@@ -62,7 +62,8 @@ fh.generic.alternate_logout.button=Save and come back later
 fh.generic.print_application=View and print application
 fh.generic.print_application_status=Print page for your records
 fh.generic.application_status_continue_read_only=View application
-fh.generic.application_status_continue=View or edit application
+fh.generic.application_status_continue=View or change application
+fh.status.lede=Your application has status:
 fh.generic.application_link=your application
 fh.generic.bta_link=Business tax account home
 

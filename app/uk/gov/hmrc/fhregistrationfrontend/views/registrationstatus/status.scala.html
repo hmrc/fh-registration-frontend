@@ -14,52 +14,90 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+
 @(status: String, id: String)(implicit request: Request[_], messages: Messages)
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+@sidebarLinks = {@statusSidebar()}
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
 
-  <div class="grid-row">
-    <div class="column-two-thirds">
-      <div class="phase-tag" role="alert">
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
 
-        <div class="form-group">
-          <h1 class="heading-xlarge" >Fulfilment House Registration Scheme</h1>
+  <div class="grid">
+    <div>
+      <div class="appstatus" role="alert">
+        <h1 class="heading-xlarge appstatus-title">
+          @Messages("app.name")
+        </h1>
 
-          <p class="lede"> Your application for @id was <strong>@status</strong></p>
-
-          <div class="grid-row lede" style="font-size: 16px;">
-
-            <div class="column-one-third">
+        <p class="lede">
+          @Messages("fh.status.lede") <strong>@status</strong>
+        </p>
+        <ul class="appstatus-steps" aria-hidden="true">
+          <li>
+            <span id="indication-received" class="appstatus-complete tick" aria-label="Received">
               Received
-              <span id="indication-received" class="tick" style="color: #EBEBEB"></span>
-              <aside style="margin-top: 10px; border-top: 10px solid #EBEBEB; padding-top: 5px;"></aside>
-            </div>
-
-            <div class="column-one-third">
+            </span>
+          </li>
+          <li>
+            <span id="indication-processed" class="@if(status != "Received"){ appstatus-complete } else { appstatus-processing }">
               Processing
-              <span id="indication-processed" class="@{if (status=="Processing" | status=="Successful" | status=="Rejected") "tick"}" style="color: #EBEBEB"></span>
-              @{if (status=="Processing" | status=="Successful" | status=="Rejected")
-                <aside style="margin-top: 10px; border-top: 10px solid #EBEBEB; padding-top: 5px;"></aside>}
-            </div>
-
-            <div class="column-one-third">
+            </span>
+          </li>
+          <li>
+            <span id="indication-approved" class="appstatus-processing">
               Decision
-              <span id="indication-approved" class="@{if (status=="Successful" | status=="Rejected") "tick"}" style="color: #EBEBEB"></span>
-              @{if (status=="Successful" | status=="Rejected")
-              <aside style="margin-top: 10px; border-top: 10px solid #EBEBEB; padding-top: 5px;"></aside>}
-            </div>
-
-          </div>
-        </div>
-
+            </span>
+          </li>
+        </ul>
       </div>
 
-      <div class="form-group">
-        <div><h2 class="heading-medium">What happens next</h2></div>
-        <ul class="list list-bullet">
-          <li>You cannot trade until an FHDDS reference number is issued.</li>
-          <li>It will take up to 45 days from your initial application before we make a decision.</li>
+      <div>
+
+        <h2 class="heading-large">
+        @Messages("fh.ack.what_happens_next")
+        </h2>
+
+        <p>
+        @Messages("fh.ack.what_happens_next_1")
+        </p>
+
+        <p>
+        @Messages("fh.ack.what_happens_next_2")
+        </p>
+
+
+        <h2 class="heading-medium">
+        @Messages("fh.ack.help_using_service")
+        </h2>
+
+        <p>
+          <a href="@Messages("link.guidance_page")">
+          @Messages("fh.ack.guidance_link_text")
+          </a>
+          @Messages("fh.ack.to_find_out")
+        </p>
+
+        <ul class="bullets">
+          <li>
+          @Messages("fh.ack.help_bullet_1")
+          </li>
+          <li>
+          @Messages("fh.ack.help_bullet_2")
+          </li>
+          <li>
+          @Messages("fh.ack.help_bullet_3")
+          </li>
         </ul>
+
+        <p>
+          <a class="button" href="@{
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+          }">
+            @Messages("fh.generic.application_status_continue")
+          </a>
+        </p>
+
       </div>
 
     </div>
