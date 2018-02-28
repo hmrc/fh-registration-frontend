@@ -135,6 +135,11 @@ class Application @Inject()(
     }
   }
 
+  // todo placeholder
+  def confirmDeleteSection(sectionName: String) = UserAction.async { implicit request ⇒
+    Future successful Ok(confirm_delete_section("test", sectionName))
+  }
+
   def businessType = UserAction { implicit request ⇒
     Ok(business_type(businessTypeForm))
   }

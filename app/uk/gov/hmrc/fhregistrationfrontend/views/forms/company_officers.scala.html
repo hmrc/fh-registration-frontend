@@ -48,6 +48,9 @@
 
     @helper.CSRF.formField
 
+    @if(companyOfficersForm(identificationTypeKey).value) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDeleteSection(Messages("fh.company_officers.each.title", section))}" style="float:right;">Remove</a>
+    }
     <h2>@Messages("fh.company_officers.each.title", section)</h2>
 
     @RadioGroup(

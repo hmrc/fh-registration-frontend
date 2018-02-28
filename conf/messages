@@ -606,6 +606,10 @@ fh.continue_delete.continue.hint=You have until midnight on
 fh.continue_delete.continue.hint_continue=to complete this form
 fh.continue_delete.delete=Delete your progress and start again
 
+# - Delete Section Confirmation
+fh.delete_confirmation_section.header=Are you sure you want to delete {0}?
+fh.delete_confirmation_section.delete=Delete {0}
+
 # - Acknowledgement Page
 #============================================================
 fh.ack.application_submitted=Application submitted
