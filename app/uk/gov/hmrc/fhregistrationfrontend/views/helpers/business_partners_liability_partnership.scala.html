@@ -70,12 +70,12 @@
       RadioParams(
         "true",
         Messages("fh.generic.yes"),
-        Some("vat")
+        Some("llp.vat")
       ),
       RadioParams(
         "false",
         Messages("fh.generic.no"),
-        Some("utr")
+        Some("llp.utr")
       )
     )
   )
@@ -83,7 +83,7 @@
 
 @NestedPanel(
   NestedPanelParams(
-    "vat",
+    "llp.vat",
     TextInput(
       TextInputParams(
         name = s"$businessPartnerLimitedLiabilityPartnershipKey.$vatRegistrationKey",
@@ -98,7 +98,7 @@
 
 @NestedPanel(
   NestedPanelParams(
-    "utr",
+    "llp.utr",
     TextInput(
       TextInputParams(
         name = s"$businessPartnerLimitedLiabilityPartnershipKey.$uniqueTaxpayerReferenceKey",
