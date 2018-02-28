@@ -93,9 +93,4 @@ object CompanyOfficersForm {
 
   val companyOfficerForm = Form(companyOfficerMapping)
 
-  val companyOfficersForm = Form(
-    mapping(
-      companyOfficersKey → list(companyOfficerMapping)
-    )(CompanyOfficers.apply)(CompanyOfficers.unapply)
-  )
 }

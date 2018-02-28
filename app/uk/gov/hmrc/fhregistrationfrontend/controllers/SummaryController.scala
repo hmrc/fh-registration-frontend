@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 import play.api.mvc.AnyContent
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
@@ -45,56 +46,19 @@ class SummaryController @Inject()(
 
 
   def partnership(implicit request: SummaryRequest[AnyContent]) = {
-    import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-    val application = PartnershipApplication(
-      request pageData mainBusinessAddressPage,
-      request pageData contactPersonPage,
-      request pageData tradingNamePage,
-      request pageData vatNumberPage,
-      request pageData businessPartnersPage,
-      request pageData businessStatusPage,
-      request pageData importingActivitiesPage,
-      request pageData businessCustomersPage,
-      request pageData otherStoragePremisesPage
-    )
-
+    val application = Journeys partnershipApplication request
     Ok(partnership_summary(application, request.bpr))
   }
 
 
   def soleTrader(implicit request: SummaryRequest[AnyContent]) = {
-    import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-    val application = SoleProprietorApplication(
-      request pageData mainBusinessAddressPage,
-      request pageData contactPersonPage,
-      request pageData nationalInsuranceNumberPage,
-      request pageData tradingNamePage,
-      request pageData vatNumberPage,
-      request pageData businessStatusPage,
-      request pageData importingActivitiesPage,
-      request pageData businessCustomersPage,
-      request pageData otherStoragePremisesPage
-    )
+    val application = Journeys soleTraderApplication request
 
     Ok(sole_proprietor_summary(application, request.bpr))
   }
 
   private def ltdSummary(implicit request: SummaryRequest[AnyContent]) = {
-    import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-    val application = LimitedCompanyApplication(
-      request pageData mainBusinessAddressPage,
-      request pageData contactPersonPage,
-      request pageData companyRegistrationNumberPage,
-      request pageData dateOfIncorporationPage,
-      request pageData tradingNamePage,
-      request pageData vatNumberPage,
-      request pageData companyOfficersPage,
-      request pageData businessStatusPage,
-      request pageData importingActivitiesPage,
-      request pageData businessCustomersPage,
-      request pageData otherStoragePremisesPage
-    )
-
+    val application = Journeys ltdApplication request
     Ok(ltd_summary(application, request.bpr))
   }
 }

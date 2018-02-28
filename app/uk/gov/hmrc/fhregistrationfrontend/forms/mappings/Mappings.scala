@@ -39,7 +39,7 @@ object Mappings {
 
   def address: Mapping[Address] = mapping(
     "Line1" -> addressLine,
-    "Line2" -> addressLine,
+    "Line2" -> optional(addressLine),
     "Line3" -> optional(addressLine),
     "Line4" -> optional(addressLine),
     "postcode" -> postcode,
@@ -77,7 +77,7 @@ object Mappings {
     "Line2" -> optional(addressLine),
     "Line3" -> optional(addressLine),
     "Line4" -> addressLine,
-    "countryCode" -> optional(nonEmptyText)
+    "countryCode" -> nonEmptyText
   )(InternationalAddress.apply)(InternationalAddress.unapply)
 
   def localDate = tuple(

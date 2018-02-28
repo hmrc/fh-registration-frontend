@@ -23,7 +23,7 @@ case class InternationalAddress (
   addressLine2: Option[String],
   addressLine3: Option[String],
   addressLine4: String,
-  countryCode: Option[String]
+  countryCode: String
 )
 
 object InternationalAddress {

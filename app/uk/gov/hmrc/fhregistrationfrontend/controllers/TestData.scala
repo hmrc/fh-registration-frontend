@@ -109,7 +109,7 @@ object TestData {
         StoragePremise(
           Address(
             "8 Oxford Road",
-            "Worthing",
+            Some("Worthing"),
             None,
             None,
             "BN11 1XG",
@@ -120,7 +120,7 @@ object TestData {
         StoragePremise(
           Address(
             "12 Cambridge House",
-            "Lancing Business Park",
+            Some("Lancing Business Park"),
             Some("Lancing"),
             None,
             "BN14 2HB",

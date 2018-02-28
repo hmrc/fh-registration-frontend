@@ -34,7 +34,7 @@ object TestData {
 
   val addressUk = Address(
     "line one",
-    "line two",
+    Some("line two"),
     None,
     None,
     "AA11 1AA",

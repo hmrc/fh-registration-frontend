@@ -18,14 +18,19 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.{internalId, email}
+import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.{internalId, email, allEnrolments}
+import uk.gov.hmrc.auth.core.retrieve.~
+
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession, PlayAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{continueUrl, getString, ggLoginUrl}
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, val email: Option[String], request: Request[A]) extends WrappedRequest(request)
+class UserRequest[A](val userId: String, val email: Option[String], val registrationNumber: Option[String], request: Request[A])
+  extends WrappedRequest(request) {
+}
 
 object UserAction extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
@@ -35,12 +40,20 @@ object UserAction extends ActionBuilder[UserRequest]
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
-    authorised().retrieve(internalId) {
-      case Some(id) ⇒ authorised().retrieve(email) {
-        case Some(email) ⇒ Future successful Right(new UserRequest(id, Some(email), request))
-        case _ ⇒ Future successful Right(new UserRequest(id, None, request))
-      }
-      case None     ⇒ throw AuthorisationException.fromString("Can not find user id")
+
+    authorised().retrieve(internalId and email and allEnrolments) {
+      case Some(id) ~ anEmail ~ enrolments ⇒
+        val fhddsRegistrationNumber = for {
+          enrolment ← enrolments getEnrolment Enrolments.serviceName
+          identifier ← enrolment getIdentifier Enrolments.identifierName
+        } yield {
+          identifier.value
+        }
+
+        Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumber, request))
+      case _     ⇒
+        throw AuthorisationException.fromString("Can not find user id")
+
     } recover { case e ⇒
       Left(handleFailure(e))
     }

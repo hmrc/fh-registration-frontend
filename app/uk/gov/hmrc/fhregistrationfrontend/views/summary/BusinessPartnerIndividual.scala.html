@@ -68,7 +68,7 @@
         Some(Messages("fh.business_partners.enter.partner_address")),
         SummaryAddressBlock(
             Line1 = Some(individual.address.addressLine1),
-            Line2 = Some(individual.address.addressLine2),
+            Line2 = individual.address.addressLine2,
             Line3 = individual.address.addressLine3,
             Line4 = individual.address.addressLine4,
             postcode = Some(individual.address.postcode)

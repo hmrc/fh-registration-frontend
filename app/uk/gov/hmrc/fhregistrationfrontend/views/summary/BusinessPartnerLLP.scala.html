@@ -93,7 +93,7 @@
         Some(Messages("fh.business_partners.enter.partner_address")),
         SummaryAddressBlock(
             Line1 = Some(partner.address.addressLine1),
-            Line2 = Some(partner.address.addressLine2),
+            Line2 = partner.address.addressLine2,
             Line3 = partner.address.addressLine3,
             Line4 = partner.address.addressLine4,
             postcode = Some(partner.address.postcode)

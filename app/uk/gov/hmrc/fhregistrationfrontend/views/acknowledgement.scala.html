@@ -17,15 +17,7 @@
     
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
 
-@(data: Declaration)(implicit request: Request[_], messages: Messages)
-
-@email = @{
-    if(data.isUseGgEmail){
-        Some(data.ggEmail)
-    } else {
-        data.alternativeEmail.map(_.email)
-    }
-}
+@(email: String)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}

@@ -1,0 +1,232 @@
+{
+  "requestType": "Create",
+  "subScriptionCreate": {
+    "organizationType": "Partnership",
+    "FHbusinessDetail": {
+      "isNewFulfilmentBusiness": true,
+      "proposedStartDate": "2018-08-31"
+    },
+    "additionalBusinessInformation": {
+      "allOtherInformation": {
+        "numberOfCustomers": "Over 100",
+        "doesEORIExist": true,
+        "EORINumber": {
+          "EORIVat": "GB123456789000",
+          "goodsImportedOutEORI": true
+        },
+        "numberOfpremises": "2",
+        "premises": [
+          {
+            "address": {
+              "line1": "third line one",
+              "line4": "third town",
+              "postalCode": "AB11 1AA",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": true
+          },
+          {
+            "address": {
+              "line1": "third other line one",
+              "line4": "third other town",
+              "postalCode": "AB2 1AA",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": false
+          }
+        ]
+      }
+    },
+    "businessDetail": {
+      "nonProprietor": {
+        "tradingName": "Dodgy Fulfilment",
+        "identification": {
+          "vatRegistrationNumber": "123456789",
+          "uniqueTaxpayerReference": "1111111113"
+        }
+      },
+      "partnership": {
+        "numbersOfPartners": "6",
+        "partnerDetails": [
+          {
+            "entityType": "Individual",
+            "partnerAddress": {
+              "line1": "individual line one",
+              "line2": "individual line two",
+              "line4": "individual town",
+              "postalCode": "AA12 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "name": {
+                "firstName": "mr partner",
+                "lastName": "ship"
+              },
+              "nino": "AA111111A"
+            }
+          },
+          {
+            "entityType": "Sole Proprietor",
+            "partnerAddress": {
+              "line1": "sole line one",
+              "line4": "sole town",
+              "postalCode": "AA13 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "name": {
+                "firstName": "ms sole",
+                "lastName": "trader"
+              },
+              "nino": "AA111111A",
+              "identification": {
+                "vatRegistrationNumber": "223456789"
+              },
+              "tradingName": "dodgy sole trader"
+            }
+          },
+          {
+            "entityType": "Limited Liability Partnership",
+            "partnerAddress": {
+              "line1": "llp line one",
+              "line2": "llp line two",
+              "line3": "llp line three",
+              "line4": "llp town",
+              "postalCode": "AA14 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "names": {
+                "companyName": "fulfilment llp",
+                "tradingName": "dodgy llp"
+              },
+              "identification": {
+                "vatRegistrationNumber": "323456789"
+              },
+              "incorporationDetails": {
+                "companyRegistrationNumber": "SC123456"
+              }
+            }
+          },
+          {
+            "entityType": "Partnership",
+            "partnerAddress": {
+              "line1": "partner line one",
+              "line2": "partner line two",
+              "line4": "partner town",
+              "postalCode": "AA15 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "names": {
+                "companyName": "fulfilment partNers",
+                "tradingName": "dodgy partners"
+              },
+              "identification": {
+                "vatRegistrationNumber": "423456789",
+                "uniqueTaxpayerReference": "2234567890"
+              }
+            }
+          },
+          {
+            "entityType": "Corporate Body",
+            "partnerAddress": {
+              "line1": "ltd line one",
+              "line4": "ltd town",
+              "postalCode": "AA16 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "names": {
+                "companyName": "fulfilment ltd",
+                "tradingName": "dodgy ltd"
+              },
+              "identification": {
+                "uniqueTaxpayerReference": "1234567890"
+              },
+              "incorporationDetails": {
+                "companyRegistrationNumber": "12345679"
+              }
+            }
+          },
+          {
+            "entityType": "Unincorporated Body",
+            "partnerAddress": {
+              "line1": "church one",
+              "line4": "church town",
+              "postalCode": "AA17 1AA",
+              "countryCode": "GB"
+            },
+            "partnerTypeDetail": {
+              "names": {
+                "companyName": "church of fulfilment",
+                "tradingName": "dodgy church"
+              },
+              "identification": {}
+            }
+          }
+        ]
+      }
+    },
+    "businessAddressForFHDDS": {
+      "currentAddress": {
+        "line1": "23 High Street",
+        "line2": "Park View",
+        "line3": "Gloucester",
+        "line4": "Gloucestershire",
+        "postalCode": "NE98 1ZZ",
+        "countryCode": "GB"
+      },
+      "commonDetails": {},
+      "timeOperatedAtCurrentAddress": "Less than 3 years",
+      "previousOperationalAddress": {
+        "anyPreviousOperatingAddress": true,
+        "previousOperationalAddressDetail": [
+          {
+            "previousAddress": {
+              "line1": "main line one",
+              "line4": "main town",
+              "postalCode": "AA11 1AA",
+              "countryCode": "GB"
+            },
+            "previousAddressStartdate": "2014-03-20"
+          }
+        ]
+      }
+    },
+    "contactDetail": {
+      "names": {
+        "firstName": "C",
+        "lastName": "M"
+      },
+      "usingSameContactAddress": false,
+      "address": {
+        "line1": "Int line one",
+        "line2": "Int line two",
+        "line4": "Germany",
+        "countryCode": "DE"
+      },
+      "commonDetails": {
+        "telephone": "123123",
+        "email": "a@a.ro"
+      },
+      "roleInOrganization": {
+        "beneficialShareHolder": false,
+        "director": false,
+        "partner": false,
+        "internalAccountant": false,
+        "soleProprietor": false,
+        "nominatedOfficer": false,
+        "designatedmember": false,
+        "otherRoleType": true,
+        "otherRoleDescription": "Director"
+      }
+    },
+    "declaration": {
+      "personName": "C M",
+      "personStatus": "Director",
+      "email": "c@c.co.uk",
+      "isInformationAccurate": true
+    }
+  }
+}

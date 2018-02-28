@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import java.time.LocalDate
-
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, oneOf, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, oneOf, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localDate
 
 object MainBusinessAddressForm {
 

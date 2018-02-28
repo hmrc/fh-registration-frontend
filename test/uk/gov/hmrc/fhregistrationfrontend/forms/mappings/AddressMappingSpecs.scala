@@ -44,7 +44,6 @@ class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
         Map.empty,
         List(
           "Line1" → "error.required",
-          "Line2" → "error.required",
           "postcode" → "error.required")
       )
     }
@@ -69,7 +68,7 @@ class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
    "accept valid short" in {
      val data = dataFromValidForm(validAddressShort)
      data.addressLine1 shouldBe "line one"
-     data.addressLine2 shouldBe "line two"
+     data.addressLine2 shouldBe Some("line two")
      data.addressLine3 shouldBe None
      data.addressLine4 shouldBe None
      data.postcode shouldBe "AA11 1AA"
@@ -79,7 +78,7 @@ class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
     "accept valid long" in {
       val data = dataFromValidForm(validAddressLong)
       data.addressLine1 shouldBe "line one"
-      data.addressLine2 shouldBe "line two"
+      data.addressLine2 shouldBe Some("line two")
       data.addressLine3 shouldBe Some("line three")
       data.addressLine4 shouldBe Some("line four")
       data.postcode shouldBe "AA11 1AA"

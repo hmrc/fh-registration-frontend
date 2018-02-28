@@ -1,0 +1,74 @@
+{
+  "requestType": "Create",
+  "subScriptionCreate": {
+    "organizationType": "Sole Proprietor",
+    "FHbusinessDetail": {
+      "isNewFulfilmentBusiness": false
+    },
+    "additionalBusinessInformation": {
+      "allOtherInformation": {
+        "numberOfCustomers": "11-50",
+        "doesEORIExist": false,
+        "numberOfpremises": "0",
+        "premises": []
+      }
+    },
+    "businessDetail": {
+      "soleProprietor": {
+        "identification": {
+          "nino": "AA123123A",
+          "uniqueTaxpayerReference": "1111111112"
+        }
+      }
+    },
+    "businessAddressForFHDDS": {
+      "currentAddress": {
+        "line1": "LINE 1",
+        "line2": "LINE 2",
+        "line3": "LINE 3",
+        "line4": "LINE 4",
+        "postalCode": "M46 0PT",
+        "countryCode": "GB"
+      },
+      "commonDetails": {},
+      "timeOperatedAtCurrentAddress": "3-5 years"
+    },
+    "contactDetail": {
+      "names": {
+        "firstName": "John",
+        "lastName": "Snow"
+      },
+      "roleInOrganization": {
+        "beneficialShareHolder": false,
+        "director": false,
+        "partner": false,
+        "internalAccountant": false,
+        "soleProprietor": false,
+        "nominatedOfficer": false,
+        "designatedmember": false,
+        "otherRoleType": true,
+        "otherRoleDescription": "Director"
+      },
+
+      "usingSameContactAddress": true,
+      "address": {
+        "line1": "LINE 1",
+        "line2": "LINE 2",
+        "line3": "LINE 3",
+        "line4": "LINE 4",
+        "postalCode": "M46 0PT",
+        "countryCode": "GB"
+      },
+      "commonDetails": {
+        "telephone": "111",
+        "email": "a@w.ro"
+      }
+    },
+    "declaration": {
+      "personName": "John",
+      "personStatus": "Snow",
+      "email": "user@test.com",
+      "isInformationAccurate": true
+    }
+  }
+}

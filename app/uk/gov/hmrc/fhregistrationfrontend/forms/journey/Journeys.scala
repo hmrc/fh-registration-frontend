@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 object Journeys {
+
+  import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
 
   val limitedCompanyPages = new JourneyPages(
     Seq[AnyPage](
@@ -65,6 +67,43 @@ object Journeys {
     )
   )
 
+  def partnershipApplication(pageDataLoader: PageDataLoader) =  PartnershipApplication(
+      pageDataLoader pageData mainBusinessAddressPage,
+      pageDataLoader pageData contactPersonPage,
+      pageDataLoader pageData tradingNamePage,
+      pageDataLoader pageData vatNumberPage,
+      pageDataLoader pageData businessPartnersPage,
+      pageDataLoader pageData businessStatusPage,
+      pageDataLoader pageData importingActivitiesPage,
+      pageDataLoader pageData businessCustomersPage,
+      pageDataLoader pageData otherStoragePremisesPage
+    )
+
+  def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
+    pageDataLoader pageData mainBusinessAddressPage,
+    pageDataLoader pageData contactPersonPage,
+    pageDataLoader pageData nationalInsuranceNumberPage,
+    pageDataLoader pageData tradingNamePage,
+    pageDataLoader pageData vatNumberPage,
+    pageDataLoader pageData businessStatusPage,
+    pageDataLoader pageData importingActivitiesPage,
+    pageDataLoader pageData businessCustomersPage,
+    pageDataLoader pageData otherStoragePremisesPage
+  )
+
+  def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
+      pageDataLoader pageData mainBusinessAddressPage,
+      pageDataLoader pageData contactPersonPage,
+      pageDataLoader pageData companyRegistrationNumberPage,
+      pageDataLoader pageData dateOfIncorporationPage,
+      pageDataLoader pageData tradingNamePage,
+      pageDataLoader pageData vatNumberPage,
+      pageDataLoader pageData companyOfficersPage,
+      pageDataLoader pageData businessStatusPage,
+      pageDataLoader pageData importingActivitiesPage,
+      pageDataLoader pageData businessCustomersPage,
+      pageDataLoader pageData otherStoragePremisesPage
+    )
 
   def linearJourney(journeyPages: JourneyPages) = new LinearJourney(journeyPages)
   def summaryJourney(journeyPages: JourneyPages) = new SummaryJourney()

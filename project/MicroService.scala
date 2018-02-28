@@ -33,6 +33,7 @@ trait MicroService {
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
+    .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
