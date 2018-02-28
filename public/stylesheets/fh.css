@@ -47,6 +47,14 @@ span.error-message, .form-hint {
     background: url("/fhdds/assets/images/loading.gif") no-repeat;
 }
 
+.form-actions {
+    margin-top: 3em;
+}
+
+.confirmation-label {
+    margin-top: 1em
+}
+
 /* application.min.css is overriding this to 0 after declaring it! */
 
 table {

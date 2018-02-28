@@ -57,12 +57,12 @@
     name="@{s"$fieldName.email"}"
         @if(params.value.nonEmpty){value="@{params.value}"}>
 
-    <label class="form-label" for="@{fieldName}-confirmation">
+    <label class="form-label confirmation-label" for="@{fieldName}-confirmation">
     @params.labelConfirmation
     </label>
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
-    class="form-control"
+    class="form-control confirmation-value"
     id="@{fieldName}-confirmation"
     name="@{s"$fieldName.emailConfirmation"}">
 

@@ -14,12 +14,13 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(declarationForm: Form[Declaration], ggEmail: Option[String])(implicit request: Request[_], messages: Messages)
+@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -85,7 +86,7 @@
     @TextInput(
       TextInputParams(
         name = jobTitleKey,
-        label = Messages("fh.contact_person.last_name.label"),
+        label = Messages("fh.declaration.person_status.label"),
         value = declarationForm(jobTitleKey).value,
         error = Messages("fh.declaration.person_status." + declarationForm(jobTitleKey).error.fold("")(_.message)),
         hasErrors = declarationForm(jobTitleKey).hasErrors
@@ -122,10 +123,10 @@
       @RadioGroup(
         RadioGroupParams(
           name = Some(isUseGgEmailKey),
-          legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
+          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
           required = true,
           hasErrors = declarationForm(isUseGgEmailKey).hasErrors,
-          error = Some(Messages("fh.contact_person.contact_address_correct.error")),
+          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
           value = declarationForm(isUseGgEmailKey).value,
           radios = List(
             RadioParams(
@@ -167,24 +168,43 @@
         @Messages("fh.declaration.declaration.point1")
         </li>
         <li>
-          @Messages("fh.declaration.declaration.point2") <span class="bold"> Fulfil Partners</span>
+          @Messages("fh.declaration.declaration.point2") <span class="bold"> @bpr.businessName</span>
         </li>
       </ul>
+
+      <div class="notice">
+        <i class="icon icon-important">
+          <span class="visually-hidden">Warning</span>
+        </i>
+        <strong class="bold-small">
+          <p>@Messages("fh.declaration.warning")</p>
+        </strong>
+      </div>
+
     </div>
 
-    <div class="notice">
-      <i class="icon icon-important">
-        <span class="visually-hidden">Warning</span>
-      </i>
-      <strong class="bold-small">
-        <p>@Messages("fh.declaration.warning")</p>
-      </strong>
+
+    <div class="form-group form-actions">
+
+      <p>
+        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages("button.accept.send")</button>
+      </p>
+
+      <p>
+        <a href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+        }">
+        @Messages("link.goBackToSummary")
+        </a>
+      </p>
+
+      <p>
+        <a class="" href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater()
+        }">@Messages("link.saveForLater")</a>
+      </p>
+
     </div>
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.accept.send")
-      )
-    )
   }
 }
