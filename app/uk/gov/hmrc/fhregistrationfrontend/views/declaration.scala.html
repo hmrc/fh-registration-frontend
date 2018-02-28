@@ -86,7 +86,7 @@
     @TextInput(
       TextInputParams(
         name = jobTitleKey,
-        label = Messages("fh.contact_person.last_name.label"),
+        label = Messages("fh.declaration.person_status.label"),
         value = declarationForm(jobTitleKey).value,
         error = Messages("fh.declaration.person_status." + declarationForm(jobTitleKey).error.fold("")(_.message)),
         hasErrors = declarationForm(jobTitleKey).hasErrors
@@ -123,10 +123,10 @@
       @RadioGroup(
         RadioGroupParams(
           name = Some(isUseGgEmailKey),
-          legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
+          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
           required = true,
           hasErrors = declarationForm(isUseGgEmailKey).hasErrors,
-          error = Some(Messages("fh.contact_person.contact_address_correct.error")),
+          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
           value = declarationForm(isUseGgEmailKey).value,
           radios = List(
             RadioParams(
