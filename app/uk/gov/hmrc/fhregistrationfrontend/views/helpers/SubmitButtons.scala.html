@@ -14,7 +14,19 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams)(implicit message: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
+
+
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SubmitButtonsParams, navigation: Navigation = Navigation(None))(implicit message: Messages)
+
+@summaryLink = @{
+
+  navigation.back.map {
+    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+    case _ => ""
+  }
+}
 
 <div class="form-group margin-top-30">
 
@@ -26,15 +38,14 @@
     }</button>
   </p>
 
-  @if(params.summaryLink) {
-    <p>
-      <a href="@{
-        uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-      }">
-      @Messages("link.goBackToSummary")
-      </a>
-    </p>
+  @if(summaryLink.nonEmpty) {
+    @summaryLink.map { link =>
+      <p>
+        <a href="@link">@Messages("link.goBackToSummary")</a>
+      </p>
+    }
   }
+
 
   <p class="js-show">
     <button class="button--link-style" type="submit" name="saveAction2" value="saveForLater">
