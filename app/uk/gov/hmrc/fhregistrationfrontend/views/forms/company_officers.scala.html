@@ -136,63 +136,61 @@
         )
       )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "other",
-          RadioGroup(
-            RadioGroupParams(
-              name = Some(s"$individualIdentificationKey.$hasPassportNumberKey"),
-              legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$hasPassportNumberKey").hasErrors,
-              error = Some(Messages("fh.individualIdentification.hasPassportNumber.error.required", section)),
-              value = companyOfficersForm("individualIdentification.hasPassportNumber").value,
-              radios = List(
-                RadioParams(
-                  "true",
-                  Messages("fh.generic.yes"),
-                  Some("passportNumber")
-                ),
-                RadioParams(
-                  "false",
-                  Messages("fh.generic.no"),
-                  Some("nationalID")
-                )
+      <div class="js-hidden panel" id="other">
+
+        @RadioGroup(
+          RadioGroupParams(
+            name = Some(s"$individualIdentificationKey.$hasPassportNumberKey"),
+            legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
+            hasErrors = companyOfficersForm(s"$individualIdentificationKey.$hasPassportNumberKey").hasErrors,
+            error = Some(Messages("fh.individualIdentification.hasPassportNumber.error.required", section)),
+            value = companyOfficersForm("individualIdentification.hasPassportNumber").value,
+            radios = List(
+              RadioParams(
+                "true",
+                Messages("fh.generic.yes"),
+                Some("passportNumber")
+              ),
+              RadioParams(
+                "false",
+                Messages("fh.generic.no"),
+                Some("nationalID")
               )
             )
           )
         )
-      )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "passportNumber",
-          TextInput(
-            TextInputParams(
-              name = s"$individualIdentificationKey.$passportNumberKey",
-              label = Messages("fh.company_officers.individual.passport.label"),
-              value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value,
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors,
-              error = Messages("fh.individualIdentification.passportNumber." + companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").error.fold("")(_.message), section)
+        @NestedPanel(
+          NestedPanelParams(
+            "passportNumber",
+            TextInput(
+              TextInputParams(
+                name = s"$individualIdentificationKey.$passportNumberKey",
+                label = Messages("fh.company_officers.individual.passport.label"),
+                value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value,
+                hasErrors = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors,
+                error = Messages("fh.individualIdentification.passportNumber." + companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").error.fold("")(_.message), section)
+              )
             )
           )
         )
-      )
 
-      @NestedPanel(
-        NestedPanelParams(
-          "nationalID",
-          TextInput(
-            TextInputParams(
-              name = s"$individualIdentificationKey.$nationalIDKey",
-              label = Messages("fh.company_officers.individual.nationalID.label"),
-              hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
-              value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value,
-              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors,
-              error = Messages("fh.individualIdentification.nationalID." + companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").error.fold("")(_.message), section)
+        @NestedPanel(
+          NestedPanelParams(
+            "nationalID",
+            TextInput(
+              TextInputParams(
+                name = s"$individualIdentificationKey.$nationalIDKey",
+                label = Messages("fh.company_officers.individual.nationalID.label"),
+                hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
+                value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value,
+                hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors,
+                error = Messages("fh.individualIdentification.nationalID." + companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").error.fold("")(_.message), section)
+              )
             )
           )
         )
-      )
+      </div>
 
       @RadioGroup(
         RadioGroupParams(
