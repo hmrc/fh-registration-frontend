@@ -24,6 +24,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
+import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -172,7 +173,7 @@ class Application @Inject()(
     }
   }
 
-  def summary = UserAction.async  { implicit request ⇒
+  def summary = UserAction.async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒ Ok(ltd_summary(TestData.mockSummary, bpr))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
