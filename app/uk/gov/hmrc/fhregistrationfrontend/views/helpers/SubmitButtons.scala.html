@@ -38,7 +38,7 @@
     }</button>
   </p>
 
-  @if(summaryLink.nonEmpty) {
+  @if(summaryLink!=Some("")) {
     @summaryLink.map { link =>
       <p>
         <a href="@link">@Messages("link.goBackToSummary")</a>
