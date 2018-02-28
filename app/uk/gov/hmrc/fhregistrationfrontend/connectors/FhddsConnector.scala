@@ -18,9 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Singleton
 
-import play.api.libs.json.JsValue
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -38,15 +37,11 @@ trait FhddsConnect {
   val FHDSSServiceUrl: String
   val http: WSHttp
 
-  def saveBusinessRegistrationDetails(userId: String, formTypeRef: String, businessRegistrationDetails: BusinessRegistrationDetails)(implicit hc: HeaderCarrier): Future[_] = {
-    http.PUT[BusinessRegistrationDetails,JsValue](saveBusinessRegistrationDetailsURI(userId, formTypeRef), businessRegistrationDetails)
-  }
-
-  private def saveBusinessRegistrationDetailsURI(userId: String, formTypeRef: String) = {
-    s"$FHDSSServiceUrl/fhdds/submission-extra-data/$userId/$formTypeRef/businessRegistrationDetails"
-  }
-
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
-    http.GET(s"$FHDSSServiceUrl/fhdds/fulfilment-diligence/subscription/$fhddsRegistrationNumber/status")
+    http.GET(s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
+  }
+
+  def submit(request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
+    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/application/submit", request)
   }
 }

@@ -31,11 +31,11 @@ case class Declaration(
   alternativeEmail: Option[AlternativeEmail]
 ) {
 
-  def email: Option[String] = {
+  def email: String = {
     if (isUseGgEmail)
-      ggEmail
+      ggEmail.get
     else
-      alternativeEmail map (_.email)
+      alternativeEmail.map(_.email).get
   }
 }
 

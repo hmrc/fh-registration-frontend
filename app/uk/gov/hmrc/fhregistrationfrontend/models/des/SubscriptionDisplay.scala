@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json.Json
 
-case class SubscriptionCreateRequestSchema(
+case class SubscriptionDisplay (
   organizationType: String,
   FHbusinessDetail: IsNewFulfilmentBusiness,
   GroupInformation: Option[LimitedLiabilityOrCorporateBodyWithOutGroup],
@@ -28,16 +28,14 @@ case class SubscriptionCreateRequestSchema(
   contactDetail: ContactDetail,
   declaration: Declaration)
 
-object SubscriptionCreateRequestSchema {
-  implicit val format = Json.format[SubscriptionCreateRequestSchema]
+object SubscriptionDisplay {
+  implicit val format = Json.format[SubscriptionDisplay]
 }
 
-case class SubScriptionCreate(
-  requestType: String,
-  subScriptionCreate: SubscriptionCreateRequestSchema)
+case class SubscriptionDisplayWrapper(
+  subScriptionDisplay: SubscriptionDisplay
+)
 
-
-object SubScriptionCreate {
-  implicit val format = Json.format[SubScriptionCreate]
+object SubscriptionDisplayWrapper {
+  implicit val format = Json.format[SubscriptionDisplayWrapper]
 }
-

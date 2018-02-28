@@ -16,7 +16,6 @@ GET         /address-lookup                                                     
 
 GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
 #test route for rendering without submission:
-GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.testAcknowledgement
 
 GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
@@ -25,9 +24,10 @@ POST        /form/:page/:section                                                
 
 #GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.summary
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
-GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.showDeclaration
+GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
+POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
+GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
-POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitForm
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

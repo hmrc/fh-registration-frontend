@@ -17,17 +17,31 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import java.time.LocalDate
+import javax.inject.Singleton
 
+import com.google.inject.ImplementedBy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 
-class FormToDes {
+@ImplementedBy(classOf[FormToDesImpl])
+trait FormToDes {
+  def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription
+  def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription
+  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription
 
-  def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration) =
-    des.SubscriptionCreateRequestSchema(
+}
+
+@Singleton
+class FormToDesImpl extends FormToDes {
+
+  def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription = ???
+  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = ???
+
+  override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
+    des.Subscription(
       organizationType(BusinessType.CorporateBody),
       isNewFulfilmentBusiness(application.businessStatus),
       None,
@@ -41,7 +55,7 @@ class FormToDes {
   def declaration(d: Declaration): des.Declaration = des.Declaration(
     d.fullName,
     d.jobTitle,
-    d.email,
+    Some(d.email),
     true
   )
 
@@ -77,7 +91,7 @@ class FormToDes {
       currentAddress(bpr.businessAddress),
       des.CommonDetails(None, None, None),
       mainAddress.timeAtCurrentAddress,
-      mainAddress.previousAddress map previousOperationalAddress
+      previousOperationalAddress(mainAddress)
     )
 
 
@@ -92,19 +106,22 @@ class FormToDes {
     )
 
 
-  def previousOperationalAddress(address: Address) =
-    des.PreviousOperationalAddress(
-      true,
-      Some(List(previousOperationalAddressDetail(address)))
-    )
+  def previousOperationalAddress(mainBusinessAddress: MainBusinessAddress) =
+    for {
+      address ← mainBusinessAddress.previousAddress
+      start ← mainBusinessAddress.previousAddressStartdate
+    } yield {
+      des.PreviousOperationalAddress(
+        true,
+        Some(List(previousOperationalAddressDetail(start, address))))
+    }
 
-  def previousOperationalAddressDetail(a: Address) =
+
+  def previousOperationalAddressDetail(start: LocalDate, a: Address) =
     des.PreviousOperationalAddressDetail(
       address(a),
-      LocalDate.now() //TODO: where does this value come from?
+      start
     )
-
-
 
   def businessDetail(application: LimitedCompanyApplication, bpr: BusinessRegistrationDetails) = {
     import application._
@@ -157,8 +174,8 @@ class FormToDes {
       businessCustomers.numberOfCustomers,
       importingActivities.hasEori,
       importingActivities.eoriNumber map eoriNumberType(vatNumber.hasValue),
-      otherStoragePremises.value.size.toString,
-      otherStoragePremises.value map premise
+      if (otherStoragePremises.hasValue) otherStoragePremises.value.size.toString else "0",
+      if (otherStoragePremises.hasValue) otherStoragePremises.value map premise else List.empty
     )
   }
 

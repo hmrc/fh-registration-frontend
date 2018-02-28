@@ -30,9 +30,6 @@ import scala.concurrent.Future
 
 class UserRequest[A](val userId: String, val email: Option[String], val registrationNumber: Option[String], request: Request[A])
   extends WrappedRequest(request) {
-
-
-
 }
 
 object UserAction extends ActionBuilder[UserRequest]

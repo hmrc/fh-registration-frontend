@@ -177,18 +177,6 @@ class Application @Inject()(
 
   }
 
-  //todo link with summary page
-  def showDeclaration = SummaryAction(save4LaterService) { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr))
-  }
-
-  def submitForm = SummaryAction(save4LaterService) { implicit request ⇒
-    declarationForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(declaration(formWithErrors, request.email, request.bpr)),
-      declaration => Redirect(routes.Application.startForm()) //todo link with final page
-    )
-  }
-
   def checkStatus() = UserAction.async { implicit request ⇒
     request.registrationNumber match {
       case Some(registrationNumber) ⇒
@@ -206,12 +194,6 @@ class Application @Inject()(
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
   }
-
-  def testAcknowledgement = Action.async { implicit request =>
-    import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-    Future(Ok(acknowledgement(Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true,ggEmail = Some("test@example.com")))))
-  }
-
 
   private def formTypeRef(details: BusinessRegistrationDetails) = {
     details.businessType match {

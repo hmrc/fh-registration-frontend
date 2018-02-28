@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import cats.data.EitherT
@@ -32,14 +32,14 @@ class SummaryRequest[A](
   request: UserRequest[A],
   val bpr: BusinessRegistrationDetails,
   val businessType: BusinessType
-) extends WrappedRequest[A](request)
+) extends WrappedRequest[A](request) with PageDataLoader
 {
   def userId: String = request.userId
-
   def email: Option[String] = request.email
 
   def pageData[T](page: Page[T]): T =
     cacheMap.getEntry[T](page.id)(page.format).get
+
 
 }
 

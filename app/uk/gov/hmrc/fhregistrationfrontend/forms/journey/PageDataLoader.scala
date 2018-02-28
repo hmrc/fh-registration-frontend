@@ -14,28 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import java.time.LocalDate
-
-import play.api.libs.json.Json
-
-case class MainBusinessAddress (
-  timeAtCurrentAddress: String,
-  hasPreviousAddress: Option[Boolean],
-  previousAddress: Option[Address],
-  previousAddressStartdate: Option[LocalDate]
-)
-
-object MainBusinessAddress {
-
-  implicit val format = Json.format[MainBusinessAddress]
-
-  val TimeAtCurrentAddressOptions = Seq(
-    "Less than 3 years",
-    "3-5 years",
-    "5-10 years",
-    "10 or more years"
-  )
+trait PageDataLoader {
+  def pageData[T](page: Page[T]): T
 }
-
