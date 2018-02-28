@@ -20,54 +20,55 @@
 
 @(company: CompanyOfficerCompanyModel)(implicit request: Request[_], messages: Messages)
 
-    @SummaryRow(
-        SummaryRowParams.ofString(
-            Some(Messages("fh.company_officers.entity_type.label")),
-            Messages("fh.company_officers.company.label"),
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams.ofString(
+      Some(Messages("fh.company_officers.entity_type.label")),
+      Messages("fh.company_officers.company.label"),
+      None
     )
+  )
 
-    @SummaryRow(
-        SummaryRowParams.ofString(
-            Some(Messages("fh.company_officers.company.company_name.label")),
-            company.companyName,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams.ofString(
+      Some(Messages("fh.company_officers.company.company_name.label")),
+      company.companyName,
+      None
     )
+  )
 
-
-
-    @SummaryRow(
-        SummaryRowParams.ofBoolean(
-            Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
-            company.hasVat,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
+      company.hasVat,
+      None
     )
+  )
 
-    @if(company.hasVat) {
-        @SummaryRow(
-            SummaryRowParams(
-                Some(Messages("fh.vatNumber.label")),
-                company.vat,
-                None
-            )
-        )
-    }
+  @if(company.hasVat) {
 
     @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.company_officers.company.company_registration_number.label")),
-            company.crn,
-            None
-        )
+      SummaryRowParams(
+        Some(Messages("fh.vatNumber.label")),
+        company.vat,
+        None
+      )
     )
 
+  } else {
+
     @SummaryRow(
-        SummaryRowParams.ofString(
-            Some(Messages("fh.company_officers.status.label")),
-            company.role,
-            None
-        )
+      SummaryRowParams(
+        Some(Messages("fh.company_officers.company.company_registration_number.label")),
+        company.crn,
+        None
+      )
     )
+  }
+
+  @SummaryRow(
+    SummaryRowParams.ofString(
+      Some(Messages("fh.company_officers.status.label")),
+      company.role,
+      None
+    )
+  )
