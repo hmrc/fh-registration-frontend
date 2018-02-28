@@ -103,7 +103,7 @@
 
     @if(ggEmail.isEmpty) {
 
-      <input class="visuallyhidden" name="@isUseGgEmailKey" value="false"/>
+      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
 
       @EmailConfirmation(
         EmailConfirmationParams(
@@ -118,7 +118,7 @@
       )
 
     } else {
-      <input class="visuallyhidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
+      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
 
       @RadioGroup(
         RadioGroupParams(
