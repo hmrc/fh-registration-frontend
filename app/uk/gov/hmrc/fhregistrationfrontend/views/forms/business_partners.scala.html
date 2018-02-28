@@ -60,6 +60,10 @@
 
     @helper.CSRF.formField
 
+    @if(businessPartnerForm(businessPartnersTypeKey).value) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDeleteSection(Messages("fh.business_partners.add_a_partner", section))}" style="float:right;">Remove</a>
+    }
+
     <h2>@Messages("fh.business_partners.add_a_partner", section)</h2>
 
     @RadioGroup(

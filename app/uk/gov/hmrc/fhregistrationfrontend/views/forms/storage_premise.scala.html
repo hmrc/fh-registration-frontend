@@ -47,7 +47,9 @@
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
-
+    @if(otherStoragePremisesForm(isThirdPartyKey).value) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDeleteSection(Messages("fh.other_storage_premises.each.title", sectionId))}" style="float:right;">Remove</a>
+    }
       @AddressUK(
         otherStoragePremisesForm,
         AddressUKParams(
