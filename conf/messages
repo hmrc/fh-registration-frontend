@@ -309,7 +309,7 @@ fh.declaration.alternative_email_confirmation.empty.error=Re-enter the alternati
 fh.declaration.alternative_email_confirmation.no_match.error=The email addresses are not the same
 fh.declaration.declaration.title=By submitting this application you confirm that:
 fh.declaration.declaration.point1=the information you have provided is correct and complete
-fh.declaration.declaration.point2=you have authority to submit this form on behalf of a
+fh.declaration.declaration.point2=you have authority to submit this form on behalf of 
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
 
 # Corporate Body Page specific messages

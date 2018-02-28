@@ -36,6 +36,8 @@ class SummaryRequest[A](
 {
   def userId: String = request.userId
 
+  def email: Option[String] = request.email
+
   def pageData[T](page: Page[T]): T =
     cacheMap.getEntry[T](page.id)(page.format).get
 

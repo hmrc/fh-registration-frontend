@@ -29,13 +29,12 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
-import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
@@ -45,7 +44,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
-
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -177,14 +175,14 @@ class Application @Inject()(
   }
 
   //todo link with summary page
-  def showDeclaration = UserAction.async { implicit request ⇒
-    Future successful Ok(declaration(declarationForm, request.email))
+  def showDeclaration = SummaryAction(save4LaterService) { implicit request ⇒
+    Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
-  def submitForm = UserAction.async { implicit request ⇒
+  def submitForm = SummaryAction(save4LaterService) { implicit request ⇒
     declarationForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(declaration(formWithErrors, request.email))),
-      declaration => Future.successful(Redirect(routes.Application.startForm())) //todo link with final page
+      formWithErrors => BadRequest(declaration(formWithErrors, request.email, request.bpr)),
+      declaration => Redirect(routes.Application.startForm()) //todo link with final page
     )
   }
 
