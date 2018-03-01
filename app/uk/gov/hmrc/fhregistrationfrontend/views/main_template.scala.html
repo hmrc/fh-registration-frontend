@@ -21,6 +21,8 @@
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
   linkElement: Option[Html] = None,
+  forPrint: Boolean = false,
+  environmentUrl: String = "",
   pageScripts: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
@@ -39,14 +41,18 @@
     @pageScripts
 }
 
-@govuk_wrapper(appConfig = uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config,
-               title = Messages("app.name"),
-               mainClass = mainClass,
-               bodyClasses = bodyClasses,
-               sidebar = sidebar,
-               contentHeader = contentHeader,
-               mainContent = layouts.article(mainContent),
-               serviceInfoContent = serviceInfoContent,
-               linkElement = linkElement,
-               scriptElem = Some(scriptElement)
-)
+@{
+  govuk_wrapper(appConfig = uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config,
+    title = Messages("app.name"),
+    mainClass = mainClass,
+    bodyClasses = bodyClasses,
+    sidebar = sidebar,
+    contentHeader = contentHeader,
+    mainContent = layouts.article(mainContent),
+    serviceInfoContent = serviceInfoContent,
+    linkElement = linkElement,
+    forPrint = forPrint,
+    environmentUrl = environmentUrl,
+    scriptElem = Some(scriptElement)
+  )
+}

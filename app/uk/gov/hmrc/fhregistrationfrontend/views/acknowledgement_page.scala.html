@@ -53,7 +53,7 @@
     <div class="js-show notice with-icon">
         <i class="icon icon-file-download"></i>
         <p>
-            <a href="javascript:window.print()">@Messages("fh.generic.print_application_status")</a>
+            <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.downloadPdf(s"${dateTime.toLocalDate.toString("d MMMM yyyy")}")}">@Messages("fh.generic.print_application_status")</a>
         </p>
     </div>
 
@@ -92,12 +92,6 @@
             @Messages("fh.ack.help_bullet_3")
         </li>
     </ul>
-
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.downloadPdf(s"${dateTime.toLocalDate.toString("d MMMM yyyy")}"), 'novalidate -> "novalidate") {
-    <p>
-      <button type="submit" class="button" name="print" value="pdf">download pdf</button>
-    </p>
-  }
 
     <p>
         <a href="#">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")

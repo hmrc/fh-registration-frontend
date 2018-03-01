@@ -45,7 +45,7 @@ trait WSHttp extends
   HttpDelete with WSDelete with
   Hooks with AppName
 
-object WSHttp extends WSHttp with HttpAuditing {
+object WSHttp extends WSHttp with WSPost with HttpAuditing {
   override lazy val auditConnector = FrontendAuditConnector
 }
 
