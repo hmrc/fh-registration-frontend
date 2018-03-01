@@ -21,7 +21,7 @@
   <td class="form-data" width="45%">@if(params.value.nonEmpty){ @params.value }</td>
   <td style="vertical-align: top">
     @if(params.changeLink.nonEmpty){
-    <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
+    <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
     }
   </td>
 </tr>

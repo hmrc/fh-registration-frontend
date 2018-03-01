@@ -24,7 +24,6 @@
   mainContent: Html = HtmlFormat.empty,
   linkElement : Option[Html] = None,
   serviceInfoContent: Html = HtmlFormat.empty,
-  forPrint: Boolean = false,
   environmentUrl: String = "",
   scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
 
@@ -33,10 +32,10 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
 @head = {
-    @uiLayouts.head(
-      linkElem = linkElement,
-      headScripts = None)
-  <base href="@environmentUrl"/>
+  @uiLayouts.head(
+    linkElem = linkElement,
+    headScripts = None)
+    <base href="@environmentUrl"/>
     <meta name="format-detection" content="telephone=no" />
 }
 
