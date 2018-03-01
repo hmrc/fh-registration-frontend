@@ -21,18 +21,31 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.SoleProprietorApplication
 @import play.api.Environment
 
-@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
 
-  @PageHeading(
+  @if(forPrint){
+    <style>
+      .hidden-print, a, footer, .beta-banner, h1, #global-cookie-message {
+        display: none;
+      }
+
+      .header__menu__proposition-name {
+        color: #000;
+      }
+    </style>
+    <h2>@Messages("printApplication.label") @timeStamp</h2>
+  }else{
+    @PageHeading(
       PageHeadingParams(
-          heading = Messages("fh.generic.check")
+        heading = Messages("fh.generic.check")
       )
-  )
+    )
+  }
 
   <table class="table-font-xsmall">
     <tbody>

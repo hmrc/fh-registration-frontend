@@ -69,10 +69,10 @@ class SummaryController @Inject()(
     val urlProtocol = ds.conf
       .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
     val urlHost = ds.conf
-      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host")
-      .getOrElse("fh-registration-frontend.public.mdtp")
+      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host").getOrElse("fh-registration-frontend.public.mdtp")
     val urlPort = ds.conf
       .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
+
     val url = s"$urlProtocol://$urlHost:$urlPort"
 
     request.businessType match {
@@ -84,19 +84,20 @@ class SummaryController @Inject()(
 
   private def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
 
-  def partnership(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
+  def partnership(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys partnershipApplication request
-    partnership_summary(application, request.bpr, baseUrl, forPrint)
+    partnership_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
 
-  def soleTrader(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
+  def soleTrader(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys soleTraderApplication request
-    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint)
+    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
-  private def ltdSummary(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
+  def ltdSummary(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys ltdApplication request
-    ltd_summary(application, request.bpr, baseUrl, forPrint)
+
+    ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 }
