@@ -34,9 +34,9 @@
     @params.error
     </span>
   }
-  <label>Enter postcode to lookup</label>
+  <label>Postcode</label>
   <input type="text" class="postcode-value" style="width: 200px;" />
-  <a data-context="@{fieldName}" class="button address-lookup" role="button" tabindex="0">Find address</a>
+  <a data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</a>
   <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup"></fieldset>
   <div class="form-group" style="margin-top: 1em">
     <a href="#" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
@@ -101,6 +101,6 @@
   )
   <div class="form-group lookup-link-container" style="margin-top: 1em;
     display: none;">
-    <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Lookup address with postcode</a>
+    <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
   </div>
 </div>

@@ -95,14 +95,13 @@
         name = emailAddressKey,
         label = Messages("fh.contact_person.email.label"),
         value = contactPersonForm(emailAddressKey).value,
-        hintText = Some(Messages("fh.contact_person.email.hintText")),
         error = Messages("fh.contact_person.emailAddress." + contactPersonForm(emailAddressKey).error.fold("")(_.message)),
         hasErrors = contactPersonForm(emailAddressKey).hasErrors,
         isEmail = true
       )
     )
 
-    <h2>@Messages("fh.main_business_address.title")</h2>
+    <h2>@Messages("fh.contact_person.contact_address.title")</h2>
 
     <div id="review-details" class="form-group">
       @bpr.businessAddress.line1 <br>
