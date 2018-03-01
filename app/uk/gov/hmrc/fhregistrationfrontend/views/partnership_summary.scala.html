@@ -19,12 +19,17 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipApplication
+@import play.api.Environment
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environment: String)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
+
+  <base href="@{environment}"/>
+
+  @{environment}
 
   @PageHeading(
       PageHeadingParams(
