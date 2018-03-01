@@ -27,6 +27,13 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
+@findDateHelp = {
+  @Messages("fh.dateOfIncorporation.details")
+  <a href="@Messages("link.searchCompaniesHouse")" target="_blank">
+  @Messages("fh.dateOfIncorporation.companies_house")
+  </a>.
+}
+
 @main_template(title = Messages("fh.dateOfIncorporation.title"), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -57,6 +64,8 @@
         year = dateOfIncorporationForm(s"$dateOfIncorporationKey.year").value
       )
     )
+
+    @Details(Messages("fh.dateOfIncorporation.summary"), findDateHelp)
 
     @SubmitButtons(
       SubmitButtonsParams(

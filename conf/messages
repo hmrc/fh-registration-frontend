@@ -110,18 +110,25 @@ fh.generic.status.company.value=company
 
 # - Select your business type
 #============================================================
-fh.business_type.title=Select your business type
-fh.business_type.error=Select your business type
+fh.business_type.title=Which of the following best describes your business?
+fh.businessType.error.required=Select which business type best describes your business
 fh.business_type.limited_company=Limited company
-fh.business_type.sole_trader=Sole Trader self-employed
-fh.business_type.business_partnership=Business partnership
+fh.business_type.sole_trader=Sole trader
+fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
+fh.business_type.summary=My business type is not listed here
+fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
+fh.business_type.detailsLinkText=Check the guidance (opens in a new window)
+fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
 
 # - Main Business Address
 #============================================================
 fh.main_business_address.title=Main business address
-fh.main_business_address.time_at_address.label=How long has the business operated at its current address?
-fh.timeAtCurrentAddress.error.required=Select how long the business has operated at this address
+fh.mainBusinessAddress.intro=Your main business address is normally where you:
+fh.mainBusinessAddress.point1=receive and deal with orders
+fh.mainBusinessAddress.point2=carry out the day-to-day running of the business
+fh.main_business_address.time_at_address.label=How long has the business operated from this address?
+fh.timeAtCurrentAddress.error.required=Select how long the business has operated from this address
 fh.main_business_address.0to3years.label=Less than 3 years
 fh.main_business_address.3to5years.label=3 to 5 years
 fh.main_business_address.5to10years.label=5 to 10 years
@@ -130,9 +137,9 @@ fh.main_business_address.0to3years.value=Less than 3 years
 fh.main_business_address.3to5years.value=3-5 years
 fh.main_business_address.5to10years.value=5-10 years
 fh.main_business_address.10plusYears.value=10 or more years
-fh.main_business_address.previous.label=Has the business operated from a different address in the last 3 years?
+fh.main_business_address.previous.label=Has the business operated from a different address before that?
 fh.previousAddress.error.required=Select whether the business has operated from a different address in the last 3 years
-fh.main_business_address.enter_previous.label=What was the previous address?
+fh.main_business_address.enter_previous.label=Enter the previous address
 fh.main_business_address.enter_previous.error=Enter a valid previous address
 fh.mainPreviousAddressUK_previousAddress.Line1.error.required=You must enter line 1 of the address
 fh.mainPreviousAddressUK_previousAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
@@ -143,7 +150,7 @@ fh.mainPreviousAddressUK_previousAddress.Line4.error.pattern=Address lines must 
 fh.mainPreviousAddressUK_previousAddress.postcode.error.required=Enter the postcode of the address
 fh.mainPreviousAddressUK_previousAddress.postcode.error.pattern=Enter a valid postcode
 fh.previousAddressStartdate.label=When did the business start operating from this previous address?
-fh.previousAddressStartdate.hint_text=For example, 31 07 2017
+fh.previousAddressStartdate.hint_text=For example, 31 03 2017
 fh.previousAddressStartdate.empty.error=Enter the date when the business started operating from the previous address
 fh.previousAddressStartdate.error.invalid=Enter a valid date for when the business started operating from the previous address
 fh.previousAddressStartdate.day=Day
@@ -157,7 +164,7 @@ fh.previousAddressStartdate.year.error.number=Enter the year of when the busines
 # - Contact Person
 #============================================================
 fh.contact_person.title=Contact person
-fh.contact_person.intro=This is the person we will contact if we need to discuss your application
+fh.contact_person.intro=Who should we contact if we need to discuss your application?
 fh.contact_person.first_name.label=First name
 fh.contact_person.firstName.error.required=Enter your contact person''s first name
 fh.contact_person.firstName.error.pattern=Enter only valid characters for a first name
@@ -179,7 +186,7 @@ fh.contact_person.contact_address_correct.label=Is this the contact address you 
 fh.contact_person.hasOtherContactAddress.error.required=Select whether you want to use the contact address
 fh.contact_person.contact_address_in_uk.label=Is the contact address in the UK?
 fh.contact_person.isUkAddress.error.required=Select whether the contact address you want to use is in the UK
-fh.contact_person.contact_address_new.label=Enter your contact address
+fh.contact_person.contact_address_new.label=UK contact address
 fh.contact_person.contact_address_new.error=Enter a valid contact address
 fh.contact_person.otherInternationalContactAddress_contactAddress.Line1.error.required=You must enter line 1 of the address
 fh.contact_person.otherInternationalContactAddress_contactAddress.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
@@ -211,8 +218,8 @@ fh.tradingName_value.error.pattern=Enter only valid characters for a trading nam
 #===========================================================
 fh.national_insurance_number.title=National Insurance Number
 fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
-fh.nationalInsuranceNumber_yesNo.error.required=Select whether have a National Insurance number
-fh.national_insurance_number.label=Enter National Insurance number
+fh.nationalInsuranceNumber_yesNo.error.required=Select whether you have a National Insurance number
+fh.national_insurance_number.label=National Insurance number
 fh.national_insurance_number.hintText=For example, QQ123456C
 fh.nationalInsuranceNumber_value.error.required=Enter National Insurance number
 fh.nationalInsuranceNumber_value.error.pattern=Enter a valid National Insurance number
@@ -340,13 +347,13 @@ fh.companyRegistrationNumber.label=Company registration number
 fh.companyRegistrationNumber.hint_text=For example, 12345678 or SC123456
 fh.companyRegistrationNumber.error.required=Enter the company registration number
 fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
-fh.companyRegistrationNumber.summary=Where do I find my company registration number?
-fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or by searching the register on
-fh.companyRegistrationNumber.details_companies_house=Companies House
+fh.companyRegistrationNumber.summary=Where to find your company registration number
+fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or you can 
+fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window)
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
-fh.date_of_incorporation.title=Date of incorporation
+fh.date_of_incorporation.title=Company''s date of incorporation
 fh.dateOfIncorporation.title=Date of incorporation
 fh.dateOfIncorporation.label=Date of incorporation
 fh.dateOfIncorporation.hint_text=For example, 31 07 2017
@@ -358,6 +365,9 @@ fh.dateOfIncorporation.year=Year
 fh.dateOfIncorporation.day.error.number=Enter the day of incorporation
 fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
 fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
+fh.dateOfIncorporation.summary=Where to find the date of incorporation
+fh.dateOfIncorporation.details=You can find this date on the company's Certificate of Incorporation, or
+fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window)
 
 # - Company Officers (Corporate Body)
 #===========================================================
@@ -583,10 +593,10 @@ fh.businessPartnerUnincorporatedBody.partnerAddress.Line4.error.pattern=Address 
 fh.businessPartnerUnincorporatedBody.partnerAddress.postcode.error.required=Enter the postcode of the address
 fh.businessPartnerUnincorporatedBody.partnerAddress.postcode.error.pattern=Enter a valid postcode
 
-fh.business_partners.utr.confirm.label=Do they have a Self Assessment Unique Taxpayer reference?
-fh.business_partners.utr.confirm.error=Select whether the business partner has a unique Taxpayer reference?
-fh.business_partners.utr.label=Self Assessment Unique Taxpayer reference
-fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer reference
+fh.business_partners.utr.confirm.label=Do they have a Self Assessment Unique Taxpayer Reference?
+fh.business_partners.utr.confirm.error=Select whether the business partner has a Unique Taxpayer Reference?
+fh.business_partners.utr.label=Self Assessment Unique Taxpayer Reference
+fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.hintText=For example, 1234567890
 
 fh.ct_utr.label=Unique Taxpayer reference
@@ -644,4 +654,4 @@ fh.survey_link_text=What did you think of this service?
 fh.survey_hint=(takes 30 seconds)
 
 link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
-
+link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
