@@ -16,30 +16,29 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
-import javax.inject.Singleton
-
-import play.api.libs.json.JsValue
+import javax.inject.{Inject, Singleton}
+import play.api.libs.ws.{WSClient, WSResponse}
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
 
 @Singleton
-class PdfGeneratorConnector extends PdfGeneratorConnect with ServicesConfig {
+class PdfGeneratorConnector @Inject() (ws: WSClient) extends PdfGeneratorConnect with ServicesConfig {
   val serviceURL: String = baseUrl("pdf-generator-service") + "/pdf-generator-service/generate"
   val http = WSHttp
+  def getWsClient:WSClient = ws
 }
 
 trait PdfGeneratorConnect {
 
   val serviceURL: String
   val http: WSHttp
+  def getWsClient: WSClient
 
-  def generatePdf(html: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    http.POST(serviceURL, Map("html" -> html))
+  def generatePdf(html: String)(implicit hc: HeaderCarrier): Future[WSResponse] = {
+    getWsClient.url(serviceURL).post(Map("html" -> Seq(html)))
   }
 
 }

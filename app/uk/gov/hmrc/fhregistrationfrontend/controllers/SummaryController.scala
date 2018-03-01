@@ -42,17 +42,20 @@ class SummaryController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
   def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = SummaryAction(save4LaterService).async { implicit request ⇒
-    val summaryHtml: Html = getSummaryHtml(request)
+    val summaryHtml: Html = getSummaryHtml(request, forPrint=true, timeStamp = timeStamp)
     pdfGeneratorConnector.generatePdf(removeScriptTags(summaryHtml.toString)).map { response =>
       if (response.status != OK)
         BadRequest(response.body)
       else
-        Ok(response.body.getBytes).as("application/pdf")
-          .withHeaders("Content-Disposition" -> s"attachment; filename=${request.userId}.pdf")
+      Ok(response.bodyAsBytes.toArray).as("application/pdf")
+        .withHeaders("Content-Disposition" -> s"attachment; filename=${request.userId}.pdf")
+          .withHeaders("Content-Type" -> s"application/pdf")
+          .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
     } recover {
       case e: Exception => {
         throw new BadRequestException(e.toString)
       }
+      case e:Exception => throw new BadRequestException(e.toString)
     }
   }
 
@@ -61,8 +64,8 @@ class SummaryController @Inject()(
     Ok(getSummaryHtml(request))
   }
 
-  private def getSummaryHtml(request: SummaryRequest[AnyContent]): Html = {
-    implicit val environment = ds.env
+  private def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: String = ""): Html = {
+
     val urlProtocol = ds.conf
       .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
     val urlHost = ds.conf
@@ -71,11 +74,11 @@ class SummaryController @Inject()(
     val urlPort = ds.conf
       .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
     val url = s"$urlProtocol://$urlHost:$urlPort"
-    println(s"\n\n$url\n\n")
+
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ ltdSummary(request, url)
-      case BusinessType.SoleTrader ⇒ soleTrader(request, url)
-      case BusinessType.Partnership ⇒ partnership(request, url)
+      case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp)(request)
+      case BusinessType.SoleTrader ⇒ soleTrader(forPrint, url, timeStamp)(request)
+      case BusinessType.Partnership ⇒ partnership(forPrint, url, timeStamp)(request)
     }
   }
 
@@ -83,20 +86,17 @@ class SummaryController @Inject()(
 
   def partnership(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
     val application = Journeys partnershipApplication request
-
-    partnership_summary(application, request.bpr, baseUrl)
+    partnership_summary(application, request.bpr, baseUrl, forPrint)
   }
 
 
   def soleTrader(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
     val application = Journeys soleTraderApplication request
-
-    sole_proprietor_summary(application, request.bpr, baseUrl)
+    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint)
   }
 
   private def ltdSummary(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
-      val application = Journeys ltdApplication request
-
-    ltd_summary(application, request.bpr, baseUrl)
+    val application = Journeys ltdApplication request
+    ltd_summary(application, request.bpr, baseUrl, forPrint)
   }
 }
