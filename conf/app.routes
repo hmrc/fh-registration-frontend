@@ -23,11 +23,11 @@ POST        /form/:page                                                         
 POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
+GET         /downloadPdf/:timeStamp                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
 
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
-GET         /downloadPdf/:timeStamp                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

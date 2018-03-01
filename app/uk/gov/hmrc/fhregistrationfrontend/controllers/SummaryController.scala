@@ -56,35 +56,47 @@ class SummaryController @Inject()(
     }
   }
 
+
   def summary() = SummaryAction(save4LaterService) { implicit request ⇒
     Ok(getSummaryHtml(request))
   }
 
   private def getSummaryHtml(request: SummaryRequest[AnyContent]): Html = {
+    implicit val environment = ds.env
+    val urlProtocol = ds.conf
+      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
+    val urlHost = ds.conf
+      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host")
+      .getOrElse("fh-registration-frontend.public.mdtp")
+    val urlPort = ds.conf
+      .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
+    val url = s"$urlProtocol://$urlHost:$urlPort"
+    println(s"\n\n$url\n\n")
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ ltdSummary(request)
-      case BusinessType.SoleTrader    ⇒ soleTrader(request)
-      case BusinessType.Partnership   ⇒ partnership(request)
+      case BusinessType.CorporateBody ⇒ ltdSummary(request, url)
+      case BusinessType.SoleTrader ⇒ soleTrader(request, url)
+      case BusinessType.Partnership ⇒ partnership(request, url)
     }
   }
 
   private def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
 
-  def partnership(implicit request: SummaryRequest[AnyContent]) = {
+  def partnership(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
     val application = Journeys partnershipApplication request
-    partnership_summary(application, request.bpr)
+
+    partnership_summary(application, request.bpr, baseUrl)
   }
 
 
-  def soleTrader(implicit request: SummaryRequest[AnyContent]) = {
+  def soleTrader(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
     val application = Journeys soleTraderApplication request
 
-    sole_proprietor_summary(application, request.bpr)
+    sole_proprietor_summary(application, request.bpr, baseUrl)
   }
 
-  private def ltdSummary(implicit request: SummaryRequest[AnyContent]) = {
-    val application = Journeys ltdApplication request
+  private def ltdSummary(implicit request: SummaryRequest[AnyContent], baseUrl: String) = {
+      val application = Journeys ltdApplication request
 
-    ltd_summary(application, request.bpr)
+    ltd_summary(application, request.bpr, baseUrl)
   }
 }
