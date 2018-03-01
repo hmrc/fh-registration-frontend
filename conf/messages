@@ -20,9 +20,26 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 
 # Generic messages
 fh.generic.error=There is a problem
+
 fh.generic.not_found=Page not found
 fh.generic.not_found.label=This page can’t be found
 fh.generic.not_found.inf=Please check that you have entered the correct web address.
+
+fh.generic.bad_request=Bad Request
+fh.generic.bad_request.label=Bad Request
+fh.generic.bad_request.inf=Please check that you have entered the correct data.
+
+fh.generic.unauthorized=Unauthorized
+fh.generic.unauthorized.label=Unauthorized
+fh.generic.unauthorized.inf=Please check that you were unauthorized.
+
+fh.generic.bad_gateway=Bad Gateway
+fh.generic.bad_gateway.label=Bad Gateway
+fh.generic.bad_gateway.inf=Please try again in a few minutes.
+
+fh.generic.internal_server_error=Internal Server Error
+fh.generic.internal_server_error.label=Sorry, we’re experiencing technical difficulties
+fh.generic.internal_server_error.inf=Please try again in a few minutes.
 #============================================================
 
 #Address

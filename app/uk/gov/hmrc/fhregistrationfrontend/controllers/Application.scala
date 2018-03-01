@@ -37,13 +37,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.bus
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template_Scope0.error_template
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -170,7 +168,7 @@ class Application @Inject()(
   def savedForLater = UserAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
       case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
-      case None            ⇒ pageNotFound
+      case None            ⇒ errorResultsPages(NotFound)
     }
   }
 
@@ -258,27 +256,47 @@ abstract class AppController(ds: CommonPlayDependencies, messages: play.api.i18n
     e match {
       case x: NoActiveSession      ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
-
         val ggRedirectParms = Map(
           "continue" -> Seq(continueUrl),
           "origin" -> Seq(getString("appName"))
         )
-
         Redirect(ggLoginUrl, ggRedirectParms)
       case e: OtacFailureThrowable ⇒
-        val errorTemplate = new error_template()
-        Unauthorized(errorTemplate.render("Unauthorized", "Unauthorized", "You are not authorized to use this service", request, messages))
+        errorResultsPages(Unauthorized)
       case ex                      ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
-        BadRequest(s"$ex")
+        errorResultsPages(BadRequest, Some(s"$ex"))
     }
 
-  def pageNotFound(implicit request: Request[_]) = {
-    NotFound(error_template(
-      messages("fh.generic.not_found"),
-      messages("fh.generic.not_found.label"),
-      messages("fh.generic.not_found.inf")
-    ))
+  def errorResultsPages(errorResults: Status, inf: Option[String] = None)(implicit request: Request[_]): Result = {
+    errorResults match {
+      case NotFound ⇒ NotFound(error_template(
+        messages("fh.generic.not_found"),
+        messages("fh.generic.not_found.label"),
+        inf.getOrElse(messages("fh.generic.not_found.inf"))
+      ))
+      case BadRequest ⇒ BadRequest(error_template(
+        messages("fh.generic.bad_request"),
+        messages("fh.generic.bad_request.label"),
+        inf.getOrElse(messages("fh.generic.bad_request.inf"))
+      ))
+      case Unauthorized ⇒ Unauthorized(error_template(
+        messages("fh.generic.unauthorized"),
+        messages("fh.generic.unauthorized.label"),
+        inf.getOrElse(messages("fh.generic.unauthorized.inf"))
+      ))
+      case BadGateway ⇒ BadGateway(error_template(
+        messages("fh.generic.bad_gateway"),
+        messages("fh.generic.bad_gateway.label"),
+        inf.getOrElse(messages("fh.generic.bad_gateway.inf"))
+      ))
+      case _ ⇒ InternalServerError(error_template(
+        messages("fh.generic.internal_server_error"),
+        messages("fh.generic.internal_server_error.label"),
+        inf.getOrElse(messages("fh.generic.internal_server_error.inf"))
+      ))
+    }
+
   }
 
 }

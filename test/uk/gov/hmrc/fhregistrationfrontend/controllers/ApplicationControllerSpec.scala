@@ -23,6 +23,7 @@ import play.api.i18n.MessagesApi
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.fhregistrationfrontend.AppUnitGenerator
+import play.api.mvc.Results.{NotFound,BadRequest,ServiceUnavailable}
 
 import scala.concurrent.Future
 
@@ -56,6 +57,20 @@ class ApplicationControllerSpec extends AppUnitGenerator {
       val result = applicationController.start().apply(request)
       result.header.status shouldBe Status.SEE_OTHER
       redirectLocation(result) shouldBe Some(expectedRedirect)
+    }
+
+  }
+
+  "errorResultsPages" should {
+    "show related error page" in {
+      val resultNotFound = applicationController.errorResultsPages(applicationController.Status(404))
+      resultNotFound.value.get.toString shouldBe "Success(Result(404, Map()))"
+
+      val resultBadRequest = applicationController.errorResultsPages(applicationController.Status(400))
+      resultBadRequest.value.get.toString shouldBe "Success(Result(400, Map()))"
+
+      val resultServiceUnavailable = applicationController.errorResultsPages(applicationController.Status(503))
+      resultServiceUnavailable.value.get.toString shouldBe "Success(Result(500, Map()))"
     }
 
   }
