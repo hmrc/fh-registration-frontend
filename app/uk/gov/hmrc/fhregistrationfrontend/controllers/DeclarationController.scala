@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
@@ -27,8 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement, declaration}
+
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.FormToDes
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement, acknowledgement_page, declaration}
 
 import scala.concurrent.Future
 
@@ -51,8 +55,13 @@ class DeclarationController @Inject()(
   def showAcknowledgment() = UserAction { implicit request ⇒
     val email = request.session.get(EmailSessionKey).getOrElse("")
 
-    Ok(acknowledgement(email))
-
+    val submitTime: DateTime = DateTime.now()
+    Ok(
+      acknowledgement_page(
+        Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true, ggEmail = Some("test@example.com")),
+        submitTime
+      )
+    )
   }
 
   def submitForm() = SummaryAction(save4LaterService).async { implicit request ⇒

@@ -183,45 +183,17 @@ class Application @Inject()(
 
   }
 
-<<<<<<< HEAD
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
         Ok(status(statusResp.body, request.registrationNumber))
       })
-=======
-  def checkStatus() = UserAction.async { implicit request ⇒
-    request.registrationNumber match {
-      case Some(registrationNumber) ⇒
-        fhddsConnector
-          .getStatus(registrationNumber)(hc)
-          .map(statusResp ⇒ {
-            Ok(status(statusResp.body, registrationNumber))
-          })
-      case None ⇒
-        Future successful NotFound("Not found: registration number")
-    }
-
-  //todo link with summary page
-  def showDeclaration = SummaryAction(save4LaterService) { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr))
-  }
-
-  def submitForm = SummaryAction(save4LaterService) { implicit request ⇒
-    declarationForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(declaration(formWithErrors, request.email, request.bpr)),
-      declaration => Redirect(routes.Application.startForm()) //todo link with final page
-    )
->>>>>>> added base url
   }
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
   }
-
-<<<<<<< HEAD
-=======
 
   def acknowledgement = SummaryAction(save4LaterService) { implicit request =>
     import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
@@ -234,7 +206,6 @@ class Application @Inject()(
       )
   }
 
->>>>>>> added base url
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
 }
 
