@@ -193,6 +193,7 @@ class Application @Inject()(
       case None ⇒
         Future successful NotFound("Not found: registration number")
     }
+  }
 
   //todo link with summary page
   def showDeclaration = SummaryAction(save4LaterService) { implicit request ⇒
@@ -208,18 +209,6 @@ class Application @Inject()(
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
-  }
-
-
-  def acknowledgement = SummaryAction(save4LaterService) { implicit request =>
-    import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-    val submitTime: DateTime = DateTime.now()
-      Ok(
-        acknowledgement_page(
-          Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true, ggEmail = Some("test@example.com")),
-          submitTime
-        )
-      )
   }
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
