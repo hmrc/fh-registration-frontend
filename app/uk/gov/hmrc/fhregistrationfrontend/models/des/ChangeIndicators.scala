@@ -14,6 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.services.mapping
+package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-trait Mapper[U,V]
+import play.api.libs.json.Json
+
+case class ChangeIndicators(
+  businessTypeChanged: Boolean,
+  businessDetailChanged: Boolean,
+  partnersChanged: Boolean,
+  businessAddressChanged: Boolean,
+  businessPreviousAddressChanged: Boolean,
+  contactDetailChanged: Boolean,
+  groupMemberChanged: Boolean,
+  coOfficialsChanged: Boolean,
+  additionalBusinessInfoChanged: Boolean,
+  premisesChanged: Boolean,
+  declarationChanged: Boolean)
+
+
+object ChangeIndicators {
+  implicit val formatter = Json.format[ChangeIndicators]
+}

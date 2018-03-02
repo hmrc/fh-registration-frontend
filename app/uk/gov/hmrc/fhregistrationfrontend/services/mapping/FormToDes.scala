@@ -42,7 +42,7 @@ class FormToDesImpl extends FormToDes {
 
   override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
     des.Subscription(
-      organizationType(BusinessType.CorporateBody),
+      EntityTypeMapping formToDes BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
       None,
       additionalBusinessInformation(application),
@@ -63,14 +63,14 @@ class FormToDesImpl extends FormToDes {
     des.ContactDetail(
       None,
       des.Name(contact.firstName, None, contact.lastName),
-      !contact.hasOtherContactAddress,
+      contact.usingSameContactAddress,
       contactDetailAddress(bpr, contact),
       des.CommonDetails(Some(contact.telephone), None, Some(contact.emailAddress)),
       Some(des.RoleInOrganization otherRole contact.jobTitle) //TODO: job title is the role?
     )
 
   def internationalAddress(a: InternationalAddress) =
-    des.Address (
+    des.Address(
       a.addressLine1,
       a.addressLine2,
       a.addressLine3,
@@ -83,7 +83,6 @@ class FormToDesImpl extends FormToDes {
     //TODO move this logic to ContactPerson?
     contact.otherUkContactAddress.map (address(_))
       .orElse(contact.otherInternationalContactAddress.map(internationalAddress(_)))
-      .orElse(Some(currentAddress(bpr.businessAddress)))
   }
 
   def businessAddress(bpr: BusinessRegistrationDetails, mainAddress: MainBusinessAddress): des.BusinessAddressForFHDDS =
@@ -205,12 +204,6 @@ class FormToDesImpl extends FormToDes {
       if (!hasVat) Some(eoriNumber.eoriNumber) else None,
       Some(eoriNumber.goodsImportedOutsideEori)
     )
-
-  def organizationType(businessType: BusinessType) = businessType match {
-    case BusinessType.CorporateBody ⇒ "Corporate Body"
-    case BusinessType.Partnership ⇒ "Partnership"
-    case BusinessType.SoleTrader ⇒ "Sole Proprietor"
-  }
 
   //limited company
   def isNewFulfilmentBusiness(bs: BusinessStatus)= des.IsNewFulfilmentBusiness (

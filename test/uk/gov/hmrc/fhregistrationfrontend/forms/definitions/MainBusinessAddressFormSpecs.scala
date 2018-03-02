@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
+import java.time.LocalDate
+
 import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 import uk.gov.hmrc.play.test.UnitSpec
@@ -27,7 +29,7 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
   val form = MainBusinessAddressForm.mainBusinessAddressForm
 
   val valid = Map(
-    timeAtCurrentAddressKey → "3 to 5 years"
+    timeAtCurrentAddressKey → "3-5 years"
   )
 
   val validWithNoPreviousAddress = Map(
@@ -37,7 +39,11 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
 
   val validWithPreviousAddress = Map(
     timeAtCurrentAddressKey → "Less than 3 years",
-    previousAddressKey → "true"
+    previousAddressKey → "true",
+    s"$previousAddressStartdateKey.day" -> "31",
+    s"$previousAddressStartdateKey.month" -> "7",
+    s"$previousAddressStartdateKey.year" -> "2015"
+
   ) ++ TestData.addressDataUk(mainPreviousAddressKey)
 
 
@@ -68,7 +74,7 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
     "accept valid form data" in {
 
       val data = dataFromValidForm(valid)
-      data.timeAtCurrentAddress shouldBe "3 to 5 years"
+      data.timeAtCurrentAddress shouldBe "3-5 years"
       data.hasPreviousAddress shouldBe None
       data.previousAddress shouldBe None
     }

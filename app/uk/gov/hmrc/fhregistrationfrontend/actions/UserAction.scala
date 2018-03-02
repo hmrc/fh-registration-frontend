@@ -30,6 +30,7 @@ import scala.concurrent.Future
 
 class UserRequest[A](val userId: String, val email: Option[String], val registrationNumber: Option[String], request: Request[A])
   extends WrappedRequest(request) {
+  def userIsRegistered = registrationNumber.isDefined
 }
 
 object UserAction extends ActionBuilder[UserRequest]

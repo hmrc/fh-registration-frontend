@@ -63,7 +63,7 @@
     )
 )
 
-@if(contactPersonForm.hasOtherContactAddress) {
+@if(!contactPersonForm.usingSameContactAddress) {
 
     @SummaryRow(
         SummaryRowParams.ofBoolean(

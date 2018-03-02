@@ -20,6 +20,7 @@ import javax.inject.Singleton
 
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -41,7 +42,11 @@ trait FhddsConnect {
     http.GET(s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
   }
 
+  def getSubmission(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[SubscriptionDisplayWrapper] = {
+    http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
+  }
+
   def submit(request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
-    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/application/submit", request)
+    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/submit", request)
   }
 }

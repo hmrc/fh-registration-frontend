@@ -41,7 +41,7 @@ object LtdLargeUk {
       "Director",
       "11123",
       "a@w.ro",
-      true,
+      false,
       Some(true),
       Some(Address(
         "Flat 1B",

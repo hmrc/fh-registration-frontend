@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
+
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -29,7 +30,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, SummaryAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -180,31 +181,16 @@ class Application @Inject()(
 
   }
 
-  def checkStatus() = UserAction.async { implicit request ⇒
-    request.registrationNumber match {
-      case Some(registrationNumber) ⇒
-        fhddsConnector
-          .getStatus(registrationNumber)(hc)
-          .map(statusResp ⇒ {
-            Ok(status(statusResp.body, registrationNumber))
-          })
-      case None ⇒
-        Future successful NotFound("Not found: registration number")
-    }
-
+  def checkStatus() = EnrolledUserAction().async { implicit request ⇒
+    fhddsConnector
+      .getStatus(request.registrationNumber)(hc)
+      .map(statusResp ⇒ {
+        Ok(status(statusResp.body, request.registrationNumber))
+      })
   }
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
-  }
-
-  private def formTypeRef(details: BusinessRegistrationDetails) = {
-    details.businessType match {
-      case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
-      case Some("corporate body") ⇒ limitedCompanyFormTypeRef
-      case Some("Partnership")    ⇒ partnershipFormTypeRef
-      case _                      ⇒ limitedCompanyFormTypeRef
-    }
   }
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)

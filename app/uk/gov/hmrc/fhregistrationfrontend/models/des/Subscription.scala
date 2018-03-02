@@ -30,18 +30,36 @@ case class Subscription(
 
 object Subscription {
   implicit val format = Json.format[Subscription]
+
+  def of(sd: SubscriptionDisplay) = {
+    Subscription(
+      sd.organizationType,
+      sd.FHbusinessDetail,
+      sd.GroupInformation,
+      sd.additionalBusinessInformation,
+      sd.businessDetail,
+      sd.businessAddressForFHDDS,
+      sd.contactDetail,
+      sd.declaration
+    )
+  }
 }
 
 case class SubScriptionCreate(
   requestType: String,
-  subScriptionCreate: Subscription)
+  subScriptionCreate: Subscription,
+  changeIndicators: Option[ChangeIndicators]
+)
 
 
 object SubScriptionCreate {
   implicit val format = Json.format[SubScriptionCreate]
 
-  def apply(subScriptionCreate: Subscription): SubScriptionCreate =
-    SubScriptionCreate("Create", subScriptionCreate)
+  def apply(subscription: Subscription): SubScriptionCreate =
+    SubScriptionCreate("Create", subscription, None)
+
+  def subscriptionAmend(changeIndicators: ChangeIndicators, subscription: Subscription): SubScriptionCreate =
+    SubScriptionCreate("Update", subscription, Some(changeIndicators))
 
 }
 

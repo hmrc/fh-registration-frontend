@@ -37,18 +37,20 @@ class FormToDesSpecs extends UnitSpec {
     .as[BusinessRegistrationDetails]
 
   "Limited company submission service" should {
-    "Create a correct json for fhdds-limited-company-minimum.xml" in {
+    "Create a correct json for fhdds-limited-company-minimum" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd, LtdMinimum.application, LtdMinimum.declaration))
+        service.limitedCompanySubmission(brd, LtdMinimum.application, LtdMinimum.declaration),
+        None)
 
-      validatesFor(submission, "fhdds-limited-company-minimum.xml")
+      validatesFor(submission, "fhdds-limited-company-minimum")
     }
 
-    "Create a correct json for fhdds-limited-company-minimum-international.xml" in {
+    "Create a correct json for fhdds-limited-company-minimum-international" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd, LtdMinimumInternational.application, LtdMinimumInternational.declaration))
+        service.limitedCompanySubmission(brd, LtdMinimumInternational.application, LtdMinimumInternational.declaration),
+        None)
 
     validatesFor(submission, "fhdds-limited-company-minimum-international.xml")
 
@@ -60,7 +62,9 @@ class FormToDesSpecs extends UnitSpec {
     "Create a correct json for fhdds-limited-company-large-uk.xml" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd, LtdLargeUk.application, LtdLargeUk.declaration))
+        service.limitedCompanySubmission(brd, LtdLargeUk.application, LtdLargeUk.declaration),
+        None
+      )
 
 
       validatesFor(submission, "fhdds-limited-company-large-uk.xml")
