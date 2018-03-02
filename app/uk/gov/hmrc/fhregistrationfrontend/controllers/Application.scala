@@ -174,14 +174,6 @@ class Application @Inject()(
     }
   }
 
-  def summary = UserAction.async { implicit request ⇒
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Ok(ltd_summary(TestData.mockSummary, bpr))
-      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-    }
-
-  }
-
   def checkStatus() = UserAction.async { implicit request ⇒
     request.registrationNumber match {
       case Some(registrationNumber) ⇒
@@ -191,20 +183,8 @@ class Application @Inject()(
             Ok(status(statusResp.body, registrationNumber))
           })
       case None ⇒
-        Future successful NotFound("Not found: registration number")
+        Future successful errorResultsPages(NotFound, Some("Not found: registration number"))
     }
-  }
-
-  //todo link with summary page
-  def showDeclaration = SummaryAction(save4LaterService) { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr))
-  }
-
-  def submitForm = SummaryAction(save4LaterService) { implicit request ⇒
-    declarationForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(declaration(formWithErrors, request.email, request.bpr)),
-      declaration => Redirect(routes.Application.startForm()) //todo link with final page
-    )
   }
 
   def componentExamples = Action.async { implicit request =>
