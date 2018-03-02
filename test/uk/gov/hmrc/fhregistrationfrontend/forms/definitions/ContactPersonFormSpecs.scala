@@ -31,11 +31,11 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     jobTitleKey → "Parking Attendant",
     telephoneKey → "07012311234",
     emailAddressKey → "george.costanza@seinfeld.org",
-    hasOtherContactAddressKey → "false"
+    usingSameContactAddressKey → "true"
   )
 
   val dataWithOtherAddress = validShort +
-    (hasOtherContactAddressKey → "true")
+    (usingSameContactAddressKey → "false")
 
   val validWithUkAddress = dataWithOtherAddress +
     (isUkAddressKey → "true") ++
@@ -73,7 +73,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
           jobTitleKey → "error.required",
           telephoneKey → "error.required",
           emailAddressKey → "error.required",
-          hasOtherContactAddressKey → "error.required"
+          usingSameContactAddressKey → "error.required"
         )
       )
     }
@@ -116,7 +116,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       data.jobTitle shouldBe "Parking Attendant"
       data.telephone shouldBe "07012311234"
       data.emailAddress shouldBe "george.costanza@seinfeld.org"
-      data.hasOtherContactAddress shouldBe false
+      data.usingSameContactAddress shouldBe true
       data.otherUkContactAddress shouldBe None
       data.otherInternationalContactAddress shouldBe None
     }
@@ -124,7 +124,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     "accept valid with uk address" in {
       val data = dataFromValidForm(validWithUkAddress)
 
-      data.hasOtherContactAddress shouldBe true
+      data.usingSameContactAddress shouldBe false
       data.otherUkContactAddress shouldBe Some(TestData.addressUk)
       data.otherInternationalContactAddress shouldBe None
     }

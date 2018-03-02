@@ -114,26 +114,26 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some(hasOtherContactAddressKey),
+        name = Some(usingSameContactAddressKey),
         legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
-        hasErrors = contactPersonForm(hasOtherContactAddressKey).hasErrors,
-        error = Some(Messages("fh.contact_person.hasOtherContactAddress.error.required")),
-        value = contactPersonForm(hasOtherContactAddressKey).value,
+        hasErrors = contactPersonForm(usingSameContactAddressKey).hasErrors,
+        error = Some(Messages("fh.contact_person.usingSameContactAddress.error.required")),
+        value = contactPersonForm(usingSameContactAddressKey).value,
         radios = List(
           RadioParams(
-            "false",
+            "true",
             "Yes"
           ),
           RadioParams(
-            "true",
+            "false",
             "No",
-            Some(hasOtherContactAddressKey)
+            Some(usingSameContactAddressKey)
           )
         )
       )
     )
 
-    <div id="@hasOtherContactAddressKey" class="js-hidden panel">
+    <div id="@usingSameContactAddressKey" class="js-hidden panel">
 
       @RadioGroup(
         RadioGroupParams(

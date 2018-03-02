@@ -29,7 +29,7 @@ class DesToFormSpec extends UnitSpec {
   val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-display.schema.json")
   val schema = Json.fromJson[SchemaType](schemaAsJson).get
   val validator = new SchemaValidator().validate(schema) _
-  val service = new DesToForm()
+  val service = new DesToFormImpl()
 
   "Des to form" should {
     "Correctly load limited-company-minimum" in {
@@ -47,9 +47,20 @@ class DesToFormSpec extends UnitSpec {
 
 
   def validatesFor(file: String, application: LimitedCompanyApplication) = {
-    loadDesDataFile(file)
-//    val loadedApplication = service limitedCompanySubmission ???
+    val display = loadDesDataFile(file)
+    val loadedApplication = service limitedCompanyApplication display
 //    loadedApplication shouldEqual application.mainBusinessAddress
+//    loadedApplication shouldEqual application.contactPerson
+//    loadedApplication shouldEqual application.companyRegistrationNumber
+//    loadedApplication shouldEqual application.dateOfIncorporation
+//    loadedApplication shouldEqual application.tradingName
+//    loadedApplication shouldEqual application.vatNumber
+//    loadedApplication shouldEqual application.companyOfficers
+//    loadedApplication shouldEqual application.businessStatus
+//    loadedApplication shouldEqual application.importingActivities
+//    loadedApplication shouldEqual application.businessCustomers
+//    loadedApplication shouldEqual application.otherStoragePremises
+    loadedApplication shouldEqual application
   }
 
   def loadDesDataFile(file: String): SubscriptionDisplay = {

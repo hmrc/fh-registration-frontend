@@ -35,7 +35,7 @@ object LtdMinimumInternational {
       "D",
       "123123",
       "a@a.ro",
-      true,
+      false,
       Some(false),
       None,
       Some(InternationalAddress(

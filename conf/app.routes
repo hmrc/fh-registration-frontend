@@ -28,7 +28,7 @@ GET         /summary                                                            
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
-
+GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

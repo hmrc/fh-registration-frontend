@@ -34,7 +34,7 @@ object LtdMinimum {
       "director",
       "07231111",
       "a@a.ro",
-      false,
+      true,
       None,
       None,
       None

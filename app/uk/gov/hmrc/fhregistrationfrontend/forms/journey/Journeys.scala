@@ -67,6 +67,58 @@ object Journeys {
     )
   )
 
+  def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) = {
+    new JourneyPages(
+      Seq[AnyPage](
+        mainBusinessAddressPage withData a.mainBusinessAddress,
+        contactPersonPage withData a.contactPerson,
+        companyRegistrationNumberPage withData a.companyRegistrationNumber,
+        dateOfIncorporationPage withData a.dateOfIncorporation,
+        tradingNamePage withData a.tradingName,
+        vatNumberPage withData a.vatNumber,
+        companyOfficersPage withData a.companyOfficers,
+        businessStatusPage withData a.businessStatus,
+        importingActivitiesPage withData a.importingActivities,
+        businessCustomersPage withData a.businessCustomers,
+        otherStoragePremisesPage withData a.otherStoragePremises
+      )
+    )
+  }
+
+  def unapplySoleTraderApplication(a: SoleProprietorApplication) = {
+    new JourneyPages(
+      Seq[Page[_]](
+        mainBusinessAddressPage withData a.mainBusinessAddress,
+        contactPersonPage withData a.contactPerson,
+        nationalInsuranceNumberPage withData a.nationalInsuranceNumber,
+        tradingNamePage withData a.tradingName,
+        vatNumberPage withData a.vatNumber,
+        businessStatusPage withData a.businessStatus,
+        importingActivitiesPage withData a.importingActivities,
+        businessCustomersPage withData a.businessCustomers,
+        otherStoragePremisesPage withData a.otherStoragePremises
+      )
+    )
+  }
+
+
+  def unapplyPartnershipApplication(a: PartnershipApplication) = {
+    new JourneyPages(
+      Seq[Page[_]](
+        mainBusinessAddressPage withData a.mainBusinessAddress,
+        contactPersonPage withData a.contactPerson,
+        tradingNamePage withData a.tradingName,
+        vatNumberPage  withData a.vatNumber,
+        businessPartnersPage withData a.businessPartners,
+        businessStatusPage withData a.businessStatus,
+        importingActivitiesPage withData a.importingActivities,
+        businessCustomersPage withData a.businessCustomers,
+        otherStoragePremisesPage withData a.otherStoragePremises
+
+      )
+    )
+  }
+
   def partnershipApplication(pageDataLoader: PageDataLoader) =  PartnershipApplication(
       pageDataLoader pageData mainBusinessAddressPage,
       pageDataLoader pageData contactPersonPage,
