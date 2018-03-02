@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
@@ -28,8 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaratio
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.FormToDes
-import uk.gov.hmrc.fhregistrationfrontend.views.html.declaration
-import uk.gov.hmrc.fhregistrationfrontend.views.html.acknowledgement
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 
 import scala.concurrent.Future
 
@@ -42,17 +40,19 @@ class DeclarationController @Inject()(
   fhddsConnector   : FhddsConnector
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
-  val EmailSessionKey = "declaration_email"
+  val emailSessionKey = "declaration_email"
+  val submitTimeKey = "submit_time"
 
   def showDeclaration() = SummaryAction(save4LaterService) { implicit request ⇒
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
   def showAcknowledgment() = UserAction { implicit request ⇒
-    val email = request.session.get(EmailSessionKey).getOrElse("")
-
-    Ok(acknowledgement(email))
-
+    val email: String = request.session.get(emailSessionKey).getOrElse("")
+    val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the form")
+    Ok(
+      acknowledgement_page(email, submitTime)
+    )
   }
 
   def submitForm() = SummaryAction(save4LaterService).async { implicit request ⇒
@@ -66,7 +66,8 @@ class DeclarationController @Inject()(
           Json toJson submission
         )
         fhddsConnector.submit(submissionRequest).map { response ⇒
-          Redirect(routes.DeclarationController.showAcknowledgment()).withSession(request.session + (EmailSessionKey → declaration.email))
+          Redirect(routes.DeclarationController.showAcknowledgment())
+            .withSession(request.session + (emailSessionKey → declaration.email) + (submitTimeKey → response.processingDate.toString))
         }
       }
     )

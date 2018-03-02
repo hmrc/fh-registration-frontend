@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
@@ -29,17 +29,15 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -172,14 +170,6 @@ class Application @Inject()(
     }
   }
 
-  def summary = UserAction.async  { implicit request ⇒
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Ok(ltd_summary(TestData.mockSummary, bpr))
-      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-    }
-
-  }
-
   def checkStatus() = UserAction.async { implicit request ⇒
     request.registrationNumber match {
       case Some(registrationNumber) ⇒
@@ -189,22 +179,12 @@ class Application @Inject()(
             Ok(status(statusResp.body, registrationNumber))
           })
       case None ⇒
-        Future successful NotFound("Not found: registration number")
+        Future successful errorResultsPages(NotFound, Some("Not found: registration number"))
     }
-
   }
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
-  }
-
-  private def formTypeRef(details: BusinessRegistrationDetails) = {
-    details.businessType match {
-      case Some("Sole Trader")    ⇒ soleTraderFormTypeRef
-      case Some("corporate body") ⇒ limitedCompanyFormTypeRef
-      case Some("Partnership")    ⇒ partnershipFormTypeRef
-      case _                      ⇒ limitedCompanyFormTypeRef
-    }
   }
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)

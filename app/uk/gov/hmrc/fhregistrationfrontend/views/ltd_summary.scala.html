@@ -20,18 +20,32 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+@import play.api.Environment
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width")) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = Messages("fh.generic.check")
+  @if(forPrint){
+    <style>
+      .hidden-print, a, footer, .beta-banner, h1, #global-cookie-message {
+        display: none;
+      }
+
+      .header__menu__proposition-name {
+        color: #000;
+      }
+    </style>
+    <h2>@Messages("printApplication.label") @timeStamp</h2>
+  }else{
+    @PageHeading(
+      PageHeadingParams(
+        heading = Messages("fh.generic.check")
+      )
     )
-  )
+  }
 
   <table class="table-font-xsmall">
     <tbody>
