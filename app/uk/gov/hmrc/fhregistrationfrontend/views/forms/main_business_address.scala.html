@@ -24,19 +24,12 @@
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@overThreeYearsPeriodLabels = @{
-  List(
-    Messages("fh.main_business_address.3to5years.label"),
-    Messages("fh.main_business_address.5to10years.label"),
-    Messages("fh.main_business_address.10plusYears.label"))
-}
-
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
 
-@main_template(title = Messages("fh.main_business_address.title"), scriptElem = Some(pageScripts)) {
+@main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -50,7 +43,14 @@
     )
   )
 
-  <div id="review-details" class="form-group">
+  <p>@Messages("fh.mainBusinessAddress.intro")</p>
+
+  <ul class="list list-bullet">
+    <li>@Messages("fh.mainBusinessAddress.point1")</li>
+    <li>@Messages("fh.mainBusinessAddress.point2")</li>
+  </ul>
+
+  <div id="review-details" class="panel panel-border-wide form-group">
     @bpr.businessAddress.line1 <br>
     @bpr.businessAddress.line2 <br>
     @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}

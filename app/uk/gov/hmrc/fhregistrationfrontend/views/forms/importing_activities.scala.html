@@ -28,7 +28,14 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.importing_activities.title"), scriptElem = Some(pageScripts)) {
+
+@helpHtml = {
+  @Messages("fh.importing_activities.eori.confirm.hint_text1")
+  <a href=@{Messages("link.eoriTeam")} target="_blank">@Messages("fh.importing_activities.eori.link_text")</a>
+  @Messages("fh.importing_activities.eori.confirm.hint_text2")
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -50,7 +57,7 @@
       RadioGroupParams(
         name = Some(hasEoriKey),
         legend = Some(Messages("fh.importing_activities.eori.confirm.label")),
-        hintText = Some(Messages("fh.importing_activities.eori.hint_text")),
+        hintHtml = Some(helpHtml),
         hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
         error = Some(Messages("fh.hasEori.error.required")),
         value = importingActivitiesForm(hasEoriKey).value,
@@ -74,6 +81,7 @@
         TextInputParams(
           name = s"$eoriNumberKey.$eoriNumberKey",
           label = Messages("fh.importing_activities.eori.label"),
+          hintText = Some(Messages("fh.importing_activities.eori.hint_text")),
           hasErrors = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors,
           value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value,
           error = Messages("fh.eoriNumber.eoriNumber." + getError(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error))

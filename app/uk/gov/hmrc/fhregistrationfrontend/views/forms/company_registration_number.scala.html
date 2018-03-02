@@ -28,7 +28,14 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.companyRegistrationNumber.title"), scriptElem = Some(pageScripts)) {
+@crnDetails = {
+  @Messages("fh.companyRegistrationNumber.details")
+  <a href="@Messages("link.searchCompaniesHouse")" target="_blank">
+    @Messages("fh.companyRegistrationNumber.details_companies_house")
+  </a>.
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -57,20 +64,7 @@
       )
     )
 
-    <div class="form-group" style="margin-top:2em">
-      <details id="company-registration-number-details">
-        <summary class="summary">
-          @Messages("fh.companyRegistrationNumber.summary")
-        </summary>
-        <div>
-          @Messages("fh.companyRegistrationNumber.details")
-          <a href="https://www.gov.uk/government/organisations/companies-house" id="companies-house">
-            @Messages("fh.companyRegistrationNumber.details_companies_house")
-            <span class="visuallyhidden">@Messages("fh.companyRegistrationNumber.details_companies_house")</span>
-          </a>
-        </div>
-      </details>
-    </div>
+    @Details(Messages("fh.companyRegistrationNumber.summary"), crnDetails)
 
     @SubmitButtons(
       SubmitButtonsParams(

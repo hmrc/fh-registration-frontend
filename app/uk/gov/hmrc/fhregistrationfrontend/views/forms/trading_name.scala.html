@@ -28,7 +28,7 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.tradingName.title"), scriptElem = Some(pageScripts)) {
+@main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -51,7 +51,7 @@
         name = hasTradingNameKey,
         value = tradingNameForm(tradingNameKey).value,
         yesNoValue = tradingNameForm(hasTradingNameKey).value,
-        yesNoLabel = Messages("fh.tradingName.confirm.label"),
+        yesNoLabel = Messages("fh.trading_name.confirm.label"),
         yesNoError = Messages("fh.tradingName_yesNo.error.required"),
         valueLabel = Messages("fh.tradingName.label"),
         valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
@@ -62,8 +62,7 @@
 
     @SubmitButtons(
       SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
+        label = Messages("button.save.continue")
       ),
       navigation
     )

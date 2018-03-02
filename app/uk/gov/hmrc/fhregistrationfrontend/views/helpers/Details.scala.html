@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.fhregistrationfrontend.views.helpers
+@(summary:String, details: Html)(implicit message : Messages)
 
-import play.twirl.api.Html
+<details>
 
-case class RadioGroupParams(
-  name: Option[String] = None,
-  radios: List[RadioParams],
-  inline: Boolean = true,
-  legend: Option[String] = None,
-  legendSize: Option[String] = None,
-  required: Boolean = false,
-  error: Option[String] = None,
-  value: Option[String] = None,
-  hintText: Option[String] = None,
-  hintHtml: Option[Html] = None,
-  hasErrors: Boolean = false
-)
+  <summary><span class="summary">@summary</span></summary>
+
+  <div class="panel panel-border-narrow">
+
+    @details
+
+  </div>
+
+</details>

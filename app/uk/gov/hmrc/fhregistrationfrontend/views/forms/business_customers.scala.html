@@ -28,7 +28,7 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(title = Messages("fh.business_customers.title"), scriptElem = Some(pageScripts)) {
+@main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -50,6 +50,7 @@
       RadioGroupParams(
         name = Some(numberOfCustomersKey),
         legend = Some(Messages("fh.business_customers.label")),
+        hintText = Some(Messages("fh.business_customers.hint_text")),
         inline = false,
         required = true,
         hasErrors = businessCustomersForm(numberOfCustomersKey).hasErrors,
@@ -69,12 +70,12 @@
             Messages("fh.business_customers.11_50.label")
           ),
           RadioParams(
-            Messages("fh.business_customers.51_100.label"),
-            Messages("fh.business_customers.51_100.value")
+            Messages("fh.business_customers.51_100.value"),
+            Messages("fh.business_customers.51_100.label")
           ),
           RadioParams(
-            Messages("fh.business_customers.101_plus.label"),
-            Messages("fh.business_customers.101_plus.value")
+            Messages("fh.business_customers.101_plus.value"),
+            Messages("fh.business_customers.101_plus.label")
           )
         )
       )

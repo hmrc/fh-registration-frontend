@@ -20,23 +20,16 @@
 
 @(businessTypeForm: Form[BusinessType])(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(Messages("fh.business_type.title"), mainClass = Some("full-width")) {
+@typeNotListed = {
+  <p>@Messages("fh.business_type.details1")</p>
+  <p><a href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(businessTypeForm.hasErrors) {
-    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
-      <ul class="error-summary-list">
-      @if(businessTypeForm("businessType").hasErrors){
-        <li id="period-error-link">@{
-          Messages(businessTypeForm("businessType").errors.seq.head.message)
-        }
-        </li>
-      }
-      </ul>
-    </div>
-  }
+  @error_box(businessTypeForm)
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType(), 'novalidate -> "novalidate") {
 
@@ -52,6 +45,7 @@
       RadioGroupParams(
         name = Some("businessType"),
         inline = false,
+        error = Some(Messages("fh.businessType.error.required")),
         hasErrors = businessTypeForm("businessType").hasErrors,
         value = businessTypeForm("businessType").value,
         radios = List(
@@ -70,6 +64,8 @@
         )
       )
     )
+
+    @Details(Messages("fh.business_type.summary"), typeNotListed)
 
     @SubmitButtons(
       SubmitButtonsParams(

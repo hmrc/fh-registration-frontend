@@ -16,16 +16,27 @@
 
 @(url: String, sectionName: String)(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme") {
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  <p class="js-show">
+    <a id="back" class="back-link print-hidden" href="JavaScript: window.history.go(-1)">
+    @Messages("link.back")
+    </a>
+  </p>
 
   <form action="@{url}" method="DELETE">
 
     <h1>@Messages("fh.delete_confirmation_section.header", sectionName)</h1>
 
-    <br><br><button class="button">@Messages("fh.delete_confirmation_section.delete", sectionName)</button><br><br>
+    <span class="form-hint">@sectionName will be removed from your application, use the back link if you would prefer to edit the details instead.</span>
 
-    <p class="back-to-previous print-hidden">
-      <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
-    </p>
+    <button class="button form-actions">@Messages("fh.delete_confirmation_section.delete", sectionName)</button><br><br>
+
   </form>
 }
