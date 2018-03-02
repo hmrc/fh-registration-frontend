@@ -26,10 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement, declaration}
-
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.FormToDes
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 
@@ -54,7 +51,7 @@ class DeclarationController @Inject()(
 
   def showAcknowledgment() = UserAction { implicit request ⇒
     val email: String = request.session.get(emailSessionKey).getOrElse("")
-    val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the form")
+    val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the application")
     Ok(
       acknowledgement_page(email, submitTime)
     )

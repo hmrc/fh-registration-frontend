@@ -29,8 +29,6 @@ POST        /submit                                                             
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
 GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
-GET         /downloadPdf/:timeStamp                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
-
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

@@ -18,11 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
-<<<<<<< HEAD
-
 import org.joda.time.DateTime
-=======
->>>>>>> FHDDS-773: get submit time from session
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -34,11 +30,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
-
 import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, SummaryAction, UserAction}
-
-import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
-
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -189,17 +181,6 @@ class Application @Inject()(
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
-  }
-
-  def acknowledgement = SummaryAction(save4LaterService) { implicit request =>
-    import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-    val submitTime: DateTime = DateTime.now()
-      Ok(
-        acknowledgement_page(
-          Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true, ggEmail = Some("test@example.com")),
-          submitTime
-        )
-      )
   }
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
