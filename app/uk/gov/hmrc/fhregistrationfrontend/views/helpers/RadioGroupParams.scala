@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import play.twirl.api.Html
+
 case class RadioGroupParams(
   name: Option[String] = None,
   radios: List[RadioParams],
@@ -26,5 +28,6 @@ case class RadioGroupParams(
   error: Option[String] = None,
   value: Option[String] = None,
   hintText: Option[String] = None,
+  hintHtml: Option[Html] = None,
   hasErrors: Boolean = false
 )
