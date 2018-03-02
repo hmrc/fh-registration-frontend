@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(title: String,
+@(title: String="",
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
@@ -40,7 +40,7 @@
 }
 
 @govuk_wrapper(appConfig = uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config,
-               title = title,
+               title = Messages("app.name"),
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
