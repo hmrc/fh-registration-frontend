@@ -60,12 +60,13 @@ fh.generic.application=view and print application
 fh.generic.sign_out=Sign out
 fh.generic.alternate_logout.button=Save and come back later
 fh.generic.print_application=View and print application
-fh.generic.print_application_status=Print page for your records
+fh.generic.print_application_status=Print a copy of your application
 fh.generic.application_status_continue_read_only=View application
 fh.generic.application_status_continue=View or change application
-fh.status.lede=Your application has status:
+fh.status.lede=The status of your application is:
 fh.generic.application_link=your application
 fh.generic.bta_link=Business tax account home
+fh.generic.on=on
 
 fh.generic.create_new_application_link=Create a new application
 
@@ -191,6 +192,7 @@ fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=En
 fh.trading_name.title=Trading name
 fh.tradingName.title=Trading name
 fh.tradingName.confirm.label=Does the business use a trading name
+fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one? 
 fh.trading_name.confirm.label=Does the business use a trading name
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
 fh.tradingName.label=Enter the trading name
@@ -217,7 +219,7 @@ fh.vatNumber_yesNo.error.required=Select whether the business has a VAT registra
 fh.vatNumber.label=Enter the VAT registration number
 fh.vatNumber.hintText=For example, 123456789
 fh.vatNumber_value.error.required=Enter the VAT registration number
-fh.vatNumber_value.error.pattern=Enter a valid VAT registration number
+fh.vatNumber_value.error.pattern=Enter a valid UK VAT registration number
 
 # - Business status
 #===========================================================
@@ -245,7 +247,10 @@ fh.importing_activities.title=Importing activities
 fh.importing_activities.eori.confirm.label=Does the business have any EORI numbers?
 fh.hasEori.error.required=Select whether the business has any EORI numbers
 fh.importing_activities.eori.label=Enter the EORI number
-fh.importing_activities.eori.hint_text=The business should have an EORI number if it imports goods with sellers outside the EU. If the business does not have an EORI number, answer ''No''.
+fh.importing_activities.eori.hint_text=For example, GB123456789000
+fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods with sellers outside the EU. Contact the
+fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
+fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window)
 fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
 fh.eoriNumber.eoriNumber.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under any of its EORI numbers?
@@ -254,15 +259,16 @@ fh.eoriNumber.goodsImportedOutsideEori.error.required=Select whether the busines
 # - Business Customers
 #===========================================================
 fh.business_customers.title=Business customers
-fh.business_customers.label=How many sellers established outside the EU does the business store goods for?
-fh.numberOfCustomers.error.required=Select how many sellers established outside the EU the business stores goods for
+fh.business_customers.label=How many overseas customers established outside the EU does the business store goods for, currently?
+fh.business_customers.hint_text=You only need to tell us about the part of the business that deals with fulfilment.
+fh.numberOfCustomers.error.required=Select how many sellers established outside the EU the business currently stores goods for
 fh.business_customers.none.label=None
 fh.business_customers.none.value=None
-fh.business_customers.1_10.label=1-10
+fh.business_customers.1_10.label=1 to 10
 fh.business_customers.1_10.value=1-10
-fh.business_customers.11_50.label=11-50
+fh.business_customers.11_50.label=11 to 50
 fh.business_customers.11_50.value=11-50
-fh.business_customers.51_100.label=51-100
+fh.business_customers.51_100.label=51 to 100
 fh.business_customers.51_100.value=51-100
 fh.business_customers.101_plus.label=More than 100
 fh.business_customers.101_plus.value=More than 100
@@ -270,13 +276,13 @@ fh.business_customers.101_plus.value=More than 100
 # - Other storage premises
 #===========================================================
 fh.other_storage_premises.title=Other storage premises
-fh.other_storage_premises.confirm.label=Other than the main business address, does the business use any other premises to store third-party goods imported from outside the EU?
+fh.other_storage_premises.confirm.label=Does the business store third-party goods imported from outside the EU at any premises in the UK other than its main business address?
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.each.title=Storage Premises {0}
 fh.other_storage_premises.third_party.label=Are these third party premises?
-fh.other_storage_premises.company.addMore = Have more premises to add?
+fh.other_storage_premises.company.addMore=Are there any more premises?
 fh.storagePremise_address.storagePremise_address.Line1.error.required=You must enter line 1 of the address
 fh.storagePremise_address.storagePremise_address.Line1.error.pattern=Address lines must not be longer than 35 characters and contain illegal characters
 fh.storagePremise_address.storagePremise_address.Line2.error.required=You must enter line 2 of the address
@@ -359,7 +365,7 @@ fh.company_officers.intro=You must tell us about all the directors and company s
 fh.company_officers.each.title=Company officer {0}
 fh.company_officers.entity_type.label=Is company officer an individual or a company?
 fh.identificationType.error.required=Select whether company officer {0} is an invidual or a company
-fh.addMore.error.required=Select whether have more to add
+fh.addMore.error.required=Select whether there are any more to add
 
 fh.company_officers.status.label=What is their role?
 fh.individualIdentification.role.error.required=Select what role company officer {0} has in the company
@@ -402,18 +408,18 @@ fh.company_officers.company.label=A company
 fh.company_officers.company.title=Enter the company details
 fh.company_officers.company.company_name.label=Company name
 fh.companyIdentification.companyName.error.required=Enter a company name for company officer {0}
-fh.company_officers.company.vat_registration.confirm.label=Does the company have a VAT registration number?
+fh.company_officers.company.vat_registration.confirm.label=Does the company have a UK VAT registration number?
 fh.company_officers.company.vat_registration.confirm.error=Select whether company officer {0} has a VAT registration number
-fh.company_officers.company.vat_registration.error=Enter a valid VAT registration number
+fh.company_officers.company.vat_registration.error=Enter a valid UK VAT registration number
 fh.companyIdentification.hasVat.error.required=Select whether company officer {0} has a VAT registration number
 fh.companyIdentification.vatRegistration.error.required=Enter a VAT registration number for company officer {0}
-fh.companyIdentification.vatRegistration.error.pattern=Enter a valid VAT registration number for company officer {0}
+fh.companyIdentification.vatRegistration.error.pattern=Enter a valid UK VAT registration number for company officer {0}
 fh.company_officers.company.company_registration_number.label=Enter the company registration number
 fh.company_officers.company.company_registration_number.hint_text=For example, 12345678 or SC123456
 fh.companyIdentification.companyRegistration.error.required=Enter the company registration number for company officer {0}
 fh.companyIdentification.companyRegistration.error.pattern=Enter a valid company registration number for company officer {0}
 fh.companyIdentification.role.error.required=Select what role company officer {0} has in the company
-fh.company_officers.company.addMore= Have more officers to add?
+fh.company_officers.company.addMore=Are there any more company officers?
 
 # - Business partners
 #============================================================
@@ -582,9 +588,9 @@ fh.business_partners.utr.label=Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.hintText=For example, 1234567890
 
-fh.ct_utr.label=Unique Taxpayer reference
+fh.ct_utr.label=Unique Taxpayer Reference
 
-fh.business_partners.addMore = Add more partners?
+fh.business_partners.addMore=Are there any more partners?
 
 # - save for later page
 #===========================================================
@@ -638,3 +644,4 @@ fh.survey_hint=(takes 30 seconds)
 
 link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
 link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
+link.eoriTeam=https://www.tax.service.gov.uk/shortforms/form/EORIContact
