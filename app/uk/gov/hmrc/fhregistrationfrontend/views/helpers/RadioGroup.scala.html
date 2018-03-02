@@ -44,23 +44,29 @@
 }
 
 <div class="@{formGroupClass}">
-    <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
-        @legend
-        @if(params.hasErrors) {
-            <span class="error-message" id="@{params.name}-inline-error">
-              @params.error
-            </span>
-        }
+  <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
 
-        @if(params.hintText.nonEmpty){
-          <span class="form-hint">@params.hintText</span>
-        }
+    @legend
 
-        @for(radio <- params.radios){
-          <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
-            <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
-            <label for="@params.name@radio.value">@radio.label</label>
-          </div>
-        }
-    </fieldset>
+    @if(params.hasErrors) {
+        <span class="error-message" id="@{params.name}-inline-error">
+          @params.error
+        </span>
+    }
+
+    @if(params.hintText.nonEmpty){
+      <span class="form-hint">@params.hintText</span>
+    }
+
+    @if(params.hintHtml.nonEmpty){
+      <span class="form-hint">@params.hintHtml</span>
+    }
+
+    @for(radio <- params.radios){
+      <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
+        <input id="@params.name@radio.value" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
+        <label for="@params.name@radio.value">@radio.label</label>
+      </div>
+    }
+  </fieldset>
 </div>

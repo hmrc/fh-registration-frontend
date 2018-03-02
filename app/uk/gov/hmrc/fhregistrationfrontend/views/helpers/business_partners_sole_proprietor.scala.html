@@ -103,6 +103,7 @@
       TextInputParams(
         name = s"$businessPartnerSoleProprietorKey.$vatRegistrationKey",
         label = Messages("fh.vatNumber.label"),
+        hintText = Some(Messages("fh.vatNumber.hintText")),
         value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").value,
         hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").hasErrors,
         error = Messages("fh.businessPartnerSoleProprietor.vat_value." + businessPartnerForm(s"$businessPartnerSoleProprietorKey.$vatRegistrationKey").error.fold("")(_.message))
@@ -117,7 +118,7 @@
     TextInput(
       TextInputParams(
         name = s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey",
-        label = Messages("fh.ct_utr.label"),
+        label = Messages("fh.business_partners.utr.label"),
         hintText = Some(Messages("fh.business_partners.utr.hintText")),
         value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey").value,
         hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey").hasErrors,
