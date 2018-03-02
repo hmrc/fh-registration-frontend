@@ -32,7 +32,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, For
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement, declaration}
 
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.FormToDes
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement, acknowledgement_page, declaration}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 
 import scala.concurrent.Future
 
@@ -46,21 +46,19 @@ class DeclarationController @Inject()(
   fhddsConnector: FhddsConnector
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
-  val EmailSessionKey = "declaration_email"
+  val emailSessionKey = "declaration_email"
+  val submitTimeKey = "submit_time"
 
   def showDeclaration() = SummaryAction(save4LaterService) { implicit request ⇒
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
   def showAcknowledgment() = UserAction { implicit request ⇒
-    val email = request.session.get(EmailSessionKey).getOrElse("")
+    val email: String = request.session.get(emailSessionKey).getOrElse("")
 
-    val submitTime: DateTime = DateTime.now()
+    val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the form")
     Ok(
-      acknowledgement_page(
-        Declaration(fullName = "test user", jobTitle = "Director", alternativeEmail = None, isUseGgEmail = true, ggEmail = Some("test@example.com")),
-        submitTime
-      )
+      acknowledgement_page(email, submitTime)
     )
   }
 
