@@ -85,8 +85,7 @@
         label = Messages("fh.contact_person.telephone.label"),
         value = contactPersonForm(telephoneKey).value,
         error = Messages("fh.contact_person.telephone." + contactPersonForm(telephoneKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(telephoneKey).hasErrors,
-        isNumber = true
+        hasErrors = contactPersonForm(telephoneKey).hasErrors
       )
     )
 
