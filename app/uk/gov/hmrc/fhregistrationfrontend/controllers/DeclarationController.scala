@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
