@@ -49,7 +49,6 @@ class DeclarationController @Inject()(
 
   def showAcknowledgment() = UserAction { implicit request ⇒
     val email: String = request.session.get(emailSessionKey).getOrElse("")
-
     val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the form")
     Ok(
       acknowledgement_page(email, submitTime)
@@ -67,7 +66,8 @@ class DeclarationController @Inject()(
           Json toJson submission
         )
         fhddsConnector.submit(submissionRequest).map { response ⇒
-          Redirect(routes.DeclarationController.showAcknowledgment()).withSession(request.session + (emailSessionKey → declaration.email))
+          Redirect(routes.DeclarationController.showAcknowledgment())
+            .withSession(request.session + (emailSessionKey → declaration.email) + (submitTimeKey → response.processingDate.toString))
         }
       }
     )
