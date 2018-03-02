@@ -18,31 +18,35 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
+<<<<<<< HEAD
 
 import org.joda.time.DateTime
+=======
+>>>>>>> FHDDS-773: get submit time from session
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.{Configuration, Environment, Logger}
-import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
+
 import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, SummaryAction, UserAction}
+
+import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
+
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 

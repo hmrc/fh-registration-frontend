@@ -20,16 +20,13 @@ import java.time.LocalDateTime
 
 import javax.inject.Inject
 import play.api.mvc.AnyContent
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.sole_proprietor_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.partnership_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
 import uk.gov.hmrc.http.BadRequestException
 
 
