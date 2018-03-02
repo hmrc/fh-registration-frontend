@@ -161,6 +161,12 @@ fh.previousAddressStartdate.year=Year
 fh.previousAddressStartdate.day.error.number=Enter the day of when the business started operating from the previous address
 fh.previousAddressStartdate.month.error.number=Enter the month of when the business started operating from the previous address
 fh.previousAddressStartdate.year.error.number=Enter the year of when the business started operating from the previous address
+fh.previousAddressStartdate.day.error.max=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.day.error.min=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.month.error.max=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.month.error.min=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.year.error.max=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.year.error.min=Enter a valid date for when the business started operating from the previous address
 
 
 # - Contact Person
@@ -249,11 +255,11 @@ fh.business_status.new_business.hint_text=For example, 31 07 2019
 fh.business_status.new_business.error.number=Enter the intended start date
 fh.business_status.new_business.error.pattern=Enter a valid date for the intended start date
 fh.proposedStartDate.day.error.max=Enter a valid day for the intended start date
-fh.proposedStartDate.day.error.mix=Enter a valid day for the intended start date
+fh.proposedStartDate.day.error.min=Enter a valid day for the intended start date
 fh.proposedStartDate.month.error.max=Enter a valid month for the intended start date
-fh.proposedStartDate.month.error.mix=Enter a valid month for the intended start date
+fh.proposedStartDate.month.error.min=Enter a valid month for the intended start date
 fh.proposedStartDate.year.error.max=Enter a valid year for the intended start date
-fh.proposedStartDate.year.error.mix=Enter a valid year for the intended start date
+fh.proposedStartDate.year.error.min=Enter a valid year for the intended start date
 fh.proposedStartDate.day.error.number=Enter the day for the intended start date
 fh.proposedStartDate.month.error.number=Enter the month for the intended start date
 fh.proposedStartDate.year.error.number=Enter the year for the intended start date
@@ -375,6 +381,12 @@ fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
 fh.dateOfIncorporation.summary=Where to find the date of incorporation
 fh.dateOfIncorporation.details=You can find this date on the company's Certificate of Incorporation, or
 fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window)
+fh.dateOfIncorporation.day.error.max=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.day.error.min=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.month.error.max=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.month.error.min=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.year.error.max=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.year.error.min=Enter a valid date for the date of incorporation
 
 # - Company Officers (Corporate Body)
 #===========================================================

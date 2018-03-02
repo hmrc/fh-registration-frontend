@@ -24,4 +24,11 @@ case class BusinessCustomers (
 
 object BusinessCustomers {
   implicit val format = Json.format[BusinessCustomers]
+  val businessCustomersOptions = Seq(
+    "None",
+    "1-10",
+    "11-50",
+    "51-100",
+    "More than 100"
+  )
 }

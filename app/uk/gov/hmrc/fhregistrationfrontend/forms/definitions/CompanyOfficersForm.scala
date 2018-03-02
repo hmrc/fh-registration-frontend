@@ -67,7 +67,7 @@ object CompanyOfficersForm {
   val hasVatMapping = hasVatKey → yesOrNo
 
   val companyOfficerCompanyMapping = mapping(
-    companyNameKey → nonEmptyText,
+    companyNameKey → companyName,
     hasVatMapping,
     vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
     companyRegistrationKey → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
