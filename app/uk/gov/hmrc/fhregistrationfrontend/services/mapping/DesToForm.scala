@@ -85,7 +85,7 @@ class DesToFormImpl extends DesToForm {
 
   def otherStoragePremises(allOtherInformation: AllOtherInformation) = OtherStoragePremises(
     allOtherInformation.numberOfpremises != "0",
-    allOtherInformation.premises map premises
+    ListWithTrackedChanges fromValues (allOtherInformation.premises map premises)
   )
 
   def premises(premise: des.Premises): StoragePremise = StoragePremise(
@@ -120,11 +120,11 @@ class DesToFormImpl extends DesToForm {
       businessDetail.proposedStartDate
     )
 
-  def companyOfficers(partners: Option[des.PartnerCorporateBody]): List[CompanyOfficer] =
-    partners
-    .flatMap(_.companyOfficials)
-    .map( _ map companyOfficial)
-    .get
+  def companyOfficers(partners: Option[des.PartnerCorporateBody]): ListWithTrackedChanges[CompanyOfficer] =
+    ListWithTrackedChanges fromValues partners
+      .flatMap(_.companyOfficials)
+      .map( _ map companyOfficial)
+      .get
 
   def companyOfficial(official: des.CompanyOfficial): CompanyOfficer = {
     official match {

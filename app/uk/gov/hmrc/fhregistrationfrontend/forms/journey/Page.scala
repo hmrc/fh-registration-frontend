@@ -63,6 +63,7 @@ object Page {
   import DateOfIncorporation.format
   import MainBusinessAddress.format
   import BusinessPartner.businessPartnerFormat
+  import ListWithTrackedChanges.listWithTrackedChangesFormat
 
   type AnyPage = Page[_]
 

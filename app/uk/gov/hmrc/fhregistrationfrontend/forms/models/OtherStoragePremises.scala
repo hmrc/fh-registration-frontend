@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 
 case class OtherStoragePremises (
   hasValue: Boolean,
-  value: List[StoragePremise]
+  value: ListWithTrackedChanges[StoragePremise]
 )
 
 object OtherStoragePremises {

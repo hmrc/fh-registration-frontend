@@ -19,16 +19,12 @@ case class FhddsBackendStub()
     country = "GB")
 
   private def mkBusinessPartnerRecord(businessType: String) = {
-    BusinessRegistrationDetails(businessName = "Real Business Inc",
-      businessType = Some(businessType),
+    BusinessRegistrationDetails(
+      businessName = Some("Real Business Inc"),
       businessAddress = aFakeAddress,
-      sapNumber = "1234567890",
-      safeId = "XE0001234567890",
-      agentReferenceNumber = Some("JARN1234567"),
-      firstName = None,
-      lastName = None,
-      utr = Some("1111111111"),
-      identification = None)
+      safeId = Some("XE0001234567890"),
+      utr = Some("1111111111")
+     )
   }
 
   def hasBusinessDetails(formType: String, businessType: String) = {

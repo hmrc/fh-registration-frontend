@@ -33,7 +33,7 @@
 
     @if(data.hasValue) {
 
-        @for((storagePremise:StoragePremise, index) <- data.value.zipWithIndex) {
+        @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
 
             @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"), section = {index+1}.toString())
 

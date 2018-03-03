@@ -20,13 +20,13 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises, StoragePremise}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, OtherStoragePremises, StoragePremise}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 case class OtherStoragePremisesPage(
   mainPage: Page[Boolean],
-  storagePremisePage: Page[List[StoragePremise]],
+  storagePremisePage: Page[ListWithTrackedChanges[StoragePremise]],
   section: Option[String] = None
 ) extends Page[OtherStoragePremises] {
 
@@ -92,7 +92,7 @@ case class OtherStoragePremisesPage(
 
   override val data: Option[OtherStoragePremises] = {
     mainPage.data map {
-      hasOthers ⇒ OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse List.empty)
+      hasOthers ⇒ OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse ListWithTrackedChanges.empty[StoragePremise])
     }
   }
 }

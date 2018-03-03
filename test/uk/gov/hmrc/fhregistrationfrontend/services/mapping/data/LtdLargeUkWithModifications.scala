@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
-object LtdLargeUk {
+object LtdLargeUkWithModifications {
   val application = LimitedCompanyApplication(
     MainBusinessAddress(
       "Less than 3 years",
@@ -77,8 +77,7 @@ object LtdLargeUk {
             Some("AA123231"),
             None, None, None,
             "Director"
-          )
-        ) → ListWithTrackedChanges.Added,
+          )) → ListWithTrackedChanges.NoChange,
         CompanyOfficer(
           CompanyOfficerType.Company,
           CompanyOfficerCompany(
@@ -88,34 +87,61 @@ object LtdLargeUk {
             None,
             "Company Secretary"
           )
-        ) → ListWithTrackedChanges.Added),
-      List.empty),
-    BusinessStatus(true, Some(LocalDate.of(2018,6, 30))),
+        ) → ListWithTrackedChanges.Updated),
+      List(
+        CompanyOfficer(
+          CompanyOfficerType.Company,
+          CompanyOfficerCompany(
+            "Some Other Company",
+            true,
+            Some("123456789"),
+            None,
+            "Company Secretary"
+          )
+        )
+      )),
+    BusinessStatus(true, Some(LocalDate.of(2018, 6, 30))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
-    OtherStoragePremises(true,
-      ListWithTrackedChanges(
-        List(
-          StoragePremise(
-            Address(
-              "1 Some High Street",
-              None,
-              None,
-              Some("Sometown"),
-              "Z99 2YY",
-              None),
-            false) → ListWithTrackedChanges.Added,
-          StoragePremise(
-            Address(
-              "25 Testing Close",
-              None,
-              None,
-              Some("Othertown"),
-              "Z9 3WW",
-              None),
-            true) → ListWithTrackedChanges.Added),
-        List.empty))
-  )
+    OtherStoragePremises(true, ListWithTrackedChanges(
+      List(
+        StoragePremise(
+          Address(
+            "1 Some High Street",
+            None,
+            None,
+            Some("Sometown"),
+            "Z99 2YY",
+            None),
+          false) → ListWithTrackedChanges.Added,
+        StoragePremise(
+          Address(
+            "25 Testing Close",
+            None,
+            None,
+            Some("Othertown"),
+            "Z9 3WW",
+            None),
+          true) → ListWithTrackedChanges.Updated,
+        StoragePremise(
+          Address(
+            "26 Testing Close",
+            None,
+            None,
+            Some("Othertown"),
+            "Z9 3WW",
+            None),
+          true) → ListWithTrackedChanges.NoChange
+      ),
+      List(StoragePremise(
+        Address(
+          "27 Testing Close",
+          None,
+          None,
+          Some("Othertown"),
+          "Z9 3WW",
+          None),
+        true)))))
 
   val declaration = Declaration(
     "C",

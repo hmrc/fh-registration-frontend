@@ -43,21 +43,24 @@ object LtdMinimum {
     DateOfIncorporation(LocalDate.of(2015, 3, 20)),
     TradingName(false, None),
     VatNumber(false, None),
-    List(CompanyOfficer(
-      CompanyOfficerType.Individual,
-      CompanyOfficerIndividual(
-        "C",
-        "M",
-        true,
-        Some("AA123456A"),
-        None, None, None,
-        "Director"
-      )
-    )),
+    ListWithTrackedChanges(
+      List(
+        CompanyOfficer(
+          CompanyOfficerType.Individual,
+          CompanyOfficerIndividual(
+            "C",
+            "M",
+            true,
+            Some("AA123456A"),
+            None, None, None,
+            "Director"
+          )
+        ) → ListWithTrackedChanges.Added),
+      List.empty),
     BusinessStatus(false, None),
     ImportingActivities(false, None),
     BusinessCustomers("1-10"),
-    OtherStoragePremises(false, List.empty)
+    OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
   )
 
   val declaration = Declaration(
