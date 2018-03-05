@@ -20,6 +20,8 @@ GET         /form/:page                                                         
 GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
 POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
+POST        /form/:page/:section/delete                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String)
+GET         /form/:page/:section/confirmDelete                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /downloadPdf/:timeStamp                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)

@@ -19,9 +19,12 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{PageAction, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Rendering
+import uk.gov.hmrc.fhregistrationfrontend.actions.{PageAction, PageRequest, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
+
+import scala.concurrent.Future
 
 @Singleton
 class FormPageController @Inject()(
@@ -55,14 +58,38 @@ class FormPageController @Inject()(
               if (page.nextSubsection.isDefined)
                 Redirect(routes.FormPageController.loadWithSection(page.id, page.nextSubsection.get))
               else
-                request.journey next pageId match {
-                  case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
-                  case None           ⇒ Redirect(routes.SummaryController.summary())
-                }
+                showNextPage(page)
             }
           }
       }
     )
+  }
+
+  def deleteSection[T](pageId: String, sectionId: String): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    request.page[T].delete match {
+      case None          ⇒ Future successful BadRequest("bad request")
+      case Some(newPage) ⇒
+        save4LaterService
+          .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
+          .map { _ ⇒
+            showNextPage(newPage)
+          }
+    }
+  }
+
+  def confirmDeleteSection[T](pageId: String, sectionId: String): Action[AnyContent] = UserAction { implicit request ⇒
+    Ok(confirm_delete_section(pageId, sectionId))
+  }
+
+
+  def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
+    if (newPage.nextSubsection.isDefined)
+      Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
+    else
+      request.journey next newPage.id match {
+        case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
+        case None           ⇒ Redirect(routes.SummaryController.summary())
+      }
   }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) = {

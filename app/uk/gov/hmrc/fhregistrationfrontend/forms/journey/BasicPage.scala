@@ -56,4 +56,6 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
   override val withSubsection: PartialFunction[Option[String], Page[T]] = {
     case None ⇒ this
   }
+
+  override def delete: Option[Page[T]] = None
 }
