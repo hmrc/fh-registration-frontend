@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, hash: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -47,8 +47,8 @@
 
     @helper.CSRF.formField
 
-    @if(companyOfficersForm(identificationTypeKey).value) {
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDeleteSection(Messages("fh.company_officers.each.title", section))}" style="float:right;">Remove</a>
+    @if(companyOfficersForm.value.isDefined) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("companyOfficers", section, hash)}" style="float:right;">Remove</a>
     }
     <h2>@Messages("fh.company_officers.each.title", section)</h2>
 

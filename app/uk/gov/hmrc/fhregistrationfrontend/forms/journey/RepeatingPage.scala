@@ -62,8 +62,8 @@ case class RepeatingPage[T](
   override def nextSubsection: Option[String] =
     if (addMore)
       Some(section(value.size))
-    else if (index < value.size - 1)
-      Some(section(index + 1))
+//    else if (index < value.size - 1)
+//      Some(section(index + 1))
     else
       None
 

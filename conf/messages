@@ -305,7 +305,8 @@ fh.other_storage_premises.confirm.label=Does the business store third-party good
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
-fh.other_storage_premises.each.title=Storage Premises {0}
+fh.other_storage_premises.each.title=Storage premises {0}
+fh.otherStoragePremises.each.title=Storage premises {0}
 fh.other_storage_premises.third_party.label=Are these premises operated by a third party?
 fh.other_storage_premises.company.addMore=Are there any more premises?
 fh.storagePremise_address.storagePremise_address.Line1.error.required=You must enter line 1 of the address
@@ -394,6 +395,7 @@ fh.dateOfIncorporation.year.error.min=Enter a valid date for the date of incorpo
 fh.company_officers.title=Company officers
 fh.company_officers.intro=You must tell us about all the directors and company secretaries. We will use this information to check their identity
 fh.company_officers.each.title=Company officer {0}
+fh.companyOfficers.each.title=Company officer {0}
 fh.company_officers.entity_type.label=Is company officer an individual or a company?
 fh.identificationType.error.required=Select whether company officer {0} is an individual or a company
 fh.addMore.error.required=Select whether there are any more to add
@@ -461,6 +463,7 @@ fh.business_partners.entity=What is a legal entity?
 fh.business_partners.entity_intro=A legal entity is an individual, company or other organisation that can legally enter into an agreement or contract. Select the option that best describes how each partner is represented in the partnership.
 
 fh.business_partners.add_a_partner=Partner {0}
+fh.businessPartners.each.title=Partner {0}
 fh.business_partners.entity_type.label=What type of legal entity is this partner?
 fh.businessPartnersType.error.required=Select the type of legal entity for the partner {0}
 

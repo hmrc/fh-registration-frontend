@@ -45,6 +45,7 @@ trait Page[T] extends Rendering {
   val format: Format[T]
   val data: Option[T]
   val withSubsection: PartialFunction[Option[String], Page[T]]
+  val hash: String
 
   def withData(data: T): Page[T]
 

@@ -65,20 +65,28 @@ class FormPageController @Inject()(
     )
   }
 
-  def deleteSection[T](pageId: String, sectionId: String): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
-    request.page[T].delete match {
-      case None          ⇒ Future successful BadRequest("bad request")
-      case Some(newPage) ⇒
-        save4LaterService
-          .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
-          .map { _ ⇒
-            showNextPage(newPage)
-          }
+  def deleteSection[T](pageId: String, sectionId: String, hash: String): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    if (request.page[T].data.exists(_.hashCode() == hash)) {
+      request.page[T].delete match {
+        case None ⇒ Future successful BadRequest("bad request")
+        case Some(newPage) ⇒
+          save4LaterService
+            .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
+            .map { _ ⇒
+              showNextPage(newPage)
+            }
+      }
+    } else {
+      Future successful NotFound("Not Found")
     }
   }
 
-  def confirmDeleteSection[T](pageId: String, sectionId: String): Action[AnyContent] = UserAction { implicit request ⇒
-    Ok(confirm_delete_section(pageId, sectionId))
+  def confirmDeleteSection[T](pageId: String, sectionId: String, hash: String): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    println(s"======= $hash, ${request.page[T].data.map(_.hashCode())}")
+    if (request.page[T].data.exists(_.hashCode() == hash))
+      Future successful Ok(confirm_delete_section(pageId, sectionId, hash))
+    else
+      Future successful NotFound("Not Found")
   }
 
 

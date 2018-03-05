@@ -20,8 +20,8 @@ GET         /form/:page                                                         
 GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
 POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
-POST        /form/:page/:section/delete                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String)
-GET         /form/:page/:section/confirmDelete                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String)
+POST        /form/:page/:section/delete/:hash                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String, hash)
+GET         /form/:page/:section/confirmDelete/:hash                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, hash)
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /downloadPdf/:timeStamp                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
@@ -34,7 +34,6 @@ GET         /amend                                                              
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
-GET         /confirmDeleteSection                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDeleteSection(sectionName: String)
 GET         /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteOrContinue(isNewForm: Boolean)
 POST        /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
 
