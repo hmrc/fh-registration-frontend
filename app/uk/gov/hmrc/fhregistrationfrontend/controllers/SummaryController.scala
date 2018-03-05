@@ -16,49 +16,85 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import javax.inject.Inject
+import java.time.LocalDateTime
 
+import javax.inject.Inject
 import play.api.mvc.AnyContent
+import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
+import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.sole_proprietor_summary
-import uk.gov.hmrc.fhregistrationfrontend.views.html.partnership_summary
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
+import uk.gov.hmrc.http.BadRequestException
+
 
 @Inject
 class SummaryController @Inject()(
-  ds               : CommonPlayDependencies,
-  messagesApi      : play.api.i18n.MessagesApi,
-  links            : ExternalUrls
+  ds                   : CommonPlayDependencies,
+  pdfGeneratorConnector: PdfGeneratorConnector,
+  messagesApi          : play.api.i18n.MessagesApi,
+  links                : ExternalUrls
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
-
-
-  def summary() = SummaryAction(save4LaterService) { implicit request ⇒
-    request.businessType match {
-      case BusinessType.CorporateBody ⇒ ltdSummary(request)
-      case BusinessType.SoleTrader ⇒ soleTrader(request)
-      case BusinessType.Partnership ⇒ partnership(request)
+  def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = SummaryAction(save4LaterService).async { implicit request ⇒
+    val summaryHtml: Html = getSummaryHtml(request, forPrint=true, timeStamp = timeStamp)
+    pdfGeneratorConnector.generatePdf(removeScriptTags(summaryHtml.toString)).map { response =>
+      if (response.status != OK)
+        BadRequest(response.body)
+      else
+      Ok(response.bodyAsBytes.toArray).as("application/pdf")
+        .withHeaders("Content-Disposition" -> s"attachment; filename=${request.userId}.pdf")
+          .withHeaders("Content-Type" -> s"application/pdf")
+          .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
+    } recover {
+      case e: Exception => {
+        throw new BadRequestException(e.toString)
+      }
+      case e:Exception => throw new BadRequestException(e.toString)
     }
   }
 
 
-  def partnership(implicit request: SummaryRequest[AnyContent]) = {
+  def summary() = SummaryAction(save4LaterService) { implicit request ⇒
+    Ok(getSummaryHtml(request))
+  }
+
+  private def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: String = ""): Html = {
+
+    val urlProtocol = ds.conf
+      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
+    val urlHost = ds.conf
+      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host").getOrElse("fh-registration-frontend.public.mdtp")
+    val urlPort = ds.conf
+      .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
+
+    val url = s"$urlProtocol://$urlHost:$urlPort"
+
+    request.businessType match {
+      case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp)(request)
+      case BusinessType.SoleTrader ⇒ soleTrader(forPrint, url, timeStamp)(request)
+      case BusinessType.Partnership ⇒ partnership(forPrint, url, timeStamp)(request)
+    }
+  }
+
+  private def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
+
+  def partnership(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys partnershipApplication request
-    Ok(partnership_summary(application, request.bpr))
+    partnership_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
 
-  def soleTrader(implicit request: SummaryRequest[AnyContent]) = {
+  def soleTrader(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys soleTraderApplication request
-
-    Ok(sole_proprietor_summary(application, request.bpr))
+    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
-  private def ltdSummary(implicit request: SummaryRequest[AnyContent]) = {
+  def ltdSummary(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys ltdApplication request
-    Ok(ltd_summary(application, request.bpr))
+
+    ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 }

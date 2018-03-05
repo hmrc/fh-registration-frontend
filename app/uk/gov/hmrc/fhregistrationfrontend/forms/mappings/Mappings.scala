@@ -57,6 +57,7 @@ object Mappings {
 
   def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
+  def companyName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐-]{1,140}$".r)
   def tradingName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,120}$".r)
   def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 

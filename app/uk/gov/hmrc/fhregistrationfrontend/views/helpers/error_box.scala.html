@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(form: Form[_], context: String=".", sectionP: String="")(implicit message: Messages)
+@(form: Form[_], context: String=".", sectionP: String="", dateKey: String="")(implicit message: Messages)
 @defining(new scala.collection.mutable.HashSet[String]()) { set =>
   @if(form.hasErrors) {
     <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
@@ -29,7 +29,19 @@
               error.key.replace(".day", "").replace(".month", "").replace(".year", "")
             }-inline-error">
             @{
-              Messages("fh" + context + error.key + "." + error.message)
+              if(error.key.contains(s"$dateKey.day")){
+                set.add(error.key)
+                set.add(error.key.replace(".day",".month"))
+                set.add(error.key.replace(".day",".year"))
+                Messages(s"fh.$dateKey.error.invalid")
+              } else if(error.key.contains(s"$dateKey.month")){
+                set.add(error.key)
+                set.add(error.key.replace(".month",".year"))
+                Messages(s"fh.$dateKey.error.invalid")
+              } else {
+                Messages("fh" + context + error.key + "." + error.message)
+              }
+
             }
             </a>
           </li>

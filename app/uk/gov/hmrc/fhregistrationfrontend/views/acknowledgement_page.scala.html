@@ -14,9 +14,11 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
+
 @import org.joda.time.DateTime
 
-@(email: String)(implicit request: Request[_], messages: Messages)
+@(email:String, dateTime: String)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -41,7 +43,7 @@
     <div class="js-show notice with-icon">
         <i class="icon icon-file-download"></i>
         <p>
-            <a href="javascript:window.print()">@Messages("fh.generic.print_application_status")</a>
+            <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.downloadPdf(s"$dateTime")}">@Messages("fh.generic.print_application_status")</a>
         </p>
     </div>
 
@@ -84,5 +86,4 @@
     <p>
         <a href="#">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
     </p>
-
 }

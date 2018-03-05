@@ -18,9 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
-
+import org.joda.time.DateTime
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
@@ -35,12 +35,10 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, Fro
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -171,14 +169,6 @@ class Application @Inject()(
       case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
       case None            ⇒ errorResultsPages(NotFound)
     }
-  }
-
-  def summary = UserAction.async  { implicit request ⇒
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Ok(ltd_summary(TestData.mockSummary, bpr))
-      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
-    }
-
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒

@@ -35,7 +35,7 @@
 
   @Back(navigation)
 
-  @error_box(mainBusinessAddressForm)
+  @error_box(mainBusinessAddressForm, dateKey=s"$previousAddressStartdateKey")
 
   @PageHeading(
     PageHeadingParams(
@@ -134,7 +134,9 @@
             name = previousAddressStartdateKey,
             label = Messages("fh.previousAddressStartdate.label"),
             error = Messages("fh.previousAddressStartdate.error.invalid"),
-            hasErrors = mainBusinessAddressForm.hasErrors,
+            hasErrors = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").hasErrors ||
+                mainBusinessAddressForm(s"$previousAddressStartdateKey.month").hasErrors ||
+                mainBusinessAddressForm(s"$previousAddressStartdateKey.year").hasErrors,
             hintText = Some(Messages("fh.previousAddressStartdate.hint_text")),
             day = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").value,
             month = mainBusinessAddressForm(s"$previousAddressStartdateKey.month").value,
