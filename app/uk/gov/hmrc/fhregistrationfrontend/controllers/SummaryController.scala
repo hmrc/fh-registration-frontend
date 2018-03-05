@@ -21,11 +21,11 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import play.api.mvc.AnyContent
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
 import uk.gov.hmrc.http.BadRequestException
 
@@ -35,30 +35,37 @@ class SummaryController @Inject()(
   ds                   : CommonPlayDependencies,
   pdfGeneratorConnector: PdfGeneratorConnector,
   messagesApi          : play.api.i18n.MessagesApi,
-  links                : ExternalUrls
+  links                : ExternalUrls,
+  keyStoreService      : KeyStoreService
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
-  def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = SummaryAction(save4LaterService).async { implicit request ⇒
-    val summaryHtml: Html = getSummaryHtml(request, forPrint=true, timeStamp = timeStamp)
-    pdfGeneratorConnector.generatePdf(removeScriptTags(summaryHtml.toString)).map { response =>
-      if (response.status != OK)
-        BadRequest(response.body)
-      else
-      Ok(response.bodyAsBytes.toArray).as("application/pdf")
-        .withHeaders("Content-Disposition" -> s"attachment; filename=${request.userId}.pdf")
-          .withHeaders("Content-Type" -> s"application/pdf")
-          .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
-    } recover {
-      case e: Exception => {
-        throw new BadRequestException(e.toString)
-      }
-      case e:Exception => throw new BadRequestException(e.toString)
+  def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = UserAction.async { implicit request ⇒
+    keyStoreService.fetchAndGetEntry().flatMap {
+      case Some(userSummary) =>
+        val summaryHtmlForPrint: String = userSummary.replace("timeStampPlaceHolder", timeStamp)
+        pdfGeneratorConnector.generatePdf(removeScriptTags(summaryHtmlForPrint)).map { response =>
+          if (response.status != OK)
+            BadRequest(response.body)
+          else
+            Ok(response.bodyAsBytes.toArray).as("application/pdf")
+              .withHeaders("Content-Disposition" -> s"attachment; filename=${request.userId}.pdf")
+              .withHeaders("Content-Type" -> s"application/pdf")
+              .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
+        } recover {
+          case e: Exception => {
+            throw new BadRequestException(e.toString)
+          }
+          case e:Exception => throw new BadRequestException(e.toString)
+        }
+      case _ => throw new BadRequestException("no user summary found")
     }
   }
 
 
-  def summary() = SummaryAction(save4LaterService) { implicit request ⇒
-    Ok(getSummaryHtml(request))
+  def summary() = SummaryAction(save4LaterService).async { implicit request ⇒
+    keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp="timeStampPlaceHolder").toString()).map(
+      _⇒ Ok(getSummaryHtml(request))
+    )
   }
 
   private def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: String = ""): Html = {

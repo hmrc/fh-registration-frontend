@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.auth.otac.PlayOtacAuthConnector
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.cache.client.ShortLivedHttpCaching
+import uk.gov.hmrc.http.cache.client.{SessionCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.http.hooks.HttpHooks
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
@@ -66,4 +66,13 @@ object ShortLivedHttpCaching extends ShortLivedHttpCaching with ServicesConfig {
   override lazy val domain: String = getConfString("cachable.short-lived-cache.domain", throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))
 
   override def http: HttpGet with HttpPut with HttpDelete = WSHttp
+}
+
+object KeySessionCache extends SessionCache with AppName with ServicesConfig {
+
+  override lazy val http = WSHttp
+  override lazy val defaultSource = appName
+  override lazy val baseUri = baseUrl("cachable.session-cache")
+  override lazy val domain = getConfString("cachable.session-cache.domain",
+    throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
 }
