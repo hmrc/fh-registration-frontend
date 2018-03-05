@@ -1,5 +1,6 @@
 #COMMON
 app.name=Apply for the Fulfilment House Due Diligence Scheme
+app.name.short=Fulfilment House Due Diligence Scheme
 error.summary.heading=Something’s wrong
 button.save.continue=Save and continue
 button.accept.send=Accept and send application
@@ -270,7 +271,7 @@ fh.proposedStartDate.error.invalid=Enter a valid date for the intended start dat
 fh.importing_activities.title=Importing activities
 fh.importing_activities.eori.confirm.label=Does the business have any EORI numbers?
 fh.hasEori.error.required=Select whether the business has any EORI numbers
-fh.importing_activities.eori.label=Enter the EORI number
+fh.importing_activities.eori.label=EORI number
 fh.importing_activities.eori.hint_text=For example, GB123456789000
 fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods with sellers outside the EU. Contact the
 fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
