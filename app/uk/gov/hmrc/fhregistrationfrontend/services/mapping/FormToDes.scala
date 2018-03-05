@@ -21,7 +21,7 @@ import java.time.LocalDate
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.Modification
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{Modification, SoleProprietor, SoleProprietorIdentification}
 
 trait FormToDes {
   def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription
@@ -38,8 +38,22 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     changeDate = changeDate
   )
 
-  def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription = ???
-  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = ???
+  override def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription = {
+    des.Subscription(
+      EntityTypeMapping formToDes BusinessType.SoleTrader,
+      isNewFulfilmentBusiness(application.businessStatus),
+      None,
+      additionalBusinessInformation(application),
+      businessDetail(application, bpr),
+      businessAddress(bpr, application.mainBusinessAddress),
+      contactDetail(bpr, application.contactPerson),
+      declaration(d)
+    )
+  }
+
+  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = {
+    ???
+  }
 
   override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
     des.Subscription(
@@ -102,7 +116,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       ba.line3,
       ba.line4,
       ba.postcode,
-      "GB"//TODO can main business address be in a different country?
+      "GB"
     )
 
 
@@ -123,25 +137,26 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       start
     )
 
-  def businessDetail(application: LimitedCompanyApplication, bpr: BusinessRegistrationDetails) = {
-    import application._
-    des.BusinessDetail(
-      None,
-      Some(nonProprietor(tradingName, vatNumber, bpr)),
-      Some(llpOrCorporate(companyRegistrationNumber, dateOfIncorporation)),
-      None
-    )
+  def businessDetail(application: ApplicationEntity, bpr: BusinessRegistrationDetails) = {
+    application match {
+      case llt: LimitedCompanyApplication ⇒ {
+        des.BusinessDetail(
+          None,
+          Some(nonProprietor(llt.tradingName, llt.vatNumber, bpr)),
+          Some(llpOrCorporate(llt.companyRegistrationNumber, llt.dateOfIncorporation)),
+          None
+        )
+      }
+      case st: SoleProprietorApplication ⇒ {
+        des.BusinessDetail(
+          Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st))),
+          None,
+          None,
+          None
+        )
+      }
+    }
   }
-
-
-
-  //  def soleProprietor(tradingName: TradingName) =
-//    SoleProprietor(
-//      tradingName.value,
-//      SoleProprietorIdentification(
-//
-//      )
-//    )
 
   def llpOrCorporate(crn: CompanyRegistrationNumber, dateOfIncorporation: DateOfIncorporation) =
     des.LimitedLiabilityPartnershipCorporateBody(
@@ -150,6 +165,13 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         Some(crn.crn),
         Some(dateOfIncorporation.dateOfIncorporation)
       )
+    )
+
+  def soleProprietorIdentification(st: SoleProprietorApplication): SoleProprietorIdentification =
+    SoleProprietorIdentification(
+      st.nationalInsuranceNumber.value,
+      st.vatNumber.value,
+      None
     )
 
   def nonProprietor(tradingName: TradingName, vatNumber: VatNumber, bpr: BusinessRegistrationDetails) =
@@ -161,27 +183,49 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       )
     )
 
-  def additionalBusinessInformation(application: LimitedCompanyApplication) =
-    des.AdditionalBusinessInformationwithType(
-      Some(partnerCorporateBody(application.companyOfficers)),
-      allOtherInformation(application)
-    )
+  def additionalBusinessInformation(application: ApplicationEntity) =
+    application match {
+      case llt: LimitedCompanyApplication ⇒ {
+        des.AdditionalBusinessInformationwithType(
+          Some(partnerCorporateBody(llt.companyOfficers)),
+          allOtherInformation(llt)
+        )
+      }
+      case st: SoleProprietorApplication ⇒ {
+        des.AdditionalBusinessInformationwithType(
+          None,
+          allOtherInformation(st)
+        )
+      }
+    }
 
 
-  def allOtherInformation(application: LimitedCompanyApplication) = {
-    import application._
-    val desPremises = if (otherStoragePremises.hasValue) repeatedValue(premise, otherStoragePremises.value) else List.empty
 
-    des.AllOtherInformation(
-      businessCustomers.numberOfCustomers,
-      importingActivities.hasEori,
-      importingActivities.eoriNumber map eoriNumberType(vatNumber.hasValue),
-      desPremises.size.toString,
-      desPremises
+  def allOtherInformation(application: ApplicationEntity) = {
+    application match {
+      case llt: LimitedCompanyApplication ⇒ {
+        val desPremises = if (llt.otherStoragePremises.hasValue) repeatedValue(premise, llt.otherStoragePremises.value) else List.empty
+        des.AllOtherInformation(
+          llt.businessCustomers.numberOfCustomers,
+          llt.importingActivities.hasEori,
+          llt.importingActivities.eoriNumber map eoriNumberType(llt.vatNumber.hasValue),
+          desPremises.size.toString,
+          desPremises
+        )
+      }
+      case st: SoleProprietorApplication ⇒ {
+        val desPremises = if (st.otherStoragePremises.hasValue) repeatedValue(premise, st.otherStoragePremises.value) else List.empty
+        des.AllOtherInformation(
+          st.businessCustomers.numberOfCustomers,
+          st.importingActivities.hasEori,
+          st.importingActivities.eoriNumber map eoriNumberType(st.vatNumber.hasValue),
+          desPremises.size.toString,
+          desPremises
+        )
+      }
+    }
 
-    )
   }
-
 
    val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises =  { (p, modification) ⇒
     des.Premises(
@@ -202,7 +246,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       address.countryCode.getOrElse("GB")
     )
 
-
   def eoriNumberType(hasVat: Boolean)(eoriNumber: EoriNumber) =
     des.EORINumberType(
       if (hasVat) Some(eoriNumber.eoriNumber) else None,
@@ -210,7 +253,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       Some(eoriNumber.goodsImportedOutsideEori)
     )
 
-  //limited company
   def isNewFulfilmentBusiness(bs: BusinessStatus)= des.IsNewFulfilmentBusiness (
     bs.isNewFulfilmentBusiness,
     bs.proposedStartDate
@@ -221,7 +263,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.PartnerCorporateBody(
       desOfficials.size.toString,
       Some(desOfficials)
-
     )
   }
 

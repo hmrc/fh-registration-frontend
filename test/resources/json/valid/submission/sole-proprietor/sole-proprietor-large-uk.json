@@ -4,14 +4,14 @@
     "organizationType": "Sole Proprietor",
     "FHbusinessDetail": {
       "isNewFulfilmentBusiness": true,
-      "proposedStartDate": "2018-05-31"
+      "proposedStartDate": "2018-06-30"
     },
     "additionalBusinessInformation": {
       "allOtherInformation": {
-        "numberOfCustomers": "11-50",
+        "numberOfCustomers": "Over 100",
         "doesEORIExist": true,
         "EORINumber": {
-          "EORIVat": "12312222",
+          "EORIVat": "1234123132",
           "goodsImportedOutEORI": true
         },
         "numberOfpremises": "2",
@@ -21,16 +21,15 @@
               "line1": "two flat",
               "line2": "two street",
               "line4": "two town",
-              "postalCode": "AA00 0AA",
+              "postalCode": "Z99 2YY",
               "countryCode": "GB"
             },
             "thirdPartyPremises": true
           },
           {
             "address": {
-              "line1": "third flat",
-              "line2": "third street",
-              "line4": "third town",
+              "line1": "25 Testing Close",
+              "line4": "Othertown",
               "postalCode": "AA01 0AA",
               "countryCode": "GB"
             },
@@ -41,11 +40,10 @@
     },
     "businessDetail": {
       "soleProprietor": {
-        "tradingName": "snow",
+        "tradingName": "DodgyCo",
         "identification": {
           "nino": "AA123111A",
-          "vatRegistrationNumber": "123456789",
-          "uniqueTaxpayerReference": "1111111112"
+          "vatRegistrationNumber": "123456789"
         }
       }
     },
@@ -65,21 +63,20 @@
         "previousOperationalAddressDetail": [
           {
             "previousAddress": {
-              "line1": "flat",
-              "line2": "street",
-              "line4": "town",
-              "postalCode": "AA11 1AA",
+              "line1": "Flat 1A",
+              "line4": "Testtown",
+              "postalCode": "ZZ11 1ZZ",
               "countryCode": "GB"
             },
-            "previousAddressStartdate": "2014-03-20"
+            "previousAddressStartdate": "2015-03-20"
           }
         ]
       }
     },
     "contactDetail": {
       "names": {
-        "firstName": "John",
-        "lastName": "Snow"
+        "firstName": "Cosmin",
+        "lastName": "Marian"
       },
       "roleInOrganization": {
         "beneficialShareHolder": false,
@@ -90,26 +87,24 @@
         "nominatedOfficer": false,
         "designatedmember": false,
         "otherRoleType": true,
-        "otherRoleDescription": "A Director"
+        "otherRoleDescription": "Director"
       },
       "usingSameContactAddress": false,
       "address": {
-        "line1": "one flat",
-        "line2": "one street",
-        "line3": "one county",
-        "line4": "one town",
-        "postalCode": "AA11 0AA",
+        "line1": "Flat 1B",
+        "line4": "Testtown",
+        "postalCode": "ZZ11 1ZZ",
         "countryCode": "GB"
       },
       "commonDetails": {
-        "telephone": "1123",
-        "email": "a@a.ro"
+        "telephone": "11123",
+        "email": "a@w.ro"
       }
     },
     "declaration": {
-      "personName": "John",
-      "personStatus": "Snow",
-      "email": "provided@test.com",
+      "personName": "C",
+      "personStatus": "D",
+      "email": "a@b.co",
       "isInformationAccurate": true
     }
   }

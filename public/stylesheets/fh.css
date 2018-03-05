@@ -68,3 +68,9 @@ table {
 .with-icon {
     text-indent: 2em
 }
+
+@media print {
+    a, a:visited, a:link {
+        display:none;
+    }
+}

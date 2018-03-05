@@ -52,8 +52,7 @@ trait Page[T] extends Rendering {
 
   def nextSubsection: Option[String]
 
-  /** returns None if the page can not be deleted or Some(new page state)*/
-  def delete: Option[Page[T]]
+  //  def delete: Page[T,V]
 }
 
 object Page {
@@ -151,7 +150,7 @@ object Page {
   )
 
 
-
+gg
   val companyOfficersPage = RepeatingPage[CompanyOfficer](
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {

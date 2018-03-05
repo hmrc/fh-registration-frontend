@@ -21,6 +21,7 @@ case class FhddsBackendStub()
   private def mkBusinessPartnerRecord(businessType: String) = {
     BusinessRegistrationDetails(
       businessName = Some("Real Business Inc"),
+      None,
       businessAddress = aFakeAddress,
       safeId = Some("XE0001234567890"),
       utr = Some("1111111111")

@@ -23,7 +23,7 @@ import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
-import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.{LtdLargeUk, LtdLargeUkWithModifications, LtdMinimum, LtdMinimumInternational}
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.play.test.UnitSpec
 
 
@@ -34,63 +34,34 @@ class FormToDesSpecs extends UnitSpec {
   val validator = new SchemaValidator().validate(schema) _
   val service = new FormToDesImpl()
 
-  val brd: BusinessRegistrationDetails = Json
-    .parse(getClass.getResourceAsStream("/models/business-registration-details-limited-company.json"))
+  def brd(fileName: String): BusinessRegistrationDetails = Json
+    .parse(getClass.getResourceAsStream(s"/models/$fileName"))
     .as[BusinessRegistrationDetails]
 
   "Limited company submission service" should {
     "Create a correct json for fhdds-limited-company-minimum" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd, LtdMinimum.application, LtdMinimum.declaration),
+        service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdMinimum.application, LtdMinimum.declaration),
         None)
 
-      validatesFor(submission, "fhdds-limited-company-minimum")
+      validatesFor(submission, "fhdds-limited-company-minimum", "limited-company")
     }
+  }
 
-    "Create a correct json for fhdds-limited-company-minimum-international" in {
+  "Sole proprietor submission service" should {
+    "Create a correct json for max. entry" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd, LtdMinimumInternational.application, LtdMinimumInternational.declaration),
+        service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application, SPLargeUk.declaration),
         None)
 
-    validatesFor(submission, "fhdds-limited-company-minimum-international.xml")
-
-      submission.subScriptionCreate.contactDetail.address.map(_.countryCode) shouldEqual Some("BG")
-      submission.subScriptionCreate.contactDetail.address.flatMap(_.line4) shouldEqual Some("Bulgaria")
-    }
-
-
-    "Create a correct json for fhdds-limited-company-large-uk.xml" in {
-      val submission = SubScriptionCreate(
-        "Create",
-        service.limitedCompanySubmission(brd, LtdLargeUk.application, LtdLargeUk.declaration),
-        None
-      )
-
-
-      validatesFor(submission, "fhdds-limited-company-large-uk.xml")
-    }
-
-    "Create a correct json for fhdds-limited-company-large-uk-updated.xml" in {
-      val submission = SubScriptionCreate(
-        "Create",
-        service
-          .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
-          .limitedCompanySubmission(
-            brd,
-            LtdLargeUkWithModifications.application,
-            LtdLargeUkWithModifications.declaration),
-        None
-      )
-
-
-      validatesFor(submission, "fhdds-limited-company-large-uk-updated.xml")
+      validatesFor(submission, "sole-proprietor-large-uk.json", "sole-proprietor")
     }
   }
 
 
-  def validatesFor(subscrtiptionCreate: SubScriptionCreate, file: String) = {
+  def validatesFor(subscrtiptionCreate: SubScriptionCreate, file: String, entityPath: String) = {
 
     val json: JsValue = Json.toJson(subscrtiptionCreate)
 
@@ -102,16 +73,16 @@ class FormToDesSpecs extends UnitSpec {
 
     validationResult.isSuccess shouldEqual true
 
-    val expected = loadExpectedSubscriptionForFile(file)
+    val expected = loadExpectedSubscriptionForFile(file, entityPath)
     subscrtiptionCreate shouldEqual expected
 
 
     subscrtiptionCreate
   }
 
-  def loadExpectedSubscriptionForFile(file: String): SubScriptionCreate = {
+  def loadExpectedSubscriptionForFile(file: String, entityPath: String): SubScriptionCreate = {
     val baseName = FilenameUtils getBaseName file
-    val resource = getClass.getResourceAsStream(s"/json/valid/submission/limited-company/$baseName.json")
+    val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
     Json.parse(resource).as[SubScriptionCreate]
   }
 
