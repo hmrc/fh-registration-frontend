@@ -52,10 +52,7 @@ class SummaryController @Inject()(
               .withHeaders("Content-Type" -> s"application/pdf")
               .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
         } recover {
-          case e: Exception => {
-            throw new BadRequestException(e.toString)
-          }
-          case e:Exception => throw new BadRequestException(e.toString)
+          case e: Exception => throw new BadRequestException(e.toString)
         }
       case _ => throw new BadRequestException("no user summary found")
     }

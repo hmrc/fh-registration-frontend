@@ -95,4 +95,14 @@ case class OtherStoragePremisesPage(
       hasOthers ⇒ OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse ListWithTrackedChanges.empty[StoragePremise])
     }
   }
+
+  override def delete: Option[Page[OtherStoragePremises]] =
+    if(isMainSection)
+      None
+    else storagePremisePage.delete map { storagePremisePage ⇒
+      this copy(
+        storagePremisePage = storagePremisePage
+      )
+    }
+
 }

@@ -52,7 +52,8 @@ trait Page[T] extends Rendering {
 
   def nextSubsection: Option[String]
 
-  //  def delete: Page[T,V]
+  /** returns None if the page can not be deleted or Some(new page state)*/
+  def delete: Option[Page[T]]
 }
 
 object Page {

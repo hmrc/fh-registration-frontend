@@ -49,7 +49,7 @@ case class RepeatingPage[T](
   override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
-    case None ⇒ this copy (index = 0)
+    case None                       ⇒ this copy (index = 0)
     case Some(v) if validSection(v) ⇒ this copy (index = v.toInt - 1)
   }
 
@@ -63,11 +63,12 @@ case class RepeatingPage[T](
     if (addMore)
       Some(section(value.size))
     else if (index < value.size - 1)
-       Some(section(index + 1))
+      Some(section(index + 1))
     else
       None
 
-    Some(section(index + 1))
+  Some(section(index + 1))
+
   def section(index: Int) = (index + 1).toString
 
   override def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[ListWithTrackedChanges[T]] ⇒ X)(implicit r: Request[_]): X = {
@@ -79,7 +80,7 @@ case class RepeatingPage[T](
       val updateValue =
         if (value.size <= index) value append element
         else value.updated(index, element)
-      val updatePage = this copy (value = updateValue, addMore = more)
+      val updatePage = this copy(value = updateValue, addMore = more)
       withData(updatePage)
     }
   }
@@ -97,13 +98,9 @@ case class RepeatingPage[T](
   }
 
   override val data: Option[ListWithTrackedChanges[T]] = Some(value)
+  
+  override def delete: Option[Page[ListWithTrackedChanges[T]]] = {
+    Some(this copy (value = value remove index))
+  }
 
-//  override def delete: Page[CompanyOfficers, CompanyOfficer] = {
-//    if (index < 0 || index >= value.values.size)
-//      this
-//    else if (index == 0) {
-//      this copy (value = value.values.tail)
-//    }
-//
-//  }
 }
