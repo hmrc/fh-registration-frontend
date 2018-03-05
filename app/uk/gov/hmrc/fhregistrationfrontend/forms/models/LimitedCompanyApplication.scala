@@ -23,7 +23,7 @@ case class LimitedCompanyApplication(
   dateOfIncorporation: DateOfIncorporation,
   tradingName: TradingName,
   vatNumber: VatNumber,
-  companyOfficers: List[CompanyOfficer],
+  companyOfficers: ListWithTrackedChanges[CompanyOfficer],
   businessStatus: BusinessStatus,
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,

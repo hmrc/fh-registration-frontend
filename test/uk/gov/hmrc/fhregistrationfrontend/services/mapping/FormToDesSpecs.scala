@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
+import java.time.LocalDate
+
 import com.eclipsesource.schema._
 import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
-import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.{LtdLargeUk, LtdMinimum, LtdMinimumInternational}
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.{LtdLargeUk, LtdLargeUkWithModifications, LtdMinimum, LtdMinimumInternational}
 import uk.gov.hmrc.play.test.UnitSpec
 
 
@@ -68,6 +70,22 @@ class FormToDesSpecs extends UnitSpec {
 
 
       validatesFor(submission, "fhdds-limited-company-large-uk.xml")
+    }
+
+    "Create a correct json for fhdds-limited-company-large-uk-updated.xml" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service
+          .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+          .limitedCompanySubmission(
+            brd,
+            LtdLargeUkWithModifications.application,
+            LtdLargeUkWithModifications.declaration),
+        None
+      )
+
+
+      validatesFor(submission, "fhdds-limited-company-large-uk-updated.xml")
     }
   }
 

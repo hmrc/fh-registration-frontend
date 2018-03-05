@@ -22,15 +22,16 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerCorporateBody
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerLimitedLiabilityPartnership
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
 
-@(businessPartners: List[BusinessPartner])(implicit request: Request[_], messages: Messages)
+@(businessPartners: ListWithTrackedChanges[BusinessPartner])(implicit request: Request[_], messages: Messages)
 
 
 @SummarySectionHead(heading = Messages("fh.business_partners.title"))
 
-@for((businessPartner:BusinessPartner, index) <- businessPartners.zipWithIndex) {
+@for((businessPartner:BusinessPartner, index) <- businessPartners.values.zipWithIndex) {
 
     @SummaryRepeatingHead(heading = Messages("fh.business_partners.add_a_partner",{index+1}), changeLink = Some("businessPartners"), section = {index+1}.toString())
 

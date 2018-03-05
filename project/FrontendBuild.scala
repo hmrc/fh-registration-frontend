@@ -25,7 +25,8 @@ object FrontendBuild extends Build with MicroService {
     "org.typelevel" %% "cats" % "0.9.0",
     "com.github.tototoshi" %% "play-json-naming" % "1.1.0",
     "org.typelevel" %% "cats-core" % "1.0.1",
-    "org.typelevel" %% "cats-kernel" % "1.0.1"
+    "org.typelevel" %% "cats-kernel" % "1.0.1",
+    "org.julienrf" %% "play-json-derived-codecs" % "3.3"
   )
 
   def test(scope: String = "test,it") = Seq(

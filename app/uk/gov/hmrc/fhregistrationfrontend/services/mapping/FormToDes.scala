@@ -17,25 +17,26 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import java.time.LocalDate
-import javax.inject.Singleton
 
-import com.google.inject.ImplementedBy
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
-import uk.gov.hmrc.fhregistrationfrontend.models.des
+import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.Modification
 
-@ImplementedBy(classOf[FormToDesImpl])
 trait FormToDes {
   def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription
   def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription
   def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription
 
+  def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes
 }
 
-@Singleton
-class FormToDesImpl extends FormToDes {
+case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Option[LocalDate] = None) extends FormToDes {
+
+  def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes = this copy (
+    withModificationFlags = true,
+    changeDate = changeDate
+  )
 
   def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription = ???
   def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = ???
@@ -169,22 +170,26 @@ class FormToDesImpl extends FormToDes {
 
   def allOtherInformation(application: LimitedCompanyApplication) = {
     import application._
+    val desPremises = if (otherStoragePremises.hasValue) repeatedValue(premise, otherStoragePremises.value) else List.empty
+
     des.AllOtherInformation(
       businessCustomers.numberOfCustomers,
       importingActivities.hasEori,
       importingActivities.eoriNumber map eoriNumberType(vatNumber.hasValue),
-      if (otherStoragePremises.hasValue) otherStoragePremises.value.size.toString else "0",
-      if (otherStoragePremises.hasValue) otherStoragePremises.value map premise else List.empty
+      desPremises.size.toString,
+      desPremises
+
     )
   }
 
 
-  def premise(p: StoragePremise) =
+   val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises =  { (p, modification) ⇒
     des.Premises(
       address(p.address),
       p.isThirdParty,
-      None
+      modification
     )
+   }
 
 
   def address(address: Address): des.Address =
@@ -211,26 +216,56 @@ class FormToDesImpl extends FormToDes {
     bs.proposedStartDate
   )
 
-  def partnerCorporateBody(officers: List[CompanyOfficer]) =
+  def partnerCorporateBody(officers: ListWithTrackedChanges[CompanyOfficer]) = {
+    val desOfficials = repeatedValue(companyOfficial, officers)
     des.PartnerCorporateBody(
-      officers.size.toString,
-      Some(officers map (_.identification) map {
-        case i: CompanyOfficerIndividual ⇒ individualAsOfficial(i)
-        case c: CompanyOfficerCompany ⇒ companyAsOfficial(c)
-      })
-    )
+      desOfficials.size.toString,
+      Some(desOfficials)
 
-  def companyAsOfficial(c: CompanyOfficerCompany) = {
+    )
+  }
+
+  def repeatedValue[T, D](t: (T, Option[Modification]) ⇒ D, list: ListWithTrackedChanges[T]): List[D] = {
+    val values = list.valuesWithStatus map {
+      case (v, changeStatus) ⇒ t(v, modification(changeStatus))
+    }
+
+    if (withModificationFlags)
+      values ++ (list.deleted.map(v ⇒ t(v, Some(des.Modification("Removed", changeDate)))))
+    else
+      values
+  }
+
+
+  def modification(changeStatus: ListWithTrackedChanges.Status) = {
+    if (withModificationFlags)
+      changeStatus match {
+        case ListWithTrackedChanges.NoChange ⇒ None
+        case ListWithTrackedChanges.Added    ⇒ Some(Modification("Added", changeDate))
+        case ListWithTrackedChanges.Updated  ⇒ Some(Modification("Updated", changeDate))
+      }
+    else
+      None
+  }
+
+  val companyOfficial: (CompanyOfficer, Option[Modification]) ⇒ des.CompanyOfficial = { (officer, modification) ⇒
+    officer.identification match {
+      case i: CompanyOfficerIndividual ⇒ individualAsOfficial(i, modification)
+      case c: CompanyOfficerCompany    ⇒ companyAsOfficial(c, modification)
+    }
+  }
+
+  def companyAsOfficial(c: CompanyOfficerCompany, modification: Option[des.Modification]) = {
     import c._
     des.CompanyAsOfficial(
       role,
       des.CompanyName(Some(companyName), None),
       des.CompanyIdentification(c.vat, None, c.crn),
-      None
+      modification
     )
   }
 
-  def individualAsOfficial(i: CompanyOfficerIndividual) = {
+  def individualAsOfficial(i: CompanyOfficerIndividual, modification: Option[Modification]) = {
     import i._
     des.IndividualAsOfficial(
       role,
@@ -240,8 +275,7 @@ class FormToDesImpl extends FormToDes {
         nationalId,
         nino
       ),
-      None
-
+      modification
     )
   }
 
