@@ -21,18 +21,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipApplication
 @import play.api.Environment
 
-<<<<<<< Updated upstream
+
 @(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-=======
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environmentUrl: String, forPrint: Boolean = false)(implicit request: Request[_], messages: Messages)
-
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme - Summary of application to register", linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), forPrint = forPrint, environmentUrl = environmentUrl) {
->>>>>>> Stashed changes
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
 

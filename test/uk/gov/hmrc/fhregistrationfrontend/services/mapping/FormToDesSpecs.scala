@@ -50,7 +50,7 @@ class FormToDesSpecs extends UnitSpec {
   }
 
   "Sole proprietor submission service" should {
-    "Create a correct json for max. entry" in {
+    "Create a correct json for max. data entry" in {
       val submission = SubScriptionCreate(
         "Create",
         service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application, SPLargeUk.declaration),
@@ -60,6 +60,16 @@ class FormToDesSpecs extends UnitSpec {
     }
   }
 
+  "Partnership submission service" should {
+    "Create a correct json for max. data entry" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service.partnership(brd("business-registration-details-partnership.json"), PartnershipLargeInt.application, PartnershipLargeInt.declaration),
+        None)
+
+      validatesFor(submission, "partnership-large-int.json", "partnership")
+    }
+  }
 
   def validatesFor(subscrtiptionCreate: SubScriptionCreate, file: String, entityPath: String) = {
 

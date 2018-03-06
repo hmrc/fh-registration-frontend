@@ -21,11 +21,13 @@ import java.time.LocalDate
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{Modification, SoleProprietor, SoleProprietorIdentification}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration ⇒ _, _}
 
 trait FormToDes {
   def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription
+
   def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription
+
   def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes
@@ -33,7 +35,7 @@ trait FormToDes {
 
 case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Option[LocalDate] = None) extends FormToDes {
 
-  def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes = this copy (
+  def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes = this copy(
     withModificationFlags = true,
     changeDate = changeDate
   )
@@ -51,8 +53,17 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     )
   }
 
-  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = {
-    ???
+  override def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = {
+    des.Subscription(
+      EntityTypeMapping formToDes BusinessType.Partnership,
+      isNewFulfilmentBusiness(application.businessStatus),
+      None,
+      additionalBusinessInformation(application),
+      businessDetail(application, bpr),
+      businessAddress(bpr, application.mainBusinessAddress),
+      contactDetail(bpr, application.contactPerson),
+      declaration(d)
+    )
   }
 
   override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
@@ -96,7 +107,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def contactDetailAddress(bpr: BusinessRegistrationDetails, contact: ContactPerson): Option[des.Address] = {
     //TODO move this logic to ContactPerson?
-    contact.otherUkContactAddress.map (address(_))
+    contact.otherUkContactAddress.map(address(_))
       .orElse(contact.otherInternationalContactAddress.map(internationalAddress(_)))
   }
 
@@ -147,7 +158,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           None
         )
       }
-      case st: SoleProprietorApplication ⇒ {
+      case st: SoleProprietorApplication  ⇒ {
         des.BusinessDetail(
           Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st))),
           None,
@@ -155,7 +166,87 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           None
         )
       }
+      case ps: PartnershipApplication     ⇒ {
+        des.BusinessDetail(
+          None,
+          Some(nonProprietor(ps.tradingName, ps.vatNumber, bpr)),
+          None,
+          Some(partnershipPartners(ps.businessPartners))
+        )
+      }
     }
+  }
+
+  def partnershipPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): Partnership =
+    des.Partnership(
+      businessPartners.size.toString,
+      getAllPartners(businessPartners)
+    )
+
+  def getAllPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): List[PartnerDetail] = {
+    val partners =
+    for {
+      businessPartner <- businessPartners.values
+      partner = businessPartner.identification match {
+        case i: BusinessPartnerIndividual                  ⇒
+          PartnerDetail(
+            entityType = "Individual",
+            partnerAddress = address(i.address),
+            partnerTypeDetail = IndividualPartnerType(Name(firstName = i.firstName, None, lastName = i.lastName), nino = i.nino),
+            None)
+        case s: BusinessPartnerSoleProprietor              ⇒
+          PartnerDetail(
+            entityType = "Sole Proprietor",
+            partnerAddress = address(s.address),
+            partnerTypeDetail = SoleProprietorPartnerType(
+              Name(firstName = s.firstName, None, lastName = s.lastName),
+              nino = s.nino,
+              identification = PartnerIdentification(vatRegistrationNumber = s.vat, uniqueTaxpayerReference = s.uniqueTaxpayerReference),
+              tradingName = s.tradeName
+            ),
+            None)
+        case p: BusinessPartnerPartnership                 ⇒
+          PartnerDetail(
+            entityType = "Partnership",
+            partnerAddress = address(p.address),
+            partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
+              CompanyName(companyName = Some(p.partnershipName), tradingName = p.tradeName),
+              identification = PartnerIdentification(vatRegistrationNumber = p.vat, uniqueTaxpayerReference = p.uniqueTaxpayerReference)
+            ),
+            None)
+        case l: BusinessPartnerLimitedLiabilityPartnership ⇒
+          PartnerDetail(
+            entityType = "Limited Liability Partnership",
+            partnerAddress = address(l.address),
+            partnerTypeDetail = LimitedLiabilityPartnershipType(
+              CompanyName(companyName = Some(l.limitedLiabilityPartnershipName), tradingName = l.tradeName),
+              identification = PartnerIdentification(vatRegistrationNumber = l.vat, uniqueTaxpayerReference = l.uniqueTaxpayerReference),
+              incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(l.companyRegistrationNumber), dateOfIncorporation = None)
+            ),
+            None)
+        case c: BusinessPartnerCorporateBody               ⇒
+          PartnerDetail(
+            entityType = "Corporate Body",
+            partnerAddress = address(c.address),
+            partnerTypeDetail = LimitedLiabilityPartnershipType(
+              CompanyName(companyName = Some(c.companyName), tradingName = c.tradeName),
+              identification = PartnerIdentification(vatRegistrationNumber = c.vat, uniqueTaxpayerReference = c.uniqueTaxpayerReference),
+              incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(c.companyRegistrationNumber), dateOfIncorporation = None)
+            ),
+            None)
+        case u: BusinessPartnerUnincorporatedBody          ⇒
+          PartnerDetail(
+            entityType = "Unincorporated Body",
+            partnerAddress = address(u.address),
+            partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
+              CompanyName(companyName = Some(u.unincorporatedBodyName), tradingName = u.tradeName),
+              identification = PartnerIdentification(vatRegistrationNumber = u.vat, uniqueTaxpayerReference = u.uniqueTaxpayerReference)
+            ),
+            None)
+      }
+    } yield partner
+
+    partners.toList
   }
 
   def llpOrCorporate(crn: CompanyRegistrationNumber, dateOfIncorporation: DateOfIncorporation) =
@@ -191,14 +282,19 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           allOtherInformation(llt)
         )
       }
-      case st: SoleProprietorApplication ⇒ {
+      case st: SoleProprietorApplication  ⇒ {
         des.AdditionalBusinessInformationwithType(
           None,
           allOtherInformation(st)
         )
       }
+      case ps: PartnershipApplication     ⇒ {
+        des.AdditionalBusinessInformationwithType(
+          None,
+          allOtherInformation(ps)
+        )
+      }
     }
-
 
 
   def allOtherInformation(application: ApplicationEntity) = {
@@ -213,7 +309,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           desPremises
         )
       }
-      case st: SoleProprietorApplication ⇒ {
+      case st: SoleProprietorApplication  ⇒ {
         val desPremises = if (st.otherStoragePremises.hasValue) repeatedValue(premise, st.otherStoragePremises.value) else List.empty
         des.AllOtherInformation(
           st.businessCustomers.numberOfCustomers,
@@ -223,17 +319,27 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           desPremises
         )
       }
+      case ps: PartnershipApplication     ⇒ {
+        val desPremises = if (ps.otherStoragePremises.hasValue) repeatedValue(premise, ps.otherStoragePremises.value) else List.empty
+        des.AllOtherInformation(
+          ps.businessCustomers.numberOfCustomers,
+          ps.importingActivities.hasEori,
+          ps.importingActivities.eoriNumber map eoriNumberType(ps.vatNumber.hasValue),
+          desPremises.size.toString,
+          desPremises
+        )
+      }
     }
 
   }
 
-   val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises =  { (p, modification) ⇒
+  val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises = { (p, modification) ⇒
     des.Premises(
       address(p.address),
       p.isThirdParty,
       modification
     )
-   }
+  }
 
 
   def address(address: Address): des.Address =
@@ -253,7 +359,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       Some(eoriNumber.goodsImportedOutsideEori)
     )
 
-  def isNewFulfilmentBusiness(bs: BusinessStatus)= des.IsNewFulfilmentBusiness (
+  def isNewFulfilmentBusiness(bs: BusinessStatus) = des.IsNewFulfilmentBusiness(
     bs.isNewFulfilmentBusiness,
     bs.proposedStartDate
   )
