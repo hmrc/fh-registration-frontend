@@ -167,10 +167,11 @@ class Application @Inject()(
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
+    def canAmend: Boolean = false
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber))
+        Ok(status(statusResp.body, request.registrationNumber, canAmend))
       })
   }
 
