@@ -59,5 +59,4 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
 
   override def delete: Option[Page[T]] = None
 
-  override val hash = data.hashCode
 }

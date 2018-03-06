@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String, hash: Int)(implicit request: Request[_], messages: Messages)
+@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -62,7 +62,7 @@
     @helper.CSRF.formField
 
     @if(businessPartnerForm.value.isDefined) {
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("businessPartners", section, hash)}" style="float:right;">Remove</a>
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("businessPartners", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
     }
 
     <h2>@Messages("fh.business_partners.add_a_partner", section)</h2>

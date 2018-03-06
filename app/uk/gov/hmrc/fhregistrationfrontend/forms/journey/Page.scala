@@ -38,7 +38,7 @@ trait FormRendering[T] {
 
 trait RepeatedFormRendering[T] {
   def render
-    (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
+    (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
       (implicit request: Request[_], messages: Messages): Html
 }
 
@@ -47,7 +47,6 @@ trait Page[T] extends Rendering {
   val format: Format[T]
   val data: Option[T]
   val withSubsection: PartialFunction[Option[String], Page[T]]
-  def hash: Int
 
   def withData(data: T): Page[T]
 
@@ -146,9 +145,9 @@ object Page {
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {
       override def render
-        (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
+        (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
         (implicit request: Request[_], messages: Messages): Html = {
-        business_partners(form, navigation, sectionId, hash)
+        business_partners(form, navigation, sectionId)
       }
     },
     BusinessPartnersForm.businessPartnerMapping
@@ -160,9 +159,9 @@ object Page {
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
       override def render
-        (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
+        (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
         (implicit request: Request[_], messages: Messages): Html = {
-        company_officers(form, navigation, sectionId, hash)
+        company_officers(form, navigation, sectionId)
       }
     },
     CompanyOfficersForm.companyOfficerMapping
@@ -205,9 +204,9 @@ object Page {
     "storagePremises",
     new RepeatedFormRendering[(StoragePremise, Boolean)] {
       override def render
-        (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
+        (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
         (implicit request: Request[_], messages: Messages): Html = {
-        storage_premise(form, navigation, sectionId, hash)
+        storage_premise(form, navigation, sectionId)
       }
     },
     StoragePremisesForm.storagePremiseMapping

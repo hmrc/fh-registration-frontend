@@ -65,8 +65,8 @@ class FormPageController @Inject()(
     )
   }
 
-  def deleteSection[T](pageId: String, sectionId: String, hash: Int): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
-    if (request.page[T].hash == hash) {
+  def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
       request.page[T].delete match {
         case None ⇒ Future successful BadRequest("bad request")
         case Some(newPage) ⇒
@@ -81,9 +81,9 @@ class FormPageController @Inject()(
     }
   }
 
-  def confirmDeleteSection[T](pageId: String, sectionId: String, hash: Int): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
-    if (request.page[T].hash == hash)
-      Future successful Ok(confirm_delete_section(pageId, sectionId, hash))
+  def confirmDeleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    if (request.lastUpdateTimestamp == lastUpdateTimestamp)
+      Future successful Ok(confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
     else
       Future successful NotFound("Not Found. Expired")
   }
@@ -103,9 +103,9 @@ class FormPageController @Inject()(
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒
         if (hasErrors)
-          BadRequest(page.render(bpr, request.journey.navigation(request.page.id)))
+          BadRequest(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
         else {
-          Ok(page.render(bpr, request.journey.navigation(request.page.id)))
+          Ok(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
         }
       case None      ⇒
         Redirect(links.businessCustomerVerificationUrl)
