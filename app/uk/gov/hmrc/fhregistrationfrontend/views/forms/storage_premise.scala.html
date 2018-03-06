@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String)(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
@@ -33,7 +33,6 @@
 @main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
   @Back(navigation)
 
   @error_box(otherStoragePremisesForm, s".$storagePremise_addressKey.")

@@ -25,6 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 
 
@@ -38,7 +39,7 @@ trait FormRendering[T] {
 
 trait RepeatedFormRendering[T] {
   def render
-    (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+    (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
       (implicit request: Request[_], messages: Messages): Html
 }
 
@@ -145,21 +146,22 @@ object Page {
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {
       override def render
-        (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+        (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
         (implicit request: Request[_], messages: Messages): Html = {
-        business_partners(form, navigation, sectionId)
+        business_partners(form, navigation, sectionId, params)
       }
     },
-    BusinessPartnersForm.businessPartnerMapping
+    BusinessPartnersForm.businessPartnerMapping,
+    minItems = 2
   )
 
   val companyOfficersPage = RepeatingPage[CompanyOfficer](
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
       override def render
-        (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+        (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
         (implicit request: Request[_], messages: Messages): Html = {
-        company_officers(form, navigation, sectionId)
+        company_officers(form, navigation, sectionId, params)
       }
     },
     CompanyOfficersForm.companyOfficerMapping
@@ -202,9 +204,9 @@ object Page {
     "storagePremises",
     new RepeatedFormRendering[(StoragePremise, Boolean)] {
       override def render
-        (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+        (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
         (implicit request: Request[_], messages: Messages): Html = {
-        storage_premise(form, navigation, sectionId)
+        storage_premise(form, navigation, sectionId, params)
       }
     },
     StoragePremisesForm.storagePremiseMapping
