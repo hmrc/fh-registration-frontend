@@ -105,4 +105,11 @@ case class OtherStoragePremisesPage(
       )
     }
 
+  override def hash: Int =  {
+    var h = 1
+    h = h * 17 + mainPage.hash
+    h = h * 31 + storagePremisePage.hash
+    h
+  }
+
 }
