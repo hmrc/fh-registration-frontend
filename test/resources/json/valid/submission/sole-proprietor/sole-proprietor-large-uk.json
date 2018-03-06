@@ -43,7 +43,8 @@
         "tradingName": "DodgyCo",
         "identification": {
           "nino": "AA123111A",
-          "vatRegistrationNumber": "123456789"
+          "vatRegistrationNumber": "123456789",
+          "uniqueTaxpayerReference": "1111111112"
         }
       }
     },
