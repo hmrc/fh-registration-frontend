@@ -37,7 +37,9 @@ trait FormRendering[T] {
 }
 
 trait RepeatedFormRendering[T] {
-  def render(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)(implicit request: Request[_], messages: Messages): Html
+  def render
+    (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
+      (implicit request: Request[_], messages: Messages): Html
 }
 
 trait Page[T] extends Rendering {
@@ -45,7 +47,7 @@ trait Page[T] extends Rendering {
   val format: Format[T]
   val data: Option[T]
   val withSubsection: PartialFunction[Option[String], Page[T]]
-  val hash: String
+  def hash: Int
 
   def withData(data: T): Page[T]
 
@@ -143,9 +145,10 @@ object Page {
   val businessPartnersPage = new RepeatingPage[BusinessPartner](
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {
-      override def render(form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+      override def render
+        (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
         (implicit request: Request[_], messages: Messages): Html = {
-        business_partners(form, navigation, sectionId)
+        business_partners(form, navigation, sectionId, hash)
       }
     },
     BusinessPartnersForm.businessPartnerMapping
@@ -156,9 +159,10 @@ object Page {
   val companyOfficersPage = RepeatingPage[CompanyOfficer](
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
-      override def render(form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+      override def render
+        (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
         (implicit request: Request[_], messages: Messages): Html = {
-        company_officers(form, navigation, sectionId)
+        company_officers(form, navigation, sectionId, hash)
       }
     },
     CompanyOfficersForm.companyOfficerMapping
@@ -200,9 +204,10 @@ object Page {
   val storagePremisesPage = RepeatingPage[StoragePremise](
     "storagePremises",
     new RepeatedFormRendering[(StoragePremise, Boolean)] {
-      override def render(form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String)
+      override def render
+        (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, hash: Int)
         (implicit request: Request[_], messages: Messages): Html = {
-        storage_premise(form, navigation, sectionId)
+        storage_premise(form, navigation, sectionId, hash)
       }
     },
     StoragePremisesForm.storagePremiseMapping
