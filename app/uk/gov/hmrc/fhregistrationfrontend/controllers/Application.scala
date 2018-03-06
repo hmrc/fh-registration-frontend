@@ -167,7 +167,6 @@ class Application @Inject()(
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
-    //todo this val could be subject to feature toggle
     def canAmend: Boolean = false
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
