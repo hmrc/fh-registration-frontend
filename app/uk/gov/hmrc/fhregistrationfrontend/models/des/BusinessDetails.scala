@@ -17,9 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json.Json
 
 
 case class SoleProprietor(tradingName: Option[String],

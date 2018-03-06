@@ -67,6 +67,7 @@ class DesToFormImpl extends DesToForm {
   override def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails = {
     BusinessRegistrationDetails(
       None,
+      None,
       businessAddress(subscriptionDisplay.businessAddressForFHDDS.currentAddress),
       None,
       subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.vatRegistrationNumber)

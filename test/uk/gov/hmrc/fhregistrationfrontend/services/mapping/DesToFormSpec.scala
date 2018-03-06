@@ -21,7 +21,7 @@ import play.api.libs.json.{JsValue, Json}
 import com.eclipsesource.schema._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplay, SubscriptionDisplayWrapper}
-import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.{LtdLargeUk, LtdMinimum, LtdMinimumInternational}
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.play.test.UnitSpec
 
 class DesToFormSpec extends UnitSpec {

@@ -153,8 +153,6 @@ object Page {
     BusinessPartnersForm.businessPartnerMapping
   )
 
-
-
   val companyOfficersPage = RepeatingPage[CompanyOfficer](
     "companyOfficers",
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
