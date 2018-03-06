@@ -11,35 +11,35 @@
         "numberOfCustomers": "Over 100",
         "doesEORIExist": true,
         "EORINumber": {
-          "EORIVat": "GB123456789000",
+          "EORIVat": "1234123132",
           "goodsImportedOutEORI": true
         },
         "numberOfpremises": "2",
         "premises": [
           {
             "address": {
-              "line1": "third line one",
-              "line4": "third town",
-              "postalCode": "AB11 1AA",
-              "countryCode": "GB"
-            },
-            "thirdPartyPremises": true
-          },
-          {
-            "address": {
-              "line1": "third other line one",
-              "line4": "third other town",
-              "postalCode": "AB2 1AA",
+              "line1": "1 Some High Street",
+              "line4": "Sometown",
+              "postalCode": "Z99 2YY",
               "countryCode": "GB"
             },
             "thirdPartyPremises": false
+          },
+          {
+            "address": {
+              "line1": "25 Testing Close",
+              "line4": "Othertown",
+              "postalCode": "Z9 3WW",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": true
           }
         ]
       }
     },
     "businessDetail": {
       "nonProprietor": {
-        "tradingName": "Dodgy Fulfilment",
+        "tradingName": "DodgyCo",
         "identification": {
           "vatRegistrationNumber": "123456789",
           "uniqueTaxpayerReference": "1111111113"
@@ -52,9 +52,8 @@
             "entityType": "Individual",
             "partnerAddress": {
               "line1": "individual line one",
-              "line2": "individual line two",
-              "line4": "individual town",
-              "postalCode": "AA12 1AA",
+              "line4": "Othertown",
+              "postalCode": "Z9 3WW",
               "countryCode": "GB"
             },
             "partnerTypeDetail": {
@@ -62,7 +61,7 @@
                 "firstName": "mr partner",
                 "lastName": "ship"
               },
-              "nino": "AA111111A"
+              "nino": "AA123123A"
             }
           },
           {
@@ -78,7 +77,7 @@
                 "firstName": "ms sole",
                 "lastName": "trader"
               },
-              "nino": "AA111111A",
+              "nino": "AA123231",
               "identification": {
                 "vatRegistrationNumber": "223456789"
               },
@@ -184,31 +183,31 @@
         "previousOperationalAddressDetail": [
           {
             "previousAddress": {
-              "line1": "main line one",
-              "line4": "main town",
-              "postalCode": "AA11 1AA",
+              "line1": "Flat 1A",
+              "line4": "Testtown",
+              "postalCode": "ZZ11 1ZZ",
               "countryCode": "GB"
             },
-            "previousAddressStartdate": "2014-03-20"
+            "previousAddressStartdate": "2015-03-20"
           }
         ]
       }
     },
     "contactDetail": {
       "names": {
-        "firstName": "C",
-        "lastName": "M"
+        "firstName": "Cosmin",
+        "lastName": "Marian"
       },
       "usingSameContactAddress": false,
       "address": {
-        "line1": "Int line one",
-        "line2": "Int line two",
-        "line4": "Germany",
-        "countryCode": "DE"
+        "line1": "some street",
+        "line2": "Sofia",
+        "line4": "Bulgaria",
+        "countryCode": "BG"
       },
       "commonDetails": {
-        "telephone": "123123",
-        "email": "a@a.ro"
+        "telephone": "11123",
+        "email": "a@w.ro"
       },
       "roleInOrganization": {
         "beneficialShareHolder": false,
@@ -223,9 +222,9 @@
       }
     },
     "declaration": {
-      "personName": "C M",
-      "personStatus": "Director",
-      "email": "c@c.co.uk",
+      "personName": "C",
+      "personStatus": "D",
+      "email": "a@b.co",
       "isInformationAccurate": true
     }
   }
