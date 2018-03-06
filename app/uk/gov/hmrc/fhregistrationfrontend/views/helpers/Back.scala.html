@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 
-@(navigation: Navigation = Navigation(None))(implicit message: Messages)
+@(navigation: Navigation)(implicit message: Messages)
 
 @backLink = @{
   navigation.back.map {

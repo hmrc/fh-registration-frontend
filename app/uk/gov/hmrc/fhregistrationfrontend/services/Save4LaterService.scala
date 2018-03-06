@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services
 
+import java.util.Date
+
 import com.google.inject.ImplementedBy
 import org.joda.time.DateTime
 import play.api.libs.json
@@ -40,9 +42,6 @@ trait Save4LaterService {
 
   import Save4LaterKeys._
 
-  implicit val dateReads: Reads[DateTime] = Reads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss'Z'")
-  implicit val dateWrites: Writes[DateTime] = Writes.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss'Z'")
-
   val shortLivedCache: ShortLivedCache
 
   def saveBusinessType(userId: String, businessType: BusinessType)(implicit hc: HeaderCarrier) = {
@@ -61,8 +60,8 @@ trait Save4LaterService {
     fetchData4Later[BusinessRegistrationDetails](userId, businessRegistrationDetailsKey)
   }
 
-  def fetchLastUpdateTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[DateTime]] = {
-    fetchData4Later[DateTime](userId, userLastTimeSavedKey)
+  def fetchLastUpdateTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[Long]] = {
+    fetchData4Later[Long](userId, userLastTimeSavedKey)
   }
 
   def removeUserData(userId: String)(implicit hc: HeaderCarrier) = {
@@ -70,7 +69,7 @@ trait Save4LaterService {
   }
 
   def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
-    val lastTimeUserSaved: DateTime = new DateTime()
+    val lastTimeUserSaved = System.currentTimeMillis()
     shortLivedCache.cache(id, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
       shortLivedCache.cache(id, formId, data) map {
         data ⇒ data.getEntry[T](formId)

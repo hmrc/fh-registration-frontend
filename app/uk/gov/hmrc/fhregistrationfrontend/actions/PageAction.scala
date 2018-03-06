@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
+import org.joda.time.DateTime
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
@@ -29,6 +30,7 @@ import scala.concurrent.Future
 class PageRequest[A](
   val journeyState: JourneyState,
   val journey: JourneyNavigation,
+  val lastUpdateTimestamp: Long,
   p: AnyPage,
   request: UserRequest[A]) extends WrappedRequest[A](request)
 {
@@ -66,6 +68,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit val s
       new PageRequest(
         journeyState,
         journeyNavigation,
+        lastUpdateTimestamp(cacheMap),
         pageWithSection,
         input
       )

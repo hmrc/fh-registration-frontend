@@ -105,7 +105,7 @@ class Application @Inject()(
     else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
-          Ok(continue_delete(savedDate, deleteOrContinueForm))
+          Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
         case None            ⇒ Redirect(routes.Application.businessType())
       }
     }
@@ -117,7 +117,7 @@ class Application @Inject()(
       deleteOrContinue => {
         if (deleteOrContinue == "delete") {
           save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-            case Some(savedDate) ⇒ Future successful Ok(confirm_delete(savedDate))
+            case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
             case None            ⇒ Future successful ServiceUnavailable
           }
         } else {
@@ -160,16 +160,17 @@ class Application @Inject()(
 
   def savedForLater = UserAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
-      case Some(savedDate) ⇒ Ok(saved(savedDate.plusDays(formMaxExpiryDays)))
+      case Some(savedDate) ⇒ Ok(saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
       case None            ⇒ errorResultsPages(NotFound)
     }
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
+    def canAmend: Boolean = false
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber))
+        Ok(status(statusResp.body, request.registrationNumber, canAmend))
       })
   }
 

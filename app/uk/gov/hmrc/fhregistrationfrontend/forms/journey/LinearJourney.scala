@@ -33,7 +33,7 @@ class LinearJourney(val journeyPages: JourneyPages) extends JourneyNavigation {
     pages takeWhile (_.id != pageId) lastOption
   }
 
-  override def navigation(pageId: String): Navigation = {
-    Navigation(previous(pageId) map {page ⇒ FormPage(page.id)})
+  override def navigation(lastUpdateTime: Long, pageId: String): Navigation = {
+    Navigation(lastUpdateTime, previous(pageId) map {page ⇒ FormPage(page.id)})
   }
 }

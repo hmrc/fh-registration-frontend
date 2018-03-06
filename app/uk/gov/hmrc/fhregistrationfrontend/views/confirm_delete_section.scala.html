@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(page: String, section: String, hash: Int)(implicit request: Request[_], messages: Messages)
+@(page: String, section: String, timestamp: Long)(implicit request: Request[_], messages: Messages)
 
 
 @pageScripts = {
@@ -34,7 +34,7 @@
     </a>
   </p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.deleteSection(page, section, hash), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.deleteSection(page, section, timestamp), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
