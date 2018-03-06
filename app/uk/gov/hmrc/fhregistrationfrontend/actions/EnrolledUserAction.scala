@@ -49,3 +49,7 @@ class EnrolledUserAction
     }
   }
 }
+
+// #test status page as standalone with this instead of above `case None`:
+// case None ⇒
+//   Future successful Right(new EnrolledUserRequest[A]("XDFH00000123456", request))
