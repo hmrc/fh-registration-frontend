@@ -160,7 +160,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       }
       case st: SoleProprietorApplication  ⇒ {
         des.BusinessDetail(
-          Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st))),
+          Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st, bpr))),
           None,
           None,
           None
@@ -258,11 +258,11 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       )
     )
 
-  def soleProprietorIdentification(st: SoleProprietorApplication): SoleProprietorIdentification =
+  def soleProprietorIdentification(st: SoleProprietorApplication, bpr: BusinessRegistrationDetails): SoleProprietorIdentification =
     SoleProprietorIdentification(
       st.nationalInsuranceNumber.value,
       st.vatNumber.value,
-      None
+      bpr.utr
     )
 
   def nonProprietor(tradingName: TradingName, vatNumber: VatNumber, bpr: BusinessRegistrationDetails) =
