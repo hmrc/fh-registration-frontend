@@ -14,11 +14,15 @@
  * limitations under the License.
  *@
 
-@(url: String, sectionName: String)(implicit request: Request[_], messages: Messages)
+@(page: String, section: String, hash: Int)(implicit request: Request[_], messages: Messages)
 
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@sectionName = {
+  @Messages(s"fh.$page.each.title", section)
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
@@ -30,13 +34,15 @@
     </a>
   </p>
 
-  <form action="@{url}" method="DELETE">
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.deleteSection(page, section, hash), 'novalidate -> "novalidate") {
 
-    <h1>@Messages("fh.delete_confirmation_section.header", sectionName)</h1>
+    @helper.CSRF.formField
+
+    <h1>@Messages("fh.delete_confirmation_section.delete", sectionName)</h1>
 
     <span class="form-hint">@sectionName will be removed from your application, use the back link if you would prefer to edit the details instead.</span>
 
     <button class="button form-actions">@Messages("fh.delete_confirmation_section.delete", sectionName)</button><br><br>
 
-  </form>
+  }
 }
