@@ -29,6 +29,6 @@ object BusinessCustomers {
     "1-10",
     "11-50",
     "51-100",
-    "More than 100"
+    "Over 100"
   )
 }

@@ -287,6 +287,7 @@ fh.business_customers.title=Business customers
 fh.business_customers.label=How many overseas customers established outside the EU does the business store goods for, currently?
 fh.business_customers.hint_text=You only need to tell us about the part of the business that deals with fulfilment.
 fh.numberOfCustomers.error.required=Select how many sellers established outside the EU the business currently stores goods for
+fh.numberOfCustomers.error.invalid=Select how many sellers established outside the EU the business currently stores goods for
 fh.business_customers.none.label=None
 fh.business_customers.none.value=None
 fh.business_customers.1_10.label=1 to 10
@@ -296,7 +297,7 @@ fh.business_customers.11_50.value=11-50
 fh.business_customers.51_100.label=51 to 100
 fh.business_customers.51_100.value=51-100
 fh.business_customers.101_plus.label=More than 100
-fh.business_customers.101_plus.value=More than 100
+fh.business_customers.101_plus.value=Over 100
 
 # - Other storage premises
 #===========================================================
