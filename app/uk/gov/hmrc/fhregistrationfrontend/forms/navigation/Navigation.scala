@@ -16,6 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.navigation
 
-case class Navigation(back: Option[Link])
+case class Navigation(lastUpdateTimestamp: Long, back: Option[Link])
 
 

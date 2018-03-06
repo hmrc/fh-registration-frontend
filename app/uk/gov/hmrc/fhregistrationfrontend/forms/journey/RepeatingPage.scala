@@ -46,7 +46,6 @@ case class RepeatingPage[T](
     )
   )
 
-  override val hash = value.hashCode
   override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
@@ -89,12 +88,12 @@ case class RepeatingPage[T](
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
     val filledForm = if (index < value.size) form fill ((value(index), false)) else form
 
-    renderer.render(filledForm, bpr, navigation, section(index), hash)
+    renderer.render(filledForm, bpr, navigation, section(index))
   }
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
     override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
-      renderer.render(form, bpr, navigation, section(index), hash)
+      renderer.render(form, bpr, navigation, section(index))
     }
   }
 

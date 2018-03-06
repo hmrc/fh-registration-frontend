@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
 @(businessTypeForm: Form[BusinessType])(implicit request: Request[_], messages: Messages)
 
@@ -70,7 +71,8 @@
     @SubmitButtons(
       SubmitButtonsParams(
         label = Messages("button.save.continue")
-      )
+      ),
+      navigation = Navigation(0, None)
     )
   }
 }

@@ -24,5 +24,5 @@ class SummaryJourney extends JourneyNavigation {
 
   override def previous(pageId: String): Option[AnyPage] = None
 
-  override def navigation(pageId: String): Navigation = Navigation(Some(SummaryPage))
+  override def navigation(lastUpdateTime: Long, pageId: String): Navigation = Navigation(lastUpdateTime, Some(SummaryPage))
 }

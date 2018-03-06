@@ -32,7 +32,7 @@ trait JourneyNavigation {
 
   def previous(pageId: String): Option[AnyPage]
 
-  def navigation(pageId: String): Navigation
+  def navigation(lastUpdateTime: Long, pageId: String): Navigation
 
 }
 

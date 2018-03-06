@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
@@ -51,6 +52,10 @@ trait JourneyAction extends FrontendAction {
       case Some(bt) ⇒ Right(bt)
       case None ⇒ Left(NotFound("Not found: business type"))
     }
+  }
+
+  def lastUpdateTimestamp(cacheMap: CacheMap) = {
+    cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
   }
 
   def getJourneyPages(cacheMap: CacheMap): Either[Result, JourneyPages] = {
