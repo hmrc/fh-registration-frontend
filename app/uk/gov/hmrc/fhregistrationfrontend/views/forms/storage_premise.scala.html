@@ -23,17 +23,47 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String)(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
+@addMore = {
+  @params.forceHasMore match {
+    case Some(force) => {
+      <input type="hidden" name="addMore" value="@Some(force)" />
+    }
+    case None => {
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = otherStoragePremisesForm(s"addMore").value,
+          legend = Some(Messages("fh.other_storage_premises.company.addMore")),
+          hasErrors = otherStoragePremisesForm(s"addMore").hasErrors,
+          error = Some(Messages("fh.storagePremise_address.addMore.error.required")),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None
+            )
+          )
+        )
+      )
+    }
+  }
+}
+
 @main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
   @Back(navigation)
 
   @error_box(otherStoragePremisesForm, s".$storagePremise_addressKey.")
@@ -47,7 +77,7 @@
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
-    @if(otherStoragePremisesForm.value.isDefined) {
+    @if(params.canRemove) {
       <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
     }
       @AddressUK(
@@ -82,27 +112,8 @@
           )
         )
       )
-     @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"addMore"),
-          value = otherStoragePremisesForm(s"addMore").value,
-          legend = Some(Messages("fh.other_storage_premises.company.addMore")),
-          hasErrors = otherStoragePremisesForm(s"addMore").hasErrors,
-          error = Some(Messages("fh.storagePremise_address.addMore.error.required")),
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None 
-            )
-          )
-        )
-      )
+
+    @addMore
 
     @SubmitButtons(
       SubmitButtonsParams(

@@ -26,6 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 import scala.util.Try
 
@@ -36,7 +37,9 @@ case class RepeatingPage[T](
   mapping: Mapping[T],
   value   : ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
   index   : Int = 0,
-  addMore : Boolean = false
+  addMore : Boolean = false,
+  minItems: Int = 1,
+  maxItems: Int = 100
 )(implicit val format: Format[ListWithTrackedChanges[T]]) extends Page[ListWithTrackedChanges[T]] {
 
   val form: Form[(T, Boolean)] = Form(
@@ -55,7 +58,7 @@ case class RepeatingPage[T](
 
   private def validSection(sectionId: String): Boolean = {
     Try(sectionId.toInt)
-      .map(s ⇒ s >= 1 && s <= value.size + 1)
+      .map(s ⇒ s >= 1 && s <= value.size + 1 && s <= maxItems)
       .getOrElse(false)
   }
 
@@ -67,7 +70,6 @@ case class RepeatingPage[T](
     else
       None
 
-  Some(section(index + 1))
 
   def section(index: Int) = (index + 1).toString
 
@@ -75,32 +77,50 @@ case class RepeatingPage[T](
     val updatedForm = form.bindFromRequest
     if (updatedForm.hasErrors)
       withErrors(errorRenderer(updatedForm))
+    else if (index > maxItems)
+      withErrors(errorRenderer(updatedForm withError ("element", "too.many.items")))
     else {
       val (element, more) = updatedForm.value.get
-      val updateValue =
-        if (value.size <= index) value append element
-        else value.updated(index, element)
-      val updatePage = this copy(value = updateValue, addMore = more)
-      withData(updatePage)
+      if (more && (index + 1 > maxItems))
+        withErrors(errorRenderer(updatedForm withError ("addMore", "too.many.items")))
+      else {
+        val updateValue =
+          if (value.size <= index) value append element
+          else value.updated(index, element)
+        val updatePage = this copy(value = updateValue, addMore = more)
+        withData(updatePage)
+      }
     }
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
     val filledForm = if (index < value.size) form fill ((value(index), false)) else form
 
-    renderer.render(filledForm, bpr, navigation, section(index))
+
+
+    renderer.render(filledForm, bpr, navigation, section(index), renderingParams)
   }
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
     override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
-      renderer.render(form, bpr, navigation, section(index))
+      renderer.render(form, bpr, navigation, section(index), renderingParams)
     }
   }
 
+  def renderingParams = RepeatingPageParams(
+    canRemove = value.size > minItems,
+    forceHasMore =
+      if (math.max(value.size, index + 1) < minItems) Some(true)
+      else if (math.max(value.size, index + 1) >= maxItems) Some(false)
+      else None
+  )
+
   override val data: Option[ListWithTrackedChanges[T]] = Some(value)
 
-  override def delete: Option[Page[ListWithTrackedChanges[T]]] = {
-    Some(this copy (value = value remove index))
-  }
+  override def delete: Option[Page[ListWithTrackedChanges[T]]] =
+    if (value.size <= minItems)
+      None
+    else
+      Some(this copy (value = value remove index))
 
 }

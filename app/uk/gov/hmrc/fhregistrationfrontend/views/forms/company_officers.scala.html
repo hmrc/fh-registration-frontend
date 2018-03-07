@@ -21,10 +21,41 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@addMore = {
+  @params.forceHasMore match {
+    case Some(force) => {
+      <input type="hidden" name="addMore" value="@Some(force)" />
+    }
+    case None => {
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = companyOfficersForm(s"addMore").value,
+          legend = Some(Messages("fh.company_officers.company.addMore")),
+          error = Some(Messages("fh.addMore.error.required")),
+          hasErrors = companyOfficersForm(s"addMore").hasErrors,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None
+            )
+          )
+        )
+      )
+    }
+  }
 }
 
 @main_template(scriptElem = Some(pageScripts)) {
@@ -47,7 +78,7 @@
 
     @helper.CSRF.formField
 
-    @if(companyOfficersForm.value.isDefined) {
+    @if(params.canRemove) {
       <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
     }
     <h2>@Messages("fh.company_officers.each.title", section)</h2>
@@ -324,27 +355,7 @@
       )
     </div>
 
-    @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"addMore"),
-          value = companyOfficersForm(s"addMore").value,
-          legend = Some(Messages("fh.company_officers.company.addMore")),
-          error = Some(Messages("fh.addMore.error.required")),
-          hasErrors = companyOfficersForm(s"addMore").hasErrors,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None 
-            )
-          )
-        )
-      )
+    @addMore
 
     @SubmitButtons(
       SubmitButtonsParams(

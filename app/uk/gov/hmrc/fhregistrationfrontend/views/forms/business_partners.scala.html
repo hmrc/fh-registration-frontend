@@ -22,11 +22,42 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
-@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String)(implicit request: Request[_], messages: Messages)
+@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@addMore = {
+  @params.forceHasMore match {
+    case Some(force) => {
+      <input type="hidden" name="addMore" value="@Some(force)" />
+    }
+    case None => {
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = businessPartnerForm(s"addMore").value,
+          legend = Some(Messages("fh.business_partners.addMore")),
+          error = Some(Messages("fh.addMore.error.required")),
+          hasErrors = businessPartnerForm(s"addMore").hasErrors,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None
+            )
+          )
+        )
+      )
+    }
+  }
 }
 
 
@@ -61,7 +92,7 @@
 
     @helper.CSRF.formField
 
-    @if(businessPartnerForm.value.isDefined) {
+    @if(params.canRemove) {
       <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("businessPartners", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
     }
 
@@ -134,27 +165,7 @@
       @business_partners_unincorporated_body(businessPartnerForm)
     </div>
 
-    @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"addMore"),
-          value = businessPartnerForm(s"addMore").value,
-          legend = Some(Messages("fh.business_partners.addMore")),
-          error = Some(Messages("fh.addMore.error.required")),
-          hasErrors = businessPartnerForm(s"addMore").hasErrors,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None 
-            )
-          )
-        )
-      )
+    @addMore
 
     @SubmitButtons(
       SubmitButtonsParams(
