@@ -58,7 +58,7 @@ case class RepeatingPage[T](
 
   private def validSection(sectionId: String): Boolean = {
     Try(sectionId.toInt)
-      .map(s ⇒ s >= 1 && s <= value.size + 1)
+      .map(s ⇒ s >= 1 && s <= value.size + 1 && s <= maxItems)
       .getOrElse(false)
   }
 
@@ -70,7 +70,6 @@ case class RepeatingPage[T](
     else
       None
 
-  Some(section(index + 1))
 
   def section(index: Int) = (index + 1).toString
 
@@ -111,8 +110,8 @@ case class RepeatingPage[T](
   def renderingParams = RepeatingPageParams(
     canRemove = value.size > minItems,
     forceHasMore =
-      if (value.size < minItems) Some(true)
-      else if (value.size >= maxItems) Some(false)
+      if (math.max(value.size, index + 1) < minItems) Some(true)
+      else if (math.max(value.size, index + 1) >= maxItems) Some(false)
       else None
   )
 
