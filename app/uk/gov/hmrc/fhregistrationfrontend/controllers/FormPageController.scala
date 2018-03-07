@@ -31,7 +31,8 @@ import scala.concurrent.Future
 class FormPageController @Inject()(
   ds               : CommonPlayDependencies,
   links            : ExternalUrls
-)(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) extends AppController(ds) with SubmitForLater with UnexpectedState {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SubmitForLater with UnexpectedState {
+
 
   def load(pageId: String) = PageAction(pageId).async { implicit request ⇒
     renderForm(request.page, false)

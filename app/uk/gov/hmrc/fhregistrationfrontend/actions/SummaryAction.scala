@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import cats.data.EitherT
 import cats.implicits._
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
@@ -48,10 +48,10 @@ class SummaryRequest[A](
 }
 
 object SummaryAction {
-  def apply(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) = UserAction andThen new SummaryAction
+  def apply(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = UserAction andThen new SummaryAction
 }
 
-class SummaryAction(implicit val save4LaterService: Save4LaterService, val messages: Messages, val request: Request[_])
+class SummaryAction(implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
   extends JourneyAction
     with ActionRefiner[UserRequest, SummaryRequest]{
 
@@ -60,7 +60,7 @@ class SummaryAction(implicit val save4LaterService: Save4LaterService, val messa
     val result: EitherT[Future, Result, SummaryRequest[A]] = for {
       cacheMap ← EitherT(loadCacheMap)
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
-      _ ← journeyIsComplete(journeyPages, cacheMap, messages, request).toEitherT[Future]
+      _ ← journeyIsComplete(journeyPages, cacheMap).toEitherT[Future]
       bpr ← findBpr(cacheMap).toEitherT[Future]
       bt ← getBusinessType(cacheMap).toEitherT[Future]
     } yield {
@@ -70,12 +70,12 @@ class SummaryAction(implicit val save4LaterService: Save4LaterService, val messa
     result.value
   }
 
-  def journeyIsComplete(journeyPages: JourneyPages, cacheMap: CacheMap, messages: Messages, request: Request[_]): Either[Result, Boolean] = {
+  def journeyIsComplete(journeyPages: JourneyPages, cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, Boolean] = {
     if(loadJourneyState(journeyPages, cacheMap).isComplete)
       Right(true)
     else
       Logger.error(s"Bad Request")
-      Left(errorResultsPages(Results.BadRequest)(request,messages))
+      Left(errorResultsPages(Results.BadRequest))
   }
 
 }

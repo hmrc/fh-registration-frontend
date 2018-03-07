@@ -37,7 +37,7 @@ class SummaryController @Inject()(
   pdfGeneratorConnector: PdfGeneratorConnector,
   links                : ExternalUrls,
   keyStoreService      : KeyStoreService
-)(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
   def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = UserAction.async { implicit request ⇒
     keyStoreService.fetchAndGetEntry().flatMap {
@@ -59,7 +59,7 @@ class SummaryController @Inject()(
   }
 
 
-  def summary() = SummaryAction(save4LaterService, messages, request).async { implicit request ⇒
+  def summary() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
     keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp="timeStampPlaceHolder").toString()).map(
       _⇒ Ok(getSummaryHtml(request))
     )

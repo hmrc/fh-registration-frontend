@@ -41,13 +41,13 @@ class DeclarationController @Inject()(
   links         : ExternalUrls,
   desToForm     : DesToForm,
   fhddsConnector: FhddsConnector
-)(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
   val emailSessionKey = "declaration_email"
   val submitTimeKey = "submit_time"
   val formToDes: FormToDes = new FormToDesImpl()
 
-  def showDeclaration() = SummaryAction(save4LaterService, messages, request) { implicit request ⇒
+  def showDeclaration() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
@@ -59,7 +59,7 @@ class DeclarationController @Inject()(
     )
   }
 
-  def submitForm() = SummaryAction(save4LaterService, messages, request).async { implicit request ⇒
+  def submitForm() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
     declarationForm.bindFromRequest().fold(
       formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
       declaration => {

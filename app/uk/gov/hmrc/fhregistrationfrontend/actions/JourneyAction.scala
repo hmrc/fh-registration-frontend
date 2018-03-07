@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.mvc.Result
 import play.api.Logger
-import play.api.i18n.Messages
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Request, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
@@ -31,10 +30,9 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-trait JourneyAction extends FrontendAction with UnexpectedState {
+trait JourneyAction extends FrontendAction with UnexpectedState with I18nSupport {
   implicit val save4LaterService: Save4LaterService
-  implicit val messages: Messages
-  implicit val request: Request[_]
+  implicit val messagesApi: MessagesApi
 
   def loadCacheMap(implicit request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.shortLivedCache.fetch(request.userId) map {
@@ -48,7 +46,7 @@ trait JourneyAction extends FrontendAction with UnexpectedState {
     }
   }
 
-  def findBpr(cacheMap: CacheMap): Either[Result, BusinessRegistrationDetails] = {
+  def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] = {
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {
       case Some(bpr) ⇒ Right(bpr)
       case None ⇒
@@ -57,7 +55,7 @@ trait JourneyAction extends FrontendAction with UnexpectedState {
     }
   }
 
-  def getBusinessType(cacheMap: CacheMap): Either[Result, BusinessType] = {
+  def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] = {
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ Right(bt)
       case None ⇒
@@ -70,7 +68,7 @@ trait JourneyAction extends FrontendAction with UnexpectedState {
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
   }
 
-  def getJourneyPages(cacheMap: CacheMap): Either[Result, JourneyPages] = {
+  def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
     getBusinessType(cacheMap).right flatMap {
       _ match {
         case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)

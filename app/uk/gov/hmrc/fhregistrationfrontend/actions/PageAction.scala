@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import play.api.Logger
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
@@ -42,14 +42,14 @@ class PageRequest[A](
 }
 
 object PageAction {
-  def apply(pageId: String)(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) = UserAction andThen new PageAction(pageId, None)
-  def apply(pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) = UserAction andThen new PageAction(pageId, sectionId)
+  def apply(pageId: String)(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = UserAction andThen new PageAction(pageId, None)
+  def apply(pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = UserAction andThen new PageAction(pageId, sectionId)
 }
 
 
 //TODO all exceptional results need to be reviewed
 class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit val save4LaterService: Save4LaterService, val messages: Messages, val request: Request[_])
+  (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
   extends JourneyAction with ActionRefiner[UserRequest, PageRequest] {
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, PageRequest[A]]] = {
@@ -60,7 +60,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages, cacheMap)
       page <- loadPage(input, journeyState).toEitherT[Future]
-      _ ← accessiblePage(page, journeyState)(messages, request).toEitherT[Future]
+      _ ← accessiblePage(page, journeyState).toEitherT[Future]
       pageWithData = loadPageWithData(cacheMap, page)
       pageWithSection ← loadPageSection(pageWithData).toEitherT[Future]
       journeyNavigation = loadJourneyNavigation(journeyPages, journeyState)
@@ -76,7 +76,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
     result.value
   }
 
-  def accessiblePage(page: AnyPage, state: JourneyState)(implicit messages: Messages, request: Request[_]):  Either[Result, Boolean] = {
+  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]):  Either[Result, Boolean] = {
     if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
       Right(true)
     } else {
@@ -95,7 +95,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
     }
   }
 
-  def loadPageSection(page: Page[T])(implicit messages: Messages, request: Request[_]): Either[Result, Page[T]] = {
+  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] = {
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else

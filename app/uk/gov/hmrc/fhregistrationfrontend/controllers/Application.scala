@@ -135,7 +135,7 @@ class Application @Inject()(
       }
   }
 
-  def resumeForm = ResumeJourneyAction() { implicit request ⇒
+  def resumeForm = ResumeJourneyAction()(save4LaterService, messages) { implicit request ⇒
     if(request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary())
     else {
@@ -212,7 +212,7 @@ abstract class AppController(ds: CommonPlayDependencies)
 
   def usewhiteListing: Boolean = false
 
-  override val messagesApi: MessagesApi = ds.messagesApi
+  override implicit val messagesApi: MessagesApi = ds.messagesApi
 
   override def authConnector: PlayAuthConnector = FrontendAuthConnector
 
