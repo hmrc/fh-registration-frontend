@@ -28,7 +28,7 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
   extends Page[T]
     with Rendering {
 
-  override def withData(data: T) = this copy (data = Some(data), form = form.fill(data))
+  override def withData(data: T) = this copy (data = Some(data))
 
 
   override def nextSubsection: Option[String] = None
@@ -59,4 +59,7 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
 
   override def delete: Option[Page[T]] = None
 
+  override def pageStatus: PageStatus = if (data.isDefined) Completed else NotStarted
+
+  override def lastSection: Option[String] = None
 }

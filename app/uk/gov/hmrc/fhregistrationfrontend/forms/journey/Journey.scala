@@ -42,4 +42,7 @@ trait JourneyState {
 
   def nextPageToComplete(): Option[String]
   def isPageComplete(page: AnyPage): Boolean
+
+  def get[T](pageId: String): Option[Page[T]]
+  def lastEditedPage: Option[AnyPage]
 }

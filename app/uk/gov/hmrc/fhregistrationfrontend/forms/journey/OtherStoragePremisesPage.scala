@@ -105,4 +105,15 @@ case class OtherStoragePremisesPage(
       )
     }
 
+  override def pageStatus: PageStatus =
+    if (mainPage.pageStatus != Completed) mainPage.pageStatus
+    else if (!hasOtherPremises) Completed
+    else if (storagePremisePage.pageStatus == Completed) Completed
+    else InProgress
+
+  override def lastSection: Option[String] =
+    if (hasOtherPremises)
+      storagePremisePage.lastSection
+    else
+      None
 }

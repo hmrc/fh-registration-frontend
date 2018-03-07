@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType

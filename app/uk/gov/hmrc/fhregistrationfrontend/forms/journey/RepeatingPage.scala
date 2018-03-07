@@ -123,4 +123,14 @@ case class RepeatingPage[T](
     else
       Some(this copy (value = value remove index))
 
+  override def pageStatus: PageStatus =
+    if (value.size == 0 && minItems > 0 ) NotStarted
+    else if (value.size < minItems) InProgress
+    else Completed
+
+  override def lastSection: Option[String] =
+    if (value.size == 0)
+      None
+    else
+      Some(section(value.size - 1))
 }

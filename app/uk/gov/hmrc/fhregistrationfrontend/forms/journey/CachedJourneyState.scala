@@ -21,7 +21,14 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends JourneyState {
 
-  val pages = journeyPages.pages
+  val pages = journeyPages.pages map { page ⇒ pageWithData(page) }
+
+  private def pageWithData[T](page: Page[T]) = {
+    cacheMap.getEntry(page.id)(page.format) match {
+      case Some(data) ⇒ page withData data
+      case None ⇒ page
+    }
+  }
 
   override def isComplete: Boolean = pages forall isPageComplete
 
@@ -30,10 +37,30 @@ class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends
     case index ⇒ pages take index forall isPageComplete
   }
 
-  override def nextPageToComplete(): Option[String] = pages find { p ⇒ !(cacheMap.data contains p.id)} map (_.id)
+  override def nextPageToComplete(): Option[String] = pages find { p ⇒ !isPageComplete(p)} map (_.id)
 
 
-  override def isPageComplete(page: AnyPage) = cacheMap.data contains page.id
+  override def isPageComplete(page: AnyPage) = page.pageStatus == Completed
 
+  def get[T](pageId: String): Option[Page[T]] = {
+    pages find ( _.id == pageId) map (_.asInstanceOf[Page[T]])
+  }
+
+  override def lastEditedPage: Option[AnyPage] = {
+    val firstNotCompletedIndex = pages indexWhere ( _.pageStatus != Completed)
+
+    if (firstNotCompletedIndex < 0)
+      None
+    else
+      pages(firstNotCompletedIndex).pageStatus match {
+        case InProgress ⇒ Some(pages(firstNotCompletedIndex))
+        case NotStarted ⇒
+          if (firstNotCompletedIndex == 0)
+            None
+          else
+            Some(pages(firstNotCompletedIndex - 1))
+      }
+
+  }
 
 }

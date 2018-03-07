@@ -57,6 +57,9 @@ trait Page[T] extends Rendering {
 
   /** returns None if the page can not be deleted or Some(new page state)*/
   def delete: Option[Page[T]]
+
+  def pageStatus: PageStatus
+  def lastSection: Option[String]
 }
 
 object Page {
