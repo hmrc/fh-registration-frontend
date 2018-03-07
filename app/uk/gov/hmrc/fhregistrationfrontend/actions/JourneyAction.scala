@@ -17,6 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.mvc.Result
+import play.api.Logger
+import play.api.i18n.Messages
+import play.api.mvc.{Request, Result, Results}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -27,29 +31,38 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-trait JourneyAction extends FrontendAction {
+trait JourneyAction extends FrontendAction with UnexpectedState {
   implicit val save4LaterService: Save4LaterService
+  implicit val messages: Messages
+  implicit val request: Request[_]
 
   def loadCacheMap(implicit request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.shortLivedCache.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒ Left(NotFound)
+      case None ⇒
+        Logger.error(s"Not found in shortLivedCache")
+        Left(errorResultsPages(Results.NotFound))
     } recover { case t ⇒
-      Left(BadGateway)
+      Logger.error(s"Not found in shortLivedCache")
+      Left(errorResultsPages(Results.BadGateway))
     }
   }
 
   def findBpr(cacheMap: CacheMap): Either[Result, BusinessRegistrationDetails] = {
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {
       case Some(bpr) ⇒ Right(bpr)
-      case None ⇒ Left(NotFound("Not found: bpr"))
+      case None ⇒
+        Logger.error(s"Not found bpr")
+        Left(errorResultsPages(Results.NotFound))
     }
   }
 
   def getBusinessType(cacheMap: CacheMap): Either[Result, BusinessType] = {
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ Right(bt)
-      case None ⇒ Left(NotFound("Not found: business type"))
+      case None ⇒
+        Logger.error(s"Not found business type")
+        Left(errorResultsPages(Results.NotFound))
     }
   }
 
@@ -63,7 +76,9 @@ trait JourneyAction extends FrontendAction {
         case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
         case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages)
         case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
-        case _                          ⇒ Left(NotFound("Not found: wrong business type"))
+        case _                          ⇒
+          Logger.error(s"Not found: wrong business type")
+          Left(errorResultsPages(Results.NotFound))
       }
     }
   }

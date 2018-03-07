@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
+import play.api.i18n.Messages
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyState
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -30,11 +31,11 @@ class ResumeJourneyRequest[A](
 ) extends WrappedRequest[A](request)
 
 object ResumeJourneyAction {
-  def apply(implicit save4LaterService: Save4LaterService) = UserAction andThen new ResumeJourneyAction
+  def apply()(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) = UserAction andThen new ResumeJourneyAction
 }
 
 
-class ResumeJourneyAction(implicit val save4LaterService: Save4LaterService)
+class ResumeJourneyAction(implicit val save4LaterService: Save4LaterService, val messages: Messages, val request: Request[_])
   extends ActionRefiner[UserRequest, ResumeJourneyRequest]
   with FrontendAction
   with JourneyAction

@@ -17,9 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{PageAction, PageRequest, UserAction}
+import play.api.Logger
+import play.api.i18n.Messages
+import play.api.mvc.{Action, AnyContent, Request, Results}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{PageAction, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
@@ -29,10 +30,8 @@ import scala.concurrent.Future
 @Singleton
 class FormPageController @Inject()(
   ds               : CommonPlayDependencies,
-  messagesApi      : play.api.i18n.MessagesApi,
   links            : ExternalUrls
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) with SubmitForLater {
-
+)(implicit save4LaterService: Save4LaterService, messages: Messages, request: Request[_]) extends AppController(ds) with SubmitForLater with UnexpectedState {
 
   def load(pageId: String) = PageAction(pageId).async { implicit request ⇒
     renderForm(request.page, false)
@@ -65,28 +64,33 @@ class FormPageController @Inject()(
     )
   }
 
-  def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
-    if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
-      request.page[T].delete match {
-        case None ⇒ Future successful BadRequest("bad request")
-        case Some(newPage) ⇒
-          save4LaterService
-            .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
-            .map { _ ⇒
-              showNextPage(newPage)
-            }
+  def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
+    PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+      if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
+        request.page[T].delete match {
+          case None          ⇒ Future successful errorResultsPages(Results.BadRequest)
+          case Some(newPage) ⇒
+            save4LaterService
+              .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
+              .map { _ ⇒
+                showNextPage(newPage)
+              }
+        }
+      } else {
+        Logger.error(s"Not Found. Expired")
+        Future successful errorResultsPages(Results.NotFound)
       }
-    } else {
-      Future successful NotFound("Not Found. Expired")
     }
-  }
 
-  def confirmDeleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] = PageAction(pageId, Some(sectionId)).async { implicit request ⇒
-    if (request.lastUpdateTimestamp == lastUpdateTimestamp)
-      Future successful Ok(confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
-    else
-      Future successful NotFound("Not Found. Expired")
-  }
+  def confirmDeleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
+    PageAction(pageId, Some(sectionId)).async { implicit request ⇒
+      if (request.lastUpdateTimestamp == lastUpdateTimestamp)
+        Future successful Ok(confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
+      else {
+        Logger.error(s"Not Found. Expired")
+        Future successful errorResultsPages(Results.NotFound)
+      }
+    }
 
 
   def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
