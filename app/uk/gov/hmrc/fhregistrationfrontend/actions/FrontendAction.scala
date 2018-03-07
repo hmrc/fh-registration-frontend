@@ -29,5 +29,4 @@ trait FrontendAction extends Results {
 
   implicit def mdcExecutionContext(implicit loggingDetails: LoggingDetails): ExecutionContext = MdcLoggingExecutionContext.fromLoggingDetails
 
-
 }

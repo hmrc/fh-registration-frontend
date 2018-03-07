@@ -18,13 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.{internalId, email, allEnrolments}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
 import uk.gov.hmrc.auth.core.retrieve.~
-
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession, PlayAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{continueUrl, getString, ggLoginUrl}
+import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
 
