@@ -98,9 +98,10 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
   def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] = {
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
-    else
+    else {
       Logger.error(s"Not found")
       Left(errorResultsPages(Results.NotFound))
+    }
   }
 
   def loadPage[A](request: UserRequest[A], journeyState: JourneyState)(implicit messages: Messages): Either[Result, Page[T]] =
