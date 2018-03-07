@@ -18,11 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
-import org.joda.time.DateTime
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
@@ -57,9 +56,9 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit val s
     val result: EitherT[Future, Result, PageRequest[A]] = for {
       cacheMap ← EitherT(loadCacheMap)
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
-      page <- loadPage(input, journeyPages).toEitherT[Future]
-
       journeyState = loadJourneyState(journeyPages, cacheMap)
+      page <- loadPage(input, journeyState).toEitherT[Future]
+
       _ ← accessiblePage(page, journeyState).toEitherT[Future]
       pageWithData = loadPageWithData(cacheMap, page)
       pageWithSection ← loadPageSection(pageWithData).toEitherT[Future]
@@ -75,8 +74,6 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit val s
     }
     result.value
   }
-
-
 
   def accessiblePage(page: AnyPage, state: JourneyState):  Either[Result, Boolean] = {
     if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
@@ -103,8 +100,8 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(implicit val s
       Left(NotFound("Not found"))
   }
 
-  def loadPage[A](request: UserRequest[A], journeyPages: JourneyPages): Either[Result, Page[T]] =
-    journeyPages.get[T](pageId) match {
+  def loadPage[A](request: UserRequest[A], journeyState: JourneyState): Either[Result, Page[T]] =
+    journeyState.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
       case None       ⇒ Left(NotFound("Not Found"))
     }

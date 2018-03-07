@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
 import javax.inject.{Inject, Singleton}
+
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
@@ -30,7 +31,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
 import uk.gov.hmrc.auth.otac.OtacFailureThrowable
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, ResumeJourneyAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -122,11 +123,23 @@ class Application @Inject()(
             case None            ⇒ Future successful ServiceUnavailable
           }
         } else {
-          //todo goto the right page
-          Future successful Redirect(routes.Application.startForm())
+          Future successful Redirect(routes.Application.resumeForm())
         }
       }
     )
+  }
+
+  def resumeForm = ResumeJourneyAction(save4LaterService) { implicit request ⇒
+    if(request.journeyState.isComplete)
+      Redirect(routes.SummaryController.summary())
+    else {
+      request.journeyState.lastEditedPage.map( p ⇒ p.id → p.lastSection) match {
+        case None ⇒ Redirect(routes.Application.startForm())
+        case Some((pid , Some(section))) ⇒  Redirect(routes.FormPageController.loadWithSection(pid, section))
+        case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
+
+      }
+    }
   }
 
   def deleteUserData = UserAction.async { implicit request ⇒
