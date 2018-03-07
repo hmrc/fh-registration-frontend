@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.Logger
-import play.api.i18n.Messages
-import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
+import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 
 import scala.concurrent.Future
 
@@ -33,13 +30,14 @@ class EnrolledUserRequest[A](
 }
 
 object EnrolledUserAction {
-  def apply()(implicit messages: Messages) = UserAction andThen new EnrolledUserAction
+  def apply() = UserAction andThen new EnrolledUserAction
 
 }
 
-class EnrolledUserAction (implicit val messages: Messages)
+class EnrolledUserAction
   extends FrontendAction
-    with ActionRefiner[UserRequest, EnrolledUserRequest] with UnexpectedState {
+    with ActionRefiner[UserRequest, EnrolledUserRequest]
+{
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EnrolledUserRequest[A]]] = {
     implicit val r = request
@@ -47,9 +45,7 @@ class EnrolledUserAction (implicit val messages: Messages)
       case Some(registrationNumber) ⇒
         Future successful Right(new EnrolledUserRequest[A](registrationNumber, request))
       case None ⇒
-        Logger.error(s"Not found: registration number")
-        Future successful Left(errorResultsPages(Results.NotFound))
+        Future successful Left(NotFound("Not found: registration number"))
     }
   }
-
 }

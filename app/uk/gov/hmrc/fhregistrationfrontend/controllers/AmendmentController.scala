@@ -32,10 +32,13 @@ import scala.concurrent.Future
 @Inject
 class AmendmentController @Inject()(
   ds               : CommonPlayDependencies,
+  messagesApi      : play.api.i18n.MessagesApi,
   links            : ExternalUrls,
   desToForm        : DesToForm,
   fhddsConnector   : FhddsConnector
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
+
+
 
   def startAmendment() = EnrolledUserAction().async { implicit request ⇒
 
@@ -75,5 +78,6 @@ class AmendmentController @Inject()(
         Journeys unapplyPartnershipApplication application
     }
   }
+
 
 }

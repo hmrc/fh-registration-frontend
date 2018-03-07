@@ -19,8 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import java.time.LocalDateTime
 
 import javax.inject.Inject
-import play.api.i18n.Messages
-import play.api.mvc.{AnyContent, Request}
+import play.api.mvc.AnyContent
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
@@ -35,9 +34,10 @@ import uk.gov.hmrc.http.BadRequestException
 class SummaryController @Inject()(
   ds                   : CommonPlayDependencies,
   pdfGeneratorConnector: PdfGeneratorConnector,
+  messagesApi          : play.api.i18n.MessagesApi,
   links                : ExternalUrls,
   keyStoreService      : KeyStoreService
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
   def downloadPdf(timeStamp: String = LocalDateTime.now().toString) = UserAction.async { implicit request ⇒
     keyStoreService.fetchAndGetEntry().flatMap {
@@ -59,7 +59,7 @@ class SummaryController @Inject()(
   }
 
 
-  def summary() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
+  def summary() = SummaryAction(save4LaterService).async { implicit request ⇒
     keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp="timeStampPlaceHolder").toString()).map(
       _⇒ Ok(getSummaryHtml(request))
     )

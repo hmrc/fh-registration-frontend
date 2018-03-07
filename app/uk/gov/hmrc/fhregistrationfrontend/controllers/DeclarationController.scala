@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
-
 import javax.inject.Inject
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
@@ -30,24 +29,24 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscr
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
-import play.api.i18n.Messages
-import play.api.mvc.Request
 
 import scala.concurrent.Future
 
 @Inject
 class DeclarationController @Inject()(
   ds            : CommonPlayDependencies,
+  messagesApi   : play.api.i18n.MessagesApi,
   links         : ExternalUrls,
   desToForm     : DesToForm,
   fhddsConnector: FhddsConnector
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds, messagesApi) {
 
   val emailSessionKey = "declaration_email"
   val submitTimeKey = "submit_time"
   val formToDes: FormToDes = new FormToDesImpl()
 
-  def showDeclaration() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
+
+  def showDeclaration() = SummaryAction(save4LaterService) { implicit request ⇒
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
@@ -59,7 +58,7 @@ class DeclarationController @Inject()(
     )
   }
 
-  def submitForm() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
+  def submitForm() = SummaryAction(save4LaterService).async { implicit request ⇒
     declarationForm.bindFromRequest().fold(
       formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
       declaration => {
