@@ -129,6 +129,13 @@ class Application @Inject()(
     )
   }
 
+  def confirmDelete = UserAction.async { implicit request ⇒
+      save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+        case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+        case None            ⇒ Future successful ServiceUnavailable
+      }
+  }
+
   def resumeForm = ResumeJourneyAction(save4LaterService) { implicit request ⇒
     if(request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary())

@@ -37,6 +37,7 @@ GET         /saved                                                              
 
 GET         /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteOrContinue(isNewForm: Boolean)
 POST        /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
+GET         /confirmDelete                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
 
 GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
 
