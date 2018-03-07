@@ -48,13 +48,11 @@
 
   <ul class="bullets">
     <li>
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.start()}">
-        @Messages("fh.held_until.continue")
-      </a>
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.resumeForm()}">@Messages("fh.held_until.continue")</a>
       @Messages("fh.held_until.continue.notice")
     </li>
     <li>@Messages("fh.held_until.delete")
-      <a href="#">
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDelete()}">
         @Messages("fh.held_until.delete.notice")
       </a>
     </li>
