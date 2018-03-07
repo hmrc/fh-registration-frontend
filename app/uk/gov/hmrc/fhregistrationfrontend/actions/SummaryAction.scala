@@ -73,9 +73,10 @@ class SummaryAction(implicit val save4LaterService: Save4LaterService, val messa
   def journeyIsComplete(journeyPages: JourneyPages, cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, Boolean] = {
     if(loadJourneyState(journeyPages, cacheMap).isComplete)
       Right(true)
-    else
+    else {
       Logger.error(s"Bad Request")
       Left(errorResultsPages(Results.BadRequest))
+    }
   }
 
 }
