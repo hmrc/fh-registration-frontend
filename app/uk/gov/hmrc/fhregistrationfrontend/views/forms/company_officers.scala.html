@@ -30,7 +30,7 @@
 @addMore = {
   @params.forceHasMore match {
     case Some(force) => {
-      <input type="hidden" name="addMore" value="@Some(force)" />
+      <input type="hidden" name="addMore" value="@force" />
     }
     case None => {
       @RadioGroup(
