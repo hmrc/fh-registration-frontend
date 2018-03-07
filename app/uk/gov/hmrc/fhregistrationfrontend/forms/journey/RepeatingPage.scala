@@ -108,7 +108,7 @@ case class RepeatingPage[T](
   }
 
   def renderingParams = RepeatingPageParams(
-    canRemove = value.size > minItems,
+    canRemove = value.size > minItems && index < value.size,
     forceHasMore =
       if (math.max(value.size, index + 1) < minItems) Some(true)
       else if (math.max(value.size, index + 1) >= maxItems) Some(false)
