@@ -67,14 +67,20 @@ class SummaryController @Inject()(
 
   private def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: String = ""): Html = {
 
-    val urlProtocol = ds.conf
-      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
-    val urlHost = ds.conf
-      .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host").getOrElse("fh-registration-frontend.public.mdtp")
-    val urlPort = ds.conf
-      .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
 
-    val url = s"$urlProtocol://$urlHost:$urlPort"
+    val url =
+      if (forPrint) {
+        val urlProtocol = ds.conf
+          .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
+        val urlHost = ds.conf
+          .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host").getOrElse("fh-registration-frontend.public.mdtp")
+        val urlPort = ds.conf
+          .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
+
+        Some(s"$urlProtocol://$urlHost:$urlPort")
+      } else {
+        None
+      }
 
     request.businessType match {
       case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp)(request)
@@ -85,18 +91,18 @@ class SummaryController @Inject()(
 
   private def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
 
-  def partnership(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
+  def partnership(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys partnershipApplication request
     partnership_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
 
-  def soleTrader(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
+  def soleTrader(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys soleTraderApplication request
     sole_proprietor_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
   }
 
-  def ltdSummary(forPrint: Boolean = false, baseUrl: String, timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
+  def ltdSummary(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: String = "")(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys ltdApplication request
 
     ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp)

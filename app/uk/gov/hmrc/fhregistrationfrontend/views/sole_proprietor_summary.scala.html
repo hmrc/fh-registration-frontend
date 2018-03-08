@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.SoleProprietorApplication
 @import play.api.Environment
 
-@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: Option[String], forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
