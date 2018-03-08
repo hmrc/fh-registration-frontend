@@ -73,12 +73,8 @@ class DeclarationController @Inject()(
   }
 
   private def sendSubscription(declaration: Declaration)(implicit request: SummaryRequest[_]) = {
-    val submissionRequest =
-      if (request.userIsRegistered) {
-        amendedSubmissionRequest(declaration)
-      } else {
-       newSubmissionRequest(declaration)
-      }
+    /** use amendedSubmissionRequest when an enroled user submits a request */
+    val submissionRequest = newSubmissionRequest(declaration)
 
     val result = submissionRequest flatMap { fhddsConnector.submit(_) }
     result map { _ ⇒

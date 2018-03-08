@@ -55,14 +55,14 @@ class AmendmentController @Inject()(
     }
   }
 
-  def savePageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
+  private def savePageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) {
       case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveData4Later(userId, page.id, page.data.get)(hc, page.format)}
     }
   }
 
-  def loadJourneyPagesFromDes(display: SubscriptionDisplay) = {
+  private def loadJourneyPagesFromDes(display: SubscriptionDisplay) = {
     desToForm.entityType(display) match {
       case BusinessType.CorporateBody ⇒
         val application = desToForm.limitedCompanyApplication(display)
