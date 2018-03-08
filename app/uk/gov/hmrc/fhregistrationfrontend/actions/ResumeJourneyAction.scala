@@ -32,7 +32,7 @@ class ResumeJourneyRequest[A](
 
 object ResumeJourneyAction {
   def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    UserAction andThen NoEnrolmentCheckAction(messagesApi) andThen new ResumeJourneyAction
+    UserAction andThen NoEnrolmentCheckAction() andThen new ResumeJourneyAction
 }
 
 

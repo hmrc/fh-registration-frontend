@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
 import scala.concurrent.Future
 
 object NoEnrolmentCheckAction {
-  def apply(implicit messagesApi: MessagesApi) = UserAction andThen new NoEnrolmentCheckAction
+  def apply()(implicit messagesApi: MessagesApi) = UserAction andThen new NoEnrolmentCheckAction
 }
 
 class NoEnrolmentCheckAction(implicit val messagesApi: MessagesApi)
@@ -32,13 +32,7 @@ class NoEnrolmentCheckAction(implicit val messagesApi: MessagesApi)
     with I18nSupport
     with UnexpectedState {
 
+  // Check is DISABLED
   override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] =
-    Future successful {
-      implicit val r = request
-
-      if (request.userIsRegistered)
-        Some(errorResultsPages(Results.BadRequest))
-      else
-        None
-    }
+    Future successful None
 }

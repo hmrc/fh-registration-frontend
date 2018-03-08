@@ -43,10 +43,10 @@ class PageRequest[A](
 
 object PageAction {
   def apply(pageId: String)(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    UserAction andThen NoEnrolmentCheckAction(messagesApi) andThen new PageAction(pageId, None)
+    UserAction andThen NoEnrolmentCheckAction() andThen new PageAction(pageId, None)
 
   def apply(pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    UserAction andThen NoEnrolmentCheckAction(messagesApi) andThen new PageAction(pageId, sectionId)
+    UserAction andThen NoEnrolmentCheckAction() andThen new PageAction(pageId, sectionId)
 }
 
 
