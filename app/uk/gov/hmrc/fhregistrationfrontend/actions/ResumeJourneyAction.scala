@@ -31,7 +31,8 @@ class ResumeJourneyRequest[A](
 ) extends WrappedRequest[A](request)
 
 object ResumeJourneyAction {
-  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = UserAction andThen new ResumeJourneyAction
+  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
+    UserAction andThen NoEnrolmentCheckAction(messagesApi) andThen new ResumeJourneyAction
 }
 
 
