@@ -1,0 +1,78 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
+
+@(individual: BusinessPartnerIndividualModel)(implicit request: Request[_], messages: Messages)
+
+@SummaryRow(
+    SummaryRowParams.ofString(
+        Some(Messages("fh.business_partners.entity_type.label")),
+        Messages("fh.business_partners.entity_type.individual.label"),
+        None
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams.ofString(
+        Some(Messages("fh.business_partners.individual.first_name.label")),
+        individual.firstName,
+        None
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams.ofString(
+        Some(Messages("fh.business_partners.individual.last_name.label")),
+        individual.lastName,
+        None
+    )
+)
+
+@SummaryRow(
+    SummaryRowParams.ofBoolean(
+        Some(Messages("fh.business_partners.individual.nino.confirm.label")),
+        individual.hasNino,
+        None
+    )
+)
+
+@if(individual.hasNino) {
+    @SummaryRow(
+        SummaryRowParams(
+            Some(Messages("fh.business_partners.individual.nino.label")),
+            individual.nino,
+            None
+        )
+    )
+}
+
+
+@SummaryAddress(
+    SummaryAddressParams(
+        Some(Messages("fh.business_partners.enter.partner_address")),
+        SummaryAddressBlock(
+            Line1 = Some(individual.address.addressLine1),
+            Line2 = individual.address.addressLine2,
+            Line3 = individual.address.addressLine3,
+            Line4 = individual.address.addressLine4,
+            postcode = Some(individual.address.postcode)
+        ),
+        None
+    )
+)

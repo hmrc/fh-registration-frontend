@@ -1,16 +1,45 @@
 # microservice specific routes
 
-GET   /                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
-GET   /continue                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue()
-POST  /select-entity-type                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitEntityType()
+GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
 
+GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
+POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
-GET   /continueWithEntityType                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithEntityType()
+GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
-GET   /whitelisted                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
+GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
-GET   /fulfilment-diligence/subscription/:fhddsRegistrationNumber/status   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus(fhddsRegistrationNumber)
+GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
+GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
+
+GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
+
+GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
+GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
+POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
+POST        /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
+POST        /form/:page/:section/delete/:timestamp                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String, timestamp: Long)
+GET         /form/:page/:section/confirmDelete/:timestamp                             @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, timestamp: Long)
+GET         /resume                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
+
+GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
+GET         /downloadPdf/:timeStamp                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
+
+GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
+POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
+GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
+
+GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+
+GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
+
+GET         /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteOrContinue(isNewForm: Boolean)
+POST        /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
+GET         /confirmDelete                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
+
+GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                   controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

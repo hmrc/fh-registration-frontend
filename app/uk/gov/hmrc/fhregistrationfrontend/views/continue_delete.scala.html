@@ -1,0 +1,65 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import org.joda.time.DateTime
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+
+@(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages)
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.continue_delete.header")
+    )
+  )
+
+  <legend class="heading-medium">
+    @Messages("fh.continue_delete.to_do")
+  </legend>
+
+  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue()}" method="POST">
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+    
+    @helper.CSRF.formField
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some("deleteOrContinue"),
+        inline = false,
+        required = true,
+        hasErrors = act("act").hasErrors,
+        error = Some(Messages("fh.business_customers.error")),
+        value = Some("continue"),
+        hintText = Some(Messages("fh.continue_delete.continue.hint") + s" ${expiryTime.plusDays(27).toLocalDate.toString("d MMMM yyyy")
+        } " + Messages("fh.continue_delete.continue.hint_continue")),
+        radios = List(
+          RadioParams(
+            "continue",
+            Messages("fh.continue_delete.continue")
+          ),
+          RadioParams(
+            "delete",
+            Messages("fh.continue_delete.delete")
+          )
+        )
+      )
+    )
+
+    <br><br><button class="button">@Messages("fh.generic.continue")</button><br><br>
+  </form>
+}

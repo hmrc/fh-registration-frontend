@@ -1,0 +1,368 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@addMore = {
+  @params.forceHasMore match {
+    case Some(force) => {
+      <input type="hidden" name="addMore" value="@force" />
+    }
+    case None => {
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = companyOfficersForm(s"addMore").value,
+          legend = Some(Messages("fh.company_officers.company.addMore")),
+          error = Some(Messages("fh.addMore.error.required")),
+          hasErrors = companyOfficersForm(s"addMore").hasErrors,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None
+            )
+          )
+        )
+      )
+    }
+  }
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @Back(navigation)
+
+  @error_box(companyOfficersForm, sectionP=section)
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.company_officers.title")
+    )
+  )
+
+  <p>@Messages("fh.company_officers.intro")</p>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @if(params.canRemove) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
+    }
+    <h2>@Messages("fh.company_officers.each.title", section)</h2>
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(identificationTypeKey),
+        legend = Some(Messages("fh.company_officers.entity_type.label")),
+        hasErrors = companyOfficersForm(identificationTypeKey).hasErrors,
+        error = Some(Messages("fh.identificationType.error.required", section)),
+        value = companyOfficersForm(identificationTypeKey).value,
+        inline = false,
+        radios = List(
+          RadioParams(
+            "Individual",
+            Messages("fh.company_officers.individual.label"),
+            Some("individualOfficers")
+          ),
+          RadioParams(
+            "Company",
+            Messages("fh.company_officers.company.label"),
+            Some("companyOfficers")
+          )
+        )
+      )
+    )
+
+    <div class="form-group panel js-hidden" id="individualOfficers">
+
+      <h2>@Messages("fh.company_officers.individual.title")</h2>
+
+      @TextInput(
+        TextInputParams(
+          name = s"$individualIdentificationKey.$firstNameKey",
+          label = Messages("fh.contact_person.first_name.label"),
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").value,
+          error = Messages("fh.individualIdentification.firstName." + companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").error.fold("")(_.message), section)
+        )
+      )
+
+      @TextInput(
+        TextInputParams(
+          name = s"$individualIdentificationKey.$lastNameKey",
+          label = Messages("fh.contact_person.last_name.label"),
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").value,
+          error = Messages("fh.individualIdentification.lastName." + companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").error.fold("")(_.message), section)
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey"),
+          legend = Some(Messages("fh.company_officers.individual.nino.confirm.label")),
+          hintText = Some(Messages("fh.company_officers.individual.nino.confirm.hint_text")),
+          value = companyOfficersForm(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey").value,
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey").hasErrors,
+          error = Some(Messages("fh.individualIdentification.hasNationalInsuranceNumber.error.required", section)),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              Some("nationalInsuranceNumber")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some("other")
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "nationalInsuranceNumber",
+          TextInput(
+            TextInputParams(
+              name = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
+              label = Messages("fh.company_officers.individual.nino.label"),
+              hintText = Some(Messages("fh.company_officers.individual.nino.hint_text")),
+              value = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").value,
+              hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").hasErrors,
+              error = Messages("fh.individualIdentification.nationalInsuranceNumber." + companyOfficersForm(s"$individualIdentificationKey.$nationalInsuranceNumberKey").error.fold("")(_.message), section)
+            )
+          )
+        )
+      )
+
+      <div class="js-hidden panel" id="other">
+
+        @RadioGroup(
+          RadioGroupParams(
+            name = Some(s"$individualIdentificationKey.$hasPassportNumberKey"),
+            legend = Some(Messages("fh.company_officers.individual.passport.confirm")),
+            hasErrors = companyOfficersForm(s"$individualIdentificationKey.$hasPassportNumberKey").hasErrors,
+            error = Some(Messages("fh.individualIdentification.hasPassportNumber.error.required", section)),
+            value = companyOfficersForm("individualIdentification.hasPassportNumber").value,
+            radios = List(
+              RadioParams(
+                "true",
+                Messages("fh.generic.yes"),
+                Some("passportNumber")
+              ),
+              RadioParams(
+                "false",
+                Messages("fh.generic.no"),
+                Some("nationalID")
+              )
+            )
+          )
+        )
+
+        @NestedPanel(
+          NestedPanelParams(
+            "passportNumber",
+            TextInput(
+              TextInputParams(
+                name = s"$individualIdentificationKey.$passportNumberKey",
+                label = Messages("fh.company_officers.individual.passport.label"),
+                value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value,
+                hasErrors = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").hasErrors,
+                error = Messages("fh.individualIdentification.passportNumber." + companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").error.fold("")(_.message), section)
+              )
+            )
+          )
+        )
+
+        @NestedPanel(
+          NestedPanelParams(
+            "nationalID",
+            TextInput(
+              TextInputParams(
+                name = s"$individualIdentificationKey.$nationalIDKey",
+                label = Messages("fh.company_officers.individual.nationalID.label"),
+                hintText = Some(Messages("fh.company_officers.individual.nationalID.hint_text")),
+                value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value,
+                hasErrors = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").hasErrors,
+                error = Messages("fh.individualIdentification.nationalID." + companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").error.fold("")(_.message), section)
+              )
+            )
+          )
+        )
+      </div>
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"$individualIdentificationKey.$roleKey"),
+          legend = Some(Messages("fh.company_officers.status.label")),
+          inline = false,
+          required = true,
+          hasErrors = companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors,
+          value = companyOfficersForm(s"$individualIdentificationKey.$roleKey").value,
+          error = Some(Messages("fh.individualIdentification.role.error.required", section)),
+          radios = List(
+            RadioParams(
+              Messages("fh.company_officers.status.director.value"),
+              Messages("fh.company_officers.status.director")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.company_secretary.value"),
+              Messages("fh.company_officers.status.company_secretary")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.both.value"),
+              Messages("fh.company_officers.status.both")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.member.value"),
+              Messages("fh.company_officers.status.member")
+            )
+          )
+        )
+      )
+    </div>
+
+    <div class="form-group panel js-hidden" id="companyOfficers">
+      <h2>@Messages("fh.company_officers.company.title")</h2>
+
+      @TextInput(
+        TextInputParams(
+          name = s"$companyIdentificationKey.$companyNameKey",
+          value = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").value,
+          label = Messages("fh.company_officers.company.company_name.label"),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors,
+          error = Messages("fh.companyIdentification.companyName.error.required", section)
+        )
+      )
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"$companyIdentificationKey.$hasVatKey"),
+          value = companyOfficersForm(s"$companyIdentificationKey.$hasVatKey").value,
+          legend = Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$hasVatKey").hasErrors,
+          error = Some(Messages("fh.companyIdentification.hasVat.error.required", section)),
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              Some("hasVatRegistration")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some("hasCompanyRegistration")
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "hasVatRegistration",
+          TextInput(
+            TextInputParams(
+              name = s"$companyIdentificationKey.$vatRegistrationKey",
+              value = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").value,
+              label = Messages("fh.vatNumber.label"),
+              hintText = Some(Messages("fh.vatNumber.hintText")),
+              hasErrors = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").hasErrors,
+              error = Messages("fh.companyIdentification.vatRegistration." + companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").error.fold("")(_.message), section)
+            )
+          )
+        )
+      )
+
+      @NestedPanel(
+        NestedPanelParams(
+          "hasCompanyRegistration",
+          TextInput(
+            TextInputParams(
+              name = s"$companyIdentificationKey.$companyRegistrationKey",
+              value = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").value,
+              label = Messages("fh.company_officers.company.company_registration_number.label"),
+              hintText = Some(Messages("fh.company_officers.company.company_registration_number.hint_text")),
+              hasErrors = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors,
+              error = Messages("fh.companyIdentification.companyRegistration." + companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").error.fold("")(_.message), section)
+            )
+          )
+        )
+      )
+
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"$companyIdentificationKey.$roleKey"),
+          value = companyOfficersForm(s"$companyIdentificationKey.$roleKey").value,
+          legend = Some(Messages("fh.company_officers.status.label")),
+          inline = false,
+          required = true,
+          hasErrors = companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors,
+          error = Some(Messages("fh.individualIdentification.role.error.required", section)),
+          radios = List(
+            RadioParams(
+              Messages("fh.company_officers.status.director.value"),
+              Messages("fh.company_officers.status.director")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.company_secretary.value"),
+              Messages("fh.company_officers.status.company_secretary")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.both.value"),
+              Messages("fh.company_officers.status.both")
+            ),
+            RadioParams(
+              Messages("fh.company_officers.status.member.value"),
+              Messages("fh.company_officers.status.member")
+            )
+          )
+        )
+      )
+    </div>
+
+    @addMore
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      ),
+      navigation
+    )
+  }
+}

@@ -1,0 +1,84 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.DateTupleParams)(implicit message : Messages)
+
+@fieldName = @{
+  params.context match {
+    case Some(context) => context + "." + params.name
+    case _ => params.name
+  }
+}
+
+@formGroupClass = @{
+  if(params.hasErrors) "form-group form-group-error"
+  else "form-group"
+}
+
+@dayValue = @{
+  params.day match {
+    case Some(day) => day
+    case _ => ""
+  }
+}
+
+@monthValue = @{
+  params.month match {
+    case Some(month) => month
+    case _ => ""
+  }
+}
+
+@yearValue = @{
+  params.year match {
+    case Some(year) => year
+    case _ => ""
+  }
+}
+
+<fieldset class="@{formGroupClass}" id="@{fieldName}_container">
+
+    <legend>
+        <span class="form-label-bold">
+          @params.label
+        </span>
+        @if(params.hintText.nonEmpty){
+        <span class="form-hint">@params.hintText</span>
+        }
+    </legend>
+
+    @if(params.hasErrors){
+        <span class="error-message" id="@{params.name}-inline-error">
+          @params.error
+        </span>
+    }
+
+    <div class="form-date">
+        <div class="form-group form-group-day">
+            <label class="form-label" for="@{s"$fieldName.day"}">@Messages("fh.dateOfIncorporation.day")</label>
+            <input class="form-control" id="@{s"$fieldName.day"}" name="@{s"$fieldName.day"}" type="number" value="@{dayValue}">
+        </div>
+        <div class="form-group form-group-month">
+            <label class="form-label" for="@{s"$fieldName.month"}">@Messages("fh.dateOfIncorporation.month")</label>
+            <input class="form-control" id="@{s"$fieldName.month"}" name="@{s"$fieldName.month"}" type="number" value="@{monthValue}">
+        </div>
+        <div class="form-group form-group-year">
+            <label class="form-label" for="@{s"$fieldName.year"}">@Messages("fh.dateOfIncorporation.year")</label>
+            <input class="form-control" id="@{s"$fieldName.year"}" name="@{s"$fieldName.year"}" type="number" value="@{yearValue}">
+        </div>
+    </div>
+
+</fieldset>

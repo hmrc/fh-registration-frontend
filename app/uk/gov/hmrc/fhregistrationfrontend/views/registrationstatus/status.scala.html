@@ -1,0 +1,105 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+
+@(status: String, id: String, canAmend: Boolean)(implicit request: Request[_], messages: Messages)
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+@sidebarLinks =  {@if(canAmend) {@statusSidebar()}}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
+
+  <div class="grid">
+    <div>
+      <div class="appstatus" role="alert">
+        <h1 class="heading-xlarge appstatus-title">
+          @Messages("app.name.short")
+        </h1>
+
+        <p class="lede">
+          @Messages("fh.status.lede") <strong>@status</strong>
+        </p>
+        <ul class="appstatus-steps" aria-hidden="true">
+          <li>
+            <span id="indication-received" class="appstatus-complete tick" aria-label="Received">
+              Received
+            </span>
+          </li>
+          <li>
+            <span id="indication-processed" class="@if(status != "Received"){ appstatus-complete } else { appstatus-processing }">
+              Processing
+            </span>
+          </li>
+          <li>
+            <span id="indication-approved" class="appstatus-processing">
+              Decision
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+
+        <h2 class="heading-large">
+        @Messages("fh.ack.what_happens_next")
+        </h2>
+
+        <p>
+        @Messages("fh.ack.what_happens_next_1")
+        </p>
+
+        <p>
+        @Messages("fh.ack.what_happens_next_2")
+        </p>
+
+
+        <h2 class="heading-medium">
+        @Messages("fh.ack.help_using_service")
+        </h2>
+
+        <p>
+          <a href="@Messages("link.guidance_page")">
+          @Messages("fh.ack.guidance_link_text")
+          </a>
+          @Messages("fh.ack.to_find_out")
+        </p>
+
+        <ul class="bullets">
+          <li>
+          @Messages("fh.ack.help_bullet_1")
+          </li>
+          <li>
+          @Messages("fh.ack.help_bullet_3")
+          </li>
+        </ul>
+
+        @if(canAmend) {
+          <p>
+            <a class="button" href="@{
+              uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
+            }">
+            @Messages("fh.generic.application_status_continue")
+            </a>
+          </p>
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

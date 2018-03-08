@@ -1,0 +1,100 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(businessStatusForm: Form[BusinessStatus], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @Back(navigation)
+
+  @error_box(businessStatusForm, dateKey=s"$proposedStartDateKey")
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.business_status.title")
+    )
+  )
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(isNewFulfilmentBusinessKey),
+        legend = Some(Messages("fh.business_status.label")),
+        value = businessStatusForm(isNewFulfilmentBusinessKey).value,
+        hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
+        error = Some(Messages("fh.isNewFulfilmentBusiness.error.required")),
+        radios = List(
+          RadioParams(
+            "true",
+            Messages("fh.generic.yes"),
+            Some("newBusiness")
+          ),
+          RadioParams(
+            "false",
+            Messages("fh.generic.no")
+          )
+        )
+      )
+    )
+
+    @NestedPanel(
+      NestedPanelParams(
+        "newBusiness",
+        DateTuple(
+          DateTupleParams(
+            name=s"$proposedStartDateKey",
+            label=Messages("fh.business_status.new_business.label"),
+            hasErrors = {
+              businessStatusForm(s"$proposedStartDateKey").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.day").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.month").hasErrors ||
+              businessStatusForm(s"$proposedStartDateKey.year").hasErrors
+            },
+            error=Messages("fh.business_status.new_business.error.pattern"),
+            hintText=Some(Messages("fh.business_status.new_business.hint_text")),
+            day = businessStatusForm(s"$proposedStartDateKey.day").value,
+            month = businessStatusForm(s"$proposedStartDateKey.month").value,
+            year = businessStatusForm(s"$proposedStartDateKey.year").value
+          )
+        )
+      )
+    )
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      ),
+      navigation
+    )
+  }
+}

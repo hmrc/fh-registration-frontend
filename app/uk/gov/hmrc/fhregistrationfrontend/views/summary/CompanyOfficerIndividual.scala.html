@@ -1,0 +1,105 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
+
+@(individual: CompanyOfficerIndividualModel)(implicit request: Request[_], messages: Messages)
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.company_officers.entity_type.label")),
+            Messages("fh.company_officers.individual.label"),
+            None
+        )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.company_officers.individual.first_name.label")),
+            individual.firstName,
+            None
+        )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.company_officers.individual.last_name.label")),
+            individual.lastName,
+            None
+        )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofBoolean(
+            Some(Messages("fh.company_officers.individual.nino.confirm.label")),
+            individual.hasNino,
+            None
+        )
+    )
+
+    @if(individual.hasNino) {
+        @SummaryRow(
+            SummaryRowParams(
+                Some(Messages("fh.company_officers.individual.nino.label")),
+                individual.nino,
+                None
+            )
+        )
+    } else {
+
+      @SummaryRow(
+        SummaryRowParams.ofBoolean(
+          Some(Messages("fh.company_officers.individual.passport.confirm")),
+          individual.hasPassportNumber,
+          None
+        )
+      )
+
+      @if(individual.hasPassportNumber == Some(true)) {
+
+        @SummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.company_officers.individual.passport.label")),
+            individual.passport,
+            None
+          )
+        )
+
+      } else {
+
+        @SummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.company_officers.individual.nationalID.label")),
+            individual.nationalId,
+            None
+          )
+        )
+
+      }
+
+    }
+
+
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.company_officers.status.label")),
+            individual.role,
+            None
+        )
+    )

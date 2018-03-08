@@ -1,0 +1,90 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+
+@(businessPartnerForm: Form[_])(implicit request: Request[_], messages: Messages)
+
+<h2>@Messages("fh.business_partners.enter.title")</h2>
+
+@TextInput(
+  TextInputParams(
+    name = s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey",
+    label = Messages("fh.business_partners.unincorporate_body.name.label"),
+    hasErrors = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").hasErrors,
+    value = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").value,
+    error = Messages("fh.businessPartnerUnincorporatedBody.unincorporatedBodyName." + businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").error.fold("")(_.message))
+  )
+)
+
+@YesNoText(
+  YesNoTextParams(
+    name = s"$businessPartnerUnincorporatedBodyKey.$hasTradeNameKey",
+    value = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey").value,
+    yesNoValue = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasTradeNameKey").value,
+    yesNoLabel = Messages("fh.trading_name.confirm.label"),
+    yesNoError = Messages("fh.tradingName_yesNo.error.required"),
+    valueLabel = Messages("fh.tradingName.label"),
+    valueError = Messages("fh.businessPartnerUnincorporatedBody.tradeName_value." + businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey").error.fold("")(_.message)),
+    hasErrors = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasTradeNameKey").hasErrors,
+    hasValueError= businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey").hasErrors
+  )
+)
+
+@YesNoText(
+  YesNoTextParams(
+    name = s"$businessPartnerUnincorporatedBodyKey.$hasVatKey",
+    value = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey").value,
+    yesNoValue = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasVatKey").value,
+    yesNoLabel = Messages("fh.vat_registration.confirm.label"),
+    yesNoError = Messages("fh.businessPartnerUnincorporatedBody.vat_yesNo.error.required"),
+    valueLabel = Messages("fh.vatNumber.label"),
+    valueError = Messages("fh.businessPartnerUnincorporatedBody.vat_value." + businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey").error.fold("")(_.message)),
+    valueHintText = Some(Messages("fh.vatNumber.hintText")),
+    hasErrors = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasVatKey").hasErrors,
+    hasValueError= businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey").hasErrors
+  )
+)
+
+@YesNoText(
+  YesNoTextParams(
+    name = s"$businessPartnerUnincorporatedBodyKey.$hasUniqueTaxpayerReferenceKey",
+    value = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey").value,
+    yesNoValue = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasUniqueTaxpayerReferenceKey").value,
+    yesNoLabel = Messages("fh.business_partners.utr.confirm.label"),
+    yesNoError = Messages("fh.business_partners.utr.confirm.error"),
+    valueLabel = Messages("fh.business_partners.utr.label"),
+    valueError = Messages("fh.businessPartnerUnincorporatedBody.uniqueTaxpayerReference_value." + businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey").error.fold("")(_.message)),
+    valueHintText = Some(Messages("fh.business_partners.utr.hintText")),
+    hasValueError = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey").hasErrors,
+    hasErrors = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$hasUniqueTaxpayerReferenceKey").hasErrors
+  )
+)
+
+
+@AddressUK(
+  businessPartnerForm,
+  AddressUKParams(
+    name = s"$businessPartnerUnincorporatedBodyKey.$addressKey",
+    label = Messages("fh.business_partners.enter.partner_address"),
+    hasErrors = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$addressKey.postcode").hasErrors,
+    error = Some(Messages("fh.business_partners.enter.partner_address.error"))
+  )
+)

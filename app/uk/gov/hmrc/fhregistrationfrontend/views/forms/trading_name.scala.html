@@ -1,0 +1,70 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @Back(navigation)
+
+  @error_box(tradingNameForm)
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.tradingName.title")
+    )
+  )
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName"), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @YesNoText(
+      YesNoTextParams(
+        name = hasTradingNameKey,
+        value = tradingNameForm(tradingNameKey).value,
+        yesNoValue = tradingNameForm(hasTradingNameKey).value,
+        yesNoLabel = Messages("fh.trading_name.confirm.label"),
+        yesNoError = Messages("fh.tradingName_yesNo.error.required"),
+        valueLabel = Messages("fh.tradingName.label"),
+        valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
+        hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
+        hasValueError= tradingNameForm(tradingNameKey).hasErrors
+      )
+    )
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue")
+      ),
+      navigation
+    )
+  }
+}

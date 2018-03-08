@@ -33,6 +33,7 @@ trait MicroService {
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
+    .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
@@ -50,7 +51,8 @@ trait MicroService {
       parallelExecution in IntegrationTest := false)
       .settings(resolvers ++= Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
-        Resolver.jcenterRepo
+        Resolver.jcenterRepo,
+        "emueller-bintray" at "http://dl.bintray.com/emueller/maven"
       ))
 }
 

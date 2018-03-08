@@ -1,0 +1,153 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@main_template(scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @Back(navigation)
+
+  @error_box(mainBusinessAddressForm, dateKey=s"$previousAddressStartdateKey")
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.main_business_address.title")
+    )
+  )
+
+  <p>@Messages("fh.mainBusinessAddress.intro")</p>
+
+  <div id="review-details" class="panel panel-border-wide form-group">
+    @bpr.businessAddress.line1 <br>
+    @bpr.businessAddress.line2 <br>
+    @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
+    @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
+    @bpr.businessAddress.postcode <br>
+  </div>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(timeAtCurrentAddressKey),
+        legend = Some(Messages("fh.main_business_address.time_at_address.label")),
+        inline = false,
+        required = true,
+        error = Some(Messages("fh.timeAtCurrentAddress.error.required")),
+        hasErrors = mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors,
+        value = mainBusinessAddressForm(timeAtCurrentAddressKey).value,
+        radios = List(
+          RadioParams(
+            Messages("fh.main_business_address.0to3years.value"),
+            Messages("fh.main_business_address.0to3years.label"),
+            dataTarget = Some("lessThan3Years")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.3to5years.value"),
+            Messages("fh.main_business_address.3to5years.label")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.5to10years.value"),
+            Messages("fh.main_business_address.5to10years.label")
+          ),
+          RadioParams(
+            Messages("fh.main_business_address.10plusYears.value"),
+            Messages("fh.main_business_address.10plusYears.label")
+          )
+        )
+      )
+    )
+
+    <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(previousAddressKey),
+          legend = Some(Messages("fh.main_business_address.previous.label")),
+          hasErrors = mainBusinessAddressForm(previousAddressKey).hasErrors,
+          error = Some(Messages("fh.previousAddress.error.required")),
+          value = mainBusinessAddressForm(previousAddressKey).value,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              Some("hasPreviousAddress")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no")
+            )
+          )
+        )
+      )
+
+      <div class="panel panel-border-narrow js-hidden" id="hasPreviousAddress">
+
+        @AddressUK(
+          mainBusinessAddressForm,
+          AddressUKParams(
+            context = Some("mainPreviousAddressUK"),
+            name = previousAddressKey,
+            label = Messages("fh.main_business_address.enter_previous.label"),
+            hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
+            error = Some(Messages("fh.main_business_address.enter_previous.error"))
+          )
+        )
+
+        @DateTuple(
+          DateTupleParams(
+            name = previousAddressStartdateKey,
+            label = Messages("fh.previousAddressStartdate.label"),
+            error = Messages("fh.previousAddressStartdate.error.invalid"),
+            hasErrors = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").hasErrors ||
+                mainBusinessAddressForm(s"$previousAddressStartdateKey.month").hasErrors ||
+                mainBusinessAddressForm(s"$previousAddressStartdateKey.year").hasErrors,
+            hintText = Some(Messages("fh.previousAddressStartdate.hint_text")),
+            day = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").value,
+            month = mainBusinessAddressForm(s"$previousAddressStartdateKey.month").value,
+            year = mainBusinessAddressForm(s"$previousAddressStartdateKey.year").value
+          )
+        )
+
+      </div>
+    </div>
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      ),
+      navigation
+    )
+  }
+}

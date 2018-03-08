@@ -1,0 +1,62 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises => StoragePremisesModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
+
+@(data: StoragePremisesModel)(implicit request: Request[_], messages: Messages)
+
+    @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
+
+    @SummaryRow(
+        SummaryRowParams.ofBoolean(
+            Some(Messages("fh.other_storage_premises.confirm.label")),
+            data.hasValue,
+            Some("otherStoragePremises")
+        )
+    )
+
+    @if(data.hasValue) {
+
+        @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
+
+            @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"), section = {index+1}.toString())
+
+            @SummaryAddress(
+                SummaryAddressParams(
+                    Some(Messages("fh.other_storage_premises.enter.label")),
+                    SummaryAddressBlock(
+                        Line1 = Some(storagePremise.address.addressLine1),
+                        Line2 = storagePremise.address.addressLine2,
+                        Line3 = storagePremise.address.addressLine3,
+                        Line4 = storagePremise.address.addressLine4,
+                        postcode = Some(storagePremise.address.postcode)
+                    ),
+                    None
+                )
+            )
+
+            @SummaryRow(
+                SummaryRowParams.ofBoolean(
+                    Some(Messages("fh.other_storage_premises.third_party.label")),
+                    storagePremise.isThirdParty,
+                    None
+                )
+            )
+        }
+    }

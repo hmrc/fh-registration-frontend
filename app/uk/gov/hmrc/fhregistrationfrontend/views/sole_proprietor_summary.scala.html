@@ -1,0 +1,68 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.SoleProprietorApplication
+@import play.api.Environment
+
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: String, forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
+
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
+
+  @if(forPrint){
+    <style>
+      .hidden-print, a, footer, .beta-banner, h1, #global-cookie-message {
+        display: none;
+      }
+
+      .header__menu__proposition-name {
+        color: #000;
+      }
+    </style>
+    <h2>@Messages("printApplication.label") @timeStamp</h2>
+  }else{
+    @PageHeading(
+      PageHeadingParams(
+        heading = Messages("fh.generic.check")
+      )
+    )
+  }
+
+  <table class="table-font-xsmall">
+    <tbody>
+
+      @MainBusinessAddress(applicationData.mainBusinessAddress)
+      @ContactPerson(applicationData.contactPerson, bpr)
+      @NationalInsurance(applicationData.nationalInsuranceNumber)
+      @TradingName(applicationData.tradingName)
+      @VATRegistrationNumber(applicationData.vatNumber)
+      @BusinessStatus(applicationData.businessStatus)
+      @ImportingActivities(applicationData.importingActivities)
+      @BusinessCustomers(applicationData.businessCustomers)
+      @OtherStoragePremises(applicationData.otherStoragePremises)
+
+    </tbody>
+  </table>
+
+  @SummaryButtons()
+
+}

@@ -17,13 +17,16 @@ object FrontendBuild extends Build with MicroService {
     "com.typesafe.play" %% "play-json" % "2.5.12",
     "org.pegdown" % "pegdown" % "1.4.2",
     "uk.gov.hmrc" %% "play-hmrc-api" % "1.3.0",
-    "uk.gov.hmrc" %% "http-caching-client" % "6.2.0",
+    "uk.gov.hmrc" %% "http-caching-client" % "7.1.0",
     "uk.gov.hmrc" %% "play-conditional-form-mapping" % "0.2.0",
     "uk.gov.hmrc" %% "time" % "3.0.0",
     "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0",
     "uk.gov.hmrc" %% "domain" % "4.1.0",
     "org.typelevel" %% "cats" % "0.9.0",
-    "com.github.tototoshi" %% "play-json-naming" % "1.1.0"
+    "com.github.tototoshi" %% "play-json-naming" % "1.1.0",
+    "org.typelevel" %% "cats-core" % "1.0.1",
+    "org.typelevel" %% "cats-kernel" % "1.0.1",
+    "org.julienrf" %% "play-json-derived-codecs" % "3.3"
   )
 
   def test(scope: String = "test,it") = Seq(
@@ -36,7 +39,8 @@ object FrontendBuild extends Build with MicroService {
     "org.scalacheck" %% "scalacheck" % "1.12.6" % scope,
     "org.mockito" % "mockito-core" % "2.7.22" % scope,
     "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % scope,
-    "com.github.tomakehurst"  %  "wiremock"  % "2.6.0" % scope
+    "com.github.tomakehurst"  %  "wiremock"  % "2.6.0" % scope,
+    "com.eclipsesource" %% "play-json-schema-validator" % "0.8.9" % scope
   )
 
 }

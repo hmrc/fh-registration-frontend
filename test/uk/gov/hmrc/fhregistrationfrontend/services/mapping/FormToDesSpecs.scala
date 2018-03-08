@@ -1,0 +1,100 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.fhregistrationfrontend.services.mapping
+
+import java.time.LocalDate
+
+import com.eclipsesource.schema._
+import org.apache.commons.io.FilenameUtils
+import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
+import uk.gov.hmrc.play.test.UnitSpec
+
+
+class FormToDesSpecs extends UnitSpec {
+
+  val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-create.schema.json")
+  val schema = Json.fromJson[SchemaType](schemaAsJson).get
+  val validator = new SchemaValidator().validate(schema) _
+  val service = new FormToDesImpl()
+
+  def brd(fileName: String): BusinessRegistrationDetails = Json
+    .parse(getClass.getResourceAsStream(s"/models/$fileName"))
+    .as[BusinessRegistrationDetails]
+
+  "Limited company submission service" should {
+    "Create a correct json for fhdds-limited-company-minimum" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdMinimum.application, LtdMinimum.declaration),
+        None)
+
+      validatesFor(submission, "fhdds-limited-company-minimum", "limited-company")
+    }
+  }
+
+  "Sole proprietor submission service" should {
+    "Create a correct json for max. data entry" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application, SPLargeUk.declaration),
+        None)
+
+      validatesFor(submission, "sole-proprietor-large-uk.json", "sole-proprietor")
+    }
+  }
+
+  "Partnership submission service" should {
+    "Create a correct json for max. data entry" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service.partnership(brd("business-registration-details-partnership.json"), PartnershipLargeInt.application, PartnershipLargeInt.declaration),
+        None)
+
+      validatesFor(submission, "partnership-large-int.json", "partnership")
+    }
+  }
+
+  def validatesFor(subscrtiptionCreate: SubScriptionCreate, file: String, entityPath: String) = {
+
+    val json: JsValue = Json.toJson(subscrtiptionCreate)
+
+    val validationResult = validator(json)
+    validationResult.fold(
+      invalid = {errors ⇒ println(errors.toJson)},
+      valid = {v ⇒ }
+    )
+
+    validationResult.isSuccess shouldEqual true
+
+    val expected = loadExpectedSubscriptionForFile(file, entityPath)
+    subscrtiptionCreate shouldEqual expected
+
+
+    subscrtiptionCreate
+  }
+
+  def loadExpectedSubscriptionForFile(file: String, entityPath: String): SubScriptionCreate = {
+    val baseName = FilenameUtils getBaseName file
+    val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
+    Json.parse(resource).as[SubScriptionCreate]
+  }
+
+
+}

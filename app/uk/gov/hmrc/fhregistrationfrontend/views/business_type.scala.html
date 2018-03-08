@@ -14,46 +14,66 @@
  * limitations under the License.
  *@
 
-@(businessType: Form[String])(implicit request: Request[_], messages: Messages)
-@labels = @{
-  List("Limited Company" → "corporate body", "Sole Trader" → "Sole Trader", "Partnership" → "Partnership")
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(businessTypeForm: Form[BusinessType])(implicit request: Request[_], messages: Messages)
+
+@typeNotListed = {
+  <p>@Messages("fh.business_type.details1")</p>
+  <p><a href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Fulfilment House Due Diligence Scheme", mainClass = Some("full-width")) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
 
-  <h3>Choose your entity type</h3>
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitEntityType(), 'novalidate -> "novalidate") {
+  @error_box(businessTypeForm)
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType(), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
-    <div class="form-group">
-      @if(businessType("businessType").hasErrors) {
-        <fieldset class="form-field--error">
-          <div class="error-notification" id="businessType-inline-error">
-          @{
-            "Please choose your entity type"
-          }
-          </div>
-          } else {
-        <fieldset>}
+    @PageHeading(
+      PageHeadingParams(
+        heading = Messages("fh.business_type.title")
+      )
+    )
 
-      @for(label <- labels) {
-        <label class="block-label selection-button-radio">@{label._1}
-        <input type="radio"
-        name="businessType"
-        id="@label._1"
-        value="@label._2"/>
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some("businessType"),
+        inline = false,
+        error = Some(Messages("fh.businessType.error.required")),
+        hasErrors = businessTypeForm("businessType").hasErrors,
+        value = businessTypeForm("businessType").value,
+        radios = List(
+          RadioParams(
+            "CorporateBody",
+            Messages("fh.business_type.limited_company")
+          ),
+          RadioParams(
+            "SoleTrader",
+            Messages("fh.business_type.sole_trader")
+          ),
+          RadioParams(
+            "Partnership",
+            Messages("fh.business_type.business_partnership")
+          )
+        )
+      )
+    )
 
-        </label>
-      }
+    @Details(Messages("fh.business_type.summary"), typeNotListed)
 
-      </fieldset>
-    </div>
-
-    <div class="form-group">
-      <input type="submit" id="p-continue" class="button" value="@Messages("continue")">
-    </div>
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue")
+      ),
+      navigation = Navigation(0, None)
+    )
   }
 
 }

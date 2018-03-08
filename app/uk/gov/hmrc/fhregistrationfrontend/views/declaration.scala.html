@@ -1,0 +1,210 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+
+@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @if(declarationForm.hasErrors) {
+    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
+      <ul class="error-summary-list">
+        @if(declarationForm(fullNameKey).hasErrors) {
+          <li id="@fullNameKey-error-link"><a href="#@fullNameKey-inline-error">@{
+            Messages("fh.declaration.person_name." + declarationForm(fullNameKey).errors.head.message)
+          }
+          </a></li>
+        }
+        @if(declarationForm(jobTitleKey).hasErrors) {
+          <li id="@jobTitleKey-error-link"><a href="#@jobTitleKey-inline-error">@{
+            Messages("fh.declaration.person_status." + declarationForm(jobTitleKey).errors.head.message)
+          }
+          </a></li>
+        }
+        @if(declarationForm(isUseGgEmailKey).hasErrors) {
+          <li id="@isUseGgEmailKey-error-link"><a href="#@isUseGgEmailKey-inline-error">@{
+            Messages("fh.declaration.use_gg_email.confirm.error")
+          }
+          </a></li>
+        }
+        @if(declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
+            declarationForm(s"$alternativeEmailKey.email").hasErrors) {
+          <li id="@isUseGgEmailKey-error-link"><a href="#@alternativeEmailKey-inline-error">@{
+            Messages("fh.declaration.email.error")
+          }
+          </a></li>
+        }
+      </ul>
+    </div>
+  }
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm(), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @PageHeading(
+      PageHeadingParams(
+        heading = Messages("fh.declaration.title")
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = fullNameKey,
+        label = Messages("fh.declaration.person_name.label"),
+        value = declarationForm(fullNameKey).value,
+        error = Messages("fh.declaration.person_name." + declarationForm(fullNameKey).error.fold("")(_.message)),
+        hasErrors = declarationForm(fullNameKey).hasErrors
+      )
+    )
+
+    @TextInput(
+      TextInputParams(
+        name = jobTitleKey,
+        label = Messages("fh.declaration.person_status.label"),
+        value = declarationForm(jobTitleKey).value,
+        error = Messages("fh.declaration.person_status." + declarationForm(jobTitleKey).error.fold("")(_.message)),
+        hasErrors = declarationForm(jobTitleKey).hasErrors
+      )
+    )
+
+    <h3 class="small-heading">@{
+      s"${Messages("fh.declaration.has_gg_email")} "
+    }
+      <span><strong>@{
+        s"${ggEmail.getOrElse("")}"
+      }</strong></span>
+    </h3>
+
+    @if(ggEmail.isEmpty) {
+
+      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
+
+      @EmailConfirmation(
+        EmailConfirmationParams(
+          name = alternativeEmailKey,
+          label = Messages("fh.declaration.email.label"),
+          labelConfirmation = Messages("fh.declaration.email.confirmation.label"),
+          error = Messages("fh.declaration.email.error"),
+          isEmail = true,
+          hasErrors = declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
+              declarationForm(s"$alternativeEmailKey.email").hasErrors
+        )
+      )
+
+    } else {
+      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
+
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(isUseGgEmailKey),
+          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
+          required = true,
+          hasErrors = declarationForm(isUseGgEmailKey).hasErrors,
+          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
+          value = declarationForm(isUseGgEmailKey).value,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some(alternativeEmailKey)
+            )
+          )
+        )
+      )
+      @NestedPanel(
+        NestedPanelParams(
+          alternativeEmailKey,
+          EmailConfirmation(
+            EmailConfirmationParams(
+              name = alternativeEmailKey,
+              label = Messages("fh.declaration.alternative_email.label"),
+              labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
+              error = Messages("fh.declaration.email.error"),
+              isEmail = true,
+              hasErrors = declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
+                  declarationForm(s"$alternativeEmailKey.email").hasErrors
+            )
+          )
+        )
+      )
+
+    }
+
+    <div class="form-group">
+      <h2>@Messages("fh.declaration.title")</h2>
+      <p>@Messages("fh.declaration.declaration.title")</p>
+      <ul class="bullets">
+        <li>
+        @Messages("fh.declaration.declaration.point1")
+        </li>
+        <li>
+          @Messages("fh.declaration.declaration.point2") <span class="bold"> @bpr.businessName</span>
+        </li>
+      </ul>
+
+      <div class="notice">
+        <i class="icon icon-important">
+          <span class="visually-hidden">Warning</span>
+        </i>
+        <strong class="bold-small">
+          <p>@Messages("fh.declaration.warning")</p>
+        </strong>
+      </div>
+
+    </div>
+
+
+    <div class="form-group form-actions">
+
+      <p>
+        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages("button.accept.send")</button>
+      </p>
+
+      <p>
+        <a href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+        }">
+        @Messages("link.goBackToSummary")
+        </a>
+      </p>
+
+      <p>
+        <a class="" href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater()
+        }">@Messages("link.saveForLater")</a>
+      </p>
+
+    </div>
+
+  }
+}

@@ -1,0 +1,70 @@
+h1 {
+    margin-top: 0.55556em;
+}
+
+h4 {
+    font-weight: normal;
+    margin-bottom: 1em;
+}
+
+#back, a.back-link {
+    margin-bottom: 1em;
+}
+
+strong {
+    font-weight: 700;
+}
+
+legend.form-label-bold {
+    font-size: 1.1em;
+    margin-bottom: 0.55556em;
+}
+
+.panel-border-narrow, .panel {
+    padding-top: 0;
+}
+
+span.error-message, .form-hint {
+    margin-bottom: 0.55556em;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.lookup-results-fieldset {
+    margin-top: 30px;
+}
+
+.address-manual-container, .address-lookup-container {
+    margin-bottom: 1.57895em;
+}
+
+.loading {
+    display: none;
+    margin-top: 10px;
+    padding: 5px 0 0 39px;
+    background: url("/fhdds/assets/images/loading.gif") no-repeat;
+}
+
+.form-actions {
+    margin-top: 3em;
+}
+
+.confirmation-label {
+    margin-top: 1em
+}
+
+/* application.min.css is overriding this to 0 after declaring it! */
+
+table {
+    margin-bottom: 1.57895em;
+}
+
+.js-show {
+    display: none;
+}
+
+.with-icon {
+    text-indent: 2em
+}

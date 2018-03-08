@@ -1,0 +1,178 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+
+@(businessPartnerForm: Form[(BusinessPartner, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@addMore = {
+  @params.forceHasMore match {
+    case Some(force) => {
+      <input type="hidden" name="addMore" value="@force" />
+    }
+    case None => {
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(s"addMore"),
+          value = businessPartnerForm(s"addMore").value,
+          legend = Some(Messages("fh.business_partners.addMore")),
+          error = Some(Messages("fh.addMore.error.required")),
+          hasErrors = businessPartnerForm(s"addMore").hasErrors,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes"),
+              None
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              None
+            )
+          )
+        )
+      )
+    }
+  }
+}
+
+
+@main_template(scriptElem = Some(pageScripts)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @Back(navigation)
+
+  @error_box(businessPartnerForm, sectionP=section)
+
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.business_partners.title", section)
+    )
+  )
+
+  <p>@Messages("fh.business_partners.intro")</p>
+
+  <div class="form-group" style="margin-top:2em">
+    <details id="business-partners-details">
+      <summary class="summary">
+      @Messages("fh.business_partners.entity")
+      </summary>
+      <div>
+        @Messages("fh.business_partners.entity_intro")
+      </div>
+    </details>
+  </div>
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("businessPartners", section), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @if(params.canRemove) {
+      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("businessPartners", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
+    }
+
+    <h2>@Messages("fh.business_partners.add_a_partner", section)</h2>
+
+    @RadioGroup(
+      RadioGroupParams(
+        inline = false,
+        name = Some(businessPartnersTypeKey),
+        legend = Some(Messages("fh.business_partners.entity_type.label")),
+        hasErrors = businessPartnerForm(businessPartnersTypeKey).hasErrors,
+        error = Some(Messages("fh.businessPartnersType.error.required", section)),
+        value = businessPartnerForm(businessPartnersTypeKey).value,
+        radios = List(
+          RadioParams(
+            Messages("fh.business_partners.entity_type.individual.value"),
+            Messages("fh.business_partners.entity_type.individual.label"),
+            Some(Messages("fh.business_partners.entity_type.individual.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.sole_proprietor.value"),
+            Messages("fh.business_partners.entity_type.sole_proprietor.label"),
+            Some(Messages("fh.business_partners.entity_type.sole_proprietor.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.partnership.value"),
+            Messages("fh.business_partners.entity_type.partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.value"),
+            Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
+            Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.corporate_body.value"),
+            Messages("fh.business_partners.entity_type.corporate_body.label"),
+            Some(Messages("fh.business_partners.entity_type.corporate_body.value"))
+          ),
+          RadioParams(
+            Messages("fh.business_partners.entity_type.unincorporated_body.value"),
+            Messages("fh.business_partners.entity_type.unincorporated_body.label"),
+            Some(Messages("fh.business_partners.entity_type.unincorporated_body.value"))
+          )
+        )
+      )
+    )
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.individual.value")">
+      @business_partners_individual(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.sole_proprietor.value")">
+      @business_partners_sole_proprietor(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.partnership.value")">
+      @business_partners_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.limited_liability_partnership.value")">
+      @business_partners_liability_partnership(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.corporate_body.value")">
+      @business_partners_corporate_body(businessPartnerForm)
+    </div>
+
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporated_body.value")">
+      @business_partners_unincorporated_body(businessPartnerForm)
+    </div>
+
+    @addMore
+
+    @SubmitButtons(
+      SubmitButtonsParams(
+        label = Messages("button.save.continue"),
+        summaryLink = false
+      ),
+      navigation
+    )
+  }
+}

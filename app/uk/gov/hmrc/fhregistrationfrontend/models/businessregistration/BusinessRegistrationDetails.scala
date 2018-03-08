@@ -20,19 +20,14 @@ import com.github.tototoshi.play.json.JsonNaming
 import play.api.libs.json.Json
 
 case class BusinessRegistrationDetails(
-  businessName: String,
+  businessName: Option[String],
   businessType: Option[String],
   businessAddress: Address,
-  sapNumber: String,
-  safeId: String,
-  isAGroup: Boolean = false,
-  directMatch: Boolean = false,
-  agentReferenceNumber: Option[String],
+  safeId: Option[String],
+  utr: Option[String] = None,
   firstName: Option[String] = None,
   lastName: Option[String] = None,
-  utr: Option[String] = None,
-  identification: Option[Identification] = None,
-  isBusinessDetailsEditable: Boolean = false)
+  identification: Option[Identification] = None)
 
 object BusinessRegistrationDetails {
   implicit val formats = JsonNaming snakecase Json.format[BusinessRegistrationDetails]
