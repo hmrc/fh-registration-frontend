@@ -48,7 +48,8 @@ class SummaryRequest[A](
 }
 
 object SummaryAction {
-  def apply(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = UserAction andThen new SummaryAction
+  def apply(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
+    UserAction andThen NoEnrolmentCheckAction(messagesApi) andThen new SummaryAction
 }
 
 class SummaryAction(implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
