@@ -18,10 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object LtdLargeUk {
-  val application = LimitedCompanyApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = LimitedCompanyApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),
@@ -67,7 +68,7 @@ object LtdLargeUk {
           Some("AA123123A"),
           None, None, None,
           "Company Secretary"
-        )) → ListWithTrackedChanges.Added,
+        )) → changeFlags,
         CompanyOfficer(
           CompanyOfficerType.Individual,
           CompanyOfficerIndividual(
@@ -78,7 +79,7 @@ object LtdLargeUk {
             None, None, None,
             "Director"
           )
-        ) → ListWithTrackedChanges.Added,
+        ) → changeFlags,
         CompanyOfficer(
           CompanyOfficerType.Company,
           CompanyOfficerCompany(
@@ -88,7 +89,7 @@ object LtdLargeUk {
             None,
             "Company Secretary"
           )
-        ) → ListWithTrackedChanges.Added),
+        ) → changeFlags),
       List.empty),
     BusinessStatus(true, Some(LocalDate.of(2018,6, 30))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
@@ -104,7 +105,7 @@ object LtdLargeUk {
               Some("Sometown"),
               "Z99 2YY",
               None),
-            false) → ListWithTrackedChanges.Added,
+            false) → changeFlags,
           StoragePremise(
             Address(
               "25 Testing Close",
@@ -113,7 +114,7 @@ object LtdLargeUk {
               Some("Othertown"),
               "Z9 3WW",
               None),
-            true) → ListWithTrackedChanges.Added),
+            true) → changeFlags),
         List.empty))
   )
 

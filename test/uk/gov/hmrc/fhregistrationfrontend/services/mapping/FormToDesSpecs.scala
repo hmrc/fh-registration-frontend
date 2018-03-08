@@ -42,11 +42,51 @@ class FormToDesSpecs extends UnitSpec {
     "Create a correct json for fhdds-limited-company-minimum" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdMinimum.application, LtdMinimum.declaration),
+        service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdMinimum.application(), LtdMinimum.declaration),
         None)
 
       validatesFor(submission, "fhdds-limited-company-minimum", "limited-company")
     }
+  }
+
+  "Create a correct json for fhdds-limited-company-minimum-international" in {
+    val submission = SubScriptionCreate(
+      "Create",
+      service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdMinimumInternational.application(), LtdMinimumInternational.declaration),
+      None)
+
+    validatesFor(submission, "fhdds-limited-company-minimum-international.xml", "limited-company")
+
+    submission.subScriptionCreate.contactDetail.address.map(_.countryCode) shouldEqual Some("BG")
+    submission.subScriptionCreate.contactDetail.address.flatMap(_.line4) shouldEqual Some("Bulgaria")
+  }
+
+
+  "Create a correct json for fhdds-limited-company-large-uk.xml" in {
+    val submission = SubScriptionCreate(
+      "Create",
+      service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdLargeUk.application(), LtdLargeUk.declaration),
+      None
+    )
+
+
+    validatesFor(submission, "fhdds-limited-company-large-uk.xml", "limited-company")
+  }
+
+  "Create a correct json for fhdds-limited-company-large-uk-updated.xml" in {
+    val submission = SubScriptionCreate(
+      "Create",
+      service
+        .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+        .limitedCompanySubmission(
+          brd("business-registration-details-limited-company.json"),
+          LtdLargeUkWithModifications.application,
+          LtdLargeUkWithModifications.declaration),
+      None
+    )
+
+
+    validatesFor(submission, "fhdds-limited-company-large-uk-updated.xml", "limited-company")
   }
 
   "Sole proprietor submission service" should {

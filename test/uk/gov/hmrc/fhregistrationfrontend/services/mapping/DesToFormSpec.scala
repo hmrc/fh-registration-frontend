@@ -20,6 +20,7 @@ import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
 import com.eclipsesource.schema._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.NoChange
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplay, SubscriptionDisplayWrapper}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -33,15 +34,15 @@ class DesToFormSpec extends UnitSpec {
 
   "Des to form" should {
     "Correctly load limited-company-minimum" in {
-      validatesFor("fhdds-limited-company-minimum", LtdMinimum.application)
+      validatesFor("fhdds-limited-company-minimum", LtdMinimum.application(NoChange))
     }
 
     "Correctly load limited-company-minimum-international" in {
-      validatesFor("fhdds-limited-company-minimum-international", LtdMinimumInternational.application)
+      validatesFor("fhdds-limited-company-minimum-international", LtdMinimumInternational.application(NoChange))
     }
 
     "Correctly load limited-company-large-uk" in {
-      validatesFor("fhdds-limited-company-large-uk", LtdLargeUk.application)
+      validatesFor("fhdds-limited-company-large-uk", LtdLargeUk.application(NoChange))
     }
   }
 

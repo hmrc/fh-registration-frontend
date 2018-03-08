@@ -18,11 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object LtdMinimumInternational {
 
-  val application = LimitedCompanyApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = LimitedCompanyApplication(
     MainBusinessAddress(
       "3-5 years",
       None,
@@ -62,7 +63,7 @@ object LtdMinimumInternational {
             Some(true), Some("1231231"), None,
             "Company Secretary"
           )
-        ) → ListWithTrackedChanges.Added),
+        ) → changeFlags),
       List.empty),
       BusinessStatus(false, None),
       ImportingActivities(false, None),
