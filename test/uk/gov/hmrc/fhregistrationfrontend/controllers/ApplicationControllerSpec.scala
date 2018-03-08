@@ -18,15 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.http.Status
-import play.api.i18n.MessagesApi
-import play.api.mvc.{Result, Results}
-import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.fhregistrationfrontend.AppUnitGenerator
-import play.api.mvc.Results.{BadRequest, NotFound, ServiceUnavailable}
+import play.api.mvc.Results
 import uk.gov.hmrc.auth.core.Enrolments
-import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.fhregistrationfrontend.AppUnitGenerator
 
 import scala.concurrent.Future
 
