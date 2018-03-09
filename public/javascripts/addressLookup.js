@@ -17,7 +17,7 @@
 
       $lookup.show();
 
-      if($this.val().length) {
+      if($this.val().length || $this.hasClass('form-control-error')) {
         $lookup.addClass('js-hidden');
         $manual.removeClass('js-hidden');
         $lookupLink.show()

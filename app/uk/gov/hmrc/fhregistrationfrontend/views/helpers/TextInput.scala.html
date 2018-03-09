@@ -31,6 +31,14 @@
   }
 }
 
+@inputClass = @{
+  if(params.hasErrors) {
+    "form-control form-control-error"
+  } else {
+    "form-control"
+  }
+}
+
 @nestedClass = @{
   if(params.hiddenNested){" panel js-hidden"} else {""}
 }
@@ -52,7 +60,7 @@
   }
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
-    class="form-control"
+    class="@{inputClass}"
     id="@{fieldName}"
     name="@{fieldName}"
       @if(params.value.nonEmpty){value="@{params.value}"}>
