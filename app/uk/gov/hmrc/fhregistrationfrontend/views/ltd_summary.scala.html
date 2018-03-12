@@ -17,12 +17,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
 @import play.api.Environment
+@import java.util.Date
+@import java.text.DateFormat
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: Option[String], forPrint: Boolean = false, timeStamp: String = "")(implicit request: Request[_], messages: Messages)
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: Option[String], forPrint: Boolean = false, timeStamp: Option[Date] = None)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -39,7 +42,7 @@
         color: #000;
       }
     </style>
-    <h2>@Messages("printApplication.label") @timeStamp</h2>
+    <h2>@Messages("printApplication.label") @formatTimestamp(timeStamp)</h2>
   }else{
     @PageHeading(
       PageHeadingParams(

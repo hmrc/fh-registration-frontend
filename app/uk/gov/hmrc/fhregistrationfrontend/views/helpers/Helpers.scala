@@ -16,11 +16,22 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import play.api.data.FormError
 
 object Helpers {
   def getError(error: Option[FormError]) = {
     if (error.nonEmpty) error.head.message
     else ""
+  }
+
+  def formatTimestamp(date: Option[Date]): String = {
+    date.map(d ⇒ formatTimestamp(d)).getOrElse("")
+  }
+
+  def formatTimestamp(date: Date): String = {
+    new SimpleDateFormat("dd MMMM yyyy HH:mm").format(date)
   }
 }

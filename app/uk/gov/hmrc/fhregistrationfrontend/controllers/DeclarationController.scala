@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import java.time.LocalDate
-
+import java.time.{LocalDate, LocalDateTime}
 import javax.inject.Inject
+
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
@@ -27,11 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.decl
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import play.api.i18n.Messages
 import play.api.mvc.Request
+import uk.gov.hmrc.http.BadRequestException
 
 import scala.concurrent.Future
 
@@ -40,8 +41,9 @@ class DeclarationController @Inject()(
   ds            : CommonPlayDependencies,
   links         : ExternalUrls,
   desToForm     : DesToForm,
-  fhddsConnector: FhddsConnector
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+  fhddsConnector: FhddsConnector,
+  keyStoreService      : KeyStoreService
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
 
   val emailSessionKey = "declaration_email"
   val submitTimeKey = "submit_time"
@@ -53,9 +55,8 @@ class DeclarationController @Inject()(
 
   def showAcknowledgment() = UserAction { implicit request ⇒
     val email: String = request.session.get(emailSessionKey).getOrElse("")
-    val submitTime: String = request.session.get(submitTimeKey).getOrElse("Error, can not get the submit time for the application")
     Ok(
-      acknowledgement_page(email, submitTime)
+      acknowledgement_page(email)
     )
   }
 
@@ -63,10 +64,14 @@ class DeclarationController @Inject()(
     declarationForm.bindFromRequest().fold(
       formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
       declaration => {
-        sendSubscription(declaration) map { response ⇒
-          Redirect(
-            routes.DeclarationController.showAcknowledgment())
-            .withSession(request.session + (emailSessionKey → declaration.email) + (submitTimeKey → response.processingDate.toString))
+        sendSubscription(declaration) flatMap { response ⇒
+          keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
+            .map(_ ⇒ true)
+            .recover{case _ ⇒ false}
+            .map { pdfSaved ⇒
+              Redirect(routes.DeclarationController.showAcknowledgment())
+                .withSession(request.session + (emailSessionKey → declaration.email) + (submitTimeKey → response.processingDate.toString))
+            }
         }
       }
     )

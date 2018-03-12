@@ -19,7 +19,7 @@
 
 @import org.joda.time.DateTime
 
-@(email:String, dateTime: String)(implicit request: Request[_], messages: Messages)
+@(email:String)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -44,7 +44,7 @@
     <div class="js-show notice with-icon">
         <i class="icon icon-file-download"></i>
         <p>
-            <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.downloadPdf(s"$dateTime")}">@Messages("fh.generic.print_application_status")</a>
+            <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.PdfDownloadController.downloadPdf}">@Messages("fh.generic.print_application_status")</a>
         </p>
     </div>
 
