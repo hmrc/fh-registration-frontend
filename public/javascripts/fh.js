@@ -238,6 +238,57 @@ function init() {
   var showHideContent = new GOVUK.ShowHideContent()
   showHideContent.init()
 
+  $('a[target="_blank"]').click(function() {
+    ga('send', 'event', 'external link', 'click', this.innerText)
+    //console.log('send', 'event', 'external link', 'click', this.innerText)
+  });
+
+  $('form').on('click', 'input:radio', function() {
+    var question = $(this).parents('fieldset').find('legend').text()
+    ga('send', 'event', 'radio selection', 'click', question, this.id);
+    //console.log('send', 'event', 'radio selection', 'click', question, this.id);
+  });
+
+  $('button:submit').click(function() {
+    var eventLabel = $('h1').text();
+    var eventAction = eventLabel === 'Declaration' ? 'application submission' : 'section submission';
+    ga('send', 'event', eventAction, 'click', eventLabel)
+    //console.log('send', 'event', eventAction, 'click', eventLabel)
+  });
+
+  if ($('.error-summary-list li a').length) {
+    $('.error-summary-list li a').each(function(i, item) {
+      var eventLabel = $(item).text()
+      ga('send', 'event', 'validation error', 'report', eventLabel)
+      //console.log('send', 'event', 'validation error', 'report', eventLabel)
+    })
+  }
+
+  $('a.address-lookup').click(function() {
+    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup', 'click', eventLabel)
+    //console.log('send', 'event', 'postcode lookup', 'click', eventLabel)
+  })
+
+  $('a.manual-address-mode').click(function() {
+    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'manual address preference', 'click', eventLabel)
+    //console.log('send', 'event', 'manual address preference', 'click', eventLabel)
+  })
+
+  $('a.lookup-address-mode').click(function() {
+    var eventLabel = $(this).parents('.address-manual-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup preference', 'click', eventLabel)
+    //console.log('send', 'event', 'postcode lookup preference', 'click', eventLabel)
+  })
+
+  if ($('.transaction-banner--complete').length) {
+    var eventLabel = $('.transaction-banner--complete').find('h1').text();
+    ga('send', 'event', 'transaction complete', 'report', eventLabel)
+    //console.log('send', 'event', 'transaction complete', 'report', eventLabel)
+  }
+
+
 }
 
 $(document).ready(init)
