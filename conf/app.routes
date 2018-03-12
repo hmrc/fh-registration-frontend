@@ -25,7 +25,7 @@ GET         /form/:page/:section/confirmDelete/:timestamp                       
 GET         /resume                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
-GET         /downloadPdf/:timeStamp                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.downloadPdf(timeStamp: String)
+GET         /downloadPdf                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPdf
 
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm

@@ -199,7 +199,7 @@ class Application @Inject()(
 }
 
 @Singleton
-abstract class AppController(ds: CommonPlayDependencies)
+abstract class AppController(val ds: CommonPlayDependencies)
   extends FrontendController
     with I18nSupport
     with AuthorisedFunctions
