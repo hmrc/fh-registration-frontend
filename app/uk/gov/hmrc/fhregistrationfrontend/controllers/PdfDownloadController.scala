@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
+import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
 import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
@@ -30,20 +31,10 @@ class PdfDownloadController @Inject()(
   pdfGeneratorConnector: PdfGeneratorConnector
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds){
 
-  def downloadPdf() = UserAction.async { implicit request ⇒
-    keyStoreService.fetchAndGetEntry().flatMap {
+  def downloadPrintable() = UserAction.async { implicit request ⇒
+    keyStoreService.fetchAndGetEntry().map {
       case Some(userSummary) =>
-        pdfGeneratorConnector.generatePdf(removeScriptTags(userSummary)).map { response =>
-          if (response.status != OK)
-            BadRequest(response.body)
-          else
-            Ok(response.bodyAsBytes.toArray).as("application/pdf")
-              .withHeaders("Content-Disposition" -> s"attachment; filename=application.pdf")
-              .withHeaders("Content-Type" -> s"application/pdf")
-              .withHeaders("Content-Length" → s"${response.header("Content-Length").getOrElse("unknown")}")
-        } recover {
-          case e: Exception => throw new BadRequestException(e.toString)
-        }
+        Ok(Html(removeScriptTags(userSummary)))
       case _ => throw new BadRequestException("no user summary found")
     }
   }

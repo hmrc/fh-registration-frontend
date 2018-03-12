@@ -30,19 +30,7 @@ trait SummaryFunctions {
 
   protected def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: Option[Date] = None): Html = {
 
-    val url =
-      if (forPrint) {
-        val urlProtocol = ds.conf
-          .getString(s"${ds.env.mode}.microservice.services.fhdds-front.protocol").getOrElse("http")
-        val urlHost = ds.conf
-          .getString(s"${ds.env.mode}.microservice.services.fhdds-front.host").getOrElse("fh-registration-frontend.public.mdtp")
-        val urlPort = ds.conf
-          .getInt(s"${ds.env.mode}.microservice.services.fhdds-front.port").getOrElse(80)
-
-        Some(s"$urlProtocol://$urlHost:$urlPort")
-      } else {
-        None
-      }
+    val url = None
 
     request.businessType match {
       case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp)(request)
