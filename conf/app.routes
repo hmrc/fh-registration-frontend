@@ -2,6 +2,9 @@
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
+GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
+GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
+GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
@@ -31,7 +34,7 @@ GET         /declaration                                                        
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
-#GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+#GET        /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
