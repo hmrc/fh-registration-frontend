@@ -39,14 +39,17 @@
     <meta name="format-detection" content="telephone=no" />
 }
 
-@headerNavLinks = {}
+
+@signOutLink = {
+  <li><a id="logOutNavHref" href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout>@Messages("link.signout")</a></li>
+}
 
 @insideHeader = {
     @uiLayouts.header_nav(
       navTitle = Some(Messages("app.name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(headerNavLinks))
+      navLinks = Some(signOutLink))
 }
 
 @afterHeader = {}
