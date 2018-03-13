@@ -18,12 +18,30 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 
-@Singleton
-class ExternalUrls @Inject() (ds: CommonPlayDependencies) {
+import play.api.mvc.Action
+import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
+import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{logoutContinueUrl, getString}
 
-  val businessCustomerVerificationUrl = ds.conf
-    .getString(s"${ds.env.mode}.microservice.services.business-customer-urls.business-verification")
-    .getOrElse("http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue")
+@Singleton
+class SignOutController  @Inject()(
+  ds               : CommonPlayDependencies
+) extends AppController(ds) {
+
+
+
+  def signout() = Action {
+    val ggRedirectParms = Map(
+      "continue" -> Seq(logoutContinueUrl),
+      "origin" -> Seq(getString("appName"))
+    )
+
+    Redirect(ExternalUrls.ggLogoutUrl, ggRedirectParms)
+  }
+
+  def signedout() = Action {
+    Redirect(ExternalUrls.surveyRedirectUrl)
+  }
+
 
 
 }
