@@ -26,7 +26,9 @@
   <p><a href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(pageScripts = Some(scripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

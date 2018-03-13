@@ -18,7 +18,9 @@
 
 @(expiryTime: DateTime)(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
+@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(pageScripts = Some(scripts)) {
 
   <div class="transaction-banner--complete">
     <h1 class="transaction-banner__heading">
