@@ -238,6 +238,65 @@ function init() {
   var showHideContent = new GOVUK.ShowHideContent()
   showHideContent.init()
 
+  // Google Analytics event reporting, using template:
+  // ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject])
+
+  $('a[target="_blank"]').click(function() {
+    ga('send', 'event', 'external link', 'click', this.innerText)
+  });
+
+  $('form').on('click', 'input:radio', function() {
+    var question = $(this).parents('fieldset').find('legend').text() || $('h1').text()
+    ga('send', 'event', 'radio selection', 'click', question, this.value);
+  });
+
+  $('button:submit').click(function() {
+    var eventLabel = $('h1').text();
+    // TODO: consider how this can work with locales
+    var eventAction = eventLabel === 'Declaration' ? 'application submission' : 'section submission';
+    ga('send', 'event', eventAction, 'click', eventLabel)
+  });
+
+  $('form').on('focus', '.lookup-results-fieldset', function () {
+    var eventLabel = $(this).find('legend').text();
+    ga('send', 'event', 'postcode lookup', 'results', eventLabel)
+  })
+
+
+  if ($('.error-summary-list li a').length) {
+    $('.error-summary-list li a').each(function(i, item) {
+      var eventValue = $(item).text()
+      var eventLabel = $('h1').text()
+      ga('send', 'event', 'validation error', 'report', eventLabel, eventValue)
+    })
+  }
+
+  $('a.address-lookup').click(function() {
+    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup', 'click', eventLabel)
+  })
+
+  $('a.manual-address-mode').click(function() {
+    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'manual address preference', 'click', eventLabel)
+  })
+
+  $('a.lookup-address-mode').click(function() {
+    var eventLabel = $(this).parents('.address-manual-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup preference', 'click', eventLabel)
+  })
+
+  $('#back').click(function() {
+    var eventLabel = $('h1').text()
+    ga('send', 'event', 'back navigation', 'click', eventLabel)
+  })
+
+  if ($('.transaction-banner--complete').length) {
+    var eventLabel = $('.transaction-banner--complete').find('h1').text();
+    ga('send', 'event', 'transaction complete', 'report', eventLabel)
+  }
+
+
 }
 
 $(document).ready(init)

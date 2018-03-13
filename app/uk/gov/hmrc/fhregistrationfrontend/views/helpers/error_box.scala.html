@@ -27,8 +27,7 @@
           }-error-link">
             <a href="#@{
               error.key.replace(".day", "").replace(".month", "").replace(".year", "")
-            }-inline-error">
-            @{
+            }-inline-error">@{
               if(error.key.contains(s"$dateKey.day")){
                 set.add(error.key)
                 set.add(error.key.replace(".day",".month"))
@@ -42,8 +41,7 @@
                 Messages("fh" + context + error.key + "." + error.message, sectionP)
               }
 
-            }
-            </a>
+            }</a>
           </li>
             <!-- @set.add(error.key) -->
         }

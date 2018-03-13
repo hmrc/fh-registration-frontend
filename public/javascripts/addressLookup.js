@@ -57,11 +57,11 @@
 
       $('#' + context + '-results')
           .html(addressStringBuilder.join(''))
-          .focus()
           .on('click', '.postcode-lookup-result', function (e) {
               var index = $(e.currentTarget).val();
               populateAddress(data.addresses[index].address, context)
-          });
+          })
+        .find('.postcode-lookup-result:first').focus()
 
   }
 
