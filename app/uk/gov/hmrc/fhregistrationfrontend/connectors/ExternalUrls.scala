@@ -33,6 +33,6 @@ object ExternalUrls extends RunMode with ServicesConfig {
   val ggLogoutUrl = s"$companyAuthUrl$logoutPath"
   val logoutContinueUrl = s"$logoutCallback"
 
-  val surveyRedirectUrl = getConfString("services.surveyRedirectUrl", "feedback-survey?origin=fhdds")
+  val surveyRedirectUrl = getConfString("surveyRedirectUrl", "/feedback-survey?origin=fhdds")
 
 }
