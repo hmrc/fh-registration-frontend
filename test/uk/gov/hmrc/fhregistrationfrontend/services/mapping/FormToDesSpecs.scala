@@ -93,7 +93,7 @@ class FormToDesSpecs extends UnitSpec {
     "Create a correct json for max. data entry" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application, SPLargeUk.declaration),
+        service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application(), SPLargeUk.declaration),
         None)
 
       validatesFor(submission, "sole-proprietor-large-uk.json", "sole-proprietor")
@@ -104,7 +104,7 @@ class FormToDesSpecs extends UnitSpec {
     "Create a correct json for max. data entry" in {
       val submission = SubScriptionCreate(
         "Create",
-        service.partnership(brd("business-registration-details-partnership.json"), PartnershipLargeInt.application, PartnershipLargeInt.declaration),
+        service.partnership(brd("business-registration-details-partnership.json"), PartnershipLargeInt.application(), PartnershipLargeInt.declaration),
         None)
 
       validatesFor(submission, "partnership-large-int.json", "partnership")

@@ -17,13 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import javax.inject.Inject
-
 import com.google.inject.ImplementedBy
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{AllOtherInformation, BusinessAddressForFHDDS, IsNewFulfilmentBusiness, SubscriptionDisplay}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{Address ⇒ _, _}
 
 @ImplementedBy(classOf[DesToFormImpl])
 trait DesToForm {
@@ -40,17 +40,16 @@ trait DesToForm {
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
 
-  def entityType(subscriptionDisplay: SubscriptionDisplay) =
+  override def entityType(subscriptionDisplay: SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
 
-  def limitedCompanyApplication(subscription: des.SubscriptionDisplay) = {
+  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
     LimitedCompanyApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       companyRegistrationNumber(subscription.businessDetail),
       dateOfIncorporation(subscription.businessDetail),
       tradingName(subscription.businessDetail),
-
       vatNumber(subscription.businessDetail),
       companyOfficers(subscription.additionalBusinessInformation.partnerCorporateBody),
       businessStatus(subscription.FHbusinessDetail),
@@ -60,9 +59,33 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorApplication = ???
+  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorApplication = {
+    SoleProprietorApplication(
+      mainBusinessAddress(subscription.businessAddressForFHDDS),
+      contactPerson(subscription.contactDetail),
+      nationalInsuranceNumber(subscription.businessDetail),
+      tradingNameForSoleProprietor(subscription.businessDetail),
+      vatNumberForSoleProprietor(subscription.businessDetail),
+      businessStatus(subscription.FHbusinessDetail),
+      importingActivities(subscription.additionalBusinessInformation.allOtherInformation),
+      businessCustomers(subscription.additionalBusinessInformation.allOtherInformation),
+      otherStoragePremises(subscription.additionalBusinessInformation.allOtherInformation)
+    )
+  }
 
-  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipApplication = ???
+  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipApplication = {
+    PartnershipApplication(
+      mainBusinessAddress(subscription.businessAddressForFHDDS),
+      contactPerson(subscription.contactDetail),
+      tradingName(subscription.businessDetail),
+      vatNumber(subscription.businessDetail),
+      businessPartners(subscription.businessDetail.partnership),
+      businessStatus(subscription.FHbusinessDetail),
+      importingActivities(subscription.additionalBusinessInformation.allOtherInformation),
+      businessCustomers(subscription.additionalBusinessInformation.allOtherInformation),
+      otherStoragePremises(subscription.additionalBusinessInformation.allOtherInformation)
+    )
+  }
 
   override def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails = {
     BusinessRegistrationDetails(
@@ -114,6 +137,104 @@ class DesToFormImpl extends DesToForm {
       }
     else
       None
+
+  def businessPartners(partnership: Option[Partnership]): ListWithTrackedChanges[BusinessPartner] = {
+    val businessPartners = partnership.get.partnerDetails.map(
+      businessPartner
+    )
+    ListWithTrackedChanges.fromValues(businessPartners)
+  }
+
+  def businessPartner(partner: PartnerDetail): BusinessPartner = {
+    partner.partnerTypeDetail match {
+      case i: IndividualPartnerType ⇒ BusinessPartner(
+        BusinessPartnerType.Individual,
+        BusinessPartnerIndividual(
+          i.name.firstName,
+          i.name.lastName,
+          i.nino.nonEmpty,
+          i.nino,
+          address(partner.partnerAddress)
+        )
+      )
+      case s: SoleProprietorPartnerType ⇒ BusinessPartner(
+        BusinessPartnerType.SoleProprietor,
+        BusinessPartnerSoleProprietor(
+          s.name.firstName,
+          s.name.lastName,
+          s.tradingName.nonEmpty,
+          s.tradingName,
+          s.nino.nonEmpty,
+          s.nino,
+          s.identification.vatRegistrationNumber.nonEmpty,
+          s.identification.vatRegistrationNumber,
+          s.identification.uniqueTaxpayerReference,
+          address(partner.partnerAddress)
+        )
+      )
+      case l: LimitedLiabilityPartnershipType ⇒
+        if (partner.entityType == "Limited Liability Partnership"){
+          BusinessPartner(
+            BusinessPartnerType.LimitedLiabilityPartnership,
+            BusinessPartnerLimitedLiabilityPartnership(
+              l.names.companyName.get,
+              l.names.tradingName.nonEmpty,
+              l.names.tradingName,
+              l.incorporationDetails.companyRegistrationNumber.get,
+              l.identification.vatRegistrationNumber.nonEmpty,
+              l.identification.vatRegistrationNumber,
+              l.identification.uniqueTaxpayerReference,
+              address(partner.partnerAddress)
+            )
+          )
+        } else {
+          BusinessPartner(
+            BusinessPartnerType.CorporateBody,
+            BusinessPartnerCorporateBody(
+              l.names.companyName.get,
+              l.names.tradingName.nonEmpty,
+              l.names.tradingName,
+              l.incorporationDetails.companyRegistrationNumber.get,
+              l.identification.vatRegistrationNumber.nonEmpty,
+              l.identification.vatRegistrationNumber,
+              l.identification.uniqueTaxpayerReference,
+              address(partner.partnerAddress)
+            )
+          )
+        }
+      case p: PartnershipOrUnIncorporatedBodyPartnerType ⇒
+        if (partner.entityType == "Partnership"){
+          BusinessPartner(
+            BusinessPartnerType.Partnership,
+            BusinessPartnerPartnership(
+              p.names.companyName.get,
+              p.names.tradingName.nonEmpty,
+              p.names.tradingName,
+              p.identification.vatRegistrationNumber.nonEmpty,
+              p.identification.vatRegistrationNumber,
+              p.identification.uniqueTaxpayerReference.nonEmpty,
+              p.identification.uniqueTaxpayerReference,
+              address(partner.partnerAddress)
+            )
+          )
+        } else {
+          BusinessPartner(
+            BusinessPartnerType.UnincorporatedBody,
+            BusinessPartnerUnincorporatedBody(
+              p.names.companyName.get,
+              p.names.tradingName.nonEmpty,
+              p.names.tradingName,
+              p.identification.vatRegistrationNumber.nonEmpty,
+              p.identification.vatRegistrationNumber,
+              p.identification.uniqueTaxpayerReference.nonEmpty,
+              p.identification.uniqueTaxpayerReference,
+              address(partner.partnerAddress)
+            )
+          )
+        }
+
+    }
+  }
 
   def businessStatus(businessDetail: des.IsNewFulfilmentBusiness) =
     BusinessStatus(
@@ -168,6 +289,14 @@ class DesToFormImpl extends DesToForm {
       }
   }
 
+  def vatNumberForSoleProprietor(detail: des.BusinessDetail) = {
+    detail.soleProprietor
+      .flatMap(_.identification.vatRegistrationNumber)
+      .fold(VatNumber(false, None)) {
+        name ⇒ VatNumber(true, Some(name))
+      }
+  }
+
   def tradingName(detail: des.BusinessDetail) = {
     detail
       .nonProprietor
@@ -176,6 +305,23 @@ class DesToFormImpl extends DesToForm {
         name ⇒ TradingName(true, Some(name))
       }
   }
+
+  def tradingNameForSoleProprietor(detail: des.BusinessDetail) = {
+    detail.soleProprietor.flatMap(_.tradingName)
+      .fold(TradingName(false, None)) {
+        name ⇒ TradingName(true, Some(name))
+      }
+  }
+
+  def nationalInsuranceNumber(businessDetails: des.BusinessDetail): NationalInsuranceNumber =
+    businessDetails.soleProprietor.map (
+      id ⇒ {
+        NationalInsuranceNumber(
+          id.identification.nino.nonEmpty,
+          id.identification.nino
+        )
+      }
+    ).get
 
 
   def companyRegistrationNumber(businessDetails: des.BusinessDetail) =

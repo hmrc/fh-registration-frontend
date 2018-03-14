@@ -18,10 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object SPLargeUk {
-  val application = SoleProprietorApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = SoleProprietorApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),
@@ -70,7 +71,7 @@ object SPLargeUk {
               Some("two town"),
               "Z99 2YY",
               None),
-            true) → ListWithTrackedChanges.Added,
+            true) → changeFlags,
           StoragePremise(
             Address(
               "25 Testing Close",
@@ -79,7 +80,7 @@ object SPLargeUk {
               Some("Othertown"),
               "AA01 0AA",
               None),
-            false) → ListWithTrackedChanges.Added),
+            false) → changeFlags),
         List.empty))
   )
 
