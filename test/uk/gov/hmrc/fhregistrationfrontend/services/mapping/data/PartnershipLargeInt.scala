@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Ad
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object PartnershipLargeInt {
-  def application(changeFlags: ListWithTrackedChanges.Status = Added) = PartnershipApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = PartnershipBusinessApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),

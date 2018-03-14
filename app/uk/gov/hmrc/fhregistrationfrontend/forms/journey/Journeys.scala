@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyBusinessApplication, PartnershipBusinessApplication, SoleProprietorBusinessApplication}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 object Journeys {
@@ -67,7 +67,7 @@ object Journeys {
     )
   )
 
-  def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) = {
+  def unapplyLimitedCompanyApplication(a: LimitedCompanyBusinessApplication) = {
     new JourneyPages(
       Seq[AnyPage](
         mainBusinessAddressPage withData a.mainBusinessAddress,
@@ -85,7 +85,7 @@ object Journeys {
     )
   }
 
-  def unapplySoleTraderApplication(a: SoleProprietorApplication) = {
+  def unapplySoleTraderApplication(a: SoleProprietorBusinessApplication) = {
     new JourneyPages(
       Seq[Page[_]](
         mainBusinessAddressPage withData a.mainBusinessAddress,
@@ -102,7 +102,7 @@ object Journeys {
   }
 
 
-  def unapplyPartnershipApplication(a: PartnershipApplication) = {
+  def unapplyPartnershipApplication(a: PartnershipBusinessApplication) = {
     new JourneyPages(
       Seq[Page[_]](
         mainBusinessAddressPage withData a.mainBusinessAddress,
@@ -119,7 +119,7 @@ object Journeys {
     )
   }
 
-  def partnershipApplication(pageDataLoader: PageDataLoader) =  PartnershipApplication(
+  def partnershipApplication(pageDataLoader: PageDataLoader) =  PartnershipBusinessApplication(
       pageDataLoader pageData mainBusinessAddressPage,
       pageDataLoader pageData contactPersonPage,
       pageDataLoader pageData tradingNamePage,
@@ -131,7 +131,7 @@ object Journeys {
       pageDataLoader pageData otherStoragePremisesPage
     )
 
-  def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
+  def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorBusinessApplication(
     pageDataLoader pageData mainBusinessAddressPage,
     pageDataLoader pageData contactPersonPage,
     pageDataLoader pageData nationalInsuranceNumberPage,
@@ -143,7 +143,7 @@ object Journeys {
     pageDataLoader pageData otherStoragePremisesPage
   )
 
-  def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
+  def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyBusinessApplication(
       pageDataLoader pageData mainBusinessAddressPage,
       pageDataLoader pageData contactPersonPage,
       pageDataLoader pageData companyRegistrationNumberPage,

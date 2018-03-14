@@ -54,7 +54,7 @@ class DesToFormSpec extends UnitSpec {
   }
 
 
-  def validatesFor(file: String, application: ApplicationEntity) = {
+  def validatesFor(file: String, application: BusinessEntityApplication) = {
     val display = loadDesDataFile(file)
     val loadedApplication = display.organizationType match {
       case "Corporate Body" ⇒  service limitedCompanyApplication display
@@ -62,80 +62,6 @@ class DesToFormSpec extends UnitSpec {
       case "Partnership" ⇒  service partnershipApplication display
     }
     loadedApplication shouldEqual application
-    loadedApplication.value.map(
-      _.get match {
-        case l: LimitedCompanyApplication ⇒
-          (l.mainBusinessAddress,
-            l.contactPerson,
-            l.companyRegistrationNumber,
-            l.dateOfIncorporation,
-            l.tradingName,
-            l.vatNumber,
-            l.companyOfficers,
-            l.businessStatus,
-            l.importingActivities,
-            l.businessCustomers,
-            l.otherStoragePremises) shouldEqual applicationChecker(application)
-        case s: SoleProprietorApplication ⇒
-          (s.mainBusinessAddress,
-            s.contactPerson,
-            s.nationalInsuranceNumber,
-            s.tradingName,
-            s.vatNumber,
-            s.businessStatus,
-            s.importingActivities,
-            s.businessCustomers,
-            s.otherStoragePremises) shouldEqual applicationChecker(application)
-        case p: PartnershipApplication ⇒
-          (p.mainBusinessAddress,
-            p.contactPerson,
-            p.tradingName,
-            p.vatNumber,
-            p.businessPartners,
-            p.businessStatus,
-            p.importingActivities,
-            p.businessCustomers,
-            p.otherStoragePremises) shouldEqual applicationChecker(application)
-      }
-    )
-
-  }
-
-  def applicationChecker(application: ApplicationEntity) = {
-    application.value.map(_.get match {
-      case l: LimitedCompanyApplication ⇒
-        (l.mainBusinessAddress,
-          l.contactPerson,
-          l.companyRegistrationNumber,
-          l.dateOfIncorporation,
-          l.tradingName,
-          l.vatNumber,
-          l.companyOfficers,
-          l.businessStatus,
-          l.importingActivities,
-          l.businessCustomers,
-          l.otherStoragePremises)
-      case s: SoleProprietorApplication ⇒
-        (s.mainBusinessAddress,
-          s.contactPerson,
-          s.nationalInsuranceNumber,
-          s.tradingName,
-          s.vatNumber,
-          s.businessStatus,
-          s.importingActivities,
-          s.businessCustomers,
-          s.otherStoragePremises)
-      case p: PartnershipApplication ⇒
-        (p.mainBusinessAddress,
-          p.contactPerson,
-          p.tradingName,
-          p.vatNumber,
-          p.businessPartners,
-          p.businessStatus,
-          p.importingActivities,
-          p.businessCustomers,
-          p.otherStoragePremises)
-    } ).get
   }
 
   def loadDesDataFile(filePath: String): SubscriptionDisplay = {

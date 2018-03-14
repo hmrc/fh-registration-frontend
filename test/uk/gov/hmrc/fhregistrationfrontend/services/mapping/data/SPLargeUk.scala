@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Ad
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object SPLargeUk {
-  def application(changeFlags: ListWithTrackedChanges.Status = Added) = SoleProprietorApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = SoleProprietorBusinessApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),

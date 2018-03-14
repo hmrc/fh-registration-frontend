@@ -30,9 +30,9 @@ trait DesToForm {
 
   def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails
   def entityType(subscriptionDisplay: SubscriptionDisplay): BusinessType
-  def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication
-  def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorApplication
-  def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication
+  def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyBusinessApplication
+  def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorBusinessApplication
+  def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipBusinessApplication
 
 }
 
@@ -43,8 +43,8 @@ class DesToFormImpl extends DesToForm {
   override def entityType(subscriptionDisplay: SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
 
-  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
-    LimitedCompanyApplication(
+  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyBusinessApplication = {
+    LimitedCompanyBusinessApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       companyRegistrationNumber(subscription.businessDetail),
@@ -59,8 +59,8 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorApplication = {
-    SoleProprietorApplication(
+  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorBusinessApplication = {
+    SoleProprietorBusinessApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       nationalInsuranceNumber(subscription.businessDetail),
@@ -73,8 +73,8 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipApplication = {
-    PartnershipApplication(
+  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipBusinessApplication = {
+    PartnershipBusinessApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       tradingName(subscription.businessDetail),

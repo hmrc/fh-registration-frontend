@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-sealed trait ApplicationEntity
+sealed trait BusinessEntityApplication
 
-case class LimitedCompanyApplication(
+case class LimitedCompanyBusinessApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,
   companyRegistrationNumber: CompanyRegistrationNumber,
@@ -30,9 +30,9 @@ case class LimitedCompanyApplication(
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,
   otherStoragePremises: OtherStoragePremises
-) extends ApplicationEntity
+) extends BusinessEntityApplication
 
-case class SoleProprietorApplication(
+case class SoleProprietorBusinessApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,
   nationalInsuranceNumber: NationalInsuranceNumber,
@@ -42,10 +42,10 @@ case class SoleProprietorApplication(
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,
   otherStoragePremises: OtherStoragePremises
-) extends ApplicationEntity
+) extends BusinessEntityApplication
 
 
-case class PartnershipApplication(
+case class PartnershipBusinessApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,
   tradingName: TradingName,
@@ -55,4 +55,4 @@ case class PartnershipApplication(
   importingActivities: ImportingActivities,
   businessCustomers: BusinessCustomers,
   otherStoragePremises: OtherStoragePremises
-) extends ApplicationEntity
+) extends BusinessEntityApplication

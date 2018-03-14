@@ -21,7 +21,7 @@ import java.time.LocalDate
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object LtdLargeUkWithModifications {
-  val application = LimitedCompanyApplication(
+  val application = LimitedCompanyBusinessApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),

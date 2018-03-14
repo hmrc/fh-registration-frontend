@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object LtdMinimumInternational {
 
-  def application(changeFlags: ListWithTrackedChanges.Status = Added) = LimitedCompanyApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = LimitedCompanyBusinessApplication(
     MainBusinessAddress(
       "3-5 years",
       None,
