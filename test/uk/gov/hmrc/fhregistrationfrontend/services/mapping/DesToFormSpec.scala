@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
-import org.apache.commons.io.FilenameUtils
-import play.api.libs.json.{JsValue, Json}
 import com.eclipsesource.schema._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+import play.api.libs.json.Json
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.NoChange
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplay, SubscriptionDisplayWrapper}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
@@ -34,39 +33,62 @@ class DesToFormSpec extends UnitSpec {
 
   "Des to form" should {
     "Correctly load limited-company-minimum" in {
-      validatesFor("fhdds-limited-company-minimum", LtdMinimum.application(NoChange))
+      validatesFor("limited-company/fhdds-limited-company-minimum", LtdMinimum.application(NoChange))
     }
 
     "Correctly load limited-company-minimum-international" in {
-      validatesFor("fhdds-limited-company-minimum-international", LtdMinimumInternational.application(NoChange))
+      validatesFor("limited-company/fhdds-limited-company-minimum-international", LtdMinimumInternational.application(NoChange))
     }
 
     "Correctly load limited-company-large-uk" in {
-      validatesFor("fhdds-limited-company-large-uk", LtdLargeUk.application(NoChange))
+      validatesFor("limited-company/fhdds-limited-company-large-uk", LtdLargeUk.application(NoChange))
+    }
+
+    "Correctly load sole-proprietor-large-uk" in {
+      validatesFor("sole-proprietor/sole-proprietor-large-uk", SPLargeUk.application(NoChange))
+    }
+
+    "Correctly load partnership-large-int" in {
+      validatesFor("partnership/partnership-large-int", PartnershipLargeInt.application(NoChange))
     }
   }
 
 
-  def validatesFor(file: String, application: LimitedCompanyApplication) = {
+  def validatesFor(file: String, application: ApplicationEntity) = {
     val display = loadDesDataFile(file)
-    val loadedApplication = service limitedCompanyApplication display
-//    loadedApplication shouldEqual application.mainBusinessAddress
-//    loadedApplication shouldEqual application.contactPerson
-//    loadedApplication shouldEqual application.companyRegistrationNumber
-//    loadedApplication shouldEqual application.dateOfIncorporation
-//    loadedApplication shouldEqual application.tradingName
-//    loadedApplication shouldEqual application.vatNumber
-//    loadedApplication shouldEqual application.companyOfficers
-//    loadedApplication shouldEqual application.businessStatus
-//    loadedApplication shouldEqual application.importingActivities
-//    loadedApplication shouldEqual application.businessCustomers
-//    loadedApplication shouldEqual application.otherStoragePremises
+    val loadedApplication = display.organizationType match {
+      case "Corporate Body" ⇒  service limitedCompanyApplication display
+      case "Sole Proprietor" ⇒  service soleProprietorApplication display
+      case "Partnership" ⇒  service partnershipApplication display
+    }
     loadedApplication shouldEqual application
+//    loadedApplication.value.map(_.get match {
+//      case l: LimitedCompanyApplication ⇒
+//        l.mainBusinessAddress shouldEqual applicationReader(application)
+//        l.contactPerson shouldEqual application.contactPerson
+//        l.companyRegistrationNumber shouldEqual application.companyRegistrationNumber
+//        l.dateOfIncorporation shouldEqual application.dateOfIncorporation
+//        l.tradingName shouldEqual application.tradingName
+//        l.vatNumber shouldEqual application.vatNumber
+//        l.companyOfficers shouldEqual application.companyOfficers
+//        l.businessStatus shouldEqual application.businessStatus
+//        l.importingActivities shouldEqual application.importingActivities
+//        l.businessCustomers shouldEqual application.businessCustomers
+//        l.otherStoragePremises shouldEqual application.otherStoragePremises
+//    } )
+
   }
 
-  def loadDesDataFile(file: String): SubscriptionDisplay = {
-    val baseName = FilenameUtils getBaseName file
-    val resource = getClass.getResourceAsStream(s"/json/valid/display/limited-company/$baseName.json")
+  def applicationReader(application: ApplicationEntity): MainBusinessAddress = {
+    application.value.map(_.get match {
+      case l: LimitedCompanyApplication ⇒ l.mainBusinessAddress
+      case s: SoleProprietorApplication ⇒ s.mainBusinessAddress
+      case p: PartnershipApplication ⇒ p.mainBusinessAddress
+    } ).get
+  }
+
+  def loadDesDataFile(filePath: String): SubscriptionDisplay = {
+    val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
     val validationResult = validator(Json parse resource)
     validationResult .fold(
       invalid = {errors ⇒ println(errors.toJson)},

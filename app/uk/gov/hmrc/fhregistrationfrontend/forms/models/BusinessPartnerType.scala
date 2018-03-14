@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-object BusinessPartnersType extends Enumeration {
+object BusinessPartnerType extends Enumeration {
   type BusinessPartnerTypes = Value
 
   val Individual, SoleProprietor, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody = Value

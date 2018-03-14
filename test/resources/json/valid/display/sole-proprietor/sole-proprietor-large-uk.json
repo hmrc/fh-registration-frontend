@@ -1,0 +1,111 @@
+{
+  "subScriptionDisplay": {
+    "organizationType": "Sole Proprietor",
+    "FHbusinessDetail": {
+      "isNewFulfilmentBusiness": true,
+      "proposedStartDate": "2018-06-30"
+    },
+    "additionalBusinessInformation": {
+      "allOtherInformation": {
+        "numberOfCustomers": "Over 100",
+        "doesEORIExist": true,
+        "EORINumber": {
+          "EORIVat": "1234123132",
+          "goodsImportedOutEORI": true
+        },
+        "numberOfpremises": "2",
+        "premises": [
+          {
+            "address": {
+              "line1": "two flat",
+              "line2": "two street",
+              "line4": "two town",
+              "postalCode": "Z99 2YY",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": true
+          },
+          {
+            "address": {
+              "line1": "25 Testing Close",
+              "line4": "Othertown",
+              "postalCode": "AA01 0AA",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": false
+          }
+        ]
+      }
+    },
+    "businessDetail": {
+      "soleProprietor": {
+        "tradingName": "DodgyCo",
+        "identification": {
+          "nino": "AA123111A",
+          "vatRegistrationNumber": "123456789",
+          "uniqueTaxpayerReference": "1111111112"
+        }
+      }
+    },
+    "businessAddressForFHDDS": {
+      "currentAddress": {
+        "line1": "LINE 1",
+        "line2": "LINE 2",
+        "line3": "LINE 3",
+        "line4": "LINE 4",
+        "postalCode": "M46 0PT",
+        "countryCode": "GB"
+      },
+      "commonDetails": {},
+      "timeOperatedAtCurrentAddress": "Less than 3 years",
+      "previousOperationalAddress": {
+        "anyPreviousOperatingAddress": true,
+        "previousOperationalAddressDetail": [
+          {
+            "previousAddress": {
+              "line1": "Flat 1A",
+              "line4": "Testtown",
+              "postalCode": "ZZ11 1ZZ",
+              "countryCode": "GB"
+            },
+            "previousAddressStartdate": "2015-03-20"
+          }
+        ]
+      }
+    },
+    "contactDetail": {
+      "names": {
+        "firstName": "Cosmin",
+        "lastName": "Marian"
+      },
+      "roleInOrganization": {
+        "beneficialShareHolder": false,
+        "director": false,
+        "partner": false,
+        "internalAccountant": false,
+        "soleProprietor": false,
+        "nominatedOfficer": false,
+        "designatedmember": false,
+        "otherRoleType": true,
+        "otherRoleDescription": "Director"
+      },
+      "usingSameContactAddress": false,
+      "address": {
+        "line1": "Flat 1B",
+        "line4": "Testtown",
+        "postalCode": "ZZ11 1ZZ",
+        "countryCode": "GB"
+      },
+      "commonDetails": {
+        "telephone": "11123",
+        "email": "a@w.ro"
+      }
+    },
+    "declaration": {
+      "personName": "C",
+      "personStatus": "D",
+      "email": "a@b.co",
+      "isInformationAccurate": true
+    }
+  }
+}
