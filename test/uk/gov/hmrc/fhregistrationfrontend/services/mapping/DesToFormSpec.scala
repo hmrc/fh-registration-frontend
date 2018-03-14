@@ -62,28 +62,79 @@ class DesToFormSpec extends UnitSpec {
       case "Partnership" ⇒  service partnershipApplication display
     }
     loadedApplication shouldEqual application
-//    loadedApplication.value.map(_.get match {
-//      case l: LimitedCompanyApplication ⇒
-//        l.mainBusinessAddress shouldEqual applicationReader(application)
-//        l.contactPerson shouldEqual application.contactPerson
-//        l.companyRegistrationNumber shouldEqual application.companyRegistrationNumber
-//        l.dateOfIncorporation shouldEqual application.dateOfIncorporation
-//        l.tradingName shouldEqual application.tradingName
-//        l.vatNumber shouldEqual application.vatNumber
-//        l.companyOfficers shouldEqual application.companyOfficers
-//        l.businessStatus shouldEqual application.businessStatus
-//        l.importingActivities shouldEqual application.importingActivities
-//        l.businessCustomers shouldEqual application.businessCustomers
-//        l.otherStoragePremises shouldEqual application.otherStoragePremises
-//    } )
+    loadedApplication.value.map(
+      _.get match {
+        case l: LimitedCompanyApplication ⇒
+          (l.mainBusinessAddress,
+            l.contactPerson,
+            l.companyRegistrationNumber,
+            l.dateOfIncorporation,
+            l.tradingName,
+            l.vatNumber,
+            l.companyOfficers,
+            l.businessStatus,
+            l.importingActivities,
+            l.businessCustomers,
+            l.otherStoragePremises) shouldEqual applicationChecker(application)
+        case s: SoleProprietorApplication ⇒
+          (s.mainBusinessAddress,
+            s.contactPerson,
+            s.nationalInsuranceNumber,
+            s.tradingName,
+            s.vatNumber,
+            s.businessStatus,
+            s.importingActivities,
+            s.businessCustomers,
+            s.otherStoragePremises) shouldEqual applicationChecker(application)
+        case p: PartnershipApplication ⇒
+          (p.mainBusinessAddress,
+            p.contactPerson,
+            p.tradingName,
+            p.vatNumber,
+            p.businessPartners,
+            p.businessStatus,
+            p.importingActivities,
+            p.businessCustomers,
+            p.otherStoragePremises) shouldEqual applicationChecker(application)
+      }
+    )
 
   }
 
-  def applicationReader(application: ApplicationEntity): MainBusinessAddress = {
+  def applicationChecker(application: ApplicationEntity) = {
     application.value.map(_.get match {
-      case l: LimitedCompanyApplication ⇒ l.mainBusinessAddress
-      case s: SoleProprietorApplication ⇒ s.mainBusinessAddress
-      case p: PartnershipApplication ⇒ p.mainBusinessAddress
+      case l: LimitedCompanyApplication ⇒
+        (l.mainBusinessAddress,
+          l.contactPerson,
+          l.companyRegistrationNumber,
+          l.dateOfIncorporation,
+          l.tradingName,
+          l.vatNumber,
+          l.companyOfficers,
+          l.businessStatus,
+          l.importingActivities,
+          l.businessCustomers,
+          l.otherStoragePremises)
+      case s: SoleProprietorApplication ⇒
+        (s.mainBusinessAddress,
+          s.contactPerson,
+          s.nationalInsuranceNumber,
+          s.tradingName,
+          s.vatNumber,
+          s.businessStatus,
+          s.importingActivities,
+          s.businessCustomers,
+          s.otherStoragePremises)
+      case p: PartnershipApplication ⇒
+        (p.mainBusinessAddress,
+          p.contactPerson,
+          p.tradingName,
+          p.vatNumber,
+          p.businessPartners,
+          p.businessStatus,
+          p.importingActivities,
+          p.businessCustomers,
+          p.otherStoragePremises)
     } ).get
   }
 
