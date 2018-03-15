@@ -114,7 +114,7 @@ object BusinessPartnersForm {
 
   val addressMapping = addressKey → address
 
-  val businessPartnersTypeMapping = businessPartnersTypeKey → enum(BusinessPartnersType)
+  val businessPartnersTypeMapping = businessPartnersTypeKey → enum(BusinessPartnerType)
 
   val businessPartnerIndividualMapping = mapping(
     firstNameKey → personName,
@@ -183,12 +183,12 @@ object BusinessPartnersForm {
 
   val businessPartnerMapping: Mapping[BusinessPartner] = mapping(
     businessPartnersTypeMapping,
-    businessPartnerIndividualKey → (businessPartnerIndividualMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.Individual)),
-    businessPartnerSoleProprietorKey → (businessPartnerSoleProprietorMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.SoleProprietor)),
-    businessPartnerPartnershipKey → (businessPartnerPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.Partnership)),
-    businessPartnerLimitedLiabilityPartnershipKey → (businessPartnerLimitedLiabilityPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.LimitedLiabilityPartnership)),
-    businessPartnerCorporateBodyKey → (businessPartnerCorporateBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.CorporateBody)),
-    businessPartnerUnincorporatedBodyKey → (businessPartnerUnincorporatedBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnersType.UnincorporatedBody))
+    businessPartnerIndividualKey → (businessPartnerIndividualMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Individual)),
+    businessPartnerSoleProprietorKey → (businessPartnerSoleProprietorMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.SoleProprietor)),
+    businessPartnerPartnershipKey → (businessPartnerPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Partnership)),
+    businessPartnerLimitedLiabilityPartnershipKey → (businessPartnerLimitedLiabilityPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.LimitedLiabilityPartnership)),
+    businessPartnerCorporateBodyKey → (businessPartnerCorporateBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.CorporateBody)),
+    businessPartnerUnincorporatedBodyKey → (businessPartnerUnincorporatedBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.UnincorporatedBody))
   ) {
     case (businessPartnersType, individual, soleProprietor, partnership, limitedLiabilityPartnership, corporateBody, unincorporatedBody) ⇒
       BusinessPartner(

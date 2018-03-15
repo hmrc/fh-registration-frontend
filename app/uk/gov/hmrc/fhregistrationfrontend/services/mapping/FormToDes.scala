@@ -148,7 +148,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       start
     )
 
-  def businessDetail(application: ApplicationEntity, bpr: BusinessRegistrationDetails) = {
+  def businessDetail(application: BusinessEntityApplication, bpr: BusinessRegistrationDetails) = {
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         des.BusinessDetail(
@@ -274,7 +274,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       )
     )
 
-  def additionalBusinessInformation(application: ApplicationEntity) =
+  def additionalBusinessInformation(application: BusinessEntityApplication) =
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         des.AdditionalBusinessInformationwithType(
@@ -297,7 +297,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     }
 
 
-  def allOtherInformation(application: ApplicationEntity) = {
+  def allOtherInformation(application: BusinessEntityApplication) = {
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         val desPremises = if (llt.otherStoragePremises.hasValue) repeatedValue(premise, llt.otherStoragePremises.value) else List.empty

@@ -18,10 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object PartnershipLargeInt {
-  val application = PartnershipApplication(
+  def application(changeFlags: ListWithTrackedChanges.Status = Added) = PartnershipApplication(
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),
@@ -56,7 +57,7 @@ object PartnershipLargeInt {
     VatNumber(true, Some("123456789")),
     ListWithTrackedChanges(
       List(BusinessPartner(
-        BusinessPartnersType.Individual,
+        BusinessPartnerType.Individual,
         BusinessPartnerIndividual(
           "mr partner",
           "ship",
@@ -69,9 +70,9 @@ object PartnershipLargeInt {
             Some("Othertown"),
             "Z9 3WW",
             None)
-        )) → ListWithTrackedChanges.Added,
+        )) → changeFlags,
         BusinessPartner(
-          BusinessPartnersType.SoleProprietor,
+          BusinessPartnerType.SoleProprietor,
           BusinessPartnerSoleProprietor(
             "ms sole",
             "trader",
@@ -90,9 +91,9 @@ object PartnershipLargeInt {
               "AA13 1AA",
               None)
           )
-        ) → ListWithTrackedChanges.Added,
+        ) → changeFlags,
         BusinessPartner(
-          BusinessPartnersType.LimitedLiabilityPartnership,
+          BusinessPartnerType.LimitedLiabilityPartnership,
           BusinessPartnerLimitedLiabilityPartnership(
             "fulfilment llp",
             true,
@@ -109,9 +110,9 @@ object PartnershipLargeInt {
               "AA14 1AA",
               None)
           )
-        ) → ListWithTrackedChanges.Added,
+        ) → changeFlags,
         BusinessPartner(
-          BusinessPartnersType.Partnership,
+          BusinessPartnerType.Partnership,
           BusinessPartnerPartnership(
             "fulfilment partNers",
             true,
@@ -128,9 +129,9 @@ object PartnershipLargeInt {
               "AA15 1AA",
               None)
           )
-        ) → ListWithTrackedChanges.Added,
+        ) → changeFlags,
         BusinessPartner(
-          BusinessPartnersType.CorporateBody,
+          BusinessPartnerType.CorporateBody,
           BusinessPartnerCorporateBody(
             "fulfilment ltd",
             true,
@@ -147,9 +148,9 @@ object PartnershipLargeInt {
               "AA16 1AA",
               None)
           )
-        ) → ListWithTrackedChanges.Added,
+        ) → changeFlags,
         BusinessPartner(
-          BusinessPartnersType.UnincorporatedBody,
+          BusinessPartnerType.UnincorporatedBody,
           BusinessPartnerUnincorporatedBody(
             "church of fulfilment",
             true,
@@ -166,7 +167,7 @@ object PartnershipLargeInt {
               "AA17 1AA",
               None)
           )
-        ) → ListWithTrackedChanges.Added),
+        ) → changeFlags),
       List.empty),
     BusinessStatus(true, Some(LocalDate.of(2018,8,31))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
@@ -182,7 +183,7 @@ object PartnershipLargeInt {
               Some("Sometown"),
               "Z99 2YY",
               None),
-            false) → ListWithTrackedChanges.Added,
+            false) → changeFlags,
           StoragePremise(
             Address(
               "25 Testing Close",
@@ -191,7 +192,7 @@ object PartnershipLargeInt {
               Some("Othertown"),
               "Z9 3WW",
               None),
-            true) → ListWithTrackedChanges.Added),
+            true) → changeFlags),
         List.empty))
   )
 
