@@ -18,20 +18,24 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import javax.inject.Inject
 import com.google.inject.ImplementedBy
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{Address ⇒ _, _}
+import uk.gov.hmrc.fhregistrationfrontend.models.des._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 @ImplementedBy(classOf[DesToFormImpl])
 trait DesToForm {
 
   def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails
+
   def entityType(subscriptionDisplay: SubscriptionDisplay): BusinessType
+
   def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyBusinessApplication
+
   def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorBusinessApplication
+
   def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipBusinessApplication
 
 }
@@ -147,7 +151,7 @@ class DesToFormImpl extends DesToForm {
 
   def businessPartner(partner: PartnerDetail): BusinessPartner = {
     partner.partnerTypeDetail match {
-      case i: IndividualPartnerType ⇒ BusinessPartner(
+      case i: IndividualPartnerType                      ⇒ BusinessPartner(
         BusinessPartnerType.Individual,
         BusinessPartnerIndividual(
           i.name.firstName,
@@ -157,7 +161,7 @@ class DesToFormImpl extends DesToForm {
           address(partner.partnerAddress)
         )
       )
-      case s: SoleProprietorPartnerType ⇒ BusinessPartner(
+      case s: SoleProprietorPartnerType                  ⇒ BusinessPartner(
         BusinessPartnerType.SoleProprietor,
         BusinessPartnerSoleProprietor(
           s.name.firstName,
@@ -172,8 +176,8 @@ class DesToFormImpl extends DesToForm {
           address(partner.partnerAddress)
         )
       )
-      case l: LimitedLiabilityPartnershipType ⇒
-        if (partner.entityType == "Limited Liability Partnership"){
+      case l: LimitedLiabilityPartnershipType            ⇒
+        if (partner.entityType == "Limited Liability Partnership") {
           BusinessPartner(
             BusinessPartnerType.LimitedLiabilityPartnership,
             BusinessPartnerLimitedLiabilityPartnership(
@@ -203,7 +207,7 @@ class DesToFormImpl extends DesToForm {
           )
         }
       case p: PartnershipOrUnIncorporatedBodyPartnerType ⇒
-        if (partner.entityType == "Partnership"){
+        if (partner.entityType == "Partnership") {
           BusinessPartner(
             BusinessPartnerType.Partnership,
             BusinessPartnerPartnership(
@@ -245,7 +249,7 @@ class DesToFormImpl extends DesToForm {
   def companyOfficers(partners: Option[des.PartnerCorporateBody]): ListWithTrackedChanges[CompanyOfficer] =
     ListWithTrackedChanges fromValues partners
       .flatMap(_.companyOfficials)
-      .map( _ map companyOfficial)
+      .map(_ map companyOfficial)
       .get
 
   def companyOfficial(official: des.CompanyOfficial): CompanyOfficer = {
@@ -266,7 +270,7 @@ class DesToFormImpl extends DesToForm {
             i.role
           )
         )
-      case c: des.CompanyAsOfficial ⇒ CompanyOfficer(
+      case c: des.CompanyAsOfficial    ⇒ CompanyOfficer(
         CompanyOfficerType.Company,
         CompanyOfficerCompany(
           c.name.companyName.get,
@@ -314,7 +318,7 @@ class DesToFormImpl extends DesToForm {
   }
 
   def nationalInsuranceNumber(businessDetails: des.BusinessDetail): NationalInsuranceNumber =
-    businessDetails.soleProprietor.map (
+    businessDetails.soleProprietor.map(
       id ⇒ {
         NationalInsuranceNumber(
           id.identification.nino.nonEmpty,
@@ -342,7 +346,7 @@ class DesToFormImpl extends DesToForm {
   def contactPerson(cd: des.ContactDetail) = ContactPerson(
     cd.names.firstName,
     cd.names.lastName,
-    roleInOrganization (cd.roleInOrganization.get),
+    roleInOrganization(cd.roleInOrganization.get),
     cd.commonDetails.telephone.get,
     cd.commonDetails.email.get,
     cd.usingSameContactAddress,
@@ -352,21 +356,21 @@ class DesToFormImpl extends DesToForm {
   )
 
   def roleInOrganization(roleInOrganization: des.RoleInOrganization): String = {
-      roleInOrganization.otherRoleDescription get
+    roleInOrganization.otherRoleDescription get
   }
 
   def otherInternationalContactAddress(cd: des.ContactDetail): Option[InternationalAddress] =
     cd.address.filter(_.countryCode != GBCountryCode) map internationalAddress
 
   def ukOtherAddress(cd: des.ContactDetail): Option[Boolean] = {
-    if (cd.usingSameContactAddress )
+    if (cd.usingSameContactAddress)
       None
     else {
       cd.address map (_.countryCode == GBCountryCode)
     }
   }
 
-  def otherUkContactAddress(cd: des.ContactDetail): Option[Address] = {
+  def otherUkContactAddress(cd: des.ContactDetail): Option[models.Address] = {
     cd.address.filter(_.countryCode == GBCountryCode) map address
   }
 
@@ -379,8 +383,8 @@ class DesToFormImpl extends DesToForm {
       a.countryCode
     )
 
-  def address(a: des.Address) =
-    Address(
+  def address(a: des.Address): models.Address=
+    models.Address(
       a.line1,
       a.line2,
       a.line3,
@@ -396,7 +400,7 @@ class DesToFormImpl extends DesToForm {
     mainAddress.previousOperationalAddress.flatMap(previousAddressStartDate)
   )
 
-  def previousAddressStartDate(pa:  des.PreviousOperationalAddress) = {
+  def previousAddressStartDate(pa: des.PreviousOperationalAddress) = {
     for {
       prevAddressesDetail ← pa.previousOperationalAddressDetail
       prevAddressDetail ← prevAddressesDetail.headOption
@@ -405,7 +409,7 @@ class DesToFormImpl extends DesToForm {
     }
   }
 
-  def previousAddress(pa:  des.PreviousOperationalAddress) = {
+  def previousAddress(pa: des.PreviousOperationalAddress) = {
     for {
       prevAddressesDetail ← pa.previousOperationalAddressDetail
       prevAddressDetail ← prevAddressesDetail.headOption
