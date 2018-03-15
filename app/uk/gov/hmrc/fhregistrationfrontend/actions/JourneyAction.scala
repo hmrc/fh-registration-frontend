@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import cats.data.EitherT
+import cats.implicits._
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Request, Result, Results}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyState, Journeys}
+import play.api.i18n.MessagesApi
+import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -30,9 +31,61 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-trait JourneyAction extends FrontendAction with UnexpectedState with I18nSupport {
-  implicit val save4LaterService: Save4LaterService
-  implicit val messagesApi: MessagesApi
+class JourneyRequest[A](
+  cacheMap: CacheMap,
+  request: UserRequest[A],
+  val bpr: BusinessRegistrationDetails,
+  val businessType: BusinessType,
+  val journeyPages: JourneyPages,
+  val journeyState: JourneyState
+
+) extends WrappedRequest[A](request) with PageDataLoader
+{
+  def userId: String = request.userId
+
+  def pageDataOpt[T](page: Page[T]): Option[T] =
+    cacheMap.getEntry[T](page.id)(page.format)
+
+  def registrationNumber = request.registrationNumber
+  def userIsRegistered = request.userIsRegistered
+  def email: Option[String] = request.email
+
+  def lastUpdateTimestamp = {
+    cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
+  }
+}
+
+object JourneyAction {
+  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
+    new UserAction() andThen new NoEnrolmentCheckAction andThen new JourneyAction
+}
+
+class JourneyAction (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
+  extends ActionRefiner[UserRequest, JourneyRequest]
+    with FrontendAction
+{
+
+  override def refine[A](input: UserRequest[A]): Future[Either[Result, JourneyRequest[A]]] = {
+    implicit val r: UserRequest[A] = input
+
+    val result: EitherT[Future, Result, JourneyRequest[A]] = for {
+      cacheMap ← EitherT(loadCacheMap)
+      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      journeyState = loadJourneyState(journeyPages, cacheMap)
+      bpr ← findBpr(cacheMap).toEitherT[Future]
+      bt ← getBusinessType(cacheMap).toEitherT[Future]
+    } yield {
+      new JourneyRequest[A](
+        cacheMap,
+        r,
+        bpr,
+        bt,
+        journeyPages,
+        journeyState)
+    }
+
+    result.value
+  }
 
   def loadCacheMap(implicit request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.shortLivedCache.fetch(request.userId) map {
@@ -62,10 +115,6 @@ trait JourneyAction extends FrontendAction with UnexpectedState with I18nSupport
         Logger.error(s"Not found business type")
         Left(errorResultsPages(Results.NotFound))
     }
-  }
-
-  def lastUpdateTimestamp(cacheMap: CacheMap) = {
-    cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
   }
 
   def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {

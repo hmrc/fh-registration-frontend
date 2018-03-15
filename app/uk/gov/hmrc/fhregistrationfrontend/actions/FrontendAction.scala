@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Request, Results}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.LoggingDetails
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -24,7 +26,11 @@ import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext
 
 import scala.concurrent.ExecutionContext
 
-trait FrontendAction extends Results {
+trait FrontendAction
+  extends Results
+    with UnexpectedState
+    with I18nSupport{
+
   implicit def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
   implicit def mdcExecutionContext(implicit loggingDetails: LoggingDetails): ExecutionContext = MdcLoggingExecutionContext.fromLoggingDetails

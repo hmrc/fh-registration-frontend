@@ -53,7 +53,7 @@ class DeclarationController @Inject()(
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
-  def showAcknowledgment() = UserAction { implicit request ⇒
+  def showAcknowledgment() = UserAction()(messagesApi) { implicit request ⇒
     val email: String = request.session.get(emailSessionKey).getOrElse("")
     Ok(
       acknowledgement_page(email)

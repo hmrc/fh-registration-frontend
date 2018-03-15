@@ -21,10 +21,10 @@ import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 object ExternalUrls extends RunMode with ServicesConfig {
 
   val companyAuthUrl: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
-  val loginCallback: String = getConfString("auth.login-callback.url", "")
+  val loginCallback: String = getConfString("auth.login-callback.url", "/fhdds")
   val loginPath: String = getConfString("auth.login_path", "")
 
-  val logoutCallback: String = getConfString("auth.logout-callback.url", "")
+  val logoutCallback: String = getConfString("auth.logout-callback.url", "/fhdds/signed-out")
   val logoutPath: String = getConfString("auth.logout_path", "")
 
   val ggLoginUrl = s"$companyAuthUrl$loginPath"

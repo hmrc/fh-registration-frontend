@@ -16,24 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.mvc._
-import play.api.Logger
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page, PageDataLoader}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.http.cache.client.CacheMap
 import cats.data.EitherT
 import cats.implicits._
-import play.api.i18n.{Messages, MessagesApi}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import play.api.Logger
+import play.api.i18n.MessagesApi
+import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyState, Page, PageDataLoader}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
 class SummaryRequest[A](
-  cacheMap: CacheMap,
-  request: UserRequest[A],
-  val bpr: BusinessRegistrationDetails,
-  val businessType: BusinessType
+  request: JourneyRequest[A]
 ) extends WrappedRequest[A](request) with PageDataLoader
 {
   def userId: String = request.userId
@@ -42,37 +36,34 @@ class SummaryRequest[A](
   def registrationNumber = request.registrationNumber
   def userIsRegistered = request.userIsRegistered
 
-  def pageData[T](page: Page[T]): T =
-    cacheMap.getEntry[T](page.id)(page.format).get
+  val bpr = request.bpr
+  val businessType = request.businessType
+
+  def pageDataOpt[T](page: Page[T]): Option[T] = request.pageDataOpt(page)
 
 }
 
 object SummaryAction {
   def apply(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    UserAction andThen NoEnrolmentCheckAction() andThen new SummaryAction
+    new UserAction() andThen new NoEnrolmentCheckAction() andThen new JourneyAction  andThen new SummaryAction
 }
 
 class SummaryAction(implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
-  extends JourneyAction
-    with ActionRefiner[UserRequest, SummaryRequest]{
+  extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
-  override protected def refine[A](input: UserRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
-    implicit val r: UserRequest[A] = input
+  override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
+    implicit val r: JourneyRequest[A] = input
     val result: EitherT[Future, Result, SummaryRequest[A]] = for {
-      cacheMap ← EitherT(loadCacheMap)
-      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
-      _ ← journeyIsComplete(journeyPages, cacheMap).toEitherT[Future]
-      bpr ← findBpr(cacheMap).toEitherT[Future]
-      bt ← getBusinessType(cacheMap).toEitherT[Future]
+      _ ← journeyIsComplete(input.journeyState).toEitherT[Future]
     } yield {
-      new SummaryRequest[A](cacheMap, input, bpr, bt)
+      new SummaryRequest[A](input)
     }
 
     result.value
   }
 
-  def journeyIsComplete(journeyPages: JourneyPages, cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, Boolean] = {
-    if(loadJourneyState(journeyPages, cacheMap).isComplete)
+  def journeyIsComplete(journeyState: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] = {
+    if(journeyState.isComplete)
       Right(true)
     else {
       Logger.error(s"Bad Request")

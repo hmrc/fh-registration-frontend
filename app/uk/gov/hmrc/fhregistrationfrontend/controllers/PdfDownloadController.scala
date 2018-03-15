@@ -29,7 +29,7 @@ class PdfDownloadController @Inject()(
   keyStoreService      : KeyStoreService
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds){
 
-  def downloadPrintable() = UserAction.async { implicit request ⇒
+  def downloadPrintable() = UserAction().async { implicit request ⇒
     keyStoreService.fetchAndGetEntry().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))

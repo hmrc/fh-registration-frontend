@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
 
@@ -33,11 +33,11 @@ class EnrolledUserRequest[A](
 }
 
 object EnrolledUserAction {
-  def apply()(implicit messages: Messages) = UserAction andThen new EnrolledUserAction
+  def apply()(implicit messagesApi: MessagesApi) = new UserAction andThen new EnrolledUserAction
 
 }
 
-class EnrolledUserAction (implicit val messages: Messages)
+class EnrolledUserAction (implicit val messagesApi: MessagesApi)
   extends FrontendAction
     with ActionRefiner[UserRequest, EnrolledUserRequest] with UnexpectedState {
 
