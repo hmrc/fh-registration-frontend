@@ -32,11 +32,11 @@ trait DesToForm {
 
   def entityType(subscriptionDisplay: SubscriptionDisplay): BusinessType
 
-  def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyBusinessApplication
+  def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication
 
-  def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorBusinessApplication
+  def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorApplication
 
-  def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipBusinessApplication
+  def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication
 
 }
 
@@ -47,8 +47,8 @@ class DesToFormImpl extends DesToForm {
   override def entityType(subscriptionDisplay: SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
 
-  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyBusinessApplication = {
-    LimitedCompanyBusinessApplication(
+  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
+    LimitedCompanyApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       companyRegistrationNumber(subscription.businessDetail),
@@ -63,8 +63,8 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorBusinessApplication = {
-    SoleProprietorBusinessApplication(
+  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorApplication = {
+    SoleProprietorApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       nationalInsuranceNumber(subscription.businessDetail),
@@ -77,8 +77,8 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipBusinessApplication = {
-    PartnershipBusinessApplication(
+  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipApplication = {
+    PartnershipApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
       tradingName(subscription.businessDetail),
