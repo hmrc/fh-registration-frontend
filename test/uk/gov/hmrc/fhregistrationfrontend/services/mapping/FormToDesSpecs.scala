@@ -62,7 +62,7 @@ class FormToDesSpecs extends UnitSpec {
   }
 
 
-  "Create a correct json for fhdds-limited-company-large-uk.xml" in {
+  "Create a correct json for fhdds-limited-company-large-uk" in {
     val submission = SubScriptionCreate(
       "Create",
       service.limitedCompanySubmission(brd("business-registration-details-limited-company.json"), LtdLargeUk.application(), LtdLargeUk.declaration),
@@ -70,12 +70,12 @@ class FormToDesSpecs extends UnitSpec {
     )
 
 
-    validatesFor(submission, "fhdds-limited-company-large-uk.xml", "limited-company")
+    validatesFor(submission, "fhdds-limited-company-large-uk", "limited-company")
   }
 
-  "Create a correct json for fhdds-limited-company-large-uk-updated.xml" in {
+  "Create a correct json for fhdds-limited-company-large-uk-updated" in {
     val submission = SubScriptionCreate(
-      "Create",
+      "Update",
       service
         .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
         .limitedCompanySubmission(
@@ -85,8 +85,7 @@ class FormToDesSpecs extends UnitSpec {
       None
     )
 
-
-    validatesFor(submission, "fhdds-limited-company-large-uk-updated.xml", "limited-company")
+    validatesFor(submission, "fhdds-limited-company-large-uk-updated", "limited-company")
   }
 
   "Sole proprietor submission service" should {
@@ -126,7 +125,6 @@ class FormToDesSpecs extends UnitSpec {
     val expected = loadExpectedSubscriptionForFile(file, entityPath)
     subscrtiptionCreate shouldEqual expected
 
-
     subscrtiptionCreate
   }
 
@@ -135,6 +133,5 @@ class FormToDesSpecs extends UnitSpec {
     val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
     Json.parse(resource).as[SubScriptionCreate]
   }
-
 
 }
