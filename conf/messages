@@ -351,6 +351,8 @@ fh.declaration.declaration.title=By submitting this application you confirm that
 fh.declaration.declaration.point1=the information you have provided is correct and complete
 fh.declaration.declaration.point2=you have authority to submit this form on behalf of 
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
+fh.declaration.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.hasAmendments.error.linkText=View or change your application
 
 # Corporate Body Page specific messages
 #============================================================
