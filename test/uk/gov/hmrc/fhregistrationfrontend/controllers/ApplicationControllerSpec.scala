@@ -50,18 +50,6 @@ class ApplicationControllerSpec extends AppUnitGenerator with Results {
     override val usewhiteListing = false
   }
 
-//  "GET /" should {
-//
-//    val expectedRedirect = "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
-//
-//    "return 303" in {
-//      val result = applicationController.start().apply(request)
-//      result.header.status shouldBe 303
-//      redirectLocation(result) shouldBe Some(expectedRedirect)
-//    }
-//
-//  }
-
   "errorResultsPages" should {
     "show related error page" in {
       val resultNotFound = applicationController.errorResultsPages(Results.NotFound)
