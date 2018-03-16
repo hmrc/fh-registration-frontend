@@ -29,7 +29,7 @@ class SummaryController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds)  with SummaryFunctions {
 
   def summary() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
-      Ok(getSummaryHtml(request))
+    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasAmendments))
   }
 
 }

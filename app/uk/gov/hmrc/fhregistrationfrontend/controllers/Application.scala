@@ -46,9 +46,8 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 class Application @Inject()(
   links            : ExternalUrls,
   ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector,
-  save4LaterService: Save4LaterService
-) extends AppController(ds) {
+  fhddsConnector   : FhddsConnector
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)

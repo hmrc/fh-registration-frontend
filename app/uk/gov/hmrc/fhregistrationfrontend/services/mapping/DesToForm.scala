@@ -17,20 +17,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import javax.inject.Inject
+
 import com.google.inject.ImplementedBy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des._
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
+import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 @ImplementedBy(classOf[DesToFormImpl])
 trait DesToForm {
 
-  def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails
+  def businessRegistrationDetails(subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails
 
-  def entityType(subscriptionDisplay: SubscriptionDisplay): BusinessType
+  def entityType(subscriptionDisplay: des.SubscriptionDisplay): BusinessType
 
   def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication
 
@@ -38,13 +39,14 @@ trait DesToForm {
 
   def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication
 
+  def declaration(declaration: des.Declaration): Declaration
 }
 
 @Inject
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
 
-  override def entityType(subscriptionDisplay: SubscriptionDisplay) =
+  override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
 
   override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
@@ -63,7 +65,7 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def soleProprietorApplication(subscription: SubscriptionDisplay): SoleProprietorApplication = {
+  override def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorApplication = {
     SoleProprietorApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
@@ -77,7 +79,7 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def partnershipApplication(subscription: SubscriptionDisplay): PartnershipApplication = {
+  override def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication = {
     PartnershipApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
@@ -91,13 +93,22 @@ class DesToFormImpl extends DesToForm {
     )
   }
 
-  override def businessRegistrationDetails(subscriptionDisplay: SubscriptionDisplay): BusinessRegistrationDetails = {
+  override def businessRegistrationDetails(subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails = {
+    val utr: Option[String] = entityType(subscriptionDisplay) match {
+      case BusinessType.CorporateBody ⇒
+        subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
+      case BusinessType.Partnership   ⇒
+        subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
+      case BusinessType.SoleTrader    ⇒
+        subscriptionDisplay.businessDetail.soleProprietor.flatMap(_.identification.uniqueTaxpayerReference)
+    }
+
     BusinessRegistrationDetails(
       None,
       None,
       businessAddress(subscriptionDisplay.businessAddressForFHDDS.currentAddress),
       None,
-      subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.vatRegistrationNumber)
+      utr
     )
   }
 
@@ -111,7 +122,7 @@ class DesToFormImpl extends DesToForm {
       ""
     )
 
-  def otherStoragePremises(allOtherInformation: AllOtherInformation) = OtherStoragePremises(
+  def otherStoragePremises(allOtherInformation: des.AllOtherInformation) = OtherStoragePremises(
     allOtherInformation.numberOfpremises != "0",
     ListWithTrackedChanges fromValues (allOtherInformation.premises map premises)
   )
@@ -121,16 +132,16 @@ class DesToFormImpl extends DesToForm {
     premise.thirdPartyPremises
   )
 
-  def businessCustomers(allOtherInformation: AllOtherInformation) =
+  def businessCustomers(allOtherInformation: des.AllOtherInformation) =
     BusinessCustomers(allOtherInformation.numberOfCustomers)
 
-  def importingActivities(allOtherInformation: AllOtherInformation) =
+  def importingActivities(allOtherInformation: des.AllOtherInformation) =
     ImportingActivities(
       allOtherInformation.doesEORIExist,
       eoriNumber(allOtherInformation)
     )
 
-  def eoriNumber(allOtherInformation: AllOtherInformation): Option[EoriNumber] =
+  def eoriNumber(allOtherInformation: des.AllOtherInformation): Option[EoriNumber] =
     if (allOtherInformation.doesEORIExist)
       for {
         eori ← allOtherInformation.EORINumber
@@ -142,16 +153,16 @@ class DesToFormImpl extends DesToForm {
     else
       None
 
-  def businessPartners(partnership: Option[Partnership]): ListWithTrackedChanges[BusinessPartner] = {
+  def businessPartners(partnership: Option[des.Partnership]): ListWithTrackedChanges[BusinessPartner] = {
     val businessPartners = partnership.get.partnerDetails.map(
       businessPartner
     )
     ListWithTrackedChanges.fromValues(businessPartners)
   }
 
-  def businessPartner(partner: PartnerDetail): BusinessPartner = {
+  def businessPartner(partner: des.PartnerDetail): BusinessPartner = {
     partner.partnerTypeDetail match {
-      case i: IndividualPartnerType                      ⇒ BusinessPartner(
+      case i: des.IndividualPartnerType                      ⇒ BusinessPartner(
         BusinessPartnerType.Individual,
         BusinessPartnerIndividual(
           i.name.firstName,
@@ -161,7 +172,7 @@ class DesToFormImpl extends DesToForm {
           address(partner.partnerAddress)
         )
       )
-      case s: SoleProprietorPartnerType                  ⇒ BusinessPartner(
+      case s: des.SoleProprietorPartnerType                  ⇒ BusinessPartner(
         BusinessPartnerType.SoleProprietor,
         BusinessPartnerSoleProprietor(
           s.name.firstName,
@@ -176,7 +187,7 @@ class DesToFormImpl extends DesToForm {
           address(partner.partnerAddress)
         )
       )
-      case l: LimitedLiabilityPartnershipType            ⇒
+      case l: des.LimitedLiabilityPartnershipType            ⇒
         if (partner.entityType == "Limited Liability Partnership") {
           BusinessPartner(
             BusinessPartnerType.LimitedLiabilityPartnership,
@@ -206,7 +217,7 @@ class DesToFormImpl extends DesToForm {
             )
           )
         }
-      case p: PartnershipOrUnIncorporatedBodyPartnerType ⇒
+      case p: des.PartnershipOrUnIncorporatedBodyPartnerType ⇒
         if (partner.entityType == "Partnership") {
           BusinessPartner(
             BusinessPartnerType.Partnership,
@@ -418,5 +429,11 @@ class DesToFormImpl extends DesToForm {
     }
   }
 
-
+  override def declaration(declaration: des.Declaration): Declaration = Declaration(
+    declaration.personName,
+    declaration.personStatus,
+    true,
+    declaration.email,
+    None
+  )
 }

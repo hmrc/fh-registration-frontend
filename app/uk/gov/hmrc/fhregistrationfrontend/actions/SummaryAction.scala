@@ -27,19 +27,19 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import scala.concurrent.Future
 
 class SummaryRequest[A](
-  request: JourneyRequest[A]
-) extends WrappedRequest[A](request) with PageDataLoader
+  val journeyRequest: JourneyRequest[A]
+) extends WrappedRequest[A](journeyRequest) with PageDataLoader
 {
-  def userId: String = request.userId
-  def email: Option[String] = request.email
+  def userId: String = journeyRequest.userId
+  def email: Option[String] = journeyRequest.email
 
-  def registrationNumber = request.registrationNumber
-  def userIsRegistered = request.userIsRegistered
+  def registrationNumber = journeyRequest.registrationNumber
+  def userIsRegistered = journeyRequest.userIsRegistered
 
-  val bpr = request.bpr
-  val businessType = request.businessType
+  val bpr = journeyRequest.bpr
+  val businessType = journeyRequest.businessType
 
-  def pageDataOpt[T](page: Page[T]): Option[T] = request.pageDataOpt(page)
+  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.pageDataOpt(page)
 
 }
 

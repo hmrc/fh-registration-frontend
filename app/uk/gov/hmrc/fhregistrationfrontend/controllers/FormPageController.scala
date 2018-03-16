@@ -50,7 +50,7 @@ class FormPageController @Inject()(
       pageWithErrors => renderForm(pageWithErrors, true),
       page => {
         save4LaterService
-          .saveData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+          .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
           .map { _ ⇒
             if (isSaveForLate)
               Redirect(routes.Application.savedForLater)
@@ -72,7 +72,7 @@ class FormPageController @Inject()(
           case None          ⇒ Future successful errorResultsPages(Results.BadRequest)
           case Some(newPage) ⇒
             save4LaterService
-              .saveData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
+              .saveDraftData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
               .map { _ ⇒
                 showNextPage(newPage)
               }

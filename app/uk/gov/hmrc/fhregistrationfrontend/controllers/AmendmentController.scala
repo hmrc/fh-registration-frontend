@@ -38,29 +38,44 @@ class AmendmentController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
   def startAmendment() = EnrolledUserAction().async { implicit request ⇒
+    if (request.hasAmendmentInProgress)
+      Future successful Redirect(routes.SummaryController.summary())
 
-    fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper ⇒
-      val display = displayWrapper.subScriptionDisplay
-      val userId = request.userId
-      val entityType = desToForm entityType display
-      val journeyPages = loadJourneyPagesFromDes(display)
-      val bpr = desToForm.businessRegistrationDetails(display)
+    else {
+      fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper ⇒
+        val display = displayWrapper.subScriptionDisplay
+        val userId = request.userId
+        val entityType = desToForm entityType display
+        val journeyPages = loadJourneyPagesFromDes(display)
+        val bpr = desToForm.businessRegistrationDetails(display)
 
-      for {
-        _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
-        _ ← save4LaterService.saveBusinessType(userId, entityType)
-        _ ← savePageData(userId, journeyPages)
-      } yield
-        Redirect(routes.SummaryController.summary())
+        for {
+          _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
+          _ ← save4LaterService.saveBusinessType(userId, entityType)
+          _ ← saveDisplayPageData(userId, journeyPages)
+          _ ← savePageData(userId, journeyPages)
+          _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
+          _ ← save4LaterService.saveIsAmendment(userId)
+        } yield
+          Redirect(routes.SummaryController.summary())
+      }
+    }
+  }
+
+  private def saveDisplayPageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
+    val ignored: Any = 1
+    pages.pages.foldLeft(Future successful ignored) {
+      case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(hc, page.format)}
     }
   }
 
   private def savePageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) {
-      case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveData4Later(userId, page.id, page.data.get)(hc, page.format)}
+      case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)}
     }
   }
+
 
   private def loadJourneyPagesFromDes(display: SubscriptionDisplay) = {
     desToForm.entityType(display) match {

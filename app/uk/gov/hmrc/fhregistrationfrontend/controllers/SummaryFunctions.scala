@@ -28,32 +28,32 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_s
 trait SummaryFunctions {
   this: AppController ⇒
 
-  protected def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: Option[Date] = None): Html = {
+  protected def getSummaryHtml(request: SummaryRequest[AnyContent], forPrint: Boolean = false, timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None): Html = {
 
     val url = None
 
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp)(request)
-      case BusinessType.SoleTrader ⇒ soleTrader(forPrint, url, timeStamp)(request)
-      case BusinessType.Partnership ⇒ partnership(forPrint, url, timeStamp)(request)
+      case BusinessType.CorporateBody ⇒ ltdSummary(forPrint, url, timeStamp, hasAmendments)(request)
+      case BusinessType.SoleTrader ⇒ soleTrader(forPrint, url, timeStamp, hasAmendments)(request)
+      case BusinessType.Partnership ⇒ partnership(forPrint, url, timeStamp, hasAmendments)(request)
     }
   }
 
-  protected def partnership(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None)(implicit request: SummaryRequest[AnyContent]) = {
+  protected def partnership(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys partnershipApplication request
-    partnership_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
+    partnership_summary(application, request.bpr, baseUrl, forPrint, timeStamp, hasAmendments)
   }
 
 
-  protected def soleTrader(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None)(implicit request: SummaryRequest[AnyContent]) = {
+  protected def soleTrader(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys soleTraderApplication request
-    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
+    sole_proprietor_summary(application, request.bpr, baseUrl, forPrint, timeStamp, hasAmendments)
   }
 
-  protected def ltdSummary(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None)(implicit request: SummaryRequest[AnyContent]) = {
+  protected def ltdSummary(forPrint: Boolean = false, baseUrl: Option[String], timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys ltdApplication request
 
-    ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp)
+    ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp, hasAmendments)
   }
 
 }
