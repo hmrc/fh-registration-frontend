@@ -31,11 +31,8 @@
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-  hasAmendments match {
-    case Some(x) =>
-      if(x) Alert(Messages("fh.unsaved_summary"))
-      else ""
-    case _ => ""
+  hasAmendments.filter(_ == true).map { _ =>
+    Alert(Messages("fh.unsaved_summary"))
   }
 }
 
