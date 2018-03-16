@@ -216,9 +216,9 @@ fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=En
 #===========================================================
 fh.trading_name.title=Trading name
 fh.tradingName.title=Trading name
-fh.tradingName.confirm.label=Does the business use a trading name
+fh.tradingName.confirm.label=Does the business use a trading name?
 fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one? 
-fh.trading_name.confirm.label=Does the business use a trading name
+fh.trading_name.confirm.label=Does the business use a trading name?
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
 fh.tradingName.label=Enter the trading name
 fh.tradingName_value.error.required=Enter the trading name
