@@ -29,6 +29,10 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
 
+@entityDetails = {
+  <p>@Messages("fh.business_partners.entity_intro")</p>
+}
+
 @addMore = {
   @params.forceHasMore match {
     case Some(force) => {
@@ -77,16 +81,7 @@
 
   <p>@Messages("fh.business_partners.intro")</p>
 
-  <div class="form-group" style="margin-top:2em">
-    <details id="business-partners-details">
-      <summary class="summary">
-      @Messages("fh.business_partners.entity")
-      </summary>
-      <div>
-        @Messages("fh.business_partners.entity_intro")
-      </div>
-    </details>
-  </div>
+  @Details(Messages("fh.business_partners.entity"), entityDetails)
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("businessPartners", section), 'novalidate -> "novalidate") {
 
