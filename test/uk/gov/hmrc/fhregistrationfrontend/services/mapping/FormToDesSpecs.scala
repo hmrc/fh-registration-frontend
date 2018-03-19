@@ -220,8 +220,6 @@ class FormToDesSpecs extends UnitSpec {
 
     val json: JsValue = Json.toJson(subscrtiptionCreate)
 
-    println(s"\n\n$json\n\n")
-
     val validationResult = validator(json)
     validationResult.fold(
       invalid = {errors ⇒ println(errors.toJson)},
