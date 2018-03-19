@@ -20,15 +20,13 @@ import javax.inject.Inject
 
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.UserAction
-import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.http.BadRequestException
 
 @Inject
 class PdfDownloadController @Inject()(
   ds            : CommonPlayDependencies,
-  keyStoreService      : KeyStoreService,
-  pdfGeneratorConnector: PdfGeneratorConnector
+  keyStoreService      : KeyStoreService
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds){
 
   def downloadPrintable() = UserAction.async { implicit request ⇒
