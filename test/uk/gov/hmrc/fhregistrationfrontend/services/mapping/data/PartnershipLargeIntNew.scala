@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.{Added, Updated}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object PartnershipLargeIntNew {
@@ -64,7 +64,7 @@ object PartnershipLargeIntNew {
             Some("Othertown"),
             "Z9 3WW",
             None)
-        )) → changeFlags,
+        )) → Updated,
         BusinessPartner(
           BusinessPartnerType.SoleProprietor,
           BusinessPartnerSoleProprietor(
@@ -85,7 +85,7 @@ object PartnershipLargeIntNew {
               "AA13 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.LimitedLiabilityPartnership,
           BusinessPartnerLimitedLiabilityPartnership(
@@ -104,7 +104,7 @@ object PartnershipLargeIntNew {
               "AA14 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.Partnership,
           BusinessPartnerPartnership(
@@ -123,7 +123,7 @@ object PartnershipLargeIntNew {
               "AA15 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.CorporateBody,
           BusinessPartnerCorporateBody(
@@ -142,27 +142,26 @@ object PartnershipLargeIntNew {
               "AA16 1AA",
               None)
           )
-        ) → changeFlags,
-        BusinessPartner(
-          BusinessPartnerType.UnincorporatedBody,
-          BusinessPartnerUnincorporatedBody(
-            "church of fulfilment",
-            true,
-            Some("cat church"),
-            false,
+        ) → Updated),
+      List(BusinessPartner(
+        BusinessPartnerType.UnincorporatedBody,
+        BusinessPartnerUnincorporatedBody(
+          "church of fulfilment",
+          true,
+          Some("cat church"),
+          false,
+          None,
+          false,
+          None,
+          Address(
+            "church one",
             None,
-            false,
             None,
-            Address(
-              "church one",
-              None,
-              None,
-              Some("church town"),
-              "AA17 1AA",
-              None)
-          )
-        ) → changeFlags),
-      List.empty),
+            Some("church town"),
+            "AA17 1AA",
+            None)
+        )
+      ))),
     BusinessStatus(true, Some(LocalDate.of(2018,7, 30))),
     ImportingActivities(false, None),
     BusinessCustomers("51-100"),

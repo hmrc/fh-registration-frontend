@@ -18,6 +18,10 @@
             },
             "identification": {
               "nino": "AA123123A"
+            },
+            "modification": {
+              "changeIndicator": "Added",
+              "changeDate": "2018-02-01"
             }
           },
           {
@@ -28,6 +32,10 @@
             },
             "identification": {
               "nino": "AA122222"
+            },
+            "modification": {
+              "changeIndicator": "Added",
+              "changeDate": "2018-02-01"
             }
           }
         ]
@@ -35,7 +43,7 @@
       "allOtherInformation": {
         "numberOfCustomers": "51-100",
         "doesEORIExist": false,
-        "numberOfpremises": "3",
+        "numberOfpremises": "4",
         "premises": [
           {
             "address": {
@@ -44,7 +52,11 @@
               "postalCode": "Z99 2YY",
               "countryCode": "GB"
             },
-            "thirdPartyPremises": false
+            "thirdPartyPremises": false,
+            "modification": {
+              "changeIndicator": "Added",
+              "changeDate": "2018-02-01"
+            }
           },
           {
             "address": {
@@ -53,7 +65,11 @@
               "postalCode": "Z9 3WW",
               "countryCode": "GB"
             },
-            "thirdPartyPremises": true
+            "thirdPartyPremises": true,
+            "modification": {
+              "changeIndicator": "Updated",
+              "changeDate": "2018-02-01"
+            }
           },
           {
             "address": {
@@ -63,6 +79,19 @@
               "countryCode": "GB"
             },
             "thirdPartyPremises": true
+          },
+          {
+            "address": {
+              "line1": "27 Testing Close",
+              "line4": "Othertown",
+              "postalCode": "Z9 3WW",
+              "countryCode": "GB"
+            },
+            "thirdPartyPremises": true,
+            "modification": {
+              "changeIndicator": "Removed",
+              "changeDate": "2018-02-01"
+            }
           }
         ]
       }
