@@ -22,7 +22,7 @@ import com.eclipsesource.schema._
 import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -37,6 +37,83 @@ class FormToDesSpecs extends UnitSpec {
   def brd(fileName: String): BusinessRegistrationDetails = Json
     .parse(getClass.getResourceAsStream(s"/models/$fileName"))
     .as[BusinessRegistrationDetails]
+
+  "Diff changeIndicators service" should {
+    "Check the different between two subscriptions and creates a new json amendment payload for DES" when {
+      "For Corporate Body Update" in {
+        val originalSubscription: Subscription =
+          service.limitedCompanySubmission(
+            brd("business-registration-details-limited-company.json"),
+            LtdLargeUk.application(),
+            LtdLargeUk.declaration)
+
+        val amendedSubscription: Subscription =
+          service.limitedCompanySubmission(
+            brd("business-registration-details-limited-company.json"),
+            LtdLargeUkNew.application(),
+            LtdLargeUkNew.declaration)
+
+        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+        val submission = SubScriptionCreate(
+          "Update",
+          amendedSubscription,
+          Some(changeIndicators)
+        )
+
+        validatesFor(submission, "fhdds-limited-company-large-uk-amendment", "limited-company")
+      }
+
+      "For Sole Proprietor Update" in {
+        val originalSubscription: Subscription =
+          service.soleProprietorCompanySubmission(
+            brd("business-registration-details-sole-trader.json"),
+            SPLargeUk.application(),
+            SPLargeUk.declaration)
+
+        val amendedSubscription: Subscription =
+          service.soleProprietorCompanySubmission(
+            brd("business-registration-details-sole-trader.json"),
+            SPLargeUkNew.application(),
+            SPLargeUkNew.declaration)
+
+        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+        val submission = SubScriptionCreate(
+          "Update",
+          amendedSubscription,
+          Some(changeIndicators)
+        )
+
+        validatesFor(submission, "sole-proprietor-large-uk-amendment", "sole-proprietor")
+      }
+
+      "For Partnership Update" in {
+        val originalSubscription: Subscription =
+          service.partnership(
+            brd("business-registration-details-partnership.json"),
+            PartnershipLargeInt.application(),
+            PartnershipLargeInt.declaration)
+
+        val amendedSubscription: Subscription =
+          service.partnership(
+            brd("business-registration-details-partnership.json"),
+            PartnershipLargeIntNew.application(),
+            PartnershipLargeIntNew.declaration)
+
+        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+        val submission = SubScriptionCreate(
+          "Update",
+          amendedSubscription,
+          Some(changeIndicators)
+        )
+
+        validatesFor(submission, "partnership-large-int-amendment", "partnership")
+      }
+    }
+
+  }
 
   "Limited company submission service" should {
     "Create a correct json for fhdds-limited-company-minimum" in {
@@ -69,7 +146,6 @@ class FormToDesSpecs extends UnitSpec {
       None
     )
 
-
     validatesFor(submission, "fhdds-limited-company-large-uk", "limited-company")
   }
 
@@ -95,8 +171,9 @@ class FormToDesSpecs extends UnitSpec {
         service.soleProprietorCompanySubmission(brd("business-registration-details-sole-trader.json"), SPLargeUk.application(), SPLargeUk.declaration),
         None)
 
-      validatesFor(submission, "sole-proprietor-large-uk.json", "sole-proprietor")
+      validatesFor(submission, "sole-proprietor-large-uk", "sole-proprietor")
     }
+
   }
 
   "Partnership submission service" should {
@@ -106,7 +183,7 @@ class FormToDesSpecs extends UnitSpec {
         service.partnership(brd("business-registration-details-partnership.json"), PartnershipLargeInt.application(), PartnershipLargeInt.declaration),
         None)
 
-      validatesFor(submission, "partnership-large-int.json", "partnership")
+      validatesFor(submission, "partnership-large-int", "partnership")
     }
   }
 

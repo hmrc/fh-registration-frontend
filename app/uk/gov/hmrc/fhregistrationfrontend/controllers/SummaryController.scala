@@ -16,19 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import java.time.LocalDateTime
-
 import javax.inject.Inject
-import play.api.i18n.Messages
-import play.api.mvc.{AnyContent, Request}
-import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
-import uk.gov.hmrc.fhregistrationfrontend.connectors.PdfGeneratorConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
-import uk.gov.hmrc.http.BadRequestException
+import uk.gov.hmrc.fhregistrationfrontend.actions.SummaryAction
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 
 @Inject
@@ -37,11 +27,8 @@ class SummaryController @Inject()(
   links                : ExternalUrls
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds)  with SummaryFunctions {
 
-
-
   def summary() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
       Ok(getSummaryHtml(request))
   }
-
 
 }
