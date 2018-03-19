@@ -44,7 +44,7 @@ class ApplicationControllerSpec extends AppUnitGenerator with Results {
   when(mockConfiguration.getInt(s"formMaxExpiryDays")).thenReturn(Some(27))
 
 
-  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mockSave4Later) {
+  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector)(mockSave4Later) {
 
     override val authConnector = mockAuthConnector
     override val usewhiteListing = false
