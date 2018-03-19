@@ -107,7 +107,7 @@ class DeclarationController @Inject()(
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
-    if (prevDesDeclaration == newDesDeclaration)
+    if (prevDesDeclaration == newDesDeclaration && request.journeyRequest.hasAmendments == Some(false))
       Left("no.changes")
     else {
       val subscription = getSubscriptionForDes(
