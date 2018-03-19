@@ -18,7 +18,7 @@
 
 @(status: String, id: String, canAmend: Boolean)(implicit request: Request[_], messages: Messages)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
-@sidebarLinks =  {@if(canAmend) {@statusSidebar()}}
+@sidebarLinks =  {@statusSidebar()}
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
 
@@ -86,15 +86,13 @@
           </li>
         </ul>
 
-        @if(canAmend) {
-          <p>
-            <a class="button" href="@{
-              //  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
-            }">
-            @Messages("fh.generic.application_status_continue")
-            </a>
-          </p>
-        }
+        <p>
+          <a class="button" href="@{
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
+          }">
+          @Messages("fh.generic.application_status_continue")
+          </a>
+        </p>
 
       </div>
 

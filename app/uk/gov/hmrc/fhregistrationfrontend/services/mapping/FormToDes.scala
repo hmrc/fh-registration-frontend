@@ -31,6 +31,8 @@ trait FormToDes {
   def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes
+
+  def declaration(d: Declaration): des.Declaration
 }
 
 case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Option[LocalDate] = None) extends FormToDes {
@@ -148,7 +150,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       start
     )
 
-  def businessDetail(application: ApplicationEntity, bpr: BusinessRegistrationDetails) = {
+  def businessDetail(application: BusinessEntityApplication, bpr: BusinessRegistrationDetails) = {
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         des.BusinessDetail(
@@ -183,71 +185,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       getAllPartners(businessPartners)
     )
 
-  def getAllPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): List[PartnerDetail] = {
-    val partners =
-    for {
-      businessPartner <- businessPartners.values
-      partner = businessPartner.identification match {
-        case i: BusinessPartnerIndividual                  ⇒
-          PartnerDetail(
-            entityType = "Individual",
-            partnerAddress = address(i.address),
-            partnerTypeDetail = IndividualPartnerType(Name(firstName = i.firstName, None, lastName = i.lastName), nino = i.nino),
-            None)
-        case s: BusinessPartnerSoleProprietor              ⇒
-          PartnerDetail(
-            entityType = "Sole Proprietor",
-            partnerAddress = address(s.address),
-            partnerTypeDetail = SoleProprietorPartnerType(
-              Name(firstName = s.firstName, None, lastName = s.lastName),
-              nino = s.nino,
-              identification = PartnerIdentification(vatRegistrationNumber = s.vat, uniqueTaxpayerReference = s.uniqueTaxpayerReference),
-              tradingName = s.tradeName
-            ),
-            None)
-        case p: BusinessPartnerPartnership                 ⇒
-          PartnerDetail(
-            entityType = "Partnership",
-            partnerAddress = address(p.address),
-            partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
-              CompanyName(companyName = Some(p.partnershipName), tradingName = p.tradeName),
-              identification = PartnerIdentification(vatRegistrationNumber = p.vat, uniqueTaxpayerReference = p.uniqueTaxpayerReference)
-            ),
-            None)
-        case l: BusinessPartnerLimitedLiabilityPartnership ⇒
-          PartnerDetail(
-            entityType = "Limited Liability Partnership",
-            partnerAddress = address(l.address),
-            partnerTypeDetail = LimitedLiabilityPartnershipType(
-              CompanyName(companyName = Some(l.limitedLiabilityPartnershipName), tradingName = l.tradeName),
-              identification = PartnerIdentification(vatRegistrationNumber = l.vat, uniqueTaxpayerReference = l.uniqueTaxpayerReference),
-              incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(l.companyRegistrationNumber), dateOfIncorporation = None)
-            ),
-            None)
-        case c: BusinessPartnerCorporateBody               ⇒
-          PartnerDetail(
-            entityType = "Corporate Body",
-            partnerAddress = address(c.address),
-            partnerTypeDetail = LimitedLiabilityPartnershipType(
-              CompanyName(companyName = Some(c.companyName), tradingName = c.tradeName),
-              identification = PartnerIdentification(vatRegistrationNumber = c.vat, uniqueTaxpayerReference = c.uniqueTaxpayerReference),
-              incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(c.companyRegistrationNumber), dateOfIncorporation = None)
-            ),
-            None)
-        case u: BusinessPartnerUnincorporatedBody          ⇒
-          PartnerDetail(
-            entityType = "Unincorporated Body",
-            partnerAddress = address(u.address),
-            partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
-              CompanyName(companyName = Some(u.unincorporatedBodyName), tradingName = u.tradeName),
-              identification = PartnerIdentification(vatRegistrationNumber = u.vat, uniqueTaxpayerReference = u.uniqueTaxpayerReference)
-            ),
-            None)
-      }
-    } yield partner
-
-    partners.toList
-  }
+  def getAllPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): List[PartnerDetail] =
+    repeatedValue[BusinessPartner, des.PartnerDetail](partnerDetail, businessPartners)
 
   def llpOrCorporate(crn: CompanyRegistrationNumber, dateOfIncorporation: DateOfIncorporation) =
     des.LimitedLiabilityPartnershipCorporateBody(
@@ -274,7 +213,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       )
     )
 
-  def additionalBusinessInformation(application: ApplicationEntity) =
+  def additionalBusinessInformation(application: BusinessEntityApplication) =
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         des.AdditionalBusinessInformationwithType(
@@ -297,7 +236,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     }
 
 
-  def allOtherInformation(application: ApplicationEntity) = {
+  def allOtherInformation(application: BusinessEntityApplication) = {
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         val desPremises = if (llt.otherStoragePremises.hasValue) repeatedValue(premise, llt.otherStoragePremises.value) else List.empty
@@ -393,6 +332,67 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       }
     else
       None
+  }
+
+  val partnerDetail: (BusinessPartner, Option[Modification]) ⇒ des.PartnerDetail = { (businessPartner: BusinessPartner, modification) ⇒
+    businessPartner.identification match {
+      case i: BusinessPartnerIndividual                  ⇒
+        PartnerDetail(
+          entityType = "Individual",
+          partnerAddress = address(i.address),
+          partnerTypeDetail = IndividualPartnerType(Name(firstName = i.firstName, None, lastName = i.lastName), nino = i.nino),
+          modification)
+      case s: BusinessPartnerSoleProprietor              ⇒
+        PartnerDetail(
+          entityType = "Sole Proprietor",
+          partnerAddress = address(s.address),
+          partnerTypeDetail = SoleProprietorPartnerType(
+            Name(firstName = s.firstName, None, lastName = s.lastName),
+            nino = s.nino,
+            identification = PartnerIdentification(vatRegistrationNumber = s.vat, uniqueTaxpayerReference = s.uniqueTaxpayerReference),
+            tradingName = s.tradeName
+          ),
+          modification)
+      case p: BusinessPartnerPartnership                 ⇒
+        PartnerDetail(
+          entityType = "Partnership",
+          partnerAddress = address(p.address),
+          partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
+            CompanyName(companyName = Some(p.partnershipName), tradingName = p.tradeName),
+            identification = PartnerIdentification(vatRegistrationNumber = p.vat, uniqueTaxpayerReference = p.uniqueTaxpayerReference)
+          ),
+          modification)
+      case l: BusinessPartnerLimitedLiabilityPartnership ⇒
+        PartnerDetail(
+          entityType = "Limited Liability Partnership",
+          partnerAddress = address(l.address),
+          partnerTypeDetail = LimitedLiabilityPartnershipType(
+            CompanyName(companyName = Some(l.limitedLiabilityPartnershipName), tradingName = l.tradeName),
+            identification = PartnerIdentification(vatRegistrationNumber = l.vat, uniqueTaxpayerReference = l.uniqueTaxpayerReference),
+            incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(l.companyRegistrationNumber), dateOfIncorporation = None)
+          ),
+          modification)
+      case c: BusinessPartnerCorporateBody               ⇒
+        PartnerDetail(
+          entityType = "Corporate Body",
+          partnerAddress = address(c.address),
+          partnerTypeDetail = LimitedLiabilityPartnershipType(
+            CompanyName(companyName = Some(c.companyName), tradingName = c.tradeName),
+            identification = PartnerIdentification(vatRegistrationNumber = c.vat, uniqueTaxpayerReference = c.uniqueTaxpayerReference),
+            incorporationDetails = IncorporationDetail(companyRegistrationNumber = Some(c.companyRegistrationNumber), dateOfIncorporation = None)
+          ),
+          modification)
+      case u: BusinessPartnerUnincorporatedBody          ⇒
+        PartnerDetail(
+          entityType = "Unincorporated Body",
+          partnerAddress = address(u.address),
+          partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
+            CompanyName(companyName = Some(u.unincorporatedBodyName), tradingName = u.tradeName),
+            identification = PartnerIdentification(vatRegistrationNumber = u.vat, uniqueTaxpayerReference = u.uniqueTaxpayerReference)
+          ),
+          modification)
+    }
+
   }
 
   val companyOfficial: (CompanyOfficer, Option[Modification]) ⇒ des.CompanyOfficial = { (officer, modification) ⇒

@@ -4,17 +4,17 @@
     "organizationType": "Corporate Body",
     "FHbusinessDetail": {
       "isNewFulfilmentBusiness": true,
-      "proposedStartDate": "2018-06-30"
+      "proposedStartDate": "2018-07-30"
     },
     "additionalBusinessInformation": {
       "partnerCorporateBody": {
-        "numberOfOtherOfficials": "4",
+        "numberOfOtherOfficials": "2",
         "companyOfficials": [
           {
             "role": "Company Secretary",
             "name": {
-              "firstName": "Cosmin",
-              "lastName": "M"
+              "firstName": "Yuan",
+              "lastName": "Zhang"
             },
             "identification": {
               "nino": "AA123123A"
@@ -31,47 +31,18 @@
               "lastName": "M"
             },
             "identification": {
-              "nino": "AA123231"
-            }
-          },
-          {
-            "role": "Company Secretary",
-            "name": {
-              "companyName": "Some Company"
-            },
-            "identification": {
-              "vatRegistrationNumber": "123456789"
+              "nino": "AA122222"
             },
             "modification": {
-              "changeIndicator": "Updated",
+              "changeIndicator": "Added",
               "changeDate": "2018-02-01"
             }
-
-          },
-          {
-            "role": "Company Secretary",
-            "name": {
-              "companyName": "Some Other Company"
-            },
-            "identification": {
-              "vatRegistrationNumber": "123456789"
-            },
-            "modification": {
-              "changeIndicator": "Removed",
-              "changeDate": "2018-02-01"
-            }
-
           }
-
         ]
       },
       "allOtherInformation": {
-        "numberOfCustomers": "Over 100",
-        "doesEORIExist": true,
-        "EORINumber": {
-          "EORIVat": "1234123132",
-          "goodsImportedOutEORI": true
-        },
+        "numberOfCustomers": "51-100",
+        "doesEORIExist": false,
         "numberOfpremises": "4",
         "premises": [
           {
@@ -127,16 +98,16 @@
     },
     "businessDetail": {
       "nonProprietor": {
-        "tradingName": "DodgyCo",
+        "tradingName": "CatCo",
         "identification": {
-          "vatRegistrationNumber": "123456789",
+          "vatRegistrationNumber": "987654321",
           "uniqueTaxpayerReference": "1111111111"
         }
       },
       "limitedLiabilityPartnershipCorporateBody": {
         "incorporationDetails": {
-          "companyRegistrationNumber": "12345678",
-          "dateOfIncorporation": "2014-03-20"
+          "companyRegistrationNumber": "87654321",
+          "dateOfIncorporation": "2014-05-21"
         }
       }
     },
@@ -150,26 +121,23 @@
         "countryCode": "GB"
       },
       "commonDetails": {},
-      "timeOperatedAtCurrentAddress": "Less than 3 years",
-      "previousOperationalAddress": {
-        "anyPreviousOperatingAddress": true,
-        "previousOperationalAddressDetail": [
-          {
-            "previousAddress": {
-              "line1": "Flat 1A",
-              "line4": "Testtown",
-              "postalCode": "ZZ11 1ZZ",
-              "countryCode": "GB"
-            },
-            "previousAddressStartdate": "2015-03-20"
-          }
-        ]
-      }
+      "timeOperatedAtCurrentAddress": "3-5 years"
     },
     "contactDetail": {
       "names": {
-        "firstName": "Cosmin",
-        "lastName": "Marian"
+        "firstName": "Yuan",
+        "lastName": "ZHANG"
+      },
+      "usingSameContactAddress": false,
+      "address": {
+        "line1": "New Flat",
+        "line4": "Testtown",
+        "postalCode": "ZZ11 1AA",
+        "countryCode": "GB"
+      },
+      "commonDetails": {
+        "telephone": "11123",
+        "email": "a@w.ro"
       },
       "roleInOrganization": {
         "beneficialShareHolder": false,
@@ -181,24 +149,26 @@
         "designatedmember": false,
         "otherRoleType": true,
         "otherRoleDescription": "Director"
-      },
-      "usingSameContactAddress": false,
-      "address": {
-        "line1": "Flat 1B",
-        "line4": "Testtown",
-        "postalCode": "ZZ11 1ZZ",
-        "countryCode": "GB"
-      },
-      "commonDetails": {
-        "telephone": "11123",
-        "email": "a@w.ro"
       }
     },
     "declaration": {
-      "personName": "C",
-      "personStatus": "D",
+      "personName": "Y",
+      "personStatus": "Z",
       "email": "a@b.co",
       "isInformationAccurate": true
     }
+  },
+  "changeIndicators": {
+    "businessTypeChanged": false,
+    "businessDetailChanged": true,
+    "partnersChanged": false,
+    "businessAddressChanged": false,
+    "businessPreviousAddressChanged": true,
+    "contactDetailChanged": true,
+    "groupMemberChanged": false,
+    "coOfficialsChanged": true,
+    "additionalBusinessInfoChanged": true,
+    "premisesChanged": true,
+    "declarationChanged": true
   }
 }

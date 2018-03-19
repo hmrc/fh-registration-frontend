@@ -20,13 +20,21 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(mainClass = Some("full-width"), scriptElem = Some(pageScripts)) {
+@linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
+
+@showAlert = @{
+  hasAmendments.filter(_ == false).map { _ =>
+    Alert(Messages("fh.declaration.hasAmendments.error"), Some(Messages("fh.declaration.hasAmendments.error.linkText")), Some(linkVal))
+  }
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -66,6 +74,8 @@
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm(), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
+
+    @showAlert
 
     @PageHeading(
       PageHeadingParams(

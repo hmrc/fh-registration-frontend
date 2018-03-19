@@ -28,7 +28,7 @@ import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, ResumeJourneyAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, JourneyAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -46,9 +46,8 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 class Application @Inject()(
   links            : ExternalUrls,
   ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector,
-  save4LaterService: Save4LaterService
-) extends AppController(ds) {
+  fhddsConnector   : FhddsConnector
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
 
   override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
@@ -76,14 +75,14 @@ class Application @Inject()(
       }
   }
 
-  def start = UserAction { implicit request ⇒
+  def start = UserAction()(messagesApi) { implicit request ⇒
     request.registrationNumber match {
       case Some(_) ⇒ Redirect(routes.Application.checkStatus())
       case None ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
   }
 
-  def continue = UserAction.async { implicit request ⇒
+  def continue = UserAction().async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
@@ -96,7 +95,7 @@ class Application @Inject()(
 
   val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
 
-  def deleteOrContinue(isNewForm: Boolean) = UserAction.async { implicit request ⇒
+  def deleteOrContinue(isNewForm: Boolean) = UserAction().async { implicit request ⇒
     if (isNewForm) {
       Future successful Redirect(routes.Application.businessType())
     }
@@ -109,7 +108,7 @@ class Application @Inject()(
     }
   }
 
-  def submitDeleteOrContinue = UserAction.async { implicit request ⇒
+  def submitDeleteOrContinue = UserAction().async { implicit request ⇒
     deleteOrContinueForm.bindFromRequest().fold(
       formWithErrors => Future successful errorResultsPages(Results.ServiceUnavailable),
       deleteOrContinue => {
@@ -126,14 +125,14 @@ class Application @Inject()(
     )
   }
 
-  def confirmDelete = UserAction.async { implicit request ⇒
+  def confirmDelete = UserAction().async { implicit request ⇒
       save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
         case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
         case None            ⇒ Future successful ServiceUnavailable
       }
   }
 
-  def resumeForm = ResumeJourneyAction()(save4LaterService, messages) { implicit request ⇒
+  def resumeForm = JourneyAction()(save4LaterService, messages) { implicit request ⇒
     if(request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary())
     else {
@@ -146,17 +145,17 @@ class Application @Inject()(
     }
   }
 
-  def deleteUserData = UserAction.async { implicit request ⇒
+  def deleteUserData = UserAction().async { implicit request ⇒
     save4LaterService.removeUserData(request.userId) map {
       _ ⇒ Redirect(routes.Application.start())
     }
   }
 
-  def businessType = UserAction { implicit request ⇒
+  def businessType = UserAction()(messagesApi) { implicit request ⇒
     Ok(business_type(businessTypeForm))
   }
 
-  def submitBusinessType = UserAction.async { implicit request ⇒
+  def submitBusinessType = UserAction().async { implicit request ⇒
     businessTypeForm.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
       businessType => {
@@ -169,14 +168,14 @@ class Application @Inject()(
     )
   }
 
-  def startForm = UserAction.async { implicit request ⇒
+  def startForm = UserAction().async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
   }
 
-  def savedForLater = UserAction.async { implicit request ⇒
+  def savedForLater = UserAction().async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
       case Some(savedDate) ⇒ Ok(saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
       case None            ⇒ errorResultsPages(Results.NotFound)

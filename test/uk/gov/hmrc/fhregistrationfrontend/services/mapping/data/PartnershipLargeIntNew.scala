@@ -18,49 +18,43 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.{Added, Updated}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
-object PartnershipLargeInt {
+object PartnershipLargeIntNew {
   def application(changeFlags: ListWithTrackedChanges.Status = Added) = PartnershipApplication(
     MainBusinessAddress(
-      "Less than 3 years",
-      Some(true),
-      Some(Address(
-        "Flat 1A",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1ZZ",
-        None
-      )),
-      Some(LocalDate.of(2015, 3, 20))
+      "3-5 years",
+      None,
+      None,
+      None
     ),
     ContactPerson(
-      "Cosmin",
-      "Marian",
+      "Yuan",
+      "ZHANG",
       "Director",
       "11123",
       "a@w.ro",
       false,
-      Some(false),
-      None,
-      Some(InternationalAddress(
-        "some street",
-        Some("Sofia"),
+      Some(true),
+      Some(Address(
+        "New Flat",
         None,
-        "Bulgaria",
-        "BG"
-      ))
+        None,
+        Some("Testtown"),
+        "ZZ11 1AA",
+        None
+      )),
+      None
     ),
-    TradingName(true, Some("DodgyCo")),
-    VatNumber(true, Some("123456789")),
+    TradingName(true, Some("CatCo")),
+    VatNumber(true, Some("987654321")),
     ListWithTrackedChanges(
       List(BusinessPartner(
         BusinessPartnerType.Individual,
         BusinessPartnerIndividual(
           "mr partner",
-          "ship",
+          "shipIndividual",
           true,
           Some("AA123123A"),
           Address(
@@ -70,12 +64,12 @@ object PartnershipLargeInt {
             Some("Othertown"),
             "Z9 3WW",
             None)
-        )) → changeFlags,
+        )) → Updated,
         BusinessPartner(
           BusinessPartnerType.SoleProprietor,
           BusinessPartnerSoleProprietor(
             "ms sole",
-            "trader",
+            "traderNew",
             true,
             Some("dodgy sole trader"),
             true,
@@ -91,13 +85,13 @@ object PartnershipLargeInt {
               "AA13 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.LimitedLiabilityPartnership,
           BusinessPartnerLimitedLiabilityPartnership(
             "fulfilment llp",
             true,
-            Some("dodgy llp"),
+            Some("cat llp"),
             "SC123456",
             true,
             Some("323456789"),
@@ -110,13 +104,13 @@ object PartnershipLargeInt {
               "AA14 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.Partnership,
           BusinessPartnerPartnership(
             "fulfilment partNers",
             true,
-            Some("dodgy partners"),
+            Some("cat partners"),
             true,
             Some("423456789"),
             true,
@@ -129,13 +123,13 @@ object PartnershipLargeInt {
               "AA15 1AA",
               None)
           )
-        ) → changeFlags,
+        ) → Updated,
         BusinessPartner(
           BusinessPartnerType.CorporateBody,
           BusinessPartnerCorporateBody(
             "fulfilment ltd",
             true,
-            Some("dodgy ltd"),
+            Some("car ltd"),
             "12345679",
             false,
             None,
@@ -148,59 +142,74 @@ object PartnershipLargeInt {
               "AA16 1AA",
               None)
           )
-        ) → changeFlags,
-        BusinessPartner(
-          BusinessPartnerType.UnincorporatedBody,
-          BusinessPartnerUnincorporatedBody(
-            "church of fulfilment",
-            true,
-            Some("dodgy church"),
-            false,
+        ) → Updated),
+      List(BusinessPartner(
+        BusinessPartnerType.UnincorporatedBody,
+        BusinessPartnerUnincorporatedBody(
+          "church of fulfilment",
+          true,
+          Some("cat church"),
+          false,
+          None,
+          false,
+          None,
+          Address(
+            "church one",
             None,
-            false,
             None,
-            Address(
-              "church one",
-              None,
-              None,
-              Some("church town"),
-              "AA17 1AA",
-              None)
-          )
-        ) → changeFlags),
-      List.empty),
-    BusinessStatus(true, Some(LocalDate.of(2018,8,31))),
-    ImportingActivities(true, Some(EoriNumber("1234123132", true))),
-    BusinessCustomers("Over 100"),
-    OtherStoragePremises(true,
-      ListWithTrackedChanges(
-        List(
-          StoragePremise(
-            Address(
-              "1 Some High Street",
-              None,
-              None,
-              Some("Sometown"),
-              "Z99 2YY",
-              None),
-            false) → changeFlags,
-          StoragePremise(
-            Address(
-              "25 Testing Close",
-              None,
-              None,
-              Some("Othertown"),
-              "Z9 3WW",
-              None),
-            true) → changeFlags),
-        List.empty))
-  )
+            Some("church town"),
+            "AA17 1AA",
+            None)
+        )
+      ))),
+    BusinessStatus(true, Some(LocalDate.of(2018,7, 30))),
+    ImportingActivities(false, None),
+    BusinessCustomers("51-100"),
+    OtherStoragePremises(true, ListWithTrackedChanges(
+      List(
+        StoragePremise(
+          Address(
+            "1 Some High Street",
+            None,
+            None,
+            Some("Sometown"),
+            "Z99 2YY",
+            None),
+          false) → ListWithTrackedChanges.Added,
+        StoragePremise(
+          Address(
+            "25 Testing Close",
+            None,
+            None,
+            Some("Othertown"),
+            "Z9 3WW",
+            None),
+          true) → ListWithTrackedChanges.Updated,
+        StoragePremise(
+          Address(
+            "26 Testing Close",
+            None,
+            None,
+            Some("Othertown"),
+            "Z9 3WW",
+            None),
+          true) → ListWithTrackedChanges.NoChange
+      ),
+      List(StoragePremise(
+        Address(
+          "27 Testing Close",
+          None,
+          None,
+          Some("Othertown"),
+          "Z9 3WW",
+          None),
+        true)))))
 
   val declaration = Declaration(
-    "C",
-    "D",
+    "Y",
+    "Z",
     false,
-    Some("cosmin@cosmin.co.uk"),
+    Some("yuan@yuan.co.uk"),
     Some(AlternativeEmail(
       "a@b.co",
       "a@b.co"
