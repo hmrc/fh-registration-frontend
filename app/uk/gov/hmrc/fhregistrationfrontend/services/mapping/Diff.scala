@@ -23,7 +23,7 @@ object Diff {
   def changeIndicators(original: Subscription, amended: Subscription) =
     ChangeIndicators(
       original.organizationType != amended.organizationType,
-      original.FHbusinessDetail != amended.FHbusinessDetail,
+      original.businessDetail != amended.businessDetail,
       original.businessDetail.partnership != amended.businessDetail.partnership,
       original.businessAddressForFHDDS.currentAddress != amended.businessAddressForFHDDS.currentAddress,
       original.businessAddressForFHDDS.previousOperationalAddress != amended.businessAddressForFHDDS.previousOperationalAddress,

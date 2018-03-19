@@ -16,15 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services
 
-import java.util.Date
-
 import com.google.inject.ImplementedBy
-import org.joda.time.DateTime
 import play.api.libs.json
-import play.api.libs.json.{Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.cache.ShortLivedCache
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.ShortLivedCache
 
@@ -35,6 +32,9 @@ object Save4LaterKeys {
   val businessRegistrationDetailsKey = "businessRegistrationDetails"
   val businessTypeKey = "businessType"
   val userLastTimeSavedKey = "userLastTimeSaved"
+  val isAmendmentKey = "isAmendment"
+  def displayKeyForPage(pageId: String) =  s"display_$pageId"
+  val displayDesDeclarationKey =  s"display_des_declaration"
 }
 
 @ImplementedBy(classOf[Save4LaterServiceImpl])
@@ -45,7 +45,7 @@ trait Save4LaterService {
   val shortLivedCache: ShortLivedCache
 
   def saveBusinessType(userId: String, businessType: BusinessType)(implicit hc: HeaderCarrier) = {
-    saveData4Later(userId, businessTypeKey, businessType)
+    saveDraftData4Later(userId, businessTypeKey, businessType)
   }
 
   def fetchBusinessType(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
@@ -53,7 +53,7 @@ trait Save4LaterService {
   }
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
-    saveData4Later(userId, businessRegistrationDetailsKey, brd)
+    saveDraftData4Later(userId, businessRegistrationDetailsKey, brd)
   }
 
   def fetchBusinessRegistrationDetails(userId: String)(implicit hc: HeaderCarrier) = {
@@ -68,12 +68,35 @@ trait Save4LaterService {
     shortLivedCache.remove(userId)
   }
 
-  def saveData4Later[T](id: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+  def saveDraftData4Later[T](userId: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
     val lastTimeUserSaved = System.currentTimeMillis()
-    shortLivedCache.cache(id, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
-      shortLivedCache.cache(id, formId, data) map {
+    shortLivedCache.cache(userId, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
+      shortLivedCache.cache(userId, formId, data) map {
         data ⇒ data.getEntry[T](formId)
       }
+    }
+  }
+
+  def saveIsAmendment(userId: String)(implicit hc: HeaderCarrier) = {
+    shortLivedCache.cache(userId, isAmendmentKey, true) map {
+      data ⇒ data.getEntry[Boolean](isAmendmentKey)
+    }
+  }
+
+  def fetchIsAmendment(userId: String)(implicit hc: HeaderCarrier) = {
+    fetchData4Later[Boolean](userId, isAmendmentKey)
+  }
+
+  def saveDisplayData4Later[T](userId: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+    val key = displayKeyForPage(formId)
+    shortLivedCache.cache(userId, key, data) map {
+      data ⇒ data.getEntry[T](key)
+    }
+  }
+
+  def saveDisplayDeclaration(userId: String, declaration: des.Declaration)(implicit hc: HeaderCarrier) = {
+    shortLivedCache.cache(userId, displayDesDeclarationKey, declaration) map {
+      data ⇒ data.getEntry[des.Declaration](displayDesDeclarationKey)
     }
   }
 

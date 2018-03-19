@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
+import play.api.i18n.MessagesApi
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
 import uk.gov.hmrc.auth.core.retrieve.~
@@ -32,7 +33,11 @@ class UserRequest[A](val userId: String, val email: Option[String], val registra
   def userIsRegistered = registrationNumber.isDefined
 }
 
-object UserAction extends ActionBuilder[UserRequest]
+object UserAction {
+  def apply()(implicit messagesApi: MessagesApi) = new UserAction
+}
+
+class UserAction(implicit val messagesApi: MessagesApi) extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
   with AuthorisedFunctions {

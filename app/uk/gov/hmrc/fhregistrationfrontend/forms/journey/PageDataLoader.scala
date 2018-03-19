@@ -17,5 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 trait PageDataLoader {
-  def pageData[T](page: Page[T]): T
+  def pageDataOpt[T](page: Page[T]): Option[T]
+  def pageData[T](page: Page[T]) = pageDataOpt(page).get
 }

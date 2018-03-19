@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
+
 import uk.gov.hmrc.fhregistrationfrontend.actions.SummaryAction
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
@@ -28,7 +29,7 @@ class SummaryController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds)  with SummaryFunctions {
 
   def summary() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
-      Ok(getSummaryHtml(request))
+    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasAmendments))
   }
 
 }

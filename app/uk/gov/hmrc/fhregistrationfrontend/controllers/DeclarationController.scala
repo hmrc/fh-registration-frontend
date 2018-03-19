@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 import javax.inject.Inject
 
 import play.api.libs.json.Json
@@ -24,15 +24,12 @@ import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journeys, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
-import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
-import play.api.i18n.Messages
-import play.api.mvc.Request
-import uk.gov.hmrc.http.BadRequestException
 
 import scala.concurrent.Future
 
@@ -53,7 +50,7 @@ class DeclarationController @Inject()(
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
-  def showAcknowledgment() = UserAction { implicit request ⇒
+  def showAcknowledgment() = UserAction()(messagesApi) { implicit request ⇒
     val email: String = request.session.get(emailSessionKey).getOrElse("")
     Ok(
       acknowledgement_page(email)
@@ -61,69 +58,88 @@ class DeclarationController @Inject()(
   }
 
   def submitForm() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
-    declarationForm.bindFromRequest().fold(
+    val form = declarationForm.bindFromRequest()
+    form.fold(
       formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
-      declaration => {
-        sendSubscription(declaration) flatMap { response ⇒
-          keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
-            .map(_ ⇒ true)
-            .recover{case _ ⇒ false}
-            .map { pdfSaved ⇒
-              Redirect(routes.DeclarationController.showAcknowledgment())
-                .withSession(request.session + (emailSessionKey → declaration.email) + (submitTimeKey → response.processingDate.toString))
-            }
-        }
+      usersDeclaration => {
+        sendSubscription(usersDeclaration).fold(
+          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, Some(false))),
+          _.flatMap { response ⇒
+            keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
+              .map(_ ⇒ true)
+              .recover{case _ ⇒ false}
+              .map { pdfSaved ⇒
+                Redirect(routes.DeclarationController.showAcknowledgment())
+                  .withSession(request.session + (emailSessionKey → usersDeclaration.email) + (submitTimeKey → response.processingDate.toString))
+              }
+          }
+        )
       }
     )
   }
 
   private def sendSubscription(declaration: Declaration)(implicit request: SummaryRequest[_]) = {
-    /** use amendedSubmissionRequest when an enroled user submits a request */
-    val submissionRequest = newSubmissionRequest(declaration)
+    val submissionRequest =
+      if (request.userIsRegistered) {
+        amendedSubmissionRequest(declaration)
+      } else {
+        newSubmissionRequest(declaration)
+      }
 
-    val result = submissionRequest flatMap { fhddsConnector.submit(_) }
-    result map { _ ⇒
-      //remove data but we throw away the result of this operation
-      save4LaterService.removeUserData(request.userId)
+    submissionRequest.right map { sr ⇒
+      val result = fhddsConnector.submit(sr)
+      result map {_ ⇒ save4LaterService.removeUserData(request.userId) }
+      result
     }
-
-    result
   }
 
-  def newSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Future[SubmissionRequest] = {
-    val subscription = getSubscriptionForDes(formToDes, declaration)
+  def newSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, SubmissionRequest] = {
+    val subscription = getSubscriptionForDes(formToDes, declaration, request)
     val payload = SubScriptionCreate(subscription)
-    Future successful SubmissionRequest(
+    Right(SubmissionRequest(
       request.bpr.safeId.get,
       declaration.email,
       Json toJson payload
-    )
+    ))
   }
 
-  def amendedSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Future[SubmissionRequest] = {
-    val subscription = getSubscriptionForDes(
-      formToDes.withModificationFlags(true, Some(LocalDate.now)),
-      declaration
-    )
+  def amendedSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, SubmissionRequest] = {
+    val newDesDeclaration = formToDes.declaration(declaration)
+    val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
-    fhddsConnector.getSubmission(request.registrationNumber.get).map { response ⇒
-      val prevSubscription = Subscription of response.subScriptionDisplay
+    if (prevDesDeclaration == newDesDeclaration && request.journeyRequest.hasAmendments == Some(false))
+      Left("no.changes")
+    else {
+      val subscription = getSubscriptionForDes(
+        formToDes.withModificationFlags(true, Some(LocalDate.now)),
+        declaration,
+        request
+      )
+
+      val prevSubscription = getSubscriptionForDes(
+        formToDes.withModificationFlags(false, None),
+        desToForm.declaration(prevDesDeclaration),
+        request.journeyRequest.displayPageDataLoader
+      )
+
       val changeIndicators = Diff.changeIndicators(prevSubscription, subscription)
       val payload = SubScriptionCreate.subscriptionAmend(changeIndicators, subscription)
-      SubmissionRequest(
+      Right(SubmissionRequest(
         request.registrationNumber.get,
         declaration.email,
         Json toJson payload
-      )
+      ))
     }
   }
 
 
-  private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration)(implicit request: SummaryRequest[_]) = {
+
+
+  private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration, pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) = {
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, Journeys ltdApplication request, d)
-      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, Journeys soleTraderApplication request, d)
-      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, Journeys partnershipApplication request, d)
+      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, Journeys ltdApplication pageDataLoader, d)
+      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, Journeys soleTraderApplication pageDataLoader, d)
+      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, Journeys partnershipApplication pageDataLoader, d)
     }
   }
 
