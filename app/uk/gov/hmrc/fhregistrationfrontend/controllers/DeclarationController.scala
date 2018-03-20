@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.fhregistration.models.fhdds.SubmissionRequest
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
@@ -78,32 +78,35 @@ class DeclarationController @Inject()(
     )
   }
 
-  private def sendSubscription(declaration: Declaration)(implicit request: SummaryRequest[_]) = {
-    val submissionRequest =
+  private def sendSubscription(declaration: Declaration)(implicit request: SummaryRequest[_]):  Either[String, Future[SubmissionResponse]] = {
+    val submissionResult =
       if (request.userIsRegistered) {
-        amendedSubmissionRequest(declaration)
+        amendedSubmission(declaration)
       } else {
-        newSubmissionRequest(declaration)
+        createSubmission(declaration)
       }
 
-    submissionRequest.right map { sr ⇒
-      val result = fhddsConnector.submit(sr)
-      result map {_ ⇒ save4LaterService.removeUserData(request.userId) }
-      result
+    submissionResult.right map { submissionResponse ⇒
+      submissionResponse onSuccess {case _ ⇒ save4LaterService.removeUserData(request.userId) }
+      submissionResponse
     }
   }
 
-  def newSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, SubmissionRequest] = {
+  def createSubmission(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val subscription = getSubscriptionForDes(formToDes, declaration, request)
     val payload = SubScriptionCreate(subscription)
-    Right(SubmissionRequest(
-      request.bpr.safeId.get,
+
+    val submissionRequest = SubmissionRequest(
       declaration.email,
       Json toJson payload
-    ))
+    )
+
+    Right(
+      fhddsConnector.createSubmission(request.bpr.safeId.get, submissionRequest))
+
   }
 
-  def amendedSubmissionRequest(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, SubmissionRequest] = {
+  def amendedSubmission(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
@@ -124,11 +127,14 @@ class DeclarationController @Inject()(
 
       val changeIndicators = Diff.changeIndicators(prevSubscription, subscription)
       val payload = SubScriptionCreate.subscriptionAmend(changeIndicators, subscription)
-      Right(SubmissionRequest(
-        request.registrationNumber.get,
+      val submissionRequest = SubmissionRequest(
         declaration.email,
         Json toJson payload
-      ))
+      )
+
+      Right(
+        fhddsConnector.amendSubmission(request.registrationNumber.get, submissionRequest)
+      )
     }
   }
 

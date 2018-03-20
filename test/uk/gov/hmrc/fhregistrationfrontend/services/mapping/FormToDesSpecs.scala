@@ -39,94 +39,91 @@ class FormToDesSpecs extends UnitSpec {
     .as[BusinessRegistrationDetails]
 
   "Form for amendment service" should {
-    "Check the different between two subscriptions and creates a new json amendment payload for DES" when {
-      "For Corporate Body Update" in {
-        val originalSubscription: Subscription =
-          service.limitedCompanySubmission(
-            brd("business-registration-details-limited-company.json"),
-            LtdLargeUk.application(),
-            LtdLargeUk.declaration)
+    "Compute the differences between initial subsciption and the amendment for Corporate Body" in {
+      val originalSubscription: Subscription =
+        service.limitedCompanySubmission(
+          brd("business-registration-details-limited-company.json"),
+          LtdLargeUk.application(),
+          LtdLargeUk.declaration)
 
-        val amendedSubscription: Subscription =
-          service.limitedCompanySubmission(
+      val amendedSubscription: Subscription =
+        service.limitedCompanySubmission(
+          brd("business-registration-details-limited-company.json"),
+          LtdLargeUkNew.application(),
+          LtdLargeUkNew.declaration)
+
+      val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+      val submission = SubScriptionCreate(
+        "Update",
+        service
+          .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+          .limitedCompanySubmission(
             brd("business-registration-details-limited-company.json"),
             LtdLargeUkNew.application(),
-            LtdLargeUkNew.declaration)
+            LtdLargeUkNew.declaration),
+        Some(changeIndicators)
+      )
 
-        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
-
-        val submission = SubScriptionCreate(
-          "Update",
-          service
-            .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
-            .limitedCompanySubmission(
-              brd("business-registration-details-limited-company.json"),
-              LtdLargeUkNew.application(),
-              LtdLargeUkNew.declaration),
-          Some(changeIndicators)
-        )
-
-        validatesFor(submission, "fhdds-limited-company-large-uk-amendment", "limited-company")
-      }
-
-      "For Sole Proprietor Update" in {
-        val originalSubscription: Subscription =
-          service.soleProprietorCompanySubmission(
-            brd("business-registration-details-sole-trader.json"),
-            SPLargeUk.application(),
-            SPLargeUk.declaration)
-
-        val amendedSubscription: Subscription =
-          service.soleProprietorCompanySubmission(
-            brd("business-registration-details-sole-trader.json"),
-            SPLargeUkNew.application(),
-            SPLargeUkNew.declaration)
-
-        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
-
-        val submission = SubScriptionCreate(
-          "Update",
-          service
-            .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
-            .soleProprietorCompanySubmission(
-              brd("business-registration-details-sole-trader.json"),
-              SPLargeUkNew.application(),
-              SPLargeUkNew.declaration),
-          Some(changeIndicators)
-        )
-
-        validatesFor(submission, "sole-proprietor-large-uk-amendment", "sole-proprietor")
-      }
-
-      "For Partnership Update" in {
-        val originalSubscription: Subscription =
-          service.partnership(
-            brd("business-registration-details-partnership.json"),
-            PartnershipLargeInt.application(),
-            PartnershipLargeInt.declaration)
-
-        val amendedSubscription: Subscription =
-          service.partnership(
-            brd("business-registration-details-partnership.json"),
-            PartnershipLargeIntNew.application(),
-            PartnershipLargeIntNew.declaration)
-
-        val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
-
-        val submission = SubScriptionCreate.subscriptionAmend(
-          changeIndicators,
-          service
-            .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
-            .partnership(
-              brd("business-registration-details-sole-trader.json"),
-              PartnershipLargeIntNew.application(),
-              PartnershipLargeIntNew.declaration)
-        )
-
-        validatesFor(submission, "partnership-large-int-amendment", "partnership")
-      }
+      validatesFor(submission, "fhdds-limited-company-large-uk-amendment", "limited-company")
     }
 
+    "Compute the differences between initial subsciption and the amendment for Sole Proprietor Update" in {
+      val originalSubscription: Subscription =
+        service.soleProprietorCompanySubmission(
+          brd("business-registration-details-sole-trader.json"),
+          SPLargeUk.application(),
+          SPLargeUk.declaration)
+
+      val amendedSubscription: Subscription =
+        service.soleProprietorCompanySubmission(
+          brd("business-registration-details-sole-trader.json"),
+          SPLargeUkNew.application(),
+          SPLargeUkNew.declaration)
+
+      val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+      val submission = SubScriptionCreate(
+        "Update",
+        service
+          .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+          .soleProprietorCompanySubmission(
+            brd("business-registration-details-sole-trader.json"),
+            SPLargeUkNew.application(),
+            SPLargeUkNew.declaration),
+        Some(changeIndicators)
+      )
+
+      validatesFor(submission, "sole-proprietor-large-uk-amendment", "sole-proprietor")
+    }
+
+    "Compute the differences between initial subsciption and the amendment for Partnership Update" in {
+      val originalSubscription: Subscription =
+        service.partnership(
+          brd("business-registration-details-partnership.json"),
+          PartnershipLargeInt.application(),
+          PartnershipLargeInt.declaration)
+
+      val amendedSubscription: Subscription =
+        service.partnership(
+          brd("business-registration-details-partnership.json"),
+          PartnershipLargeIntNew.application(),
+          PartnershipLargeIntNew.declaration)
+
+      val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
+
+      val submission = SubScriptionCreate.subscriptionAmend(
+        changeIndicators,
+        service
+          .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+          .partnership(
+            brd("business-registration-details-sole-trader.json"),
+            PartnershipLargeIntNew.application(),
+            PartnershipLargeIntNew.declaration)
+      )
+
+      validatesFor(submission, "partnership-large-int-amendment", "partnership")
+    }
   }
 
   "Limited company submission service" should {

@@ -25,12 +25,11 @@ object Diff {
       original.organizationType != amended.organizationType,
       original.businessDetail != amended.businessDetail,
       original.businessDetail.partnership != amended.businessDetail.partnership,
-      original.businessAddressForFHDDS.currentAddress != amended.businessAddressForFHDDS.currentAddress,
+      original.businessAddressForFHDDS != amended.businessAddressForFHDDS,
       original.businessAddressForFHDDS.previousOperationalAddress != amended.businessAddressForFHDDS.previousOperationalAddress,
       original.contactDetail != amended.contactDetail,
       original.GroupInformation != amended.GroupInformation,
-      original.additionalBusinessInformation.partnerCorporateBody.flatMap(_.companyOfficials)
-        != amended.additionalBusinessInformation.partnerCorporateBody.flatMap(_.companyOfficials),
+      original.additionalBusinessInformation.partnerCorporateBody != amended.additionalBusinessInformation.partnerCorporateBody,
       original.additionalBusinessInformation != amended.additionalBusinessInformation,
       original.additionalBusinessInformation.allOtherInformation.premises
         != amended.additionalBusinessInformation.allOtherInformation.premises,

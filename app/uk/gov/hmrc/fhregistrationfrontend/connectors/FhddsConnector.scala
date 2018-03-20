@@ -46,7 +46,12 @@ trait FhddsConnect {
     http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
   }
 
-  def submit(request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
-    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/submit", request)
+  def createSubmission(safeId: String, request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
+    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId", request)
   }
+
+  def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
+    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber", request)
+  }
+
 }

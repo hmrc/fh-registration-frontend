@@ -124,7 +124,7 @@
     "businessTypeChanged": false,
     "businessDetailChanged": true,
     "partnersChanged": false,
-    "businessAddressChanged": false,
+    "businessAddressChanged": true,
     "businessPreviousAddressChanged": true,
     "contactDetailChanged": true,
     "groupMemberChanged": false,

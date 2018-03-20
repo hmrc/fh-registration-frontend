@@ -268,7 +268,7 @@
     "businessTypeChanged": false,
     "businessDetailChanged": true,
     "partnersChanged": true,
-    "businessAddressChanged": false,
+    "businessAddressChanged": true,
     "businessPreviousAddressChanged": true,
     "contactDetailChanged": true,
     "groupMemberChanged": false,
