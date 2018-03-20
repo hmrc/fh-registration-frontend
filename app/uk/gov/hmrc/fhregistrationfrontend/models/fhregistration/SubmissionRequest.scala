@@ -20,7 +20,6 @@ import play.api.libs.json.{JsValue, Json}
 
 
 case class SubmissionRequest(
-  safeId: String,
   emailAddress: String,
   submission: JsValue
 )
