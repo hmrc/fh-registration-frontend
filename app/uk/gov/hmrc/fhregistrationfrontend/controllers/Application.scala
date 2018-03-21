@@ -37,6 +37,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{business_type, _}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -193,6 +194,18 @@ class Application @Inject()(
 
   def componentExamples = Action.async { implicit request =>
     Future(Ok(examples()))
+  }
+
+  def withdraw = UserAction().async { implicit request =>
+    Future(Ok(withdrawal_reason()))
+  }
+
+  def withdrawConfirm = UserAction().async { implicit request =>
+    Future(Ok(withdrawal_confirm(Some("gg@example.com"))))
+  }
+
+  def showAcknowledgement =  UserAction().async { implicit request =>
+    Future(Ok(withdrawal_acknowledgement("gg@example.com")))
   }
 
 }

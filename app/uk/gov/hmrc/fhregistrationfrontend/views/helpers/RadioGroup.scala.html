@@ -14,12 +14,16 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams,legendClass: Option[String] = Some("form-label-bold"))(implicit message : Messages)
 
 @legend = {
     @params.legend match {
         case Some(legend) => {
-            <legend class="form-label-bold">@legend</legend>
+          @params.legendSize.filter(_ == "H1").map {_ =>
+            <legend><h1 class="heading-large">@legend</h1></legend>
+          }.getOrElse {
+            <legend class="@legendClass">@legend</legend>
+          }
         }
         case _ => {}
     }
