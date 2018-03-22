@@ -2,6 +2,10 @@ h1 {
     margin-top: 0.55556em;
 }
 
+legend > h1.heading-large {
+    margin-top: 0;
+}
+
 h4 {
     font-weight: normal;
     margin-bottom: 1em;

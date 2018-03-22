@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.Confirmation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm._
 
@@ -32,6 +33,8 @@
 
     @helper.CSRF.formField
 
+    @error_box(confirmationForm)
+
     @RadioGroup(
       RadioGroupParams(
         name = Some(confirmKey),
@@ -39,8 +42,9 @@
         legendSize = Some("H1"),
         inline = true,
         required = true,
-        error = Some(Messages("fh.withdrawalConfirm.error")),
-        hasErrors = false,
+        error = Some(Messages("fh.withdrawalConfirm.confirm." + getError(confirmationForm(confirmKey).error))),
+        hasErrors = confirmationForm(confirmKey).hasErrors,
+        value = confirmationForm(confirmKey).value,
         radios = List(
           RadioParams(
             "true",
