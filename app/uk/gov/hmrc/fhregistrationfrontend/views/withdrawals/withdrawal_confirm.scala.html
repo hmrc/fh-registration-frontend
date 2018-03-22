@@ -16,8 +16,10 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.Confirmation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm._
 
-@(ggEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
+@(confirmationForm: Form[Confirmation], ggEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @pageScripts = {
@@ -26,13 +28,13 @@
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.showAcknowledgement(), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation(), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("withdrawalConfirm"),
+        name = Some(confirmKey),
         legend = Some(Messages("fh.withdrawalConfirm.title")),
         legendSize = Some("H1"),
         inline = true,
@@ -75,7 +77,7 @@
       <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.hasGG.legend") @ggEmail</legend>
       @RadioGroup(
         RadioGroupParams(
-          name = Some("ggEmail"),
+          name = Some(isUseGgEmailKey),
           legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
           required = true,
           hasErrors = false,

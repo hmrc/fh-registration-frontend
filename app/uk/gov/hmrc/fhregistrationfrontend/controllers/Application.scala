@@ -28,7 +28,7 @@ import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, JourneyAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{AmendmentAction, EnrolledUserAction, JourneyAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -184,28 +184,11 @@ class Application @Inject()(
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
-    def canAmend: Boolean = false
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber, canAmend))
+        Ok(status(statusResp.body, request.registrationNumber))
       })
-  }
-
-  def componentExamples = Action.async { implicit request =>
-    Future(Ok(examples()))
-  }
-
-  def withdraw = UserAction().async { implicit request =>
-    Future(Ok(withdrawal_reason()))
-  }
-
-  def withdrawConfirm = UserAction().async { implicit request =>
-    Future(Ok(withdrawal_confirm(Some("gg@example.com"))))
-  }
-
-  def showAcknowledgement =  UserAction().async { implicit request =>
-    Future(Ok(withdrawal_acknowledgement("gg@example.com")))
   }
 
 }

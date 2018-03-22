@@ -16,8 +16,11 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
+@import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
 
-@()(implicit request: Request[_], messages: Messages)
+@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {
@@ -26,13 +29,13 @@
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.withdrawConfirm(), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason(), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("withdrawalReason"),
+        name = Some(reasonKey),
         legend = Some(Messages("fh.withdrawalReason.title")),
         legendSize = Some("H1"),
         inline = false,
@@ -41,19 +44,19 @@
         hasErrors = false,
         radios = List(
           RadioParams(
-            Messages("Applied in Error"),
+            AppliedInError.toString,
             Messages("fh.withdrawalReason.appliedInError.label")
           ),
           RadioParams(
-            Messages("Duplicate Application"),
+            DuplicateApplication.toString,
             Messages("fh.withdrawalReason.duplicateApplication.label")
           ),
           RadioParams(
-            Messages("No Longer Applicable"),
+            NoLongerApplicable.toString,
             Messages("fh.withdrawalReason.noLongerApplicable.label")
           ),
           RadioParams(
-            Messages("Other"),
+            Other.toString,
             Messages("fh.withdrawalReason.otherReason.label"),
             dataTarget = Some("otherReason")
           )
@@ -66,7 +69,7 @@
         "otherReason",
         TextInput(
           TextInputParams(
-            name = "otherReasonText",
+            name = reasonOtherKey,
             label = Messages("fh.withdrawalReason.otherReasonText.label"),
             hasErrors = false,
             error = Messages("fh.withdrawalReason.otherReasonText.error")

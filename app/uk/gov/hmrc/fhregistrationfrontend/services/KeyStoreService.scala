@@ -18,29 +18,42 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 
 import com.google.inject.{ImplementedBy, Singleton}
 import uk.gov.hmrc.fhregistrationfrontend.config.KeySessionCache
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+object KeyStoreKeys {
+  val SummaryForPrintKey = "fhdds-summary-input"
+  val WithdrawalReasonKey = "withdrawalReason"
+}
+
 @Singleton
 class KeyStoreServiceImpl extends KeyStoreService {
-  val id = "fhdds-summary-input"
-
-  override def fetchAndGetEntry()(implicit hc: HeaderCarrier): Future[Option[String]]= {
-    sessionCache.fetchAndGetEntry[String](id)
-  }
-
-  override def save(o: String)(implicit hc: HeaderCarrier): Future[CacheMap] = sessionCache.cache(id, o)
-
+  import KeyStoreKeys._
   private val sessionCache = KeySessionCache
 
+  override def saveSummaryFormPrint(o: String)(implicit hc: HeaderCarrier): Future[_] = sessionCache.cache(SummaryForPrintKey, o)
+  override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]= {
+    sessionCache.fetchAndGetEntry[String](SummaryForPrintKey)
+  }
+
+  override def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_] =
+    sessionCache.cache(WithdrawalReasonKey, reason)
+
+  override def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] =
+    sessionCache.fetchAndGetEntry[WithdrawalReason](WithdrawalReasonKey)
 }
 
 @ImplementedBy(classOf[KeyStoreServiceImpl])
 trait KeyStoreService {
-  def fetchAndGetEntry()(implicit hc: HeaderCarrier): Future[Option[String]]
 
-  def save(o: String)(implicit hc: HeaderCarrier): Future[CacheMap]
+  def saveSummaryFormPrint(o: String)(implicit hc: HeaderCarrier): Future[_]
+  def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]
+
+  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_]
+  def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]]
+
+
 }

@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 
-@(status: String, id: String, canAmend: Boolean)(implicit request: Request[_], messages: Messages)
+@(status: String, id: String)(implicit request: Request[_], messages: Messages)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @sidebarLinks =  {@statusSidebar()}
 
