@@ -16,7 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-sealed trait BusinessEntityApplication
+sealed trait BusinessEntityApplication {
+  val vatNumber: VatNumber
+  val importingActivities: ImportingActivities
+  val businessCustomers: BusinessCustomers
+  val otherStoragePremises: OtherStoragePremises
+}
 
 case class LimitedCompanyApplication(
   mainBusinessAddress: MainBusinessAddress,
