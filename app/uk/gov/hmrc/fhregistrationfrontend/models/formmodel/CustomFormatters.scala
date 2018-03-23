@@ -36,13 +36,13 @@ object CustomFormatters {
   def emailConfirmationFormat: Formatter[String] = new Formatter[String] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] = {
       Right(data.getOrElse(s"alternativeEmail.emailConfirmation", "")).right.flatMap {
-        case "" => Left(Seq(FormError("alternativeEmail.emailConfirmation", "fh.declaration.alternative_email_confirmation.empty.error")))
+        case "" => Left(Seq(FormError("alternativeEmail.emailConfirmation", "empty.error")))
         case emailConfirmation  =>
           Right(data.getOrElse("alternativeEmail.email", "")).right.flatMap {
-            case "" => Left(Seq(FormError("alternativeEmail.email", "fh.declaration.alternative_email.empty.error")))
+            case "" => Left(Seq(FormError("alternativeEmail.email", "empty.error")))
             case email  =>
               if (email == emailConfirmation) Right(emailConfirmation)
-              else Left(Seq(FormError("alternativeEmail.emailConfirmation", "fh.declaration.alternative_email_confirmation.no_match.error")))
+              else Left(Seq(FormError("alternativeEmail.emailConfirmation", "no_match.error")))
           }
       }
     }

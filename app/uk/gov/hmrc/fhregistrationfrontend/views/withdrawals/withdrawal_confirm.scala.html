@@ -33,7 +33,7 @@
 
     @helper.CSRF.formField
 
-    @error_box(confirmationForm)
+    @error_box(confirmationForm, ".withdrawalConfirm.")
 
     @RadioGroup(
       RadioGroupParams(
@@ -61,31 +61,34 @@
 
     <div class="js-hidden panel" id="emailContainer">
 
-    @if(ggEmail.isEmpty) {
+    @if(ggEmail.filterNot(_.isEmpty) == None) {
 
-      <input type="hidden" name="useGGEMail" value="false"/>
+      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
       <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.noGG.legend")</legend>
       @EmailConfirmation(
         EmailConfirmationParams(
-          name = "alternativeEmail",
+          name = alternativeEmailKey,
           label = Messages("fh.withdrawalConfirm.noGG.email.label"),
           labelConfirmation = Messages("fh.withdrawalConfirm.noGG.emailConfirm.label"),
-          error = Messages("fh.declaration.email.error"),
+          error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
           isEmail = true,
-          hasErrors = false
+          hasErrors =  confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors,
+          value = confirmationForm(s"$alternativeEmailKey.email").value,
+          valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value
         )
       )
 
     } else {
-      <input type="hidden" name="ggEmail" value="@ggEmail"/>
+      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
       <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.hasGG.legend") @ggEmail</legend>
       @RadioGroup(
         RadioGroupParams(
           name = Some(isUseGgEmailKey),
           legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
           required = true,
-          hasErrors = false,
+          hasErrors = confirmationForm(isUseGgEmailKey).hasErrors,
           error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
+          value = confirmationForm(isUseGgEmailKey).value,
           radios = List(
             RadioParams(
               "true",
@@ -104,12 +107,14 @@
           "alternativeEmailContainer",
           EmailConfirmation(
             EmailConfirmationParams(
-              name = "alternativeEmail",
+              name = alternativeEmailKey,
               label = Messages("fh.declaration.alternative_email.label"),
               labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
-              error = Messages("fh.declaration.email.error"),
+              error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
               isEmail = true,
-              hasErrors = false
+              value = confirmationForm(s"$alternativeEmailKey.email").value,
+              valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,
+              hasErrors = confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors
             )
           )
         )

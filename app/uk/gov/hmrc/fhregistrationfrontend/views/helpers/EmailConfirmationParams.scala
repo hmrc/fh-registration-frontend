@@ -39,6 +39,7 @@ case class EmailConfirmationParams(
   context: Option[String] = None,
   hiddenNested: Boolean = false,
   value: Option[String] = None,
+  valueConfirmation: Option[String] = None,
   label: String,
   labelConfirmation: String,
   hintText: Option[String] = None,

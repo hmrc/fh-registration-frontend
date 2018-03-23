@@ -334,9 +334,12 @@ fh.summary.title=Check your answers before sending your application
 #===========================================================
 fh.declaration.title=Declaration
 fh.declaration.person_name.label=Full name
+fh.declaration.fullName.error.required=Enter the full name of who is submitting this application
 fh.declaration.person_name.error.required=Enter the full name of who is submitting this application
+fh.declaration.fullName.error.pattern=Enter only valid characters for a name
 fh.declaration.person_name.error.pattern=Enter only valid characters for a name
 fh.declaration.person_status.label=Job title
+fh.declaration.jobTitle.error.required=Enter the job title of who is submitting this application
 fh.declaration.person_status.error.required=Enter the job title of who is submitting this application
 fh.declaration.person_status.error.pattern=Enter only valid characters for a job title
 fh.declaration.has_gg_email=We will send a confirmation email to:
@@ -345,6 +348,8 @@ fh.declaration.use_gg_email.confirm.error=Select whether this is the correct ema
 fh.declaration.email.label=Enter an email address
 fh.declaration.email.hint_text=We will send a confirmation email to this address
 fh.declaration.email.confirmation.label=Re-enter the email address
+fh.declaration.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.declaration.alternativeEmail.emailConfirmation.empty.error=Re-enter the email address you want to use
 fh.declaration.email.error=Enter valid email addresses that match
 fh.declaration.alternative_email.label=Enter an alternative email address
 fh.declaration.alternative_email.error.required=Enter an alternative email address
@@ -358,6 +363,8 @@ fh.declaration.declaration.point2=you have authority to submit this form on beha
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
 fh.declaration.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
 fh.declaration.hasAmendments.error.linkText=View or change your application
+fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
+fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
 
 # Corporate Body Page specific messages
 #============================================================
@@ -706,6 +713,11 @@ fh.withdrawalConfirm.noGG.legend=We will send a confirmation to the email addres
 fh.withdrawalConfirm.noGG.email.label=Enter the email address
 fh.withdrawalConfirm.noGG.emailConfirm.label=Re-enter the email address
 fh.withdrawalConfirm.hasGG.legend=We will send a confirmation email to 
+fh.withdrawalConfirm.isUseGgEmail.error.required=Select whether this is the correct email address to use
+fh.withdrawalConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.withdrawalConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
+fh.withdrawalConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid email addresses that match
+fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
 
 fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to 
