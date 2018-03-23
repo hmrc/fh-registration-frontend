@@ -16,37 +16,59 @@
 
 @(form: Form[_], context: String=".", sectionP: String="", dateKey: String="")(implicit message: Messages)
 @defining(new scala.collection.mutable.HashSet[String]()) { set =>
+
   @if(form.hasErrors) {
     <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
       <ul class="error-summary-list">
-      @for(error <- form.errors) {
-        @if(!set.contains(error.key)) {
-          <li id="@{
-            error.key
-          }-error-link">
-            <a href="#@{
-              error.key.replace(".day", "").replace(".month", "").replace(".year", "")
-            }-inline-error">@{
-              if(error.key.contains(s"$dateKey.day")){
-                set.add(error.key)
-                set.add(error.key.replace(".day",".month"))
-                set.add(error.key.replace(".day",".year"))
-                Messages(s"fh.$dateKey.error.invalid")
-              } else if(error.key.contains(s"$dateKey.month")){
-                set.add(error.key)
-                set.add(error.key.replace(".month",".year"))
-                Messages(s"fh.$dateKey.error.invalid")
-              } else {
-                Messages("fh" + context + error.key + "." + error.message, sectionP)
-              }
 
-            }</a>
-          </li>
-            <!-- @set.add(error.key) -->
+      @for(error <- form.errors) {
+
+        @if(error.key.contains("alternativeEmail")) {
+
+          @if(!set.contains("alternativeEmail")) {
+              <li>
+              <a href="#alternativeEmail-inline-error">
+              @{Messages("fh" + context + error.key + "." + error.message, sectionP)}
+              </a>
+              </li>
+              <!-- @set.add("alternativeEmail") -->
+          }
+
+        } else {
+
+          @if(!set.contains(error.key)){
+
+            <li>
+              <a href=@{
+                "#" + error.key.replace(".day", "").replace(".month", "").replace(".year", "") + "-inline-error"
+              }>
+                @if(error.key.contains(s"$dateKey.day")) {
+                  <!-- @set.add(error.key)
+                  @set.add(error.key.replace(".day", ".month"))
+                  @set.add(error.key.replace(".day", ".year")) -->
+                  @Messages(s"fh.$dateKey.error.invalid")
+                } else {
+                  @if(error.key.contains(s"$dateKey.month")) {
+                    <!-- @set.add(error.key)
+                    @set.add(error.key.replace(".month", ".year")) -->
+                    @Messages(s"fh.$dateKey.error.invalid")
+                  } else {
+                    @Messages("fh" + context + error.key + "." + error.message, sectionP)
+                  }
+                }
+
+              </a>
+            </li>
+              <!-- @set.add(error.key) -->
+          }
         }
+
       }
+
       </ul>
     </div>
+
   }
+
 }

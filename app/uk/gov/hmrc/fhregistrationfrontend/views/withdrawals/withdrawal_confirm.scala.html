@@ -1,0 +1,139 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.Confirmation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm._
+
+@(confirmationForm: Form[Confirmation], ggEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
+
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation(), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @error_box(confirmationForm, ".withdrawalConfirm.")
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(confirmKey),
+        legend = Some(Messages("fh.withdrawalConfirm.title")),
+        legendSize = Some("H1"),
+        inline = true,
+        required = true,
+        error = Some(Messages("fh.withdrawalConfirm.confirm." + getError(confirmationForm(confirmKey).error))),
+        hasErrors = confirmationForm(confirmKey).hasErrors,
+        value = confirmationForm(confirmKey).value,
+        radios = List(
+          RadioParams(
+            "true",
+            Messages("fh.generic.yes"),
+            Some("emailContainer")
+          ),
+          RadioParams(
+            "false",
+            Messages("fh.generic.no")
+          )
+        )
+      )
+    )
+
+    <div class="js-hidden panel" id="emailContainer">
+
+    @if(ggEmail.filterNot(_.isEmpty) == None) {
+
+      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
+      <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.noGG.legend")</legend>
+      @EmailConfirmation(
+        EmailConfirmationParams(
+          name = alternativeEmailKey,
+          label = Messages("fh.withdrawalConfirm.noGG.email.label"),
+          labelConfirmation = Messages("fh.withdrawalConfirm.noGG.emailConfirm.label"),
+          error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
+          isEmail = true,
+          hasErrors =  confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors,
+          value = confirmationForm(s"$alternativeEmailKey.email").value,
+          valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value
+        )
+      )
+
+    } else {
+      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
+      <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.hasGG.legend") @ggEmail</legend>
+      @RadioGroup(
+        RadioGroupParams(
+          name = Some(isUseGgEmailKey),
+          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
+          required = true,
+          hasErrors = confirmationForm(isUseGgEmailKey).hasErrors,
+          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
+          value = confirmationForm(isUseGgEmailKey).value,
+          radios = List(
+            RadioParams(
+              "true",
+              Messages("fh.generic.yes")
+            ),
+            RadioParams(
+              "false",
+              Messages("fh.generic.no"),
+              Some("alternativeEmailContainer")
+            )
+          )
+        ),legendClass = Some("plain")
+      )
+      @NestedPanel(
+        NestedPanelParams(
+          "alternativeEmailContainer",
+          EmailConfirmation(
+            EmailConfirmationParams(
+              name = alternativeEmailKey,
+              label = Messages("fh.declaration.alternative_email.label"),
+              labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
+              error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
+              isEmail = true,
+              value = confirmationForm(s"$alternativeEmailKey.email").value,
+              valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,
+              hasErrors = confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors
+            )
+          )
+        )
+      )
+
+    }
+    </div>
+
+
+    <div class="form-group form-actions">
+
+      <p>
+        <button type="submit" class="button" value="continue">@Messages("button.confirm")</button>
+      </p>
+
+      <p>
+        <a href="#">@Messages("link.cancel")</a>
+      </p>
+
+    </div>
+  }
+}

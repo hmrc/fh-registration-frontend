@@ -65,7 +65,7 @@ class DeclarationController @Inject()(
         sendSubscription(usersDeclaration).fold(
           error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, Some(false))),
           _.flatMap { response ⇒
-            keyStoreService.save(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
+            keyStoreService.saveSummaryFormPrint(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
               .map(_ ⇒ true)
               .recover{case _ ⇒ false}
               .map { pdfSaved ⇒

@@ -38,38 +38,7 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @if(declarationForm.hasErrors) {
-    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
-      <ul class="error-summary-list">
-        @if(declarationForm(fullNameKey).hasErrors) {
-          <li id="@fullNameKey-error-link"><a href="#@fullNameKey-inline-error">@{
-            Messages("fh.declaration.person_name." + declarationForm(fullNameKey).errors.head.message)
-          }
-          </a></li>
-        }
-        @if(declarationForm(jobTitleKey).hasErrors) {
-          <li id="@jobTitleKey-error-link"><a href="#@jobTitleKey-inline-error">@{
-            Messages("fh.declaration.person_status." + declarationForm(jobTitleKey).errors.head.message)
-          }
-          </a></li>
-        }
-        @if(declarationForm(isUseGgEmailKey).hasErrors) {
-          <li id="@isUseGgEmailKey-error-link"><a href="#@isUseGgEmailKey-inline-error">@{
-            Messages("fh.declaration.use_gg_email.confirm.error")
-          }
-          </a></li>
-        }
-        @if(declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
-            declarationForm(s"$alternativeEmailKey.email").hasErrors) {
-          <li id="@isUseGgEmailKey-error-link"><a href="#@alternativeEmailKey-inline-error">@{
-            Messages("fh.declaration.email.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+  @error_box(declarationForm,".declaration.")
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm(), 'novalidate -> "novalidate") {
 
@@ -111,7 +80,7 @@
       }</strong></span>
     </h3>
 
-    @if(ggEmail.isEmpty) {
+    @if(ggEmail.filterNot(_.isEmpty) == None) {
 
       <input type="hidden" name="@isUseGgEmailKey" value="false"/>
 
@@ -122,6 +91,8 @@
           labelConfirmation = Messages("fh.declaration.email.confirmation.label"),
           error = Messages("fh.declaration.email.error"),
           isEmail = true,
+          value = declarationForm(s"$alternativeEmailKey.email").value,
+          valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,
           hasErrors = declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
               declarationForm(s"$alternativeEmailKey.email").hasErrors
         )
@@ -161,6 +132,8 @@
               labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
               error = Messages("fh.declaration.email.error"),
               isEmail = true,
+              value = declarationForm(s"$alternativeEmailKey.email").value,
+              valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,
               hasErrors = declarationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors ||
                   declarationForm(s"$alternativeEmailKey.email").hasErrors
             )

@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
+import java.util.Date
 import javax.inject.Singleton
 
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -54,4 +55,7 @@ trait FhddsConnect {
     http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber", request)
   }
 
+  def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit headerCarrier: HeaderCarrier): Future[Date] = {
+    http.POST[WithdrawalRequest, Date](s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber", request)
+  }
 }

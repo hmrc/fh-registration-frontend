@@ -17,8 +17,6 @@ GET         /subscription/status                                                
 
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
 
-GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
-
 GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
@@ -34,7 +32,7 @@ GET         /declaration                                                        
 POST        /submit                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
-GET        /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
@@ -43,6 +41,13 @@ POST        /deleteOrContinue                                                   
 GET         /confirmDelete                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
 
 GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
+
+GET         /withdraw                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.startWithdraw
+GET         /withdraw/reason                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.reason
+POST        /withdraw/reason                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postReason
+GET         /withdraw/confirm                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.confirm
+POST        /withdraw/confirm                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postConfirmation
+GET         /withdraw/acknowledgment                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.acknowledgment
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

@@ -31,6 +31,14 @@
     }
 }
 
+@inputClass = @{
+  if(params.hasErrors) {
+    "form-control form-control-error"
+  } else {
+    "form-control"
+  }
+}
+
 @nestedClass = @{
     if(params.hiddenNested){"panel js-hidden"} else {""}
 }
@@ -52,7 +60,7 @@
     }
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
-    class="form-control"
+    class="@{inputClass}"
     id="@{fieldName}"
     name="@{s"$fieldName.email"}"
         @if(params.value.nonEmpty){value="@{params.value}"}>
@@ -62,8 +70,8 @@
     </label>
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
-    class="form-control confirmation-value"
+    class="@{inputClass} confirmation-value"
     id="@{fieldName}-confirmation"
-    name="@{s"$fieldName.emailConfirmation"}">
+    name="@{s"$fieldName.emailConfirmation"}" @if(params.valueConfirmation.nonEmpty){value="@{params.valueConfirmation}"}>
 
 </div>

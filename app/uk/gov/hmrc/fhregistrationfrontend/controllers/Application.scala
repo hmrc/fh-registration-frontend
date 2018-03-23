@@ -28,7 +28,7 @@ import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, JourneyAction, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{AmendmentAction, EnrolledUserAction, JourneyAction, UserAction}
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -37,6 +37,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{business_type, _}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals._
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -183,16 +184,11 @@ class Application @Inject()(
   }
 
   def checkStatus() = EnrolledUserAction().async { implicit request ⇒
-    def canAmend: Boolean = false
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber, canAmend))
+        Ok(status(statusResp.body, request.registrationNumber))
       })
-  }
-
-  def componentExamples = Action.async { implicit request =>
-    Future(Ok(examples()))
   }
 
 }
