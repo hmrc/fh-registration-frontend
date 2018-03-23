@@ -8,7 +8,7 @@
     },
     "additionalBusinessInformation": {
       "partnerCorporateBody": {
-        "numberOfOtherOfficials": "4",
+        "numberOfOtherOfficials": "3",
         "companyOfficials": [
           {
             "role": "Company Secretary",
@@ -72,7 +72,7 @@
           "EORIVat": "1234123132",
           "goodsImportedOutEORI": true
         },
-        "numberOfpremises": "4",
+        "numberOfpremises": "3",
         "premises": [
           {
             "address": {

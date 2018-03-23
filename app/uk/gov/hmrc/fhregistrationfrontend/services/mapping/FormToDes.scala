@@ -240,31 +240,34 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     application match {
       case llt: LimitedCompanyApplication ⇒ {
         val desPremises = if (llt.otherStoragePremises.hasValue) repeatedValue(premise, llt.otherStoragePremises.value) else List.empty
+        val nbPremises = if (llt.otherStoragePremises.hasValue) llt.otherStoragePremises.value.size else 0
         des.AllOtherInformation(
           llt.businessCustomers.numberOfCustomers,
           llt.importingActivities.hasEori,
           llt.importingActivities.eoriNumber map eoriNumberType(llt.vatNumber.hasValue),
-          desPremises.size.toString,
+          nbPremises.toString,
           desPremises
         )
       }
       case st: SoleProprietorApplication  ⇒ {
         val desPremises = if (st.otherStoragePremises.hasValue) repeatedValue(premise, st.otherStoragePremises.value) else List.empty
+        val nbPremises = if (st.otherStoragePremises.hasValue) st.otherStoragePremises.value.size else 0
         des.AllOtherInformation(
           st.businessCustomers.numberOfCustomers,
           st.importingActivities.hasEori,
           st.importingActivities.eoriNumber map eoriNumberType(st.vatNumber.hasValue),
-          desPremises.size.toString,
+          nbPremises.toString,
           desPremises
         )
       }
       case ps: PartnershipApplication     ⇒ {
         val desPremises = if (ps.otherStoragePremises.hasValue) repeatedValue(premise, ps.otherStoragePremises.value) else List.empty
+        val nbPremises = if (ps.otherStoragePremises.hasValue) ps.otherStoragePremises.value.size else 0
         des.AllOtherInformation(
           ps.businessCustomers.numberOfCustomers,
           ps.importingActivities.hasEori,
           ps.importingActivities.eoriNumber map eoriNumberType(ps.vatNumber.hasValue),
-          desPremises.size.toString,
+          nbPremises.toString,
           desPremises
         )
       }
@@ -306,7 +309,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   def partnerCorporateBody(officers: ListWithTrackedChanges[CompanyOfficer]) = {
     val desOfficials = repeatedValue(companyOfficial, officers)
     des.PartnerCorporateBody(
-      desOfficials.size.toString,
+      officers.size.toString,
       Some(desOfficials)
     )
   }
