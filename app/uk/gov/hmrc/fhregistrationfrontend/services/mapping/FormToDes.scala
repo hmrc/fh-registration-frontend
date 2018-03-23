@@ -237,42 +237,15 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
 
   def allOtherInformation(application: BusinessEntityApplication) = {
-    application match {
-      case llt: LimitedCompanyApplication ⇒ {
-        val desPremises = if (llt.otherStoragePremises.hasValue) repeatedValue(premise, llt.otherStoragePremises.value) else List.empty
-        val nbPremises = if (llt.otherStoragePremises.hasValue) llt.otherStoragePremises.value.size else 0
-        des.AllOtherInformation(
-          llt.businessCustomers.numberOfCustomers,
-          llt.importingActivities.hasEori,
-          llt.importingActivities.eoriNumber map eoriNumberType(llt.vatNumber.hasValue),
-          nbPremises.toString,
-          desPremises
-        )
-      }
-      case st: SoleProprietorApplication  ⇒ {
-        val desPremises = if (st.otherStoragePremises.hasValue) repeatedValue(premise, st.otherStoragePremises.value) else List.empty
-        val nbPremises = if (st.otherStoragePremises.hasValue) st.otherStoragePremises.value.size else 0
-        des.AllOtherInformation(
-          st.businessCustomers.numberOfCustomers,
-          st.importingActivities.hasEori,
-          st.importingActivities.eoriNumber map eoriNumberType(st.vatNumber.hasValue),
-          nbPremises.toString,
-          desPremises
-        )
-      }
-      case ps: PartnershipApplication     ⇒ {
-        val desPremises = if (ps.otherStoragePremises.hasValue) repeatedValue(premise, ps.otherStoragePremises.value) else List.empty
-        val nbPremises = if (ps.otherStoragePremises.hasValue) ps.otherStoragePremises.value.size else 0
-        des.AllOtherInformation(
-          ps.businessCustomers.numberOfCustomers,
-          ps.importingActivities.hasEori,
-          ps.importingActivities.eoriNumber map eoriNumberType(ps.vatNumber.hasValue),
-          nbPremises.toString,
-          desPremises
-        )
-      }
-    }
-
+    val desPremises = if (application.otherStoragePremises.hasValue) repeatedValue(premise, application.otherStoragePremises.value) else List.empty
+    val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
+    des.AllOtherInformation(
+      application.businessCustomers.numberOfCustomers,
+      application.importingActivities.hasEori,
+      application.importingActivities.eoriNumber map eoriNumberType(application.vatNumber.hasValue),
+      nbPremises.toString,
+      Some(desPremises)
+    )
   }
 
   val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises = { (p, modification) ⇒
