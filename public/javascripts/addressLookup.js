@@ -107,7 +107,7 @@
       context = CSS.escape($(this).data('context'));
 
     if (!postcode.match(postcodeRegex)){
-      showError('The postcode you have entered is not a valid UK postcode', $container);
+      showError('The postcode you have searched with is not a valid UK postcode', $container);
       return
     }
 
