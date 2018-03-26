@@ -53,26 +53,34 @@
     $container.find('.error-message').remove()
   }
 
+
+
   function showResult(data, context) {
-      var count = data.addresses.length;
-      var addressStringBuilder = ['<legend class="form-label-bold">' + count + ' ' + (count == 1 ? 'address' : 'addresses') + ' found...</legend>'];
-      jQuery.each(data.addresses, function(i, result) {
+      var results = data.addresses,
+        count = results.length,
+        $container = $('#' + context + '-results').off(),
+        addressStringBuilder = [];
+
+      function selectAddress(e) {
+        var index = $(e.currentTarget).val();
+        populateAddress(results[index].address, context)
+      }
+
+      addressStringBuilder.push('<legend class="form-label-bold">' + count + ' ' + (count === 1 ? 'address' : 'addresses') + ' found...</legend>');
+      jQuery.each(results, function(i, result) {
           var address = result.address;
           addressStringBuilder.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
           addressStringBuilder.push(address.lines.join(', '));
           addressStringBuilder.push(address.town + ', ');
           addressStringBuilder.push(address.postcode);
           addressStringBuilder.push('</label></div>');
+          $container
+            .on('click', '#' + context + '-result-' + i, selectAddress)
       });
 
-      $('#' + context + '-results')
-          .html(addressStringBuilder.join(''))
-          .on('click', '.postcode-lookup-result', function (e) {
-              var index = $(e.currentTarget).val();
-              populateAddress(data.addresses[index].address, context)
-          })
+      $container
+        .html(addressStringBuilder.join(''))
         .find('.postcode-lookup-result:first').focus()
-
   }
 
   function searchAddress(url, context) {
@@ -108,7 +116,7 @@
 
     if (!postcode.match(postcodeRegex)){
       showError('The postcode you have searched with is not a valid UK postcode', $container);
-      return
+      return;
     }
 
     searchAddress(url, context);
@@ -118,21 +126,21 @@
     $('#' + context + '-manual-container').removeClass('js-hidden');
     $('#' + context + '-lookup-container').addClass('js-hidden');
     $('.lookup-address-mode').parent().show();
-  }
+  };
 
   var lookupMode = function (context) {
     $('#' + context + '-manual-container').addClass('js-hidden');
     $('#' + context + '-lookup-container').removeClass('js-hidden');
-  }
+  };
 
   $('.manual-address-mode').on('click', function (e) {
     e.preventDefault();
     manualMode(CSS.escape($(this).data('context')));
-  })
+  });
 
   $('.lookup-address-mode').on('click', function (e) {
     e.preventDefault();
     lookupMode(CSS.escape($(this).data('context')));
-  })
+  });
 
 })(jQuery);
