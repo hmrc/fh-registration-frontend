@@ -19,9 +19,11 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import java.time.LocalDate
 import javax.inject.Inject
 
+import org.joda.time.DateTime
 import play.api.libs.json.Json
+import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journeys, PageDataLoader}
@@ -42,8 +44,8 @@ class DeclarationController @Inject()(
   keyStoreService      : KeyStoreService
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
 
-  val emailSessionKey = "declaration_email"
-  val submitTimeKey = "submit_time"
+  val EmailSessionKey = "declaration_email"
+  val ProcessingTimestampSessionKey = "declaration_processing_timestamp"
   val formToDes: FormToDes = new FormToDesImpl()
 
   def showDeclaration() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
@@ -51,10 +53,17 @@ class DeclarationController @Inject()(
   }
 
   def showAcknowledgment() = UserAction()(messagesApi) { implicit request ⇒
-    val email: String = request.session.get(emailSessionKey).getOrElse("")
-    Ok(
-      acknowledgement_page(email)
-    )
+    renderAcknowledgmentPage getOrElse errorResultsPages(Results.NotFound)
+  }
+
+  private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
+    for {
+      email ← request.session get EmailSessionKey
+      timestamp ← request.session get ProcessingTimestampSessionKey
+      processingDate = new DateTime(timestamp.toLong)
+    } yield {
+      Ok(acknowledgement_page(processingDate, email))
+    }
   }
 
   def submitForm() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
@@ -70,7 +79,9 @@ class DeclarationController @Inject()(
               .recover{case _ ⇒ false}
               .map { pdfSaved ⇒
                 Redirect(routes.DeclarationController.showAcknowledgment())
-                  .withSession(request.session + (emailSessionKey → usersDeclaration.email) + (submitTimeKey → response.processingDate.toString))
+                  .withSession(request.session
+                    + (EmailSessionKey → usersDeclaration.email)
+                    + (ProcessingTimestampSessionKey → response.processingDate.getTime.toString))
               }
           }
         )

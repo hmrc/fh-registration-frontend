@@ -21,8 +21,8 @@ import java.util.Date
 import javax.inject.Inject
 
 import org.joda.time.DateTime
-import play.api.mvc.{Action, Result, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, EnrolledUserRequest, UserAction}
+import play.api.mvc.{Action, AnyContent, Result, Results}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, EnrolledUserRequest, UserAction, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm.confirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{Confirmation, WithdrawalReason}
@@ -119,15 +119,16 @@ class WithdrawalController @Inject()(
   }
 
   def acknowledgment = UserAction()(messagesApi) { implicit request ⇒
-    (for {
+    renderAcknowledgmentPage(request) getOrElse errorResultsPages(Results.NotFound)
+  }
+
+  private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) = {
+    for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
       processingDate = new DateTime(timestamp.toLong)
     } yield {
       Ok(withdrawal_acknowledgement(processingDate, email))
-    }) getOrElse {
-      errorResultsPages(Results.NotFound)
     }
-
   }
 }
