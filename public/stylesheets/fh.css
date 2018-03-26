@@ -44,6 +44,10 @@ span.error-message, .form-hint {
     margin-bottom: 1.57895em;
 }
 
+input.postcode-value {
+    text-transform: uppercase;
+}
+
 .loading {
     display: none;
     margin-top: 10px;
