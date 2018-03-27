@@ -30,7 +30,7 @@ To run the application execute
 sbt run
 ```
 
-## Get to the landing page
+## Endpoints
 
 ```
 GET   	/fhdds/
