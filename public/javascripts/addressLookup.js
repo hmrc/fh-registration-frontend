@@ -10,38 +10,38 @@
   // open the parent manual container
   // todo: aria labelling
   $('[name$="postcode"]').each(function () {
-      var $this = $(this),
-          $manual = $this.parents('.address-manual-container'),
-          $lookup = $manual.siblings('.address-lookup-container'),
-          $lookupLink = $manual.find('.lookup-link-container');
+    var $this = $(this),
+      $manual = $this.parents('.address-manual-container'),
+      $lookup = $manual.siblings('.address-lookup-container'),
+      $lookupLink = $manual.find('.lookup-link-container');
 
-      $lookup.show();
+    $lookup.show();
 
-      if($this.val().length || $this.hasClass('form-control-error')) {
-        $lookup.addClass('js-hidden');
-        $manual.removeClass('js-hidden');
-        $lookupLink.show()
-      }
+    if($this.val().length || $this.hasClass('form-control-error')) {
+      $lookup.addClass('js-hidden');
+      $manual.removeClass('js-hidden');
+      $lookupLink.show()
+    }
   });
 
   var lookUpPath = '/fhdds/address-lookup?postcode=';
   var postcodeRegex = /(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$/;
 
-    // address mapping is custom given the different fieldnames
+  // address mapping is custom given the different fieldnames
   // in ETMP and DES schemas and the ADDRESS_LOOKUP response:
   function populateAddress(address, context) {
-      $.each([1, 2, 3], function (i, lineNum) {
-          var line = address.lines[i] || '';
-          $('[name="' + context + '.' + 'Line' + (lineNum)).val(line);
-      })
-      $('[name="' + context + '.' + 'Line4').val(address.town);
-      $('[name="' + context + '.' + 'postcode').val(address.postcode);
+    $.each([1, 2, 3], function (i, lineNum) {
+      var line = address.lines[i] || '';
+      $('[name="' + context + '.' + 'Line' + (lineNum)).val(line);
+    })
+    $('[name="' + context + '.' + 'Line4').val(address.town);
+    $('[name="' + context + '.' + 'postcode').val(address.postcode);
   }
 
   function clearAddressFields(context) {
-      $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode'], function (i, line) {
-          $('[name="' + context + '.' + line).val('');
-      });
+    $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode'], function (i, line) {
+      $('[name="' + context + '.' + line).val('');
+    });
   }
 
   function showError(error, $container) {
@@ -53,34 +53,31 @@
     $container.find('.error-message').remove()
   }
 
-
-
   function showResult(data, context) {
-      var results = data.addresses,
-        count = results.length,
-        $container = $('#' + context + '-results').off(),
-        addressStringBuilder = [];
+    var results = data.addresses,
+      count = results.length,
+      $container = $('#' + context + '-results').off(),
+      addressStringBuilder = [];
 
-      function selectAddress(e) {
-        var index = $(e.currentTarget).val();
-        populateAddress(results[index].address, context)
-      }
+    function selectAddress(e) {
+      var index = $(e.currentTarget).val();
+      populateAddress(results[index].address, context)
+    }
 
-      addressStringBuilder.push('<legend class="form-label-bold">' + count + ' ' + (count === 1 ? 'address' : 'addresses') + ' found...</legend>');
-      jQuery.each(results, function(i, result) {
-          var address = result.address;
-          addressStringBuilder.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
-          addressStringBuilder.push(address.lines.join(', '));
-          addressStringBuilder.push(address.town + ', ');
-          addressStringBuilder.push(address.postcode);
-          addressStringBuilder.push('</label></div>');
-          $container
-            .on('click', '#' + context + '-result-' + i, selectAddress)
-      });
+    addressStringBuilder.push('<legend class="form-label-bold">' + count + ' ' + (count === 1 ? 'address' : 'addresses') + ' found...</legend>');
+    jQuery.each(results, function(i, result) {
+      var address = result.address;
+      addressStringBuilder.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
+      addressStringBuilder.push(address.lines.join(', '));
+      addressStringBuilder.push(address.town + ', ');
+      addressStringBuilder.push(address.postcode);
+      addressStringBuilder.push('</label></div>');
+    });
 
-      $container
-        .html(addressStringBuilder.join(''))
-        .find('.postcode-lookup-result:first').focus()
+    $container
+      .html(addressStringBuilder.join(''))
+      .on('click', '.postcode-lookup-result', selectAddress)
+      .find('.postcode-lookup-result:first').focus()
   }
 
   function searchAddress(url, context) {
