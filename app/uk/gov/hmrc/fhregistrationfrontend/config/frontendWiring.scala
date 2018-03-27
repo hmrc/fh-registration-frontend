@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.auth.otac.PlayOtacAuthConnector
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.cache.client.{SessionCache, ShortLivedHttpCaching}
+import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.hooks.HttpHooks
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
@@ -59,7 +59,7 @@ object ConcreteOtacAuthConnector extends PlayOtacAuthConnector with ServicesConf
   val http: CoreGet = WSHttp
 }
 
-object ShortLivedHttpCaching extends ShortLivedHttpCaching with ServicesConfig {
+object ShortLivedHttpCaching extends client.ShortLivedHttpCaching with ServicesConfig {
 
   override lazy val defaultSource: String = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri: String = baseUrl("cachable.short-lived-cache")
@@ -68,7 +68,7 @@ object ShortLivedHttpCaching extends ShortLivedHttpCaching with ServicesConfig {
   override def http: HttpGet with HttpPut with HttpDelete = WSHttp
 }
 
-object KeySessionCache extends SessionCache with AppName with ServicesConfig {
+object KeySessionCache extends client.SessionCache with AppName with ServicesConfig {
 
   override lazy val http = WSHttp
   override lazy val defaultSource = appName
