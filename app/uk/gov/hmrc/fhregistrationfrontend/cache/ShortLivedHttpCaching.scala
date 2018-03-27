@@ -18,10 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.cache
 
 import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.fhregistrationfrontend.config.ShortLivedHttpCaching
-import uk.gov.hmrc.http.cache.client.ShortLivedCache
+import uk.gov.hmrc.http.cache.client
 
-
-object ShortLivedCache extends ShortLivedCache {
+object ShortLivedCache extends client.ShortLivedCache {
   override implicit lazy val crypto = ApplicationCrypto.JsonCrypto
   override lazy val shortLiveCache = ShortLivedHttpCaching
 }
