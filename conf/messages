@@ -329,6 +329,9 @@ fh.storagePremise_address.addMore.error.required=Select whether have more premis
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
+fh.summary.addMoreCompanyOfficers=Add more company officers
+fh.summary.addMoreStoragePremises=Add more storage premises
+fh.summary.addMoreBusinessPartners=Add more business partners
 
 # - Declaration
 #===========================================================

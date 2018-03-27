@@ -76,3 +76,7 @@ table {
 .with-icon {
     text-indent: 2em
 }
+
+tr > td:last-child {
+    text-align: right;
+}
