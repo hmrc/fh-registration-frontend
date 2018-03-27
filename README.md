@@ -1,6 +1,6 @@
 # fh-registration-frontend
 
-[![Build Status](https://travis-ci.org/hmrc/fh-registration-frontend.svg?branch=master)](https://travis-ci.org/hmrc/fh-registration-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/fh-registration-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/fh-registration-frontend/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/hmrc/releases/fh-registration-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/fh-registration-frontend/_latestVersion)
 
 This service provides the frontend endpoint for the [Fulfilment House Registration Scheme](https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme) project.
 
