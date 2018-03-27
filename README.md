@@ -1,12 +1,16 @@
-# Fulfilment House Registration Scheme Application
+# fh-registration-frontend
 
-[![Build Status](https://travis-ci.org/hmrc/fhdds-frontend.svg)](https://travis-ci.org/hmrc/fhdds-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/fhdds-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/fhdds-frontend/_latestVersion)
+[![Build Status](https://travis-ci.org/hmrc/fh-registration-frontend.svg?branch=master)](https://travis-ci.org/hmrc/fh-registration-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/fh-registration-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/fh-registration-frontend/_latestVersion)
 
 This service provides the frontend endpoint for the [Fulfilment House Registration Scheme](https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme) project.
 
 ## Summary
 
-This service allow a customer to apply for apply for the Fulfilment House Registration Scheme.
+This service allow a customer to apply for the Fulfilment House Registration Scheme.
+
+##Authentication
+
+This customer logs into this service using [Government Gateway](http://www.gateway.gov.uk/).
 
 ## Requirements
 
@@ -15,7 +19,7 @@ requires [MongoDB 3.2](https://www.mongodb.com/).
 
 ## Run the application locally
 
-User service manager to run all services required by FHDDS Frontend:
+Use service manager to run all services required by FHDDS Frontend:
 
 ```
 sm --start FHDDS_ALL -f
@@ -29,31 +33,32 @@ sbt run
 ### Get to the landing page
 
 ```
-GET   	/fhdds-frontend/
+GET   	/fhdds/
 ```
 
-## Acronyms
+### How to test project
 
-In the context of this application we use the following acronyms and define their
-meanings. Provided you will also find a web link to discover more about the systems
-and technology.
+Unit Tests
+```
+sbt test
+```
 
-* [API]: Application Programming Interface
+Integration Tests
+```
+sbt it:test
+```
 
-* [HoD]: Head of Duty
+Acceptance Tests
+```
+https://github.com/hmrc/fh-registration-acceptance-tests
+```
 
-* [JRE]: Java Runtime Environment
+Performance Tests
+```
+https://github.com/hmrc/fh-registration-performance-tests
+```
 
-* [JSON]: JavaScript Object Notation
-
-* [URL]: Uniform Resource Locator
-
-## License
-
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-
-[HoD]: http://webarchive.nationalarchives.gov.uk/+/http://www.hmrc.gov.uk/manuals/sam/samglossary/samgloss249.htm
-[JRE]: http://www.oracle.com/technetwork/java/javase/overview/index.html
-[API]: https://en.wikipedia.org/wiki/Application_programming_interface
-[URL]: https://en.wikipedia.org/wiki/Uniform_Resource_Locator
-[JSON]: http://json.org/
+Contract Tests
+```
+https://github.com/hmrc/fh-registration-contract-tests
+```
