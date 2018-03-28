@@ -2,7 +2,7 @@
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
-GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
+
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
 GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
@@ -10,8 +10,6 @@ GET         /businessType                                                       
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
 GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
-
-GET         /whitelisted                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.whitelisted(p: String)
 
 GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 

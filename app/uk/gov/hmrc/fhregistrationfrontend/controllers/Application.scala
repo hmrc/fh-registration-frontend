@@ -59,23 +59,6 @@ class Application @Inject()(
 
   val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
 
-  def whitelisted(p: String) = Action.async {
-    implicit request ⇒
-      authorised() {
-        val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-        Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
-      } recover {
-        case x: NoActiveSession ⇒
-          Logger.warn(s"could not authenticate user due to: No Active Session " + x)
-
-          val ggRedirectParms = Map(
-            "continue" -> Seq(s"$continueUrl/whitelisted?p=$p"),
-            "origin" -> Seq(getString("appName"))
-          )
-          Redirect(ggLoginUrl, ggRedirectParms)
-      }
-  }
-
   def start = UserAction()(messagesApi) { implicit request ⇒
     request.registrationNumber match {
       case Some(_) ⇒ Redirect(routes.Application.checkStatus())

@@ -63,7 +63,7 @@ object ShortLivedHttpCaching extends client.ShortLivedHttpCaching with ServicesC
 
   override lazy val defaultSource: String = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri: String = baseUrl("cachable.short-lived-cache")
-  override lazy val domain: String = getConfString("cachable.short-lived-cache.domain", throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))
+  override lazy val domain: String = getConfString("cachable.short-lived-cache.domain", "save4later")
 
   override def http: HttpGet with HttpPut with HttpDelete = WSHttp
 }
@@ -73,6 +73,5 @@ object KeySessionCache extends client.SessionCache with AppName with ServicesCon
   override lazy val http = WSHttp
   override lazy val defaultSource = appName
   override lazy val baseUri = baseUrl("cachable.session-cache")
-  override lazy val domain = getConfString("cachable.session-cache.domain",
-    throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
+  override lazy val domain = getConfString("cachable.session-cache.domain", "keystore")
 }
