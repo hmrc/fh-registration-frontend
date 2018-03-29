@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import java.time.LocalDate
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Added
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
@@ -237,7 +238,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
 
   def allOtherInformation(application: BusinessEntityApplication) = {
-    val desPremises = if (application.otherStoragePremises.hasValue) repeatedValue(premise, application.otherStoragePremises.value) else List.empty
+    val desPremises =
+      if (application.otherStoragePremises.hasValue)
+        repeatedValue(premise, application.otherStoragePremises.value)
+      else
+        allRemoved(premise, application.otherStoragePremises.value)
+
     val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
     des.AllOtherInformation(
       application.businessCustomers.numberOfCustomers,
@@ -246,6 +252,16 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       nbPremises.toString,
       Some(desPremises)
     )
+  }
+
+  def allRemoved[T, D](t: (T, Option[Modification]) ⇒ D, list: ListWithTrackedChanges[T]): List[D] = {
+    val markedRemoved = list.valuesWithStatus.collect {
+      case (premise, status) if status != Added ⇒ premise
+    }
+
+    val flag = Some(des.Modification("Removed", changeDate))
+    val all = (markedRemoved ++ list.deleted)
+    all map (t(_, flag))
   }
 
   val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises = { (p, modification) ⇒

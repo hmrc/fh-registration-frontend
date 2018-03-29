@@ -184,6 +184,22 @@ class FormToDesSpecs extends UnitSpec {
     validatesFor(submission, "fhdds-limited-company-large-uk-updated", "limited-company")
   }
 
+
+  "Create a correct json for fhdds-limited-company-large-uk-amend-no-premises" in {
+    val submission = SubScriptionCreate(
+      "Update",
+      service
+        .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
+        .limitedCompanySubmission(
+          brd("business-registration-details-limited-company.json"),
+          LtdLargeUkAmendNoPremises.application,
+          LtdLargeUkAmendNoPremises.declaration),
+      None
+    )
+
+    validatesFor(submission, "fhdds-limited-company-large-uk-amend-no-premises", "limited-company")
+  }
+
   "Sole proprietor submission service" should {
     "Create a correct json for max. data entry" in {
       val submission = SubScriptionCreate(
