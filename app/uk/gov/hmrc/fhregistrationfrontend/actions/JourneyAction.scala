@@ -140,10 +140,8 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
   }
 
   def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] = {
-    println(s"\n\n1111111\n\n")
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ {
-        println(s"\n\n222222\n\n")
         Right(bt)
       }
       case None ⇒
