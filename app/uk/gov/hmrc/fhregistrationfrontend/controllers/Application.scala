@@ -105,10 +105,10 @@ class Application @Inject()(
   }
 
   def confirmDelete = userAction.async { implicit request ⇒
-    save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-      case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
-      case None            ⇒ Future successful ServiceUnavailable
-    }
+      save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+        case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+        case None            ⇒ Future successful ServiceUnavailable
+      }
   }
 
   def resumeForm = journeyAction { implicit request ⇒

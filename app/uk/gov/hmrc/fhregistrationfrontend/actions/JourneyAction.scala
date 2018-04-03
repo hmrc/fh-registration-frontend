@@ -141,9 +141,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
 
   def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] = {
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
-      case Some(bt) ⇒ {
-        Right(bt)
-      }
+      case Some(bt) ⇒ Right(bt)
       case None ⇒
         Logger.error(s"Not found business type")
         Left(errorHandler.errorResultsPages(Results.NotFound))

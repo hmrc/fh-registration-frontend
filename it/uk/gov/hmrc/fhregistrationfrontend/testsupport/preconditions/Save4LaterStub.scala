@@ -43,8 +43,11 @@ case class Save4LaterStub
 
   def businessTypeHasSaved() = {
     stubFor(
-      stubS4LGet("businessType")
+      stubS4LPut("userLastTimeSaved")
     )
+//    stubFor(
+//      stubS4LGet("businessType", "CorporateBody")
+//    )
     stubFor(
       stubS4LGetSetJs(
         s"""{
@@ -62,7 +65,7 @@ case class Save4LaterStub
            |  "safe_id" : "XE0001234567890",
            |  "utr" : "1111111111"
            |},
-           |"businessType": "${encrypt("true")}"
+           |"businessType": "${encrypt("CorporateBody")}"
            |}""")
     )
     builder
