@@ -49,6 +49,8 @@ trait TestConfiguration
       configMap + (
         s"Test.microservice.services.$service.host" -> wiremockHost,
         s"Test.microservice.services.$service.port" -> wiremockPort,
+        s"Test.microservice.services.cachable.short-lived-cache.domain" -> "save4later",
+        s"Test.microservice.services.cachable.session-cache.domain" -> "keystore",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty
       )

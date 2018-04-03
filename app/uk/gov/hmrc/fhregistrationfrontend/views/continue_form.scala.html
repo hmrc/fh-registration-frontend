@@ -15,8 +15,9 @@
  *@
 
 @import org.joda.time.DateTime
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(lastTimeSaved: DateTime)(implicit request: Request[_], messages: Messages)
+@(lastTimeSaved: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(mainClass = Some("full-width")) {
 

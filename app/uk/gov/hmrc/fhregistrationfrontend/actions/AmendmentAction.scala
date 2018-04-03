@@ -17,9 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
-import play.api.i18n.MessagesApi
-import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
+import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
@@ -34,13 +33,8 @@ class AmendmentRequest[A](
   def email: Option[String] = request.email
 }
 
-object AmendmentAction {
-  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = new UserAction andThen new AmendmentAction()
-
-}
-
-class AmendmentAction (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
-    extends ActionRefiner[UserRequest, AmendmentRequest] with UnexpectedState
+class AmendmentAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+    extends ActionRefiner[UserRequest, AmendmentRequest]
       with FrontendAction
 {
 
@@ -54,12 +48,12 @@ class AmendmentAction (implicit val save4LaterService: Save4LaterService, val me
             Right(new AmendmentRequest[A](registrationNumber, isAmendment getOrElse false, request))
           case None                     ⇒
             Logger.error(s"Not found: registration number. Is user enrolled?")
-            Left(errorResultsPages(Results.BadRequest))
+            Left(errorHandler.errorResultsPages(Results.BadRequest))
         }
       }
       .recover{ case t ⇒
         Logger.error(s"Could not access shortLivedCache", t)
-        Left(errorResultsPages(Results.BadGateway))
+        Left(errorHandler.errorResultsPages(Results.BadGateway))
       }
 
   }

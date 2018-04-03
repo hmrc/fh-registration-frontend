@@ -21,8 +21,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

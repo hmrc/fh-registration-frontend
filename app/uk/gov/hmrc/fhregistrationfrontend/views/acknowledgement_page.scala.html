@@ -15,11 +15,11 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-@import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @import org.joda.time.DateTime
 
-@(date: DateTime, email:String)(implicit request: Request[_], messages: Messages)
+@(date: DateTime, email:String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}

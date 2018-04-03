@@ -17,9 +17,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import org.joda.time.DateTime
-@import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(date: DateTime, email: String)(implicit request: Request[_], messages: Messages)
+@(date: DateTime, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @pageScripts = {

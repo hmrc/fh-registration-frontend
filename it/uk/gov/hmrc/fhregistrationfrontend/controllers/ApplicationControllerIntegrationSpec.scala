@@ -74,43 +74,23 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "Show the form's first page when the user has selected a business type and the user is new" in {
-
-      commonPrecondition
-        .keyStore.businessTypeHasSaved()
-
-      WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/resume")
-          .withFollowRedirects(false)
-          .get()
-
-        whenReady(result) { res ⇒
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"http://$wiremockHost:$wiremockPort/fhdds/mainBusinessAddress")
-        }
-      }
-    }
+//    "Show the form's first page when the user has selected a business type and the user is new" in {
 //
-//    "/continue will redirect to dfs frontend when the user has a correct BPR for Partnership" in {
-//      given()
-//        .audit.writesAuditOrMerged()
-//        .user.isAuthorised()
-//        .fhddsBackend.hasBusinessDetails("fhdds-partnership", "Parnership")
-//        .businessCustomerFrontend.hasBusinessPartnerRecord("Partnership")
-//
+//      commonPrecondition
+//        .save4later.businessTypeHasSaved()
+//        .keyStore.businessTypeHasSaved()
 //
 //      WsTestClient.withClient { client ⇒
-//        val result = client.url(s"$baseUrl/continue")
+//        val result = client.url(s"$baseUrl/resume")
 //          .withFollowRedirects(false)
 //          .get()
 //
 //        whenReady(result) { res ⇒
-//          res.status shouldBe 303
-//          res.header(HeaderNames.LOCATION) shouldBe Some(s"http://$wiremockHost:$wiremockPort/fhdds-forms/forms/form/fhdds-partnership/new")
+//          res.status mustBe 303
+//          res.header(HeaderNames.LOCATION) mustBe Some(s"http://$wiremockHost:$wiremockPort/fhdds/mainBusinessAddress")
 //        }
 //      }
 //    }
-
 
   }
 

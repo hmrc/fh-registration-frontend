@@ -12,24 +12,24 @@ case class KeyStoreStub
 
   def businessRecordHasSaved() = {
     stubFor(
-      stubS4LPut("userLastTimeSaved")
+      keyStorePut("userLastTimeSaved")
     )
     stubFor(
-      stubS4LPut("businessRegistrationDetails")
+      keyStorePut("businessRegistrationDetails")
     )
     builder
   }
 
   def getNoneData() = {
     stubFor(
-      stubS4LGet()
+      keyStoreGet()
     )
     builder
   }
 
   def businessTypeHasSaved() = {
     stubFor(
-      stubS4LGet("businessType", "CorporateBody")
+      keyStoreGet("businessType", "CorporateBody")
     )
     builder
   }
@@ -38,7 +38,7 @@ case class KeyStoreStub
 
   def encrypt(str: String): String = crypto.encrypt(PlainText(str)).value
 
-  def stubS4LPut(key: String, data: String = "data"): MappingBuilder =
+  def keyStorePut(key: String, data: String = "data"): MappingBuilder =
     put(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/data/$key"))
       .willReturn(ok(s"""
                         |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
@@ -50,7 +50,7 @@ case class KeyStoreStub
           """.stripMargin
       ))
 
-  def stubS4LGet(key: String = "", data: String = ""): MappingBuilder =
+  def keyStoreGet(key: String = "", data: String = ""): MappingBuilder =
     get(urlPathMatching("/keystore/fh-registration-frontend/some-id"))
       .willReturn(ok(
         s"""

@@ -21,6 +21,8 @@ import cats.implicits._
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -76,12 +78,7 @@ class JourneyRequest[A](
     cacheMap.getEntry[des.Declaration](displayDesDeclarationKey)
 }
 
-object JourneyAction {
-  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    new UserAction() andThen new NoEnrolmentCheckAction andThen new JourneyAction
-}
-
-class JourneyAction (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
+class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
   extends ActionRefiner[UserRequest, JourneyRequest]
     with FrontendAction
 {
@@ -115,21 +112,21 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
         Right(true)
       else {
         Logger.error(s"Journey request with enrolment but no amendment in progress")
-        Left(errorResultsPages(Results.BadRequest))
+        Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
     else
       Right(true)
   }
 
   def loadCacheMap(implicit save4LaterService: Save4LaterService, request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
-    save4LaterService.shortLivedCache.fetch(request.userId) map {
+    save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
       case None ⇒
         Logger.error(s"Not found in shortLivedCache")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorHandler.errorResultsPages(Results.NotFound))
     } recover { case t ⇒
       Logger.error(s"Could not access shortLivedCache", t)
-      Left(errorResultsPages(Results.BadGateway))
+      Left(errorHandler.errorResultsPages(Results.BadGateway))
     }
   }
 
@@ -138,7 +135,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
       case Some(bpr) ⇒ Right(bpr)
       case None ⇒
         Logger.error(s"Not found bpr")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
@@ -146,11 +143,12 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
     println(s"\n\n1111111\n\n")
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ {
+        println(s"\n\n222222\n\n")
         Right(bt)
       }
       case None ⇒
         Logger.error(s"Not found business type")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
@@ -162,7 +160,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
         case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
         case _                          ⇒
           Logger.error(s"Not found: wrong business type")
-          Left(errorResultsPages(Results.NotFound))
+          Left(errorHandler.errorResultsPages(Results.NotFound))
       }
     }
   }

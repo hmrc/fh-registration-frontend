@@ -17,9 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
 import scala.concurrent.Future
 
@@ -32,13 +32,8 @@ class EnrolledUserRequest[A](
   def email: Option[String] = request.email
 }
 
-object EnrolledUserAction {
-  def apply()(implicit  messagesApi: MessagesApi) = new UserAction andThen new EnrolledUserAction()
-
-}
-
-class EnrolledUserAction (implicit val messagesApi: MessagesApi)
-    extends ActionRefiner[UserRequest, EnrolledUserRequest] with UnexpectedState
+class EnrolledUserAction (implicit errorHandler: ErrorHandler)
+    extends ActionRefiner[UserRequest, EnrolledUserRequest]
       with FrontendAction
 {
 
@@ -50,7 +45,7 @@ class EnrolledUserAction (implicit val messagesApi: MessagesApi)
           Right(new EnrolledUserRequest[A](registrationNumber, request))
         case None                     ⇒
           Logger.error(s"Not found: registration number. Is user enrolled?")
-          Left(errorResultsPages(Results.BadRequest))
+          Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
     }
   }

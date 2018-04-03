@@ -34,31 +34,24 @@ class ApplicationControllerSpec extends AppUnitGenerator with Results {
   when(mockAuthConnector.authorise(any(), any[Retrieval[RType]]())(any(),any()))
     .thenReturn(Future.successful(authResult))
 
-  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-sole-proprietor"))
-    .thenReturn(None)
-  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-limited-company"))
-    .thenReturn(Some("fhdds-limited-company"))
-  when(mockConfiguration.getString(s"fhdds-dfs-frontend.fhdds-partnership"))
-    .thenReturn(Some("fhdds-partnership"))
-
   when(mockConfiguration.getInt(s"formMaxExpiryDays")).thenReturn(Some(27))
 
 
-  val applicationController = new Application(new ExternalUrls(ds), ds, mockFhddsConnector)(mockSave4Later) {
+  val applicationController =
+    new Application(new ExternalUrls(ds), ds, mockFhddsConnector, mockBusinessCustomerFrontendConnector, mockActions)(mockSave4Later) {
 
     override val authConnector = mockAuthConnector
-    override val usewhiteListing = false
   }
 
   "errorResultsPages" should {
     "show related error page" in {
-      val resultNotFound = applicationController.errorResultsPages(Results.NotFound)
+      val resultNotFound = ds.errorHandler.errorResultsPages(Results.NotFound)
       resultNotFound.value.get.toString shouldBe "Success(Result(404, Map()))"
 
-      val resultBadRequest = applicationController.errorResultsPages(Results.BadRequest)
+      val resultBadRequest = ds.errorHandler.errorResultsPages(Results.BadRequest)
       resultBadRequest.value.get.toString shouldBe "Success(Result(400, Map()))"
 
-      val resultServiceUnavailable = applicationController.errorResultsPages(Results.ServiceUnavailable)
+      val resultServiceUnavailable = ds.errorHandler.errorResultsPages(Results.ServiceUnavailable)
       resultServiceUnavailable.value.get.toString shouldBe "Success(Result(500, Map()))"
     }
 

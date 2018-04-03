@@ -16,25 +16,40 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
+import javax.inject.{Inject, Singleton}
+
+import play.api.{Configuration, Environment}
 import play.api.mvc.Request
-import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
+import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails.formats
-import uk.gov.hmrc.http.HttpGet
+import uk.gov.hmrc.play.bootstrap.filters.frontend.crypto.SessionCookieCrypto
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.frontend.filters.SessionCookieCryptoFilter
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
 
 import scala.concurrent.Future
 
-trait BusinessCustomerFrontendConnector extends ServicesConfig with HeaderCarrierForPartialsConverter {
+@Singleton
+class BusinessCustomerFrontendConnector @Inject() (
+  val http: HttpClient,
+  override val runModeConfiguration: Configuration,
+  environment: Environment,
+  sessionCookieCrypto: SessionCookieCrypto
+) extends ServicesConfig with HeaderCarrierForPartialsConverter {
+
+
+  override protected def mode = environment.mode
 
   def serviceUrl = baseUrl("business-customer-frontend")
   val businessCustomerUri = "business-customer"
   val reviewDetailsUri = "fetch-review-details"
   val service = "FHDDS"
-  val http: HttpGet
+
+  override def crypto: (String) => String = { v ⇒
+    sessionCookieCrypto.crypto.encrypt(PlainText(v)).value
+  }
 
   def getReviewDetails(implicit request: Request[_]): Future[BusinessRegistrationDetails] = {
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"
@@ -42,7 +57,3 @@ trait BusinessCustomerFrontendConnector extends ServicesConfig with HeaderCarrie
   }
 }
 
-object BusinessCustomerFrontendConnector extends BusinessCustomerFrontendConnector {
-  val http = WSHttp
-  override def crypto: (String) => String = SessionCookieCryptoFilter.encrypt _
-}

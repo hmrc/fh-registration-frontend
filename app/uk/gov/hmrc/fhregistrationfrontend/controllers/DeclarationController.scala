@@ -23,7 +23,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journeys, PageDataLoader}
@@ -41,19 +41,22 @@ class DeclarationController @Inject()(
   links         : ExternalUrls,
   desToForm     : DesToForm,
   fhddsConnector: FhddsConnector,
-  keyStoreService      : KeyStoreService
+  keyStoreService      : KeyStoreService,
+  actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
 
   val EmailSessionKey = "declaration_email"
   val ProcessingTimestampSessionKey = "declaration_processing_timestamp"
   val formToDes: FormToDes = new FormToDesImpl()
 
-  def showDeclaration() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
+  import actions._
+
+  def showDeclaration() = summaryAction { implicit request ⇒
     Ok(declaration(declarationForm, request.email, request.bpr))
   }
 
-  def showAcknowledgment() = UserAction()(messagesApi) { implicit request ⇒
-    renderAcknowledgmentPage getOrElse errorResultsPages(Results.NotFound)
+  def showAcknowledgment() = userAction { implicit request ⇒
+    renderAcknowledgmentPage getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
@@ -66,7 +69,7 @@ class DeclarationController @Inject()(
     }
   }
 
-  def submitForm() = SummaryAction(save4LaterService, messagesApi).async { implicit request ⇒
+  def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
       formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
@@ -74,7 +77,7 @@ class DeclarationController @Inject()(
         sendSubscription(usersDeclaration).fold(
           error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, Some(false))),
           _.flatMap { response ⇒
-            keyStoreService.saveSummaryFormPrint(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
+            keyStoreService.saveSummaryForPrint(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
               .map(_ ⇒ true)
               .recover{case _ ⇒ false}
               .map { pdfSaved ⇒

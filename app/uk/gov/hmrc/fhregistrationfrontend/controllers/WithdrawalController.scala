@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 import org.joda.time.DateTime
 import play.api.mvc.{Action, AnyContent, Result, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, EnrolledUserRequest, UserAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm.confirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{Confirmation, WithdrawalReason}
@@ -37,10 +37,11 @@ import scala.concurrent.Future
 class WithdrawalController @Inject()(
   ds               : CommonPlayDependencies,
   fhddsConnector   : FhddsConnector,
-  keyStoreService      : KeyStoreService
+  keyStoreService      : KeyStoreService,
+  actions: Actions
 ) extends AppController(ds) {
 
-
+  import actions._
   val EmailSessionKey = "withdrawal_confirmation_email"
   val ProcessingTimestampSessionKey = "withdrawal_processing_timestamp"
 
@@ -49,11 +50,11 @@ class WithdrawalController @Inject()(
     Redirect(routes.WithdrawalController.reason())
   }
 
-  def reason = EnrolledUserAction()(messagesApi) { implicit request ⇒
+  def reason = enrolledUserAction { implicit request ⇒
       Ok(withdrawal_reason(withdrawalReasonForm))
   }
 
-  def postReason = EnrolledUserAction().async { implicit request ⇒
+  def postReason = enrolledUserAction.async { implicit request ⇒
     withdrawalReasonForm.bindFromRequest().fold(
       formWithError ⇒ Future successful BadRequest(withdrawal_reason(formWithError)),
       withdrawalReason ⇒
@@ -64,10 +65,10 @@ class WithdrawalController @Inject()(
   }
 
   def withWithdrawalReason(f: EnrolledUserRequest[_] ⇒ WithdrawalReason ⇒ Future[Result]) =
-    EnrolledUserAction().async { implicit request ⇒
+    enrolledUserAction.async { implicit request ⇒
       keyStoreService.fetchWithdrawalReason() flatMap {
         case Some(reason) ⇒ f(request)(reason)
-        case None ⇒ Future successful errorResultsPages(Results.BadRequest)
+        case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
@@ -75,7 +76,7 @@ class WithdrawalController @Inject()(
     implicit request ⇒ reason ⇒
         keyStoreService.fetchWithdrawalReason().map {
           case Some(_) ⇒ Ok(withdrawal_confirm(confirmationForm, request.email))
-          case None    ⇒ errorResultsPages(Results.BadRequest)
+          case None    ⇒ errorHandler.errorResultsPages(Results.BadRequest)
         }
   }
 
@@ -118,8 +119,8 @@ class WithdrawalController @Inject()(
       .withdraw(request.registrationNumber, withdrawRequest)
   }
 
-  def acknowledgment = UserAction()(messagesApi) { implicit request ⇒
-    renderAcknowledgmentPage(request) getOrElse errorResultsPages(Results.NotFound)
+  def acknowledgment = userAction { implicit request ⇒
+    renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) = {

@@ -313,6 +313,7 @@ fh.other_storage_premises.confirm.error=Select whether the business uses other p
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.each.title=Storage premises {0}
 fh.otherStoragePremises.each.title=Storage premises {0}
+fh.otherStoragePremises.each.inf=Tell us about each of the premises that you use to store third-party goods imported from outside the EU
 fh.other_storage_premises.third_party.label=Are these premises operated by a third party?
 fh.other_storage_premises.company.addMore=Are there any more premises?
 fh.storagePremise_address.storagePremise_address.Line1.error.required=You must enter line 1 of the address

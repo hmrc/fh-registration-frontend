@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import javax.inject.Inject
+
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession, PlayAuthConnector}
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAuthConnector
-import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{continueUrl, getString, ggLoginUrl}
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
@@ -33,15 +33,12 @@ class UserRequest[A](val userId: String, val email: Option[String], val registra
   def userIsRegistered = registrationNumber.isDefined
 }
 
-object UserAction {
-  def apply()(implicit messagesApi: MessagesApi) = new UserAction
-}
-
-class UserAction(implicit val messagesApi: MessagesApi) extends ActionBuilder[UserRequest]
+class UserAction @Inject()(
+  externalUrls: ExternalUrls
+)(implicit override val authConnector: AuthConnector) extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
   with AuthorisedFunctions {
-  override def authConnector: PlayAuthConnector = FrontendAuthConnector
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
@@ -70,11 +67,11 @@ class UserAction(implicit val messagesApi: MessagesApi) extends ActionBuilder[Us
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
 
         val ggRedirectParms = Map(
-          "continue" -> Seq(continueUrl),
-          "origin" -> Seq(getString("appName"))
+          "continue" -> Seq(externalUrls.continueUrl),
+          "origin" -> Seq(externalUrls.getString("appName"))
         )
 
-        Redirect(ggLoginUrl, ggRedirectParms)
+        Redirect(externalUrls.ggLoginUrl, ggRedirectParms)
       case e: AuthorisationException ⇒
         Unauthorized
       case ex                      ⇒

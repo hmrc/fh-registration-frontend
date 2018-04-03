@@ -20,6 +20,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, OtherStoragePremises, StoragePremise}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -83,7 +84,7 @@ case class OtherStoragePremisesPage(
   private def hasOtherPremises = mainPage.data contains true
 
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     if (isMainSection)
       mainPage.render(bpr, navigation)
     else
