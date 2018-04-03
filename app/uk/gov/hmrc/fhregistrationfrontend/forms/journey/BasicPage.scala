@@ -21,6 +21,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
@@ -42,14 +43,14 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
     }
   }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     val filledForm = data map (form fill _) getOrElse form
     rendering.render(filledForm, bpr, navigation)
   }
 
 
   private def errorRenderer(form: Form[T]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html =
+    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
       rendering.render(form, bpr, navigation)
   }
 

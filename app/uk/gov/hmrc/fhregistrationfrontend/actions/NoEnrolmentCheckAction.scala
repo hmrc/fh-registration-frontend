@@ -16,17 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{ActionFilter, Result, Results}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
+import play.api.mvc.{ActionFilter, Result}
+import uk.gov.hmrc.auth.core.AuthConnector
 
 import scala.concurrent.Future
 
-object NoEnrolmentCheckAction {
-  def apply()(implicit messagesApi: MessagesApi) = UserAction() andThen new NoEnrolmentCheckAction
-}
-
-class NoEnrolmentCheckAction(implicit val messagesApi: MessagesApi)
+class NoEnrolmentCheckAction
   extends ActionFilter[UserRequest]
     with FrontendAction
  {

@@ -22,6 +22,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
@@ -93,7 +94,7 @@ case class RepeatingPage[T](
     }
   }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     val filledForm = if (index < value.size) form fill ((value(index), false)) else form
 
 
@@ -102,7 +103,7 @@ case class RepeatingPage[T](
   }
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html = {
+    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
       renderer.render(form, bpr, navigation, section(index), renderingParams)
     }
   }

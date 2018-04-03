@@ -22,6 +22,8 @@ import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import play.api.Logger
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -42,18 +44,9 @@ class PageRequest[A](
   def lastUpdateTimestamp = request.lastUpdateTimestamp
 }
 
-object PageAction {
-  def apply(pageId: String)(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    JourneyAction() andThen new PageAction(pageId, None)
-
-  def apply(pageId: String, sectionId: Option[String])(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    JourneyAction() andThen new PageAction(pageId, sectionId)
-}
-
-
 //TODO all exceptional results need to be reviewed
 class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
+  (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
   extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
@@ -81,7 +74,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
       Right(true)
     } else {
       Logger.error(s"Not found")
-      Left(errorResultsPages(Results.NotFound))
+      Left(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
@@ -100,16 +93,16 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
       Right(page withSubsection sectionId)
     else {
       Logger.error(s"Not found")
-      Left(errorResultsPages(Results.NotFound))
+      Left(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
-  def loadPage[A](request: JourneyRequest[A])(implicit messages: Messages): Either[Result, Page[T]] =
+  def loadPage[A](request: JourneyRequest[A]): Either[Result, Page[T]] =
     request.journeyState.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
       case None       ⇒
         Logger.error(s"Not found")
-        Left(errorResultsPages(Results.NotFound)(request,messages))
+        Left(errorHandler.errorResultsPages(Results.NotFound)(request))
     }
 
   def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) = {

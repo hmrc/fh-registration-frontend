@@ -22,24 +22,20 @@ import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.api.{Configuration, Environment, Logger}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{AmendmentAction, EnrolledUserAction, JourneyAction, UserAction}
-import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
-import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{business_type, _}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals._
-import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{business_type, _}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -47,43 +43,25 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 class Application @Inject()(
   links            : ExternalUrls,
   ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector
+  fhddsConnector   : FhddsConnector,
+  businessCustomerConnector: BusinessCustomerFrontendConnector,
+  actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
 
-  override def usewhiteListing = configuration.getBoolean("services.whitelisting.enabled").getOrElse(false)
-
   override val configuration: Configuration = ds.conf
-
-  val businessCustomerConnector = BusinessCustomerFrontendConnector
 
   val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
 
-  def whitelisted(p: String) = Action.async {
-    implicit request ⇒
-      authorised() {
-        val verificationUrl = configuration.getString("services.verificationUrl").getOrElse("http://localhost:9227/verification/otac/login")
-        Future successful Redirect(s"$verificationUrl?p=$p").withSession(request.session + (SessionKeys.redirect → routes.Application.start().url))
-      } recover {
-        case x: NoActiveSession ⇒
-          Logger.warn(s"could not authenticate user due to: No Active Session " + x)
-
-          val ggRedirectParms = Map(
-            "continue" -> Seq(s"$continueUrl/whitelisted?p=$p"),
-            "origin" -> Seq(getString("appName"))
-          )
-          Redirect(ggLoginUrl, ggRedirectParms)
-      }
-  }
-
-  def start = UserAction()(messagesApi) { implicit request ⇒
+  import actions._
+  def start = userAction { implicit request ⇒
     request.registrationNumber match {
       case Some(_) ⇒ Redirect(routes.Application.checkStatus())
       case None ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
   }
 
-  def continue = UserAction().async { implicit request ⇒
+  def continue = userAction.async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
@@ -96,7 +74,7 @@ class Application @Inject()(
 
   val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
 
-  def deleteOrContinue(isNewForm: Boolean) = UserAction().async { implicit request ⇒
+  def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request ⇒
     if (isNewForm) {
       Future successful Redirect(routes.Application.businessType())
     }
@@ -109,15 +87,15 @@ class Application @Inject()(
     }
   }
 
-  def submitDeleteOrContinue = UserAction().async { implicit request ⇒
+  def submitDeleteOrContinue = userAction.async { implicit request ⇒
     deleteOrContinueForm.bindFromRequest().fold(
-      formWithErrors => Future successful errorResultsPages(Results.ServiceUnavailable),
+      formWithErrors => Future successful errorHandler.errorResultsPages(Results.ServiceUnavailable),
       deleteOrContinue => {
         if (deleteOrContinue == "delete") {
           save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
             case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
             case None            ⇒
-              Future successful errorResultsPages(Results.ServiceUnavailable)
+              Future successful errorHandler.errorResultsPages(Results.ServiceUnavailable)
           }
         } else {
           Future successful Redirect(routes.Application.resumeForm())
@@ -126,14 +104,14 @@ class Application @Inject()(
     )
   }
 
-  def confirmDelete = UserAction().async { implicit request ⇒
+  def confirmDelete = userAction.async { implicit request ⇒
       save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
         case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
         case None            ⇒ Future successful ServiceUnavailable
       }
   }
 
-  def resumeForm = JourneyAction()(save4LaterService, messages) { implicit request ⇒
+  def resumeForm = journeyAction { implicit request ⇒
     if(request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary())
     else {
@@ -146,17 +124,17 @@ class Application @Inject()(
     }
   }
 
-  def deleteUserData = UserAction().async { implicit request ⇒
+  def deleteUserData = userAction.async { implicit request ⇒
     save4LaterService.removeUserData(request.userId) map {
       _ ⇒ Redirect(routes.Application.start())
     }
   }
 
-  def businessType = UserAction()(messagesApi) { implicit request ⇒
+  def businessType = userAction { implicit request ⇒
     Ok(business_type(businessTypeForm))
   }
 
-  def submitBusinessType = UserAction().async { implicit request ⇒
+  def submitBusinessType = userAction.async { implicit request ⇒
     businessTypeForm.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
       businessType => {
@@ -169,21 +147,21 @@ class Application @Inject()(
     )
   }
 
-  def startForm = UserAction().async { implicit request ⇒
+  def startForm = userAction.async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
       case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
     }
   }
 
-  def savedForLater = UserAction().async { implicit request ⇒
+  def savedForLater = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
       case Some(savedDate) ⇒ Ok(saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
-      case None            ⇒ errorResultsPages(Results.NotFound)
+      case None            ⇒ errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def checkStatus() = EnrolledUserAction().async { implicit request ⇒
+  def checkStatus() = enrolledUserAction.async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
@@ -197,19 +175,15 @@ class Application @Inject()(
 abstract class AppController(val ds: CommonPlayDependencies)
   extends FrontendController
     with I18nSupport
-    with AuthorisedFunctions
-    with Whitelisting
-    with UnexpectedState {
+    with AuthorisedFunctions {
 
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
-  def usewhiteListing: Boolean = false
-
   override implicit val messagesApi: MessagesApi = ds.messagesApi
 
-  override def authConnector: PlayAuthConnector = FrontendAuthConnector
-
-  override def otacAuthConnector = ConcreteOtacAuthConnector
+  override implicit def authConnector: AuthConnector = ds.authConnector
+  implicit val appConfig = ds.appConfig
+  implicit val errorHandler = ds.errorHandler
 
   val configuration: Configuration = ds.conf
   val messages: MessagesApi = messagesApi
@@ -217,43 +191,14 @@ abstract class AppController(val ds: CommonPlayDependencies)
   lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
   val hasCtUtr: Predicate = Enrolment("IR-CT")
 
+
 }
 
 @Singleton
-final class CommonPlayDependencies @Inject()(val conf: Configuration, val env: Environment, val messagesApi: MessagesApi)
-
-trait UnexpectedState {
-  import Results._
-
-  def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_], messages: Messages): Result = {
-
-    errorResults match {
-      case NotFound ⇒ NotFound(error_template(
-        messages("fh.generic.not_found"),
-        messages("fh.generic.not_found.label"),
-        errorMsg.getOrElse(messages("fh.generic.not_found.inf"))
-      ))
-      case BadRequest ⇒ BadRequest(error_template(
-        messages("fh.generic.bad_request"),
-        messages("fh.generic.bad_request.label"),
-        errorMsg.getOrElse(messages("fh.generic.bad_request.inf"))
-      ))
-      case Unauthorized ⇒ Unauthorized(error_template(
-        messages("fh.generic.unauthorized"),
-        messages("fh.generic.unauthorized.label"),
-        errorMsg.getOrElse(messages("fh.generic.unauthorized.inf"))
-      ))
-      case BadGateway ⇒ BadGateway(error_template(
-        messages("fh.generic.bad_gateway"),
-        messages("fh.generic.bad_gateway.label"),
-        errorMsg.getOrElse(messages("fh.generic.bad_gateway.inf"))
-      ))
-      case _ ⇒ InternalServerError(error_template(
-        messages("fh.generic.internal_server_error"),
-        messages("fh.generic.internal_server_error.label"),
-        errorMsg.getOrElse(messages("fh.generic.internal_server_error.inf"))
-      ))
-    }
-
-  }
-}
+final class CommonPlayDependencies @Inject()(
+  val conf: Configuration,
+  val appConfig: AppConfig,
+  val env: Environment,
+  val messagesApi: MessagesApi,
+  val errorHandler: ErrorHandler,
+  val authConnector: AuthConnector)

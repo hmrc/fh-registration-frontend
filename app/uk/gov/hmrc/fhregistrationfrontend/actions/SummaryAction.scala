@@ -21,6 +21,8 @@ import cats.implicits._
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyState, Page, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
@@ -43,12 +45,8 @@ class SummaryRequest[A](
 
 }
 
-object SummaryAction {
-  def apply(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) =
-    new UserAction() andThen new NoEnrolmentCheckAction() andThen new JourneyAction  andThen new SummaryAction
-}
 
-class SummaryAction(implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
+class SummaryAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
   extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
@@ -67,7 +65,7 @@ class SummaryAction(implicit val save4LaterService: Save4LaterService, val messa
       Right(true)
     else {
       Logger.error(s"Bad Request")
-      Left(errorResultsPages(Results.BadRequest))
+      Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
   }
 

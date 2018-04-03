@@ -21,8 +21,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

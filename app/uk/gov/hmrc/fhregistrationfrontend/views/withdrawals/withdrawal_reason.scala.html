@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages)
+@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {

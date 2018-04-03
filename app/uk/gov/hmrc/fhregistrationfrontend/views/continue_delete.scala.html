@@ -17,8 +17,9 @@
 @import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages)
+@(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
 
