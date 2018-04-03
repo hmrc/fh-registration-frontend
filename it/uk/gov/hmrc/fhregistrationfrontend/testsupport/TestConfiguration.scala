@@ -48,7 +48,10 @@ trait TestConfiguration
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap + (
         s"Test.microservice.services.$service.host" -> wiremockHost,
-        s"Test.microservice.services.$service.port" -> wiremockPort)
+        s"Test.microservice.services.$service.port" -> wiremockPort,
+        s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
+        s"json.encryption.previousKeys" -> List.empty
+      )
     } +
       (s"Test.auditing.consumer.baseUri.host" -> wiremockHost, s"Test.auditing.consumer.baseUri.port" -> wiremockPort)
 

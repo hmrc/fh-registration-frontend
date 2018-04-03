@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import uk.gov.hmrc.crypto.CompositeSymmetricCrypto.aes
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
 
-case class Save4LaterStub
+case class KeyStoreStub
 ()
   (implicit builder: PreconditionBuilder) {
 
@@ -29,9 +29,6 @@ case class Save4LaterStub
 
   def businessTypeHasSaved() = {
     stubFor(
-      stubS4LPut("userLastTimeSaved")
-    )
-    stubFor(
       stubS4LGet("businessType", "CorporateBody")
     )
     builder
@@ -42,7 +39,7 @@ case class Save4LaterStub
   def encrypt(str: String): String = crypto.encrypt(PlainText(str)).value
 
   def stubS4LPut(key: String, data: String = "data"): MappingBuilder =
-    put(urlPathMatching(s"/save4later/fh-registration-frontend/some-id/data/$key"))
+    put(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/data/$key"))
       .willReturn(ok(s"""
                         |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
                         |    "data": { "${encrypt(key)}": "${encrypt(data)}" },
@@ -54,13 +51,13 @@ case class Save4LaterStub
       ))
 
   def stubS4LGet(key: String = "", data: String = ""): MappingBuilder =
-    get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
+    get(urlPathMatching("/keystore/fh-registration-frontend/some-id"))
       .willReturn(ok(
         s"""
            |{
            |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
            |  "data": {
-           |    "$key": "${encrypt("true")}"
+           |    "$key": "$data"
            |  },
            |  "id": "some-id",
            |  "modifiedDetails": {

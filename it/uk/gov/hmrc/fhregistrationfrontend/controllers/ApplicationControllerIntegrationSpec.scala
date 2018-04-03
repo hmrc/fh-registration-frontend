@@ -77,7 +77,7 @@ class ApplicationControllerIntegrationSpec
     "Show the form's first page when the user has selected a business type and the user is new" in {
 
       commonPrecondition
-        .save4later.businessTypeHasSaved()
+        .keyStore.businessTypeHasSaved()
 
       WsTestClient.withClient { client ⇒
         val result = client.url(s"$baseUrl/resume")
