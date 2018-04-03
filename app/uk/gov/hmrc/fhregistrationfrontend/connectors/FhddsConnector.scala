@@ -17,27 +17,30 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import java.util.Date
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
 
+
+
 @Singleton
-class FhddsConnector extends FhddsConnect with ServicesConfig {
+class FhddsConnector @Inject() (
+  val http: HttpClient,
+  override val runModeConfiguration: Configuration,
+  environment: Environment
+) extends ServicesConfig
+{
+
+  override protected def mode = environment.mode
   val FHDSSServiceUrl: String = baseUrl("fhdds")
-  val http = WSHttp
-}
-
-trait FhddsConnect {
-
-  val FHDSSServiceUrl: String
-  val http: WSHttp
 
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
     http.GET(s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")

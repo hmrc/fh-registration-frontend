@@ -16,9 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
+import javax.inject.Inject
+
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 
-object ExternalUrls extends RunMode with ServicesConfig {
+
+class ExternalUrls @Inject()(
+  override val runModeConfiguration: Configuration,
+  environment: Environment
+) extends RunMode with ServicesConfig {
+
+  override protected def mode = environment.mode
 
   val companyAuthUrl: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
   val loginCallback: String = getConfString("auth.login-callback.url", "/fhdds")

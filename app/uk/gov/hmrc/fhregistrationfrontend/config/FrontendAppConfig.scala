@@ -18,9 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.Configuration
+import com.google.inject.ImplementedBy
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
+@ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
   val analyticsToken: String
   val analyticsHost: String
@@ -33,8 +35,13 @@ trait AppConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(configuration: play.api.Configuration) extends AppConfig with ServicesConfig {
+class FrontendAppConfig @Inject()(
+  configuration: play.api.Configuration,
+  override val runModeConfiguration: Configuration,
+  environment: Environment) extends AppConfig with ServicesConfig {
 
+
+  override protected def mode = environment.mode
   private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
 //  private val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
@@ -54,6 +61,3 @@ class FrontendAppConfig @Inject()(configuration: play.api.Configuration) extends
   override lazy val phaseBannerFeedbackUnauth: String = s"$contactFrontend/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 }
 
-object FrontendAppConfig {
-  lazy val config = new FrontendAppConfig(Configuration.load(play.Environment.simple().underlying()))
-}
