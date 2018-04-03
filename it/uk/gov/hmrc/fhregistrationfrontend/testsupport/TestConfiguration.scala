@@ -9,11 +9,11 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.PreconditionBuilder
 import uk.gov.hmrc.play.it.Port
+
 import scala.collection.JavaConversions._
 
-trait TestedApplication
+trait TestConfiguration
   extends GuiceOneServerPerSuite
     with IntegrationPatience
     with PatienceConfiguration
@@ -32,15 +32,14 @@ trait TestedApplication
       timeout = Span(4, Seconds),
       interval = Span(50, Millis))
 
-  def given() = new PreconditionBuilder
-
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .configure(replaceWithWiremock(Seq(
       "auth",
       "auth.company-auth",
       "fhdds",
-      "fhdds-dfs-frontend",
-      "business-customer-frontend"
+      "business-customer-frontend",
+      "cachable.short-lived-cache",
+      "cachable.session-cache"
     )))
     .build()
 
@@ -49,7 +48,12 @@ trait TestedApplication
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap + (
         s"Test.microservice.services.$service.host" -> wiremockHost,
-        s"Test.microservice.services.$service.port" -> wiremockPort)
+        s"Test.microservice.services.$service.port" -> wiremockPort,
+        s"Test.microservice.services.cachable.short-lived-cache.domain" -> "save4later",
+        s"Test.microservice.services.cachable.session-cache.domain" -> "keystore",
+        s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
+        s"json.encryption.previousKeys" -> List.empty
+      )
     } +
       (s"Test.auditing.consumer.baseUri.host" -> wiremockHost, s"Test.auditing.consumer.baseUri.port" -> wiremockPort)
 

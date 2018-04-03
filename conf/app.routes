@@ -2,7 +2,7 @@
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
-GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
+
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
 GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
