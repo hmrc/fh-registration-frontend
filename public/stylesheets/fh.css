@@ -68,3 +68,21 @@ table {
 .with-icon {
     text-indent: 2em
 }
+@media print {
+    .hidden-print,
+    #content a,
+    .header-proposition a,
+    .header-proposition ul, .beta-banner a {
+        display: none;
+    }
+    .header__menu__proposition-name {
+        display: block;
+        color: black;
+        font-weight: bold;
+        font-size: 1em;
+    }
+    th {
+        font-size: 1.5em;
+        text-align: left;
+    }
+}
