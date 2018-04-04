@@ -126,7 +126,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
       case Some(cacheMap) ⇒ Right(cacheMap)
       case None ⇒
         Logger.error(s"Not found in shortLivedCache")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorResultsPages(Results.BadRequest))
     } recover { case t ⇒
       Logger.error(s"Could not access shortLivedCache", t)
       Left(errorResultsPages(Results.BadGateway))
@@ -138,7 +138,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
       case Some(bpr) ⇒ Right(bpr)
       case None ⇒
         Logger.error(s"Not found bpr")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorResultsPages(Results.BadRequest))
     }
   }
 
@@ -147,7 +147,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
       case Some(bt) ⇒ Right(bt)
       case None ⇒
         Logger.error(s"Not found business type")
-        Left(errorResultsPages(Results.NotFound))
+        Left(errorResultsPages(Results.BadRequest))
     }
   }
 
@@ -159,7 +159,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, val mess
         case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
         case _                          ⇒
           Logger.error(s"Not found: wrong business type")
-          Left(errorResultsPages(Results.NotFound))
+          Left(errorResultsPages(Results.BadRequest))
       }
     }
   }
