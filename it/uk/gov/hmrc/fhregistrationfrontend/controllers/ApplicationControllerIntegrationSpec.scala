@@ -78,16 +78,23 @@ class ApplicationControllerIntegrationSpec
 
       commonPrecondition
         .save4later.businessTypeHasSaved()
-        .keyStore.businessTypeHasSaved()
 
       WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/resume")
+        val result1 = client.url(s"$baseUrl/resume")
           .withFollowRedirects(false)
           .get()
 
-        whenReady(result) { res ⇒
+        val result2 = client.url(s"$baseUrl/startForm")
+          .withFollowRedirects(false)
+          .get()
+
+        whenReady(result1) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"http://$wiremockHost:$wiremockPort/fhdds/mainBusinessAddress")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/startForm")
+        }
+        whenReady(result2) { res ⇒
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/mainBusinessAddress")
         }
       }
     }

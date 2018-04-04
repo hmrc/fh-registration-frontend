@@ -42,31 +42,31 @@ case class Save4LaterStub
   }
 
   def businessTypeHasSaved() = {
-    stubFor(
-      stubS4LPut("userLastTimeSaved")
-    )
-//    stubFor(
-//      stubS4LGet("businessType", "CorporateBody")
-//    )
+    val brd =
+      """
+        |{
+        |  "business_name" : "Real Business Inc",
+        |  "business_type" : "corporate body",
+        |  "business_address" : {
+        |    "line1" : "23 High Street",
+        |    "line2" : "Park View",
+        |    "line3" : "Gloucester",
+        |    "line4" : "Gloucestershire",
+        |    "postcode" : "NE98 1ZZ",
+        |    "country" : "GB"
+        |    },
+        |  "safe_id" : "XE0001234567890",
+        |  "utr" : "1111111111"
+        |}
+      """.stripMargin
+
     stubFor(
       stubS4LGetSetJs(
         s"""{
-           |"businessRegistrationDetails": {
-           |  "business_name" : "Real Business Inc",
-           |  "business_type" : "corporate body",
-           |  "business_address" : {
-           |    "line1" : "23 High Street",
-           |    "line2" : "Park View",
-           |    "line3" : "Gloucester",
-           |    "line4" : "Gloucestershire",
-           |    "postcode" : "NE98 1ZZ",
-           |    "country" : "GB"
-           |  },
-           |  "safe_id" : "XE0001234567890",
-           |  "utr" : "1111111111"
-           |},
-           |"businessType": "${encrypt("CorporateBody")}"
-           |}""")
+           "businessRegistrationDetails": "${encrypt(brd)}"
+           ,
+           "businessType": "${encrypt("\"CorporateBody\"")}"
+           }""")
     )
     builder
   }
@@ -88,25 +88,26 @@ case class Save4LaterStub
           """.stripMargin
       ))
 
-  def stubS4LGet(key: String = "", data: String = "true"): MappingBuilder =
+  def stubS4LGet(key: String = "", data: String = ""): MappingBuilder =
     get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
       .willReturn(ok(
         s"""
-           |{
-           |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
-           |  "data": {
-           |    "$key": "${encrypt(data)}"
-           |  },
-           |  "id": "some-id",
-           |  "modifiedDetails": {
-           |    "createdAt": { "$$date": 1502097615710 },
-           |    "lastUpdated": { "$$date": 1502189409725 }
-           |  }
-           |}
+           {
+             "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
+             "data": {
+               "$key": "${encrypt(data)}"
+             },
+             "id": "some-id",
+             "modifiedDetails": {
+               "createdAt": { "$$date": 1502097615710 },
+               "lastUpdated": { "$$date": 1502189409725 }
+             }
+           }
           """.stripMargin
       ))
 
-  def stubS4LGetSetJs(data: String = s"""{"":""}"""): MappingBuilder =
+  def stubS4LGetSetJs(data: String = s"""{"":""}"""): MappingBuilder = {
+    println(s""""$data"""")
     get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
       .willReturn(ok(
         s"""
@@ -121,5 +122,5 @@ case class Save4LaterStub
            |}
           """.stripMargin
       ))
-
+  }
 }

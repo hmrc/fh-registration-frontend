@@ -14,7 +14,7 @@ trait TestHelper
     given()
       .audit.writesAuditOrMerged()
       .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessPartnerRecord
+      .businessCustomerFrontend.hasBusinessCustomerRecord
       .save4later.businessRecordHasSaved()
       .save4later.getNoneData()
   }
