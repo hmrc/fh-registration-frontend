@@ -161,34 +161,7 @@
         populateAddress(index, store)
       })
   }
-
-  function showResult(data, context) {
-    var results = data.addresses,
-      count = results.length,
-      $container = $('#' + context + '-results').off(),
-      addressStringBuilder = [];
-
-    function selectAddress(e) {
-      var index = $(e.currentTarget).val();
-      populateAddress(results[index].address, context)
-    }
-
-    addressStringBuilder.push('<legend class="form-label-bold">' + count + ' ' + (count === 1 ? 'address' : 'addresses') + ' found...</legend>');
-    jQuery.each(results, function(i, result) {
-      var address = result.address;
-      addressStringBuilder.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + context + '-result-' + i + '" name="' + context + '-result" value="' + i + '"><label for="' + context + '-result-' + i + '">');
-      addressStringBuilder.push(address.lines.join(', '));
-      addressStringBuilder.push(address.town + ', ');
-      addressStringBuilder.push(address.postcode);
-      addressStringBuilder.push('</label></div>');
-    });
-
-    $container
-      .html(addressStringBuilder.join(''))
-      .on('click', '.postcode-lookup-result', selectAddress)
-      .find('.postcode-lookup-result:first').focus()
-  }
-
+  
   function searchAddress(url, store) {
     // remove previous results
     store.$results
