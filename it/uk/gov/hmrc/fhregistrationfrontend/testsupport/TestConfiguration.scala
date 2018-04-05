@@ -27,6 +27,8 @@ trait TestConfiguration
 
   override lazy val port: Int = Port.randomAvailable
 
+  val baseUrl = s"http://localhost:$port/fhdds"
+
   abstract override implicit val patienceConfig: PatienceConfig =
     PatienceConfig(
       timeout = Span(4, Seconds),
@@ -51,6 +53,8 @@ trait TestConfiguration
         s"Test.microservice.services.$service.port" -> wiremockPort,
         s"Test.microservice.services.cachable.short-lived-cache.domain" -> "save4later",
         s"Test.microservice.services.cachable.session-cache.domain" -> "keystore",
+        s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
+        s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty
       )

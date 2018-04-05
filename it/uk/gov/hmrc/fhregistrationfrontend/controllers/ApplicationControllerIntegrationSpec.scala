@@ -8,7 +8,7 @@ class ApplicationControllerIntegrationSpec
   extends TestHelper with TestConfiguration {
 
   "Application" should {
-    val baseUrl = s"http://localhost:$port/fhdds"
+
     "be reachable" in {
       given()
         .audit.writesAuditOrMerged()
@@ -70,31 +70,6 @@ class ApplicationControllerIntegrationSpec
         whenReady(result) { res ⇒
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/businessType")
-        }
-      }
-    }
-
-    "Show the form's first page when the user has selected a business type and the user is new" in {
-
-      commonPrecondition
-        .save4later.businessTypeHasSaved()
-
-      WsTestClient.withClient { client ⇒
-        val result1 = client.url(s"$baseUrl/resume")
-          .withFollowRedirects(false)
-          .get()
-
-        val result2 = client.url(s"$baseUrl/startForm")
-          .withFollowRedirects(false)
-          .get()
-
-        whenReady(result1) { res ⇒
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/startForm")
-        }
-        whenReady(result2) { res ⇒
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/mainBusinessAddress")
         }
       }
     }
