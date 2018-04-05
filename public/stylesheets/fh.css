@@ -85,3 +85,9 @@ tr > td:last-child {
     background-color: #ffbf47;
     outline: 3px solid #ffbf47;
 }
+
+.pagination:after {
+    content: "";
+    display: block;
+    clear: both;
+}
