@@ -161,7 +161,7 @@
         populateAddress(index, store)
       })
   }
-  
+
   function searchAddress(url, store) {
     // remove previous results
     store.$results
