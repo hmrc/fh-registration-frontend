@@ -32,9 +32,9 @@
   <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
     <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
     <span class="form-hint">For example, The Mill, Flat A or 37b</span>
-    <input type="text" id="@{fieldName}-property-filter" class="property-value" style="width: 150px; margin-bottom: 15px;" />
+    <input type="text" data-context="@{fieldName}" id="@{fieldName}-property-filter" class="property-value" style="width: 150px; margin-bottom: 15px;" />
     <label for="@{fieldName}-postcode-search">Postcode</label>
-    <input type="text" class="postcode-value" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
+    <input type="text" class="postcode-value" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
     <a data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</a>
     <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup" aria-live="polite"></fieldset>
     <div class="form-group" style="margin-top: 1em">
