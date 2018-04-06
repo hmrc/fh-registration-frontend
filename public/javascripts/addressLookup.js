@@ -94,10 +94,19 @@
   }
 
   function showError (error, store, $input) {
-    clearError(store)
-    $('<span class="error-message" role="alert">' + error + '</span>').insertBefore($input)
-    $input && $input.addClass('form-control-error').focus()
-    store.$results.empty().siblings('.pagination').remove()
+    clearError(store);
+    var $error = $('<span class="error-message" role="alert">' + error + '</span>');
+    if ($input) {
+      // a user input error
+      $error.insertBefore($input);
+      $input.addClass('form-control-error').focus();
+    } else {
+      // a service level error
+      $error.insertAfter(store.$submitButton);
+    }
+
+    store.$results.empty().siblings('.pagination').remove();
+    store.$submitButton.removeAttr('disabled');
   }
 
   function clearError (store) {
@@ -120,6 +129,7 @@
       $results: $('#' + context + '-results').off(),
       $postcodeInput: $container.find('input.postcode-value'),
       $filterInput: $container.find('input.property-value'),
+      $submitButton: $container.find('.address-lookup'),
       legend: ''
     };
     return Store[context];
@@ -161,12 +171,14 @@
         var index = $(e.currentTarget).val();
         populateAddress(index, store)
       })
+
+    store.$submitButton.removeAttr('disabled');
   }
 
   function searchAddress(url, store) {
     // remove previous results
     store.$results
-      .empty()
+      .html('searching...')
       .siblings('.pagination')
       .remove()
     // clear down previous address fields
@@ -179,25 +191,26 @@
       url: url,
       dataType: "json",
       success: function(data) {
-        //showResult(data, context);
         processResults(data, store)
       },
       error: function(jqXHR) {
-        //doError(jqXHR, context);
-        showError('Sorry something went wrong, please try again', $container)
+        showError('Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually', store, false)
       },
       headers: {"X-Hmrc-Origin": "fhdds"}
     });
   }
 
-  $('.address-lookup').on('click', function () {
-    var context = CSS.escape($(this).data('context'));
+  function handleSubmit (e) {
+    var context = CSS.escape($(e.currentTarget).data('context'));
+    console.log('context', context);
     var url;
     var store = initStore(context);
+    store.$submitButton.attr('disabled', 'disabled');
     var propertyFilter = store.$filterInput.val();
     var postcode = store.$postcodeInput.val().replace(/\s/g,'').toUpperCase();
+
     if (postcode === '') {
-      showError('You must enter a UK postcode to look up an address', store, store.$postcodeInput)
+      showError('You must enter a UK postcode to look up an address', store, store.$postcodeInput);
       return false
     }
     if (!postcode.match(postcodeRegex)) {
@@ -216,7 +229,18 @@
     }
 
     searchAddress(url, store);
-  });
+  }
+
+  function handleKeyPress (e) {
+    if ( e.which === 13 ) {
+      e.preventDefault();
+      e.stopPropagation();
+      handleSubmit(e);
+    }
+  }
+
+  $('.address-lookup').on('click', handleSubmit);
+  $('.postcode-value, .property-value').on('keypress', handleKeyPress);
 
   var manualMode = function (context) {
     $('#' + context + '-manual-container').removeClass('js-hidden');
