@@ -209,7 +209,7 @@
 
     if (propertyFilter !== '') {
       if(!propertyFilter.match(filterRegex)) {
-        showError('A property name or number can be no longer than 35 characters long and only contain characters that are alpha-numeric or any of the following symbols !\'‘’"“”(),./—–‐-', store, store.$filterInput);
+        showError('A property name or number can be no longer than 35 characters long and only contain characters that are alpha-numeric, spaces and/or any of the following symbols !\'‘’"“”(),./—–‐-', store, store.$filterInput);
         return false;
       }
       url += '&filter=' + encodeURIComponent(propertyFilter);
