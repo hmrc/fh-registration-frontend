@@ -16,6 +16,7 @@
   var perPage = parseInt(Utils.getParameterByName('perPage'), 10) || 10;
   var maxCount = parseInt(Utils.getParameterByName('maxCount'), 10) || 50;
   var postcodeRegex = /(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$/;
+  var filterRegex = /^[A-Za-z0-9 !'‘’"“”(),./—–‐-]{1,35}$/;
   var lookUpPath = '/fhdds/address-lookup?postcode=';
   // initialise the display of js-only controls
   // the display will default to an open manual address
@@ -134,7 +135,7 @@
       list.push(', ' + address.town + ', ');
       list.push(address.postcode);
       list.push('</label></div>');
-      i++
+      i++;
       return list
     }, [])
   }
@@ -207,6 +208,10 @@
     url = lookUpPath + postcode;
 
     if (propertyFilter !== '') {
+      if(!propertyFilter.match(filterRegex)) {
+        showError('A property name or number can be no longer than 35 characters long and only contain characters that are alpha-numeric or any of the following symbols !\'‘’"“”(),./—–‐-', store, store.$filterInput);
+        return false;
+      }
       url += '&filter=' + encodeURIComponent(propertyFilter);
     }
 
