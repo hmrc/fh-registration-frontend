@@ -196,7 +196,6 @@
 
   function handleSubmit (e) {
     var context = CSS.escape($(e.currentTarget).data('context'));
-    console.log('context', context);
     var url;
     var store = initStore(context);
     store.$submitButton.attr('disabled', 'disabled');
