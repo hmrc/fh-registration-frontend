@@ -233,7 +233,7 @@
   }
 
   $('.address-lookup').on('click', handleSubmit);
-  $('.postcode-value, .property-value').on('keypress', handleKeyPress);
+  $('.address-lookup, .postcode-value, .property-value').on('keypress', handleKeyPress);
 
   var manualMode = function (context) {
     $('#' + context + '-manual-container').removeClass('js-hidden');
