@@ -2,47 +2,30 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
-import uk.gov.hmrc.crypto.CompositeSymmetricCrypto.aes
-import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
 
 case class KeyStoreStub
 ()
   (implicit builder: PreconditionBuilder) {
 
-
-  def businessRecordHasSaved() = {
+  def fetchWithdrawalReason() = {
     stubFor(
-      keyStorePut("userLastTimeSaved")
-    )
-    stubFor(
-      keyStorePut("businessRegistrationDetails")
+      keyStoreGet("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""")
     )
     builder
   }
 
-  def getNoneData() = {
+  def saveWithdrawalReason() = {
     stubFor(
-      keyStoreGet()
+      keyStorePut("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""")
     )
     builder
   }
-
-  def businessTypeHasSaved() = {
-    stubFor(
-      keyStoreGet("businessType", "CorporateBody")
-    )
-    builder
-  }
-
-  val crypto: CompositeSymmetricCrypto = aes(s"fqpLDZ4sumDsekHkeEBlCA==", Seq.empty)
-
-  def encrypt(str: String): String = crypto.encrypt(PlainText(str)).value
 
   def keyStorePut(key: String, data: String = "data"): MappingBuilder =
     put(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/data/$key"))
       .willReturn(ok(s"""
                         |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
-                        |    "data": { "${encrypt(key)}": "${encrypt(data)}" },
+                        |    "data": { "$key": $data },
                         |    "id": "some-id",
                         |    "modifiedDetails": {
                         |      "createdAt": { "$$date": 1502265526026 },
@@ -57,7 +40,7 @@ case class KeyStoreStub
            |{
            |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
            |  "data": {
-           |    "$key": "$data"
+           |    "$key": $data
            |  },
            |  "id": "some-id",
            |  "modifiedDetails": {

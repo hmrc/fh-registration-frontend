@@ -14,9 +14,22 @@ trait TestHelper
     given()
       .audit.writesAuditOrMerged()
       .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessPartnerRecord
+      .businessCustomerFrontend.hasBusinessCustomerRecord
       .save4later.businessRecordHasSaved()
       .save4later.getNoneData()
+  }
+
+  def withdrawalPrecondition = {
+    given()
+      .audit.writesAuditOrMerged()
+      .user.isAuthorisedAndEnrolled()
+  }
+
+  def summaryPrecondition = {
+    given()
+      .audit.writesAuditOrMerged()
+      .user.isAuthorised()
+      .save4later.getFullData()
   }
 
 }

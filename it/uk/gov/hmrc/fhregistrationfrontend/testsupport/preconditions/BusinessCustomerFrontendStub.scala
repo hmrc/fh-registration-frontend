@@ -9,7 +9,6 @@ case class BusinessCustomerFrontendStub()
 {
   import BusinessRegistrationDetails.formats
 
-
   private val aFakeAddress = Address(
     line1 = "line1",
     line2 = "line2",
@@ -28,7 +27,7 @@ case class BusinessCustomerFrontendStub()
     )
   }
 
-  def hasBusinessPartnerRecord = {
+  def hasBusinessCustomerRecord = {
     stubFor(
       get(urlPathEqualTo("/business-customer/fetch-review-details/FHDDS"))
       .willReturn(ok(

@@ -182,8 +182,8 @@ abstract class AppController(val ds: CommonPlayDependencies)
   override implicit val messagesApi: MessagesApi = ds.messagesApi
 
   override implicit def authConnector: AuthConnector = ds.authConnector
-  implicit val appConfig = ds.appConfig
-  implicit val errorHandler = ds.errorHandler
+  implicit val appConfig: AppConfig = ds.appConfig
+  implicit val errorHandler: ErrorHandler = ds.errorHandler
 
   val configuration: Configuration = ds.conf
   val messages: MessagesApi = messagesApi
