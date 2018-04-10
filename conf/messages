@@ -699,7 +699,7 @@ fh.survey_hint=(takes 30 seconds)
 # - Not Completed enrollment Acknowledgement Page
 #============================================================
 fh.ackN.application_submitted=Fulfilment House Due Diligence Scheme
-fh.ackN.application_received=Your application has been received
+fh.ackN.application_received=Your application has been
 fh.ackN.what_happens_next=What happens next
 fh.ackN.what_happens_next_1=We need to make a few checks before we can process your application.
 fh.ackN.what_happens_next_2=Once this is done, you will get an email to confirm that your application has been successfully submitted.
