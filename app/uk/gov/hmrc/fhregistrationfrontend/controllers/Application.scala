@@ -34,7 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{business_type, _}
+import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
