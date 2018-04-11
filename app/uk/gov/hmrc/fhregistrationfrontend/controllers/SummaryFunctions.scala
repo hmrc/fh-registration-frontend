@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.SummaryRequest
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.summary.LimitedCompanyPrintable
 
 trait SummaryFunctions {
   this: AppController ⇒
@@ -54,6 +55,12 @@ trait SummaryFunctions {
     val application = Journeys ltdApplication request
 
     ltd_summary(application, request.bpr, baseUrl, forPrint, timeStamp, hasAmendments)
+  }
+
+  protected def printableLtdSummary()(implicit request: SummaryRequest[AnyContent]) = {
+    val application = Journeys ltdApplication request
+
+    LimitedCompanyPrintable(application, request.bpr)
   }
 
 }
