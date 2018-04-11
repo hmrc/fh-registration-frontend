@@ -1,0 +1,68 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+
+@()(implicit request: Request[_], messages: Messages)
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets)) {
+  <div class="grid">
+    <div>
+      <div class="appstatus" role="alert">
+        <h1 class="heading-xlarge appstatus-title">
+        @Messages("app.name.short")
+        </h1>
+
+        <p class="lede">
+          @Messages("fh.status_pending.application") <strong>@Messages("fh.status_pending.application_received")</strong>
+        </p>
+      </div>
+
+      <div>
+
+        <h2 class="heading-large">
+        @Messages("fh.status_pending.what_happens_next")
+        </h2>
+
+        <p>
+        @Messages("fh.status_pending.what_happens_next_1")
+        </p>
+
+        <p>
+        @Messages("fh.status_pending.what_happens_next_2")
+        </p>
+
+        <p>
+          @Messages("fh.status_pending.what_happens_next_3")
+          <a href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
+          @Messages("fh.status_pending.what_happens_next_5")
+        </p>
+
+        <p>
+          <a class="button" href="@{
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
+          }">
+          @Messages("fh.status_pending.finish")
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+}
