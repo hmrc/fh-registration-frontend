@@ -94,16 +94,16 @@ fh.generic.on=on
 
 # - Not Completed enrollment Status Page
 #============================================================
-fh.no_status.application_submitted=Fulfilment House Due Diligence Scheme
-fh.no_status.application=Your application has been
-fh.no_status.application_received=Received
-fh.no_status.what_happens_next=What happens next
-fh.no_status.what_happens_next_1=We need to make a few checks before we can process your application.
-fh.no_status.what_happens_next_2=Once this is done, you will get an email to confirm that your application has been successfully submitted.
-fh.no_status.what_happens_next_3=Contact
-fh.no_status.what_happens_next_4=VAT general enquiries
-fh.no_status.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
-fh.no_status.finish=Finish and sign out
+fh.status_pending.application_submitted=Fulfilment House Due Diligence Scheme
+fh.status_pending.application=Your application has been
+fh.status_pending.application_received=Received
+fh.status_pending.what_happens_next=What happens next
+fh.status_pending.what_happens_next_1=We need to make a few checks before we can process your application.
+fh.status_pending.what_happens_next_2=Once this is done, you will get an email to confirm that your application has been successfully submitted.
+fh.status_pending.what_happens_next_3=Contact
+fh.status_pending.what_happens_next_4=VAT general enquiries
+fh.status_pending.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
+fh.status_pending.finish=Finish and sign out
 
 
 fh.generic.create_new_application_link=Create a new application
