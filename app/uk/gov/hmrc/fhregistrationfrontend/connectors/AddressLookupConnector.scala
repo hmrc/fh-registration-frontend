@@ -46,9 +46,9 @@ class AddressLookupConnector @Inject() (
   override protected def mode = environment.mode
   val addressLookupUrl: String = baseUrl("address-lookup")
 
-  def lookup(postcode: String)(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
+  def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode")(implicitly[HttpReads[JsValue]], fhddsHc, MdcLoggingExecutionContext.fromLoggingDetails(hc)
+    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(implicitly[HttpReads[JsValue]], fhddsHc, MdcLoggingExecutionContext.fromLoggingDetails(hc)
     ) map {
       addressListJson =>
         AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
