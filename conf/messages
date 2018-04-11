@@ -92,6 +92,20 @@ fh.generic.application_link=your application
 fh.generic.bta_link=Business tax account home
 fh.generic.on=on
 
+# - Not Completed enrollment Status Page
+#============================================================
+fh.status_pending.application_submitted=Fulfilment House Due Diligence Scheme
+fh.status_pending.application=Your application has been
+fh.status_pending.application_received=Received
+fh.status_pending.what_happens_next=What happens next
+fh.status_pending.what_happens_next_1=We need to make a few checks before we can process your application.
+fh.status_pending.what_happens_next_2=Once this is done, you will get an email to confirm that your application has been successfully submitted.
+fh.status_pending.what_happens_next_3=Contact
+fh.status_pending.what_happens_next_4=VAT general enquiries
+fh.status_pending.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
+fh.status_pending.finish=Finish and sign out
+
+
 fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
@@ -683,7 +697,7 @@ fh.delete_confirmation_section.delete=Delete {0}
 # - Acknowledgement Page
 #============================================================
 fh.ack.application_submitted=Application submitted
-fh.ack.confirmation_email_sent=We have sent a confirmation email to
+fh.ack.confirmation_email_sent=We will send a confirmation email to
 fh.ack.what_happens_next=What happens next
 fh.ack.what_happens_next_1=We will review your application. We may get in touch with your contact person to discuss your application
 fh.ack.what_happens_next_2=We will let you know when a decision has been made.
@@ -695,18 +709,6 @@ fh.ack.help_bullet_2=how to make changes to your application
 fh.ack.help_bullet_3=how to contact HMRC about your application
 fh.survey_link_text=What did you think of this service?
 fh.survey_hint=(takes 30 seconds)
-
-# - Not Completed enrollment Acknowledgement Page
-#============================================================
-fh.ackN.application_submitted=Fulfilment House Due Diligence Scheme
-fh.ackN.application_received=Your application has been received
-fh.ackN.what_happens_next=What happens next
-fh.ackN.what_happens_next_1=There's a few checks we need to make before we can process your application.
-fh.ackN.what_happens_next_2=Once this is done, you'll get an email to confirm that your application has been successfully submitted.
-fh.ackN.what_happens_next_3=Contact
-fh.ackN.what_happens_next_4=VAT general enquiries
-fh.ackN.what_happens_next_5= if you have not received a confirmation email within 1 hour of submitting your application.
-
 
 # - Withdrawal reason
 #============================================================
