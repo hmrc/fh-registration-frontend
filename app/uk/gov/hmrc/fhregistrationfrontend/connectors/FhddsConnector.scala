@@ -18,9 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Singleton
 
+import play.api.libs.json.Reads
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -52,6 +54,11 @@ trait FhddsConnect {
 
   def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
     http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber", request)
+  }
+
+  def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
+    implicit val reads = Reads.enumNameReads(EnrolmentProgress)
+    http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
   }
 
 }
