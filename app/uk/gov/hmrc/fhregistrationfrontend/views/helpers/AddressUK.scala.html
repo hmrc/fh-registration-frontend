@@ -27,7 +27,7 @@
 }
 
 <fieldset id="@{fieldName}-fieldset">
-  <legend class="form-label-bold">@{params.label}</legend>
+  <legend class="form-label-bold" id="@{fieldName}-title">@{params.label}</legend>
 
   <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
     <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
@@ -38,7 +38,7 @@
     <a data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</a>
     <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" role="radiogroup" aria-live="polite"></fieldset>
     <div class="form-group" style="margin-top: 1em">
-      <a href="#" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
+      <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
     </div>
   </div>
 
