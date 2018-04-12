@@ -42,15 +42,15 @@
     var address = store.addresses[index].address;
     $.each([1, 2, 3], function (i, lineNum) {
       var line = address.lines[i] || '';
-      $('[name="' + store.context + '.' + 'Line' + (lineNum)).val(line);
+      $('[name="' + store.context + '.' + 'Line' + (lineNum) + '"]').val(line);
     });
-    $('[name="' + store.context + '.' + 'Line4').val(address.town);
-    $('[name="' + store.context + '.' + 'postcode').val(address.postcode);
+    $('[name="' + store.context + '.' + 'Line4"]').val(address.town);
+    $('[name="' + store.context + '.' + 'postcode"]').val(address.postcode);
   }
 
   function clearAddressFields (context) {
     $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode'], function (i, line) {
-      $('[name="' + context + '.' + line).val('');
+      $('[name="' + context + '.' + line + '"]').val('');
     });
   }
 
@@ -246,8 +246,7 @@
     $('#' + context + '-lookup-container').removeClass('js-hidden');
   };
 
-  $('.manual-address-mode').on('click', function (e) {
-    e.preventDefault();
+  $('.manual-address-mode').on('click', function () {
     manualMode(CSS.escape($(this).data('context')));
   });
 
