@@ -30,11 +30,12 @@ import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{EnrolledUserAction, JourneyAction, UserAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.config.{ConcreteOtacAuthConnector, FrontendAuthConnector}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
@@ -80,11 +81,20 @@ class Application @Inject()(
   def start = UserAction().async { implicit request ⇒
     request.registrationNumber match {
       case Some(_) ⇒ Future successful Redirect(routes.Application.checkStatus())
-      case None ⇒ startOrContinueApplication
+      case None ⇒ noEnrolments
     }
   }
 
   val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
+
+  private def noEnrolments(implicit request: UserRequest[_]) = {
+    fhddsConnector
+      .getEnrolmentProgress
+      .flatMap {
+        case EnrolmentProgress.Pending ⇒ Future successful Ok(status_pending())
+        case _ ⇒ startOrContinueApplication
+      }
+  }
   
   private def startOrContinueApplication(implicit request: UserRequest[_]) = {
     val redirectWhenSaved = for {
@@ -98,7 +108,7 @@ class Application @Inject()(
     redirectWhenSaved getOrElse Redirect(links.businessCustomerVerificationUrl)
   }
 
-  def continueWithBpr = UserAction().async { implicit request ⇒
+  def continueWithBpr = ContinueWithBprAction(fhddsConnector).async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
@@ -169,7 +179,7 @@ class Application @Inject()(
   def startForm = UserAction().async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
-      case None      ⇒ Redirect(links.businessCustomerVerificationUrl)
+      case None      ⇒ errorResultsPages(Results.BadRequest)
     }
   }
 
