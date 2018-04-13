@@ -14,12 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @import org.joda.time.DateTime
+@import scala.concurrent.Future
+@import play.twirl.api.{Html⇒tHtml}
 
-@(date: DateTime, email:String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(date: DateTime, email:String, printableSummary: Html)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -32,59 +33,71 @@
         @Messages("fh.ack.application_submitted")
       </h1>
 
-      <span id="subref" class="h1-heading" style="color : #ffffff ;">
+      <span id="subref" class="h1-heading">
         @Messages("fh.generic.on")
         @{date.toLocalDate().toString("d MMMM yyyy")}
       </span>
 
     </div>
 
-    <h4>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h4>
+    <div class="hidden-print">
 
-    <div class="js-show notice with-icon">
-        <i class="icon icon-file-download"></i>
-        <p>
-            <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.PdfDownloadController.downloadPrintable}">@Messages("fh.generic.print_application_status")</a>
-        </p>
+      <h4>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h4>
+
+      <div class="js-show notice with-icon">
+          <i class="icon icon-file-download"></i>
+          <p>
+              <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
+          </p>
+      </div>
+
+      <h4 class="heading-medium">
+          @Messages("fh.ack.what_happens_next")
+      </h4>
+
+      <p>
+          @Messages("fh.ack.what_happens_next_1")
+      </p>
+
+      <p>
+          @Messages("fh.ack.what_happens_next_2")
+      </p>
+
+
+      <h2 class="heading-medium">
+          @Messages("fh.ack.help_using_service")
+      </h2>
+
+      <p>
+          <a href="@Messages("link.guidance_page")">
+              @Messages("fh.ack.guidance_link_text")
+          </a>
+          @Messages("fh.ack.to_find_out")
+      </p>
+
+      <ul class="bullets">
+          <li>
+              @Messages("fh.ack.help_bullet_1")
+          </li>
+          <li>
+              @Messages("fh.ack.help_bullet_2")
+          </li>
+          <li>
+              @Messages("fh.ack.help_bullet_3")
+          </li>
+      </ul>
+      <p>
+        <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
+      </p>
     </div>
 
-    <h4 class="heading-medium">
-        @Messages("fh.ack.what_happens_next")
-    </h4>
+    <div class="show-print">
+      <table class="table-font-xsmall">
+        <tbody>
+          @printableSummary
+        </tbody>
+      </table>
 
-    <p>
-        @Messages("fh.ack.what_happens_next_1")
-    </p>
+    </div>
 
-    <p>
-        @Messages("fh.ack.what_happens_next_2")
-    </p>
-
-
-    <h2 class="heading-medium">
-        @Messages("fh.ack.help_using_service")
-    </h2>
-
-    <p>
-        <a href="@Messages("link.guidance_page")">
-            @Messages("fh.ack.guidance_link_text")
-        </a>
-        @Messages("fh.ack.to_find_out")
-    </p>
-
-    <ul class="bullets">
-        <li>
-            @Messages("fh.ack.help_bullet_1")
-        </li>
-        <li>
-            @Messages("fh.ack.help_bullet_2")
-        </li>
-        <li>
-            @Messages("fh.ack.help_bullet_3")
-        </li>
-    </ul>
-
-    <p>
-        <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
-    </p>
 }
