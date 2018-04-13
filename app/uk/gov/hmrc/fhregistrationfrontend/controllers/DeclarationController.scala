@@ -67,7 +67,7 @@ class DeclarationController @Inject()(
       timestamp ← request.session get ProcessingTimestampSessionKey
       processingDate = new DateTime(timestamp.toLong)
       userSummaryInKeyStore = keyStoreService.fetchSummaryForPrint()
-      userSummary = Await.result(userSummaryInKeyStore, 100 milliseconds)
+      userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
       printableSummary ← userSummary
     } yield {
       Ok(acknowledgement_page(processingDate, email, Html(printableSummary)))
