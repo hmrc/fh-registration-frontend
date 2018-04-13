@@ -24,7 +24,7 @@
 @import java.util.Date
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: Option[String], forPrint: Boolean = false, timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -37,25 +37,15 @@
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
 
-  @if(forPrint){
-    <style>
-      .hidden-print, a, footer, .beta-banner, h1, #global-cookie-message {
-        display: none;
-      }
 
+  @showAlert
 
-    </style>
-    <h2>@Messages("printApplication.label") @formatTimestamp(timeStamp)</h2>
-  }else{
-
-    @showAlert
-
-    @PageHeading(
-      PageHeadingParams(
-        heading = Messages("fh.generic.check")
-      )
+  @PageHeading(
+    PageHeadingParams(
+      heading = Messages("fh.generic.check")
     )
-  }
+  )
+
 
   <table class="table-font-xsmall">
     <tbody>

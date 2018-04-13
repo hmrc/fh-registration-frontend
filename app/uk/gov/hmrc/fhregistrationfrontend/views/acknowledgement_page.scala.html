@@ -14,10 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @import org.joda.time.DateTime
+@import scala.concurrent.Future
+@import play.twirl.api.{Html⇒tHtml}
 
 @(date: DateTime, email:String, printableSummary: Html)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
@@ -88,7 +89,12 @@
     </div>
 
     <div class="show-print">
-      @printableSummary
+      <table class="table-font-xsmall">
+        <tbody>
+          @printableSummary
+        </tbody>
+      </table>
+
     </div>
 
     <p>
