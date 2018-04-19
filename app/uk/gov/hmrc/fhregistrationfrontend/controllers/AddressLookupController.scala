@@ -23,7 +23,7 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.http.BadRequestException
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -32,12 +32,12 @@ class AddressLookupController @Inject()(
   addressLookupConnector: AddressLookupConnector
 ) extends FrontendController {
 
-  def addressLookup(postcode: String) = Action.async {
+  def addressLookup(postcode: String, filter: Option[String]) = Action.async {
     implicit request =>
       implicit val writes = Json.format[RecordSet]
       val validPostcodeCharacters = "^[A-z0-9 ]*$"
       if (postcode.matches(validPostcodeCharacters)) {
-        addressLookupConnector.lookup(postcode) map {
+        addressLookupConnector.lookup(postcode, filter) map {
           case AddressLookupErrorResponse(e: BadRequestException) => BadRequest(e.message)
           case AddressLookupErrorResponse(e)                      => BadGateway
           case AddressLookupSuccessResponse(recordSet)            => Ok(writes.writes(recordSet))
