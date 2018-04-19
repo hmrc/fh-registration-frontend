@@ -16,14 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 import play.Logger
-import play.api.{Configuration, Environment}
 import play.api.libs.json.JsValue
+import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -36,15 +35,15 @@ case class AddressLookupSuccessResponse(addressList: RecordSet) extends AddressL
 case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupResponse
 
 @Singleton
-class AddressLookupConnector @Inject() (
-  val http: HttpClient,
-  override val runModeConfiguration: Configuration,
-  environment: Environment
-) extends ServicesConfig {
-
-
-  override protected def mode = environment.mode
+class AddressLookupConnector extends AddressLookupConnect with ServicesConfig {
   val addressLookupUrl: String = baseUrl("address-lookup")
+  val http = WSHttp
+}
+
+trait AddressLookupConnect {
+
+  val addressLookupUrl: String
+  val http: WSHttp
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
@@ -59,5 +58,3 @@ class AddressLookupConnector @Inject() (
     }
   }
 }
-
-

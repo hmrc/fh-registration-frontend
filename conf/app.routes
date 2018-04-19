@@ -14,7 +14,7 @@ GET         /whitelisted                                                        
 
 GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
-GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String)
+GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
 GET         /examples                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.componentExamples
 
