@@ -84,7 +84,7 @@ object Mappings {
   def localDate = tuple(
     "day" -> number(min = 1, max = 31),
     "month" -> number(min = 1, max = 12),
-    "year" -> number(min = 1000, max = 2999)
+    "year" -> number(min = 1800, max = 2999)
   ) verifying ("error.invalid", x ⇒ localDateTimeConstraint(x)) transform (
     x ⇒ localDateTime(x),
     (d: LocalDate) ⇒ (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
