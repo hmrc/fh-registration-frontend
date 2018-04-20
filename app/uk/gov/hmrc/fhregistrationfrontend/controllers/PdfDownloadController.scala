@@ -30,7 +30,7 @@ class PdfDownloadController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds){
 
   def downloadPrintable() = UserAction().async { implicit request ⇒
-    keyStoreService.fetchAndGetEntry().map {
+    keyStoreService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))
       case _ => throw new BadRequestException("no user summary found")

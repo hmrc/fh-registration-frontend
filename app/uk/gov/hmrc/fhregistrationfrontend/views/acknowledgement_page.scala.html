@@ -19,7 +19,7 @@
 
 @import org.joda.time.DateTime
 
-@(email:String)(implicit request: Request[_], messages: Messages)
+@(date: DateTime, email:String)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -34,7 +34,7 @@
 
       <span id="subref" class="h1-heading" style="color : #ffffff ;">
         @Messages("fh.generic.on")
-        @{DateTime.now().toLocalDate().toString("d MMMM yyyy")}
+        @{date.toLocalDate().toString("d MMMM yyyy")}
       </span>
 
     </div>
