@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import javax.inject.Inject
+import java.time.format.DateTimeFormatter
 
-import org.joda.time.DateTime
+import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
@@ -44,8 +45,8 @@ class DeclarationController @Inject()(
   keyStoreService      : KeyStoreService
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
 
-  val EmailSessionKey = "declaration_email"
-  val ProcessingTimestampSessionKey = "declaration_processing_timestamp"
+  val emailSessionKey = "declaration_email"
+  val processingTimestampSessionKey = "declaration_processing_timestamp"
   val formToDes: FormToDes = new FormToDesImpl()
 
   def showDeclaration() = SummaryAction(save4LaterService, messagesApi) { implicit request ⇒
@@ -57,10 +58,12 @@ class DeclarationController @Inject()(
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
+    val dateFormatter = new SimpleDateFormat("dd MMM yyyy")
+    val timeFormatter = new SimpleDateFormat("E MMM d hh:mm:ss z yyyy")
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
-      processingDate = new DateTime(timestamp.toLong)
+      email ← request.session get emailSessionKey
+      timestamp ← request.session get processingTimestampSessionKey
+      processingDate = dateFormatter.format(timeFormatter.parse(timestamp))
     } yield {
       Ok(acknowledgement_page(processingDate, email))
     }
@@ -80,8 +83,8 @@ class DeclarationController @Inject()(
               .map { pdfSaved ⇒
                 Redirect(routes.DeclarationController.showAcknowledgment())
                   .withSession(request.session
-                    + (EmailSessionKey → usersDeclaration.email)
-                    + (ProcessingTimestampSessionKey → response.processingDate.getTime.toString))
+                    + (emailSessionKey → usersDeclaration.email)
+                    + (processingTimestampSessionKey → response.processingDate.toString))
               }
           }
         )

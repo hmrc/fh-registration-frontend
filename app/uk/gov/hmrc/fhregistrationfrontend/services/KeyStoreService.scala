@@ -26,13 +26,13 @@ import scala.concurrent.Future
 @Singleton
 class KeyStoreServiceImpl extends KeyStoreService {
 
-  val SummaryForPrintKey = "fhdds-summary-input"
+  val summaryForPrintKey = "fhdds-summary-input"
 
   private val sessionCache = KeySessionCache
 
-  override def saveSummaryFormPrint(o: String)(implicit hc: HeaderCarrier): Future[_] = sessionCache.cache(SummaryForPrintKey, o)
+  override def saveSummaryFormPrint(o: String)(implicit hc: HeaderCarrier): Future[_] = sessionCache.cache(summaryForPrintKey, o)
   override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]= {
-    sessionCache.fetchAndGetEntry[String](SummaryForPrintKey)
+    sessionCache.fetchAndGetEntry[String](summaryForPrintKey)
   }
 
 }
