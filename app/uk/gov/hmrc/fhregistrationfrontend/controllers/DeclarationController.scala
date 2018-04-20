@@ -58,7 +58,7 @@ class DeclarationController @Inject()(
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
-    val dateFormatter = new SimpleDateFormat("dd MMM yyyy")
+    val dateFormatter = new SimpleDateFormat("dd MMMM yyyy")
     val timeFormatter = new SimpleDateFormat("E MMM d hh:mm:ss z yyyy")
     for {
       email ← request.session get emailSessionKey
