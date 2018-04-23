@@ -34,4 +34,8 @@ object Helpers {
   def formatTimestamp(date: Date): String = {
     new SimpleDateFormat("dd MMMM yyyy HH:mm").format(date)
   }
+
+  def formatDateStamp(date: Date): String = {
+    new SimpleDateFormat("dd MMMM yyyy").format(date)
+  }
 }

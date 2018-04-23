@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config
 @import java.util.Date
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
 
 @(date: Date, email:String)(implicit request: Request[_], messages: Messages)
 
@@ -32,7 +33,7 @@
 
       <span id="subref" class="h1-heading" style="color : #ffffff ;">
         @Messages("fh.generic.on")
-        @date
+        @formatDateStamp(date)
       </span>
 
     </div>
