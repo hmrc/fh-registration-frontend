@@ -34,7 +34,11 @@
   </a>.
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.dateOfIncorporation.title")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -44,7 +48,7 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.dateOfIncorporation.title")
+      heading = title
     )
   )
 
