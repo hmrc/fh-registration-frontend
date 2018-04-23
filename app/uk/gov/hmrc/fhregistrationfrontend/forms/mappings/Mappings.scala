@@ -51,9 +51,9 @@ object Mappings {
   def personTitle: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
   def roleInOrganization: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
 
-  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
+  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,30}$".r)
   def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+‐-]{7,24}$".r)
-  def email: Mapping[String] = nonEmptyText(0, 132) verifying Constraints.emailAddress
+  def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
