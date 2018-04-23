@@ -20,7 +20,7 @@
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @sidebarLinks =  {@statusSidebar()}
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Status", sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
 
   <div class="grid">
     <div>

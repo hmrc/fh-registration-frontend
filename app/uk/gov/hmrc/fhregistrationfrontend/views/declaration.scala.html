@@ -34,7 +34,11 @@
   }
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.declaration.title")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -79,7 +83,7 @@
 
     @PageHeading(
       PageHeadingParams(
-        heading = Messages("fh.declaration.title")
+        heading = title
       )
     )
 

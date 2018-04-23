@@ -20,11 +20,15 @@
 
 @(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
+@title = @{
+  Messages("fh.continue_delete.header")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title) {
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.continue_delete.header")
+      heading = title
     )
   )
 

@@ -34,7 +34,11 @@
   }
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
+@title = @{
+  Messages("fh.generic.check")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
 
   @if(forPrint){
     <style>
@@ -51,7 +55,7 @@
 
     @PageHeading(
       PageHeadingParams(
-        heading = Messages("fh.generic.check")
+        heading = title
       )
     )
   }
