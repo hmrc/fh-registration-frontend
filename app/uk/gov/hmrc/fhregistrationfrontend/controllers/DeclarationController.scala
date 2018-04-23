@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
 
@@ -33,8 +32,10 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
+import play.twirl.api.Html
 
-import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 @Inject
 class DeclarationController @Inject()(
@@ -62,8 +63,11 @@ class DeclarationController @Inject()(
       email ← request.session get emailSessionKey
       timestamp ← request.session get processingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
+      userSummaryInKeyStore = keyStoreService.fetchSummaryForPrint()
+      userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
+      printableSummary ← userSummary
     } yield {
-      Ok(acknowledgement_page(processingDate, email))
+      Ok(acknowledgement_page(processingDate, email, Html(printableSummary)))
     }
   }
 
@@ -75,7 +79,7 @@ class DeclarationController @Inject()(
         sendSubscription(usersDeclaration).fold(
           error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, Some(false))),
           _.flatMap { response ⇒
-            keyStoreService.saveSummaryFormPrint(getSummaryHtml(request, forPrint = true, timeStamp=Some(response.processingDate)).toString())
+            keyStoreService.saveSummaryFormPrint(getSummaryData()(request).toString())
               .map(_ ⇒ true)
               .recover{case _ ⇒ false}
               .map { pdfSaved ⇒
