@@ -14,16 +14,13 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipApplication
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipApplication
-@import play.api.Environment
-@import java.util.Date
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environment: Option[String], forPrint: Boolean = false, timeStamp: Option[Date] = None, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -40,25 +37,13 @@
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
 
-  @if(forPrint){
-    <style>
-      .hidden-print, a, footer, .beta-banner, h1, #global-cookie-message {
-        display: none;
-      }
+  @showAlert
 
-
-    </style>
-    <h2>@Messages("printApplication.label") @formatTimestamp(timeStamp)</h2>
-  }else{
-
-    @showAlert
-
-    @PageHeading(
-      PageHeadingParams(
-        heading = title
-      )
+  @PageHeading(
+    PageHeadingParams(
+      heading = title
     )
-  }
+  )
 
   <table class="table-font-xsmall">
     <tbody>

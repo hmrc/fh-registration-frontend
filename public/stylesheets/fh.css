@@ -91,3 +91,45 @@ tr > td:last-child {
     display: block;
     clear: both;
 }
+
+.show-print {
+    display: none;
+}
+
+.transaction-banner--complete .h1-heading {
+    color: white;
+}
+
+@media print {
+    .hidden-print,
+    #content a,
+    .header-proposition a,
+    .header-proposition ul, .beta-banner, .phase-banner,
+    h1.heading-large {
+        display: none;
+    }
+    h1.transaction-banner__heading {
+        margin-bottom: 0;
+        color: black;
+    }
+    .transaction-banner--complete p {
+        margin-top: 0;
+    }
+    .header__menu__proposition-name, a#proposition-name, .transaction-banner--complete .h1-heading {
+        display: block;
+        color: black;
+        font-weight: bold;
+        font-size: 1em;
+    }
+    th {
+        font-size: 1.5em;
+        text-align: left;
+    }
+    .show-print {
+        display: block;
+    }
+
+    .show-printable.hidden-print {
+        display: none !important;
+    }
+}
