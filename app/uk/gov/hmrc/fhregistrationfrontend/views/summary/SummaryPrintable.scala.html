@@ -1,0 +1,66 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication,SoleProprietorApplication,PartnershipApplication,BusinessEntityApplication}
+
+@(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+
+@{
+  applicationData match {
+    case limitedCompanyApplication: LimitedCompanyApplication ⇒
+      Html(MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress).toString() +
+          ContactPerson(limitedCompanyApplication.contactPerson, bpr).toString() +
+          CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber).toString() +
+          DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation).toString() +
+          TradingName(limitedCompanyApplication.tradingName).toString() +
+          VATRegistrationNumber(limitedCompanyApplication.vatNumber).toString() +
+          CompanyOfficers(limitedCompanyApplication.companyOfficers).toString() +
+          BusinessStatus(limitedCompanyApplication.businessStatus).toString() +
+          ImportingActivities(limitedCompanyApplication.importingActivities).toString() +
+          BusinessCustomers(limitedCompanyApplication.businessCustomers).toString() +
+          OtherStoragePremises(limitedCompanyApplication.otherStoragePremises).toString()
+      )
+
+    case soleProprietorApplication: SoleProprietorApplication ⇒
+      Html(
+        MainBusinessAddress(soleProprietorApplication.mainBusinessAddress).toString() +
+            ContactPerson(soleProprietorApplication.contactPerson, bpr).toString() +
+            NationalInsurance(soleProprietorApplication.nationalInsuranceNumber).toString() +
+            TradingName(soleProprietorApplication.tradingName).toString() +
+            VATRegistrationNumber(soleProprietorApplication.vatNumber).toString() +
+            BusinessStatus(soleProprietorApplication.businessStatus).toString() +
+            ImportingActivities(soleProprietorApplication.importingActivities).toString() +
+            BusinessCustomers(soleProprietorApplication.businessCustomers).toString() +
+            OtherStoragePremises(soleProprietorApplication.otherStoragePremises).toString()
+      )
+
+    case partnershipApplication: PartnershipApplication ⇒
+      Html(
+        MainBusinessAddress(partnershipApplication.mainBusinessAddress).toString() +
+            ContactPerson(partnershipApplication.contactPerson, bpr).toString() +
+            TradingName(partnershipApplication.tradingName).toString() +
+            VATRegistrationNumber(partnershipApplication.vatNumber).toString() +
+            BusinessPartners(partnershipApplication.businessPartners).toString() +
+            BusinessStatus(partnershipApplication.businessStatus).toString() +
+            ImportingActivities(partnershipApplication.importingActivities).toString() +
+            BusinessCustomers(partnershipApplication.businessCustomers).toString() +
+            OtherStoragePremises(partnershipApplication.otherStoragePremises)
+      )
+
+  }
+}
