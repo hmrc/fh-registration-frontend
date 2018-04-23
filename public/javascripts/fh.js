@@ -265,21 +265,26 @@ function init() {
   // because we will have a race condition on submission
   // we need to intercept the submission to post the analytics events
   $('form').on('submit', function (e) {
-    e.preventDefault();
-    var $form = $(this);
-    var eventLabel = $('h1').text();
-    var form = $form[0];
-    var $selectedRadios = $form.find('input:radio:checked');
-    $selectedRadios.each(function (i, option) {
-      ga('send', 'event', 'radio selection', option.value, option.name)
-    });
+    var $pageHeading = $('h1');
+    var $actionField = $('[name="saveAction"]');
+    // we can only report on forms with headings and actions
+    if ($pageHeading.length && $actionField.length) {
+      e.preventDefault();
+      var $form = $(this);
+      var eventLabel = $pageHeading.text();
+      var form = $form[0];
+      var $selectedRadios = $form.find('input:radio:checked');
+      $selectedRadios.each(function (i, option) {
+        ga('send', 'event', 'radio selection', option.value, option.name)
+      });
 
-    var eventAction = $('[name="saveAction"]').val();
-    ga('send', 'event', 'submit', eventAction, eventLabel, {
-      hitCallback: wrapInTimeout(function() {
-        form.submit();
+      var eventAction = $actionField.val();
+      ga('send', 'event', 'submit', eventAction, eventLabel, {
+        hitCallback: wrapInTimeout(function() {
+          form.submit();
+        })
       })
-    })
+    }
   });
 
   if ($('.error-summary-list li a').length) {
