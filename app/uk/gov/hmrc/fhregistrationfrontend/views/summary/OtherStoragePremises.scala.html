@@ -35,20 +35,17 @@
 
         @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
 
-            @SummaryRepeatingHead(heading = Messages("fh.other_storage_premises.each.title",{index+1}), changeLink = Some("otherStoragePremises"), section = {index+1}.toString())
-
-            @SummaryAddress(
-                SummaryAddressParams(
-                    Some(Messages("fh.other_storage_premises.enter.label")),
-                    SummaryAddressBlock(
-                        Line1 = Some(storagePremise.address.addressLine1),
-                        Line2 = storagePremise.address.addressLine2,
-                        Line3 = storagePremise.address.addressLine3,
-                        Line4 = storagePremise.address.addressLine4,
-                        postcode = Some(storagePremise.address.postcode)
-                    ),
-                    None
-                )
+            @SummaryRepeatingAddress(
+              heading = Messages("fh.other_storage_premises.each.title",{index+1}),
+              address = SummaryAddressBlock(
+                Line1 = Some(storagePremise.address.addressLine1),
+                Line2 = storagePremise.address.addressLine2,
+                Line3 = storagePremise.address.addressLine3,
+                Line4 = storagePremise.address.addressLine4,
+                postcode = Some(storagePremise.address.postcode)
+              ),
+              changeLink = Some("otherStoragePremises"),
+              section = {index+1}.toString()
             )
 
             @SummaryRow(
