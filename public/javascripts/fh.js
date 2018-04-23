@@ -263,13 +263,12 @@ function init() {
   });
 
   // because we will have a race condition on submission
-  // we need to intercept the submission to post the analytics event
+  // we need to intercept the submission to post the analytics events
   $('form').on('submit', function (e) {
     e.preventDefault();
     var $form = $(this);
     var eventLabel = $('h1').text();
     var form = $form[0];
-    // if we have a single question we can send the selected option
     var $selectedRadios = $form.find('input:radio:checked');
     $selectedRadios.each(function (i, option) {
       ga('send', 'event', 'radio selection', option.value, option.name)
@@ -310,7 +309,6 @@ function init() {
     var eventLabel = $('.transaction-banner--complete').find('h1').text();
     ga('send', 'event', 'transaction complete', 'report', eventLabel)
   }
-
 
 }
 
