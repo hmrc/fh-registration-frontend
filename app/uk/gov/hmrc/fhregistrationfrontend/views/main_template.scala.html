@@ -40,9 +40,13 @@
     @pageScripts
 }
 
+@pageTitle = @{
+  title + " - " + Messages("app.name") + " - " + "GOV.UK"
+}
+
 @{
   govuk_wrapper(appConfig = uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig.config,
-    title = Messages("app.name"),
+    title = pageTitle,
     mainClass = mainClass,
     bodyClasses = bodyClasses,
     sidebar = sidebar,

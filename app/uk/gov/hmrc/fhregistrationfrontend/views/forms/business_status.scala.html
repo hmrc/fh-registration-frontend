@@ -27,7 +27,11 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.business_status.title")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -37,7 +41,7 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.business_status.title")
+      heading = title
     )
   )
 
