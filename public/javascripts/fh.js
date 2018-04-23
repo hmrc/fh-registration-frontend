@@ -267,16 +267,16 @@ function init() {
   $('form').on('submit', function (e) {
     e.preventDefault();
     var $form = $(this);
-    var eventCategory = $('h1').text();
+    var eventLabel = $('h1').text();
     var form = $form[0];
     // if we have a single question we can send the selected option
     var $selectedRadios = $form.find('input:radio:checked');
     $selectedRadios.each(function (i, option) {
-      ga('send', 'event', 'radio selection', option.name, option.value)
+      ga('send', 'event', 'radio selection', option.value, option.name)
     });
 
     var eventAction = $('[name="saveAction"]').val();
-    ga('send', 'event', eventAction, eventCategory, eventAction, {
+    ga('send', 'event', 'submit', eventAction, eventLabel, {
       hitCallback: wrapInTimeout(function() {
         form.submit();
       })
@@ -285,9 +285,9 @@ function init() {
 
   if ($('.error-summary-list li a').length) {
     $('.error-summary-list li a').each(function(i, item) {
-      var eventValue = $(item).text();
+      var eventAction = $(item).text();
       var eventLabel = $('h1').text();
-      ga('send', 'event', 'error', eventLabel, eventValue)
+      ga('send', 'event', 'error', eventAction, eventLabel)
     })
   }
 
