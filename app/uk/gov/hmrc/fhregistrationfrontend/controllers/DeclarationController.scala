@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
 
 import javax.inject.Inject
 import play.api.libs.json.Json
@@ -57,12 +58,10 @@ class DeclarationController @Inject()(
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
-    val dateFormatter = new SimpleDateFormat("dd MMMM yyyy")
-    val timeFormatter = new SimpleDateFormat("E MMM d hh:mm:ss z yyyy")
     for {
       email ← request.session get emailSessionKey
       timestamp ← request.session get processingTimestampSessionKey
-      processingDate = dateFormatter.format(timeFormatter.parse(timestamp))
+      processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(acknowledgement_page(processingDate, email))
     }
@@ -83,7 +82,7 @@ class DeclarationController @Inject()(
                 Redirect(routes.DeclarationController.showAcknowledgment())
                   .withSession(request.session
                     + (emailSessionKey → usersDeclaration.email)
-                    + (processingTimestampSessionKey → response.processingDate.toString))
+                    + (processingTimestampSessionKey → response.processingDate.getTime.toString))
               }
           }
         )
