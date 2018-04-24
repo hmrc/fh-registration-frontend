@@ -46,20 +46,20 @@
   }
 }
 
-@legendClass = @{
-  if(params.hiddenLegend) {
-    "hidden"
+@legend = {
+  <legend class="form-label-bold">
+  @if(params.legendAsHeading) {
+    <h1>@params.yesNoLabel</h1>
   } else {
-    "form-label-bold"
+    @params.yesNoLabel
   }
+  </legend>
 }
 
 <div class="@{formGroupClass}" id="@{fieldNamePure}_group">
     <fieldset class="inline">
 
-        <legend class="@{legendClass}">
-            @params.yesNoLabel
-        </legend>
+        @legend
 
         @if(params.yesNoHintText.nonEmpty){
             <span class="form-hint">@params.yesNoHintText</span>

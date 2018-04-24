@@ -19,7 +19,13 @@
 @legend = {
     @params.legend match {
         case Some(legend) => {
-            <legend class="form-label-bold">@legend</legend>
+          <legend class="form-label-bold">
+          @if(params.legendAsHeading) {
+            <h1>@legend</h1>
+          } else {
+            @legend
+          }
+          </legend>
         }
         case _ => {}
     }

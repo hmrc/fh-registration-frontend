@@ -47,12 +47,6 @@
 
   @error_box(importingActivitiesForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -62,6 +56,8 @@
         name = Some(hasEoriKey),
         hintHtml = Some(helpHtml),
         hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
+        legend = Some(title),
+        legendAsHeading = true,
         error = Some(Messages("fh.hasEori.error.required")),
         value = importingActivitiesForm(hasEoriKey).value,
         radios = List(

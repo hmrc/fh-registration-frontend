@@ -40,12 +40,6 @@
 
   @error_box(vatNumberForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -55,14 +49,14 @@
         name = hasVatNumberKey,
         value = vatNumberForm(vatNumberKey).value,
         yesNoValue = vatNumberForm(hasVatNumberKey).value,
-        yesNoLabel = Messages("fh.vatNumber.confirm.label"),
+        yesNoLabel = title,
         yesNoError = Messages("fh.vatNumber_yesNo.error.required"),
         valueLabel = Messages("fh.vatNumber.label"),
         valueError = Messages("fh.vatNumber_value." + getError(vatNumberForm(vatNumberKey).error)),
         valueHintText = Some(Messages("fh.vatNumber.hintText")),
         hasValueError = vatNumberForm(vatNumberKey).hasErrors,
         hasErrors = vatNumberForm(hasVatNumberKey).hasErrors,
-        hiddenLegend = true
+        legendAsHeading = true
       )
     )
 

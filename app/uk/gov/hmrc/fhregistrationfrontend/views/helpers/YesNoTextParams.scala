@@ -56,6 +56,6 @@ case class YesNoTextParams(
   noInputError   : Option[String] = None,
   hasNoValueError: Boolean = false,
   hasErrors      : Boolean = false,
-  hiddenLegend   : Boolean = false
+  legendAsHeading   : Boolean = false
 )
 
