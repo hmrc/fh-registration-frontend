@@ -42,7 +42,8 @@ case class TextInputParams(
   hasErrors: Boolean = false,
   isNumber: Boolean = false,
   isEmail: Boolean = false,
-  hiddenLabel: Boolean = false
+  hiddenLabel: Boolean = false,
+  labelAsHeading: Boolean = false
 )
 
 
