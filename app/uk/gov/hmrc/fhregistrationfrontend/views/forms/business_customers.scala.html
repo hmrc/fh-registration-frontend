@@ -40,12 +40,6 @@
 
   @error_box(businessCustomersForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -53,6 +47,8 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(numberOfCustomersKey),
+        legend = Some(title),
+        legendAsHeading = true,
         hintText = Some(Messages("fh.business_customers.hint_text")),
         inline = false,
         required = true,
