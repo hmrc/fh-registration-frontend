@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.tradingName.title")
+  Messages("fh.tradingName.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -60,7 +60,8 @@
         valueLabel = Messages("fh.tradingName.label"),
         valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
         hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
-        hasValueError= tradingNameForm(tradingNameKey).hasErrors
+        hasValueError= tradingNameForm(tradingNameKey).hasErrors,
+        hiddenLegend = true
       )
     )
 

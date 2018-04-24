@@ -46,10 +46,18 @@
   }
 }
 
+@legendClass = @{
+  if(params.hiddenLegend) {
+    "hidden"
+  } else {
+    "form-label-bold"
+  }
+}
+
 <div class="@{formGroupClass}" id="@{fieldNamePure}_group">
     <fieldset class="inline">
 
-        <legend class="form-label-bold">
+        <legend class="@{legendClass}">
             @params.yesNoLabel
         </legend>
 

@@ -36,7 +36,7 @@
 }
 
 @title = @{
-  Messages("fh.importing_activities.title")
+  Messages("fh.importing_activities.eori.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -60,7 +60,6 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(hasEoriKey),
-        legend = Some(Messages("fh.importing_activities.eori.confirm.label")),
         hintHtml = Some(helpHtml),
         hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
         error = Some(Messages("fh.hasEori.error.required")),

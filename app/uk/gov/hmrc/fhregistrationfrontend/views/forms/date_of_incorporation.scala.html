@@ -35,7 +35,7 @@
 }
 
 @title = @{
-  Messages("fh.dateOfIncorporation.title")
+  Messages("fh.dateOfIncorporation.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -60,6 +60,7 @@
       DateTupleParams(
         name = dateOfIncorporationKey,
         label = Messages("fh.dateOfIncorporation.label"),
+        hiddenLabel = true,
         error = Messages("fh.dateOfIncorporation.error.invalid"),
         hasErrors = dateOfIncorporationForm.hasErrors,
         hintText = Some(Messages("fh.dateOfIncorporation.hint_text")),

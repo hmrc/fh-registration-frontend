@@ -216,9 +216,9 @@ fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=En
 #===========================================================
 fh.trading_name.title=Trading name
 fh.tradingName.title=Trading name
-fh.tradingName.confirm.label=Does the business use a trading name?
+fh.tradingName.confirm.label=Does the business use a trading name that is different from its registered one?
 fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one? 
-fh.trading_name.confirm.label=Does the business use a trading name?
+fh.trading_name.confirm.label=Does the business use a trading name that is different from its registered one?
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
 fh.tradingName.label=Enter the trading name
 fh.tradingName_value.error.required=Enter the trading name
@@ -365,7 +365,7 @@ fh.declaration.hasAmendments.error.linkText=View or change your application
 #===========================================================
 fh.company_registration_number.title=Company registration number
 fh.companyRegistrationNumber.title=Company registration number
-fh.companyRegistrationNumber.label=Company registration number
+fh.companyRegistrationNumber.label=What is the business''s company registration number?
 fh.companyRegistrationNumber.hint_text=For example, 12345678 or SC123456
 fh.companyRegistrationNumber.error.required=Enter the company registration number
 fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
@@ -375,9 +375,9 @@ fh.companyRegistrationNumber.details_companies_house=search the Companies House 
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
-fh.date_of_incorporation.title=Company''s date of incorporation
+fh.date_of_incorporation.title=Date of incorporation
 fh.dateOfIncorporation.title=Date of incorporation
-fh.dateOfIncorporation.label=Date of incorporation
+fh.dateOfIncorporation.label=What is the business''s date of incorporation?
 fh.dateOfIncorporation.hint_text=For example, 31 07 2017
 fh.dateOfIncorporation.empty.error=Enter the date of incorporation
 fh.dateOfIncorporation.error.invalid=Enter a valid date for the date of incorporation

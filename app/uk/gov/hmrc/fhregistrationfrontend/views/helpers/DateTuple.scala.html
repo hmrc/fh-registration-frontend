@@ -54,10 +54,18 @@
   }
 }
 
+@labelClass = @{
+  if(params.hiddenLabel) {
+    "hidden"
+  } else {
+    "form-label-bold"
+  }
+}
+
 <fieldset class="@{formGroupClass}" id="@{fieldName}_container">
 
     <legend>
-        <span class="form-label-bold">
+        <span class="@{labelClass}">
           @params.label
         </span>
         @if(params.hintText.nonEmpty){

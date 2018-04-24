@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.national_insurance_number.title")
+  Messages("fh.national_insurance_number.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -61,7 +61,8 @@
         valueError = Messages("fh.nationalInsuranceNumber_value." + getError(nationalInsuranceNumberForm(nationalInsuranceNumberKey).error)),
         valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
         hasValueError = nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors,
-        hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors
+        hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors,
+        hiddenLegend = true
       )
     )
 

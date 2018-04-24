@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.business_customers.title")
+  Messages("fh.business_customers.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -53,7 +53,6 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(numberOfCustomersKey),
-        legend = Some(Messages("fh.business_customers.label")),
         hintText = Some(Messages("fh.business_customers.hint_text")),
         inline = false,
         required = true,

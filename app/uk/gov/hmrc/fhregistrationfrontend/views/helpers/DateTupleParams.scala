@@ -26,5 +26,6 @@ case class DateTupleParams(
   day      : Option[String] = None,
   month    : Option[String] = None,
   year     : Option[String] = None,
-  hasErrors: Boolean = false
+  hasErrors: Boolean = false,
+  hiddenLabel: Boolean = false
 )

@@ -55,6 +55,7 @@ case class YesNoTextParams(
   noInputHintText: Option[String] = None,
   noInputError   : Option[String] = None,
   hasNoValueError: Boolean = false,
-  hasErrors      : Boolean = false
+  hasErrors      : Boolean = false,
+  hiddenLegend   : Boolean = false
 )
 

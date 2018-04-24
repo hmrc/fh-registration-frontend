@@ -30,7 +30,7 @@
 }
 
 @title = @{
-  Messages("fh.other_storage_premises.title")
+  Messages("fh.other_storage_premises.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -65,7 +65,6 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(otherStoragePremisesKey),
-        legend = Some(Messages("fh.other_storage_premises.confirm.label")),
         hasErrors = hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors,
         error = Some(Messages("fh.other_storage_premises.confirm.error")),
         value = hasOtherStoragePremisesForm(otherStoragePremisesKey).value,

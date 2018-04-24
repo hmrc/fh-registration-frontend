@@ -36,7 +36,7 @@
 }
 
 @title = @{
-  Messages("fh.companyRegistrationNumber.title")
+  Messages("fh.companyRegistrationNumber.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -64,7 +64,8 @@
         value = companyRegistrationNumberForm(companyRegistrationNumberKey).value,
         error = Messages("fh.companyRegistrationNumber." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
         hasErrors = companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors,
-        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text"))
+        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text")),
+        hiddenLabel = true
       )
     )
 

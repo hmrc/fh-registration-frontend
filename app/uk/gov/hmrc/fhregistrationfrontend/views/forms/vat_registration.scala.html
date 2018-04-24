@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.vatNumber.title")
+  Messages("fh.vatNumber.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -61,7 +61,8 @@
         valueError = Messages("fh.vatNumber_value." + getError(vatNumberForm(vatNumberKey).error)),
         valueHintText = Some(Messages("fh.vatNumber.hintText")),
         hasValueError = vatNumberForm(vatNumberKey).hasErrors,
-        hasErrors = vatNumberForm(hasVatNumberKey).hasErrors
+        hasErrors = vatNumberForm(hasVatNumberKey).hasErrors,
+        hiddenLegend = true
       )
     )
 
