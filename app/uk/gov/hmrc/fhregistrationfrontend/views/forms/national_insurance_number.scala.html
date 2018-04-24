@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.national_insurance_number.title")
+  Messages("fh.national_insurance_number.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -40,12 +40,6 @@
 
   @error_box(nationalInsuranceNumberForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("nationalInsuranceNumber"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -55,13 +49,14 @@
         name = hasNationalInsuranceNumberKey,
         value = nationalInsuranceNumberForm(nationalInsuranceNumberKey).value,
         yesNoValue = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).value,
-        yesNoLabel = Messages("fh.national_insurance_number.confirm.label"),
+        yesNoLabel = title,
         yesNoError = Messages("fh.nationalInsuranceNumber_yesNo.error.required"),
         valueLabel = Messages("fh.national_insurance_number.label"),
         valueError = Messages("fh.nationalInsuranceNumber_value." + getError(nationalInsuranceNumberForm(nationalInsuranceNumberKey).error)),
         valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
         hasValueError = nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors,
-        hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors
+        hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors,
+        legendAsHeading = true
       )
     )
 

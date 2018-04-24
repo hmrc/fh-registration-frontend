@@ -28,7 +28,7 @@
 }
 
 @title = @{
-  Messages("fh.business_status.title")
+  Messages("fh.business_status.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -39,12 +39,6 @@
 
   @error_box(businessStatusForm, dateKey=s"$proposedStartDateKey")
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -52,7 +46,8 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(isNewFulfilmentBusinessKey),
-        legend = Some(Messages("fh.business_status.label")),
+        legend = Some(title),
+        legendAsHeading = true,
         value = businessStatusForm(isNewFulfilmentBusinessKey).value,
         hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
         error = Some(Messages("fh.isNewFulfilmentBusiness.error.required")),

@@ -29,7 +29,7 @@
 }
 
 @title = @{
-  Messages("fh.tradingName.title")
+  Messages("fh.tradingName.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -40,12 +40,6 @@
 
   @error_box(tradingNameForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -55,12 +49,13 @@
         name = hasTradingNameKey,
         value = tradingNameForm(tradingNameKey).value,
         yesNoValue = tradingNameForm(hasTradingNameKey).value,
-        yesNoLabel = Messages("fh.trading_name.confirm.label"),
+        yesNoLabel = title,
         yesNoError = Messages("fh.tradingName_yesNo.error.required"),
         valueLabel = Messages("fh.tradingName.label"),
         valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
         hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
-        hasValueError= tradingNameForm(tradingNameKey).hasErrors
+        hasValueError= tradingNameForm(tradingNameKey).hasErrors,
+        legendAsHeading = true
       )
     )
 

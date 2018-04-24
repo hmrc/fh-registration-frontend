@@ -36,7 +36,7 @@
 }
 
 @title = @{
-  Messages("fh.importing_activities.title")
+  Messages("fh.importing_activities.eori.confirm.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -47,12 +47,6 @@
 
   @error_box(importingActivitiesForm)
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -60,9 +54,10 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(hasEoriKey),
-        legend = Some(Messages("fh.importing_activities.eori.confirm.label")),
         hintHtml = Some(helpHtml),
         hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
+        legend = Some(title),
+        legendAsHeading = true,
         error = Some(Messages("fh.hasEori.error.required")),
         value = importingActivitiesForm(hasEoriKey).value,
         radios = List(

@@ -107,13 +107,13 @@
       )
     )
 
-    <h3 class="small-heading">@{
+    <h2 class="small-heading">@{
       s"${Messages("fh.declaration.has_gg_email")} "
     }
       <span><strong>@{
         s"${ggEmail.getOrElse("")}"
       }</strong></span>
-    </h3>
+    </h2>
 
     @if(ggEmail.isEmpty) {
 

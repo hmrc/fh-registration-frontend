@@ -41,7 +41,9 @@ case class TextInputParams(
   error: String,
   hasErrors: Boolean = false,
   isNumber: Boolean = false,
-  isEmail: Boolean = false
+  isEmail: Boolean = false,
+  hiddenLabel: Boolean = false,
+  labelAsHeading: Boolean = false
 )
 
 

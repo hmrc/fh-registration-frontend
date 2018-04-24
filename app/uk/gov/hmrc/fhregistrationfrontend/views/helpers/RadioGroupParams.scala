@@ -23,6 +23,7 @@ case class RadioGroupParams(
   radios: List[RadioParams],
   inline: Boolean = true,
   legend: Option[String] = None,
+  legendAsHeading: Boolean = false,
   legendSize: Option[String] = None,
   required: Boolean = false,
   error: Option[String] = None,

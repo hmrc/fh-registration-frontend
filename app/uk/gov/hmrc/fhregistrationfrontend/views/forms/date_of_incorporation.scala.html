@@ -35,7 +35,7 @@
 }
 
 @title = @{
-  Messages("fh.dateOfIncorporation.title")
+  Messages("fh.dateOfIncorporation.label")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -46,12 +46,6 @@
 
   @error_box(dateOfIncorporationForm, dateKey=s"$dateOfIncorporationKey")
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
@@ -59,7 +53,8 @@
     @DateTuple(
       DateTupleParams(
         name = dateOfIncorporationKey,
-        label = Messages("fh.dateOfIncorporation.label"),
+        label = title,
+        legendAsHeading = true,
         error = Messages("fh.dateOfIncorporation.error.invalid"),
         hasErrors = dateOfIncorporationForm.hasErrors,
         hintText = Some(Messages("fh.dateOfIncorporation.hint_text")),
