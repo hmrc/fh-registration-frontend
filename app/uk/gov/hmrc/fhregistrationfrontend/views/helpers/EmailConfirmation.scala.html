@@ -61,7 +61,7 @@
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
 
-    class="form-control"
+    class="@{inputClass}"
     id="@{s"$fieldName.email"}"
     name="@{s"$fieldName.email"}"
         @if(params.value.nonEmpty){value="@{params.value}"}>
