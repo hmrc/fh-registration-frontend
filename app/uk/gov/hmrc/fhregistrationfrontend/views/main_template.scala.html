@@ -42,9 +42,13 @@
     @pageScripts
 }
 
+@pageTitle = @{
+  title + " - " + Messages("app.name") + " - " + "GOV.UK"
+}
+
 @{
   govuk_wrapper(
-    title = Messages("app.name"),
+    title = pageTitle,
     mainClass = mainClass,
     bodyClasses = bodyClasses,
     sidebar = sidebar,

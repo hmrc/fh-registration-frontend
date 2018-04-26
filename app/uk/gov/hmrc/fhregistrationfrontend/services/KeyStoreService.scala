@@ -45,11 +45,11 @@ class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache) extends KeyStor
 
   override def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] =
     sessionCache.fetchAndGetEntry[WithdrawalReason](WithdrawalReasonKey)
+
 }
 
 @ImplementedBy(classOf[KeyStoreServiceImpl])
 trait KeyStoreService {
-
   def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_]
   def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]
 

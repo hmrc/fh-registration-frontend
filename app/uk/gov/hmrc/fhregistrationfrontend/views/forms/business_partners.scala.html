@@ -65,8 +65,11 @@
   }
 }
 
+@title = @{
+  Messages("fh.business_partners.title", section)
+}
 
-@main_template(scriptElem = Some(pageScripts)) {
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -76,7 +79,7 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.business_partners.title", section)
+      heading = title
     )
   )
 

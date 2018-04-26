@@ -22,7 +22,7 @@ class SummaryControllerIntegrationSpec
       }
     }
 
-    "Show the not found page when the user has not fulfilled all the pages" in {
+    "Show the bad request page when the user has not fulfilled all the pages" in {
 
       commonPrecondition
 
@@ -30,7 +30,7 @@ class SummaryControllerIntegrationSpec
         val result = client.url(s"$baseUrl/summary").get()
 
         whenReady(result) { res ⇒
-          res.status mustBe 404
+          res.status mustBe 400
         }
 
       }

@@ -39,14 +39,30 @@
   }
 }
 
+@labelClass = @{
+  if(params.hiddenLabel) {
+    "hidden"
+  } else {
+    "form-label"
+  }
+}
+
+@label = @{
+  if(params.labelAsHeading) {
+    <h1>{params.label}</h1>
+  } else {
+    params.label
+  }
+}
+
 @nestedClass = @{
   if(params.hiddenNested){" panel js-hidden"} else {""}
 }
 
 <div class="@{formGroupClass}@{nestedClass}" id="@{fieldName}_container">
 
-    <label class="form-label" for="@{fieldName}">
-        @params.label
+    <label class="@{labelClass}" for="@{fieldName}">
+        @label
     </label>
 
     @if(params.hintText.nonEmpty){

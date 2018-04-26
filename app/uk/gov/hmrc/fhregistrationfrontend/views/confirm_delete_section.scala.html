@@ -28,7 +28,11 @@
   @Messages(s"fh.$page.each.title", section)
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.delete_confirmation_section.delete", sectionName)
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, scriptElem = Some(pageScripts)) {
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   <p class="js-show">
@@ -41,7 +45,7 @@
 
     @helper.CSRF.formField
 
-    <h1>@Messages("fh.delete_confirmation_section.delete", sectionName)</h1>
+    <h1>@title</h1>
 
     <span class="form-hint">@sectionName will be removed from your application, use the back link if you would prefer to edit the details instead.</span>
 

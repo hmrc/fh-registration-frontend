@@ -62,7 +62,11 @@
   }
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.other_storage_premises.title")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
   @Back(navigation)
@@ -71,7 +75,7 @@
 
   @PageHeading(
     PageHeadingParams(
-      heading = Messages("fh.other_storage_premises.title")
+      heading = title
     )
   )
 

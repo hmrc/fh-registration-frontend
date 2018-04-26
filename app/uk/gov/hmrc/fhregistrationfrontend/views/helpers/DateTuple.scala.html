@@ -54,16 +54,23 @@
   }
 }
 
+@legend = {
+  <legend class="form-label-bold">
+  @if(params.legendAsHeading) {
+    <h1>@params.label</h1>
+  } else {
+    @params.label
+  }
+  </legend>
+}
+
 <fieldset class="@{formGroupClass}" id="@{fieldName}_container">
 
-    <legend>
-        <span class="form-label-bold">
-          @params.label
-        </span>
-        @if(params.hintText.nonEmpty){
-        <span class="form-hint">@params.hintText</span>
-        }
-    </legend>
+    @legend
+
+    @if(params.hintText.nonEmpty){
+      <span class="form-hint">@params.hintText</span>
+    }
 
     @if(params.hasErrors){
         <span class="error-message" id="@{params.name}-inline-error">

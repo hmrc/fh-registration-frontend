@@ -25,6 +25,13 @@ import play.api.mvc.{Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
+import java.util.Date
+
+import javax.inject.Inject
+import play.api.libs.json.Json
+import play.api.mvc.{Result, Results}
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journeys, PageDataLoader}
@@ -33,6 +40,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
+import play.twirl.api.Html
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -47,8 +55,9 @@ class DeclarationController @Inject()(
   actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
 
-  val EmailSessionKey = "declaration_email"
-  val ProcessingTimestampSessionKey = "declaration_processing_timestamp"
+
+  val emailSessionKey = "declaration_email"
+  val processingTimestampSessionKey = "declaration_processing_timestamp"
   val formToDes: FormToDes = new FormToDesImpl()
 
   import actions._
@@ -63,9 +72,10 @@ class DeclarationController @Inject()(
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
-      processingDate = new DateTime(timestamp.toLong)
+
+      email ← request.session get emailSessionKey
+      timestamp ← request.session get processingTimestampSessionKey
+      processingDate = new Date(timestamp.toLong)
       userSummaryInKeyStore = keyStoreService.fetchSummaryForPrint()
       userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
       printableSummary ← userSummary
@@ -88,8 +98,9 @@ class DeclarationController @Inject()(
               .map { pdfSaved ⇒
                 Redirect(routes.DeclarationController.showAcknowledgment())
                   .withSession(request.session
-                    + (EmailSessionKey → usersDeclaration.email)
-                    + (ProcessingTimestampSessionKey → response.processingDate.getTime.toString))
+
+                    + (emailSessionKey → usersDeclaration.email)
+                    + (processingTimestampSessionKey → response.processingDate.getTime.toString))
               }
           }
         )
@@ -156,9 +167,6 @@ class DeclarationController @Inject()(
       )
     }
   }
-
-
-
 
   private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration, pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) = {
     request.businessType match {

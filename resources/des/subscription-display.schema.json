@@ -98,10 +98,6 @@
           "$ref": "#/definitions/GroupMemberDetailType"
         }
       },
-      "required": [
-        "creatingFHDDSGroup",
-        "confirmationByRepresentative"
-      ],
       "additionalProperties": false
     },
     "GroupMemberDetailType": {
@@ -352,7 +348,6 @@
           "required": [
             "doesEORIExist",
             "numberOfCustomers",
-            "premises",
             "numberOfpremises"
           ],
           "additionalProperties": false
@@ -899,11 +894,11 @@
       "properties": {
         "EORIVat": {
           "type": "string",
-          "pattern": "^[A-Z0-9 -]{1,15}$"
+          "maxLength": 15
         },
         "EORINonVat": {
           "type": "string",
-          "pattern": "^[A-Z0-9 -]{1,15}$"
+          "maxLength": 15
         },
         "goodsImportedOutEORI": {
           "type": "boolean"

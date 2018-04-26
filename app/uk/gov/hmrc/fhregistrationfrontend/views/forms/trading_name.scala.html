@@ -29,19 +29,17 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.tradingName.confirm.label")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @Back(navigation)
 
   @error_box(tradingNameForm)
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = Messages("fh.tradingName.title")
-    )
-  )
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName"), 'novalidate -> "novalidate") {
 
@@ -52,12 +50,13 @@
         name = hasTradingNameKey,
         value = tradingNameForm(tradingNameKey).value,
         yesNoValue = tradingNameForm(hasTradingNameKey).value,
-        yesNoLabel = Messages("fh.trading_name.confirm.label"),
+        yesNoLabel = title,
         yesNoError = Messages("fh.tradingName_yesNo.error.required"),
         valueLabel = Messages("fh.tradingName.label"),
         valueError = Messages("fh.tradingName_value." + getError(tradingNameForm(tradingNameKey).error)),
         hasErrors = tradingNameForm(hasTradingNameKey).hasErrors,
-        hasValueError= tradingNameForm(tradingNameKey).hasErrors
+        hasValueError= tradingNameForm(tradingNameKey).hasErrors,
+        legendAsHeading = true
       )
     )
 

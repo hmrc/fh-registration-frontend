@@ -21,11 +21,15 @@
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(pageScripts = Some(scripts)) {
+@title = @{
+  Messages("fh.has_saved")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, pageScripts = Some(scripts)) {
 
   <div class="transaction-banner--complete">
     <h1 class="transaction-banner__heading">
-      @Messages("fh.has_saved")
+      @title
     </h1>
     <p>
     @Messages("fh.held_until")
