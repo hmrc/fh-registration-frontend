@@ -36,19 +36,17 @@
   </a>.
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.companyRegistrationNumber.label")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @Back(navigation)
 
   @error_box(companyRegistrationNumberForm)
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = Messages("fh.companyRegistrationNumber.title")
-    )
-  )
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey), 'novalidate -> "novalidate") {
 
@@ -57,11 +55,12 @@
     @TextInput(
       TextInputParams(
         name = companyRegistrationNumberKey,
-        label = Messages("fh.companyRegistrationNumber.label"),
+        label = title,
         value = companyRegistrationNumberForm(companyRegistrationNumberKey).value,
         error = Messages("fh.companyRegistrationNumber." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
         hasErrors = companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors,
-        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text"))
+        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text")),
+        labelAsHeading = true
       )
     )
 

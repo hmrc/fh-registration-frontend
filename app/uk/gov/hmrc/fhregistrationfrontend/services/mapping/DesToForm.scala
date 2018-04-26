@@ -124,7 +124,7 @@ class DesToFormImpl extends DesToForm {
 
   def otherStoragePremises(allOtherInformation: des.AllOtherInformation) = OtherStoragePremises(
     allOtherInformation.numberOfpremises != "0",
-    ListWithTrackedChanges fromValues (allOtherInformation.premises map premises)
+    ListWithTrackedChanges fromValues (allOtherInformation.premises getOrElse List.empty map premises)
   )
 
   def premises(premise: des.Premises): StoragePremise = StoragePremise(

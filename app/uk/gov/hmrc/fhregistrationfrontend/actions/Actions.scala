@@ -20,11 +20,12 @@ import javax.inject.Inject
 
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
+import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 class Actions @Inject() (
-  externalUrls: ExternalUrls
+  externalUrls: ExternalUrls,
+  fhddsConnector: FhddsConnector
 )(implicit val authConnector: AuthConnector,
   save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler) {
@@ -36,6 +37,7 @@ class Actions @Inject() (
   def noEnrolmentCheckAction = userAction andThen new NoEnrolmentCheckAction
   def journeyAction = userAction andThen noEnrolmentCheckAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
+  def continueWithBprAction = userAction andThen new ContinueWithBprAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)

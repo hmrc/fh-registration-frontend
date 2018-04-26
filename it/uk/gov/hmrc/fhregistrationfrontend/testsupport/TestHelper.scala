@@ -17,6 +17,7 @@ trait TestHelper
       .businessCustomerFrontend.hasBusinessCustomerRecord
       .save4later.businessRecordHasSaved()
       .save4later.getNoneData()
+      .fhddsBackend.hasNoEnrolmentProgress()
   }
 
   def withdrawalPrecondition = {

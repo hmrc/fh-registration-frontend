@@ -19,11 +19,14 @@
 @legend = {
     @params.legend match {
         case Some(legend) => {
-          @params.legendSize.filter(_ == "H1").map {_ =>
-            <legend><h1 class="heading-large">@legend</h1></legend>
-          }.getOrElse {
-            <legend class="@legendClass">@legend</legend>
+
+          <legend class="form-label-bold">
+          @if(params.legendAsHeading) {
+            <h1>@legend</h1>
+          } else {
+            @legend
           }
+          </legend>
         }
         case _ => {}
     }

@@ -240,62 +240,80 @@ function init() {
 
   // Google Analytics event reporting, using template:
   // ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject])
+  // wrapInTimeout function to ensure forms get submitted when GA fails to respond
+  function wrapInTimeout(callback, optionalTime) {
+    var called = false;
+    function fn() {
+      if (!called) {
+        called = true;
+        callback();
+      }
+    }
+    setTimeout(fn, optionalTime || 1000);
+    return fn;
+  }
 
   $('a[target="_blank"]').click(function() {
     ga('send', 'event', 'external link', 'click', this.innerText)
   });
 
-  $('form').on('click', 'input:radio', function() {
-    var question = $(this).parents('fieldset').find('legend').text() || $('h1').text()
-    ga('send', 'event', 'radio selection', 'click', question, this.value);
+  $('summary span.summary').click(function() {
+    var eventLabel = $(this).text();
+    ga('send', 'event', 'help', 'click', eventLabel);
   });
 
-  $('button:submit').click(function() {
-    var eventLabel = $('h1').text();
-    // TODO: consider how this can work with locales
-    var eventAction = eventLabel === 'Declaration' ? 'application submission' : 'section submission';
-    ga('send', 'event', eventAction, 'click', eventLabel)
+  // because we will have a race condition on submission
+  // we need to intercept the submission to post the analytics events
+  $('form').on('submit', function (e) {
+    var $pageHeading = $('h1');
+    var $actionField = $('[name="saveAction"]');
+    // we can only report on forms with headings and actions
+    if ($pageHeading.length && $actionField.length) {
+      e.preventDefault();
+      var $form = $(this);
+      var eventLabel = $pageHeading.text();
+      var form = $form[0];
+      var $selectedRadios = $form.find('input:radio:checked');
+      $selectedRadios.each(function (i, option) {
+        ga('send', 'event', 'radio selection', option.value, option.name)
+      });
+
+      var eventAction = $actionField.val();
+      ga('send', 'event', 'submit', eventAction, eventLabel, {
+        hitCallback: wrapInTimeout(function() {
+          form.submit();
+        })
+      })
+    }
   });
-
-  $('form').on('focus', '.lookup-results-fieldset', function () {
-    var eventLabel = $(this).find('legend').text();
-    ga('send', 'event', 'postcode lookup', 'results', eventLabel)
-  })
-
 
   if ($('.error-summary-list li a').length) {
     $('.error-summary-list li a').each(function(i, item) {
-      var eventValue = $(item).text()
-      var eventLabel = $('h1').text()
-      ga('send', 'event', 'validation error', 'report', eventLabel, eventValue)
+      var eventAction = $(item).text();
+      var eventLabel = $('h1').text();
+      ga('send', 'event', 'error', eventAction, eventLabel)
     })
   }
 
   $('a.address-lookup').click(function() {
     var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
     ga('send', 'event', 'postcode lookup', 'click', eventLabel)
-  })
+  });
 
   $('a.manual-address-mode').click(function() {
     var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
     ga('send', 'event', 'manual address preference', 'click', eventLabel)
-  })
+  });
 
   $('a.lookup-address-mode').click(function() {
     var eventLabel = $(this).parents('.address-manual-container').siblings('legend').text();
     ga('send', 'event', 'postcode lookup preference', 'click', eventLabel)
-  })
-
-  $('#back').click(function() {
-    var eventLabel = $('h1').text()
-    ga('send', 'event', 'back navigation', 'click', eventLabel)
-  })
+  });
 
   if ($('.transaction-banner--complete').length) {
     var eventLabel = $('.transaction-banner--complete').find('h1').text();
     ga('send', 'event', 'transaction complete', 'report', eventLabel)
   }
-
 
 }
 

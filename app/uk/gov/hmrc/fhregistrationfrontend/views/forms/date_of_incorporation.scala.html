@@ -35,19 +35,17 @@
   </a>.
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.dateOfIncorporation.label")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @Back(navigation)
 
   @error_box(dateOfIncorporationForm, dateKey=s"$dateOfIncorporationKey")
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = Messages("fh.dateOfIncorporation.title")
-    )
-  )
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
 
@@ -56,7 +54,8 @@
     @DateTuple(
       DateTupleParams(
         name = dateOfIncorporationKey,
-        label = Messages("fh.dateOfIncorporation.label"),
+        label = title,
+        legendAsHeading = true,
         error = Messages("fh.dateOfIncorporation.error.invalid"),
         hasErrors = dateOfIncorporationForm.hasErrors,
         hintText = Some(Messages("fh.dateOfIncorporation.hint_text")),

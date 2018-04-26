@@ -51,9 +51,9 @@ object Mappings {
   def personTitle: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
   def roleInOrganization: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
 
-  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,35}$".r)
+  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,30}$".r)
   def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+‐-]{7,24}$".r)
-  def email: Mapping[String] = nonEmptyText(0, 132) verifying Constraints.emailAddress
+  def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
@@ -65,7 +65,7 @@ object Mappings {
 
   def withdrwalReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐-]{1,40}$".r)
   def nino = nonEmptyText verifying Constraints
-    .pattern("^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]?$".r)
+    .pattern("^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]$".r)
   def nationalIdNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
   def passportNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
 
@@ -85,7 +85,7 @@ object Mappings {
   def localDate = tuple(
     "day" -> number(min = 1, max = 31),
     "month" -> number(min = 1, max = 12),
-    "year" -> number(min = 1900, max = 2999)
+    "year" -> number(min = 1800, max = 2999)
   ) verifying ("error.invalid", x ⇒ localDateTimeConstraint(x)) transform (
     x ⇒ localDateTime(x),
     (d: LocalDate) ⇒ (d.getDayOfMonth, d.getMonth.getValue, d.getYear)

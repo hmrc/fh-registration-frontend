@@ -1,8 +1,7 @@
 # microservice specific routes
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
-GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continue
-
+GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
 GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
@@ -14,6 +13,7 @@ GET         /startForm                                                          
 GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
 GET         /address-lookup                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
+
 
 GET         /form/:page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
@@ -34,7 +34,6 @@ GET         /amend                                                              
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
-GET         /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteOrContinue(isNewForm: Boolean)
 POST        /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
 GET         /confirmDelete                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
 

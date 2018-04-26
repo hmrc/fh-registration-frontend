@@ -115,7 +115,7 @@ class FormPageController @Inject()(
           Ok(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
         }
       case None      ⇒
-        Redirect(links.businessCustomerVerificationUrl)
+        errorHandler.errorResultsPages(Results.BadRequest)
     }
   }
 

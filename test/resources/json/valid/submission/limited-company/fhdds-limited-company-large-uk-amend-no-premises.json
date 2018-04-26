@@ -72,21 +72,8 @@
           "EORIVat": "1234123132",
           "goodsImportedOutEORI": true
         },
-        "numberOfpremises": "3",
+        "numberOfpremises": "0",
         "premises": [
-          {
-            "address": {
-              "line1": "1 Some High Street",
-              "line4": "Sometown",
-              "postalCode": "Z99 2YY",
-              "countryCode": "GB"
-            },
-            "thirdPartyPremises": false,
-            "modification": {
-              "changeIndicator": "Added",
-              "changeDate": "2018-02-01"
-            }
-          },
           {
             "address": {
               "line1": "25 Testing Close",
@@ -96,7 +83,7 @@
             },
             "thirdPartyPremises": true,
             "modification": {
-              "changeIndicator": "Updated",
+              "changeIndicator": "Removed",
               "changeDate": "2018-02-01"
             }
           },
@@ -107,7 +94,11 @@
               "postalCode": "Z9 3WW",
               "countryCode": "GB"
             },
-            "thirdPartyPremises": true
+            "thirdPartyPremises": true,
+            "modification": {
+              "changeIndicator": "Removed",
+              "changeDate": "2018-02-01"
+            }
           },
           {
             "address": {

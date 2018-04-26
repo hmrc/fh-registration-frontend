@@ -23,8 +23,7 @@
       "allOtherInformation": {
         "numberOfCustomers": "1-10",
         "doesEORIExist": false,
-        "numberOfpremises": "0",
-        "premises": []
+        "numberOfpremises": "0"
       }
     },
     "businessDetail": {

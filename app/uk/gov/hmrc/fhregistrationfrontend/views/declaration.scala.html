@@ -35,7 +35,11 @@
   }
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.declaration.title")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -49,7 +53,7 @@
 
     @PageHeading(
       PageHeadingParams(
-        heading = Messages("fh.declaration.title")
+        heading = title
       )
     )
 
@@ -73,13 +77,13 @@
       )
     )
 
-    <h3 class="small-heading">@{
+    <h2 class="small-heading">@{
       s"${Messages("fh.declaration.has_gg_email")} "
     }
       <span><strong>@{
         s"${ggEmail.getOrElse("")}"
       }</strong></span>
-    </h3>
+    </h2>
 
     @if(ggEmail.filterNot(_.isEmpty) == None) {
 

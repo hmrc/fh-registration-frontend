@@ -28,19 +28,17 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@main_template(scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages("fh.business_status.label")
+}
+
+@main_template(title = title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @Back(navigation)
 
   @error_box(businessStatusForm, dateKey=s"$proposedStartDateKey")
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = Messages("fh.business_status.title")
-    )
-  )
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
 
@@ -49,7 +47,8 @@
     @RadioGroup(
       RadioGroupParams(
         name = Some(isNewFulfilmentBusinessKey),
-        legend = Some(Messages("fh.business_status.label")),
+        legend = Some(title),
+        legendAsHeading = true,
         value = businessStatusForm(isNewFulfilmentBusinessKey).value,
         hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
         error = Some(Messages("fh.isNewFulfilmentBusiness.error.required")),

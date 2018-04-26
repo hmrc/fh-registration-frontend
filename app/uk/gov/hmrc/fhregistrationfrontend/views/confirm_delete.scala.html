@@ -19,11 +19,15 @@
 
 @(timeSaved: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template() {
+@title = @{
+  Messages("fh.delete_confirmation_page.header")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title) {
 
   <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData()}" method="GET">
 
-    <h1>@Messages("fh.delete_confirmation_page.header")</h1>
+    <h1>@title</h1>
 
     <p>
       <img src="./assets/images/File.png" align="left" style="margin: 0px 20px">

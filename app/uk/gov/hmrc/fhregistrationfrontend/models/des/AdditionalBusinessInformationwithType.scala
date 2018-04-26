@@ -40,7 +40,7 @@ case class AllOtherInformation(
   doesEORIExist: Boolean,
   EORINumber: Option[EORINumberType],
   numberOfpremises: String,
-  premises: List[Premises])
+  premises: Option[List[Premises]])
 
 object AllOtherInformation {
   implicit val format = Json.format[AllOtherInformation]

@@ -37,6 +37,7 @@ class ApplicationControllerIntegrationSpec
       given()
         .audit.writesAuditOrMerged()
         .user.isAuthorised()
+        .fhddsBackend.hasNoEnrolmentProgress()
 
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false).get()) { res ⇒
@@ -46,26 +47,12 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "continue redirect to form type page when the user has a correct BPR and the user is new" in {
+    "continue redirects to business type page when the user has a correct BPR and the user is new" in {
 
       commonPrecondition
 
       WsTestClient.withClient { client ⇒
         val result = client.url(s"$baseUrl/continue").withFollowRedirects(false).get()
-
-        whenReady(result) { res ⇒
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/deleteOrContinue?isNewForm=true")
-        }
-      }
-    }
-
-    "Show form type page when the user has a correct BPR and the user is new" in {
-
-      commonPrecondition
-
-      WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/deleteOrContinue?isNewForm=true").withFollowRedirects(false).get()
 
         whenReady(result) { res ⇒
           res.status mustBe 303
