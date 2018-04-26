@@ -742,7 +742,7 @@ fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter valid email addres
 
 fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to 
-fh.ack.withdrawal.waitNotice=You will need to wait 24 hours before you can submit a new application
+fh.ack.withdrawal.waitNotice=You will need to wait until tomorrow before you can submit a new application
 
 # - Not Completed enrollment Status Page
 #============================================================
