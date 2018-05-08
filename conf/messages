@@ -154,6 +154,14 @@ fh.emailVerification.alternativeEmailValue.hintText=For example, sample@example.
 fh.emailVerification.alternativeEmailValue.error.required=Enter your new email address
 fh.emailVerification.alternativeEmailValue.error.pattern=Enter a valid email address
 fh.emailVerification.alternativeEmailValue.error.maxLength=Email addresses cannot be longer than 100 characters
+fh.emailVerification.pendingText.sentEmail=We have sent an email to you at:
+fh.emailVerification.pendingtText.whatHappensNext=What happens next
+fh.emailVerification.pendingText.goToEmail=You will need to go to that email account and click the link in the message we sent you
+fh.emailVerification.pendingText.youHave30Mins=You have 30 minutes to do this
+fh.emailVerification.pendingText.whereEmailUpdated=Where your email address is updated
+fh.emailVerification.pendingText.onlyFHDDS=Once you have verified your new email address, we will only use it to contact you about your application for the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.pendingText.otherGovUnchanged=Your email address will not be updated in other government services
+
 
 
 # - Main Business Address
