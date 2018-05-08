@@ -38,7 +38,7 @@
 
   @Back(navigation)
 
-  @error_box(emailVerificationForm)
+  @error_box(emailVerificationForm, ".emailVerification.")
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("emailVerification"), 'novalidate -> "novalidate") {
 
@@ -75,8 +75,8 @@
       @TextInput(
         TextInputParams(
           name = alternativeEmailKey,
-          label = Messages("fh.emailVerification.alternativeEmailValue.label"),
-          hintText = Some(Messages("fh.emailVerification.alternativeEmailValue.hintText")),
+          label = Messages(s"fh.emailVerification.$alternativeEmailKey.label"),
+          hintText = Some(Messages(s"fh.emailVerification.$alternativeEmailKey.hintText")),
           value = emailVerificationForm(alternativeEmailKey).value,
           error = Messages("fh.emailVerification." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
           hasErrors = emailVerificationForm(alternativeEmailKey).hasErrors,
