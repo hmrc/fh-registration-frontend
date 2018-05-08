@@ -15,13 +15,13 @@
 *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerfication
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(emailVerificationForm: Form[EmailVerfication], ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -61,10 +61,26 @@
           RadioParams(
             "useAlternativeEmail",
             Messages("fh.emailVerification.alternativeEmailOption.label")
+            Some("alternativeEmailContainer")
           )
         )
       )
     )
+
+    <div class="js-hidden panel" id="alternativeEmailContainer">
+      <p>The email addresses you use for other government services will not change.</p>
+      @TextInput(
+        TextInputParams(
+          name = emailAddressKey,
+          label = Messages("fh.emailVerification.alternativeEmailValue.label"),
+          hintText = Some(Messages("fh.emailVerification.alternativeEmailValue.hintText")),
+          value = emailverificationForm(emailAddressKey).value,
+          error = Messages("h.emailVerification.alternativeEmailValue." + emailverificationForm(emailAddressKey).error.fold("")(_.message)),
+          hasErrors = emailverificationForm(emailAddressKey).hasErrors,
+          isEmail = true
+        )
+      )
+    </div>
 
     @SubmitButtons(
       SubmitButtonsParams(
