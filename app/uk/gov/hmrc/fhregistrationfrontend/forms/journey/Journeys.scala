@@ -23,10 +23,9 @@ object Journeys {
 
   import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
 
-  val limitedCompanyPages = (ggMail: Option[String]) ⇒ new JourneyPages(
+  val limitedCompanyPages = new JourneyPages(
     Seq[AnyPage](
       Page.mainBusinessAddressPage,
-      Page.emailVerificationPage(ggMail),
       Page.contactPersonPage,
       Page.companyRegistrationNumberPage,
       Page.dateOfIncorporationPage,
@@ -40,10 +39,9 @@ object Journeys {
     )
   )
 
-  val soleTraderPages = (ggMail: Option[String]) ⇒ new JourneyPages(
+  val soleTraderPages = new JourneyPages(
     Seq[Page[_]](
       Page.mainBusinessAddressPage,
-      Page.emailVerificationPage(ggMail),
       Page.contactPersonPage,
       Page.nationalInsuranceNumberPage,
       Page.tradingNamePage,
@@ -55,10 +53,9 @@ object Journeys {
     )
   )
 
-  val partnershipPages = (ggMail: Option[String]) ⇒ new JourneyPages(
+  val partnershipPages = new JourneyPages(
     Seq[Page[_]](
       Page.mainBusinessAddressPage,
-      Page.emailVerificationPage(ggMail),
       Page.contactPersonPage,
       Page.tradingNamePage,
       Page.vatNumberPage,

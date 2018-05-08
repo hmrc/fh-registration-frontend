@@ -20,7 +20,8 @@ import play.api.libs.json.Json
 
 case class EmailVerification (
   usingGgEmailAddress: Boolean,
-  emailAddress: String
+  ggEmail: Option[String],
+  alternativeEmail: Option[String]
 )
 
 object EmailVerification {

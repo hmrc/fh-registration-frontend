@@ -19,18 +19,25 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{email, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 
 
 object EmailVerificationForm {
 
   val emailOptionKey = "usingGgEmailAddress"
-  val emailAddressKey = "emailAddress"
+  val ggEmailKey = "ggEmail"
+  val alternativeEmailKey = "alternativeEmail"
+
+  private val isUseGgEmailMapping = emailOptionKey → yesOrNo
+  private val ggEmailMapping = ggEmailKey → (email onlyWhen (isUseGgEmailMapping is true))
+  private val alternativeEmailMapping = alternativeEmailKey → (email onlyWhen (isUseGgEmailMapping is false))
 
   val emailVerificationForm = Form(
     mapping(
-      emailOptionKey → yesOrNo,
-      emailAddressKey → email
+      isUseGgEmailMapping,
+      ggEmailMapping,
+      alternativeEmailMapping
     )(EmailVerification.apply)(EmailVerification.unapply)
   )
 }
