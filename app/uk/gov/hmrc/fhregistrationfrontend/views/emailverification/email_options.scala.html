@@ -52,15 +52,15 @@
         inline = false,
         required = true,
         hasErrors = emailVerificationForm(emailOptionKey).hasErrors,
-        error = Some(Messages("fh.emailVerification.error.required")),
+        error = Some(Messages(s"fh.emailVerification.$emailOptionKey.error.required")),
         value = emailVerificationForm(emailOptionKey).value,
         radios = List(
           RadioParams(
-            "useGGEmail",
+            "true",
             ggEmail.get
           ),
           RadioParams(
-            "useAlternativeEmail",
+            "false",
             Messages("fh.emailVerification.alternativeEmailOption.label"),
             Some("alternativeEmailContainer")
           )
@@ -68,16 +68,18 @@
       )
     )
 
+    <input type="hidden" name="@{ggEmailKey}" value="@{ggEmail.get}"/>
+
     <div class="js-hidden panel" id="alternativeEmailContainer">
       <p>The email addresses you use for other government services will not change.</p>
       @TextInput(
         TextInputParams(
-          name = emailAddressKey,
+          name = alternativeEmailKey,
           label = Messages("fh.emailVerification.alternativeEmailValue.label"),
           hintText = Some(Messages("fh.emailVerification.alternativeEmailValue.hintText")),
-          value = emailVerificationForm(emailAddressKey).value,
-          error = Messages("h.emailVerification.alternativeEmailValue." + emailVerificationForm(emailAddressKey).error.fold("")(_.message)),
-          hasErrors = emailVerificationForm(emailAddressKey).hasErrors,
+          value = emailVerificationForm(alternativeEmailKey).value,
+          error = Messages("fh.emailVerification." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
+          hasErrors = emailVerificationForm(alternativeEmailKey).hasErrors,
           isEmail = true
         )
       )

@@ -35,7 +35,7 @@
 @main_template(title = title, scriptElem = Some(pageScripts)) {
 
 <h1>{{ title }}</h1>
-<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(emailAddressKey).value}</p>
+<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
 <h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
 <p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
 <p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
