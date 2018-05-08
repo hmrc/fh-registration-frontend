@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
@@ -45,14 +46,14 @@
 
     @RadioGroup(
       RadioGroupParams(
-        name = Some("emailVerification"),
+        name = Some(emailOptionKey),
         legend = Some(title),
         legendAsHeading = true,
         inline = false,
         required = true,
-        hasErrors = emailVerificationForm("emailVerification").hasErrors,
+        hasErrors = emailVerificationForm(emailOptionKey).hasErrors,
         error = Some(Messages("fh.emailVerification.error.required")),
-        value = emailVerificationForm("emailVerification").value,
+        value = emailVerificationForm(emailOptionKey).value,
         radios = List(
           RadioParams(
             "useGGEmail",
@@ -60,7 +61,7 @@
           ),
           RadioParams(
             "useAlternativeEmail",
-            Messages("fh.emailVerification.alternativeEmailOption.label")
+            Messages("fh.emailVerification.alternativeEmailOption.label"),
             Some("alternativeEmailContainer")
           )
         )
@@ -74,9 +75,9 @@
           name = emailAddressKey,
           label = Messages("fh.emailVerification.alternativeEmailValue.label"),
           hintText = Some(Messages("fh.emailVerification.alternativeEmailValue.hintText")),
-          value = emailverificationForm(emailAddressKey).value,
-          error = Messages("h.emailVerification.alternativeEmailValue." + emailverificationForm(emailAddressKey).error.fold("")(_.message)),
-          hasErrors = emailverificationForm(emailAddressKey).hasErrors,
+          value = emailVerificationForm(emailAddressKey).value,
+          error = Messages("h.emailVerification.alternativeEmailValue." + emailVerificationForm(emailAddressKey).error.fold("")(_.message)),
+          hasErrors = emailVerificationForm(emailAddressKey).hasErrors,
           isEmail = true
         )
       )
