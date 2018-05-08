@@ -38,7 +38,7 @@
 
   @Back(navigation)
 
-  @error_box(emailVerificationForm)
+  @error_box(emailVerificationForm, ".emailVerification.")
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("emailVerification"), 'novalidate -> "novalidate") {
 
