@@ -154,6 +154,7 @@ fh.emailVerification.alternativeEmail.hintText=For example, sample@example.com
 fh.emailVerification.alternativeEmail.error.required=Enter your new email address
 fh.emailVerification.alternativeEmail.error.email=Enter a valid email address
 fh.emailVerification.alternativeEmail.error.maxLength=Email addresses cannot be longer than 100 characters
+fh.emailVerification.alternativeEmail.info=The email addresses you use for other government services will not change.
 fh.emailVerification.pending.title=You have 30 minutes to verify your email address
 fh.emailVerification.pendingText.sentEmail=We have sent an email to you at:
 fh.emailVerification.pendingText.whatHappensNext=What happens next
