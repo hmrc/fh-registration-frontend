@@ -1,3 +1,18 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
 
 @*
 * Copyright 2018 HM Revenue & Customs
@@ -35,7 +50,7 @@
 @main_template(title = title, scriptElem = Some(pageScripts)) {
 
 <h1>{{ title }}</h1>
-<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(emailAddressKey).value}</p>
+<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
 <h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
 <p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
 <p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
