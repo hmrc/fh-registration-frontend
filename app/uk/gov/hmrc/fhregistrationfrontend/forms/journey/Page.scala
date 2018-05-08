@@ -86,17 +86,7 @@ object Page {
         main_business_address(form, bpr, navigation)
       }
     })
-
-  val emailVerificationPage: Option[String] ⇒ Page[EmailVerification] = (ggMail: Option[String]) ⇒ new BasicPage[EmailVerification](
-    "emailVerification",
-    EmailVerificationForm.emailVerificationForm,
-    new FormRendering[EmailVerification] {
-      override def render(form: Form[EmailVerification], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
-        email_options(form, ggMail, navigation)
-      }
-    })
-
+  
   val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
     "contactPerson",
     ContactPersonForm.contactPersonForm,
