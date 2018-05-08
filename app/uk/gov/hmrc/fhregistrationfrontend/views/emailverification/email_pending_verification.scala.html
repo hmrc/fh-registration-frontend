@@ -17,6 +17,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
@@ -34,7 +35,7 @@
 @main_template(title = title, scriptElem = Some(pageScripts)) {
 
 <h1>{{ title }}</h1>
-<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm('alternativeEmailValue').value}</p>
+<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(emailAddressKey).value}</p>
 <h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
 <p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
 <p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
