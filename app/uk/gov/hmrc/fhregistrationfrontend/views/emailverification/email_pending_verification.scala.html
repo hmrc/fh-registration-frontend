@@ -28,7 +28,7 @@
 }
 
 @title = @{
-  Messages("fh.emailVerification.label")
+  Messages("fh.emailVerification.pending.title")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
@@ -43,9 +43,9 @@
 <p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
 <p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
 
-<button class="button--secondary">Resend email</button>
+<button class="button--secondary">@Messages("fh.emailVerification.resendEmail")</button>
 <div class="margin-top-30">
-  <a href="email-change">Change email address</a>
+  <a href="email-change">@Messages("fh.emailVerification.changeEmail")</a>
 </div>
 
 }
