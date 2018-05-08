@@ -1,18 +1,18 @@
 @*
- * Copyright 2018 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2018 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
@@ -38,7 +38,7 @@
 
   @Back(navigation)
 
-  @error_box(emailVerificationForm, ".emailVerification.")
+  @error_box(emailVerificationForm)
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("emailVerification"), 'novalidate -> "novalidate") {
 
@@ -52,15 +52,15 @@
         inline = false,
         required = true,
         hasErrors = emailVerificationForm(emailOptionKey).hasErrors,
-        error = Some(Messages(s"fh.emailVerification.$emailOptionKey.error.required")),
+        error = Some(Messages("fh.emailVerification.error.required")),
         value = emailVerificationForm(emailOptionKey).value,
         radios = List(
           RadioParams(
-            "true",
+            "useGGEmail",
             ggEmail.get
           ),
           RadioParams(
-            "false",
+            "useAlternativeEmail",
             Messages("fh.emailVerification.alternativeEmailOption.label"),
             Some("alternativeEmailContainer")
           )
@@ -68,18 +68,16 @@
       )
     )
 
-    <input type="hidden" name="@{ggEmailKey}" value="@{ggEmail.get}"/>
-
     <div class="js-hidden panel" id="alternativeEmailContainer">
       <p>The email addresses you use for other government services will not change.</p>
       @TextInput(
         TextInputParams(
-          name = alternativeEmailKey,
-          label = Messages(s"fh.emailVerification.$alternativeEmailKey.label"),
-          hintText = Some(Messages(s"fh.emailVerification.$alternativeEmailKey.hintText")),
-          value = emailVerificationForm(alternativeEmailKey).value,
-          error = Messages(s"fh.emailVerification.$alternativeEmailKey." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
-          hasErrors = emailVerificationForm(alternativeEmailKey).hasErrors,
+          name = emailAddressKey,
+          label = Messages("fh.emailVerification.alternativeEmailValue.label"),
+          hintText = Some(Messages("fh.emailVerification.alternativeEmailValue.hintText")),
+          value = emailVerificationForm(emailAddressKey).value,
+          error = Messages("h.emailVerification.alternativeEmailValue." + emailVerificationForm(emailAddressKey).error.fold("")(_.message)),
+          hasErrors = emailVerificationForm(emailAddressKey).hasErrors,
           isEmail = true
         )
       )
