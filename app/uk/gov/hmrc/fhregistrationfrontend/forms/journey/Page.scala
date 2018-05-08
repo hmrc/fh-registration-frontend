@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
 
 
 trait Rendering {
@@ -67,6 +68,7 @@ object Page {
 
   import CompanyOfficer.companyOfficerFormat
   import CompanyRegistrationNumber.format
+  import EmailVerification.format
   import ContactPerson.format
   import DateOfIncorporation.format
   import MainBusinessAddress.format
@@ -82,6 +84,16 @@ object Page {
       override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)
         (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         main_business_address(form, bpr, navigation)
+      }
+    })
+
+  val emailVerificationPage: Option[String] ⇒ Page[EmailVerification] = (ggMail: Option[String]) ⇒ new BasicPage[EmailVerification](
+    "emailVerification",
+    EmailVerificationForm.emailVerificationForm,
+    new FormRendering[EmailVerification] {
+      override def render(form: Form[EmailVerification], bpr: BusinessRegistrationDetails, navigation: Navigation)
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+        email_options(form, ggMail, navigation)
       }
     })
 
@@ -145,7 +157,6 @@ object Page {
     }
   })
 
-  //todo: should use BusinessPartnersForm.businessPartnersForm. When repeat component ready, replace businessPartnerForm with businessPartnersForm
   val businessPartnersPage = new RepeatingPage[BusinessPartner](
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {

@@ -89,7 +89,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
     val result: EitherT[Future, Result, JourneyRequest[A]] = for {
       cacheMap ← EitherT(loadCacheMap)
       _ ← checkAmendmentJourney(cacheMap).toEitherT[Future]
-      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      journeyPages ← getJourneyPages(cacheMap, r.email).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages, cacheMap)
       bpr ← findBpr(cacheMap).toEitherT[Future]
       bt ← getBusinessType(cacheMap).toEitherT[Future]
@@ -151,12 +151,12 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
     }
   }
 
-  def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
+  def getJourneyPages(cacheMap: CacheMap, ggMail: Option[String])(implicit request: Request[_]): Either[Result, JourneyPages] = {
     getBusinessType(cacheMap).right flatMap {
       _ match {
-        case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
-        case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages)
-        case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
+        case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages(ggMail))
+        case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages(ggMail))
+        case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages(ggMail))
         case _                          ⇒
           Logger.error(s"Not found: wrong business type")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
