@@ -22,30 +22,24 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(emailVerificationForm: Form[EmailVerification], ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
 @title = @{
-  Messages("fh.emailVerification.pending.title")
+  Messages("fh.emailVerification.verified.title")
 }
 
 @main_template(title = title, scriptElem = Some(pageScripts)) {
 
-<h1>{{ title }}</h1>
-<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm('alternativeEmailValue').value}</p>
-<h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
-<p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
-<p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
-
-<h2>@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
-<p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
-<p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
-
-<button class="button--secondary">@Messages("fh.emailVerification.resendEmail")</button>
-<div class="margin-top-30">
-  <a href="email-change">@Messages("fh.emailVerification.changeEmail")</a>
-</div>
-
+  <div class="transaction-banner--complete">
+    <h1 class="transaction-banner__heading">
+    @title
+    </h1>
+  </div>
+  <h2>@Messages("fh.emailVerification.verified.whatThisMeans")</h2>
+  <p>@Messages("fh.emailVerification.verified.onlyFHDDS")</p>
+  <p>@Messages("fh.emailVerification.verified.otherGovUnchanged")</p>
+  <button class="button">@Messages("fh.generic.continue")</button>
 }
