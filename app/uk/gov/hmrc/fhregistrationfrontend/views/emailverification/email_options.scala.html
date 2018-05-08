@@ -78,7 +78,7 @@
           label = Messages(s"fh.emailVerification.$alternativeEmailKey.label"),
           hintText = Some(Messages(s"fh.emailVerification.$alternativeEmailKey.hintText")),
           value = emailVerificationForm(alternativeEmailKey).value,
-          error = Messages("fh.emailVerification." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
+          error = Messages(s"fh.emailVerification.$alternativeEmailKey." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
           hasErrors = emailVerificationForm(alternativeEmailKey).hasErrors,
           isEmail = true
         )
