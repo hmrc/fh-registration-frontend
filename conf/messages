@@ -171,6 +171,9 @@ fh.emailVerification.verified.onlyFHDDS=We will only use this email address to c
 fh.emailVerification.verified.otherGovUnchanged=Your email address has not been updated in other government services.
 fh.emailVerification.edit.title=Change your email address
 fh.emailVerification.edit.info=Once you have entered your new email address, we will send you an email so you can verify it.
+fh.emailVerification.edit.start.title=Change your contact email
+fh.emailVerification.edit.start.info=We will use this email address to contact you about the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.edit.start.label=Your email address:
 
 
 
