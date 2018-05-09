@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(emailVerificationForm: Form[EmailVerification], ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], ggEmail: Option[String], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -36,21 +36,27 @@
   Messages("fh.emailVerification.pending.title")
 }
 
+@showAlert = @{
+  emailSentAgain.filter(_ == true).map { _ =>
+    Alert(Messages("fh.emailVerification.emailSentAgain"))
+  }
+}
+
 @main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
-<h1>{{ title }}</h1>
-<p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
-<h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
-<p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
-<p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
+  @showAlert
 
-<h2>@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
-<p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
-<p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
+  <h1>{{ title }}</h1>
+  <p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
+  <h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
+  <p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
+  <p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
 
-<button class="button--secondary">@Messages("fh.emailVerification.resendEmail")</button>
-<div class="margin-top-30">
-  <a href="email-change">@Messages("fh.emailVerification.changeEmail")</a>
-</div>
+  <h2>@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
+  <p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
+  <p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
+
+  <p><a href="#" class="button--secondary">@Messages("fh.emailVerification.resendEmail")</a></p>
+  <p><a href="email-change">@Messages("fh.emailVerification.changeEmail")</a></p>
 
 }

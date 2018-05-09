@@ -174,6 +174,7 @@ fh.emailVerification.edit.info=Once you have entered your new email address, we 
 fh.emailVerification.edit.start.title=Change your contact email
 fh.emailVerification.edit.start.info=We will use this email address to contact you about the Fulfilment House Due Diligence Scheme.
 fh.emailVerification.edit.start.label=Your email address:
+fh.emailVerification.emailSentAgain=We have sent a new email with a verification link in it
 
 
 

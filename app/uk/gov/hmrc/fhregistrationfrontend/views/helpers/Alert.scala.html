@@ -16,7 +16,7 @@
 
 @(alert:String, linkText: Option[String] = None, linkVal: Option[String] = None)(implicit message : Messages)
 
-<div class="alert alert--info margin-bottom-30">
+<div class="alert alert--info margin-bottom-30" role="alert">
     @{alert}
     @if(linkText.nonEmpty) {
       <a href=@{Some(linkVal)}>@{Some(linkText)}</a>
