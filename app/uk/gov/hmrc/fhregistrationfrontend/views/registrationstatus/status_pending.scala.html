@@ -15,9 +15,11 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Status Pending", linkElement = Some(stylesheets)) {
   <div class="grid">

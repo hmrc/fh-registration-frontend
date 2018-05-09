@@ -17,51 +17,37 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.UnexpectedState
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
 import scala.concurrent.Future
 
 class EnrolledUserRequest[A](
   val registrationNumber: String,
-  val  hasAmendmentInProgress: Boolean,
-  request    : UserRequest[A]
+  val request: UserRequest[A]
 ) extends WrappedRequest[A](request) {
 
   def userId: String = request.userId
   def email: Option[String] = request.email
 }
 
-object EnrolledUserAction {
-  def apply()(implicit save4LaterService: Save4LaterService, messagesApi: MessagesApi) = new UserAction andThen new EnrolledUserAction()
-
-}
-
-class EnrolledUserAction (implicit val save4LaterService: Save4LaterService, val messagesApi: MessagesApi)
-    extends ActionRefiner[UserRequest, EnrolledUserRequest] with UnexpectedState
+class EnrolledUserAction (implicit errorHandler: ErrorHandler)
+    extends ActionRefiner[UserRequest, EnrolledUserRequest]
       with FrontendAction
 {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EnrolledUserRequest[A]]] = {
     implicit val r = request
-    save4LaterService
-      .fetchIsAmendment(request.userId)
-      .map { isAmendment ⇒
-        request.registrationNumber match {
-          case Some(registrationNumber) ⇒
-            Right(new EnrolledUserRequest[A](registrationNumber, isAmendment getOrElse false, request))
-          case None                     ⇒
-            Logger.error(s"Not found: registration number. Is user enrolled?")
-            Left(errorResultsPages(Results.BadRequest))
-        }
+    Future successful {
+      request.registrationNumber match {
+        case Some(registrationNumber) ⇒
+          Right(new EnrolledUserRequest[A](registrationNumber, request))
+        case None                     ⇒
+          Logger.error(s"Not found: registration number. Is user enrolled?")
+          Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
-      .recover{ case t ⇒
-        Logger.error(s"Could not access shortLivedCache", t)
-        Left(errorResultsPages(Results.BadGateway))
-      }
-
+    }
   }
 
 }

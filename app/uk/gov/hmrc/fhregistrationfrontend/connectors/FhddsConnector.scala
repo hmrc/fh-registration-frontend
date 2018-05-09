@@ -16,29 +16,33 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
-import javax.inject.Singleton
+import java.util.Date
+import javax.inject.{Inject, Singleton}
 
 import play.api.libs.json.Reads
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.config.WSHttp
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
 
+
+
 @Singleton
-class FhddsConnector extends FhddsConnect with ServicesConfig {
+class FhddsConnector @Inject() (
+  val http: HttpClient,
+  override val runModeConfiguration: Configuration,
+  environment: Environment
+) extends ServicesConfig
+{
+
+  override protected def mode = environment.mode
   val FHDSSServiceUrl: String = baseUrl("fhdds")
-  val http = WSHttp
-}
-
-trait FhddsConnect {
-
-  val FHDSSServiceUrl: String
-  val http: WSHttp
 
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
     http.GET(s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
@@ -56,6 +60,9 @@ trait FhddsConnect {
     http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber", request)
   }
 
+  def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit headerCarrier: HeaderCarrier): Future[Date] = {
+    http.POST[WithdrawalRequest, Date](s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber", request)
+  }
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
     http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")

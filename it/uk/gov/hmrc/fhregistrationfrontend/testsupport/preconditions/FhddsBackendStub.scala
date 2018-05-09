@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
 case class FhddsBackendStub()
   (implicit builder: PreconditionBuilder)
@@ -36,6 +37,14 @@ case class FhddsBackendStub()
       .willReturn(ok(
         Json.toJson(mkBusinessPartnerRecord(businessType)).toString()
       ))
+    )
+    builder
+  }
+
+  def hasNoEnrolmentProgress() = {
+    stubFor(
+      get(urlEqualTo("/fhdds/subscription/enrolmentProgress"))
+        .willReturn(ok(Json.toJson(EnrolmentProgress.Unknown).toString()))
     )
     builder
   }

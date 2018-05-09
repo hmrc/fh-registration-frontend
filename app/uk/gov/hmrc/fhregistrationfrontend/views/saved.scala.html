@@ -15,8 +15,9 @@
  *@
 
 @import org.joda.time.DateTime
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(expiryTime: DateTime)(implicit request: Request[_], messages: Messages)
+@(expiryTime: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 

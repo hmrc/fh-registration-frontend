@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.cache
+package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 
-import uk.gov.hmrc.crypto.ApplicationCrypto
-import uk.gov.hmrc.fhregistrationfrontend.config.ShortLivedHttpCaching
-import uk.gov.hmrc.http.cache.client.ShortLivedCache
+import play.api.libs.json.Json
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum.WithdrawalReasonEnum
 
+case class WithdrawalReason (
+  withdrawalReason: WithdrawalReasonEnum,
+  withdrawalReasonOther: Option[String]
+)
 
-object ShortLivedCache extends ShortLivedCache {
-  override implicit lazy val crypto = ApplicationCrypto.JsonCrypto
-  override lazy val shortLiveCache = ShortLivedHttpCaching
+object WithdrawalReason {
+  implicit val format = Json.format[WithdrawalReason]
 }

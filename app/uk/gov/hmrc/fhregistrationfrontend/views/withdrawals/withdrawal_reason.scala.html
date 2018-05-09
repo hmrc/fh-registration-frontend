@@ -1,0 +1,102 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
+@import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
+@import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+@title = @{
+  Messages("fh.withdrawalReason.title")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason(), 'novalidate -> "novalidate") {
+
+    @helper.CSRF.formField
+
+    @error_box(reasonForm)
+
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(reasonKey),
+        legend = Some(title),
+        legendAsHeading = true,
+        inline = false,
+        required = true,
+        error = Some(Messages("fh.reason.error.required")),
+        value = reasonForm(reasonKey).value,
+        hasErrors = reasonForm(reasonKey).hasErrors,
+        radios = List(
+          RadioParams(
+            AppliedInError.toString,
+            Messages("fh.withdrawalReason.appliedInError.label")
+          ),
+          RadioParams(
+            DuplicateApplication.toString,
+            Messages("fh.withdrawalReason.duplicateApplication.label")
+          ),
+          RadioParams(
+            NoLongerApplicable.toString,
+            Messages("fh.withdrawalReason.noLongerApplicable.label")
+          ),
+          RadioParams(
+            Other.toString,
+            Messages("fh.withdrawalReason.otherReason.label"),
+            dataTarget = Some("otherReason")
+          )
+        )
+      )
+    )
+
+    @NestedPanel(
+      NestedPanelParams(
+        "otherReason",
+        TextInput(
+          TextInputParams(
+            name = reasonOtherKey,
+            label = Messages("fh.withdrawalReason.otherReasonText.label"),
+            hasErrors = reasonForm(reasonOtherKey).hasErrors,
+            error = Messages("fh.reasonOther." + getError(reasonForm(reasonOtherKey).error)),
+            value = reasonForm(reasonOtherKey).value
+          )
+        )
+      )
+    )
+
+    <div class="form-group form-actions">
+
+      <p>
+        <button type="submit" class="button" value="continue">@Messages("button.continue")</button>
+      </p>
+
+      <p>
+        <a href="#">@Messages("link.cancel")</a>
+      </p>
+
+    </div>
+  }
+}

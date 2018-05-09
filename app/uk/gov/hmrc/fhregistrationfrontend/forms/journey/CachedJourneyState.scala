@@ -59,6 +59,7 @@ class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends
             None
           else
             Some(pages(firstNotCompletedIndex - 1))
+        case Completed ⇒ throw new IllegalArgumentException("must be != Completed")
       }
 
   }

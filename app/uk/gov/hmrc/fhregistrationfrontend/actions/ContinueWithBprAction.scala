@@ -16,18 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.i18n.MessagesApi
 import play.api.mvc.{ActionRefiner, Result, Results}
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
 import scala.concurrent.Future
 
-object ContinueWithBprAction {
-  def apply(fhddsConnector: FhddsConnector)(implicit messagesApi: MessagesApi) = new UserAction() andThen new ContinueWithBprAction(fhddsConnector)(messagesApi)
-}
-
-class ContinueWithBprAction(fhddsConnector: FhddsConnector) (val messagesApi: MessagesApi)
+class ContinueWithBprAction (fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler)
   extends ActionRefiner[UserRequest, UserRequest] with FrontendAction {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] = {
@@ -35,12 +31,12 @@ class ContinueWithBprAction(fhddsConnector: FhddsConnector) (val messagesApi: Me
     implicit val r = request
 
     if (r.userIsRegistered)
-      Future successful Left(errorResultsPages(Results.BadRequest))
+      Future successful Left(errorHandler.errorResultsPages(Results.BadRequest))
     else {
       fhddsConnector
         .getEnrolmentProgress
         .map {
-          case EnrolmentProgress.Pending ⇒ Left(errorResultsPages(Results.BadRequest))
+          case EnrolmentProgress.Pending ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
           case _ ⇒ Right(r)
         }
     }

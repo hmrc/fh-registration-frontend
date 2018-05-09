@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams)(implicit message : Messages)
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioGroupParams,legendClass: Option[String] = Some("form-label-bold"))(implicit message : Messages)
 
 @legend = {
     @params.legend match {
         case Some(legend) => {
+
           <legend class="form-label-bold">
           @if(params.legendAsHeading) {
             <h1>@legend</h1>

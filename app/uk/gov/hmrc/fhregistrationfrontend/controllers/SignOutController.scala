@@ -19,27 +19,26 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Action
-import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
-import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls.{logoutContinueUrl, getString}
+import uk.gov.hmrc.fhregistrationfrontend.connectors
 
 @Singleton
 class SignOutController  @Inject()(
-  ds               : CommonPlayDependencies
+  ds               : CommonPlayDependencies,
+  externalUrls     : connectors.ExternalUrls
 ) extends AppController(ds) {
-
 
 
   def signout() = Action {
     val ggRedirectParms = Map(
-      "continue" -> Seq(logoutContinueUrl),
-      "origin" -> Seq(getString("appName"))
+      "continue" -> Seq(externalUrls.logoutContinueUrl),
+      "origin" -> Seq(externalUrls.getString("appName"))
     )
 
-    Redirect(ExternalUrls.ggLogoutUrl, ggRedirectParms)
+    Redirect(externalUrls.ggLogoutUrl, ggRedirectParms)
   }
 
   def signedout() = Action {
-    Redirect(ExternalUrls.surveyRedirectUrl)
+    Redirect(externalUrls.surveyRedirectUrl)
   }
 
 

@@ -21,6 +21,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
@@ -30,17 +31,17 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 
 
 trait Rendering {
-  def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html
+  def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
 }
 
 trait FormRendering[T] {
-  def render(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html
+  def render(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
 }
 
 trait RepeatedFormRendering[T] {
   def render
     (form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
-      (implicit request: Request[_], messages: Messages): Html
+      (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
 }
 
 trait Page[T] extends Rendering {
@@ -79,7 +80,7 @@ object Page {
     MainBusinessAddressForm.mainBusinessAddressForm,
     new FormRendering[MainBusinessAddress] {
       override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         main_business_address(form, bpr, navigation)
       }
     })
@@ -89,7 +90,7 @@ object Page {
     ContactPersonForm.contactPersonForm,
     new FormRendering[ContactPerson] {
       override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         contact_person(form, bpr, navigation)
       }
     })
@@ -99,7 +100,7 @@ object Page {
     CompanyRegistrationNumberForm.companyRegistrationNumberForm,
     new FormRendering[CompanyRegistrationNumber] {
       override def render(form: Form[CompanyRegistrationNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         company_registration_number(form, navigation)
       }
     })
@@ -109,7 +110,7 @@ object Page {
     NationalInsuranceNumberForm.nationalInsuranceNumberForm,
     new FormRendering[NationalInsuranceNumber] {
     override def render(form: Form[NationalInsuranceNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)
-      (implicit request: Request[_], messages: Messages): Html = {
+      (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
       national_insurance_number(form, navigation)
     }
   })
@@ -119,7 +120,7 @@ object Page {
     DateOfIncorporationForm.dateOfIncorporationForm,
     new FormRendering[DateOfIncorporation] {
       override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         date_of_incorporation(form, navigation)
       }
     })
@@ -129,7 +130,7 @@ object Page {
     TradingNameForm.tradingNameForm,
     new FormRendering[TradingName] {
       override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         trading_name(form, navigation)
       }
     })
@@ -139,7 +140,7 @@ object Page {
     VatNumberForm.vatNumberForm,
     new FormRendering[VatNumber] {
     override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)
-      (implicit request: Request[_], messages: Messages): Html = {
+      (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
       vat_registration(form, navigation)
     }
   })
@@ -150,7 +151,7 @@ object Page {
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {
       override def render
         (form: Form[(BusinessPartner, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         business_partners(form, navigation, sectionId, params)
       }
     },
@@ -163,7 +164,7 @@ object Page {
     new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
       override def render
         (form: Form[(CompanyOfficer, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         company_officers(form, navigation, sectionId, params)
       }
     },
@@ -173,7 +174,7 @@ object Page {
   val businessStatusPage = new BasicPage[BusinessStatus](
     "businessStatus", BusinessStatusForm.businessStatusForm, new FormRendering[BusinessStatus] {
       override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         business_status(form, navigation)
       }
     })
@@ -181,7 +182,7 @@ object Page {
   val importingActivitiesPage = new BasicPage[ImportingActivities](
     "importingActivities", ImportingActivitiesForm.importingActivitiesForm, new FormRendering[ImportingActivities] {
       override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         importing_activities(form, navigation)
       }
     })
@@ -189,7 +190,7 @@ object Page {
   val businessCustomersPage = new BasicPage[BusinessCustomers](
     "businessCustomers", BusinessCustomersForm.businessCustomersForm, new FormRendering[BusinessCustomers] {
       override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails, navigation: Navigation)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         business_customers(form, navigation)
       }
     })
@@ -198,7 +199,7 @@ object Page {
     "hasOtherStoragePremises",
     StoragePremisesForm.hasOtherStoragePrmisesForm,
     new FormRendering[Boolean] {
-      override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages): Html =
+      override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
         has_other_storage_premises(form, navigation)
     }
   )
@@ -208,7 +209,7 @@ object Page {
     new RepeatedFormRendering[(StoragePremise, Boolean)] {
       override def render
         (form: Form[(StoragePremise, Boolean)], bpr: BusinessRegistrationDetails, navigation: Navigation, sectionId: String, params: RepeatingPageParams)
-        (implicit request: Request[_], messages: Messages): Html = {
+        (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         storage_premise(form, navigation, sectionId, params)
       }
     },

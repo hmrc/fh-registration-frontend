@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.connectors
+package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
 
-object DFSUrls extends ServicesConfig {
-  val DFSHost: String = baseUrl("fhdds-dfs-frontend")
+case class Confirmation(
+  continue: Boolean,
+  isUseGgEmail: Option[Boolean],
+  ggEmail: Option[String],
+  alternativeEmail: Option[AlternativeEmail]
+) {
 
-  def dfsURL(formTypeRef: String): String = {
-    s"$DFSHost/fhdds-forms/forms/form/$formTypeRef/new"
+  def email: Option[String] = {
+    isUseGgEmail flatMap {
+      case true  ⇒ ggEmail
+      case false ⇒ alternativeEmail.map(_.email)
+    }
   }
 }

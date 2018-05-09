@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.EnrolledUserAction
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
@@ -34,10 +34,12 @@ class AmendmentController @Inject()(
   ds               : CommonPlayDependencies,
   links            : ExternalUrls,
   desToForm        : DesToForm,
-  fhddsConnector   : FhddsConnector
+  fhddsConnector   : FhddsConnector,
+  actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+  import actions._
 
-  def startAmendment() = EnrolledUserAction().async { implicit request ⇒
+  def startAmendment() = amendmentAction.async { implicit request ⇒
     if (request.hasAmendmentInProgress)
       Future successful Redirect(routes.SummaryController.summary())
 

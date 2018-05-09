@@ -19,8 +19,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
+@import play.api.Environment
+@import java.util.Date
+@import java.text.DateFormat
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
@@ -29,6 +34,7 @@
     Alert(Messages("fh.unsaved_summary"))
   }
 }
+
 
 @title = @{
   Messages("fh.generic.check")
