@@ -169,6 +169,8 @@ fh.emailVerification.verified.title=Email address verified
 fh.emailVerification.verified.whatThisMeans=What this means
 fh.emailVerification.verified.onlyFHDDS=We will only use this email address to contact you about your application for the Fulfilment House Due Diligence Scheme.
 fh.emailVerification.verified.otherGovUnchanged=Your email address has not been updated in other government services.
+fh.emailVerification.edit.title=Change your email address
+fh.emailVerification.edit.info=Once you have entered your new email address, we will send you an email so you can verify it.
 
 
 
