@@ -49,10 +49,13 @@ class UserAction(implicit val messagesApi: MessagesApi) extends ActionBuilder[Us
     authorised().retrieve(internalId and email and allEnrolments) {
       case Some(id) ~ anEmail ~ enrolments ⇒
         val fhddsRegistrationNumber = for {
-          enrolment ← enrolments getEnrolment Enrolments.serviceName
+          enrolment ← enrolments.enrolments
+          if enrolment.key equalsIgnoreCase Enrolments.serviceName
+
           identifier ← enrolment.identifiers
           if identifier.key equalsIgnoreCase Enrolments.identifierName
           if identifier.value.slice(2, 4) == "FH"
+
         } yield {
           identifier.value
         }
