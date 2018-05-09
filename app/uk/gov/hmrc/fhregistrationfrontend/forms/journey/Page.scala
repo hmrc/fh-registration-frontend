@@ -86,7 +86,7 @@ object Page {
         main_business_address(form, bpr, navigation)
       }
     })
-  
+
   val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
     "contactPerson",
     ContactPersonForm.contactPersonForm,
