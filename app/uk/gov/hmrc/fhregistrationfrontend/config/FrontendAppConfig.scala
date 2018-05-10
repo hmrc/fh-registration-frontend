@@ -32,6 +32,7 @@ trait AppConfig {
   val phaseBannerFeedback: String
   val phaseBannerFeedbackUnauth: String
   val appName: String
+  def emailVerificationCallback(hash: String): String
 }
 
 @Singleton
@@ -47,6 +48,7 @@ class FrontendAppConfig @Inject()(
 //  private val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
+  lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
 
   override lazy val appName: String = loadConfig("appName")
 
@@ -59,5 +61,9 @@ class FrontendAppConfig @Inject()(
 
   override lazy val phaseBannerFeedback: String = s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
   override lazy val phaseBannerFeedbackUnauth: String = s"$contactFrontend/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
+
+  override def emailVerificationCallback(hash: String) = {
+    s"$fhddsFrontendUrl/email-verify/$hash"
+  }
 }
 

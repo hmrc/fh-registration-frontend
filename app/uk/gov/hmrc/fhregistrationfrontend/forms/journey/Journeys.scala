@@ -25,8 +25,8 @@ object Journeys {
 
   val limitedCompanyPages = new JourneyPages(
     Seq[AnyPage](
-      Page.mainBusinessAddressPage,
       Page.contactPersonPage,
+      Page.mainBusinessAddressPage,
       Page.companyRegistrationNumberPage,
       Page.dateOfIncorporationPage,
       Page.tradingNamePage,
@@ -41,8 +41,8 @@ object Journeys {
 
   val soleTraderPages = new JourneyPages(
     Seq[Page[_]](
-      Page.mainBusinessAddressPage,
       Page.contactPersonPage,
+      Page.mainBusinessAddressPage,
       Page.nationalInsuranceNumberPage,
       Page.tradingNamePage,
       Page.vatNumberPage,
@@ -55,8 +55,8 @@ object Journeys {
 
   val partnershipPages = new JourneyPages(
     Seq[Page[_]](
-      Page.mainBusinessAddressPage,
       Page.contactPersonPage,
+      Page.mainBusinessAddressPage,
       Page.tradingNamePage,
       Page.vatNumberPage,
       Page.businessPartnersPage,

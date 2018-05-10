@@ -31,6 +31,8 @@ trait DesToForm {
 
   def businessRegistrationDetails(subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails
 
+  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String]
+
   def entityType(subscriptionDisplay: des.SubscriptionDisplay): BusinessType
 
   def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication
@@ -45,6 +47,10 @@ trait DesToForm {
 @Inject
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
+
+  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String] = {
+    subscriptionDisplay.contactDetail.commonDetails.email
+  }
 
   override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
@@ -359,7 +365,7 @@ class DesToFormImpl extends DesToForm {
     cd.names.lastName,
     roleInOrganization(cd.roleInOrganization.get),
     cd.commonDetails.telephone.get,
-    cd.commonDetails.email.get,
+    None,
     cd.usingSameContactAddress,
     ukOtherAddress(cd),
     otherUkContactAddress(cd),

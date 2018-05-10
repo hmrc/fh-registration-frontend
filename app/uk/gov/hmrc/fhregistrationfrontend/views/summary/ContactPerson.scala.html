@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit request: Request[_], messages: Messages)
 
 @SummarySectionHead(heading = Messages("fh.contact_person.title"))
 
@@ -55,13 +55,14 @@
     )
 )
 
-@SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.contact_person.email.label")),
-        contactPersonForm.emailAddress,
-        Some("contactPerson")
-    )
-)
+<tr>
+    <td style="vertical-align: top" width="45%">@Messages("fh.contact_person.email.label")</td>
+    <td class="form-data" width="45%">@{verifiedEmail}</td>
+    <td style="vertical-align: top">
+        <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailChange}">Change<span class="visuallyhidden"> email address</span></a>
+    </td>
+</tr>
+
 
 @if(!contactPersonForm.usingSameContactAddress) {
 

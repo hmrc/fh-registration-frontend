@@ -40,6 +40,7 @@ class SummaryRequest[A](
 
   val bpr = journeyRequest.bpr
   val businessType = journeyRequest.businessType
+  val verifiedEmail = journeyRequest.verifiedEmail
 
   def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.pageDataOpt(page)
 

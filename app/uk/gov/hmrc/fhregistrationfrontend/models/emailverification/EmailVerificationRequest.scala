@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(alert:String, linkText: Option[String] = None, linkVal: Option[String] = None)(implicit message : Messages)
+package uk.gov.hmrc.fhregistrationfrontend.models.emailverification
 
-<div class="alert alert--info margin-bottom-30" role="alert">
-    @{alert}
-    @if(linkText.nonEmpty) {
-      <a href=@{Some(linkVal)}>@{Some(linkText)}</a>
-    }
-</div>
+import play.api.libs.json.Json
+
+case class EmailVerificationRequest (
+  email: String,
+  templateId: String,
+  templateParameters: Map[String, String],
+  linkExpiryDuration: String,
+  continueUrl: String
+)
+
+object EmailVerificationRequest {
+  implicit val format = Json.format[EmailVerificationRequest]
+}
+

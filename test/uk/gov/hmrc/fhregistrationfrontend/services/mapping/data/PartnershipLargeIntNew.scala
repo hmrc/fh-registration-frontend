@@ -34,7 +34,7 @@ object PartnershipLargeIntNew {
       "ZHANG",
       "Director",
       "11123",
-      "a@w.ro",
+      None,
       false,
       Some(true),
       Some(Address(
@@ -204,7 +204,7 @@ object PartnershipLargeIntNew {
           "Z9 3WW",
           None),
         true)))))
-
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "Y",
     "Z",

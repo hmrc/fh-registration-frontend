@@ -170,9 +170,9 @@ class DeclarationController @Inject()(
 
   private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration, pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) = {
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, Journeys ltdApplication pageDataLoader, d)
-      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, Journeys soleTraderApplication pageDataLoader, d)
-      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, Journeys partnershipApplication pageDataLoader, d)
+      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, request.verifiedEmail, Journeys ltdApplication pageDataLoader, d)
+      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, request.verifiedEmail, Journeys soleTraderApplication pageDataLoader, d)
+      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, request.verifiedEmail, Journeys partnershipApplication pageDataLoader, d)
     }
   }
 

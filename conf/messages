@@ -143,6 +143,42 @@ fh.business_type.details1=You can only apply online for a limited company, sole 
 fh.business_type.detailsLinkText=Check the guidance (opens in a new window)
 fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
 
+# - Email verification
+#============================================================
+fh.emailVerification.title=Email verification
+fh.emailVerification.label=Which email address do you want us to use to contact you about the application?
+fh.emailVerification.usingGgEmailAddress.error.required=Select which email address you want to us to use to contact you about your application
+fh.emailVerification.alternativeEmailOption.label=I want to enter a new email address
+fh.emailVerification.alternativeEmail.label=Enter your new email address
+fh.emailVerification.alternativeEmail.hintText=For example, sample@example.com
+fh.emailVerification.alternativeEmail.error.required=Enter your new email address
+fh.emailVerification.alternativeEmail.error.email=Enter a valid email address
+fh.emailVerification.alternativeEmail.error.maxLength=Email addresses cannot be longer than 100 characters
+fh.emailVerification.alternativeEmail.info=The email addresses you use for other government services will not change.
+fh.emailVerification.pending.title=You have 30 minutes to verify your email address
+fh.emailVerification.pendingText.sentEmail=We have sent an email to you at:
+fh.emailVerification.pendingText.whatHappensNext=What happens next
+fh.emailVerification.pendingText.goToEmail=You will need to go to that email account and click the link in the message we sent you
+fh.emailVerification.pendingText.youHave30Mins=You have 30 minutes to do this
+fh.emailVerification.pendingText.whereEmailUpdated=Where your email address is updated
+fh.emailVerification.pendingText.onlyFHDDS=Once you have verified your new email address, we will only use it to contact you about your application for the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.pendingText.otherGovUnchanged=Your email address will not be updated in other government services
+fh.emailVerification.resendEmail=Resend email
+fh.emailVerification.changeEmail=Change email address
+fh.emailVerification.verified.title=Email address verified
+fh.emailVerification.verified.whatThisMeans=What this means
+fh.emailVerification.verified.onlyFHDDS=We will only use this email address to contact you about your application for the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.verified.otherGovUnchanged=Your email address has not been updated in other government services.
+fh.emailVerification.edit.title=Change your email address
+fh.emailVerification.edit.info=Once you have entered your new email address, we will send you an email so you can verify it.
+fh.emailVerification.edit.start.title=Change your contact email
+fh.emailVerification.edit.start.info=We will use this email address to contact you about the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.edit.start.label=Your email address:
+fh.emailVerification.emailSentAgain=We have sent a new email with a verification link in it
+
+
+
+
 # - Main Business Address
 #============================================================
 fh.main_business_address.title=Main business address

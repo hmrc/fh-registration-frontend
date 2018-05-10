@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, AmendmentRequest}
+import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
@@ -35,6 +35,7 @@ class AmendmentController @Inject()(
   links            : ExternalUrls,
   desToForm        : DesToForm,
   fhddsConnector   : FhddsConnector,
+  emailVerificationConnector: EmailVerificationConnector,
   actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
   import actions._
@@ -50,10 +51,12 @@ class AmendmentController @Inject()(
         val entityType = desToForm entityType display
         val journeyPages = loadJourneyPagesFromDes(display)
         val bpr = desToForm.businessRegistrationDetails(display)
+        val contactEmail = desToForm.contactEmail(display)
 
         for {
           _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
           _ ← save4LaterService.saveBusinessType(userId, entityType)
+          _ ← saveContactEmail(contactEmail)
           _ ← saveDisplayPageData(userId, journeyPages)
           _ ← savePageData(userId, journeyPages)
           _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
@@ -62,6 +65,19 @@ class AmendmentController @Inject()(
           Redirect(routes.SummaryController.summary())
       }
     }
+  }
+
+  private def saveContactEmail(contactEmail: Option[String])(implicit request: AmendmentRequest[_]): Future[Any] = {
+    val ignored: Any = 1
+    contactEmail.fold(
+      Future successful ignored
+    ) { contactEmail ⇒
+      emailVerificationConnector.isVerified(contactEmail) flatMap {
+        case true  ⇒ save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
+        case false ⇒ Future successful ignored
+      }
+    }
+
   }
 
   private def saveDisplayPageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {

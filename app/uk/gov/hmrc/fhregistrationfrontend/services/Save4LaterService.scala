@@ -33,6 +33,8 @@ object Save4LaterKeys {
   val businessTypeKey = "businessType"
   val userLastTimeSavedKey = "userLastTimeSaved"
   val isAmendmentKey = "isAmendment"
+  val verifiedEmailKey = "verifiedEmail"
+  val pendingEmailKey = "pendingEmail"
   def displayKeyForPage(pageId: String) =  s"display_$pageId"
   val displayDesDeclarationKey =  s"display_des_declaration"
 }
@@ -53,6 +55,27 @@ class Save4LaterService @Inject() (
   def fetchBusinessType(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
     fetchData4Later[String](userId, businessTypeKey)
   }
+
+  def saveVerifiedEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+    saveDraftData4Later(userId, verifiedEmailKey, email)
+  }
+
+  def fetchVerifiedEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+    fetchData4Later[String](userId, verifiedEmailKey)
+  }
+
+  def savePendingEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+    saveDraftData4Later(userId, pendingEmailKey, email)
+  }
+
+  def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) = {
+    savePendingEmail(userId, "")
+  }
+
+  def fetchPendingEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+    fetchData4Later[String](userId, pendingEmailKey).map { _.filterNot( _.isEmpty) }
+  }
+
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
     saveDraftData4Later(userId, businessRegistrationDetailsKey, brd)

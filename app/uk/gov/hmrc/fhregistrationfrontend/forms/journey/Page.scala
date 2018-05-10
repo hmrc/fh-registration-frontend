@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
 
 
 trait Rendering {
@@ -67,6 +68,7 @@ object Page {
 
   import CompanyOfficer.companyOfficerFormat
   import CompanyRegistrationNumber.format
+  import EmailVerification.format
   import ContactPerson.format
   import DateOfIncorporation.format
   import MainBusinessAddress.format
@@ -145,7 +147,6 @@ object Page {
     }
   })
 
-  //todo: should use BusinessPartnersForm.businessPartnersForm. When repeat component ready, replace businessPartnerForm with businessPartnersForm
   val businessPartnersPage = new RepeatingPage[BusinessPartner](
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {

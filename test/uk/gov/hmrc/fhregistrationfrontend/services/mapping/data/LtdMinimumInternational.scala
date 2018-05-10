@@ -35,7 +35,7 @@ object LtdMinimumInternational {
       "M",
       "D",
       "123123",
-      "a@a.ro",
+      None,
       false,
       Some(false),
       None,
@@ -70,6 +70,8 @@ object LtdMinimumInternational {
       BusinessCustomers("11-50"),
       OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
     )
+
+  val verifiedEmail = "a@a.ro"
 
   val declaration = Declaration(
     "R",

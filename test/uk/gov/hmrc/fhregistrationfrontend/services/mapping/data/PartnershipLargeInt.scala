@@ -41,7 +41,7 @@ object PartnershipLargeInt {
       "Marian",
       "Director",
       "11123",
-      "a@w.ro",
+      None,
       false,
       Some(false),
       None,
@@ -196,6 +196,7 @@ object PartnershipLargeInt {
         List.empty))
   )
 
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "C",
     "D",

@@ -40,7 +40,7 @@ object LtdLargeUkAmendNoPremises {
       "Marian",
       "Director",
       "11123",
-      "a@w.ro",
+      None,
       false,
       Some(true),
       Some(Address(
@@ -143,6 +143,7 @@ object LtdLargeUkAmendNoPremises {
           None),
         true)))))
 
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "C",
     "D",
