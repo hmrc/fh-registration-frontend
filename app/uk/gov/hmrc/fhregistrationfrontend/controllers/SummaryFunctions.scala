@@ -41,19 +41,19 @@ trait SummaryFunctions {
 
   protected def partnership(baseUrl: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys partnershipApplication request
-    partnership_summary(application, request.bpr, baseUrl, hasAmendments)
+    partnership_summary(application, request.bpr, request.verifiedEmail, baseUrl, hasAmendments)
   }
 
 
   protected def soleTrader(baseUrl: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys soleTraderApplication request
-    sole_proprietor_summary(application, request.bpr, baseUrl, hasAmendments)
+    sole_proprietor_summary(application, request.bpr, request.verifiedEmail, baseUrl, hasAmendments)
   }
 
   protected def ltdSummary(baseUrl: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: SummaryRequest[AnyContent]) = {
     val application = Journeys ltdApplication request
 
-    ltd_summary(application, request.bpr, baseUrl, hasAmendments)
+    ltd_summary(application, request.bpr, request.verifiedEmail, baseUrl, hasAmendments)
   }
 
   protected def getSummaryData()(implicit request: SummaryRequest[AnyContent]) = {
@@ -63,7 +63,7 @@ trait SummaryFunctions {
       case BusinessType.Partnership ⇒ Journeys partnershipApplication request
     }
 
-    SummaryPrintable(application, request.bpr)
+    SummaryPrintable(application, request.bpr, request.verifiedEmail)
   }
 
 }

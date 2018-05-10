@@ -51,7 +51,7 @@ object ContactPersonForm {
       lastNameKey → personName,
       jobTitleKey → roleInOrganization,
       telephoneKey → telephone,
-      emailAddressKey → email,
+      emailAddressKey → optional(email),
       usingSameContactAddressMapping,
       ukAddressMapping,
       otherUkContactAddressMapping,

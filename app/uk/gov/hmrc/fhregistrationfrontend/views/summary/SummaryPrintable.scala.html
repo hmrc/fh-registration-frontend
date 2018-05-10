@@ -18,13 +18,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication,SoleProprietorApplication,PartnershipApplication,BusinessEntityApplication}
 
-@(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails)(implicit request: Request[_], messages: Messages)
+@(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit request: Request[_], messages: Messages)
 
 @{
   applicationData match {
     case limitedCompanyApplication: LimitedCompanyApplication ⇒
       Html(MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress).toString() +
-          ContactPerson(limitedCompanyApplication.contactPerson, bpr).toString() +
+          ContactPerson(limitedCompanyApplication.contactPerson, bpr, verifiedEmail).toString() +
           CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber).toString() +
           DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation).toString() +
           TradingName(limitedCompanyApplication.tradingName).toString() +
@@ -39,7 +39,7 @@
     case soleProprietorApplication: SoleProprietorApplication ⇒
       Html(
         MainBusinessAddress(soleProprietorApplication.mainBusinessAddress).toString() +
-            ContactPerson(soleProprietorApplication.contactPerson, bpr).toString() +
+            ContactPerson(soleProprietorApplication.contactPerson, bpr, verifiedEmail).toString() +
             NationalInsurance(soleProprietorApplication.nationalInsuranceNumber).toString() +
             TradingName(soleProprietorApplication.tradingName).toString() +
             VATRegistrationNumber(soleProprietorApplication.vatNumber).toString() +
@@ -52,7 +52,7 @@
     case partnershipApplication: PartnershipApplication ⇒
       Html(
         MainBusinessAddress(partnershipApplication.mainBusinessAddress).toString() +
-            ContactPerson(partnershipApplication.contactPerson, bpr).toString() +
+            ContactPerson(partnershipApplication.contactPerson, bpr, verifiedEmail).toString() +
             TradingName(partnershipApplication.tradingName).toString() +
             VATRegistrationNumber(partnershipApplication.vatNumber).toString() +
             BusinessPartners(partnershipApplication.businessPartners).toString() +

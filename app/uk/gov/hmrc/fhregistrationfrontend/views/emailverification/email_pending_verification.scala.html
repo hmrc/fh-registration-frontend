@@ -55,7 +55,8 @@
   <h2>@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
   <p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
   <p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("emailVerification"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
+    @helper.CSRF.formField
     <input type="hidden" name="@{emailOptionKey}" value="false">
     <input type="hidden" name="@{alternativeEmailKey}" value="@{emailVerificationForm(alternativeEmailKey).value}">
     <div class="form-group">

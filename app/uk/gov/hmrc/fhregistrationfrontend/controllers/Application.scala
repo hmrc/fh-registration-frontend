@@ -30,14 +30,14 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, ContinueWithBprAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -175,7 +175,7 @@ class Application @Inject()(
 
   def startForm = userAction.async { implicit request ⇒
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
+      case Some(_)   ⇒ Redirect(routes.FormPageController.load("contactPerson"))
       case None      ⇒ errorHandler.errorResultsPages(Results.BadRequest)
     }
   }

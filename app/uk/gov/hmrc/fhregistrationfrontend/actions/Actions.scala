@@ -32,6 +32,7 @@ class Actions @Inject() (
 
 
   def userAction = new UserAction(externalUrls)
+  def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction
   def amendmentAction = userAction andThen new AmendmentAction()
   def enrolledUserAction = userAction andThen new EnrolledUserAction
   def noEnrolmentCheckAction = userAction andThen new NoEnrolmentCheckAction

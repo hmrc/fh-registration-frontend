@@ -25,11 +25,11 @@ import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration ⇒ _, _}
 
 trait FormToDes {
-  def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription
+  def limitedCompanySubmission(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: LimitedCompanyApplication, d: Declaration): des.Subscription
 
-  def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription
+  def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: SoleProprietorApplication, d: Declaration): des.Subscription
 
-  def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription
+  def partnership(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: PartnershipApplication, d: Declaration): des.Subscription
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes
 
@@ -43,7 +43,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     changeDate = changeDate
   )
 
-  override def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, application: SoleProprietorApplication, d: Declaration): des.Subscription = {
+  override def soleProprietorCompanySubmission(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: SoleProprietorApplication, d: Declaration): des.Subscription = {
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.SoleTrader,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -51,12 +51,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
-      contactDetail(bpr, application.contactPerson),
+      contactDetail(bpr, application.contactPerson, verifiedEmail),
       declaration(d)
     )
   }
 
-  override def partnership(bpr: BusinessRegistrationDetails, application: PartnershipApplication, d: Declaration): des.Subscription = {
+  override def partnership(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: PartnershipApplication, d: Declaration): des.Subscription = {
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.Partnership,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -64,12 +64,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
-      contactDetail(bpr, application.contactPerson),
+      contactDetail(bpr, application.contactPerson, verifiedEmail),
       declaration(d)
     )
   }
 
-  override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
+  override def limitedCompanySubmission(bpr: BusinessRegistrationDetails, verifiedEmail: String, application: LimitedCompanyApplication, d: Declaration): des.Subscription =
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -77,7 +77,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
-      contactDetail(bpr, application.contactPerson),
+      contactDetail(bpr, application.contactPerson, verifiedEmail),
       declaration(d)
     )
 
@@ -88,13 +88,13 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     true
   )
 
-  def contactDetail(bpr: BusinessRegistrationDetails, contact: ContactPerson) =
+  def contactDetail(bpr: BusinessRegistrationDetails, contact: ContactPerson, verifiedEmail: String) =
     des.ContactDetail(
       None,
       des.Name(contact.firstName, None, contact.lastName),
       contact.usingSameContactAddress,
       contactDetailAddress(bpr, contact),
-      des.CommonDetails(Some(contact.telephone), None, Some(contact.emailAddress)),
+      des.CommonDetails(Some(contact.telephone), None, Some(verifiedEmail)),
       Some(des.RoleInOrganization otherRole contact.jobTitle) //TODO: job title is the role?
     )
 

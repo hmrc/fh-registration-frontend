@@ -37,12 +37,12 @@
 }
 
 @main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
-
+    testt
   @Back(navigation)
 
   @error_box(emailVerificationForm, ".emailVerification.")
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("emailVerification"), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -52,6 +52,7 @@
 
     <p>@Messages("fh.emailVerification.edit.info")</p>
 
+    <input type="hidden" name="@{emailOptionKey}" value="false">
     @TextInput(
       TextInputParams(
         name = alternativeEmailKey,

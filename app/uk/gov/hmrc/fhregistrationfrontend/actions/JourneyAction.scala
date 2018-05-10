@@ -19,10 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -41,6 +40,7 @@ class JourneyRequest[A](
   request: UserRequest[A],
   val bpr: BusinessRegistrationDetails,
   val businessType: BusinessType,
+  val verifiedEmail: String,
   val journeyPages: JourneyPages,
   val journeyState: JourneyState
 ) extends WrappedRequest[A](request) with PageDataLoader
@@ -81,6 +81,7 @@ class JourneyRequest[A](
 class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
   extends ActionRefiner[UserRequest, JourneyRequest]
     with FrontendAction
+    with ActionFunctions
 {
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, JourneyRequest[A]]] = {
@@ -93,17 +94,27 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
       journeyState = loadJourneyState(journeyPages, cacheMap)
       bpr ← findBpr(cacheMap).toEitherT[Future]
       bt ← getBusinessType(cacheMap).toEitherT[Future]
+      verifiedEmail ← findVerifiedEmail(cacheMap).toEitherT[Future]
     } yield {
       new JourneyRequest[A](
         cacheMap,
         r,
         bpr,
         bt,
+        verifiedEmail,
         journeyPages,
         journeyState)
     }
 
     result.value
+  }
+
+  def findVerifiedEmail(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, String] = {
+    cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey).fold(
+      Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus()))
+    )(
+      verifiedEmail ⇒ Either.right(verifiedEmail)
+    )
   }
 
   def checkAmendmentJourney(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, Boolean] = {
@@ -116,19 +127,6 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
       }
     else
       Right(true)
-  }
-
-  def loadCacheMap(implicit save4LaterService: Save4LaterService, request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
-    save4LaterService.fetch(request.userId) map {
-      case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒
-        Logger.error(s"Not found in shortLivedCache")
-        Left(errorHandler.errorResultsPages(Results.BadRequest))
-
-    } recover { case t ⇒
-      Logger.error(s"Could not access shortLivedCache", t)
-      Left(errorHandler.errorResultsPages(Results.BadGateway))
-    }
   }
 
   def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] = {

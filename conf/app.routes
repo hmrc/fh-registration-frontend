@@ -8,6 +8,15 @@ GET         /signed-out                                                         
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
+GET         /contact-email                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.contactEmail
+POST        /contact-email                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail
+GET         /email-verification-status                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerificationStatus
+GET         /email-change                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailChange
+GET         /email-edit                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailEdit
+GET         /email-verify/:token                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerify(token)
+GET         /email-verified                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerified
+
+
 GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
 GET         /subscription/status                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus

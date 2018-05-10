@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.models.emailverification
 
 import play.api.libs.json.Json
 
-case class EmailVerification (
-  usingGgEmailAddress: Boolean,
-  ggEmail: Option[String],
-  alternativeEmail: Option[String]
-) {
+case class EmailVerificationRequest (
+  email: String,
+  templateId: String,
+  templateParameters: Map[String, String],
+  linkExpiryDuration: String,
+  continueUrl: String
+)
 
-  def email =
-    if (usingGgEmailAddress)
-      ggEmail.get
-    else
-      alternativeEmail.get
+object EmailVerificationRequest {
+  implicit val format = Json.format[EmailVerificationRequest]
 }
 
-object EmailVerification {
-  implicit val format = Json.format[EmailVerification]
-}
