@@ -55,13 +55,13 @@
     )
 )
 
-@SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.contact_person.email.label")),
-        contactPersonForm.emailAddress,
-        Some("contactPerson")
-    )
-)
+<tr>
+    <td style="vertical-align: top" width="45%">@Messages("fh.contact_person.email.label")</td>
+    <td class="form-data" width="45%">@{contactPersonForm.emailAddress}</td>
+    <td style="vertical-align: top">
+        <a class="hidden-print" href="/fhdds/emailChangeStart">Change<span class="visuallyhidden"> email address</span></a>
+    </td>
+</tr>
 
 @if(!contactPersonForm.usingSameContactAddress) {
 
