@@ -759,7 +759,7 @@ fh.withdrawalReason.otherReason.label=Other reason
 fh.reason.error.required=Select a reason for withdrawing your application
 fh.withdrawalReason.otherReasonText.label=Enter your reason for withdrawal
 fh.reasonOther.error.required=Enter your reason for withdrawal
-fh.reasonOther.error.pattern=Reason for withdrawal must be no longer than 40 characters and only include letters a to z, numbers, commas, full stops, apostrophes, round brackets, exclamation marks, ampersands, question marks, single and double quotation marks, colons, semi-colons, asterisks, @ signs, # signs, percent signs, forward and backward slashes, plus and equals signs, | and ~ signs, pound, euro, dollar and yen signs, and spaces
+fh.reasonOther.error.pattern=Reason for withdrawal must be no longer than 40 characters and only include letters a to z, numbers and spaces
 
 # - Withdrawal confirm
 #============================================================

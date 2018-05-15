@@ -134,16 +134,19 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     )
 
 
-  def previousOperationalAddress(mainBusinessAddress: MainBusinessAddress) =
-    for {
+  def previousOperationalAddress(mainBusinessAddress: MainBusinessAddress) = {
+    val previousAddressDetail = for {
       address ← mainBusinessAddress.previousAddress
       start ← mainBusinessAddress.previousAddressStartdate
     } yield {
-      des.PreviousOperationalAddress(
-        true,
-        Some(List(previousOperationalAddressDetail(start, address))))
+      List(previousOperationalAddressDetail(start, address))
     }
 
+    mainBusinessAddress.hasPreviousAddress map {
+      des.PreviousOperationalAddress(_, previousAddressDetail)
+    }
+
+  }
 
   def previousOperationalAddressDetail(start: LocalDate, a: Address) =
     des.PreviousOperationalAddressDetail(

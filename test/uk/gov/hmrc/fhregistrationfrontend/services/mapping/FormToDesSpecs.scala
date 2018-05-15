@@ -150,6 +150,20 @@ class FormToDesSpecs extends UnitSpec {
     }
   }
 
+  "Limited company submission service" should {
+    "Create a correct json for fhdds-limited-company-minimum-less-than-three-years" in {
+      val submission = SubScriptionCreate(
+        "Create",
+        service.limitedCompanySubmission(
+          brd("business-registration-details-limited-company.json"),
+          LtdMinimumLessThanThreeYears.application(),
+          LtdMinimumLessThanThreeYears.declaration),
+        None)
+
+      validatesFor(submission, "fhdds-limited-company-minimum-less-than-three-years", "limited-company")
+    }
+  }
+
   "Create a correct json for fhdds-limited-company-minimum-international" in {
     val submission = SubScriptionCreate(
       "Create",

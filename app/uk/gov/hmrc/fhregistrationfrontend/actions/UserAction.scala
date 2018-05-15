@@ -46,13 +46,18 @@ class UserAction @Inject()(
     authorised().retrieve(internalId and email and allEnrolments) {
       case Some(id) ~ anEmail ~ enrolments ⇒
         val fhddsRegistrationNumber = for {
-          enrolment ← enrolments getEnrolment Enrolments.serviceName
-          identifier ← enrolment getIdentifier Enrolments.identifierName
+          enrolment ← enrolments.enrolments
+          if enrolment.key equalsIgnoreCase Enrolments.serviceName
+
+          identifier ← enrolment.identifiers
+          if identifier.key equalsIgnoreCase Enrolments.identifierName
+          if identifier.value.slice(2, 4) == "FH"
+
         } yield {
           identifier.value
         }
 
-        Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumber, request))
+        Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumber.headOption, request))
       case _     ⇒
         throw AuthorisationException.fromString("Can not find user id")
 
