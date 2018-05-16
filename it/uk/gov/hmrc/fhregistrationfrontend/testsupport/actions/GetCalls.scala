@@ -20,6 +20,13 @@ class GetCalls(baseUrl: String)(implicit builder: ActionsBuilder) {
       .get()
   }
 
+  def contactPersonPage(implicit client: WSClient): Future[WSResponse] = {
+    client.url(s"$baseUrl/form/contactPerson")
+      .withFollowRedirects(false)
+      .withHeaders("X-Session-ID" → "some-id")
+      .get()
+  }
+
   def declarationPage(implicit client: WSClient): Future[WSResponse] = {
     client.url(s"$baseUrl/declaration")
       .withFollowRedirects(false)
