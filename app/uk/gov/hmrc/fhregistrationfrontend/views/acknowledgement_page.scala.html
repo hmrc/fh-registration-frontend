@@ -33,11 +33,9 @@
 
   <div class="transaction-banner--complete">
 
-
     <h1 class="transaction-banner__heading">
       @title
     </h1>
-
 
     <span id="subref" class="h1-heading">
       @Messages("fh.generic.on")
@@ -46,9 +44,9 @@
 
   </div>
 
-    <div class="hidden-print">
+  <div class="hidden-print">
 
-      <h4>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h4>
+      <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
 
       <div class="js-show notice with-icon">
           <i class="icon icon-file-download"></i>
@@ -57,9 +55,9 @@
           </p>
       </div>
 
-      <h4 class="heading-medium">
+      <h2 class="heading-medium">
           @Messages("fh.ack.what_happens_next")
-      </h4>
+      </h2>
 
       <p>
           @Messages("fh.ack.what_happens_next_1")
@@ -103,63 +101,5 @@
           @printableSummary
         </tbody>
       </table>
-
-
-    <div class="js-show notice with-icon">
-      <i class="icon icon-file-download"></i>
-      <p>
-        <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
-      </p>
     </div>
-
-    <h4 class="heading-medium">
-    @Messages("fh.ack.what_happens_next")
-    </h4>
-
-    <p>
-    @Messages("fh.ack.what_happens_next_1")
-    </p>
-
-    <p>
-    @Messages("fh.ack.what_happens_next_2")
-    </p>
-
-
-    <h2 class="heading-medium">
-    @Messages("fh.ack.help_using_service")
-    </h2>
-
-    <p>
-      <a href="@Messages("link.guidance_page")">
-      @Messages("fh.ack.guidance_link_text")
-      </a>
-      @Messages("fh.ack.to_find_out")
-    </p>
-
-    <ul class="bullets">
-      <li>
-      @Messages("fh.ack.help_bullet_1")
-      </li>
-      <li>
-      @Messages("fh.ack.help_bullet_2")
-      </li>
-      <li>
-      @Messages("fh.ack.help_bullet_3")
-      </li>
-    </ul>
-    <p>
-      <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
-    </p>
-  </div>
-
-  <div class="show-print">
-    <table class="table-font-xsmall">
-      <tbody>
-      @printableSummary
-      </tbody>
-    </table>
-
-  </div>
-
-
 }
