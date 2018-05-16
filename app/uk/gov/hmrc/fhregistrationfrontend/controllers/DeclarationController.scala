@@ -123,7 +123,7 @@ class DeclarationController @Inject()(
   }
 
   def createSubmission(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
-    val subscription = getSubscriptionForDes(formToDes, declaration, request)
+    val subscription = getSubscriptionForDes(formToDes, declaration, request.verifiedEmail, request)
     val payload = SubScriptionCreate(subscription)
 
     val submissionRequest = SubmissionRequest(
@@ -146,12 +146,14 @@ class DeclarationController @Inject()(
       val subscription = getSubscriptionForDes(
         formToDes.withModificationFlags(true, Some(LocalDate.now)),
         declaration,
+        request.verifiedEmail,
         request
       )
 
       val prevSubscription = getSubscriptionForDes(
         formToDes.withModificationFlags(false, None),
         desToForm.declaration(prevDesDeclaration),
+        request.journeyRequest.displayVerifiedEmail.get,
         request.journeyRequest.displayPageDataLoader
       )
 
@@ -168,11 +170,11 @@ class DeclarationController @Inject()(
     }
   }
 
-  private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration, pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) = {
+  private def getSubscriptionForDes(formToDes: FormToDes, d: Declaration, verifiedEmail: String, pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) = {
     request.businessType match {
-      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, request.verifiedEmail, Journeys ltdApplication pageDataLoader, d)
-      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, request.verifiedEmail, Journeys soleTraderApplication pageDataLoader, d)
-      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, request.verifiedEmail, Journeys partnershipApplication pageDataLoader, d)
+      case BusinessType.CorporateBody ⇒ formToDes limitedCompanySubmission(request.bpr, verifiedEmail, Journeys ltdApplication pageDataLoader, d)
+      case BusinessType.SoleTrader    ⇒ formToDes soleProprietorCompanySubmission(request.bpr, verifiedEmail, Journeys soleTraderApplication pageDataLoader, d)
+      case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, verifiedEmail, Journeys partnershipApplication pageDataLoader, d)
     }
   }
 

@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -72,9 +72,18 @@ class AmendmentController @Inject()(
     contactEmail.fold(
       Future successful ignored
     ) { contactEmail ⇒
-      emailVerificationConnector.isVerified(contactEmail) flatMap {
-        case true  ⇒ save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
-        case false ⇒ Future successful ignored
+
+      def saveIfVerified(verified: Boolean) = {
+        if (verified) save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
+        else Future successful ignored
+      }
+
+      for {
+        _ ← save4LaterService.saveDisplayData4Later(request.userId, Save4LaterKeys.verifiedEmailKey, contactEmail)
+        verified ← emailVerificationConnector.isVerified(contactEmail)
+        result ← saveIfVerified(verified)
+      } yield {
+        result
       }
     }
 

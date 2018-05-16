@@ -62,9 +62,13 @@ class JourneyRequest[A](
     request.userIsRegistered && cacheMap.getEntry[Boolean](Save4LaterKeys.isAmendmentKey).getOrElse(false)
 
   def hasAmendments: Option[Boolean] = {
-    if (isAmendmentJourney) Some(journeyPages.pages exists( page ⇒ pageHasAmendments(page)))
+    if (isAmendmentJourney)
+      Some(pagesHaveAmendments || verifiedEmailHasAmendments)
     else None
   }
+
+  private def pagesHaveAmendments = journeyPages.pages exists( page ⇒ pageHasAmendments(page))
+  private def verifiedEmailHasAmendments = displayVerifiedEmail exists (_ != verifiedEmail)
 
   private def pageHasAmendments[T](page: Page[T]) = {
     cacheMap.getEntry[T](page.id)(page.format) != cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
@@ -76,6 +80,10 @@ class JourneyRequest[A](
 
   def displayDeclaration =
     cacheMap.getEntry[des.Declaration](displayDesDeclarationKey)
+
+  def displayVerifiedEmail =
+    cacheMap.getEntry[String](Save4LaterKeys.displayKeyForPage(Save4LaterKeys.verifiedEmailKey))
+
 }
 
 class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
