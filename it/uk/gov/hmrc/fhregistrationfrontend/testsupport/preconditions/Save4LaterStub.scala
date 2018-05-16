@@ -154,6 +154,11 @@ case class Save4LaterStub
     builder
   }
 
+  def hasBusinessInformationWOVerifiedEmail = {
+    stubS4LGet(businessInformationData - "verifiedEmail")
+    builder
+  }
+
   val crypto: CompositeSymmetricCrypto = aes(s"fqpLDZ4sumDsekHkeEBlCA==", Seq.empty)
 
   def encrypt(str: String): String = crypto.encrypt(PlainText(str)).value
