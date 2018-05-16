@@ -5,9 +5,9 @@ import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.Future
 
-class ServiceCalls(baseUrl: String)(implicit builder: ActionsBuilder) {
+class PostCalls(baseUrl: String)(implicit builder: ActionsBuilder) {
 
-  def declarationSubmit(implicit client: WSClient): Future[WSResponse] = {
+  def declaration(implicit client: WSClient): Future[WSResponse] = {
     client.url(s"$baseUrl/submit")
       .withFollowRedirects(false)
       .withHeaders("X-Session-ID" → "some-id",
@@ -25,4 +25,5 @@ class ServiceCalls(baseUrl: String)(implicit builder: ActionsBuilder) {
       |}
     """.stripMargin
   }
+
 }

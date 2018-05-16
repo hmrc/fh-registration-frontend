@@ -156,6 +156,7 @@ class FormToDesSpecs extends UnitSpec {
         "Create",
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdMinimumLessThanThreeYears.verifiedEmail,
           LtdMinimumLessThanThreeYears.application(),
           LtdMinimumLessThanThreeYears.declaration),
         None)

@@ -17,7 +17,7 @@ class AmendWithVerifiedEmailSpec
           .save4later.hasAmendmentDataWithNewVerifiedEmail("a@test.com")
 
         WsTestClient.withClient { implicit client ⇒
-          val result = user.calls.declarationSubmit.futureValue
+          val result = user.posts.declaration.futureValue
           result.status mustBe 303
           result.header("Location") mustBe Some("/fhdds/acknowledgement")
 
