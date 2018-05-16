@@ -21,6 +21,13 @@ case class KeyStoreStub
     builder
   }
 
+  def acceptsDelete() = {
+    stubFor(
+      delete(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/")).willReturn(ok())
+    )
+    builder
+  }
+
   def keyStorePut(key: String, data: String = "data"): MappingBuilder =
     put(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/data/$key"))
       .willReturn(ok(s"""

@@ -30,7 +30,7 @@ case class UserStub
 
   }
 
-  def isAuthorisedAndEnrolled() = {
+  def isAuthorisedAndEnrolled = {
     stubFor(
       post(urlPathEqualTo("/auth/authorise"))
         .willReturn(
@@ -43,7 +43,7 @@ case class UserStub
                |     "key": "HMRC-OBTDS-ORG",
                |     "identifiers": [{
                |       "key":"ETMPREGISTRATIONNUMBER",
-               |       "value": "XE0001234567890"
+               |       "value": "XEFH01234567890"
                |     }]
                |  }],
                |  "loginTimes": {

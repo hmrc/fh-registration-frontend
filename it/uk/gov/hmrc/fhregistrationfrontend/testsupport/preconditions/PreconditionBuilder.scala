@@ -1,6 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
-class PreconditionBuilder {
+class PreconditionBuilder extends PreconditionHelpers {
   implicit val builder: PreconditionBuilder = this
 
   def audit = AuditStub()
