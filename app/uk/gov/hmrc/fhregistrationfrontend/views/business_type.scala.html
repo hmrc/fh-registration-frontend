@@ -43,16 +43,12 @@
 
     @helper.CSRF.formField
 
-    @PageHeading(
-      PageHeadingParams(
-        heading = title
-      )
-    )
-
     @RadioGroup(
       RadioGroupParams(
         name = Some("businessType"),
         inline = false,
+        legend = Some(title),
+        legendAsHeading = true,
         error = Some(Messages("fh.businessType.error.required")),
         hasErrors = businessTypeForm("businessType").hasErrors,
         value = businessTypeForm("businessType").value,
