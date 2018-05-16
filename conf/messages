@@ -701,7 +701,7 @@ fh.business_partners.addMore=Are there any more partners?
 
 # - save for later page
 #===========================================================
-fh.has_saved = ✓ Your progress has been saved
+fh.has_saved = Your progress has been saved
 fh.held_until = This will be held until midnight on
 fh.held_until.hint = If the form you are working on has a submission deadline you will need to return and complete the form before that deadline.
 fh.held_until.notice = Partially completed forms will not be processed by HMRC.
