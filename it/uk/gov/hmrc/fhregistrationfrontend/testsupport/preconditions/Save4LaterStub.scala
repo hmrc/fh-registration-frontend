@@ -138,6 +138,12 @@ case class Save4LaterStub
     builder
   }
 
+  def hasFullPreEmailVerificationData() = {
+    val data = fullJourneyData - "verifiedEmail"
+    stubS4LGet(data)
+    builder
+  }
+
   def hasAmendmentDataWithNewVerifiedEmail(verifiedEmail: String) = {
     stubS4LGet(amendmentData + ("verifiedEmail" → ("\"" + verifiedEmail + "\"")))
     builder

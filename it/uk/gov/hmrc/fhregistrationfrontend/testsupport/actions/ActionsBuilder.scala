@@ -4,6 +4,7 @@ class ActionsBuilder(baseUrl: String) {
 
   implicit val builder: ActionsBuilder = this
 
-  def calls = new ServiceCalls(baseUrl)
+  def posts = new PostCalls(baseUrl)
+  def gets = new GetCalls(baseUrl)
 
 }
