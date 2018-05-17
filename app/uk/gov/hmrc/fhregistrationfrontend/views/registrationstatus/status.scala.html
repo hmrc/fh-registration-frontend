@@ -22,22 +22,12 @@
 @sidebarLinks =  {@statusSidebar(status)}
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = "Status", sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
-
       @{statusHeading(status, id)}
       @{statusMoreInfo()}
-
       @{status match {
         case "revoked" => statusNewApplication()
         case "rejected" => statusNewApplication()
         case _ => statusWhatHappensNext()
       }}
-
-      <p>
-        <a class="button" href="@{
-          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
-        }">
-        @Messages("fh.generic.application_status_continue")
-        </a>
-      </p>
-
+      @{statusActions(status)}
 }
