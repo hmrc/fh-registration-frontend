@@ -14,11 +14,22 @@
  * limitations under the License.
  *@
 
-@(status: String)(implicit messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
+
+@(status: String)(implicit messages: Messages, config: AppConfig)
 <p>
   <a class="button" href="@{
     uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()
   }">
-  @Messages("fh.generic.application_status_continue")
+  @Messages(s"fh.status.$status.cta")
   </a>
 </p>
+
+<p class="js-show">
+  <a href="JavaScript: window.print();">
+    @Messages("fh.status.generic.print_page")
+  </a>
+</p>
+
+@SurveyLink()

@@ -14,20 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(status: String, id: String)(implicit message : Messages)
-
-<div class="gov-box-highlight appstatus">
-
-  <h1 class="heading-xlarge">
-    @Messages(s"fh.status.$status.title")
-  </h1>
-
-  <p class="lede">
-    @Messages(s"fh.status.$status.subheading", id)
-  </p>
-
-  @if(id == "") { @statusSteps(status) }
-
-</div>
+@()(implicit messages: Messages, config: AppConfig)
+<p>
+  <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a>
+  @Messages("fh.survey_hint")
+</p>
