@@ -365,7 +365,7 @@ class DesToFormImpl extends DesToForm {
     cd.names.lastName,
     roleInOrganization(cd.roleInOrganization.get),
     cd.commonDetails.telephone.get,
-    None,
+    cd.commonDetails.email,
     cd.usingSameContactAddress,
     ukOtherAddress(cd),
     otherUkContactAddress(cd),

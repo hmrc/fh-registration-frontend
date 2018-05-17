@@ -20,6 +20,7 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -28,10 +29,11 @@ import scala.concurrent.Future
 class EmailVerificationRequest[A](
   val verifiedEmail: Option[String],
   val pendingEmail: Option[String],
+  val candidateEmail: Option[String],
   request: UserRequest[A]) extends WrappedRequest(request) {
 
   def userId = request.userId
-  def email = request.email
+  def ggEmail = request.ggEmail
 }
 
 class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
@@ -44,18 +46,38 @@ class EmailVerificationAction(implicit val save4LaterService: Save4LaterService,
     implicit val r = request
     val result = for {
       cacheMap ← EitherT(loadCacheMap)
+      verifiedEmail = cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey)
+      pendingEmail = getPendingEmail(cacheMap)
+      contactPersonEmail = getContactPersonEmail(cacheMap)
+      contactPersonV1Email = getContactPersonEmailV1(cacheMap)
+
     } yield {
+
+      val candidateEmail =
+        verifiedEmail orElse pendingEmail orElse contactPersonEmail orElse contactPersonV1Email orElse request.ggEmail
+
       new EmailVerificationRequest[A](
-        cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey),
-        getPendingEmail(cacheMap),
+        verifiedEmail,
+        pendingEmail,
+        candidateEmail,
         request
       )
     }
     result.value
   }
 
-  def getPendingEmail(cacheMap: CacheMap) = cacheMap
+  private def getPendingEmail(cacheMap: CacheMap) = cacheMap
     .getEntry[String](Save4LaterKeys.pendingEmailKey)
     .filterNot(_.isEmpty)
+
+
+  private def getContactPersonEmail(cacheMap: CacheMap) =
+    cacheMap
+      .getEntry[ContactPerson]("contactPerson")
+      .flatMap(_.emailAddress)
+
+  private def getContactPersonEmailV1(cacheMap: CacheMap) =
+    cacheMap
+      .getEntry[String](Save4LaterKeys.v1ContactEmailKey)
 
 }
