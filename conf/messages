@@ -106,6 +106,7 @@ fh.status_pending.what_happens_next_5=if you have not received a confirmation em
 fh.status_pending.finish=Finish and sign out
 
 
+
 fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
@@ -793,7 +794,19 @@ fh.status_pending.what_happens_next_4=VAT general enquiries
 fh.status_pending.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
 fh.status_pending.finish=Finish and sign out
 
+# - Status Page
+#===============================================================
+fh.status.generic.what_this_means=What this means
+fh.status.generic.go_to_bta=To see the full details of our decision, go to your secure messages in your 
+fh.status.generic.bta_link_text=business tax account
+fh.status.generic.what_happens_next=What happens next
+fh.status.generic.apply_again=If you want to apply again, you will need to 
+fh.status.generic.start_new_link_text=start a new application
+fh.status.approved.title=Application approved
+fh.status.approved.subheading=Your registration number is {0}
+
 link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
 link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
 link.eoriTeam=https://www.tax.service.gov.uk/shortforms/form/EORIContact
 link.vat=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries
+link.bta=https://www.tax.service.gov.uk/
