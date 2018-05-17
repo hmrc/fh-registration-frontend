@@ -34,6 +34,7 @@ object Save4LaterKeys {
   val userLastTimeSavedKey = "userLastTimeSaved"
   val isAmendmentKey = "isAmendment"
   val verifiedEmailKey = "verifiedEmail"
+  val v1ContactEmailKey = "v1ContactEmail"
   val pendingEmailKey = "pendingEmail"
   def displayKeyForPage(pageId: String) =  s"display_$pageId"
   val displayDesDeclarationKey =  s"display_des_declaration"
@@ -67,6 +68,10 @@ class Save4LaterService @Inject() (
 
   def savePendingEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
     saveDraftData4Later(userId, pendingEmailKey, email)
+  }
+
+  def saveV1ContactEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+    saveDraftData4Later(userId, v1ContactEmailKey, email)
   }
 
   def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) = {

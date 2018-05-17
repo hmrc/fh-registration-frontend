@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, val email: Option[String], val registrationNumber: Option[String], request: Request[A])
+class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], request: Request[A])
   extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }

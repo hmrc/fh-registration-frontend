@@ -75,7 +75,7 @@ class AmendmentController @Inject()(
 
       def saveIfVerified(verified: Boolean) = {
         if (verified) save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
-        else Future successful ignored
+        else save4LaterService.saveV1ContactEmail(request.userId, contactEmail)
       }
 
       for {

@@ -38,13 +38,13 @@ class EmailVerificationController @Inject() (
 {
   import actions._
 
-  def contactEmail = userAction { implicit request ⇒
-    Ok(email_options(emailVerificationForm, request.email, Navigation.noNavigation))
+  def contactEmail = emailVerificationAction { implicit request ⇒
+    Ok(email_options(emailVerificationForm, request.candidateEmail, Navigation.noNavigation))
   }
 
-  def submitContactEmail = userAction.async { implicit request ⇒
+  def submitContactEmail = emailVerificationAction.async { implicit request ⇒
     emailVerificationForm.bindFromRequest() fold (
-      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, request.email, Navigation.noNavigation))),
+      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, request.candidateEmail, Navigation.noNavigation))),
       emailOptions ⇒ emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap { isVerified ⇒
         if (isVerified) {
           save4LaterService
@@ -66,14 +66,14 @@ class EmailVerificationController @Inject() (
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(pendingEmail), None)    ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Ok(email_pending_verification(form, request.email, Navigation.noNavigation, None))
+        Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
       case (Some(pendingEmail), Some(verifiedEmail))
         if pendingEmail == verifiedEmail ⇒ Redirect(routes.Application.resumeForm())
 
       case (Some(pendingEmail), Some(_)) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Ok(email_pending_verification(form, request.email, Navigation.noNavigation, None))
+        Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
       case (None, Some(_))               ⇒ Redirect(routes.Application.resumeForm())
       case (None, None)                  ⇒ Redirect(routes.EmailVerificationController.contactEmail())
@@ -124,7 +124,7 @@ class EmailVerificationController @Inject() (
         }
       case Some(pendingEmail)                                     ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Future successful Ok(email_pending_verification(form, request.email, Navigation.noNavigation, None))
+        Future successful Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
       case None                                                   ⇒
         Future successful Redirect(routes.Application.resumeForm())
