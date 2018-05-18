@@ -142,7 +142,9 @@ class Application @Inject()(
       Redirect(routes.SummaryController.summary())
     else {
       request.journeyState.lastEditedPage.map( p ⇒ p.id → p.lastSection) match {
-        case None ⇒ Redirect(routes.Application.startForm())
+        case None ⇒
+          val firstPage = request.journeyPages.pages(0).id
+          Redirect(routes.FormPageController.load(firstPage))
         case Some((pid , Some(section))) ⇒  Redirect(routes.FormPageController.loadWithSection(pid, section))
         case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
 
@@ -167,17 +169,14 @@ class Application @Inject()(
         for {
           _ ← save4LaterService.saveBusinessType(request.userId, businessType)
         } yield {
-          Redirect(routes.Application.startForm())
+          Redirect(routes.EmailVerificationController.contactEmail())
         }
       }
     )
   }
 
-  def startForm = userAction.async { implicit request ⇒
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(_)   ⇒ Redirect(routes.FormPageController.load("contactPerson"))
-      case None      ⇒ errorHandler.errorResultsPages(Results.BadRequest)
-    }
+  def startForm = userAction { implicit request ⇒
+    Redirect(routes.Application.resumeForm())
   }
 
   def savedForLater = userAction.async { implicit request ⇒

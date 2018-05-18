@@ -34,7 +34,7 @@ object LtdMinimumLessThanThreeYears {
       "M",
       "director",
       "07231111",
-      None,
+      Some(verifiedEmail),
       true,
       None,
       None,
