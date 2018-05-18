@@ -5,6 +5,10 @@ strong {
     background-color: #005ea5;
     color: #fff;
 }
+
+.appstatus h1.heading-xlarge {
+    margin-bottom: .5em;
+}
 .sidebar {
     margin-top: 0;
     border-top: 0;
@@ -18,9 +22,7 @@ strong {
 .govuk-related-items h2 {
     margin-top: 0.55556em;
 }
-h1.appstatus-title {
-    color: #fff;
-}
+
 p.lede, .lede {
     font-family: "nta", Arial, sans-serif;
     font-size: 24px;
