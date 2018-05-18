@@ -38,6 +38,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgres
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -191,7 +192,7 @@ class Application @Inject()(
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber))
+        Ok(status(StatusPageParams.statusParams(4), request.registrationNumber))
       })
   }
 

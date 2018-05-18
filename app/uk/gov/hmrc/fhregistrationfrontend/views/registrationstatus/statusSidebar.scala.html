@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@(status: String)(implicit request: Request[_], messages: Messages)
-
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@(params: StatusPageParams)(implicit request: Request[_], messages: Messages)
 
     <nav class="govuk-related-items ">
       <h2 class="heading-medium" id="subsection-title">
@@ -24,15 +24,13 @@
 
       <ul class="section__ul--link-list sidebar__list">
         <li class="sidebar__list-item">
-          <a href="@{
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment
-          }">
-                @Messages("fh.generic.application_status_continue")
+          <a href="@{params.cta}">
+                @Messages(s"fh.status.${params.status}.cta")
           </a>
         </li>
         <li class="sidebar__list-item">
-          <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()}">
-                @Messages("fh.generic.application_status_withdraw")
+          <a href="@{params.secondary}">
+                @Messages(s"fh.status.${params.status}.secondaryLink")
           </a>
         </li>
       </ul>

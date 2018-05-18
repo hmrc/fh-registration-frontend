@@ -14,40 +14,65 @@
  * limitations under the License.
  *@
 
-@()(implicit message : Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-<h2 class="heading-large">
-@Messages("fh.ack.what_happens_next")
+@(params: StatusPageParams)(implicit message : Messages, appConfig: AppConfig)
+
+<h2>
+  @Messages("fh.status.generic.what_happens_next")
 </h2>
 
-<p>
-@Messages("fh.ack.what_happens_next_1")
-</p>
+@if(params.category == "pre") {
+  <p>
+    @Messages("fh.ack.what_happens_next_1")
+  </p>
 
-<p>
-@Messages("fh.ack.what_happens_next_2")
-</p>
+  <p>
+    @Messages("fh.ack.what_happens_next_2")
+  </p>
 
-
-<h2 class="heading-medium">
-@Messages("fh.ack.help_using_service")
-</h2>
+  <h2 class="heading-medium">
+    @Messages("fh.ack.help_using_service")
+  </h2>
+}
 
 <p>
   <a href="@Messages("link.guidance_page")">
-  @Messages("fh.ack.guidance_link_text")
+    @Messages("fh.ack.guidance_link_text")
   </a>
   @Messages("fh.ack.to_find_out")
 </p>
 
 <ul class="bullets">
   <li>
-  @Messages("fh.ack.help_bullet_1")
+    @Messages(s"fh.status.${params.category}.help_bullet_1")
   </li>
   <li>
-  @Messages("fh.ack.help_bullet_2")
+    @Messages(s"fh.status.${params.category}.help_bullet_2")
   </li>
   <li>
-  @Messages("fh.ack.help_bullet_3")
+    @Messages(s"fh.status.${params.category}.help_bullet_3")
   </li>
 </ul>
+
+<p>
+  <a class="button" href="@{params.cta}">
+    @Messages(s"fh.status.${params.status}.cta")
+  </a>
+</p>
+
+<p>
+  <a href="@{params.secondary}">
+    @Messages(s"fh.status.${params.status}.secondaryLink")
+  </a>
+</p>
+
+<p class="js-show">
+  <a href="JavaScript: window.print();">
+    @Messages("fh.status.generic.print_page")
+  </a>
+</p>
+
+@SurveyLink()

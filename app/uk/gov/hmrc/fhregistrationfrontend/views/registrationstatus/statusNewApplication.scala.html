@@ -14,10 +14,31 @@
  * limitations under the License.
  *@
 
-@()(implicit message : Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+@(params: StatusPageParams)(implicit message : Messages, appConfig: AppConfig)
+<h2>
+  @Messages("fh.status.generic.what_happens_next")
+</h2>
+
 <p>
   @Messages("fh.status.generic.apply_again")
-    <a href="/fhdds">
+    <a href="@{params.secondary}">
       @Messages("fh.status.generic.start_new_link_text")
     </a>.
 </p>
+<p>
+  <a class="button" href="@{params.cta}">
+    @Messages(s"fh.status.${params.status}.cta")
+  </a>
+</p>
+
+<p class="js-show">
+  <a href="JavaScript: window.print();">
+  @Messages("fh.status.generic.print_page")
+  </a>
+</p>
+
+@SurveyLink()

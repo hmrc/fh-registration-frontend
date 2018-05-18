@@ -16,18 +16,21 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 
-@(status: String, id: String)(implicit message : Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@(params: StatusPageParams, id: String)(implicit message : Messages)
 
-<div class="gov-box-highlight appstatus">
+<div class="govuk-box-highlight appstatus">
 
   <h1 class="heading-xlarge">
-    @Messages(s"fh.status.$status.title")
+    @Messages(s"fh.status.${params.status}.title")
   </h1>
 
-  <p class="lede">
-    @Messages(s"fh.status.$status.subheading", id)
-  </p>
+  @if(params.showSubHeading) {
+    <p class="font-large">
+      @Html(Messages(s"fh.status.${params.status}.subheading", id))
+    </p>
+  }
 
-  @if(id == "") { @statusSteps(status) }
+  @if(params.showSteps) { @statusSteps(params.status) }
 
 </div>
