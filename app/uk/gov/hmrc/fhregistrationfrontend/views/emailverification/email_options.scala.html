@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(emailVerificationForm: Form[EmailVerification], ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], forced: Boolean, ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -33,7 +33,13 @@
 }
 
 @title = @{
-  Messages("fh.emailVerification.label")
+    if (forced) Messages("fh.emailVerification.forced.label")
+    else Messages("fh.emailVerification.label")
+}
+
+@action = @{
+    if (forced) uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitForcedContactEmail
+    else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail
 }
 
 @main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
@@ -44,7 +50,7 @@
 
   @error_box(emailVerificationForm, ".emailVerification.")
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
+  @helper.form(action = action, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 

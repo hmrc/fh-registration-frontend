@@ -41,7 +41,7 @@ object PartnershipLargeInt {
       "Marian",
       "Director",
       "11123",
-      None,
+      Some(verifiedEmail),
       false,
       Some(false),
       None,

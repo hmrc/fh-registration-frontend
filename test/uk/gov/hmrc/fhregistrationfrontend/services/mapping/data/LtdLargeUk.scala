@@ -41,7 +41,7 @@ object LtdLargeUk {
       "Marian",
       "Director",
       "11123",
-      None,
+      Some(verifiedEmail),
       false,
       Some(true),
       Some(Address(

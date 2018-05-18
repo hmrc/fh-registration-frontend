@@ -147,6 +147,7 @@ fh.business_type.details2=to find out how to apply for a different type of busin
 #============================================================
 fh.emailVerification.title=Email verification
 fh.emailVerification.label=Which email address do you want us to use to contact you about the application?
+fh.emailVerification.forced.label=​Before you continue, which email address should we use to contact your business about the Fulfilment House Due Diligence Scheme?
 fh.emailVerification.usingGgEmailAddress.error.required=Select which email address you want to us to use to contact you about your application
 fh.emailVerification.alternativeEmailOption.label=I want to enter a new email address
 fh.emailVerification.alternativeEmail.label=Enter your new email address

@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.Inject
 
 import play.api.mvc.Results
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EmailVerificationRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm.emailVerificationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
@@ -39,24 +39,41 @@ class EmailVerificationController @Inject() (
   import actions._
 
   def contactEmail = emailVerificationAction { implicit request ⇒
-    Ok(email_options(emailVerificationForm, request.candidateEmail, Navigation.noNavigation))
+    Ok(email_options(emailVerificationForm, false, request.candidateEmail, Navigation.noNavigation))
+  }
+
+  def forcedContactEmail = emailVerificationAction { implicit request ⇒
+    Ok(email_options(emailVerificationForm, true, request.candidateEmail, Navigation.noNavigation))
   }
 
   def submitContactEmail = emailVerificationAction.async { implicit request ⇒
     emailVerificationForm.bindFromRequest() fold (
-      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, request.candidateEmail, Navigation.noNavigation))),
-      emailOptions ⇒ emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap { isVerified ⇒
-        if (isVerified) {
-          save4LaterService
-            .saveVerifiedEmail(request.userId, emailOptions.email)
-            .map { _ ⇒ Redirect(routes.Application.resumeForm())}
-        } else {
-          save4LaterService
-            .savePendingEmail (request.userId, emailOptions.email)
-            .map { _ ⇒ Redirect(routes.EmailVerificationController.emailVerificationStatus())}
-        }
-      }
+      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, false, request.candidateEmail, Navigation.noNavigation))),
+      emailOptions ⇒ handleContactEmail(emailOptions)
     )
+  }
+
+  def submitForcedContactEmail = emailVerificationAction.async { implicit request ⇒
+    emailVerificationForm.bindFromRequest() fold (
+      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, true, request.candidateEmail, Navigation.noNavigation))),
+      emailOptions ⇒ handleContactEmail(emailOptions)
+    )
+  }
+
+
+  private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) = {
+    emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap { isVerified ⇒
+      if (isVerified) {
+        save4LaterService
+          .saveVerifiedEmail(request.userId, emailOptions.email)
+          .map { _ ⇒ Redirect(routes.Application.resumeForm())}
+      } else {
+        save4LaterService
+          .savePendingEmail (request.userId, emailOptions.email)
+          .map { _ ⇒ Redirect(routes.EmailVerificationController.emailVerificationStatus())}
+      }
+    }
+
   }
 
   def emailHash(email: String) = email.hashCode.toHexString.toUpperCase
@@ -76,7 +93,7 @@ class EmailVerificationController @Inject() (
         Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
       case (None, Some(_))               ⇒ Redirect(routes.Application.resumeForm())
-      case (None, None)                  ⇒ Redirect(routes.EmailVerificationController.contactEmail())
+      case (None, None)                  ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail())
 
     }
   }

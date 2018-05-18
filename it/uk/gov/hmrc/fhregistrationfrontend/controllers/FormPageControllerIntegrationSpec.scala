@@ -25,7 +25,7 @@ class FormPageControllerIntegrationSpec
 
         whenReady(result1) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/startForm")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/contactPerson")
         }
         whenReady(result2) { res ⇒
           res.status mustBe 303

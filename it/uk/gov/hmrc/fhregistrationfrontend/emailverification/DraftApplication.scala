@@ -18,7 +18,7 @@ class DraftApplication
         val result = user.gets.contactPersonPage.futureValue
 
         result.status mustBe 303
-        result.header("Location") mustBe Some("/fhdds/contact-email")
+        result.header("Location") mustBe Some("/fhdds/email-verification-status")
       }
     }
   }

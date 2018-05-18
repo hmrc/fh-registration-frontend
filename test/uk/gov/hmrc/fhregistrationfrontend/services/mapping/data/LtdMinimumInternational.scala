@@ -35,7 +35,7 @@ object LtdMinimumInternational {
       "M",
       "D",
       "123123",
-      None,
+      Some(verifiedEmail),
       false,
       Some(false),
       None,
