@@ -23,6 +23,8 @@
 
 @(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
+@mode = @{"variation"}
+
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -40,7 +42,7 @@
 }
 
 @title = @{
-  Messages("fh.declaration.title")
+  Messages(s"fh.declaration.$mode.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
@@ -154,7 +156,7 @@
 
     <div class="form-group">
       <h2>@Messages("fh.declaration.title")</h2>
-      <p>@Messages("fh.declaration.declaration.title")</p>
+      <p>@Messages(s"fh.declaration.declaration.$mode.title")</p>
       <ul class="bullets">
         <li>
         @Messages("fh.declaration.declaration.point1")
