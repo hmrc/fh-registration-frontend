@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
