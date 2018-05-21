@@ -386,6 +386,14 @@ fh.storagePremise_address.addMore.error.required=Select whether have more premis
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
+fh.summary.new.title=Check your answers before sending your application
+fh.summary.amendment.title=Check your answers before sending your application
+fh.summary.variation.title=View or update registered details
+
+fh.summary.rejected.title=View application
+fh.summary.revoked.title=View application
+fh.summary.withdrawn.title=View application
+fh.summary.deregistered.title=View application
 fh.summary.addMoreCompanyOfficers=Add more company officers
 fh.summary.addMoreStoragePremises=Add more storage premises
 fh.summary.addMoreBusinessPartners=Add more business partners
@@ -393,6 +401,9 @@ fh.summary.addMoreBusinessPartners=Add more business partners
 # - Declaration
 #===========================================================
 fh.declaration.title=Declaration
+fh.declaration.new.title=Declaration
+fh.declaration.amendment.title=Declaration
+fh.declaration.variation.title=Confirm details and send your update
 fh.declaration.person_name.label=Full name
 fh.declaration.fullName.error.required=Enter the full name of who is submitting this application
 fh.declaration.person_name.error.required=Enter the full name of who is submitting this application
@@ -418,6 +429,9 @@ fh.declaration.alternative_email_confirmation.label=Re-enter the alternative ema
 fh.declaration.alternative_email_confirmation.empty.error=Re-enter the alternative email address
 fh.declaration.alternative_email_confirmation.no_match.error=The email addresses are not the same
 fh.declaration.declaration.title=By submitting this application you confirm that:
+fh.declaration.declaration.new.title=By submitting this application you confirm that:
+fh.declaration.declaration.amendment.title=By submitting this application you confirm that:
+fh.declaration.declaration.variation.title=By sending this update to your registered details you confirm that:
 fh.declaration.declaration.point1=the information you have provided is correct and complete
 fh.declaration.declaration.point2=you have authority to submit this form on behalf of the business you wish to register
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
