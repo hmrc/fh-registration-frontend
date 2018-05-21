@@ -19,17 +19,17 @@
 <ul class="appstatus-steps" aria-hidden="true">
   <li>
     <span id="indication-received" class="appstatus-complete tick" aria-label="Received">
-              Received
+      @Messages("fh.status.received.step")
     </span>
   </li>
   <li>
     <span id="indication-processed" class="@if(status != "received"){ appstatus-complete } else { appstatus-processing }">
-              Processing
+      @Messages("fh.status.processing.step")
     </span>
   </li>
   <li>
     <span id="indication-approved" class="appstatus-processing">
-              Decision
+      @Messages("fh.status.decision.step")
     </span>
   </li>
 </ul>
