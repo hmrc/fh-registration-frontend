@@ -25,8 +25,5 @@
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = Messages(s"fh.status.${params.status}.title"), sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
       @{statusHeading(params, id)}
       @{if(params.category == "post") statusMoreInfo()}
-      @{params.hasSecondaryAction match {
-        case false => statusNewApplication(params)
-        case _ => statusWhatHappensNext(params)
-      }}
+      @params.nextTemplate(params, messages, appConfig)
 }

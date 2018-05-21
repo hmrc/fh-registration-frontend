@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(params: StatusPageParams)(implicit message : Messages, appConfig: AppConfig)
+@(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
 <h2>
   @Messages("fh.status.generic.what_happens_next")
 </h2>
@@ -41,4 +41,4 @@
   </a>
 </p>
 
-@SurveyLink()
+@SurveyLink()(Messages, appConfig)

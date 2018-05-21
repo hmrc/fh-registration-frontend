@@ -15,14 +15,17 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus
+import play.api.i18n.Messages
 import play.api.mvc.Call
-
+import play.twirl.api.{Html, HtmlFormat}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 case class StatusPageParams(
                              status: String,
                              cta: Call,
                              secondary: Call,
-                             hasSecondaryAction: Boolean,
+                             nextTemplate: (StatusPageParams, Messages, AppConfig) => HtmlFormat.Appendable,
                              category: String = "pre",
                              showSubHeading: Boolean = true,
                              showSteps: Boolean = false
@@ -34,35 +37,37 @@ object StatusPageParams {
       "received",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = true,
+      nextTemplate = statusWhatHappensNext.apply,
+      showSubHeading = false,
       showSteps = true
     ),
     StatusPageParams(
       "processing",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = true,
+      nextTemplate = statusWhatHappensNext.apply,
+      showSubHeading = false,
       showSteps = true
     ),
     StatusPageParams(
       "approved",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = true,
+      nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       "approvedWithConditions",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = true,
+      nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       "rejected",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = false,
+      nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
       category = "post"
     ),
@@ -70,7 +75,7 @@ object StatusPageParams {
       "revoked",
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
-      hasSecondaryAction = false,
+      nextTemplate = statusNewApplication.apply,
       category = "post"
     )
   )

@@ -192,7 +192,7 @@ class Application @Inject()(
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(statusResp ⇒ {
-        Ok(status(StatusPageParams.statusParams(3), request.registrationNumber))
+        Ok(status(StatusPageParams.statusParams(1), request.registrationNumber))
       })
   }
 
