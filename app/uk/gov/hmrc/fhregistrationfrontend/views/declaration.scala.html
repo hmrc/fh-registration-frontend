@@ -35,11 +35,15 @@
   }
 }
 
+@titlePrefix = @{
+  if (declarationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.declaration.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, scriptElem = Some(pageScripts)) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

@@ -32,6 +32,10 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
+@titlePrefix = @{
+  if (emailVerificationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
     if (forced) Messages("fh.emailVerification.forced.label")
     else Messages("fh.emailVerification.label")
@@ -42,7 +46,7 @@
     else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail
 }
 
-@main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

@@ -36,11 +36,15 @@
   </a>.
 }
 
+@titlePrefix = @{
+  if (companyRegistrationNumberForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.companyRegistrationNumber.label")
 }
 
-@main_template(title = title, scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

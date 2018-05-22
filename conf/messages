@@ -26,6 +26,7 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 
 # Generic messages
 fh.generic.error=There is a problem
+fh.generic.errorPrefix=Error:
 
 fh.generic.not_found=Page not found
 fh.generic.not_found.label=This page can’t be found
