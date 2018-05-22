@@ -18,7 +18,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
-@(dateOfIncorporationForm: DateOfIncorporationModel)(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: DateOfIncorporationModel, mode: String)(implicit request: Request[_], messages: Messages)
+
+@changeLink = @{
+  if (mode != "readOnly") {
+    Some("businessStatus")
+  } else {
+    None
+  }
+}
 
 @SummarySectionHead(heading = Messages("fh.date_of_incorporation.title"))
 
@@ -26,6 +34,6 @@
     SummaryRowParams.ofDate(
       Some(Messages("fh.dateOfIncorporation.label")),
       dateOfIncorporationForm.dateOfIncorporation,
-      Some("dateOfIncorporation")
+      changeLink
     )
   )

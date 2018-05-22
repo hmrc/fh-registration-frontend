@@ -19,7 +19,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
 
-@(businessCustomersForm: BusinessCustomersModel)(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: BusinessCustomersModel, mode: String)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != "readOnly") {
+      Some("businessCustomers")
+    } else {
+      None
+    }
+  }
 
   @SummarySectionHead(heading = Messages("fh.business_customers.title"))
 
@@ -27,6 +35,6 @@
     SummaryRowParams.ofString(
       Some(Messages("fh.business_customers.label")),
       businessCustomersForm.numberOfCustomers,
-      Some("businessCustomers")
+      changeLink
     )
   )

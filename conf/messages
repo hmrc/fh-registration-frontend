@@ -112,6 +112,9 @@ fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
 fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.new.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
@@ -389,14 +392,13 @@ fh.summary.title=Check your answers before sending your application
 fh.summary.new.title=Check your answers before sending your application
 fh.summary.amendment.title=Check your answers before sending your application
 fh.summary.variation.title=View or update registered details
-
-fh.summary.rejected.title=View application
-fh.summary.revoked.title=View application
-fh.summary.withdrawn.title=View application
-fh.summary.deregistered.title=View application
+fh.summary.readOnly.title=View application
 fh.summary.addMoreCompanyOfficers=Add more company officers
 fh.summary.addMoreStoragePremises=Add more storage premises
 fh.summary.addMoreBusinessPartners=Add more business partners
+fh.summary.new.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.amendment.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.variation.unsubmittedAlert=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # - Declaration
 #===========================================================
@@ -436,7 +438,11 @@ fh.declaration.declaration.point1=the information you have provided is correct a
 fh.declaration.declaration.point2=you have authority to submit this form on behalf of the business you wish to register
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
 fh.declaration.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
-fh.declaration.hasAmendments.error.linkText=View or change your application
+fh.declaration.new.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+
+fh.declaration.new.hasAmendments.error.linkText=View or change your application
+fh.declaration.amendment.hasAmendments.error.linkText=View or change your application
+fh.declaration.variation.hasAmendments.error.linkText=View or change your registered details
 fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
 fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
 
