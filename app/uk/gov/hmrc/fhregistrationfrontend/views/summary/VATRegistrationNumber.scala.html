@@ -19,7 +19,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
 
-@(vatNumberForm: VatNumber)(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: VatNumber, mode: String)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != "readOnly") {
+      Some("vatNumber")
+    } else {
+      None
+    }
+  }
 
   @SummarySectionHead(heading = Messages("fh.vat_registration.title"))
 
@@ -27,7 +35,7 @@
     SummaryRowParams.ofBoolean(
       Some(Messages("fh.vat_registration.confirm.label")),
       vatNumberForm.hasValue,
-      Some("vatNumber")
+      changeLink
     )
   )
 
@@ -36,7 +44,7 @@
       SummaryRowParams(
         Some(Messages("fh.vatNumber.label")),
         vatNumberForm.value,
-        Some("vatNumber")
+        changeLink
       )
     )
   }

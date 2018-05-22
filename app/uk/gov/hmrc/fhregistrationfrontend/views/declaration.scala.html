@@ -33,7 +33,7 @@
 
 @showAlert = @{
   hasAmendments.filter(_ == false).map { _ =>
-    Alert(Messages("fh.declaration.hasAmendments.error"), Some(Messages("fh.declaration.hasAmendments.error.linkText")), Some(linkVal))
+    Alert(Messages(s"fh.declaration.$mode.hasAmendments.error"), Some(Messages(s"fh.declaration.$mode.hasAmendments.error.linkText")), Some(linkVal))
   }
 }
 

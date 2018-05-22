@@ -18,7 +18,16 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
-@(companyRegistrationNumberForm: CRNModel)(implicit request: Request[_], messages: Messages)
+@(companyRegistrationNumberForm: CRNModel, mode: String)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != "readOnly") {
+      Some("companyRegistrationNumber")
+    } else {
+      None
+    }
+  }
+
 
   @SummarySectionHead(heading = Messages("fh.company_registration_number.title"))
 
@@ -26,7 +35,7 @@
     SummaryRowParams.ofString(
       Some(Messages("fh.companyRegistrationNumber.label")),
       companyRegistrationNumberForm.crn,
-      Some("companyRegistrationNumber")
+      changeLink
     )
   )
 
