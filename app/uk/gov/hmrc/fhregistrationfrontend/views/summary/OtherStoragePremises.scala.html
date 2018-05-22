@@ -19,7 +19,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
 
-@(data: StoragePremisesModel)(implicit request: Request[_], messages: Messages)
+@(data: StoragePremisesModel, mode: String)(implicit request: Request[_], messages: Messages)
+
+    @changeLink = @{
+      if (mode != "readOnly") {
+        Some("otherStoragePremises")
+      } else {
+        None
+      }
+    }
 
     @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
 
@@ -27,7 +35,7 @@
         SummaryRowParams.ofBoolean(
             Some(Messages("fh.other_storage_premises.confirm.label")),
             data.hasValue,
-            Some("otherStoragePremises")
+            changeLink
         )
     )
 
@@ -44,7 +52,7 @@
                 Line4 = storagePremise.address.addressLine4,
                 postcode = Some(storagePremise.address.postcode)
               ),
-              changeLink = Some("otherStoragePremises"),
+              changeLink = changeLink,
               section = {index+1}.toString()
             )
 
@@ -57,5 +65,8 @@
             )
         }
 
-        @SummaryAddMoreLink("otherStoragePremises", (data.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+        @if(mode != "readOnly") {
+          @SummaryAddMoreLink("otherStoragePremises", (data.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+        }
+
     }

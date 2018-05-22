@@ -18,7 +18,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
-@(mainBusinessAddressForm: models.MainBusinessAddress)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: models.MainBusinessAddress, mode: String)(implicit request: Request[_], messages: Messages)
+
+@changeLink = @{
+  if (mode != "readOnly") {
+    Some("mainBusinessAddress")
+  } else {
+    None
+  }
+}
 
 @SummarySectionHead(heading = Messages("fh.main_business_address.title"))
 
@@ -26,7 +34,7 @@
     SummaryRowParams.ofString(
         Some(Messages("fh.main_business_address.time_at_address.label")),
         mainBusinessAddressForm.timeAtCurrentAddress,
-        Some("mainBusinessAddress")
+        changeLink
     )
 )
 
@@ -35,7 +43,7 @@
         SummaryRowParams.ofBoolean(
             Some(Messages("fh.main_business_address.previous.label")),
             mainBusinessAddressForm.hasPreviousAddress,
-            Some("mainBusinessAddress")
+          changeLink
         )
     )
 
@@ -51,7 +59,7 @@
                     Line4 = address.addressLine4,
                     postcode = Some(address.postcode)
                 ),
-                Some("mainBusinessAddress")
+                changeLink
             )
         )
       }
@@ -60,7 +68,7 @@
         SummaryRowParams.ofDate(
           Some(Messages("fh.previousAddressStartdate.label")),
           mainBusinessAddressForm.previousAddressStartdate,
-          Some("mainBusinessAddress")
+          changeLink
         )
       )
 
