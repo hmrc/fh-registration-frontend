@@ -34,7 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
@@ -144,7 +144,7 @@ class Application @Inject()(
     else {
       request.journeyState.lastEditedPage.map( p ⇒ p.id → p.lastSection) match {
         case None ⇒
-          val firstPage = request.journeyPages.pages(0).id
+          val firstPage = request.journeyPages.pages.head.id
           Redirect(routes.FormPageController.load(firstPage))
         case Some((pid , Some(section))) ⇒  Redirect(routes.FormPageController.loadWithSection(pid, section))
         case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
@@ -190,8 +190,8 @@ class Application @Inject()(
   def checkStatus() = enrolledUserAction.async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(statusResp ⇒ {
-        Ok(status(StatusPageParams.statusParams(1), request.registrationNumber))
+      .map(fhddsStatus ⇒ {
+        Ok(status(StatusPageParams(fhddsStatus).get, request.registrationNumber))
       })
   }
 

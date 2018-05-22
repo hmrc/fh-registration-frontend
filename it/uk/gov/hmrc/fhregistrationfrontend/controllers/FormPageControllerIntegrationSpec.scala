@@ -29,7 +29,7 @@ class FormPageControllerIntegrationSpec
         }
         whenReady(result2) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/contactPerson")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/resume")
         }
       }
     }

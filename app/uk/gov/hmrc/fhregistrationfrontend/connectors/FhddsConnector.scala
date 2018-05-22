@@ -24,6 +24,7 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -44,8 +45,8 @@ class FhddsConnector @Inject() (
   override protected def mode = environment.mode
   val FHDSSServiceUrl: String = baseUrl("fhdds")
 
-  def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
-    http.GET(s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
+  def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] = {
+    http.GET[FhddsStatus](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
   }
 
   def getSubmission(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[SubscriptionDisplayWrapper] = {
