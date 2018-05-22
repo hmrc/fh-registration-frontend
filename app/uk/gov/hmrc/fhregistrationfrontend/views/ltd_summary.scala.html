@@ -29,11 +29,11 @@
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@mode = @{"variation"}
+@mode = @{"readOnly"}
 
 @showAlert = @{
   hasAmendments.filter(_ == true).map { _ =>
-    Alert(Messages("fh.unsaved_summary"))
+    Alert(Messages(s"fh.summary.$mode.unsubmittedAlert"))
   }
 }
 
@@ -54,21 +54,23 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail)
-      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber)
-      @DateOfIncorporation(applicationData.dateOfIncorporation)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @CompanyOfficers(applicationData.companyOfficers)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, mode)
+      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, mode)
+      @DateOfIncorporation(applicationData.dateOfIncorporation, mode)
+      @TradingName(applicationData.tradingName, mode)
+      @VATRegistrationNumber(applicationData.vatNumber, mode)
+      @CompanyOfficers(applicationData.companyOfficers, mode)
+      @BusinessStatus(applicationData.businessStatus, mode)
+      @ImportingActivities(applicationData.importingActivities, mode)
+      @BusinessCustomers(applicationData.businessCustomers, mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, mode)
 
     </tbody>
   </table>
 
-  @SummaryButtons()
+  @if(mode != "readOnly") {
+    @SummaryButtons()
+  }
 
 }

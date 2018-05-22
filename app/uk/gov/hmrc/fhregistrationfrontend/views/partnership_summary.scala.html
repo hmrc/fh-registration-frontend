@@ -26,6 +26,7 @@
 
 @(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
+@mode = @{"new"}
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -53,15 +54,15 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @BusinessPartners(applicationData.businessPartners)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, mode)
+      @TradingName(applicationData.tradingName, mode)
+      @VATRegistrationNumber(applicationData.vatNumber, mode)
+      @BusinessPartners(applicationData.businessPartners, mode)
+      @BusinessStatus(applicationData.businessStatus, mode)
+      @ImportingActivities(applicationData.importingActivities, mode)
+      @BusinessCustomers(applicationData.businessCustomers, mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, mode)
 
     </tbody>
   </table>
