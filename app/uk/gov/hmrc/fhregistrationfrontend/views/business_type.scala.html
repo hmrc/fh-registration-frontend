@@ -29,11 +29,15 @@
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
+@titlePrefix = @{
+  if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.business_type.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, pageScripts = Some(scripts)) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, pageScripts = Some(scripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

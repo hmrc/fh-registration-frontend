@@ -32,11 +32,15 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
+@titlePrefix = @{
+  if (emailVerificationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.emailVerification.edit.title")
 }
 
-@main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
     testt
   @Back(navigation)
 
