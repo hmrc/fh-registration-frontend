@@ -20,9 +20,11 @@ import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
 case class StatusPageParams(
-                             status: String,
+                             status: FhddsStatus,
                              cta: Call,
                              secondary: Call,
                              nextTemplate: (StatusPageParams, Messages, AppConfig) => HtmlFormat.Appendable,
@@ -34,7 +36,7 @@ case class StatusPageParams(
 object StatusPageParams {
   val statusParams = List(
     StatusPageParams(
-      "received",
+      Received,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusWhatHappensNext.apply,
@@ -42,7 +44,7 @@ object StatusPageParams {
       showSteps = true
     ),
     StatusPageParams(
-      "processing",
+      Processing,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusWhatHappensNext.apply,
@@ -50,21 +52,21 @@ object StatusPageParams {
       showSteps = true
     ),
     StatusPageParams(
-      "approved",
+      Approved,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
-      "approvedWithConditions",
+      ApprovedWithConditions,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
-      "rejected",
+      Rejected,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusNewApplication.apply,
@@ -72,11 +74,13 @@ object StatusPageParams {
       category = "post"
     ),
     StatusPageParams(
-      "revoked",
+      Revoked,
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
       nextTemplate = statusNewApplication.apply,
       category = "post"
     )
   )
+
+  def apply(status: FhddsStatus): Option[StatusPageParams] = statusParams find (_.status == status)
 }
