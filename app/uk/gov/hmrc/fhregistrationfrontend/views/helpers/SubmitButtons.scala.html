@@ -46,11 +46,12 @@
     }
   }
 
-
-  <p class="js-show">
-    <button class="button--link-style" type="submit" name="saveAction2" value="saveForLater">
-      @Messages("link.saveForLater")
-    </button>
+  <p>
+    <a class="" href="@{
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater()
+    }">
+    @Messages("link.saveForLater")
+    </a>
   </p>
 
 </div>
