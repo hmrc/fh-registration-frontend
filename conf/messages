@@ -142,7 +142,7 @@ fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
 fh.business_type.summary=My business type is not listed here
 fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
-fh.business_type.detailsLinkText=Check the guidance (opens in a new window)
+fh.business_type.detailsLinkText=Check the guidance (opens in a new window or tab)
 fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
 
 # - Email verification
@@ -336,7 +336,7 @@ fh.importing_activities.eori.label=EORI number
 fh.importing_activities.eori.hint_text=For example, GB123456789000
 fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods from sellers outside the EU. Contact the
 fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
-fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window)
+fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window or tab)
 fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
 fh.eoriNumber.eoriNumber.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under its EORI number?
@@ -439,7 +439,7 @@ fh.companyRegistrationNumber.error.required=Enter the company registration numbe
 fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
 fh.companyRegistrationNumber.summary=Where to find your company registration number
 fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or you can 
-fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window)
+fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window or tab)
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
@@ -457,7 +457,7 @@ fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
 fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
 fh.dateOfIncorporation.summary=Where to find the date of incorporation
 fh.dateOfIncorporation.details=You can find this date on the company's Certificate of Incorporation, or
-fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window)
+fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window or tab)
 fh.dateOfIncorporation.day.error.max=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.day.error.min=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.month.error.max=Enter a valid date for the date of incorporation
