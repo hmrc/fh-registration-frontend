@@ -54,13 +54,13 @@
 
   <p>@Messages("fh.mainBusinessAddress.intro")</p>
 
-  <div id="review-details" class="panel panel-border-wide form-group">
+  <p>
     @bpr.businessAddress.line1 <br>
     @bpr.businessAddress.line2 <br>
     @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
     @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
     @bpr.businessAddress.postcode <br>
-  </div>
+  </p>
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
 
