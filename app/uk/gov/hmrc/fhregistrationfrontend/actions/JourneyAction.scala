@@ -58,7 +58,7 @@ class JourneyRequest[A](
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
   }
 
-  def isAmendmentJourney =
+  private def isAmendmentJourney =
     request.userIsRegistered && cacheMap.getEntry[Boolean](Save4LaterKeys.isAmendmentKey).getOrElse(false)
 
   def hasAmendments: Option[Boolean] = {
@@ -97,12 +97,12 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
 
     val result: EitherT[Future, Result, JourneyRequest[A]] = for {
       cacheMap ← EitherT(loadCacheMap)
-      _ ← checkAmendmentJourney(cacheMap).toEitherT[Future]
-      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
-      journeyState = loadJourneyState(journeyPages, cacheMap)
       bpr ← findBpr(cacheMap).toEitherT[Future]
       bt ← getBusinessType(cacheMap).toEitherT[Future]
       verifiedEmail ← findVerifiedEmail(cacheMap).toEitherT[Future]
+      _ ← checkAmendmentJourney(cacheMap).toEitherT[Future]
+      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      journeyState = loadJourneyState(journeyPages, cacheMap)
     } yield {
       new JourneyRequest[A](
         cacheMap,

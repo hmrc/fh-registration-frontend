@@ -19,11 +19,13 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.Processing
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
-class AmendmentRequest[A](
+class StartAmendmentRequest[A](
   val registrationNumber: String,
   val  hasAmendmentInProgress: Boolean,
   request    : UserRequest[A]
@@ -33,29 +35,28 @@ class AmendmentRequest[A](
   def email: Option[String] = request.ggEmail
 }
 
-class AmendmentAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
-    extends ActionRefiner[UserRequest, AmendmentRequest]
+class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+    extends ActionRefiner[UserRequest, StartAmendmentRequest]
       with FrontendAction
 {
 
-  override protected def refine[A](request: UserRequest[A]): Future[Either[Result, AmendmentRequest[A]]] = {
-    implicit val r = request
-    save4LaterService
-      .fetchIsAmendment(request.userId)
-      .map { isAmendment ⇒
-        request.registrationNumber match {
-          case Some(registrationNumber) ⇒
-            Right(new AmendmentRequest[A](registrationNumber, isAmendment getOrElse false, request))
-          case None                     ⇒
-            Logger.error(s"Not found: registration number. Is user enrolled?")
-            Left(errorHandler.errorResultsPages(Results.BadRequest))
-        }
-      }
-      .recover{ case t ⇒
-        Logger.error(s"Could not access shortLivedCache", t)
-        Left(errorHandler.errorResultsPages(Results.BadGateway))
-      }
+  override protected def refine[A](request: UserRequest[A]): Future[Either[Result, StartAmendmentRequest[A]]] = {
 
+    implicit val r = request
+
+    val whenRegistered = request.registrationNumber.map {
+      registrationNumber ⇒
+        fhddsConnector.getStatus(registrationNumber).flatMap {
+          case Processing ⇒
+            save4LaterService
+              .fetchIsAmendment(request.userId)
+              .map { isAmendment ⇒ Right(new StartAmendmentRequest[A](registrationNumber, isAmendment getOrElse false, request)) }
+          case _ ⇒ Future successful Left(errorHandler.errorResultsPages(Results.BadRequest))
+        }
+    }
+
+
+    whenRegistered getOrElse Future.successful(Left(errorHandler.errorResultsPages(Results.BadRequest)))
   }
 
 }

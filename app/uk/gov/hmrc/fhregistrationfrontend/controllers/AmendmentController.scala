@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, AmendmentRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartAmendmentRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
@@ -40,7 +40,7 @@ class AmendmentController @Inject()(
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
   import actions._
 
-  def startAmendment() = amendmentAction.async { implicit request ⇒
+  def startAmendment() = startAmendmentAction.async { implicit request ⇒
     if (request.hasAmendmentInProgress)
       Future successful Redirect(routes.SummaryController.summary())
 
@@ -67,7 +67,7 @@ class AmendmentController @Inject()(
     }
   }
 
-  private def saveContactEmail(contactEmail: Option[String])(implicit request: AmendmentRequest[_]): Future[Any] = {
+  private def saveContactEmail(contactEmail: Option[String])(implicit request: StartAmendmentRequest[_]): Future[Any] = {
     val ignored: Any = 1
     contactEmail.fold(
       Future successful ignored

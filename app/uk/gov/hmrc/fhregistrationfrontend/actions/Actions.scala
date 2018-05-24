@@ -32,13 +32,17 @@ class Actions @Inject() (
 
 
   def userAction = new UserAction(externalUrls)
+
+  def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
   def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction
-  def amendmentAction = userAction andThen new AmendmentAction()
+
+  def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
   def noEnrolmentCheckAction = userAction andThen new NoEnrolmentCheckAction
   def journeyAction = userAction andThen noEnrolmentCheckAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
-  def continueWithBprAction = userAction andThen new ContinueWithBprAction(fhddsConnector)
+
+  def continueWithBprAction = noPendingSubmissionFilter andThen new ContinueWithBprAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)
