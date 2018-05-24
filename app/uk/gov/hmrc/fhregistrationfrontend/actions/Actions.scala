@@ -42,7 +42,7 @@ class Actions @Inject() (
   def journeyAction = userAction andThen noEnrolmentCheckAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
 
-  def continueWithBprAction = noPendingSubmissionFilter andThen new ContinueWithBprAction(fhddsConnector)
+  def newApplicationAction = noPendingSubmissionFilter andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)
