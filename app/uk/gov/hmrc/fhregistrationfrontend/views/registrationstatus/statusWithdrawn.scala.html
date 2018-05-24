@@ -15,25 +15,29 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
-@(params: StatusPageParams)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-    <nav class="govuk-related-items ">
-      <h2 class="heading-medium" id="subsection-title">
-            Other actions
-      </h2>
+@(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
+<h2>
+  @Messages("fh.status.withdrawn.next")
+</h2>
 
-      <ul class="section__ul--link-list sidebar__list">
-        <li class="sidebar__list-item">
-          <a href="@{params.cta}">
-                @Messages(s"fh.status.${params.status}.cta")
-          </a>
-        </li>
-        @if(params.secondary.isDefined) {
-        <li class="sidebar__list-item">
-          <a href="@{params.secondary}">
-            @Messages(s"fh.status.${params.status}.secondaryLink")
-          </a>
-        </li>
-        }
-      </ul>
-    </nav>
+<p>
+  @Messages("fh.status.generic.apply_again")
+  @Messages("fh.status.generic.start_new_link_text").
+</p>
+
+<p>
+  <a class="button" href="@{params.cta}">
+  @Messages(s"fh.status.${params.status}.cta")
+  </a>
+</p>
+
+<p class="js-show">
+  <a href="JavaScript: window.print();">
+  @Messages("fh.status.generic.print_page")
+  </a>
+</p>
+
+@SurveyLink()(Messages, appConfig)

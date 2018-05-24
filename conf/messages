@@ -837,6 +837,9 @@ fh.status.revoked.title=Approval revoked
 fh.status.revoked.subheading=Your registration number <br><strong>{0}</strong><br> is no longer valid
 fh.status.revoked.cta=View application
 fh.status.revoked.secondaryLink=Start a new application
+fh.status.withdrawn.title=Application withdrawn
+fh.status.withdrawn.cta=Start new application
+fh.status.withdrawn.next=What you can do next
 
 link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
 link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/

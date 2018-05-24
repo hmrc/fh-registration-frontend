@@ -26,7 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 case class StatusPageParams(
                              status: FhddsStatus,
                              cta: Call,
-                             secondary: Call,
+                             secondary: Option[Call],
                              nextTemplate: (StatusPageParams, Messages, AppConfig) => HtmlFormat.Appendable,
                              category: String = "pre",
                              showSubHeading: Boolean = true,
@@ -37,48 +37,56 @@ object StatusPageParams {
   val statusParams = List(
     StatusPageParams(
       Received,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       showSubHeading = false,
       showSteps = true
     ),
     StatusPageParams(
       Processing,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       showSubHeading = false,
       showSteps = true
     ),
     StatusPageParams(
       Approved,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       ApprovedWithConditions,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       Rejected,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
       category = "post"
     ),
     StatusPageParams(
       Revoked,
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusNewApplication.apply,
       category = "post"
+    ),
+    StatusPageParams(
+      Withdrawn,
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = None,
+      nextTemplate = statusWithdrawn.apply,
+      showSubHeading = false,
+      category = "pre"
     )
   )
 
