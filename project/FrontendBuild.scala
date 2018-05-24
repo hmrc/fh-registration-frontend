@@ -36,6 +36,7 @@ object FrontendBuild extends Build with MicroService {
     "org.pegdown"            % "pegdown"                          % "1.6.0"   % scope,
     "org.jsoup"              % "jsoup"                            % "1.8.1"   % scope,
     "org.scalatestplus.play" %% "scalatestplus-play"              % "2.0.0"   % scope,
+    "org.scoverage"          %  "scalac-scoverage-runtime_2.11"   % "1.3.1"   % scope,
     "org.scalacheck"        %% "scalacheck"                       % "1.12.6"  % scope,
     "org.mockito"            % "mockito-core"                     % "2.7.22"  % scope,
     "org.scalamock"         %% "scalamock-scalatest-support"      % "3.5.0"   % scope,

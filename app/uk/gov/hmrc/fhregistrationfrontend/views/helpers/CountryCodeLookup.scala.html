@@ -20,23 +20,15 @@
 
 @fieldName = @{
     params.context match {
-        case Some(context) => {
-            context + "." + params.name
-        }
-        case _ => {
-            params.name
-        }
+        case Some(context) => context + "." + params.name
+        case _ => params.name
     }
 }
 
 @countryCodeName = @{
     params.context match {
-        case Some(context) => {
-            context + ".countryCode"
-        }
-        case _ => {
-            "countryCode"
-        }
+        case Some(context) => context + ".countryCode"
+        case _ => "countryCode"
     }
 }
 
@@ -55,253 +47,253 @@
   <label class="form-label">@{params.label}</label>
 
   <select name="@{countryCodeName}" id="countryCode" class="form-control js-hidden" value="@{params.countryCode}">
-    <option value="AD" @if(params.countryCode == Some("AD")) { selected="selected"}>Andorra</option>
-    <option value="AE" @if(params.countryCode == Some("AE")) { selected="selected"}>United Arab Emirates (the)</option>
-    <option value="AF" @if(params.countryCode == Some("AF")) { selected="selected"}>Afghanistan</option>
-    <option value="AG" @if(params.countryCode == Some("AG")) { selected="selected"}>Antigua and Barbuda</option>
-    <option value="AI" @if(params.countryCode == Some("AI")) { selected="selected"}>Anguilla</option>
-    <option value="AL" @if(params.countryCode == Some("AL")) { selected="selected"}>Albania</option>
-    <option value="AM" @if(params.countryCode == Some("AM")) { selected="selected"}>Armenia</option>
-    <option value="AO" @if(params.countryCode == Some("AO")) { selected="selected"}>Angola</option>
-    <option value="AQ" @if(params.countryCode == Some("AQ")) { selected="selected"}>Antarctica</option>
-    <option value="AR" @if(params.countryCode == Some("AR")) { selected="selected"}>Argentina</option>
-    <option value="AS" @if(params.countryCode == Some("AS")) { selected="selected"}>American Samoa</option>
-    <option value="AT" @if(params.countryCode == Some("AT")) { selected="selected"}>Austria</option>
-    <option value="AU" @if(params.countryCode == Some("AU")) { selected="selected"}>Australia</option>
-    <option value="AW" @if(params.countryCode == Some("AW")) { selected="selected"}>Aruba</option>
-    <option value="AX" @if(params.countryCode == Some("AX")) { selected="selected"}>Aland Islands</option>
-    <option value="AZ" @if(params.countryCode == Some("AZ")) { selected="selected"}>Azerbaijan</option>
-    <option value="BA" @if(params.countryCode == Some("BA")) { selected="selected"}>Bosnia and Herzegovina</option>
-    <option value="BB" @if(params.countryCode == Some("BB")) { selected="selected"}>Barbados</option>
-    <option value="BD" @if(params.countryCode == Some("BD")) { selected="selected"}>Bangladesh</option>
-    <option value="BE" @if(params.countryCode == Some("BE")) { selected="selected"}>Belgium</option>
-    <option value="BF" @if(params.countryCode == Some("BF")) { selected="selected"}>Burkina Faso</option>
-    <option value="BG" @if(params.countryCode == Some("BG")) { selected="selected"}>Bulgaria</option>
-    <option value="BH" @if(params.countryCode == Some("BH")) { selected="selected"}>Bahrain</option>
-    <option value="BI" @if(params.countryCode == Some("BI")) { selected="selected"}>Burundi</option>
-    <option value="BJ" @if(params.countryCode == Some("BJ")) { selected="selected"}>Benin</option>
-    <option value="BM" @if(params.countryCode == Some("BM")) { selected="selected"}>Bermuda</option>
-    <option value="BN" @if(params.countryCode == Some("BN")) { selected="selected"}>Brunei Darussalam</option>
-    <option value="BO" @if(params.countryCode == Some("BO")) { selected="selected"}>Bolivia</option>
-    <option value="BQ" @if(params.countryCode == Some("BQ")) { selected="selected"}>Bonaire, Sint Eustatius and Saba</option>
-    <option value="BR" @if(params.countryCode == Some("BR")) { selected="selected"}>Brazil</option>
-    <option value="BS" @if(params.countryCode == Some("BS")) { selected="selected"}>Bahamas (the)</option>
-    <option value="BT" @if(params.countryCode == Some("BT")) { selected="selected"}>Bhutan</option>
-    <option value="BV" @if(params.countryCode == Some("BV")) { selected="selected"}>Bouvet Island</option>
-    <option value="BW" @if(params.countryCode == Some("BW")) { selected="selected"}>Botswana</option>
-    <option value="BY" @if(params.countryCode == Some("BY")) { selected="selected"}>Belarus</option>
-    <option value="BZ" @if(params.countryCode == Some("BZ")) { selected="selected"}>Belize</option>
-    <option value="CA" @if(params.countryCode == Some("CA")) { selected="selected"}>Canada</option>
-    <option value="CC" @if(params.countryCode == Some("CC")) { selected="selected"}>Cocos (Keeling) Islands (the)</option>
-    <option value="CD" @if(params.countryCode == Some("CD")) { selected="selected"}>Congo</option>
-    <option value="CF" @if(params.countryCode == Some("CF")) { selected="selected"}>Central African Republic (the)</option>
-    <option value="CG" @if(params.countryCode == Some("CG")) { selected="selected"}>Congo (the)</option>
-    <option value="CH" @if(params.countryCode == Some("CH")) { selected="selected"}>Switzerland</option>
-    <option value="CI" @if(params.countryCode == Some("CI")) { selected="selected"}>Cote d'Ivoire</option>
-    <option value="CK" @if(params.countryCode == Some("CK")) { selected="selected"}>Cook Islands (the)</option>
-    <option value="CL" @if(params.countryCode == Some("CL")) { selected="selected"}>Chile</option>
-    <option value="CM" @if(params.countryCode == Some("CM")) { selected="selected"}>Cameroon</option>
-    <option value="CN" @if(params.countryCode == Some("CN")) { selected="selected"}>China</option>
-    <option value="CO" @if(params.countryCode == Some("CO")) { selected="selected"}>Colombia</option>
-    <option value="CR" @if(params.countryCode == Some("CR")) { selected="selected"}>Costa Rica</option>
-    <option value="CU" @if(params.countryCode == Some("CU")) { selected="selected"}>Cuba</option>
-    <option value="CV" @if(params.countryCode == Some("CV")) { selected="selected"}>Cabo Verde</option>
-    <option value="CW" @if(params.countryCode == Some("CW")) { selected="selected"}>Curacao</option>
-    <option value="CX" @if(params.countryCode == Some("CX")) { selected="selected"}>Christmas Island</option>
-    <option value="CY" @if(params.countryCode == Some("CY")) { selected="selected"}>Cyprus</option>
-    <option value="CZ" @if(params.countryCode == Some("CZ")) { selected="selected"}>Czechia</option>
-    <option value="DE" @if(params.countryCode == Some("DE")) { selected="selected"}>Germany</option>
-    <option value="DJ" @if(params.countryCode == Some("DJ")) { selected="selected"}>Djibouti</option>
-    <option value="DK" @if(params.countryCode == Some("DK")) { selected="selected"}>Denmark</option>
-    <option value="DM" @if(params.countryCode == Some("DM")) { selected="selected"}>Dominica</option>
-    <option value="DO" @if(params.countryCode == Some("DO")) { selected="selected"}>Dominican Republic (the)</option>
-    <option value="DZ" @if(params.countryCode == Some("DZ")) { selected="selected"}>Algeria</option>
-    <option value="EC" @if(params.countryCode == Some("EC")) { selected="selected"}>Ecuador</option>
-    <option value="EE" @if(params.countryCode == Some("EE")) { selected="selected"}>Estonia</option>
-    <option value="EG" @if(params.countryCode == Some("EG")) { selected="selected"}>Egypt</option>
-    <option value="EH" @if(params.countryCode == Some("EH")) { selected="selected"}>Western Sahara</option>
-    <option value="ER" @if(params.countryCode == Some("ER")) { selected="selected"}>Eritrea</option>
-    <option value="ES" @if(params.countryCode == Some("ES")) { selected="selected"}>Spain</option>
-    <option value="ET" @if(params.countryCode == Some("ET")) { selected="selected"}>Ethiopia</option>
-    <option value="FI" @if(params.countryCode == Some("FI")) { selected="selected"}>Finland</option>
-    <option value="FJ" @if(params.countryCode == Some("FJ")) { selected="selected"}>Fiji</option>
-    <option value="FK" @if(params.countryCode == Some("FK")) { selected="selected"}>Falkland Islands [Malvinas]</option>
-    <option value="FM" @if(params.countryCode == Some("FM")) { selected="selected"}>Micronesia (Federated States of)</option>
-    <option value="FO" @if(params.countryCode == Some("FO")) { selected="selected"}>Faroe Islands (the)</option>
-    <option value="FR" @if(params.countryCode == Some("FR")) { selected="selected"}>France</option>
-    <option value="GA" @if(params.countryCode == Some("GA")) { selected="selected"}>Gabon</option>
-    <option value="GD" @if(params.countryCode == Some("GD")) { selected="selected"}>Grenada</option>
-    <option value="GE" @if(params.countryCode == Some("GE")) { selected="selected"}>Georgia</option>
-    <option value="GF" @if(params.countryCode == Some("GF")) { selected="selected"}>French Guiana</option>
-    <option value="GG" @if(params.countryCode == Some("GG")) { selected="selected"}>Guernsey</option>
-    <option value="GH" @if(params.countryCode == Some("GH")) { selected="selected"}>Ghana</option>
-    <option value="GI" @if(params.countryCode == Some("GI")) { selected="selected"}>Gibraltar</option>
-    <option value="GL" @if(params.countryCode == Some("GL")) { selected="selected"}>Greenland</option>
-    <option value="GM" @if(params.countryCode == Some("GM")) { selected="selected"}>Gambia (the)</option>
-    <option value="GN" @if(params.countryCode == Some("GN")) { selected="selected"}>Guinea</option>
-    <option value="GP" @if(params.countryCode == Some("GP")) { selected="selected"}>Guadeloupe</option>
-    <option value="GQ" @if(params.countryCode == Some("GQ")) { selected="selected"}>Equatorial Guinea</option>
-    <option value="GR" @if(params.countryCode == Some("GR")) { selected="selected"}>Greece</option>
-    <option value="GS" @if(params.countryCode == Some("GS")) { selected="selected"}>South Georgia</option>
-    <option value="GT" @if(params.countryCode == Some("GT")) { selected="selected"}>Guatemala</option>
-    <option value="GU" @if(params.countryCode == Some("GU")) { selected="selected"}>Guam</option>
-    <option value="GW" @if(params.countryCode == Some("GW")) { selected="selected"}>Guinea-Bissau</option>
-    <option value="GY" @if(params.countryCode == Some("GY")) { selected="selected"}>Guyana</option>
-    <option value="HK" @if(params.countryCode == Some("HK")) { selected="selected"}>Hong Kong</option>
-    <option value="HM" @if(params.countryCode == Some("HM")) { selected="selected"}>Heard Island and McDonald Islands</option>
-    <option value="HN" @if(params.countryCode == Some("HN")) { selected="selected"}>Honduras</option>
-    <option value="HR" @if(params.countryCode == Some("HR")) { selected="selected"}>Croatia</option>
-    <option value="HT" @if(params.countryCode == Some("HT")) { selected="selected"}>Haiti</option>
-    <option value="HU" @if(params.countryCode == Some("HU")) { selected="selected"}>Hungary</option>
-    <option value="ID" @if(params.countryCode == Some("ID")) { selected="selected"}>Indonesia</option>
-    <option value="IE" @if(params.countryCode == Some("IE")) { selected="selected"}>Ireland</option>
-    <option value="IL" @if(params.countryCode == Some("IL")) { selected="selected"}>Israel</option>
-    <option value="IM" @if(params.countryCode == Some("IM")) { selected="selected"}>Isle of Man</option>
-    <option value="IN" @if(params.countryCode == Some("IN")) { selected="selected"}>India</option>
-    <option value="IO" @if(params.countryCode == Some("IO")) { selected="selected"}>British Indian Ocean Territory</option>
-    <option value="IQ" @if(params.countryCode == Some("IQ")) { selected="selected"}>Iraq</option>
-    <option value="IR" @if(params.countryCode == Some("IR")) { selected="selected"}>Iran (Islamic Republic of)</option>
-    <option value="IS" @if(params.countryCode == Some("IS")) { selected="selected"}>Iceland</option>
-    <option value="IT" @if(params.countryCode == Some("IT")) { selected="selected"}>Italy</option>
-    <option value="JE" @if(params.countryCode == Some("JE")) { selected="selected"}>Jersey</option>
-    <option value="JM" @if(params.countryCode == Some("JM")) { selected="selected"}>Jamaica</option>
-    <option value="JO" @if(params.countryCode == Some("JO")) { selected="selected"}>Jordan</option>
-    <option value="JP" @if(params.countryCode == Some("JP")) { selected="selected"}>Japan</option>
-    <option value="KE" @if(params.countryCode == Some("KE")) { selected="selected"}>Kenya</option>
-    <option value="KG" @if(params.countryCode == Some("KG")) { selected="selected"}>Kyrgyzstan</option>
-    <option value="KH" @if(params.countryCode == Some("KH")) { selected="selected"}>Cambodia</option>
-    <option value="KI" @if(params.countryCode == Some("KI")) { selected="selected"}>Kiribati</option>
-    <option value="KM" @if(params.countryCode == Some("KM")) { selected="selected"}>Comoros (the)</option>
-    <option value="KN" @if(params.countryCode == Some("KN")) { selected="selected"}>Saint Kitts and Nevis</option>
-    <option value="KP" @if(params.countryCode == Some("KP")) { selected="selected"}>Korea (Democratic People's Rep)</option>
-    <option value="KR" @if(params.countryCode == Some("KR")) { selected="selected"}>Korea (the Republic of)</option>
-    <option value="KW" @if(params.countryCode == Some("KW")) { selected="selected"}>Kuwait</option>
-    <option value="KY" @if(params.countryCode == Some("KY")) { selected="selected"}>Cayman Islands (the)</option>
-    <option value="KZ" @if(params.countryCode == Some("KZ")) { selected="selected"}>Kazakhstan</option>
-    <option value="LA" @if(params.countryCode == Some("LA")) { selected="selected"}>Lao People's Democratic Republic</option>
-    <option value="LB" @if(params.countryCode == Some("LB")) { selected="selected"}>Lebanon</option>
-    <option value="LC" @if(params.countryCode == Some("LC")) { selected="selected"}>Saint Lucia</option>
-    <option value="LI" @if(params.countryCode == Some("LI")) { selected="selected"}>Liechtenstein</option>
-    <option value="LK" @if(params.countryCode == Some("LK")) { selected="selected"}>Sri Lanka</option>
-    <option value="LR" @if(params.countryCode == Some("LR")) { selected="selected"}>Liberia</option>
-    <option value="LS" @if(params.countryCode == Some("LS")) { selected="selected"}>Lesotho</option>
-    <option value="LT" @if(params.countryCode == Some("LT")) { selected="selected"}>Lithuania</option>
-    <option value="LU" @if(params.countryCode == Some("LU")) { selected="selected"}>Luxembourg</option>
-    <option value="LV" @if(params.countryCode == Some("LV")) { selected="selected"}>Latvia</option>
-    <option value="LY" @if(params.countryCode == Some("LY")) { selected="selected"}>Libya</option>
-    <option value="MA" @if(params.countryCode == Some("MA")) { selected="selected"}>Morocco</option>
-    <option value="MC" @if(params.countryCode == Some("MC")) { selected="selected"}>Monaco</option>
-    <option value="MD" @if(params.countryCode == Some("MD")) { selected="selected"}>Moldova (the Republic of)</option>
-    <option value="ME" @if(params.countryCode == Some("ME")) { selected="selected"}>Montenegro</option>
-    <option value="MF" @if(params.countryCode == Some("MF")) { selected="selected"}>Saint Martin (French part)</option>
-    <option value="MG" @if(params.countryCode == Some("MG")) { selected="selected"}>Madagascar</option>
-    <option value="MH" @if(params.countryCode == Some("MH")) { selected="selected"}>Marshall Islands (the)</option>
-    <option value="MK" @if(params.countryCode == Some("MK")) { selected="selected"}>Macedonia</option>
-    <option value="ML" @if(params.countryCode == Some("ML")) { selected="selected"}>Mali</option>
-    <option value="MM" @if(params.countryCode == Some("MM")) { selected="selected"}>Myanmar</option>
-    <option value="MN" @if(params.countryCode == Some("MN")) { selected="selected"}>Mongolia</option>
-    <option value="MO" @if(params.countryCode == Some("MO")) { selected="selected"}>Macao</option>
-    <option value="MP" @if(params.countryCode == Some("MP")) { selected="selected"}>Northern Mariana Islands (the)</option>
-    <option value="MQ" @if(params.countryCode == Some("MQ")) { selected="selected"}>Martinique</option>
-    <option value="MR" @if(params.countryCode == Some("MR")) { selected="selected"}>Mauritania</option>
-    <option value="MS" @if(params.countryCode == Some("MS")) { selected="selected"}>Montserrat</option>
-    <option value="MT" @if(params.countryCode == Some("MT")) { selected="selected"}>Malta</option>
-    <option value="MU" @if(params.countryCode == Some("MU")) { selected="selected"}>Mauritius</option>
-    <option value="MV" @if(params.countryCode == Some("MV")) { selected="selected"}>Maldives</option>
-    <option value="MW" @if(params.countryCode == Some("MW")) { selected="selected"}>Malawi</option>
-    <option value="MX" @if(params.countryCode == Some("MX")) { selected="selected"}>Mexico</option>
-    <option value="MY" @if(params.countryCode == Some("MY")) { selected="selected"}>Malaysia</option>
-    <option value="MZ" @if(params.countryCode == Some("MZ")) { selected="selected"}>Mozambique</option>
-    <option value="NA" @if(params.countryCode == Some("NA")) { selected="selected"}>Namibia</option>
-    <option value="NC" @if(params.countryCode == Some("NC")) { selected="selected"}>New Caledonia</option>
-    <option value="NE" @if(params.countryCode == Some("NE")) { selected="selected"}>Niger (the)</option>
-    <option value="NF" @if(params.countryCode == Some("NF")) { selected="selected"}>Norfolk Island</option>
-    <option value="NG" @if(params.countryCode == Some("NG")) { selected="selected"}>Nigeria</option>
-    <option value="NI" @if(params.countryCode == Some("NI")) { selected="selected"}>Nicaragua</option>
-    <option value="NL" @if(params.countryCode == Some("NL")) { selected="selected"}>Netherlands (the)</option>
-    <option value="NO" @if(params.countryCode == Some("NO")) { selected="selected"}>Norway</option>
-    <option value="NP" @if(params.countryCode == Some("NP")) { selected="selected"}>Nepal</option>
-    <option value="NR" @if(params.countryCode == Some("NR")) { selected="selected"}>Nauru</option>
-    <option value="NU" @if(params.countryCode == Some("NU")) { selected="selected"}>Niue</option>
-    <option value="NZ" @if(params.countryCode == Some("NZ")) { selected="selected"}>New Zealand</option>
-    <option value="OM" @if(params.countryCode == Some("OM")) { selected="selected"}>Oman</option>
-    <option value="PA" @if(params.countryCode == Some("PA")) { selected="selected"}>Panama</option>
-    <option value="PE" @if(params.countryCode == Some("PE")) { selected="selected"}>Peru</option>
-    <option value="PF" @if(params.countryCode == Some("PF")) { selected="selected"}>French Polynesia</option>
-    <option value="PG" @if(params.countryCode == Some("PG")) { selected="selected"}>Papua New Guinea</option>
-    <option value="PH" @if(params.countryCode == Some("PH")) { selected="selected"}>Philippines (the)</option>
-    <option value="PK" @if(params.countryCode == Some("PK")) { selected="selected"}>Pakistan</option>
-    <option value="PL" @if(params.countryCode == Some("PL")) { selected="selected"}>Poland</option>
-    <option value="PM" @if(params.countryCode == Some("PM")) { selected="selected"}>Saint Pierre and Miquelon</option>
-    <option value="PN" @if(params.countryCode == Some("PN")) { selected="selected"}>Pitcairn</option>
-    <option value="PR" @if(params.countryCode == Some("PR")) { selected="selected"}>Puerto Rico</option>
-    <option value="PS" @if(params.countryCode == Some("PS")) { selected="selected"}>Palestine, State of</option>
-    <option value="PT" @if(params.countryCode == Some("PT")) { selected="selected"}>Portugal</option>
-    <option value="PW" @if(params.countryCode == Some("PW")) { selected="selected"}>Palau</option>
-    <option value="PY" @if(params.countryCode == Some("PY")) { selected="selected"}>Paraguay</option>
-    <option value="QA" @if(params.countryCode == Some("QA")) { selected="selected"}>Qatar</option>
-    <option value="RE" @if(params.countryCode == Some("RE")) { selected="selected"}>Reunion</option>
-    <option value="RO" @if(params.countryCode == Some("RO")) { selected="selected"}>Romania</option>
-    <option value="RS" @if(params.countryCode == Some("RS")) { selected="selected"}>Serbia</option>
-    <option value="RU" @if(params.countryCode == Some("RU")) { selected="selected"}>Russian Federation (the)</option>
-    <option value="RW" @if(params.countryCode == Some("RW")) { selected="selected"}>Rwanda</option>
-    <option value="SA" @if(params.countryCode == Some("SA")) { selected="selected"}>Saudi Arabia</option>
-    <option value="SB" @if(params.countryCode == Some("SB")) { selected="selected"}>Solomon Islands</option>
-    <option value="SC" @if(params.countryCode == Some("SC")) { selected="selected"}>Seychelles</option>
-    <option value="SD" @if(params.countryCode == Some("SD")) { selected="selected"}>Sudan (the)</option>
-    <option value="SE" @if(params.countryCode == Some("SE")) { selected="selected"}>Sweden</option>
-    <option value="SG" @if(params.countryCode == Some("SG")) { selected="selected"}>Singapore</option>
-    <option value="SH" @if(params.countryCode == Some("SH")) { selected="selected"}>Saint Helena</option>
-    <option value="SI" @if(params.countryCode == Some("SI")) { selected="selected"}>Slovenia</option>
-    <option value="SJ" @if(params.countryCode == Some("SJ")) { selected="selected"}>Svalbard and Jan Mayen</option>
-    <option value="SK" @if(params.countryCode == Some("SK")) { selected="selected"}>Slovakia</option>
-    <option value="SL" @if(params.countryCode == Some("SL")) { selected="selected"}>Sierra Leone</option>
-    <option value="SM" @if(params.countryCode == Some("SM")) { selected="selected"}>San Marino</option>
-    <option value="SN" @if(params.countryCode == Some("SN")) { selected="selected"}>Senegal</option>
-    <option value="SO" @if(params.countryCode == Some("SO")) { selected="selected"}>Somalia</option>
-    <option value="SR" @if(params.countryCode == Some("SR")) { selected="selected"}>Suriname</option>
-    <option value="SS" @if(params.countryCode == Some("SS")) { selected="selected"}>South Sudan</option>
-    <option value="ST" @if(params.countryCode == Some("ST")) { selected="selected"}>Sao Tome and Principe</option>
-    <option value="SV" @if(params.countryCode == Some("SV")) { selected="selected"}>El Salvador</option>
-    <option value="SX" @if(params.countryCode == Some("SX")) { selected="selected"}>Sint Maarten (Dutch part)</option>
-    <option value="SY" @if(params.countryCode == Some("SY")) { selected="selected"}>Syrian Arab Republic</option>
-    <option value="SZ" @if(params.countryCode == Some("SZ")) { selected="selected"}>Swaziland</option>
-    <option value="TC" @if(params.countryCode == Some("TC")) { selected="selected"}>Turks and Caicos Islands (the)</option>
-    <option value="TD" @if(params.countryCode == Some("TD")) { selected="selected"}>Chad</option>
-    <option value="TF" @if(params.countryCode == Some("TF")) { selected="selected"}>French Southern Territories (the)</option>
-    <option value="TG" @if(params.countryCode == Some("TG")) { selected="selected"}>Togo</option>
-    <option value="TH" @if(params.countryCode == Some("TH")) { selected="selected"}>Thailand</option>
-    <option value="TJ" @if(params.countryCode == Some("TJ")) { selected="selected"}>Tajikistan</option>
-    <option value="TK" @if(params.countryCode == Some("TK")) { selected="selected"}>Tokelau</option>
-    <option value="TL" @if(params.countryCode == Some("TL")) { selected="selected"}>Timor-Leste</option>
-    <option value="TM" @if(params.countryCode == Some("TM")) { selected="selected"}>Turkmenistan</option>
-    <option value="TN" @if(params.countryCode == Some("TN")) { selected="selected"}>Tunisia</option>
-    <option value="TO" @if(params.countryCode == Some("TO")) { selected="selected"}>Tonga</option>
-    <option value="TR" @if(params.countryCode == Some("TR")) { selected="selected"}>Turkey</option>
-    <option value="TT" @if(params.countryCode == Some("TT")) { selected="selected"}>Trinidad and Tobago</option>
-    <option value="TV" @if(params.countryCode == Some("TV")) { selected="selected"}>Tuvalu</option>
-    <option value="TW" @if(params.countryCode == Some("TW")) { selected="selected"}>Taiwan (Province of China)</option>
-    <option value="TZ" @if(params.countryCode == Some("TZ")) { selected="selected"}>Tanzania, United Republic of</option>
-    <option value="UA" @if(params.countryCode == Some("UA")) { selected="selected"}>Ukraine</option>
-    <option value="UG" @if(params.countryCode == Some("UG")) { selected="selected"}>Uganda</option>
-    <option value="UM" @if(params.countryCode == Some("UM")) { selected="selected"}>United States Minor Outlying Isles</option>
-    <option value="US" @if(params.countryCode == Some("US")) { selected="selected"}>United States of America (the)</option>
-    <option value="UY" @if(params.countryCode == Some("UY")) { selected="selected"}>Uruguay</option>
-    <option value="UZ" @if(params.countryCode == Some("UZ")) { selected="selected"}>Uzbekistan</option>
-    <option value="VA" @if(params.countryCode == Some("VA")) { selected="selected"}>Holy See (the)</option>
-    <option value="VC" @if(params.countryCode == Some("VC")) { selected="selected"}>Saint Vincent and the Grenadines</option>
-    <option value="VE" @if(params.countryCode == Some("VE")) { selected="selected"}>Venezuela (Bolivarian Republic of)</option>
-    <option value="VG" @if(params.countryCode == Some("VG")) { selected="selected"}>Virgin Islands (British)</option>
-    <option value="VI" @if(params.countryCode == Some("VI")) { selected="selected"}>Virgin Islands (U.S.)</option>
-    <option value="VN" @if(params.countryCode == Some("VN")) { selected="selected"}>Viet Nam</option>
-    <option value="VU" @if(params.countryCode == Some("VU")) { selected="selected"}>Vanuatu</option>
-    <option value="WF" @if(params.countryCode == Some("WF")) { selected="selected"}>Wallis and Futuna</option>
-    <option value="WS" @if(params.countryCode == Some("WS")) { selected="selected"}>Samoa</option>
-    <option value="YE" @if(params.countryCode == Some("YE")) { selected="selected"}>Yemen</option>
-    <option value="YT" @if(params.countryCode == Some("YT")) { selected="selected"}>Mayotte</option>
-    <option value="ZA" @if(params.countryCode == Some("ZA")) { selected="selected"}>South Africa</option>
-    <option value="ZM" @if(params.countryCode == Some("ZM")) { selected="selected"}>Zambia</option>
-    <option value="ZW" @if(params.countryCode == Some("ZW")) { selected="selected"}>Zimbabwe</option>
+    <option value="AD" @if(params.countryCode.contains("AD")) { selected="selected"}>Andorra</option>
+    <option value="AE" @if(params.countryCode.contains("AE")) { selected="selected"}>United Arab Emirates (the)</option>
+    <option value="AF" @if(params.countryCode.contains("AF")) { selected="selected"}>Afghanistan</option>
+    <option value="AG" @if(params.countryCode.contains("AG")) { selected="selected"}>Antigua and Barbuda</option>
+    <option value="AI" @if(params.countryCode.contains("AI")) { selected="selected"}>Anguilla</option>
+    <option value="AL" @if(params.countryCode.contains("AL")) { selected="selected"}>Albania</option>
+    <option value="AM" @if(params.countryCode.contains("AM")) { selected="selected"}>Armenia</option>
+    <option value="AO" @if(params.countryCode.contains("AO")) { selected="selected"}>Angola</option>
+    <option value="AQ" @if(params.countryCode.contains("AQ")) { selected="selected"}>Antarctica</option>
+    <option value="AR" @if(params.countryCode.contains("AR")) { selected="selected"}>Argentina</option>
+    <option value="AS" @if(params.countryCode.contains("AS")) { selected="selected"}>American Samoa</option>
+    <option value="AT" @if(params.countryCode.contains("AT")) { selected="selected"}>Austria</option>
+    <option value="AU" @if(params.countryCode.contains("AU")) { selected="selected"}>Australia</option>
+    <option value="AW" @if(params.countryCode.contains("AW")) { selected="selected"}>Aruba</option>
+    <option value="AX" @if(params.countryCode.contains("AX")) { selected="selected"}>Aland Islands</option>
+    <option value="AZ" @if(params.countryCode.contains("AZ")) { selected="selected"}>Azerbaijan</option>
+    <option value="BA" @if(params.countryCode.contains("BA")) { selected="selected"}>Bosnia and Herzegovina</option>
+    <option value="BB" @if(params.countryCode.contains("BB")) { selected="selected"}>Barbados</option>
+    <option value="BD" @if(params.countryCode.contains("BD")) { selected="selected"}>Bangladesh</option>
+    <option value="BE" @if(params.countryCode.contains("BE")) { selected="selected"}>Belgium</option>
+    <option value="BF" @if(params.countryCode.contains("BF")) { selected="selected"}>Burkina Faso</option>
+    <option value="BG" @if(params.countryCode.contains("BG")) { selected="selected"}>Bulgaria</option>
+    <option value="BH" @if(params.countryCode.contains("BH")) { selected="selected"}>Bahrain</option>
+    <option value="BI" @if(params.countryCode.contains("BI")) { selected="selected"}>Burundi</option>
+    <option value="BJ" @if(params.countryCode.contains("BJ")) { selected="selected"}>Benin</option>
+    <option value="BM" @if(params.countryCode.contains("BM")) { selected="selected"}>Bermuda</option>
+    <option value="BN" @if(params.countryCode.contains("BN")) { selected="selected"}>Brunei Darussalam</option>
+    <option value="BO" @if(params.countryCode.contains("BO")) { selected="selected"}>Bolivia</option>
+    <option value="BQ" @if(params.countryCode.contains("BQ")) { selected="selected"}>Bonaire, Sint Eustatius and Saba</option>
+    <option value="BR" @if(params.countryCode.contains("BR")) { selected="selected"}>Brazil</option>
+    <option value="BS" @if(params.countryCode.contains("BS")) { selected="selected"}>Bahamas (the)</option>
+    <option value="BT" @if(params.countryCode.contains("BT")) { selected="selected"}>Bhutan</option>
+    <option value="BV" @if(params.countryCode.contains("BV")) { selected="selected"}>Bouvet Island</option>
+    <option value="BW" @if(params.countryCode.contains("BW")) { selected="selected"}>Botswana</option>
+    <option value="BY" @if(params.countryCode.contains("BY")) { selected="selected"}>Belarus</option>
+    <option value="BZ" @if(params.countryCode.contains("BZ")) { selected="selected"}>Belize</option>
+    <option value="CA" @if(params.countryCode.contains("CA")) { selected="selected"}>Canada</option>
+    <option value="CC" @if(params.countryCode.contains("CC")) { selected="selected"}>Cocos (Keeling) Islands (the)</option>
+    <option value="CD" @if(params.countryCode.contains("CD")) { selected="selected"}>Congo</option>
+    <option value="CF" @if(params.countryCode.contains("CF")) { selected="selected"}>Central African Republic (the)</option>
+    <option value="CG" @if(params.countryCode.contains("CG")) { selected="selected"}>Congo (the)</option>
+    <option value="CH" @if(params.countryCode.contains("CH")) { selected="selected"}>Switzerland</option>
+    <option value="CI" @if(params.countryCode.contains("CI")) { selected="selected"}>Cote d'Ivoire</option>
+    <option value="CK" @if(params.countryCode.contains("CK")) { selected="selected"}>Cook Islands (the)</option>
+    <option value="CL" @if(params.countryCode.contains("CL")) { selected="selected"}>Chile</option>
+    <option value="CM" @if(params.countryCode.contains("CM")) { selected="selected"}>Cameroon</option>
+    <option value="CN" @if(params.countryCode.contains("CN")) { selected="selected"}>China</option>
+    <option value="CO" @if(params.countryCode.contains("CO")) { selected="selected"}>Colombia</option>
+    <option value="CR" @if(params.countryCode.contains("CR")) { selected="selected"}>Costa Rica</option>
+    <option value="CU" @if(params.countryCode.contains("CU")) { selected="selected"}>Cuba</option>
+    <option value="CV" @if(params.countryCode.contains("CV")) { selected="selected"}>Cabo Verde</option>
+    <option value="CW" @if(params.countryCode.contains("CW")) { selected="selected"}>Curacao</option>
+    <option value="CX" @if(params.countryCode.contains("CX")) { selected="selected"}>Christmas Island</option>
+    <option value="CY" @if(params.countryCode.contains("CY")) { selected="selected"}>Cyprus</option>
+    <option value="CZ" @if(params.countryCode.contains("CZ")) { selected="selected"}>Czechia</option>
+    <option value="DE" @if(params.countryCode.contains("DE")) { selected="selected"}>Germany</option>
+    <option value="DJ" @if(params.countryCode.contains("DJ")) { selected="selected"}>Djibouti</option>
+    <option value="DK" @if(params.countryCode.contains("DK")) { selected="selected"}>Denmark</option>
+    <option value="DM" @if(params.countryCode.contains("DM")) { selected="selected"}>Dominica</option>
+    <option value="DO" @if(params.countryCode.contains("DO")) { selected="selected"}>Dominican Republic (the)</option>
+    <option value="DZ" @if(params.countryCode.contains("DZ")) { selected="selected"}>Algeria</option>
+    <option value="EC" @if(params.countryCode.contains("EC")) { selected="selected"}>Ecuador</option>
+    <option value="EE" @if(params.countryCode.contains("EE")) { selected="selected"}>Estonia</option>
+    <option value="EG" @if(params.countryCode.contains("EG")) { selected="selected"}>Egypt</option>
+    <option value="EH" @if(params.countryCode.contains("EH")) { selected="selected"}>Western Sahara</option>
+    <option value="ER" @if(params.countryCode.contains("ER")) { selected="selected"}>Eritrea</option>
+    <option value="ES" @if(params.countryCode.contains("ES")) { selected="selected"}>Spain</option>
+    <option value="ET" @if(params.countryCode.contains("ET")) { selected="selected"}>Ethiopia</option>
+    <option value="FI" @if(params.countryCode.contains("FI")) { selected="selected"}>Finland</option>
+    <option value="FJ" @if(params.countryCode.contains("FJ")) { selected="selected"}>Fiji</option>
+    <option value="FK" @if(params.countryCode.contains("FK")) { selected="selected"}>Falkland Islands [Malvinas]</option>
+    <option value="FM" @if(params.countryCode.contains("FM")) { selected="selected"}>Micronesia (Federated States of)</option>
+    <option value="FO" @if(params.countryCode.contains("FO")) { selected="selected"}>Faroe Islands (the)</option>
+    <option value="FR" @if(params.countryCode.contains("FR")) { selected="selected"}>France</option>
+    <option value="GA" @if(params.countryCode.contains("GA")) { selected="selected"}>Gabon</option>
+    <option value="GD" @if(params.countryCode.contains("GD")) { selected="selected"}>Grenada</option>
+    <option value="GE" @if(params.countryCode.contains("GE")) { selected="selected"}>Georgia</option>
+    <option value="GF" @if(params.countryCode.contains("GF")) { selected="selected"}>French Guiana</option>
+    <option value="GG" @if(params.countryCode.contains("GG")) { selected="selected"}>Guernsey</option>
+    <option value="GH" @if(params.countryCode.contains("GH")) { selected="selected"}>Ghana</option>
+    <option value="GI" @if(params.countryCode.contains("GI")) { selected="selected"}>Gibraltar</option>
+    <option value="GL" @if(params.countryCode.contains("GL")) { selected="selected"}>Greenland</option>
+    <option value="GM" @if(params.countryCode.contains("GM")) { selected="selected"}>Gambia (the)</option>
+    <option value="GN" @if(params.countryCode.contains("GN")) { selected="selected"}>Guinea</option>
+    <option value="GP" @if(params.countryCode.contains("GP")) { selected="selected"}>Guadeloupe</option>
+    <option value="GQ" @if(params.countryCode.contains("GQ")) { selected="selected"}>Equatorial Guinea</option>
+    <option value="GR" @if(params.countryCode.contains("GR")) { selected="selected"}>Greece</option>
+    <option value="GS" @if(params.countryCode.contains("GS")) { selected="selected"}>South Georgia</option>
+    <option value="GT" @if(params.countryCode.contains("GT")) { selected="selected"}>Guatemala</option>
+    <option value="GU" @if(params.countryCode.contains("GU")) { selected="selected"}>Guam</option>
+    <option value="GW" @if(params.countryCode.contains("GW")) { selected="selected"}>Guinea-Bissau</option>
+    <option value="GY" @if(params.countryCode.contains("GY")) { selected="selected"}>Guyana</option>
+    <option value="HK" @if(params.countryCode.contains("HK")) { selected="selected"}>Hong Kong</option>
+    <option value="HM" @if(params.countryCode.contains("HM")) { selected="selected"}>Heard Island and McDonald Islands</option>
+    <option value="HN" @if(params.countryCode.contains("HN")) { selected="selected"}>Honduras</option>
+    <option value="HR" @if(params.countryCode.contains("HR")) { selected="selected"}>Croatia</option>
+    <option value="HT" @if(params.countryCode.contains("HT")) { selected="selected"}>Haiti</option>
+    <option value="HU" @if(params.countryCode.contains("HU")) { selected="selected"}>Hungary</option>
+    <option value="ID" @if(params.countryCode.contains("ID")) { selected="selected"}>Indonesia</option>
+    <option value="IE" @if(params.countryCode.contains("IE")) { selected="selected"}>Ireland</option>
+    <option value="IL" @if(params.countryCode.contains("IL")) { selected="selected"}>Israel</option>
+    <option value="IM" @if(params.countryCode.contains("IM")) { selected="selected"}>Isle of Man</option>
+    <option value="IN" @if(params.countryCode.contains("IN")) { selected="selected"}>India</option>
+    <option value="IO" @if(params.countryCode.contains("IO")) { selected="selected"}>British Indian Ocean Territory</option>
+    <option value="IQ" @if(params.countryCode.contains("IQ")) { selected="selected"}>Iraq</option>
+    <option value="IR" @if(params.countryCode.contains("IR")) { selected="selected"}>Iran (Islamic Republic of)</option>
+    <option value="IS" @if(params.countryCode.contains("IS")) { selected="selected"}>Iceland</option>
+    <option value="IT" @if(params.countryCode.contains("IT")) { selected="selected"}>Italy</option>
+    <option value="JE" @if(params.countryCode.contains("JE")) { selected="selected"}>Jersey</option>
+    <option value="JM" @if(params.countryCode.contains("JM")) { selected="selected"}>Jamaica</option>
+    <option value="JO" @if(params.countryCode.contains("JO")) { selected="selected"}>Jordan</option>
+    <option value="JP" @if(params.countryCode.contains("JP")) { selected="selected"}>Japan</option>
+    <option value="KE" @if(params.countryCode.contains("KE")) { selected="selected"}>Kenya</option>
+    <option value="KG" @if(params.countryCode.contains("KG")) { selected="selected"}>Kyrgyzstan</option>
+    <option value="KH" @if(params.countryCode.contains("KH")) { selected="selected"}>Cambodia</option>
+    <option value="KI" @if(params.countryCode.contains("KI")) { selected="selected"}>Kiribati</option>
+    <option value="KM" @if(params.countryCode.contains("KM")) { selected="selected"}>Comoros (the)</option>
+    <option value="KN" @if(params.countryCode.contains("KN")) { selected="selected"}>Saint Kitts and Nevis</option>
+    <option value="KP" @if(params.countryCode.contains("KP")) { selected="selected"}>Korea (Democratic People's Rep)</option>
+    <option value="KR" @if(params.countryCode.contains("KR")) { selected="selected"}>Korea (the Republic of)</option>
+    <option value="KW" @if(params.countryCode.contains("KW")) { selected="selected"}>Kuwait</option>
+    <option value="KY" @if(params.countryCode.contains("KY")) { selected="selected"}>Cayman Islands (the)</option>
+    <option value="KZ" @if(params.countryCode.contains("KZ")) { selected="selected"}>Kazakhstan</option>
+    <option value="LA" @if(params.countryCode.contains("LA")) { selected="selected"}>Lao People's Democratic Republic</option>
+    <option value="LB" @if(params.countryCode.contains("LB")) { selected="selected"}>Lebanon</option>
+    <option value="LC" @if(params.countryCode.contains("LC")) { selected="selected"}>Saint Lucia</option>
+    <option value="LI" @if(params.countryCode.contains("LI")) { selected="selected"}>Liechtenstein</option>
+    <option value="LK" @if(params.countryCode.contains("LK")) { selected="selected"}>Sri Lanka</option>
+    <option value="LR" @if(params.countryCode.contains("LR")) { selected="selected"}>Liberia</option>
+    <option value="LS" @if(params.countryCode.contains("LS")) { selected="selected"}>Lesotho</option>
+    <option value="LT" @if(params.countryCode.contains("LT")) { selected="selected"}>Lithuania</option>
+    <option value="LU" @if(params.countryCode.contains("LU")) { selected="selected"}>Luxembourg</option>
+    <option value="LV" @if(params.countryCode.contains("LV")) { selected="selected"}>Latvia</option>
+    <option value="LY" @if(params.countryCode.contains("LY")) { selected="selected"}>Libya</option>
+    <option value="MA" @if(params.countryCode.contains("MA")) { selected="selected"}>Morocco</option>
+    <option value="MC" @if(params.countryCode.contains("MC")) { selected="selected"}>Monaco</option>
+    <option value="MD" @if(params.countryCode.contains("MD")) { selected="selected"}>Moldova (the Republic of)</option>
+    <option value="ME" @if(params.countryCode.contains("ME")) { selected="selected"}>Montenegro</option>
+    <option value="MF" @if(params.countryCode.contains("MF")) { selected="selected"}>Saint Martin (French part)</option>
+    <option value="MG" @if(params.countryCode.contains("MG")) { selected="selected"}>Madagascar</option>
+    <option value="MH" @if(params.countryCode.contains("MH")) { selected="selected"}>Marshall Islands (the)</option>
+    <option value="MK" @if(params.countryCode.contains("MK")) { selected="selected"}>Macedonia</option>
+    <option value="ML" @if(params.countryCode.contains("ML")) { selected="selected"}>Mali</option>
+    <option value="MM" @if(params.countryCode.contains("MM")) { selected="selected"}>Myanmar</option>
+    <option value="MN" @if(params.countryCode.contains("MN")) { selected="selected"}>Mongolia</option>
+    <option value="MO" @if(params.countryCode.contains("MO")) { selected="selected"}>Macao</option>
+    <option value="MP" @if(params.countryCode.contains("MP")) { selected="selected"}>Northern Mariana Islands (the)</option>
+    <option value="MQ" @if(params.countryCode.contains("MQ")) { selected="selected"}>Martinique</option>
+    <option value="MR" @if(params.countryCode.contains("MR")) { selected="selected"}>Mauritania</option>
+    <option value="MS" @if(params.countryCode.contains("MS")) { selected="selected"}>Montserrat</option>
+    <option value="MT" @if(params.countryCode.contains("MT")) { selected="selected"}>Malta</option>
+    <option value="MU" @if(params.countryCode.contains("MU")) { selected="selected"}>Mauritius</option>
+    <option value="MV" @if(params.countryCode.contains("MV")) { selected="selected"}>Maldives</option>
+    <option value="MW" @if(params.countryCode.contains("MW")) { selected="selected"}>Malawi</option>
+    <option value="MX" @if(params.countryCode.contains("MX")) { selected="selected"}>Mexico</option>
+    <option value="MY" @if(params.countryCode.contains("MY")) { selected="selected"}>Malaysia</option>
+    <option value="MZ" @if(params.countryCode.contains("MZ")) { selected="selected"}>Mozambique</option>
+    <option value="NA" @if(params.countryCode.contains("NA")) { selected="selected"}>Namibia</option>
+    <option value="NC" @if(params.countryCode.contains("NC")) { selected="selected"}>New Caledonia</option>
+    <option value="NE" @if(params.countryCode.contains("NE")) { selected="selected"}>Niger (the)</option>
+    <option value="NF" @if(params.countryCode.contains("NF")) { selected="selected"}>Norfolk Island</option>
+    <option value="NG" @if(params.countryCode.contains("NG")) { selected="selected"}>Nigeria</option>
+    <option value="NI" @if(params.countryCode.contains("NI")) { selected="selected"}>Nicaragua</option>
+    <option value="NL" @if(params.countryCode.contains("NL")) { selected="selected"}>Netherlands (the)</option>
+    <option value="NO" @if(params.countryCode.contains("NO")) { selected="selected"}>Norway</option>
+    <option value="NP" @if(params.countryCode.contains("NP")) { selected="selected"}>Nepal</option>
+    <option value="NR" @if(params.countryCode.contains("NR")) { selected="selected"}>Nauru</option>
+    <option value="NU" @if(params.countryCode.contains("NU")) { selected="selected"}>Niue</option>
+    <option value="NZ" @if(params.countryCode.contains("NZ")) { selected="selected"}>New Zealand</option>
+    <option value="OM" @if(params.countryCode.contains("OM")) { selected="selected"}>Oman</option>
+    <option value="PA" @if(params.countryCode.contains("PA")) { selected="selected"}>Panama</option>
+    <option value="PE" @if(params.countryCode.contains("PE")) { selected="selected"}>Peru</option>
+    <option value="PF" @if(params.countryCode.contains("PF")) { selected="selected"}>French Polynesia</option>
+    <option value="PG" @if(params.countryCode.contains("PG")) { selected="selected"}>Papua New Guinea</option>
+    <option value="PH" @if(params.countryCode.contains("PH")) { selected="selected"}>Philippines (the)</option>
+    <option value="PK" @if(params.countryCode.contains("PK")) { selected="selected"}>Pakistan</option>
+    <option value="PL" @if(params.countryCode.contains("PL")) { selected="selected"}>Poland</option>
+    <option value="PM" @if(params.countryCode.contains("PM")) { selected="selected"}>Saint Pierre and Miquelon</option>
+    <option value="PN" @if(params.countryCode.contains("PN")) { selected="selected"}>Pitcairn</option>
+    <option value="PR" @if(params.countryCode.contains("PR")) { selected="selected"}>Puerto Rico</option>
+    <option value="PS" @if(params.countryCode.contains("PS")) { selected="selected"}>Palestine, State of</option>
+    <option value="PT" @if(params.countryCode.contains("PT")) { selected="selected"}>Portugal</option>
+    <option value="PW" @if(params.countryCode.contains("PW")) { selected="selected"}>Palau</option>
+    <option value="PY" @if(params.countryCode.contains("PY")) { selected="selected"}>Paraguay</option>
+    <option value="QA" @if(params.countryCode.contains("QA")) { selected="selected"}>Qatar</option>
+    <option value="RE" @if(params.countryCode.contains("RE")) { selected="selected"}>Reunion</option>
+    <option value="RO" @if(params.countryCode.contains("RO")) { selected="selected"}>Romania</option>
+    <option value="RS" @if(params.countryCode.contains("RS")) { selected="selected"}>Serbia</option>
+    <option value="RU" @if(params.countryCode.contains("RU")) { selected="selected"}>Russian Federation (the)</option>
+    <option value="RW" @if(params.countryCode.contains("RW")) { selected="selected"}>Rwanda</option>
+    <option value="SA" @if(params.countryCode.contains("SA")) { selected="selected"}>Saudi Arabia</option>
+    <option value="SB" @if(params.countryCode.contains("SB")) { selected="selected"}>Solomon Islands</option>
+    <option value="SC" @if(params.countryCode.contains("SC")) { selected="selected"}>Seychelles</option>
+    <option value="SD" @if(params.countryCode.contains("SD")) { selected="selected"}>Sudan (the)</option>
+    <option value="SE" @if(params.countryCode.contains("SE")) { selected="selected"}>Sweden</option>
+    <option value="SG" @if(params.countryCode.contains("SG")) { selected="selected"}>Singapore</option>
+    <option value="SH" @if(params.countryCode.contains("SH")) { selected="selected"}>Saint Helena</option>
+    <option value="SI" @if(params.countryCode.contains("SI")) { selected="selected"}>Slovenia</option>
+    <option value="SJ" @if(params.countryCode.contains("SJ")) { selected="selected"}>Svalbard and Jan Mayen</option>
+    <option value="SK" @if(params.countryCode.contains("SK")) { selected="selected"}>Slovakia</option>
+    <option value="SL" @if(params.countryCode.contains("SL")) { selected="selected"}>Sierra Leone</option>
+    <option value="SM" @if(params.countryCode.contains("SM")) { selected="selected"}>San Marino</option>
+    <option value="SN" @if(params.countryCode.contains("SN")) { selected="selected"}>Senegal</option>
+    <option value="SO" @if(params.countryCode.contains("SO")) { selected="selected"}>Somalia</option>
+    <option value="SR" @if(params.countryCode.contains("SR")) { selected="selected"}>Suriname</option>
+    <option value="SS" @if(params.countryCode.contains("SS")) { selected="selected"}>South Sudan</option>
+    <option value="ST" @if(params.countryCode.contains("ST")) { selected="selected"}>Sao Tome and Principe</option>
+    <option value="SV" @if(params.countryCode.contains("SV")) { selected="selected"}>El Salvador</option>
+    <option value="SX" @if(params.countryCode.contains("SX")) { selected="selected"}>Sint Maarten (Dutch part)</option>
+    <option value="SY" @if(params.countryCode.contains("SY")) { selected="selected"}>Syrian Arab Republic</option>
+    <option value="SZ" @if(params.countryCode.contains("SZ")) { selected="selected"}>Swaziland</option>
+    <option value="TC" @if(params.countryCode.contains("TC")) { selected="selected"}>Turks and Caicos Islands (the)</option>
+    <option value="TD" @if(params.countryCode.contains("TD")) { selected="selected"}>Chad</option>
+    <option value="TF" @if(params.countryCode.contains("TF")) { selected="selected"}>French Southern Territories (the)</option>
+    <option value="TG" @if(params.countryCode.contains("TG")) { selected="selected"}>Togo</option>
+    <option value="TH" @if(params.countryCode.contains("TH")) { selected="selected"}>Thailand</option>
+    <option value="TJ" @if(params.countryCode.contains("TJ")) { selected="selected"}>Tajikistan</option>
+    <option value="TK" @if(params.countryCode.contains("TK")) { selected="selected"}>Tokelau</option>
+    <option value="TL" @if(params.countryCode.contains("TL")) { selected="selected"}>Timor-Leste</option>
+    <option value="TM" @if(params.countryCode.contains("TM")) { selected="selected"}>Turkmenistan</option>
+    <option value="TN" @if(params.countryCode.contains("TN")) { selected="selected"}>Tunisia</option>
+    <option value="TO" @if(params.countryCode.contains("TO")) { selected="selected"}>Tonga</option>
+    <option value="TR" @if(params.countryCode.contains("TR")) { selected="selected"}>Turkey</option>
+    <option value="TT" @if(params.countryCode.contains("TT")) { selected="selected"}>Trinidad and Tobago</option>
+    <option value="TV" @if(params.countryCode.contains("TV")) { selected="selected"}>Tuvalu</option>
+    <option value="TW" @if(params.countryCode.contains("TW")) { selected="selected"}>Taiwan (Province of China)</option>
+    <option value="TZ" @if(params.countryCode.contains("TZ")) { selected="selected"}>Tanzania, United Republic of</option>
+    <option value="UA" @if(params.countryCode.contains("UA")) { selected="selected"}>Ukraine</option>
+    <option value="UG" @if(params.countryCode.contains("UG")) { selected="selected"}>Uganda</option>
+    <option value="UM" @if(params.countryCode.contains("UM")) { selected="selected"}>United States Minor Outlying Isles</option>
+    <option value="US" @if(params.countryCode.contains("US")) { selected="selected"}>United States of America (the)</option>
+    <option value="UY" @if(params.countryCode.contains("UY")) { selected="selected"}>Uruguay</option>
+    <option value="UZ" @if(params.countryCode.contains("UZ")) { selected="selected"}>Uzbekistan</option>
+    <option value="VA" @if(params.countryCode.contains("VA")) { selected="selected"}>Holy See (the)</option>
+    <option value="VC" @if(params.countryCode.contains("VC")) { selected="selected"}>Saint Vincent and the Grenadines</option>
+    <option value="VE" @if(params.countryCode.contains("VE")) { selected="selected"}>Venezuela (Bolivarian Republic of)</option>
+    <option value="VG" @if(params.countryCode.contains("VG")) { selected="selected"}>Virgin Islands (British)</option>
+    <option value="VI" @if(params.countryCode.contains("VI")) { selected="selected"}>Virgin Islands (U.S.)</option>
+    <option value="VN" @if(params.countryCode.contains("VN")) { selected="selected"}>Viet Nam</option>
+    <option value="VU" @if(params.countryCode.contains("VU")) { selected="selected"}>Vanuatu</option>
+    <option value="WF" @if(params.countryCode.contains("WF")) { selected="selected"}>Wallis and Futuna</option>
+    <option value="WS" @if(params.countryCode.contains("WS")) { selected="selected"}>Samoa</option>
+    <option value="YE" @if(params.countryCode.contains("YE")) { selected="selected"}>Yemen</option>
+    <option value="YT" @if(params.countryCode.contains("YT")) { selected="selected"}>Mayotte</option>
+    <option value="ZA" @if(params.countryCode.contains("ZA")) { selected="selected"}>South Africa</option>
+    <option value="ZM" @if(params.countryCode.contains("ZM")) { selected="selected"}>Zambia</option>
+    <option value="ZW" @if(params.countryCode.contains("ZW")) { selected="selected"}>Zimbabwe</option>
   </select>
 
   <script>

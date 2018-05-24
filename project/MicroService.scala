@@ -4,6 +4,7 @@ import sbt._
 import play.routes.compiler.StaticRoutesGenerator
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import play.sbt.PlayImport.PlayKeys
+import scoverage.ScoverageKeys
 
 
 trait MicroService {
@@ -24,10 +25,23 @@ trait MicroService {
   lazy val plugins : Seq[Plugins] = Seq.empty
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
+  lazy val scoverageSettings: Seq[Def.Setting[_ >: String with Double with Boolean]] = {
+    Seq(
+      ScoverageKeys.coverageEnabled := true,
+      // Semicolon-separated list of regexs matching classes to exclude
+      ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*AuthService.*;models/.data/..*;view.*",
+      // Minimum is deliberately low to avoid failures initially - please increase as we add more coverage
+      ScoverageKeys.coverageMinimum := 50,
+      ScoverageKeys.coverageFailOnMinimum := false,
+      ScoverageKeys.coverageHighlighting := true,
+      parallelExecution in Test := false
+    )
+  }
 
   lazy val microservice = Project(appName, file("."))
     .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
     .settings(PlayKeys.playDefaultPort := 1118)
+    .settings(playSettings ++ scoverageSettings: _*)
     .settings(playSettings : _*)
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
