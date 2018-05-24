@@ -16,36 +16,29 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import cats.data.EitherT
-import cats.implicits._
-import play.api.mvc.{ActionRefiner, Result, Results}
+import play.api.mvc.{ActionFilter, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
 import scala.concurrent.Future
 
-class ContinueWithBprAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler)
-  extends ActionRefiner[UserRequest, UserRequest]
-    with FrontendAction {
+class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(implicit val errorHandler: ErrorHandler)
+  extends ActionFilter[UserRequest]
+    with FrontendAction
+ {
 
-  override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] = {
-
+  override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] = {
     implicit val r = request
+    val whenRegistered = request.registrationNumber.map{ _ ⇒ Future successful None}
 
-
-    import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-
-    val whenRegistered = request.registrationNumber.map {
-      registrationNumber ⇒
-        fhddsConnector.getStatus(registrationNumber).map {
-          case Withdrawn | Rejected | Revoked | DeRegistered ⇒ Right(request)
-          case _ ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+    whenRegistered getOrElse {
+      fhddsConnector
+        .getEnrolmentProgress
+        .map {
+          case EnrolmentProgress.Pending ⇒ Some(errorHandler.errorResultsPages(Results.BadRequest))
+          case _                         ⇒ None
         }
     }
-
-    whenRegistered getOrElse Future.successful(Right(request))
-
   }
-
-
 }
