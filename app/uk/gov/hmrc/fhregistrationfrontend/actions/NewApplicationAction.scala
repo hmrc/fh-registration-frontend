@@ -16,15 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import cats.data.EitherT
-import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 
 import scala.concurrent.Future
 
-class ContinueWithBprAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler)
+class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler)
   extends ActionRefiner[UserRequest, UserRequest]
     with FrontendAction {
 

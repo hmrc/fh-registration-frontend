@@ -87,10 +87,15 @@ class Application @Inject()(
       Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
     }
 
-    redirectWhenSaved getOrElse Redirect(links.businessCustomerVerificationUrl)
+    redirectWhenSaved getOrElse Redirect(routes.Application.newApplication())
   }
 
-  def continueWithBpr = continueWithBprAction.async { implicit request ⇒
+  def newApplication = newApplicationAction { implicit request ⇒
+    Redirect(links.businessCustomerVerificationUrl)
+  }
+
+
+  def continueWithBpr = newApplicationAction.async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)

@@ -1,6 +1,7 @@
 # microservice specific routes
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET         /new                                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.newApplication()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
 GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
