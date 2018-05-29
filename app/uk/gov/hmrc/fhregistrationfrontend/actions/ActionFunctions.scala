@@ -19,7 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import play.api.Logger
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
@@ -30,13 +32,22 @@ trait ActionFunctions {
   def loadCacheMap(implicit save4LaterService: Save4LaterService,  errorHandler: ErrorHandler, request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒
-        Logger.error(s"Not found in shortLivedCache")
-        Left(errorHandler.errorResultsPages(Results.BadRequest))
+      case None ⇒ Right(new CacheMap(request.userId, Map.empty))
 
     } recover { case t ⇒
       Logger.error(s"Could not access shortLivedCache", t)
       Left(errorHandler.errorResultsPages(Results.BadGateway))
     }
   }
+
+  def loadJourneyType(cacheMap: CacheMap): JourneyType = {
+    cacheMap
+      .getEntry[JourneyType](Save4LaterKeys.journeyTypeKey)
+      .orElse(
+        cacheMap
+          .getEntry[Boolean](Save4LaterKeys.isAmendmentKey)
+          .collect {case true ⇒ JourneyType.Amendment})
+      .getOrElse(JourneyType.New)
+  }
+
 }

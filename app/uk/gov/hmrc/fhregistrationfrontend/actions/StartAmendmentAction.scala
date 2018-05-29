@@ -16,19 +16,21 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.Logger
+import cats.data.EitherT
+import cats.implicits._
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.Processing
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{Processing, Received}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
 class StartAmendmentRequest[A](
-  val registrationNumber: String,
-  val  hasAmendmentInProgress: Boolean,
-  request    : UserRequest[A]
+  val registrationNumber    : String,
+  val hasAmendmentInProgress: Boolean,
+  request                   : UserRequest[A]
 ) extends WrappedRequest[A](request) {
 
   def userId: String = request.userId
@@ -38,6 +40,7 @@ class StartAmendmentRequest[A](
 class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
     extends ActionRefiner[UserRequest, StartAmendmentRequest]
       with FrontendAction
+      with ActionFunctions
 {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, StartAmendmentRequest[A]]] = {
@@ -46,17 +49,26 @@ class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4La
 
     val whenRegistered = request.registrationNumber.map {
       registrationNumber ⇒
-        fhddsConnector.getStatus(registrationNumber).flatMap {
-          case Processing ⇒
-            save4LaterService
-              .fetchIsAmendment(request.userId)
-              .map { isAmendment ⇒ Right(new StartAmendmentRequest[A](registrationNumber, isAmendment getOrElse false, request)) }
-          case _ ⇒ Future successful Left(errorHandler.errorResultsPages(Results.BadRequest))
+        val result = for {
+          _ ← EitherT(checkIsProcessing(registrationNumber))
+          cacheMap ← EitherT(loadCacheMap)
+          journeyType = loadJourneyType(cacheMap)
+          hasAmendmentInProgress = ( journeyType == JourneyType.Amendment)
+        } yield {
+          new StartAmendmentRequest[A](registrationNumber, hasAmendmentInProgress, request)
         }
+        result.value
     }
 
 
     whenRegistered getOrElse Future.successful(Left(errorHandler.errorResultsPages(Results.BadRequest)))
+  }
+
+  private def checkIsProcessing(registrationNumber: String)(implicit request: UserRequest[_]): Future[Either[Result, Boolean]] = {
+    fhddsConnector.getStatus(registrationNumber) map {
+      case Received | Processing ⇒ Right(true)
+      case _          ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+    }
   }
 
 }

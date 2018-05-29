@@ -25,20 +25,16 @@ import scala.concurrent.Future
 
 class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(implicit val errorHandler: ErrorHandler)
   extends ActionFilter[UserRequest]
-    with FrontendAction
- {
+    with FrontendAction {
 
   override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] = {
     implicit val r = request
-    val whenRegistered = request.registrationNumber.map{ _ ⇒ Future successful None}
 
-    whenRegistered getOrElse {
-      fhddsConnector
-        .getEnrolmentProgress
-        .map {
-          case EnrolmentProgress.Pending ⇒ Some(errorHandler.errorResultsPages(Results.BadRequest))
-          case _                         ⇒ None
-        }
-    }
+    fhddsConnector
+      .getEnrolmentProgress
+      .map {
+        case EnrolmentProgress.Pending ⇒ Some(errorHandler.errorResultsPages(Results.BadRequest))
+        case _                         ⇒ None
+      }
   }
 }

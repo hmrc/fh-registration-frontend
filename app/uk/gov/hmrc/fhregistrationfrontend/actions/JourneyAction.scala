@@ -22,6 +22,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -41,6 +42,7 @@ class JourneyRequest[A](
   val bpr: BusinessRegistrationDetails,
   val businessType: BusinessType,
   val verifiedEmail: String,
+  val journeyType: JourneyType,
   val journeyPages: JourneyPages,
   val journeyState: JourneyState
 ) extends WrappedRequest[A](request) with PageDataLoader
@@ -51,20 +53,17 @@ class JourneyRequest[A](
     cacheMap.getEntry[T](page.id)(page.format)
 
   def registrationNumber = request.registrationNumber
-  def userIsRegistered = request.userIsRegistered
   def email: Option[String] = request.ggEmail
 
   def lastUpdateTimestamp = {
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
   }
 
-  private def isAmendmentJourney =
-    request.userIsRegistered && cacheMap.getEntry[Boolean](Save4LaterKeys.isAmendmentKey).getOrElse(false)
-
-  def hasAmendments: Option[Boolean] = {
-    if (isAmendmentJourney)
-      Some(pagesHaveAmendments || verifiedEmailHasAmendments)
-    else None
+  def hasUpdates: Option[Boolean] = {
+    journeyType match {
+      case JourneyType.Amendment | JourneyType.Variation ⇒ Some(pagesHaveAmendments || verifiedEmailHasAmendments)
+      case _ ⇒ None
+    }
   }
 
   private def pagesHaveAmendments = journeyPages.pages exists( page ⇒ pageHasAmendments(page))
@@ -100,7 +99,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
       bpr ← findBpr(cacheMap).toEitherT[Future]
       bt ← getBusinessType(cacheMap).toEitherT[Future]
       verifiedEmail ← findVerifiedEmail(cacheMap).toEitherT[Future]
-      _ ← checkAmendmentJourney(cacheMap).toEitherT[Future]
+      journeyType = loadJourneyType(cacheMap)
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages, cacheMap)
     } yield {
@@ -110,6 +109,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
         bpr,
         bt,
         verifiedEmail,
+        journeyType,
         journeyPages,
         journeyState)
     }
@@ -117,24 +117,13 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
     result.value
   }
 
+
   def findVerifiedEmail(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, String] = {
     cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey).fold(
       Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus()))
     )(
       verifiedEmail ⇒ Either.right(verifiedEmail)
     )
-  }
-
-  def checkAmendmentJourney(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, Boolean] = {
-    if (request.userIsRegistered)
-      if (cacheMap.getEntry[Boolean](Save4LaterKeys.isAmendmentKey).isDefined)
-        Right(true)
-      else {
-        Logger.error(s"Journey request with enrolment but no amendment in progress")
-        Left(errorHandler.errorResultsPages(Results.BadRequest))
-      }
-    else
-      Right(true)
   }
 
   def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] = {

@@ -38,8 +38,7 @@ class Actions @Inject() (
 
   def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
-  def noEnrolmentCheckAction = userAction andThen new NoEnrolmentCheckAction
-  def journeyAction = userAction andThen noEnrolmentCheckAction andThen new JourneyAction
+  def journeyAction = userAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
 
   def newApplicationAction = noPendingSubmissionFilter andThen new NewApplicationAction(fhddsConnector)
@@ -48,7 +47,7 @@ class Actions @Inject() (
     journeyAction andThen new PageAction(pageId, sectionId)
 
   def summaryAction =
-    userAction andThen noEnrolmentCheckAction andThen journeyAction andThen new SummaryAction
+    userAction andThen journeyAction andThen new SummaryAction
 
 
 

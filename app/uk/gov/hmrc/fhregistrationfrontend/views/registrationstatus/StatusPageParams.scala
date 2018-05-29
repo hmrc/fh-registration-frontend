@@ -67,7 +67,7 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Rejected,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.newApplication(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
@@ -75,14 +75,14 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Revoked,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.newApplication(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusNewApplication.apply,
       category = "post"
     ),
     StatusPageParams(
       Withdrawn,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.newApplication(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
       secondary = None,
       nextTemplate = statusWithdrawn.apply,
       showSubHeading = false,

@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 import javax.inject.{Inject, Singleton}
 
 import play.api.libs.json
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.des
@@ -33,6 +34,7 @@ object Save4LaterKeys {
   val businessTypeKey = "businessType"
   val userLastTimeSavedKey = "userLastTimeSaved"
   val isAmendmentKey = "isAmendment"
+  val journeyTypeKey = "journeyType"
   val verifiedEmailKey = "verifiedEmail"
   val v1ContactEmailKey = "v1ContactEmail"
   val pendingEmailKey = "pendingEmail"
@@ -108,15 +110,12 @@ class Save4LaterService @Inject() (
     }
   }
 
-  def saveIsAmendment(userId: String)(implicit hc: HeaderCarrier) = {
-    shortLivedCache.cache(userId, isAmendmentKey, true) map {
-      data ⇒ data.getEntry[Boolean](isAmendmentKey)
+  def saveJourneyType(userId: String, journeyType: JourneyType)(implicit hc: HeaderCarrier) = {
+    shortLivedCache.cache(userId, journeyTypeKey, journeyType) map {
+      data ⇒ data.getEntry[JourneyType](journeyTypeKey)
     }
   }
 
-  def fetchIsAmendment(userId: String)(implicit hc: HeaderCarrier) = {
-    fetchData4Later[Boolean](userId, isAmendmentKey)
-  }
 
   def saveDisplayData4Later[T](userId: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
     val key = displayKeyForPage(formId)

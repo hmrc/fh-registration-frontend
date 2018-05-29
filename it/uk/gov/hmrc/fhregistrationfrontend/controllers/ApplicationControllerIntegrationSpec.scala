@@ -42,6 +42,13 @@ class ApplicationControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false).get()) { res ⇒
           res.status mustBe 303
+          res.header(HeaderNames.LOCATION).get mustBe "/fhdds/start"
+        }
+      }
+
+      WsTestClient.withClient { client ⇒
+        whenReady(client.url(s"$baseUrl/start").withFollowRedirects(false).get()) { res ⇒
+          res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
         }
       }

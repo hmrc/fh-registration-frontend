@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartAmendmentRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Journeys}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
@@ -60,7 +60,7 @@ class AmendmentController @Inject()(
           _ ← saveDisplayPageData(userId, journeyPages)
           _ ← savePageData(userId, journeyPages)
           _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
-          _ ← save4LaterService.saveIsAmendment(userId)
+          _ ← save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
         } yield
           Redirect(routes.SummaryController.summary())
       }

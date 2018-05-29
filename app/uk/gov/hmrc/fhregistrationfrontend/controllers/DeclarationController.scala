@@ -17,8 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
-
 import javax.inject.Inject
+
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
@@ -26,15 +26,15 @@ import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import java.util.Date
-
 import javax.inject.Inject
+
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Journeys, PageDataLoader}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
@@ -109,12 +109,11 @@ class DeclarationController @Inject()(
   }
 
   private def sendSubscription(declaration: Declaration)(implicit request: SummaryRequest[_]):  Either[String, Future[SubmissionResponse]] = {
-    val submissionResult =
-      if (request.userIsRegistered) {
-        amendedSubmission(declaration)
-      } else {
-        createSubmission(declaration)
-      }
+    val submissionResult = request.journeyRequest.journeyType match {
+      case JourneyType.Amendment ⇒ amendedSubmission(declaration)
+      case JourneyType.Variation ⇒ amendedSubmission(declaration)
+      case JourneyType.New       ⇒ createSubmission(declaration)
+    }
 
     submissionResult.right map { submissionResponse ⇒
       submissionResponse onSuccess {case _ ⇒ save4LaterService.removeUserData(request.userId) }
@@ -131,8 +130,9 @@ class DeclarationController @Inject()(
       Json toJson payload
     )
 
+
     Right(
-      fhddsConnector.createSubmission(request.bpr.safeId.get, submissionRequest))
+      fhddsConnector.createSubmission(request.bpr.safeId.get, request.registrationNumber, submissionRequest))
 
   }
 
@@ -140,7 +140,7 @@ class DeclarationController @Inject()(
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
-    if (prevDesDeclaration == newDesDeclaration && request.journeyRequest.hasAmendments == Some(false))
+    if (prevDesDeclaration == newDesDeclaration && request.journeyRequest.hasUpdates == Some(false))
       Left("no.changes")
     else {
       val subscription = getSubscriptionForDes(
