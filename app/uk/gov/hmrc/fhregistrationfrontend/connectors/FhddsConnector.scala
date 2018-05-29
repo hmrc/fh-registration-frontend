@@ -53,8 +53,14 @@ class FhddsConnector @Inject() (
     http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
   }
 
-  def createSubmission(safeId: String, request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
-    http.POST[SubmissionRequest, SubmissionResponse](s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId", request)
+  def createSubmission(safeId: String, currentRegNumber: Option[String], request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
+    val url = currentRegNumber.fold(
+      s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId"
+    ) { currentRegNumber ⇒
+      s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId?currentRegNumber=$currentRegNumber"
+    }
+
+    http.POST[SubmissionRequest, SubmissionResponse](url, request)
   }
 
   def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {

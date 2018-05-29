@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import play.api.mvc.{ActionFilter, Result}
-import uk.gov.hmrc.auth.core.AuthConnector
+import play.api.libs.json.{Format, Reads, Writes}
 
-import scala.concurrent.Future
+object JourneyType extends Enumeration {
+  type JourneyType = Value
 
-class NoEnrolmentCheckAction
-  extends ActionFilter[UserRequest]
-    with FrontendAction
- {
+  val New, Amendment, Variation = Value
 
-  // Check is DISABLED
-  override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] =
-    Future successful None
+
+  implicit val businessTypeFormat = Format(
+    Reads.enumNameReads(JourneyType),
+    Writes.enumNameWrites[this.type ])
 }

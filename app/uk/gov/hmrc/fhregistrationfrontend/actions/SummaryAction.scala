@@ -36,7 +36,6 @@ class SummaryRequest[A](
   def email: Option[String] = journeyRequest.email
 
   def registrationNumber = journeyRequest.registrationNumber
-  def userIsRegistered = journeyRequest.userIsRegistered
 
   val bpr = journeyRequest.bpr
   val businessType = journeyRequest.businessType

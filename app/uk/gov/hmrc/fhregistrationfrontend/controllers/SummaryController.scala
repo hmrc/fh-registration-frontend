@@ -31,7 +31,7 @@ class SummaryController @Inject()(
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasAmendments))
+    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasUpdates))
   }
 
 }
