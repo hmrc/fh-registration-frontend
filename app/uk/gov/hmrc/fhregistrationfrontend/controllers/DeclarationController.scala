@@ -17,8 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
-import javax.inject.Inject
 
+import javax.inject.Inject
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
@@ -26,8 +26,8 @@ import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import java.util.Date
-import javax.inject.Inject
 
+import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
@@ -41,6 +41,8 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, For
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -63,7 +65,7 @@ class DeclarationController @Inject()(
   import actions._
 
   def showDeclaration() = summaryAction { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr))
+    Ok(declaration(declarationForm, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment)))
   }
 
   def showAcknowledgment() = userAction { implicit request ⇒
@@ -80,17 +82,17 @@ class DeclarationController @Inject()(
       userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
       printableSummary ← userSummary
     } yield {
-      Ok(acknowledgement_page(processingDate, email, Html(printableSummary)))
+      Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = Mode.Variation))
     }
   }
 
   def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
-      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr)),
+      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment))),
       usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
-          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, Some(false))),
+          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment, hasAmendments = Some(false)))),
           _.flatMap { response ⇒
             keyStoreService.saveSummaryForPrint(getSummaryData()(request).toString())
               .map(_ ⇒ true)

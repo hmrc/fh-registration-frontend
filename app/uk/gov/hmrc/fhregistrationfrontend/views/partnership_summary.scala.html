@@ -24,14 +24,16 @@
 @import java.util.Date
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-  hasAmendments.filter(_ == true).map { _ =>
+  params.hasAmendments.filter(_ == true).map { _ =>
     Alert(Messages("fh.unsaved_summary"))
   }
 }
@@ -53,19 +55,21 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @BusinessPartners(applicationData.businessPartners)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+      @TradingName(applicationData.tradingName, params.mode)
+      @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+      @BusinessPartners(applicationData.businessPartners, params.mode)
+      @BusinessStatus(applicationData.businessStatus, params.mode)
+      @ImportingActivities(applicationData.importingActivities, params.mode)
+      @BusinessCustomers(applicationData.businessCustomers, params.mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
 
     </tbody>
   </table>
 
-  @SummaryButtons()
+  @if(params.mode != Mode.ReadOnly) {
+    @SummaryButtons()
+  }
 
 }

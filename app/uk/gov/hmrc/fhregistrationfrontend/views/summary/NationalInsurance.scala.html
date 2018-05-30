@@ -17,8 +17,18 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(nationalInsuranceForm: NationalInsuranceNumber)(implicit request: Request[_], messages: Messages)
+@(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@changeLink = @{
+  if (mode != ReadOnly) {
+    Some("nationalInsuranceNumber")
+  } else {
+    None
+  }
+}
 
 @SummarySectionHead(heading = Messages("fh.national_insurance_number.title"))
 
@@ -26,7 +36,7 @@
     SummaryRowParams.ofBoolean(
         Some(Messages("fh.national_insurance_number.confirm.label")),
         nationalInsuranceForm.hasValue,
-        Some("nationalInsuranceNumber")
+        changeLink
     )
 )
 
@@ -35,7 +45,7 @@
         SummaryRowParams(
             Some(Messages("fh.national_insurance_number.label")),
             nationalInsuranceForm.value,
-            Some("nationalInsuranceNumber")
+            changeLink
         )
     )
 }

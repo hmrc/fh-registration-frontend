@@ -19,7 +19,18 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@changeLink = @{
+    if (mode != ReadOnly) {
+        Some("contactPerson")
+    } else {
+        None
+    }
+}
 
 @SummarySectionHead(heading = Messages("fh.contact_person.title"))
 
@@ -27,7 +38,7 @@
     SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.first_name.label")),
         contactPersonForm.firstName,
-        Some("contactPerson")
+        changeLink
     )
 )
 
@@ -35,7 +46,7 @@
     SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.last_name.label")),
         contactPersonForm.lastName,
-        Some("contactPerson")
+        changeLink
     )
 )
 
@@ -43,7 +54,7 @@
     SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.job_title.label")),
         contactPersonForm.jobTitle,
-        Some("contactPerson")
+        changeLink
     )
 )
 
@@ -51,7 +62,7 @@
     SummaryRowParams.ofString(
         Some(Messages("fh.contact_person.telephone.label")),
         contactPersonForm.telephone,
-        Some("contactPerson")
+        changeLink
     )
 )
 
@@ -59,7 +70,11 @@
     <td style="vertical-align: top" width="45%">@Messages("fh.contact_person.email.label")</td>
     <td class="form-data" width="45%">@{verifiedEmail}</td>
     <td style="vertical-align: top">
-        <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailChange}">Change<span class="visuallyhidden"> email address</span></a>
+        @if(mode != ReadOnly) {
+            <a class="hidden-print" href="@{
+                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailChange
+            }">Change<span class="visuallyhidden"> email address</span></a>
+        }
     </td>
 </tr>
 
@@ -70,7 +85,7 @@
         SummaryRowParams.ofBoolean(
             Some(Messages("fh.contact_person.contact_address_in_uk.label")),
             contactPersonForm.ukOtherAddress,
-            Some("contactPerson")
+            changeLink
         )
     )
 
@@ -86,7 +101,7 @@
                         Line4 = address.addressLine4,
                         postcode = Some(address.postcode)
                     ),
-                    Some("contactPerson")
+                    changeLink
                 )
             )
         }
@@ -103,7 +118,7 @@
                         Line3 = address.addressLine3,
                         Line4 = Some(address.addressLine4)
                     ),
-                    Some("contactPerson")
+                    changeLink
                 )
             )
         }

@@ -112,6 +112,9 @@ fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
 fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.New.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
@@ -386,13 +389,23 @@ fh.storagePremise_address.addMore.error.required=Select whether have more premis
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
+fh.summary.New.title=Check your answers before sending your application
+fh.summary.Amendment.title=Check your answers before resending your application
+fh.summary.Variation.title=View or update registered details
+fh.summary.ReadOnly.title=View application
 fh.summary.addMoreCompanyOfficers=Add more company officers
 fh.summary.addMoreStoragePremises=Add more storage premises
 fh.summary.addMoreBusinessPartners=Add more business partners
+fh.summary.New.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Variation.unsubmittedAlert=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # - Declaration
 #===========================================================
 fh.declaration.title=Declaration
+fh.declaration.New.title=Confirm details and send your application
+fh.declaration.Amendment.title=Confirm details and resend your application
+fh.declaration.Variation.title=Confirm details and send your update
 fh.declaration.person_name.label=Full name
 fh.declaration.fullName.error.required=Enter the full name of who is submitting this application
 fh.declaration.person_name.error.required=Enter the full name of who is submitting this application
@@ -417,12 +430,24 @@ fh.declaration.alternative_email.error.pattern=Enter a valid email address for t
 fh.declaration.alternative_email_confirmation.label=Re-enter the alternative email address
 fh.declaration.alternative_email_confirmation.empty.error=Re-enter the alternative email address
 fh.declaration.alternative_email_confirmation.no_match.error=The email addresses are not the same
-fh.declaration.declaration.title=By submitting this application you confirm that:
+fh.declaration.declaration.title=By sending this application you confirm that:
+fh.declaration.declaration.New.title=By sending this application you confirm that:
+fh.declaration.declaration.Amendment.title=By resending this application you confirm that:
+fh.declaration.declaration.Variation.title=By sending this update to your registered details you confirm that:
 fh.declaration.declaration.point1=the information you have provided is correct and complete
 fh.declaration.declaration.point2=you have authority to submit this form on behalf of the business you wish to register
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
 fh.declaration.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
-fh.declaration.hasAmendments.error.linkText=View or change your application
+fh.declaration.New.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.Amendment.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.Variation.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.New.button=Accept and send application
+fh.declaration.Amendment.button=Accept and resend application
+fh.declaration.Variation.button=Accept and send update
+
+fh.declaration.new.hasAmendments.error.linkText=View or change your application
+fh.declaration.amendment.hasAmendments.error.linkText=View or change your application
+fh.declaration.variation.hasAmendments.error.linkText=View or change your registered details
 fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
 fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
 
@@ -751,6 +776,11 @@ fh.ack.help_bullet_2=how to make changes to your application
 fh.ack.help_bullet_3=how to contact HMRC about your application
 fh.survey_link_text=What did you think of this service?
 fh.survey_hint=(takes 30 seconds)
+fh.ack.New.title=Application submitted
+fh.ack.Amendment.title=Application submitted
+fh.ack.Variation.title=Update to registered details sent
+fh.ack.Variation.info=We will review the details that you updated. We may get in touch with your contact person to discuss these.
+fh.ack.Variation.print=Print a copy of your update
 
 # - Withdrawal reason
 #============================================================
