@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views
 
-object EditMode extends Enumeration {
-  type EditMode = Value
+object Mode extends Enumeration {
+  type Mode = Value
   val ReadOnly, New, Amendment, Variation = Value
 }

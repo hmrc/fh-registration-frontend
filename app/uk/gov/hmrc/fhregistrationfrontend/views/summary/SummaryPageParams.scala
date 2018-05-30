@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.summary
 
-import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 
 case class SummaryPageParams(
-                              editMode: EditMode,
+                              editMode: Mode,
                               hasAmendments: Option[Boolean] = None
                             )

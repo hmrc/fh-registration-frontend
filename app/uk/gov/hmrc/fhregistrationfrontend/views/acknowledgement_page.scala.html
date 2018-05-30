@@ -20,10 +20,10 @@
 @import java.util.Date
 @import scala.concurrent.Future
 @import play.twirl.api.{Html⇒tHtml}
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.Variation
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Variation
 
-@(date: Date, email:String, printableSummary: Html, mode: EditMode)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}

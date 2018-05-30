@@ -18,10 +18,10 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(businessCustomersForm: BusinessCustomersModel, mode: EditMode)(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: BusinessCustomersModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
   @changeLink = @{
     if (mode != ReadOnly) {

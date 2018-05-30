@@ -19,10 +19,10 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
-@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String, mode: EditMode)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @changeLink = @{
     if (mode != ReadOnly) {

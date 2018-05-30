@@ -41,7 +41,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, For
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.views.EditMode
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 import scala.concurrent.duration._
@@ -65,7 +65,7 @@ class DeclarationController @Inject()(
   import actions._
 
   def showDeclaration() = summaryAction { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr, SummaryPageParams(editMode = EditMode.Amendment)))
+    Ok(declaration(declarationForm, request.email, request.bpr, SummaryPageParams(editMode = Mode.Amendment)))
   }
 
   def showAcknowledgment() = userAction { implicit request ⇒
@@ -82,17 +82,17 @@ class DeclarationController @Inject()(
       userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
       printableSummary ← userSummary
     } yield {
-      Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = EditMode.Variation))
+      Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = Mode.Variation))
     }
   }
 
   def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
-      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, SummaryPageParams(editMode = EditMode.Amendment))),
+      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, SummaryPageParams(editMode = Mode.Amendment))),
       usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
-          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, SummaryPageParams(editMode = EditMode.Amendment, hasAmendments = Some(false)))),
+          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, SummaryPageParams(editMode = Mode.Amendment, hasAmendments = Some(false)))),
           _.flatMap { response ⇒
             keyStoreService.saveSummaryForPrint(getSummaryData()(request).toString())
               .map(_ ⇒ true)
