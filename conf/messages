@@ -112,9 +112,9 @@ fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
 fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.new.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.New.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
