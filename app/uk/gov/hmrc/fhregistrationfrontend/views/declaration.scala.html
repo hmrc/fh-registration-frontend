@@ -20,10 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
-@mode = @{"variation"}
+@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -32,8 +31,8 @@
 @linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
 
 @showAlert = @{
-  hasAmendments.filter(_ == false).map { _ =>
-    Alert(Messages(s"fh.declaration.$mode.hasAmendments.error"), Some(Messages(s"fh.declaration.$mode.hasAmendments.error.linkText")), Some(linkVal))
+  params.hasAmendments.filter(_ == false).map { _ =>
+    Alert(Messages(s"fh.declaration.${params.editMode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.editMode}hasAmendments.error.linkText")), Some(linkVal))
   }
 }
 
@@ -42,7 +41,7 @@
 }
 
 @title = @{
-  Messages(s"fh.declaration.$mode.title")
+  Messages(s"fh.declaration.${params.editMode}.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
@@ -156,7 +155,7 @@
 
     <div class="form-group">
       <h2>@Messages("fh.declaration.title")</h2>
-      <p>@Messages(s"fh.declaration.declaration.$mode.title")</p>
+      <p>@Messages(s"fh.declaration.declaration.${params.editMode}.title")</p>
       <ul class="bullets">
         <li>
         @Messages("fh.declaration.declaration.point1")
@@ -181,7 +180,7 @@
     <div class="form-group form-actions">
 
       <p>
-        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages("button.accept.send")</button>
+        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages(s"fh.declaration.${params.editMode}.button")</button>
       </p>
 
       <p>

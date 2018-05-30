@@ -17,51 +17,50 @@
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication,SoleProprietorApplication,PartnershipApplication,BusinessEntityApplication}
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
 @(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit request: Request[_], messages: Messages)
-
-@mode = @{"readOnly"}
 
 @{
   applicationData match {
     case limitedCompanyApplication: LimitedCompanyApplication ⇒
-      Html(MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, mode).toString() +
-          ContactPerson(limitedCompanyApplication.contactPerson, bpr, verifiedEmail, mode).toString() +
-          CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber, mode).toString() +
-          DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation, mode).toString() +
-          TradingName(limitedCompanyApplication.tradingName, mode).toString() +
-          VATRegistrationNumber(limitedCompanyApplication.vatNumber, mode).toString() +
-          CompanyOfficers(limitedCompanyApplication.companyOfficers, mode).toString() +
-          BusinessStatus(limitedCompanyApplication.businessStatus, mode).toString() +
-          ImportingActivities(limitedCompanyApplication.importingActivities, mode).toString() +
-          BusinessCustomers(limitedCompanyApplication.businessCustomers, mode).toString() +
-          OtherStoragePremises(limitedCompanyApplication.otherStoragePremises, mode).toString()
+      Html(MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, ReadOnly).toString() +
+          ContactPerson(limitedCompanyApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+          CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber, ReadOnly).toString() +
+          DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation, ReadOnly).toString() +
+          TradingName(limitedCompanyApplication.tradingName, ReadOnly).toString() +
+          VATRegistrationNumber(limitedCompanyApplication.vatNumber, ReadOnly).toString() +
+          CompanyOfficers(limitedCompanyApplication.companyOfficers, ReadOnly).toString() +
+          BusinessStatus(limitedCompanyApplication.businessStatus, ReadOnly).toString() +
+          ImportingActivities(limitedCompanyApplication.importingActivities, ReadOnly).toString() +
+          BusinessCustomers(limitedCompanyApplication.businessCustomers, ReadOnly).toString() +
+          OtherStoragePremises(limitedCompanyApplication.otherStoragePremises, ReadOnly).toString()
       )
 
     case soleProprietorApplication: SoleProprietorApplication ⇒
       Html(
-        MainBusinessAddress(soleProprietorApplication.mainBusinessAddress, mode).toString() +
-            ContactPerson(soleProprietorApplication.contactPerson, bpr, verifiedEmail, mode).toString() +
-            NationalInsurance(soleProprietorApplication.nationalInsuranceNumber, mode).toString() +
-            TradingName(soleProprietorApplication.tradingName, mode).toString() +
-            VATRegistrationNumber(soleProprietorApplication.vatNumber, mode).toString() +
-            BusinessStatus(soleProprietorApplication.businessStatus, mode).toString() +
-            ImportingActivities(soleProprietorApplication.importingActivities, mode).toString() +
-            BusinessCustomers(soleProprietorApplication.businessCustomers, mode).toString() +
-            OtherStoragePremises(soleProprietorApplication.otherStoragePremises, mode).toString()
+        MainBusinessAddress(soleProprietorApplication.mainBusinessAddress, ReadOnly).toString() +
+            ContactPerson(soleProprietorApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+            NationalInsurance(soleProprietorApplication.nationalInsuranceNumber, ReadOnly).toString() +
+            TradingName(soleProprietorApplication.tradingName, ReadOnly).toString() +
+            VATRegistrationNumber(soleProprietorApplication.vatNumber, ReadOnly).toString() +
+            BusinessStatus(soleProprietorApplication.businessStatus, ReadOnly).toString() +
+            ImportingActivities(soleProprietorApplication.importingActivities, ReadOnly).toString() +
+            BusinessCustomers(soleProprietorApplication.businessCustomers, ReadOnly).toString() +
+            OtherStoragePremises(soleProprietorApplication.otherStoragePremises, ReadOnly).toString()
       )
 
     case partnershipApplication: PartnershipApplication ⇒
       Html(
-        MainBusinessAddress(partnershipApplication.mainBusinessAddress, mode).toString() +
-            ContactPerson(partnershipApplication.contactPerson, bpr, verifiedEmail, mode).toString() +
-            TradingName(partnershipApplication.tradingName, mode).toString() +
-            VATRegistrationNumber(partnershipApplication.vatNumber, mode).toString() +
-            BusinessPartners(partnershipApplication.businessPartners, mode).toString() +
-            BusinessStatus(partnershipApplication.businessStatus, mode).toString() +
-            ImportingActivities(partnershipApplication.importingActivities, mode).toString() +
-            BusinessCustomers(partnershipApplication.businessCustomers, mode).toString() +
-            OtherStoragePremises(partnershipApplication.otherStoragePremises, mode)
+        MainBusinessAddress(partnershipApplication.mainBusinessAddress, ReadOnly).toString() +
+            ContactPerson(partnershipApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+            TradingName(partnershipApplication.tradingName, ReadOnly).toString() +
+            VATRegistrationNumber(partnershipApplication.vatNumber, ReadOnly).toString() +
+            BusinessPartners(partnershipApplication.businessPartners, ReadOnly).toString() +
+            BusinessStatus(partnershipApplication.businessStatus, ReadOnly).toString() +
+            ImportingActivities(partnershipApplication.importingActivities, ReadOnly).toString() +
+            BusinessCustomers(partnershipApplication.businessCustomers, ReadOnly).toString() +
+            OtherStoragePremises(partnershipApplication.otherStoragePremises, ReadOnly)
       )
 
   }

@@ -24,21 +24,21 @@
 @import java.util.Date
 @import java.text.DateFormat
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@mode = @{"readOnly"}
-
 @showAlert = @{
-  hasAmendments.filter(_ == true).map { _ =>
-    Alert(Messages(s"fh.summary.$mode.unsubmittedAlert"))
+  params.hasAmendments.filter(_ == true).map { _ =>
+    Alert(Messages(s"fh.summary.${params.editMode}.unsubmittedAlert"))
   }
 }
 
 @title = @{
-  Messages(s"fh.summary.$mode.title")
+  Messages(s"fh.summary.${params.editMode}.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
@@ -54,22 +54,22 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress, mode)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, mode)
-      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, mode)
-      @DateOfIncorporation(applicationData.dateOfIncorporation, mode)
-      @TradingName(applicationData.tradingName, mode)
-      @VATRegistrationNumber(applicationData.vatNumber, mode)
-      @CompanyOfficers(applicationData.companyOfficers, mode)
-      @BusinessStatus(applicationData.businessStatus, mode)
-      @ImportingActivities(applicationData.importingActivities, mode)
-      @BusinessCustomers(applicationData.businessCustomers, mode)
-      @OtherStoragePremises(applicationData.otherStoragePremises, mode)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, params.editMode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.editMode)
+      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.editMode)
+      @DateOfIncorporation(applicationData.dateOfIncorporation, params.editMode)
+      @TradingName(applicationData.tradingName, params.editMode)
+      @VATRegistrationNumber(applicationData.vatNumber, params.editMode)
+      @CompanyOfficers(applicationData.companyOfficers, params.editMode)
+      @BusinessStatus(applicationData.businessStatus, params.editMode)
+      @ImportingActivities(applicationData.importingActivities, params.editMode)
+      @BusinessCustomers(applicationData.businessCustomers, params.editMode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, params.editMode)
 
     </tbody>
   </table>
 
-  @if(mode != "readOnly") {
+  @if(params.editMode != EditMode.ReadOnly) {
     @SummaryButtons()
   }
 

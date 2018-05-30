@@ -18,11 +18,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(data: StoragePremisesModel, mode: String)(implicit request: Request[_], messages: Messages)
+@(data: StoragePremisesModel, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
     @changeLink = @{
-      if (mode != "readOnly") {
+      if (mode != ReadOnly) {
         Some("otherStoragePremises")
       } else {
         None
@@ -65,7 +67,7 @@
             )
         }
 
-        @if(mode != "readOnly") {
+        @if(mode != ReadOnly) {
           @SummaryAddMoreLink("otherStoragePremises", (data.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
         }
 

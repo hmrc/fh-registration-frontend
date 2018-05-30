@@ -19,10 +19,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
-@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String, mode: String)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
+
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, verifiedEmail: String, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
 @changeLink = @{
-    if (mode != "readOnly") {
+    if (mode != ReadOnly) {
         Some("contactPerson")
     } else {
         None
@@ -67,7 +70,7 @@
     <td style="vertical-align: top" width="45%">@Messages("fh.contact_person.email.label")</td>
     <td class="form-data" width="45%">@{verifiedEmail}</td>
     <td style="vertical-align: top">
-        @if(mode != "readOnly") {
+        @if(mode != ReadOnly) {
             <a class="hidden-print" href="@{
                 uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailChange
             }">Change<span class="visuallyhidden"> email address</span></a>

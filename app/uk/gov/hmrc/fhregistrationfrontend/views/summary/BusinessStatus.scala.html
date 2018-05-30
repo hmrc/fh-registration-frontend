@@ -18,11 +18,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(businessStatusForm: models.BusinessStatus, mode: String)(implicit request: Request[_], messages: Messages)
+@(businessStatusForm: models.BusinessStatus, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
   @changeLink = @{
-    if (mode != "readOnly") {
+    if (mode != ReadOnly) {
       Some("businessStatus")
     } else {
       None

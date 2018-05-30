@@ -18,10 +18,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
-@(dateOfIncorporationForm: DateOfIncorporationModel, mode: String)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
+
+@(dateOfIncorporationForm: DateOfIncorporationModel, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
 @changeLink = @{
-  if (mode != "readOnly") {
+  if (mode != ReadOnly) {
     Some("businessStatus")
   } else {
     None

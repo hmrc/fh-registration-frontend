@@ -17,9 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryAction}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.EditMode
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 
 @Inject
@@ -31,7 +32,7 @@ class SummaryController @Inject()(
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasUpdates))
+    Ok(getSummaryHtml(request, SummaryPageParams(hasAmendments = request.journeyRequest.hasUpdates, editMode = EditMode.Amendment)))
   }
 
 }

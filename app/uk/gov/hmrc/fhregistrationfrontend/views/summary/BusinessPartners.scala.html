@@ -25,11 +25,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: String)(implicit request: Request[_], messages: Messages)
+@(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: EditMode)(implicit request: Request[_], messages: Messages)
 
 @changeLink = @{
-  if (mode != "readOnly") {
+  if (mode != ReadOnly) {
     Some("businessPartners")
   } else {
     None
@@ -71,6 +73,6 @@
     }}
 }
 
-@if(mode != "readOnly") {
+@if(mode != ReadOnly) {
   @SummaryAddMoreLink("businessPartners", (businessPartners.size+1).toString, Messages("fh.summary.addMoreBusinessPartners"))
 }

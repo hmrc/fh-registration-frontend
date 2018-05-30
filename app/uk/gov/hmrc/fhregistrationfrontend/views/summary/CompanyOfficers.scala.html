@@ -21,11 +21,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: String)(implicit request: Request[_], messages: Messages)
+@(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: EditMode)(implicit request: Request[_], messages: Messages)
 
     @changeLink = @{
-      if (mode != "readOnly") {
+      if (mode != ReadOnly) {
         Some("companyOfficers")
       } else {
         None
@@ -51,6 +53,6 @@
 
     }
 
-    @if(mode != "readOnly") {
+    @if(mode != ReadOnly) {
       @SummaryAddMoreLink("companyOfficers", (companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
     }

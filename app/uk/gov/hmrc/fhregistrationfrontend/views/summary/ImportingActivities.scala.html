@@ -17,11 +17,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(importingActivitiesForm: ImportingActivitiesModel, mode: String)(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: ImportingActivitiesModel, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
   @changeLink = @{
-    if (mode != "readOnly") {
+    if (mode != ReadOnly) {
       Some("importingActivities")
     } else {
       None

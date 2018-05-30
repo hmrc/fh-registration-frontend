@@ -17,11 +17,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.EditMode
+@import uk.gov.hmrc.fhregistrationfrontend.views.EditMode.ReadOnly
 
-@(mainBusinessAddressForm: models.MainBusinessAddress, mode: String)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: models.MainBusinessAddress, mode: EditMode)(implicit request: Request[_], messages: Messages)
 
 @changeLink = @{
-  if (mode != "readOnly") {
+  if (mode != ReadOnly) {
     Some("mainBusinessAddress")
   } else {
     None
