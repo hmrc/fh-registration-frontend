@@ -54,20 +54,20 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress, params.editMode)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.editMode)
-      @NationalInsurance(applicationData.nationalInsuranceNumber, params.editMode)
-      @TradingName(applicationData.tradingName, params.editMode)
-      @VATRegistrationNumber(applicationData.vatNumber, params.editMode)
-      @BusinessStatus(applicationData.businessStatus, params.editMode)
-      @ImportingActivities(applicationData.importingActivities, params.editMode)
-      @BusinessCustomers(applicationData.businessCustomers, params.editMode)
-      @OtherStoragePremises(applicationData.otherStoragePremises, params.editMode)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+      @NationalInsurance(applicationData.nationalInsuranceNumber, params.mode)
+      @TradingName(applicationData.tradingName, params.mode)
+      @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+      @BusinessStatus(applicationData.businessStatus, params.mode)
+      @ImportingActivities(applicationData.importingActivities, params.mode)
+      @BusinessCustomers(applicationData.businessCustomers, params.mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
 
     </tbody>
   </table>
 
-  @if(params.editMode != Mode.ReadOnly) {
+  @if(params.mode != Mode.ReadOnly) {
     @SummaryButtons()
   }
 

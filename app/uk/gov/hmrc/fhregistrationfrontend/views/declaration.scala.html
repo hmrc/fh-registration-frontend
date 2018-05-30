@@ -32,7 +32,7 @@
 
 @showAlert = @{
   params.hasAmendments.filter(_ == false).map { _ =>
-    Alert(Messages(s"fh.declaration.${params.editMode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.editMode}hasAmendments.error.linkText")), Some(linkVal))
+    Alert(Messages(s"fh.declaration.${params.mode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.mode}hasAmendments.error.linkText")), Some(linkVal))
   }
 }
 
@@ -41,7 +41,7 @@
 }
 
 @title = @{
-  Messages(s"fh.declaration.${params.editMode}.title")
+  Messages(s"fh.declaration.${params.mode}.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
@@ -155,7 +155,7 @@
 
     <div class="form-group">
       <h2>@Messages("fh.declaration.title")</h2>
-      <p>@Messages(s"fh.declaration.declaration.${params.editMode}.title")</p>
+      <p>@Messages(s"fh.declaration.declaration.${params.mode}.title")</p>
       <ul class="bullets">
         <li>
         @Messages("fh.declaration.declaration.point1")
@@ -180,7 +180,7 @@
     <div class="form-group form-actions">
 
       <p>
-        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages(s"fh.declaration.${params.editMode}.button")</button>
+        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages(s"fh.declaration.${params.mode}.button")</button>
       </p>
 
       <p>
