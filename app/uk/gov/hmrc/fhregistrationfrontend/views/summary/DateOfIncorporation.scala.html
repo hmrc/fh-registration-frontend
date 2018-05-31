@@ -23,10 +23,18 @@
 
 @(dateOfIncorporationForm: DateOfIncorporationModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("dateOfIncorporation")
+    } else {
+      None
+    }
+  }
+
   @SummaryRow(
     SummaryRowParams.ofDate(
       Some(Messages("fh.date_of_incorporation.title")),
       dateOfIncorporationForm.dateOfIncorporation,
-      None
+      changeLink
     )
   )

@@ -23,12 +23,20 @@
 
 @(vatNumberForm: VatNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("vatNumber")
+    } else {
+      None
+    }
+  }
+
   @if(vatNumberForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.vatNumber.label")),
         vatNumberForm.value,
-        None
+        changeLink
       )
     )
   } else {
@@ -36,7 +44,7 @@
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.vat_registration.confirm.label")),
         vatNumberForm.hasValue,
-        None
+        changeLink
       )
     )
   }

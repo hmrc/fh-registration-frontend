@@ -25,6 +25,7 @@
 @import java.text.DateFormat
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -62,10 +63,19 @@
     @VATRegistrationNumber(applicationData.vatNumber, params.mode)
     @CompanyOfficers(applicationData.companyOfficers, params.mode)
   </dl>
-  @BusinessStatus(applicationData.businessStatus, params.mode)
-  @ImportingActivities(applicationData.importingActivities, params.mode)
-  @BusinessCustomers(applicationData.businessCustomers, params.mode)
-  @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
+  @if(params.mode != ReadOnly) {
+    @SummaryAddMoreLink("companyOfficers", (applicationData.companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
+  }
+  @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
+  <dl class="govuk-check-your-answers cya-questions-long">
+    @BusinessStatus(applicationData.businessStatus, params.mode)
+    @ImportingActivities(applicationData.importingActivities, params.mode)
+    @BusinessCustomers(applicationData.businessCustomers, params.mode)
+    @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
+  </dl>
+  @if(applicationData.otherStoragePremises.hasValue && params.mode != ReadOnly) {
+    @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+  }
 
   @if(params.mode != Mode.ReadOnly) {
     @SummaryButtons()

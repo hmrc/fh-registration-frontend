@@ -30,16 +30,6 @@
     }
   }
 
-  @SummarySectionHead(heading = Messages("fh.importing_activities.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.importing_activities.eori.confirm.label")),
-      importingActivitiesForm.hasEori,
-      changeLink
-    )
-  )
-
   @if(importingActivitiesForm.hasEori) {
 
     @SummaryRow(
@@ -54,8 +44,16 @@
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
         importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
-        changeLink
+        None
       )
     )
 
+  } else {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.importing_activities.eori.confirm.label")),
+        importingActivitiesForm.hasEori,
+        changeLink
+      )
+    )
   }
