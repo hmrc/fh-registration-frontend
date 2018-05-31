@@ -23,15 +23,16 @@
 @import play.api.Environment
 @import java.util.Date
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-  hasAmendments.filter(_ == true).map { _ =>
+  params.hasAmendments.filter(_ == true).map { _ =>
     Alert(Messages("fh.unsaved_summary"))
   }
 }
@@ -41,7 +42,6 @@
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
-
 
   @showAlert
 
@@ -54,19 +54,21 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr)
-      @NationalInsurance(applicationData.nationalInsuranceNumber)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+      @NationalInsurance(applicationData.nationalInsuranceNumber, params.mode)
+      @TradingName(applicationData.tradingName, params.mode)
+      @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+      @BusinessStatus(applicationData.businessStatus, params.mode)
+      @ImportingActivities(applicationData.importingActivities, params.mode)
+      @BusinessCustomers(applicationData.businessCustomers, params.mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
 
     </tbody>
   </table>
 
-  @SummaryButtons()
+  @if(params.mode != Mode.ReadOnly) {
+    @SummaryButtons()
+  }
 
 }

@@ -18,8 +18,18 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(tradingNameForm: TradingNameModel)(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: TradingNameModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("tradingName")
+    } else {
+      None
+    }
+  }
 
   @SummarySectionHead(heading = Messages("fh.trading_name.title"))
 
@@ -27,7 +37,7 @@
     SummaryRowParams.ofBoolean(
       Some(Messages("fh.trading_name.confirm.label")),
       tradingNameForm.hasValue,
-      Some("tradingName")
+      changeLink
     )
   )
 
@@ -36,7 +46,7 @@
       SummaryRowParams(
         Some(Messages("fh.tradingName.label")),
         tradingNameForm.value,
-        Some("tradingName")
+        changeLink
       )
     )
   }

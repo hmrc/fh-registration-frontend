@@ -33,10 +33,6 @@
     )
   )
 
-  <legend class="heading-medium">
-    @Messages("fh.continue_delete.to_do")
-  </legend>
-
   <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue()}" method="POST">
     <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
     
@@ -47,6 +43,7 @@
         name = Some("deleteOrContinue"),
         inline = false,
         required = true,
+        legend = Some(Messages("fh.continue_delete.to_do")),
         hasErrors = act("act").hasErrors,
         error = Some(Messages("fh.business_customers.error")),
         value = Some("continue"),
@@ -65,6 +62,8 @@
       )
     )
 
-    <br><br><button class="button">@Messages("fh.generic.continue")</button><br><br>
+    <div class="form-group">
+      <button class="button">@Messages("fh.generic.continue")</button>
+    </div>
   </form>
 }

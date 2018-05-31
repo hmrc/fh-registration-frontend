@@ -21,15 +21,24 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(companyOfficers: ListWithTrackedChanges[CompanyOfficer])(implicit request: Request[_], messages: Messages)
+@(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+    @changeLink = @{
+      if (mode != ReadOnly) {
+        Some("companyOfficers")
+      } else {
+        None
+      }
+    }
 
     @SummarySectionHead(heading = Messages("fh.company_officers.title"))
 
     @for((companyOfficer:CompanyOfficer, index) <- companyOfficers.values.zipWithIndex) {
 
-        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"), section = {index+1}.toString())
+        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = changeLink, section = {index+1}.toString())
 
         @{companyOfficer.identification match {
             case individual: CompanyOfficerIndividualModel ⇒
@@ -44,4 +53,6 @@
 
     }
 
-    @SummaryAddMoreLink("companyOfficers", (companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
+    @if(mode != ReadOnly) {
+      @SummaryAddMoreLink("companyOfficers", (companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
+    }

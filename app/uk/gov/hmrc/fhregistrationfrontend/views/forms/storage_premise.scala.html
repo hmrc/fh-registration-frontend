@@ -62,11 +62,15 @@
   }
 }
 
+@titlePrefix = @{
+  if (otherStoragePremisesForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.other_storage_premises.title")
 }
 
-@main_template(title = title, scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
   @Back(navigation)

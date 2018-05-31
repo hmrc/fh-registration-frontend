@@ -16,17 +16,20 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
 @import java.util.Date
 @import scala.concurrent.Future
 @import play.twirl.api.{Html⇒tHtml}
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Variation
 
-@(date: Date, email:String, printableSummary: Html)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @title = @{
-  Messages("fh.ack.application_submitted")
+  Messages(s"fh.ack.$mode.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts)) {
@@ -48,51 +51,63 @@
 
       <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
 
-      <div class="js-show notice with-icon">
+      @if(mode != Variation) {
+        <div class="js-show notice with-icon">
           <i class="icon icon-file-download"></i>
           <p>
-              <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
+            <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
           </p>
-      </div>
+        </div>
 
-      <h2 class="heading-medium">
-          @Messages("fh.ack.what_happens_next")
-      </h2>
+        <h2 class="heading-medium">
+        @Messages("fh.ack.what_happens_next")
+        </h2>
 
-      <p>
-          @Messages("fh.ack.what_happens_next_1")
-      </p>
+        <p>
+        @Messages("fh.ack.what_happens_next_1")
+        </p>
 
-      <p>
-          @Messages("fh.ack.what_happens_next_2")
-      </p>
+        <p>
+        @Messages("fh.ack.what_happens_next_2")
+        </p>
 
 
-      <h2 class="heading-medium">
-          @Messages("fh.ack.help_using_service")
-      </h2>
+        <h2 class="heading-medium">
+        @Messages("fh.ack.help_using_service")
+        </h2>
 
-      <p>
+        <p>
           <a href="@Messages("link.guidance_page")">
-              @Messages("fh.ack.guidance_link_text")
+          @Messages("fh.ack.guidance_link_text")
           </a>
           @Messages("fh.ack.to_find_out")
-      </p>
+        </p>
 
-      <ul class="bullets">
+        <ul class="bullets">
           <li>
-              @Messages("fh.ack.help_bullet_1")
+          @Messages("fh.ack.help_bullet_1")
           </li>
           <li>
-              @Messages("fh.ack.help_bullet_2")
+          @Messages("fh.ack.help_bullet_2")
           </li>
           <li>
-              @Messages("fh.ack.help_bullet_3")
+          @Messages("fh.ack.help_bullet_3")
           </li>
-      </ul>
-      <p>
-        <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
-      </p>
+        </ul>
+      } else {
+        <p>
+          @Messages("fh.ack.Variation.info")
+        </p>
+        <p>
+          <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" class="button">Finish and sign out</a>
+        </p>
+        <p>
+          <a href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
+        </p>
+      }
+
+      @SurveyLink()(messages, config)
+
     </div>
 
     <div class="show-print">

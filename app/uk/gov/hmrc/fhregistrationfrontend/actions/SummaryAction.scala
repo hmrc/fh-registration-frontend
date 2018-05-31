@@ -36,10 +36,10 @@ class SummaryRequest[A](
   def email: Option[String] = journeyRequest.email
 
   def registrationNumber = journeyRequest.registrationNumber
-  def userIsRegistered = journeyRequest.userIsRegistered
 
   val bpr = journeyRequest.bpr
   val businessType = journeyRequest.businessType
+  val verifiedEmail = journeyRequest.verifiedEmail
 
   def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.pageDataOpt(page)
 

@@ -26,6 +26,7 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 
 # Generic messages
 fh.generic.error=There is a problem
+fh.generic.errorPrefix=Error:
 
 fh.generic.not_found=Page not found
 fh.generic.not_found.label=This page can’t be found
@@ -106,10 +107,14 @@ fh.status_pending.what_happens_next_5=if you have not received a confirmation em
 fh.status_pending.finish=Finish and sign out
 
 
+
 fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
 fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.New.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
@@ -140,8 +145,45 @@ fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
 fh.business_type.summary=My business type is not listed here
 fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
-fh.business_type.detailsLinkText=Check the guidance (opens in a new window)
+fh.business_type.detailsLinkText=Check the guidance (opens in a new window or tab)
 fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
+
+# - Email verification
+#============================================================
+fh.emailVerification.title=Email verification
+fh.emailVerification.label=Which email address do you want us to use to contact you about the application?
+fh.emailVerification.forced.label=​Before you continue, which email address should we use to contact your business about the Fulfilment House Due Diligence Scheme?
+fh.emailVerification.usingGgEmailAddress.error.required=Select which email address you want to us to use to contact you about your application
+fh.emailVerification.alternativeEmailOption.label=I want to enter a new email address
+fh.emailVerification.alternativeEmail.label=Enter your new email address
+fh.emailVerification.alternativeEmail.hintText=For example, sample@example.com
+fh.emailVerification.alternativeEmail.error.required=Enter your new email address
+fh.emailVerification.alternativeEmail.error.email=Enter a valid email address
+fh.emailVerification.alternativeEmail.error.maxLength=Email addresses cannot be longer than 100 characters
+fh.emailVerification.alternativeEmail.info=The email addresses you use for other government services will not change.
+fh.emailVerification.pending.title=You have 30 minutes to verify your email address
+fh.emailVerification.pendingText.sentEmail=We have sent an email to you at:
+fh.emailVerification.pendingText.whatHappensNext=What happens next
+fh.emailVerification.pendingText.goToEmail=You will need to go to that email account and click the link in the message we sent you
+fh.emailVerification.pendingText.youHave30Mins=You have 30 minutes to do this
+fh.emailVerification.pendingText.whereEmailUpdated=Where your email address is updated
+fh.emailVerification.pendingText.onlyFHDDS=Once you have verified your new email address, we will only use it to contact you about your application for the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.pendingText.otherGovUnchanged=Your email address will not be updated in other government services
+fh.emailVerification.resendEmail=Resend email
+fh.emailVerification.changeEmail=Change email address
+fh.emailVerification.verified.title=Email address verified
+fh.emailVerification.verified.whatThisMeans=What this means
+fh.emailVerification.verified.onlyFHDDS=We will only use this email address to contact you about your application for the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.verified.otherGovUnchanged=Your email address has not been updated in other government services.
+fh.emailVerification.edit.title=Change your email address
+fh.emailVerification.edit.info=Once you have entered your new email address, we will send you an email so you can verify it.
+fh.emailVerification.edit.start.title=Change your contact email
+fh.emailVerification.edit.start.info=We will use this email address to contact you about the Fulfilment House Due Diligence Scheme.
+fh.emailVerification.edit.start.label=Your email address:
+fh.emailVerification.emailSentAgain=We have sent a new email with a verification link in it
+
+
+
 
 # - Main Business Address
 #============================================================
@@ -297,7 +339,7 @@ fh.importing_activities.eori.label=EORI number
 fh.importing_activities.eori.hint_text=For example, GB123456789000
 fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods from sellers outside the EU. Contact the
 fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
-fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window)
+fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window or tab)
 fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
 fh.eoriNumber.eoriNumber.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under its EORI number?
@@ -347,13 +389,23 @@ fh.storagePremise_address.addMore.error.required=Select whether have more premis
 # - Summary
 #===========================================================
 fh.summary.title=Check your answers before sending your application
+fh.summary.New.title=Check your answers before sending your application
+fh.summary.Amendment.title=Check your answers before resending your application
+fh.summary.Variation.title=View or update registered details
+fh.summary.ReadOnly.title=View application
 fh.summary.addMoreCompanyOfficers=Add more company officers
 fh.summary.addMoreStoragePremises=Add more storage premises
 fh.summary.addMoreBusinessPartners=Add more business partners
+fh.summary.New.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.Variation.unsubmittedAlert=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
 
 # - Declaration
 #===========================================================
 fh.declaration.title=Declaration
+fh.declaration.New.title=Confirm details and send your application
+fh.declaration.Amendment.title=Confirm details and resend your application
+fh.declaration.Variation.title=Confirm details and send your update
 fh.declaration.person_name.label=Full name
 fh.declaration.fullName.error.required=Enter the full name of who is submitting this application
 fh.declaration.person_name.error.required=Enter the full name of who is submitting this application
@@ -378,12 +430,24 @@ fh.declaration.alternative_email.error.pattern=Enter a valid email address for t
 fh.declaration.alternative_email_confirmation.label=Re-enter the alternative email address
 fh.declaration.alternative_email_confirmation.empty.error=Re-enter the alternative email address
 fh.declaration.alternative_email_confirmation.no_match.error=The email addresses are not the same
-fh.declaration.declaration.title=By submitting this application you confirm that:
+fh.declaration.declaration.title=By sending this application you confirm that:
+fh.declaration.declaration.New.title=By sending this application you confirm that:
+fh.declaration.declaration.Amendment.title=By resending this application you confirm that:
+fh.declaration.declaration.Variation.title=By sending this update to your registered details you confirm that:
 fh.declaration.declaration.point1=the information you have provided is correct and complete
 fh.declaration.declaration.point2=you have authority to submit this form on behalf of the business you wish to register
 fh.declaration.warning=You could be prosecuted if you deliberately give untrue or misleading information
 fh.declaration.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
-fh.declaration.hasAmendments.error.linkText=View or change your application
+fh.declaration.New.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.Amendment.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.Variation.hasAmendments.error=Your application has not been changed as there are no differences to your previous submission
+fh.declaration.New.button=Accept and send application
+fh.declaration.Amendment.button=Accept and resend application
+fh.declaration.Variation.button=Accept and send update
+
+fh.declaration.new.hasAmendments.error.linkText=View or change your application
+fh.declaration.amendment.hasAmendments.error.linkText=View or change your application
+fh.declaration.variation.hasAmendments.error.linkText=View or change your registered details
 fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
 fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
 
@@ -400,7 +464,7 @@ fh.companyRegistrationNumber.error.required=Enter the company registration numbe
 fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
 fh.companyRegistrationNumber.summary=Where to find your company registration number
 fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or you can 
-fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window)
+fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window or tab)
 
 # - Date of incorporation (Corporate Body)
 #===========================================================
@@ -418,7 +482,7 @@ fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
 fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
 fh.dateOfIncorporation.summary=Where to find the date of incorporation
 fh.dateOfIncorporation.details=You can find this date on the company's Certificate of Incorporation, or
-fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window)
+fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window or tab)
 fh.dateOfIncorporation.day.error.max=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.day.error.min=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.month.error.max=Enter a valid date for the date of incorporation
@@ -665,7 +729,7 @@ fh.business_partners.addMore=Are there any more partners?
 
 # - save for later page
 #===========================================================
-fh.has_saved = ✓ Your progress has been saved
+fh.has_saved = Your progress has been saved
 fh.held_until = This will be held until midnight on
 fh.held_until.hint = If the form you are working on has a submission deadline you will need to return and complete the form before that deadline.
 fh.held_until.notice = Partially completed forms will not be processed by HMRC.
@@ -712,6 +776,11 @@ fh.ack.help_bullet_2=how to make changes to your application
 fh.ack.help_bullet_3=how to contact HMRC about your application
 fh.survey_link_text=What did you think of this service?
 fh.survey_hint=(takes 30 seconds)
+fh.ack.New.title=Application submitted
+fh.ack.Amendment.title=Application submitted
+fh.ack.Variation.title=Update to registered details sent
+fh.ack.Variation.info=We will review the details that you updated. We may get in touch with your contact person to discuss these.
+fh.ack.Variation.print=Print a copy of your update
 
 # - Withdrawal reason
 #============================================================
@@ -757,7 +826,53 @@ fh.status_pending.what_happens_next_4=VAT general enquiries
 fh.status_pending.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
 fh.status_pending.finish=Finish and sign out
 
+# - Status Page
+#===============================================================
+fh.status.generic.what_this_means=What this means
+fh.status.generic.go_to_bta=To see the full details of our decision, go to your secure messages in your 
+fh.status.generic.bta_link_text=business tax account
+fh.status.generic.what_happens_next=What happens next
+fh.status.pre.help_bullet_1=what you need to do while HMRC processes your application
+fh.status.pre.help_bullet_2=how to make changes to your application
+fh.status.pre.help_bullet_3=how to contact HMRC about your application
+fh.status.post.help_bullet_1=what your business must do to comply with the scheme
+fh.status.post.help_bullet_2=when you need to update your registered details
+fh.status.post.help_bullet_3=what happens if your business stops trading
+fh.status.generic.print_page=Print a copy of this page
+fh.status.generic.apply_again=If you want to apply again, you will need to 
+fh.status.generic.start_new_link_text=start a new application
+fh.status.received.step=Received
+fh.status.processing.step=Processing
+fh.status.decision.step=Decision
+fh.status.received.title=Application received
+fh.status.received.subheading=The status of your application is: <strong>Received</strong>
+fh.status.received.cta=View or change application
+fh.status.received.secondaryLink=Withdraw application
+fh.status.processing.title=Your application is being processed
+fh.status.processing.subheading=The status of your application is: <strong>Processing</strong>
+fh.status.processing.cta=View or change application
+fh.status.processing.secondaryLink=Withdraw application
+fh.status.approved.title=Application approved
+fh.status.approved.subheading=Your registration number is <br><strong>{0}</strong>
+fh.status.approved.cta=View or update registered details
+fh.status.approved.secondaryLink=Cancel registration
+fh.status.approvedWithConditions.title=Application approved with conditions
+fh.status.approvedWithConditions.subheading=Your registration number is <br><strong>{0}</strong>
+fh.status.approvedWithConditions.cta=View or update registered details
+fh.status.approvedWithConditions.secondaryLink=Cancel registration
+fh.status.rejected.title=Application rejected
+fh.status.rejected.cta=View application
+fh.status.rejected.secondaryLink=Start a new application
+fh.status.revoked.title=Approval revoked
+fh.status.revoked.subheading=Your registration number <br><strong>{0}</strong><br> is no longer valid
+fh.status.revoked.cta=View application
+fh.status.revoked.secondaryLink=Start a new application
+fh.status.withdrawn.title=Application withdrawn
+fh.status.withdrawn.cta=Start new application
+fh.status.withdrawn.next=What you can do next
+
 link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-scheme
 link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
 link.eoriTeam=https://www.tax.service.gov.uk/shortforms/form/EORIContact
 link.vat=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries
+link.bta=https://www.tax.service.gov.uk/business-tax-account

@@ -41,7 +41,7 @@ object LtdLargeUk {
       "Marian",
       "Director",
       "11123",
-      "a@w.ro",
+      Some(verifiedEmail),
       false,
       Some(true),
       Some(Address(
@@ -118,6 +118,7 @@ object LtdLargeUk {
         List.empty))
   )
 
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "C",
     "D",

@@ -30,14 +30,15 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, ContinueWithBprAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -57,27 +58,25 @@ class Application @Inject()(
   val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
 
   import actions._
-  def start = userAction.async { implicit request ⇒
+  def main = userAction.async { implicit request ⇒
 
-    request.registrationNumber match {
-      case Some(_) ⇒ Future successful Redirect(routes.Application.checkStatus())
-      case None ⇒ noEnrolments
-    }
-  }
-
-
-  val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
-
-  private def noEnrolments(implicit request: UserRequest[_]) = {
     fhddsConnector
       .getEnrolmentProgress
       .flatMap {
         case EnrolmentProgress.Pending ⇒ Future successful Ok(status_pending())
-        case _ ⇒ startOrContinueApplication
+        case _                         ⇒
+          val whenRegistered = request
+            .registrationNumber
+            .map { _ ⇒ Future successful Redirect(routes.Application.checkStatus())}
+
+          whenRegistered getOrElse Future.successful(Redirect(routes.Application.startOrContinueApplication()))
       }
   }
-  
-  private def startOrContinueApplication(implicit request: UserRequest[_]) = {
+
+
+  private val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
+
+  def startOrContinueApplication = userAction.async { implicit request ⇒
     val redirectWhenSaved = for {
       _ ← OptionT(save4LaterService.fetchBusinessRegistrationDetails(request.userId))
       _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
@@ -86,10 +85,20 @@ class Application @Inject()(
       Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
     }
 
-    redirectWhenSaved getOrElse Redirect(links.businessCustomerVerificationUrl)
+    redirectWhenSaved getOrElseF newApplication
   }
 
-  def continueWithBpr = continueWithBprAction.async { implicit request ⇒
+  private def newApplication(implicit request: UserRequest[_]) = {
+    save4LaterService
+      .fetch(request.userId).map {
+        case Some(_) ⇒ save4LaterService.removeUserData(request.userId)
+        case None ⇒
+      }
+      .map(_ ⇒ Redirect(links.businessCustomerVerificationUrl))
+  }
+
+
+  def continueWithBpr = newApplicationAction.async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
@@ -142,7 +151,9 @@ class Application @Inject()(
       Redirect(routes.SummaryController.summary())
     else {
       request.journeyState.lastEditedPage.map( p ⇒ p.id → p.lastSection) match {
-        case None ⇒ Redirect(routes.Application.startForm())
+        case None ⇒
+          val firstPage = request.journeyPages.pages.head.id
+          Redirect(routes.FormPageController.load(firstPage))
         case Some((pid , Some(section))) ⇒  Redirect(routes.FormPageController.loadWithSection(pid, section))
         case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
 
@@ -152,7 +163,7 @@ class Application @Inject()(
 
   def deleteUserData = userAction.async { implicit request ⇒
     save4LaterService.removeUserData(request.userId) map {
-      _ ⇒ Redirect(routes.Application.start())
+      _ ⇒ Redirect(routes.Application.startOrContinueApplication())
     }
   }
 
@@ -167,17 +178,14 @@ class Application @Inject()(
         for {
           _ ← save4LaterService.saveBusinessType(request.userId, businessType)
         } yield {
-          Redirect(routes.Application.startForm())
+          Redirect(routes.EmailVerificationController.contactEmail())
         }
       }
     )
   }
 
-  def startForm = userAction.async { implicit request ⇒
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒ Redirect(routes.FormPageController.load("mainBusinessAddress"))
-      case None      ⇒ errorHandler.errorResultsPages(Results.BadRequest)
-    }
+  def startForm = userAction { implicit request ⇒
+    Redirect(routes.Application.resumeForm())
   }
 
   def savedForLater = userAction.async { implicit request ⇒
@@ -190,8 +198,8 @@ class Application @Inject()(
   def checkStatus() = enrolledUserAction.async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(statusResp ⇒ {
-        Ok(status(statusResp.body, request.registrationNumber))
+      .map(fhddsStatus ⇒ {
+        Ok(status(StatusPageParams(fhddsStatus).get, request.registrationNumber))
       })
   }
 

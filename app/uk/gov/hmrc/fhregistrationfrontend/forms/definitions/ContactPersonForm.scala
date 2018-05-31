@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Form
 import play.api.data.Forms._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{personName,
-  email, roleInOrganization, telephone, yesOrNo, address, internationalAddress}
+  roleInOrganization, telephone, yesOrNo, address, internationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 
@@ -51,7 +51,7 @@ object ContactPersonForm {
       lastNameKey → personName,
       jobTitleKey → roleInOrganization,
       telephoneKey → telephone,
-      emailAddressKey → email,
+      emailAddressKey → optional(email),
       usingSameContactAddressMapping,
       ukAddressMapping,
       otherUkContactAddressMapping,

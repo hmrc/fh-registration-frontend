@@ -61,7 +61,7 @@ case class Save4LaterStub
     deleted = List.empty
   )
 
-  def businessRecordHasSaved() = {
+  def businessRecordWasSaved() = {
     stubFor(
       stubS4LPut("userLastTimeSaved")
     )
@@ -72,15 +72,7 @@ case class Save4LaterStub
   }
 
   def savePageData(key: String, data: String = "") = {
-    stubFor(
-      stubS4LGetSetJs(
-        s"""{
-           "businessRegistrationDetails": "${encrypt(brd)}"
-           ,
-           "businessType": "${encrypt("\"CorporateBody\"")}",
-           "$key": "${encrypt(data)}"
-           }""")
-    )
+      stubS4LGet(businessInformationData + (key → data))
     builder
   }
 
@@ -91,38 +83,79 @@ case class Save4LaterStub
     builder
   }
 
-  def getFullData() = {
-    stubFor(
-      stubS4LGetSetJs(
-        s"""{
-           "userLastTimeSaved": "${encrypt("\"data\"")}",
-           "businessRegistrationDetails": "${encrypt(brd)}",
-           "businessType": "${encrypt("\"CorporateBody\"")}",
-           "mainBusinessAddress": "${encrypt("""{"timeAtCurrentAddress": "3-5 years"}""")}",
-           "contactPerson": "${encrypt(contactPerson)}",
-           "companyRegistrationNumber": "${encrypt("""{"crn": "12345678"}""")}",
-           "dateOfIncorporation": "${encrypt("""{"dateOfIncorporation": "2222-02-22"}""")}",
-           "tradingName": "${encrypt("""{"hasValue": false}""")}",
-           "vatNumber": "${encrypt("""{"hasValue": false}""")}",
-           "companyOfficers": "${encrypt(Json.toJson(companyOfficials).toString())}",
-           "businessStatus": "${encrypt("""{"isNewFulfilmentBusiness": false}""")}",
-           "importingActivities": "${encrypt("""{"hasEori": false}""")}",
-           "businessCustomers": "${encrypt("""{"numberOfCustomers": "1-10"}""")}",
-           "otherStoragePremises": "${encrypt("""{"hasValue": false, "value":{"valuesWithStatus":[], "deleted":[]}}""")}"
-           }""")
-    )
+  private val formData = Map(
+    "mainBusinessAddress" -> """{"timeAtCurrentAddress": "3-5 years"}""",
+    "contactPerson" -> contactPerson,
+    "companyRegistrationNumber" -> """{"crn": "12345678"}""",
+    "dateOfIncorporation" -> """{"dateOfIncorporation": "2222-02-22"}""",
+    "tradingName" -> """{"hasValue": false}""",
+    "vatNumber" -> """{"hasValue": false}""",
+    "companyOfficers" -> Json.toJson(companyOfficials).toString(),
+    "businessStatus" -> """{"isNewFulfilmentBusiness": false}""",
+    "importingActivities" -> """{"hasEori": false}""",
+    "businessCustomers" -> """{"numberOfCustomers": "1-10"}""",
+    "otherStoragePremises" -> """{"hasValue": false, "value": {"valuesWithStatus": [], "deleted": []}}"""
+  )
+
+
+
+  private val businessInformationData = Map(
+    "userLastTimeSaved" -> System.currentTimeMillis().toString,
+    "businessRegistrationDetails" -> brd,
+    "verifiedEmail" -> "\"user@test.com\"",
+    "businessType" -> "\"CorporateBody\""
+  )
+
+
+  private val displayDesDeclaration = Map(
+    "display_des_declaration" →
+      """
+        |{
+        |"personName": "John",
+        |"personStatus": "Director",
+        |"email": "user@test.com",
+        |"isInformationAccurate": true
+        |}
+      """.stripMargin
+  )
+
+  private val displayVerifiedEmail = Map(
+    "display_verifiedEmail" → "\"user@test.com\""
+  )
+  private val amendmentData =
+    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) ⇒ s"display_$k" → v} + ("isAmendment" → "true")
+
+  private val fullJourneyData: Map[String, String] =
+    businessInformationData ++ formData
+
+  def hasFullFormData() = {
+    stubS4LGet(fullJourneyData)
     builder
   }
 
-  def businessTypeHasSaved() = {
-    stubFor(
-      stubS4LGetSetJs(
-        s"""{
-           "businessRegistrationDetails": "${encrypt(brd)}"
-           ,
-           "businessType": "${encrypt("\"CorporateBody\"")}"
-           }""")
-    )
+  def hasAmendmentData() = {
+      stubS4LGet(amendmentData)
+    builder
+  }
+
+  def hasFullPreEmailVerificationData() = {
+    val data = fullJourneyData - "verifiedEmail"
+    stubS4LGet(data)
+    builder
+  }
+
+  def hasAmendmentDataWithNewVerifiedEmail(verifiedEmail: String) = {
+    stubS4LGet(amendmentData + ("verifiedEmail" → ("\"" + verifiedEmail + "\"")))
+    builder
+  }
+
+  def businessTypeWasSaved() = {
+      stubS4LGet(businessInformationData)
+    builder
+  }
+
+  def hasBusinessInformationWOVerifiedEmail = {
+    stubS4LGet(businessInformationData - "verifiedEmail")
     builder
   }
 
@@ -161,13 +194,13 @@ case class Save4LaterStub
           """.stripMargin
       ))
 
-  def stubS4LGetSetJs(data: String = s"""{"":""}"""): MappingBuilder = {
-    get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
+  def stubS4LGet(data: Map[String, String]) = {
+    stubFor(get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
       .willReturn(ok(
         s"""
            |{
            |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
-           |  "data": $data,
+           |  "data": ${asS4LData(data)},
            |  "id": "some-id",
            |  "modifiedDetails": {
            |    "createdAt": { "$$date": 1502097615710 },
@@ -175,6 +208,23 @@ case class Save4LaterStub
            |  }
            |}
           """.stripMargin
-      ))
+      )))
   }
+
+  private def asS4LData(data: Map[String, String]) = {
+    Json.toJson(
+      data.map {
+        case (k, v) ⇒ k → Json.toJson(encrypt(v))
+      }
+    ).toString()
+
+  }
+
+  def acceptsDelete() = {
+    stubFor(
+      delete(urlPathMatching(s"/save4later/fh-registration-frontend/some-id")).willReturn(ok())
+    )
+    builder
+  }
+
 }

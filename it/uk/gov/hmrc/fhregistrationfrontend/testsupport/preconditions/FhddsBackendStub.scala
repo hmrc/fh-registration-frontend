@@ -1,7 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
+import java.util.Date
+
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
@@ -46,6 +49,16 @@ case class FhddsBackendStub()
       get(urlEqualTo("/fhdds/subscription/enrolmentProgress"))
         .willReturn(ok(Json.toJson(EnrolmentProgress.Unknown).toString()))
     )
+    builder
+  }
+
+  def acceptsAmendments() = {
+    stubFor(
+      post(
+        urlPathMatching("/fhdds/subscription/amend/..FH[0-9A-Z]+"))
+        .willReturn(
+          ok(Json.toJson(SubmissionResponse("", new Date)).toString())))
+
     builder
   }
 

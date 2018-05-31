@@ -72,7 +72,6 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
           lastNameKey → "error.required",
           jobTitleKey → "error.required",
           telephoneKey → "error.required",
-          emailAddressKey → "error.required",
           usingSameContactAddressKey → "error.required"
         )
       )
@@ -101,7 +100,6 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       fieldHasErrors(telephoneKey, Array.fill(25)('7').mkString, "error.pattern")
       fieldHasErrors(telephoneKey, "a", "error.pattern")
 
-      fieldHasErrors(emailAddressKey, "", "error.email")
       fieldHasErrors(emailAddressKey, "user", "error.email")
       //max 132
       fieldHasErrors(emailAddressKey, "user@" + Array.fill(128)('a').mkString, "error.email")
@@ -115,7 +113,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       data.lastName shouldBe "Costanza"
       data.jobTitle shouldBe "Parking Attendant"
       data.telephone shouldBe "07012311234"
-      data.emailAddress shouldBe "george.costanza@seinfeld.org"
+      data.emailAddress shouldBe Some("george.costanza@seinfeld.org")
       data.usingSameContactAddress shouldBe true
       data.otherUkContactAddress shouldBe None
       data.otherInternationalContactAddress shouldBe None

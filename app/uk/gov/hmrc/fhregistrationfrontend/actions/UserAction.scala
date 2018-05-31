@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 import play.api.Logger
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core._
@@ -28,7 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, val email: Option[String], val registrationNumber: Option[String], request: Request[A])
+class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], request: Request[A])
   extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
@@ -43,7 +44,7 @@ class UserAction @Inject()(
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
 
-    authorised().retrieve(internalId and email and allEnrolments) {
+    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments) {
       case Some(id) ~ anEmail ~ enrolments ⇒
         val fhddsRegistrationNumber = for {
           enrolment ← enrolments.enrolments

@@ -24,20 +24,21 @@
 @import java.util.Date
 @import java.text.DateFormat
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-  hasAmendments.filter(_ == true).map { _ =>
-    Alert(Messages("fh.unsaved_summary"))
+  params.hasAmendments.filter(_ == true).map { _ =>
+    Alert(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
   }
 }
 
-
 @title = @{
-  Messages("fh.generic.check")
+  Messages(s"fh.summary.${params.mode}.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
@@ -53,21 +54,23 @@
   <table class="table-font-xsmall">
     <tbody>
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr)
-      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber)
-      @DateOfIncorporation(applicationData.dateOfIncorporation)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @CompanyOfficers(applicationData.companyOfficers)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
+      @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.mode)
+      @DateOfIncorporation(applicationData.dateOfIncorporation, params.mode)
+      @TradingName(applicationData.tradingName, params.mode)
+      @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+      @CompanyOfficers(applicationData.companyOfficers, params.mode)
+      @BusinessStatus(applicationData.businessStatus, params.mode)
+      @ImportingActivities(applicationData.importingActivities, params.mode)
+      @BusinessCustomers(applicationData.businessCustomers, params.mode)
+      @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
 
     </tbody>
   </table>
 
-  @SummaryButtons()
+  @if(params.mode != Mode.ReadOnly) {
+    @SummaryButtons()
+  }
 
 }

@@ -17,8 +17,18 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(importingActivitiesForm: ImportingActivitiesModel)(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("importingActivities")
+    } else {
+      None
+    }
+  }
 
   @SummarySectionHead(heading = Messages("fh.importing_activities.title"))
 
@@ -26,7 +36,7 @@
     SummaryRowParams.ofBoolean(
       Some(Messages("fh.importing_activities.eori.confirm.label")),
       importingActivitiesForm.hasEori,
-      Some("importingActivities")
+      changeLink
     )
   )
 
@@ -36,7 +46,7 @@
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
         importingActivitiesForm.eoriNumber.map(_.eoriNumber),
-        Some("importingActivities")
+        changeLink
       )
     )
 
@@ -44,7 +54,7 @@
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
         importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
-        Some("importingActivities")
+        changeLink
       )
     )
 

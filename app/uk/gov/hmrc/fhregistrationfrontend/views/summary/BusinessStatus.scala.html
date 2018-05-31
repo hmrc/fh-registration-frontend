@@ -18,8 +18,18 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
-@(businessStatusForm: models.BusinessStatus)(implicit request: Request[_], messages: Messages)
+@(businessStatusForm: models.BusinessStatus, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("businessStatus")
+    } else {
+      None
+    }
+  }
 
   @SummarySectionHead(heading = Messages("fh.business_status.title"))
 
@@ -27,7 +37,7 @@
     SummaryRowParams.ofBoolean(
       Some(Messages("fh.business_status.label")),
       Some(businessStatusForm.isNewFulfilmentBusiness),
-      Some("businessStatus")
+      changeLink
     )
   )
 
@@ -37,7 +47,7 @@
       SummaryRowParams.ofDate(
         Some(Messages("fh.business_status.new_business.label")),
         businessStatusForm.proposedStartDate,
-        Some("businessStatus")
+        changeLink
       )
     )
 

@@ -43,12 +43,14 @@ class FormToDesSpecs extends UnitSpec {
       val originalSubscription: Subscription =
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdLargeUk.verifiedEmail,
           LtdLargeUk.application(),
           LtdLargeUk.declaration)
 
       val amendedSubscription: Subscription =
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdLargeUkNew.verifiedEmail,
           LtdLargeUkNew.application(),
           LtdLargeUkNew.declaration)
 
@@ -60,6 +62,7 @@ class FormToDesSpecs extends UnitSpec {
           .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
           .limitedCompanySubmission(
             brd("business-registration-details-limited-company.json"),
+            LtdLargeUkNew.verifiedEmail,
             LtdLargeUkNew.application(),
             LtdLargeUkNew.declaration),
         Some(changeIndicators)
@@ -72,12 +75,14 @@ class FormToDesSpecs extends UnitSpec {
       val originalSubscription: Subscription =
         service.soleProprietorCompanySubmission(
           brd("business-registration-details-sole-trader.json"),
+          SPLargeUk.verifiedEmail,
           SPLargeUk.application(),
           SPLargeUk.declaration)
 
       val amendedSubscription: Subscription =
         service.soleProprietorCompanySubmission(
           brd("business-registration-details-sole-trader.json"),
+          SPLargeUkNew.verifiedEmail,
           SPLargeUkNew.application(),
           SPLargeUkNew.declaration)
 
@@ -89,6 +94,7 @@ class FormToDesSpecs extends UnitSpec {
           .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
           .soleProprietorCompanySubmission(
             brd("business-registration-details-sole-trader.json"),
+            SPLargeUkNew.verifiedEmail,
             SPLargeUkNew.application(),
             SPLargeUkNew.declaration),
         Some(changeIndicators)
@@ -101,12 +107,14 @@ class FormToDesSpecs extends UnitSpec {
       val originalSubscription: Subscription =
         service.partnership(
           brd("business-registration-details-partnership.json"),
+          PartnershipLargeInt.verifiedEmail,
           PartnershipLargeInt.application(),
           PartnershipLargeInt.declaration)
 
       val amendedSubscription: Subscription =
         service.partnership(
           brd("business-registration-details-partnership.json"),
+          PartnershipLargeIntNew.verifiedEmail,
           PartnershipLargeIntNew.application(),
           PartnershipLargeIntNew.declaration)
 
@@ -118,6 +126,7 @@ class FormToDesSpecs extends UnitSpec {
           .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
           .partnership(
             brd("business-registration-details-sole-trader.json"),
+            PartnershipLargeIntNew.verifiedEmail,
             PartnershipLargeIntNew.application(),
             PartnershipLargeIntNew.declaration)
       )
@@ -132,6 +141,7 @@ class FormToDesSpecs extends UnitSpec {
         "Create",
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdMinimum.verifiedEmail,
           LtdMinimum.application(),
           LtdMinimum.declaration),
         None)
@@ -146,6 +156,7 @@ class FormToDesSpecs extends UnitSpec {
         "Create",
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdMinimumLessThanThreeYears.verifiedEmail,
           LtdMinimumLessThanThreeYears.application(),
           LtdMinimumLessThanThreeYears.declaration),
         None)
@@ -159,6 +170,7 @@ class FormToDesSpecs extends UnitSpec {
       "Create",
       service.limitedCompanySubmission(
         brd("business-registration-details-limited-company.json"),
+        LtdMinimumInternational.verifiedEmail,
         LtdMinimumInternational.application(),
         LtdMinimumInternational.declaration),
       None)
@@ -175,6 +187,7 @@ class FormToDesSpecs extends UnitSpec {
       "Create",
       service.limitedCompanySubmission(
         brd("business-registration-details-limited-company.json"),
+        LtdLargeUk.verifiedEmail,
         LtdLargeUk.application(),
         LtdLargeUk.declaration),
       None
@@ -190,6 +203,7 @@ class FormToDesSpecs extends UnitSpec {
         .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
         .limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdLargeUkWithModifications.verifiedEmail,
           LtdLargeUkWithModifications.application,
           LtdLargeUkWithModifications.declaration),
       None
@@ -206,6 +220,7 @@ class FormToDesSpecs extends UnitSpec {
         .withModificationFlags(true, Some(LocalDate.of(2018, 2, 1)))
         .limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
+          LtdLargeUkAmendNoPremises.verifiedEmail,
           LtdLargeUkAmendNoPremises.application,
           LtdLargeUkAmendNoPremises.declaration),
       None
@@ -220,6 +235,7 @@ class FormToDesSpecs extends UnitSpec {
         "Create",
         service.soleProprietorCompanySubmission(
           brd("business-registration-details-sole-trader.json"),
+          SPLargeUk.verifiedEmail,
           SPLargeUk.application(),
           SPLargeUk.declaration),
         None)
@@ -235,6 +251,7 @@ class FormToDesSpecs extends UnitSpec {
         "Create",
         service.partnership(
           brd("business-registration-details-partnership.json"),
+          PartnershipLargeInt.verifiedEmail,
           PartnershipLargeInt.application(),
           PartnershipLargeInt.declaration),
         None)

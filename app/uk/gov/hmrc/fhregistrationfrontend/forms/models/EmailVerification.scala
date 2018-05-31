@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.mvc.{ActionFilter, Result}
-import uk.gov.hmrc.auth.core.AuthConnector
+import play.api.libs.json.Json
 
-import scala.concurrent.Future
+case class EmailVerification (
+  usingGgEmailAddress: Boolean,
+  ggEmail: Option[String],
+  alternativeEmail: Option[String]
+) {
 
-class NoEnrolmentCheckAction
-  extends ActionFilter[UserRequest]
-    with FrontendAction
- {
+  def email =
+    if (usingGgEmailAddress)
+      ggEmail.get
+    else
+      alternativeEmail.get
+}
 
-  // Check is DISABLED
-  override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] =
-    Future successful None
+object EmailVerification {
+  implicit val format = Json.format[EmailVerification]
 }
