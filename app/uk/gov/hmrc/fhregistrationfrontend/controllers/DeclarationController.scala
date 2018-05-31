@@ -18,20 +18,14 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 
-import javax.inject.Inject
-import org.joda.time.DateTime
-import play.api.libs.json.Json
-import play.api.mvc.{Result, Results}
-import play.twirl.api.Html
-import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import java.util.Date
 
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryAction, SummaryRequest, UserAction, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
@@ -41,8 +35,6 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, For
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
-import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -60,39 +52,43 @@ class DeclarationController @Inject()(
 
   val emailSessionKey = "declaration_email"
   val processingTimestampSessionKey = "declaration_processing_timestamp"
+  val journeyTypeKey = "journey_type"
   val formToDes: FormToDes = new FormToDesImpl()
 
   import actions._
 
   def showDeclaration() = summaryAction { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment)))
+    Ok(declaration(declarationForm, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType)))
   }
 
-  def showAcknowledgment() = userAction { implicit request ⇒
-    renderAcknowledgmentPage getOrElse errorHandler.errorResultsPages(Results.NotFound)
+  def showAcknowledgment() = userAction.async { implicit request ⇒
+    renderAcknowledgmentPage map {_ getOrElse errorHandler.errorResultsPages(Results.NotFound)}
   }
 
-  private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Option[Result] = {
-    for {
-
-      email ← request.session get emailSessionKey
-      timestamp ← request.session get processingTimestampSessionKey
-      processingDate = new Date(timestamp.toLong)
-      userSummaryInKeyStore = keyStoreService.fetchSummaryForPrint()
-      userSummary = Await.result(userSummaryInKeyStore, 10 seconds)
-      printableSummary ← userSummary
-    } yield {
-      Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = Mode.Variation))
+  private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Future[Option[Result]] = {
+    keyStoreService.fetchSummaryForPrint() map {
+      userSummary ⇒
+        for {
+          email ← request.session get emailSessionKey
+          timestamp ← request.session get processingTimestampSessionKey
+          journeyTypeString ← request.session get journeyTypeKey
+          journeyType = JourneyType withName journeyTypeString
+          processingDate = new Date(timestamp.toLong)
+          printableSummary ← userSummary
+        } yield {
+          Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType)))
+        }
     }
+
   }
 
   def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
-      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment))),
+      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType))),
       usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
-          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, SummaryPageParams(mode = Mode.Amendment, hasAmendments = Some(false)))),
+          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
           _.flatMap { response ⇒
             keyStoreService.saveSummaryForPrint(getSummaryData()(request).toString())
               .map(_ ⇒ true)
@@ -100,7 +96,7 @@ class DeclarationController @Inject()(
               .map { pdfSaved ⇒
                 Redirect(routes.DeclarationController.showAcknowledgment())
                   .withSession(request.session
-
+                    + (journeyTypeKey → request.journeyRequest.journeyType.toString)
                     + (emailSessionKey → usersDeclaration.email)
                     + (processingTimestampSessionKey → response.processingDate.getTime.toString))
               }

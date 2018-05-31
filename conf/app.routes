@@ -44,6 +44,8 @@ POST        /submit                                                             
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
 GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+GET         /update                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation
+
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

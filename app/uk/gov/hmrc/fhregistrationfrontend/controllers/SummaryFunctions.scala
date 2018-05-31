@@ -18,9 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.mvc.AnyContent
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.actions.SummaryRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.actions.{JourneyRequest, SummaryRequest}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.html.summary.SummaryPrintable
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
@@ -65,6 +67,20 @@ trait SummaryFunctions {
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)
+  }
+
+  protected def summaryPageParams(journeyRequest: JourneyRequest[_]) = {
+    SummaryPageParams(modeForJourneyType(journeyRequest.journeyType), journeyRequest.hasUpdates)
+  }
+
+  protected def summaryPageParams(journeyType: JourneyType, hasUpdates: Option[Boolean] = None) = {
+    SummaryPageParams(modeForJourneyType(journeyType), hasUpdates)
+  }
+
+  protected def modeForJourneyType(journeyType: JourneyType) = journeyType match {
+    case JourneyType.New       ⇒ Mode.New
+    case JourneyType.Variation ⇒ Mode.Variation
+    case JourneyType.Amendment ⇒ Mode.Amendment
   }
 
 }

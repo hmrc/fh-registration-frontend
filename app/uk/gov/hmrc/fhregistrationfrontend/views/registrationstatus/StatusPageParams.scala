@@ -53,14 +53,14 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Approved,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       ApprovedWithConditions,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"

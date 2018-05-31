@@ -32,7 +32,7 @@ class SummaryController @Inject()(
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-    Ok(getSummaryHtml(request, SummaryPageParams(hasAmendments = request.journeyRequest.hasUpdates, mode = Mode.Amendment)))
+    Ok(getSummaryHtml(request, summaryPageParams(request.journeyRequest)))
   }
 
 }

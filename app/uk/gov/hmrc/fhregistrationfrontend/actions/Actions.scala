@@ -37,6 +37,7 @@ class Actions @Inject() (
   def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction
 
   def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
+  def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
   def journeyAction = userAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)

@@ -21,17 +21,16 @@ import cats.implicits._
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{Processing, Received}
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{Approved, ApprovedWithConditions}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.Future
 
 
-class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
-    extends ActionRefiner[UserRequest, StartUpdateRequest]
-      with FrontendAction
-      with ActionFunctions
-{
+class StartVariationAction(fhddsConnector: FhddsConnector)(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+  extends ActionRefiner[UserRequest, StartUpdateRequest]
+    with FrontendAction
+    with ActionFunctions {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, StartUpdateRequest[A]]] = {
 
@@ -40,7 +39,7 @@ class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4La
     val whenRegistered = request.registrationNumber.map {
       registrationNumber ⇒
         val result = for {
-          _ ← EitherT(checkIsProcessing(registrationNumber))
+          _ ← EitherT(checkIsApproved(registrationNumber))
           cacheMap ← EitherT(loadCacheMap)
           journeyType = loadJourneyType(cacheMap)
         } yield {
@@ -53,10 +52,10 @@ class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit val save4La
     whenRegistered getOrElse Future.successful(Left(errorHandler.errorResultsPages(Results.BadRequest)))
   }
 
-  private def checkIsProcessing(registrationNumber: String)(implicit request: UserRequest[_]): Future[Either[Result, Boolean]] = {
+  private def checkIsApproved(registrationNumber: String)(implicit request: UserRequest[_]): Future[Either[Result, Boolean]] = {
     fhddsConnector.getStatus(registrationNumber) map {
-      case Received | Processing ⇒ Right(true)
-      case _          ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+      case Approved | ApprovedWithConditions ⇒ Right(true)
+      case _                                 ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
   }
 
