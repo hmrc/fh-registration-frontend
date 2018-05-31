@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(businessCustomersForm: BusinessCustomersModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -33,8 +34,9 @@
 
   @SummaryRow(
     SummaryRowParams.ofString(
-      Some(Messages("fh.business_customers.label")),
+      Some(Messages("fh.summary.overseasCustomers")),
       businessCustomersForm.numberOfCustomers,
-      changeLink
+      changeLink,
+      GroupRow.Single
     )
   )

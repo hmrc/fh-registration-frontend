@@ -115,6 +115,9 @@ tr > td:last-child {
     border-bottom-width: 0;
 }
 
+.group-head {
+    border-bottom-width: 0;
+}
 
 @media print {
     .hidden-print,

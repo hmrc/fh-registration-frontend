@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(mainBusinessAddressForm: models.MainBusinessAddress, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -30,6 +31,10 @@
   }
 }
 
+@isGroupHead = @{
+  if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") GroupRow.Top else GroupRow.Single
+}
+
 @SummarySectionHead(heading = Messages("fh.main_business_address.title"))
 
 <dl class="govuk-check-your-answers cya-questions-long">
@@ -38,7 +43,8 @@
     SummaryRowParams.ofString(
       Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
       mainBusinessAddressForm.timeAtCurrentAddress,
-      changeLink
+      changeLink,
+      isGroupHead
     )
   )
 
@@ -49,7 +55,8 @@
         SummaryRowParams.ofBoolean(
           Some(Messages("fh.mainBusinessAddress.summary.hasPreviousAddress")),
           mainBusinessAddressForm.hasPreviousAddress,
-          None
+          None,
+          GroupRow.Member
         )
       )
     }
@@ -75,7 +82,8 @@
         SummaryRowParams.ofDate(
           Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
           mainBusinessAddressForm.previousAddressStartdate,
-          None
+          None,
+          GroupRow.Bottom
         )
       )
 

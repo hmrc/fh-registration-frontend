@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(tradingNameForm: TradingNameModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -42,9 +43,10 @@
   } else {
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.trading_name.confirm.label")),
+        Some(Messages("fh.summary.hasTradingName")),
         tradingNameForm.hasValue,
-        changeLink
+        changeLink,
+        GroupRow.Single
       )
     )
   }

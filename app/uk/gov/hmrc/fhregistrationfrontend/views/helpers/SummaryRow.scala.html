@@ -14,13 +14,25 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
+
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams)(implicit message : Messages)
+@linkClass = @{
+  params.groupRow match {
+    case GroupRow.Top => " group-head"
+    case GroupRow.Bottom => " group-bottom"
+    case _ => ""
+  }
+}
 <div>
   <dt class="cya-question">@if(params.label.nonEmpty){ @params.label }</dt>
   <dd class="cya-answer">@if(params.value.nonEmpty){ @params.value }</dd>
   @if(params.changeLink.nonEmpty){
-  <dd class="cya-change">
-    <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @{params.label}</span></a>
-  </dd>
+    <dd class="cya-change@{linkClass}">
+      <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @{params.label}</span></a>
+    </dd>
+  }
+  @if(params.groupRow == GroupRow.Bottom) {
+    <dd></dd>
   }
 </div>

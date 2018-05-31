@@ -28,35 +28,40 @@ import play.api.mvc.Call
   *
   * @param value     the value stored for this field
   * @param label     the label for the actual question
-  * @param changeLink  uri for change links
+  * @param changeLink uri for change links
+  * @param groupRow  Enum for position in a group of rows
   */
+
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow.GroupRow
 
 case class SummaryRowParams(
   label: Option[String] = None,
   value: Option[String] = None,
-  changeLink: Option[String] = None
+  changeLink: Option[String] = None,
+  groupRow: GroupRow = GroupRow.Single
 )
 
 object SummaryRowParams {
 
-  def ofString(label: Option[String], value: String, changeLink: Option[String]): SummaryRowParams = {
-    SummaryRowParams(label, Some(value), changeLink)
+  def ofString(label: Option[String], value: String, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+    SummaryRowParams(label, Some(value), changeLink, groupRow)
   }
 
-  def ofBoolean(label: Option[String], value: Option[Boolean], changeLink: Option[String]): SummaryRowParams = {
-    SummaryRowParams(label, value map (if(_) "Yes" else "No"), changeLink)
+  def ofBoolean(label: Option[String], value: Option[Boolean], changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+    SummaryRowParams(label, value map (if(_) "Yes" else "No"), changeLink, groupRow)
   }
 
-  def ofBoolean(label: Option[String], value: Boolean, changeLink: Option[String]): SummaryRowParams = {
-    ofBoolean(label, Some(value), changeLink)
+  def ofBoolean(label: Option[String], value: Boolean, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+    ofBoolean(label, Some(value), changeLink, groupRow)
   }
 
-  def ofDate(label: Option[String], value: Option[LocalDate], changeLink: Option[String]): SummaryRowParams = {
-    SummaryRowParams(label, value map (_.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))), changeLink)
+  def ofDate(label: Option[String], value: Option[LocalDate], changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+    SummaryRowParams(label, value map (_.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))), changeLink, groupRow)
   }
 
-  def ofDate(label: Option[String], value: LocalDate, changeLink: Option[String]): SummaryRowParams = {
-    ofDate(label, Some(value), changeLink)
+  def ofDate(label: Option[String], value: LocalDate, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+    ofDate(label, Some(value), changeLink, groupRow)
   }
 
 }

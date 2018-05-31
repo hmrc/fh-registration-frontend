@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -36,24 +37,27 @@
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
         importingActivitiesForm.eoriNumber.map(_.eoriNumber),
-        changeLink
+        changeLink,
+        GroupRow.Top
       )
     )
 
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
+        Some(Messages("fh.summary.usesEORI")),
         importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
-        None
+        None,
+        GroupRow.Bottom
       )
     )
 
   } else {
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.importing_activities.eori.confirm.label")),
+        Some(Messages("fh.summary.hasEORI")),
         importingActivitiesForm.hasEori,
-        changeLink
+        changeLink,
+        GroupRow.Single
       )
     )
   }

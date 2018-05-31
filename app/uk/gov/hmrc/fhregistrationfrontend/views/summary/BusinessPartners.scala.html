@@ -38,8 +38,6 @@
   }
 }
 
-@SummarySectionHead(heading = Messages("fh.business_partners.title"))
-
 @for((businessPartner:BusinessPartner, index) <- businessPartners.values.zipWithIndex) {
 
     @SummaryRepeatingHead(heading = Messages("fh.business_partners.add_a_partner",{index+1}), changeLink = changeLink, section = {index+1}.toString())
