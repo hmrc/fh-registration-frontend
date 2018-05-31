@@ -23,30 +23,20 @@
 
 @(vatNumberForm: VatNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-  @changeLink = @{
-    if (mode != ReadOnly) {
-      Some("vatNumber")
-    } else {
-      None
-    }
-  }
-
-  @SummarySectionHead(heading = Messages("fh.vat_registration.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.vat_registration.confirm.label")),
-      vatNumberForm.hasValue,
-      changeLink
-    )
-  )
-
   @if(vatNumberForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.vatNumber.label")),
         vatNumberForm.value,
-        changeLink
+        None
+      )
+    )
+  } else {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.vat_registration.confirm.label")),
+        vatNumberForm.hasValue,
+        None
       )
     )
   }

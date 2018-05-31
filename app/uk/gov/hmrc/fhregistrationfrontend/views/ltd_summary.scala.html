@@ -41,7 +41,7 @@
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
 
   @showAlert
 
@@ -51,23 +51,21 @@
     )
   )
 
-  <table class="table-font-xsmall">
-    <tbody>
-
-      @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
-      @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
-      @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.mode)
-      @DateOfIncorporation(applicationData.dateOfIncorporation, params.mode)
-      @TradingName(applicationData.tradingName, params.mode)
-      @VATRegistrationNumber(applicationData.vatNumber, params.mode)
-      @CompanyOfficers(applicationData.companyOfficers, params.mode)
-      @BusinessStatus(applicationData.businessStatus, params.mode)
-      @ImportingActivities(applicationData.importingActivities, params.mode)
-      @BusinessCustomers(applicationData.businessCustomers, params.mode)
-      @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
-
-    </tbody>
-  </table>
+  @EmailAddress(verifiedEmail, params.mode)
+  @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+  @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+  @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
+  <dl class="govuk-check-your-answers cya-questions-long">
+    @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.mode)
+    @DateOfIncorporation(applicationData.dateOfIncorporation, params.mode)
+    @TradingName(applicationData.tradingName, params.mode)
+    @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+    @CompanyOfficers(applicationData.companyOfficers, params.mode)
+  </dl>
+  @BusinessStatus(applicationData.businessStatus, params.mode)
+  @ImportingActivities(applicationData.importingActivities, params.mode)
+  @BusinessCustomers(applicationData.businessCustomers, params.mode)
+  @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
 
   @if(params.mode != Mode.ReadOnly) {
     @SummaryButtons()
