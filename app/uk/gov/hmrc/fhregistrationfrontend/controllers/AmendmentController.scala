@@ -18,8 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartAmendmentRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartUpdateRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
@@ -41,33 +42,43 @@ class AmendmentController @Inject()(
   import actions._
 
   def startAmendment() = startAmendmentAction.async { implicit request ⇒
-    if (request.hasAmendmentInProgress)
+    if (request.currentJourneyType contains JourneyType.Amendment)
       Future successful Redirect(routes.SummaryController.summary())
 
-    else {
-      fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper ⇒
-        val display = displayWrapper.subScriptionDisplay
-        val userId = request.userId
-        val entityType = desToForm entityType display
-        val journeyPages = loadJourneyPagesFromDes(display)
-        val bpr = desToForm.businessRegistrationDetails(display)
-        val contactEmail = desToForm.contactEmail(display)
+    else
+      setupJourney(JourneyType.Amendment)
+  }
 
-        for {
-          _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
-          _ ← save4LaterService.saveBusinessType(userId, entityType)
-          _ ← saveContactEmail(contactEmail)
-          _ ← saveDisplayPageData(userId, journeyPages)
-          _ ← savePageData(userId, journeyPages)
-          _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
-          _ ← save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
-        } yield
-          Redirect(routes.SummaryController.summary())
-      }
+  def startVariation() = startVariationAction.async { implicit request ⇒
+    if (request.currentJourneyType contains JourneyType.Variation)
+      Future successful Redirect(routes.SummaryController.summary())
+    else
+      setupJourney(JourneyType.Variation)
+  }
+
+  private def setupJourney(journeyType: JourneyType)(implicit request: StartUpdateRequest[_]) = {
+    fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper ⇒
+      val display = displayWrapper.subScriptionDisplay
+      val userId = request.userId
+      val entityType = desToForm entityType display
+      val journeyPages = loadJourneyPagesFromDes(display)
+      val bpr = desToForm.businessRegistrationDetails(display)
+      val contactEmail = desToForm.contactEmail(display)
+
+      for {
+        _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
+        _ ← save4LaterService.saveBusinessType(userId, entityType)
+        _ ← saveContactEmail(contactEmail)
+        _ ← saveDisplayPageData(userId, journeyPages)
+        _ ← savePageData(userId, journeyPages)
+        _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
+        _ ← save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
+      } yield
+        Redirect(routes.SummaryController.summary())
     }
   }
 
-  private def saveContactEmail(contactEmail: Option[String])(implicit request: StartAmendmentRequest[_]): Future[Any] = {
+  private def saveContactEmail(contactEmail: Option[String])(implicit request: StartUpdateRequest[_]): Future[Any] = {
     val ignored: Any = 1
     contactEmail.fold(
       Future successful ignored
