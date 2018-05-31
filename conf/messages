@@ -407,6 +407,7 @@ fh.summary.Variation.unsubmittedAlert=Your registered details will not be update
 fh.summary.email.title=Email address for notifications
 fh.summary.email.label=Email address
 fh.summary.businessDetails=Business details
+fh.summary.businessActivities=Business activities
 
 # - Declaration
 #===========================================================

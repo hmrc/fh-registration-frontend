@@ -23,12 +23,20 @@
 
 @(tradingNameForm: TradingNameModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+  @changeLink = @{
+    if (mode != ReadOnly) {
+      Some("tradingName")
+    } else {
+      None
+    }
+  }
+
   @if(tradingNameForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.tradingName.label")),
         tradingNameForm.value,
-        None
+        changeLink
       )
     )
   } else {
@@ -36,7 +44,7 @@
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.trading_name.confirm.label")),
         tradingNameForm.hasValue,
-        None
+        changeLink
       )
     )
   }

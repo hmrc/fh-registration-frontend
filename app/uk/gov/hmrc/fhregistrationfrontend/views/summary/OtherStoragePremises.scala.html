@@ -31,8 +31,6 @@
       }
     }
 
-    @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
-
     @SummaryRow(
         SummaryRowParams.ofBoolean(
             Some(Messages("fh.other_storage_premises.confirm.label")),
@@ -65,10 +63,6 @@
                     None
                 )
             )
-        }
-
-        @if(mode != ReadOnly) {
-          @SummaryAddMoreLink("otherStoragePremises", (data.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
         }
 
     }
