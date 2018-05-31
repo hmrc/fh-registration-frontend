@@ -23,30 +23,20 @@
 
 @(tradingNameForm: TradingNameModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-  @changeLink = @{
-    if (mode != ReadOnly) {
-      Some("tradingName")
-    } else {
-      None
-    }
-  }
-
-  @SummarySectionHead(heading = Messages("fh.trading_name.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.trading_name.confirm.label")),
-      tradingNameForm.hasValue,
-      changeLink
-    )
-  )
-
   @if(tradingNameForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.tradingName.label")),
         tradingNameForm.value,
-        changeLink
+        None
+      )
+    )
+  } else {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.trading_name.confirm.label")),
+        tradingNameForm.hasValue,
+        None
       )
     )
   }

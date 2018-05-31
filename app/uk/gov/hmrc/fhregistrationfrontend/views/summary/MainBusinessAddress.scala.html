@@ -32,48 +32,54 @@
 
 @SummarySectionHead(heading = Messages("fh.main_business_address.title"))
 
-@SummaryRow(
+<dl class="govuk-check-your-answers cya-questions-long">
+
+  @SummaryRow(
     SummaryRowParams.ofString(
-        Some(Messages("fh.main_business_address.time_at_address.label")),
-        mainBusinessAddressForm.timeAtCurrentAddress,
-        changeLink
+      Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
+      mainBusinessAddressForm.timeAtCurrentAddress,
+      changeLink
     )
-)
+  )
 
-@if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
-    @SummaryRow(
+  @if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
+
+    @if(mainBusinessAddressForm.hasPreviousAddress.contains(false)) {
+      @SummaryRow(
         SummaryRowParams.ofBoolean(
-            Some(Messages("fh.main_business_address.previous.label")),
-            mainBusinessAddressForm.hasPreviousAddress,
-          changeLink
+          Some(Messages("fh.mainBusinessAddress.summary.hasPreviousAddress")),
+          mainBusinessAddressForm.hasPreviousAddress,
+          None
         )
-    )
+      )
+    }
 
-    @if(mainBusinessAddressForm.hasPreviousAddress == Some(true)) {
+    @if(mainBusinessAddressForm.hasPreviousAddress.contains(true)) {
       @mainBusinessAddressForm.previousAddress.map { address =>
         @SummaryAddress(
-            SummaryAddressParams(
-                Some(Messages("fh.main_business_address.enter_previous.label")),
-                SummaryAddressBlock(
-                    Line1 = Some(address.addressLine1),
-                    Line2 = address.addressLine2,
-                    Line3 = address.addressLine3,
-                    Line4 = address.addressLine4,
-                    postcode = Some(address.postcode)
-                ),
-                changeLink
-            )
+          SummaryAddressParams(
+            Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
+            SummaryAddressBlock(
+              Line1 = Some(address.addressLine1),
+              Line2 = address.addressLine2,
+              Line3 = address.addressLine3,
+              Line4 = address.addressLine4,
+              postcode = Some(address.postcode)
+            ),
+            None
+          )
         )
       }
 
       @SummaryRow(
         SummaryRowParams.ofDate(
-          Some(Messages("fh.previousAddressStartdate.label")),
+          Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
           mainBusinessAddressForm.previousAddressStartdate,
-          changeLink
+          None
         )
       )
 
     }
-}
+  }
 
+</dl>

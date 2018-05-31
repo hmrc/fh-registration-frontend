@@ -16,12 +16,12 @@
 
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryAddressParams)(implicit message : Messages)
 
-<tr>
-  <td style="vertical-align: top;">@if(params.label.nonEmpty){ @params.label }</td>
-  <td class="form-data">@params.value</td>
-  <td style="vertical-align: top">
-    @if(params.changeLink.nonEmpty){
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
-    }
-  </td>
-</tr>
+<div>
+  <dt class="cya-question">@if(params.label.nonEmpty){ @params.label }</dt>
+  <dd class="cya-answer">@{params.value}</dd>
+  @if(params.changeLink.nonEmpty){
+  <dd class="cya-change">
+    <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @{params.label}</span></a>
+  </dd>
+  }
+</div>
