@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(vatNumberForm: VatNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -44,7 +45,8 @@
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.vat_registration.confirm.label")),
         vatNumberForm.hasValue,
-        changeLink
+        changeLink,
+        GroupRow.Single
       )
     )
   }

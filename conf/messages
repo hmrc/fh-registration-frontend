@@ -92,6 +92,7 @@ fh.status.lede=The status of your application is:
 fh.generic.application_link=your application
 fh.generic.bta_link=Business tax account home
 fh.generic.on=on
+fh.generic.name=Name
 
 # - Not Completed enrollment Status Page
 #============================================================
@@ -251,7 +252,7 @@ fh.contact_person.lastName.error.pattern=Enter only valid characters, up to a ma
 fh.contact_person.job_title.label=Job title
 fh.contact_person.jobTitle.error.required=Enter your contact person''s job title
 fh.contact_person.jobTitle.error.pattern=Enter only valid characters, up to a maximum of 40, for a job title
-fh.contact_person.telephone.label=Telephone
+fh.contact_person.telephone.label=Telephone number
 fh.contact_person.telephone.error.required=Enter your contact person''s telephone number
 fh.contact_person.telephone.error.pattern=Enter only valid characters, up to a maximum of 24, for a telephone number
 fh.contact_person.email.label=Email address
@@ -407,7 +408,17 @@ fh.summary.Variation.unsubmittedAlert=Your registered details will not be update
 fh.summary.email.title=Email address for notifications
 fh.summary.email.label=Email address
 fh.summary.businessDetails=Business details
+fh.summary.hasTradingName=Different trading name to registered name
+fh.summary.companyOfficerType=Individual or company
+fh.summary.companyOfficerRole=Role
 fh.summary.businessActivities=Business activities
+fh.summary.newFulfilmentBusiness=New fulfilment business
+fh.summary.startNewFulfilmentDate=Date the business intends to start operating as a fulfilment business
+fh.summary.hasEORI=Business has an EORI number
+fh.summary.usesEORI=Business imports goods not belonging to it under its EORI number
+fh.summary.overseasCustomers=Number of overseas customers
+fh.summary.usesStoragePremises=Business uses storage premises
+fh.summary.thirdPartyPremises=Premises operated by third party
 
 # - Declaration
 #===========================================================

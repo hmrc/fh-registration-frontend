@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -30,24 +31,23 @@
   }
 }
 
-@SummarySectionHead(heading = Messages("fh.national_insurance_number.title"))
-
-@SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.national_insurance_number.confirm.label")),
-        nationalInsuranceForm.hasValue,
-        changeLink
-    )
-)
-
 @if(nationalInsuranceForm.hasValue) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.national_insurance_number.label")),
-            nationalInsuranceForm.value,
-            changeLink
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.national_insurance_number.label")),
+      nationalInsuranceForm.value,
+      changeLink
     )
+  )
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.national_insurance_number.confirm.label")),
+      nationalInsuranceForm.hasValue,
+      changeLink,
+      GroupRow.Single
+    )
+  )
 }
 
 
