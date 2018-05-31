@@ -17,20 +17,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow.GroupRow
 
-/**
-  * Created by ali on 20/02/18.
-  *
-  * for a single row in a summary, all vals are optional
-  * meaning it's possible to leave any blank
-  *
-  * @param value     the value stored for this field
-  * @param label     the label for the actual question
-  * @param changeLink  uri for change links
-  */
+/*
+* for a single row in a summary
+*
+* @param value     the value stored for this field
+* @param label     the label for the actual question
+* @param changeLink  uri for change links
+* @param groupRow position in a summary group of rows
+*/
 
 case class SummaryAddressParams(
  label: Option[String] = None,
  value: Html,
- changeLink: Option[String] = None
+ changeLink: Option[String] = None,
+ groupRow: GroupRow = GroupRow.Single
 )

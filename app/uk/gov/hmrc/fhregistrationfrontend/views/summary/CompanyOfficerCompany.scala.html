@@ -17,14 +17,16 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(company: CompanyOfficerCompanyModel)(implicit request: Request[_], messages: Messages)
 
   @SummaryRow(
     SummaryRowParams.ofString(
-      Some(Messages("fh.company_officers.entity_type.label")),
+      Some(Messages("fh.summary.companyOfficerType")),
       Messages("fh.company_officers.company.label"),
-      None
+      None,
+      GroupRow.Member
     )
   )
 
@@ -32,15 +34,8 @@
     SummaryRowParams.ofString(
       Some(Messages("fh.company_officers.company.company_name.label")),
       company.companyName,
-      None
-    )
-  )
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
-      company.hasVat,
-      None
+      None,
+      GroupRow.Member
     )
   )
 
@@ -56,19 +51,29 @@
 
   } else {
 
-    @SummaryRow(
-      SummaryRowParams(
-        Some(Messages("fh.company_officers.company.company_registration_number.label")),
-        company.crn,
-        None
-      )
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
+      company.hasVat,
+      None,
+      GroupRow.Member
     )
+  )
+
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.company_officers.company.company_registration_number.label")),
+      company.crn,
+      None
+    )
+  )
   }
 
   @SummaryRow(
     SummaryRowParams.ofString(
-      Some(Messages("fh.company_officers.status.label")),
+      Some(Messages("fh.summary.companyOfficerRole")),
       company.role,
-      None
+      None,
+      GroupRow.Bottom
     )
   )

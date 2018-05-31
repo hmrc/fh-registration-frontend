@@ -108,6 +108,17 @@ tr > td:last-child {
     padding: 0 20px;
 }
 
+.summary-add-more {
+    text-align: right;
+    padding: 0.63158em 0 0.47368em 0;
+    margin-bottom: 1em;
+    border-bottom-width: 0;
+}
+
+.group-head {
+    border-bottom-width: 0;
+}
+
 @media print {
     .hidden-print,
     #content a,

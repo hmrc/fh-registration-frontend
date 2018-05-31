@@ -17,90 +17,96 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(partner: BusinessPartnerUnincorporatedBodyModel)(implicit request: Request[_], messages: Messages)
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.entity_type.label")),
-        Messages("fh.business_partners.entity_type.unincorporated_body.label"),
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.business_partners.entity_type.label")),
+    Messages("fh.business_partners.entity_type.unincorporated_body.label"),
+    None,
+    GroupRow.Member
+  )
 )
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.unincorporate_body.name.label")),
-        partner.unincorporatedBodyName,
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.business_partners.unincorporate_body.name.label")),
+    partner.unincorporatedBodyName,
+    None,
+    GroupRow.Member
+  )
 )
 
 @SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.trading_name.confirm.label")),
-        partner.hasTradeName,
-        None
-    )
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.trading_name.confirm.label")),
+    partner.hasTradeName,
+    None,
+    GroupRow.Member
+  )
 )
 
 @if(partner.hasTradeName) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.tradingName.label")),
-            partner.tradeName,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.tradingName.label")),
+      partner.tradeName,
+      None
     )
+  )
 }
 
 @SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.vat_registration.confirm.label")),
-        partner.hasVat,
-        None
-    )
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.vat_registration.confirm.label")),
+    partner.hasVat,
+    None,
+    GroupRow.Member
+  )
 )
 
 @if(partner.hasVat) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.vatNumber.label")),
-            partner.vat,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.vatNumber.label")),
+      partner.vat,
+      None
     )
+  )
 }
 
 @SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.business_partners.utr.confirm.label")),
-        partner.hasUniqueTaxpayerReference,
-        None
-    )
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.business_partners.utr.confirm.label")),
+    partner.hasUniqueTaxpayerReference,
+    None,
+    GroupRow.Member
+  )
 )
 
 @if(partner.hasUniqueTaxpayerReference) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.business_partners.utr.label")),
-            partner.uniqueTaxpayerReference,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.business_partners.utr.label")),
+      partner.uniqueTaxpayerReference,
+      None
     )
+  )
 }
 
-
 @SummaryAddress(
-    SummaryAddressParams(
-        Some(Messages("fh.business_partners.enter.partner_address")),
-        SummaryAddressBlock(
-            Line1 = Some(partner.address.addressLine1),
-            Line2 = partner.address.addressLine2,
-            Line3 = partner.address.addressLine3,
-            Line4 = partner.address.addressLine4,
-            postcode = Some(partner.address.postcode)
-        ),
-        None
-    )
+  SummaryAddressParams(
+    Some(Messages("fh.business_partners.enter.partner_address")),
+    SummaryAddressBlock(
+      Line1 = Some(partner.address.addressLine1),
+      Line2 = partner.address.addressLine2,
+      Line3 = partner.address.addressLine3,
+      Line4 = partner.address.addressLine4,
+      postcode = Some(partner.address.postcode)
+    ),
+    None,
+    GroupRow.Bottom
+  )
 )

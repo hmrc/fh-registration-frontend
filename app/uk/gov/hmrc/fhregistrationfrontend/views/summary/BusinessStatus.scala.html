@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(businessStatusForm: models.BusinessStatus, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -31,24 +32,22 @@
     }
   }
 
-  @SummarySectionHead(heading = Messages("fh.business_status.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.business_status.label")),
-      Some(businessStatusForm.isNewFulfilmentBusiness),
-      changeLink
-    )
-  )
-
   @if(businessStatusForm.isNewFulfilmentBusiness) {
-
     @SummaryRow(
       SummaryRowParams.ofDate(
-        Some(Messages("fh.business_status.new_business.label")),
+        Some(Messages("fh.summary.startNewFulfilmentDate")),
         businessStatusForm.proposedStartDate,
-        changeLink
+        changeLink,
+        GroupRow.Single
       )
     )
-
-  }
+  } else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.newFulfilmentBusiness")),
+      Some(businessStatusForm.isNewFulfilmentBusiness),
+      changeLink,
+      GroupRow.Single
+    )
+  )
+}
