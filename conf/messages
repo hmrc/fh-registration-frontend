@@ -290,7 +290,8 @@ fh.tradingName.confirm.label=Does the business use a trading name that is differ
 fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one? 
 fh.trading_name.confirm.label=Does the business use a trading name that is different from its registered one?
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
-fh.tradingName.label=Enter the trading name
+fh.tradingName.label=Trading name
+fh.tradingName.hintText=If the business uses multiple trading names, enter the main trading name used by the fulfilment business
 fh.tradingName_value.error.required=Enter the trading name
 fh.tradingName_value.error.pattern=Enter only valid characters for a trading name
 
