@@ -119,6 +119,10 @@ tr > td:last-child {
     border-bottom-width: 0;
 }
 
+.summary-links {
+    margin-top: 1.875em;
+}
+
 @media print {
     .hidden-print,
     #content a,
