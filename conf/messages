@@ -138,8 +138,8 @@ fh.generic.status.company.value=company
 
 # - Select your business type
 #============================================================
-fh.business_type.title=Which of the following best describes your business?
-fh.businessType.error.required=Select which business type best describes your business
+fh.business_type.title=What type of business are you applying to register?
+fh.businessType.error.required=Select which type of business you are applying to register
 fh.business_type.limited_company=Limited company
 fh.business_type.sole_trader=Sole trader
 fh.business_type.business_partnership=Ordinary business partnership
@@ -178,7 +178,7 @@ fh.emailVerification.verified.onlyFHDDS=We will only use this email address to c
 fh.emailVerification.verified.otherGovUnchanged=Your email address has not been updated in other government services.
 fh.emailVerification.edit.title=Change your email address
 fh.emailVerification.edit.info=Once you have entered your new email address, we will send you an email so you can verify it.
-fh.emailVerification.edit.start.title=Change your contact email
+fh.emailVerification.edit.start.title=Change your contact email address
 fh.emailVerification.edit.start.info=We will use this email address to contact you about the Fulfilment House Due Diligence Scheme.
 fh.emailVerification.edit.start.label=Your email address:
 fh.emailVerification.emailSentAgain=We have sent a new email with a verification link in it
@@ -238,7 +238,7 @@ fh.previousAddressStartdate.year.error.min=Enter a valid date for when the busin
 
 # - Contact Person
 #============================================================
-fh.contact_person.title=Contact person
+fh.contact_person.title=Contact person''s details
 fh.contact_person.intro=Who should we contact if we need to discuss your application?
 fh.contact_person.name.label=Name
 fh.contact_person.first_name.label=First name
@@ -486,7 +486,7 @@ fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid ema
 #===========================================================
 fh.company_registration_number.title=Company registration number
 fh.companyRegistrationNumber.title=Company registration number
-fh.companyRegistrationNumber.label=What is the business''s company registration number?
+fh.companyRegistrationNumber.label=What is the company registration number of the business?
 fh.companyRegistrationNumber.hint_text=For example, 12345678 or SC123456
 fh.companyRegistrationNumber.error.required=Enter the company registration number
 fh.companyRegistrationNumber.error.pattern=Enter a valid company registration number
@@ -498,7 +498,7 @@ fh.companyRegistrationNumber.details_companies_house=search the Companies House 
 #===========================================================
 fh.date_of_incorporation.title=Date of incorporation
 fh.dateOfIncorporation.title=Date of incorporation
-fh.dateOfIncorporation.label=What is the business''s date of incorporation?
+fh.dateOfIncorporation.label=What is the company''s date of incorporation?
 fh.dateOfIncorporation.hint_text=For example, 31 07 2017
 fh.dateOfIncorporation.empty.error=Enter the date of incorporation
 fh.dateOfIncorporation.error.invalid=Enter a valid date for the date of incorporation
