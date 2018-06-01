@@ -18,5 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 case class SubmitButtonsParams(
   label      : String,
-  summaryLink: Boolean = false
+  summaryLink: Boolean = false,
+  saveForLaterLink: Boolean = true
 )
