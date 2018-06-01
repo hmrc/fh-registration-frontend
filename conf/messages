@@ -419,6 +419,12 @@ fh.summary.usesEORI=Business imports goods not belonging to it under its EORI nu
 fh.summary.overseasCustomers=Number of overseas customers
 fh.summary.usesStoragePremises=Business uses storage premises
 fh.summary.thirdPartyPremises=Premises operated by third party
+fh.summary.partnerLegalEntity=Legal entity type
+fh.summary.partnerTradingName=Partner has a trading name different to its registered one
+fh.summary.partnerVat=Partner has a UK VAT registration number
+fh.summary.partnerHasNino=Partner has a National Insurance number
+fh.summary.partnerAddress=Partner''s address
+fh.summary.partnerHasSAUTR=Partner has a Self Assessment Unique Taxpayer Reference
 
 # - Declaration
 #===========================================================

@@ -53,7 +53,7 @@
   )
 
   @EmailAddress(verifiedEmail, params.mode)
-  @ContactPerson(applicationData.contactPerson, bpr, verifiedEmail, params.mode)
+  @ContactPerson(applicationData.contactPerson, bpr, params.mode)
   @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
   @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
   <dl class="govuk-check-your-answers cya-questions-long">

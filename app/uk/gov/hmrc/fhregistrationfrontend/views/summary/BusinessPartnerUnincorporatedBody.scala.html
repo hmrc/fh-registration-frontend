@@ -23,7 +23,7 @@
 
 @SummaryRow(
   SummaryRowParams.ofString(
-    Some(Messages("fh.business_partners.entity_type.label")),
+    Some(Messages("fh.summary.partnerLegalEntity")),
     Messages("fh.business_partners.entity_type.unincorporated_body.label"),
     None,
     GroupRow.Member
@@ -39,15 +39,6 @@
   )
 )
 
-@SummaryRow(
-  SummaryRowParams.ofBoolean(
-    Some(Messages("fh.trading_name.confirm.label")),
-    partner.hasTradeName,
-    None,
-    GroupRow.Member
-  )
-)
-
 @if(partner.hasTradeName) {
   @SummaryRow(
     SummaryRowParams(
@@ -56,16 +47,16 @@
       None
     )
   )
-}
-
-@SummaryRow(
-  SummaryRowParams.ofBoolean(
-    Some(Messages("fh.vat_registration.confirm.label")),
-    partner.hasVat,
-    None,
-    GroupRow.Member
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerTradingName")),
+      partner.hasTradeName,
+      None,
+      GroupRow.Member
+    )
   )
-)
+}
 
 @if(partner.hasVat) {
   @SummaryRow(
@@ -75,16 +66,16 @@
       None
     )
   )
-}
-
-@SummaryRow(
-  SummaryRowParams.ofBoolean(
-    Some(Messages("fh.business_partners.utr.confirm.label")),
-    partner.hasUniqueTaxpayerReference,
-    None,
-    GroupRow.Member
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerVat")),
+      partner.hasVat,
+      None,
+      GroupRow.Member
+    )
   )
-)
+}
 
 @if(partner.hasUniqueTaxpayerReference) {
   @SummaryRow(
@@ -94,11 +85,20 @@
       None
     )
   )
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerHasSAUTR")),
+      partner.hasUniqueTaxpayerReference,
+      None,
+      GroupRow.Member
+    )
+  )
 }
 
 @SummaryAddress(
   SummaryAddressParams(
-    Some(Messages("fh.business_partners.enter.partner_address")),
+    Some(Messages("fh.summary.partnerAddress")),
     SummaryAddressBlock(
       Line1 = Some(partner.address.addressLine1),
       Line2 = partner.address.addressLine2,
