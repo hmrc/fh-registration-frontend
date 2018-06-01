@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication,SoleProprietorApplication,PartnershipApplication,BusinessEntityApplication}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
@@ -24,43 +25,64 @@
 @{
   applicationData match {
     case limitedCompanyApplication: LimitedCompanyApplication ⇒
-      Html(MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, ReadOnly).toString() +
-          ContactPerson(limitedCompanyApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+      Html(EmailAddress(verifiedEmail, ReadOnly).toString() +
+          ContactPerson(limitedCompanyApplication.contactPerson, bpr, ReadOnly).toString() +
+          MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, ReadOnly).toString() +
+          SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
+          "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
           CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber, ReadOnly).toString() +
           DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation, ReadOnly).toString() +
           TradingName(limitedCompanyApplication.tradingName, ReadOnly).toString() +
           VATRegistrationNumber(limitedCompanyApplication.vatNumber, ReadOnly).toString() +
           CompanyOfficers(limitedCompanyApplication.companyOfficers, ReadOnly).toString() +
+          "</dl>" +
+          SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
+          "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
           BusinessStatus(limitedCompanyApplication.businessStatus, ReadOnly).toString() +
           ImportingActivities(limitedCompanyApplication.importingActivities, ReadOnly).toString() +
           BusinessCustomers(limitedCompanyApplication.businessCustomers, ReadOnly).toString() +
-          OtherStoragePremises(limitedCompanyApplication.otherStoragePremises, ReadOnly).toString()
+          OtherStoragePremises(limitedCompanyApplication.otherStoragePremises, ReadOnly).toString() +
+          "</dl>"
       )
 
     case soleProprietorApplication: SoleProprietorApplication ⇒
       Html(
-        MainBusinessAddress(soleProprietorApplication.mainBusinessAddress, ReadOnly).toString() +
-            ContactPerson(soleProprietorApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+            EmailAddress(verifiedEmail, ReadOnly).toString() +
+            ContactPerson(soleProprietorApplication.contactPerson, bpr, ReadOnly).toString() +
+            MainBusinessAddress(soleProprietorApplication.mainBusinessAddress, ReadOnly).toString() +
+            SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
+            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
             NationalInsurance(soleProprietorApplication.nationalInsuranceNumber, ReadOnly).toString() +
             TradingName(soleProprietorApplication.tradingName, ReadOnly).toString() +
             VATRegistrationNumber(soleProprietorApplication.vatNumber, ReadOnly).toString() +
+            "</dl>" +
+            SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
+            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
             BusinessStatus(soleProprietorApplication.businessStatus, ReadOnly).toString() +
             ImportingActivities(soleProprietorApplication.importingActivities, ReadOnly).toString() +
             BusinessCustomers(soleProprietorApplication.businessCustomers, ReadOnly).toString() +
-            OtherStoragePremises(soleProprietorApplication.otherStoragePremises, ReadOnly).toString()
+            OtherStoragePremises(soleProprietorApplication.otherStoragePremises, ReadOnly).toString() +
+            "</dl>"
       )
 
     case partnershipApplication: PartnershipApplication ⇒
       Html(
-        MainBusinessAddress(partnershipApplication.mainBusinessAddress, ReadOnly).toString() +
-            ContactPerson(partnershipApplication.contactPerson, bpr, verifiedEmail, ReadOnly).toString() +
+            EmailAddress(verifiedEmail, ReadOnly).toString() +
+            ContactPerson(partnershipApplication.contactPerson, bpr, ReadOnly).toString() +
+            MainBusinessAddress(partnershipApplication.mainBusinessAddress, ReadOnly).toString() +
+            SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
+            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
             TradingName(partnershipApplication.tradingName, ReadOnly).toString() +
             VATRegistrationNumber(partnershipApplication.vatNumber, ReadOnly).toString() +
             BusinessPartners(partnershipApplication.businessPartners, ReadOnly).toString() +
+            "</dl>" +
+            SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
+            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
             BusinessStatus(partnershipApplication.businessStatus, ReadOnly).toString() +
             ImportingActivities(partnershipApplication.importingActivities, ReadOnly).toString() +
             BusinessCustomers(partnershipApplication.businessCustomers, ReadOnly).toString() +
-            OtherStoragePremises(partnershipApplication.otherStoragePremises, ReadOnly)
+            OtherStoragePremises(partnershipApplication.otherStoragePremises, ReadOnly) +
+            "</dl>"
       )
 
   }

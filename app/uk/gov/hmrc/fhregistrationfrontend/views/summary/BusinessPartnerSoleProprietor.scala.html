@@ -23,7 +23,7 @@
 
 @SummaryRow(
   SummaryRowParams.ofString(
-    Some(Messages("fh.business_partners.entity_type.label")),
+    Some(Messages("fh.summary.partnerLegalEntity")),
     Messages("fh.business_partners.entity_type.sole_proprietor.label"),
     None,
     GroupRow.Member
@@ -50,7 +50,7 @@
 } else {
   @SummaryRow(
     SummaryRowParams.ofBoolean(
-      Some(Messages("fh.tradingName.confirm.label")),
+      Some(Messages("fh.summary.partnerTradingName")),
       partner.hasTradeName,
       None,
       GroupRow.Member
@@ -69,7 +69,7 @@
 } else {
   @SummaryRow(
     SummaryRowParams.ofBoolean(
-      Some(Messages("fh.business_partners.individual.nino.confirm.label")),
+      Some(Messages("fh.summary.partnerHasNino")),
       partner.hasNino,
       None,
       GroupRow.Member
@@ -88,7 +88,7 @@
 } else {
   @SummaryRow(
     SummaryRowParams.ofBoolean(
-      Some(Messages("fh.vatNumber.confirm.label")),
+      Some(Messages("fh.summary.partnerVat")),
       partner.hasVat,
       None,
       GroupRow.Member
@@ -98,7 +98,7 @@
 
 @SummaryAddress(
   SummaryAddressParams(
-    Some(Messages("fh.business_partners.enter.partner_address")),
+    Some(Messages("fh.summary.partnerAddress")),
     SummaryAddressBlock(
       Line1 = Some(partner.address.addressLine1),
       Line2 = partner.address.addressLine2,
