@@ -54,29 +54,29 @@ object StatusPageParams {
     StatusPageParams(
       Approved,
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       ApprovedWithConditions,
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister()),
       nextTemplate = statusWhatHappensNext.apply,
       category = "post"
     ),
     StatusPageParams(
       Rejected,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
       nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
       category = "post"
     ),
     StatusPageParams(
       Revoked,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
       nextTemplate = statusNewApplication.apply,
       category = "post"
     ),

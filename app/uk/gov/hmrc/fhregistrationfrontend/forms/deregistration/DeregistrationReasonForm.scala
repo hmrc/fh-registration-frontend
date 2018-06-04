@@ -34,7 +34,7 @@ object DeregistrationReasonForm {
     mapping(
       reasonMapping,
       reasonOtherMapping
-    )(deregistrationReason.apply)(deregistrationReason.unapply)
+    )(DeregistrationReason.apply)(DeregistrationReason.unapply)
   )
 
 }

@@ -15,19 +15,20 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
-import play.api.libs.json.{Format, Reads, Writes}
 
-object DeregistrationReasonEnum extends Enumeration {
-  type DeregistrationReasonEnum = Value
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
 
-  val NoLongerNeeded = Value("No longer needed")
-  val StoppedTrading = Value("Stopped trading")
-  val ChangedLegalEntity = Value("Change of legal entity")
-  val Other = Value("Other")
+case class Confirmation(
+                         continue: Boolean,
+                         isUseGgEmail: Option[Boolean],
+                         ggEmail: Option[String],
+                         alternativeEmail: Option[AlternativeEmail]
+                       ) {
 
-  implicit val format = Format(
-    Reads.enumNameReads(DeregistrationReasonEnum),
-    Writes.enumNameWrites[this.type ]
-  )
-
+  def email: Option[String] = {
+    isUseGgEmail flatMap {
+      case true  ⇒ ggEmail
+      case false ⇒ alternativeEmail.map(_.email)
+    }
+  }
 }
