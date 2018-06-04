@@ -869,6 +869,10 @@ fh.deregistrationConfirm.alternativeEmail.emailConfirmation.no_match.error=The e
 fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid email addresses that match
 fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
 
+fh.ack.deregister=Registration cancelled
+fh.ack.deregister.emailSend=We will send a confirmation email to 
+fh.ack.deregister.waitNotice=You will need to wait until tomorrow before you can submit a new application
+
 # - Not Completed enrollment Status Page
 #============================================================
 fh.status_pending.application_submitted=Fulfilment House Due Diligence Scheme
