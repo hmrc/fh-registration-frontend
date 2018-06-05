@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 import com.google.inject.{ImplementedBy, Singleton}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
+import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -29,6 +30,7 @@ import uk.gov.hmrc.http.cache.client.SessionCache
 object KeyStoreKeys {
   val SummaryForPrintKey = "fhdds-summary-input"
   val WithdrawalReasonKey = "withdrawalReason"
+  val DeregistrationReasonKey = "deregistrationReason"
 }
 
 @Singleton
@@ -46,6 +48,12 @@ class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache) extends KeyStor
   override def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] =
     sessionCache.fetchAndGetEntry[WithdrawalReason](WithdrawalReasonKey)
 
+  override def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[_] =
+    sessionCache.cache(DeregistrationReasonKey, reason)
+
+  override def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] =
+    sessionCache.fetchAndGetEntry[DeregistrationReason](DeregistrationReasonKey)
+
 }
 
 @ImplementedBy(classOf[KeyStoreServiceImpl])
@@ -56,5 +64,6 @@ trait KeyStoreService {
   def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_]
   def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]]
 
-
+  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[_]
+  def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]]
 }

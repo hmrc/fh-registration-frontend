@@ -842,6 +842,37 @@ fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to 
 fh.ack.withdrawal.waitNotice=You will need to wait until tomorrow before you can submit a new application
 
+# - Deregistration reason
+#============================================================
+fh.deregistration.title=Why are you cancelling your registration?
+fh.deregistration.noLongerNeeded.label=Business no longer needs to be registered
+fh.deregistration.stoppedTrading.label=Stopped trading as a fulfilment business
+fh.deregistration.changedLegalEntity.label=Business has changed its legal entity type
+fh.deregistration.otherReason.label=Other reason
+fh.deregistration.reason.error.required=Select a reason for cancelling your registration
+fh.deregistration.otherReasonText.label=Enter your reason
+fh.deregistration.reasonOther.error.required=Enter your reason for cancelling your registration
+fh.deregistration.reasonOther.error.pattern=Reason for cancelling must be no longer than 40 characters and only include letters a to z, numbers and spaces
+
+# - Deregistration confirm
+#============================================================
+fh.deregistrationConfirm.title=Are you sure you want to cancel your registration?
+fh.deregistrationConfirm.error=Select yes if you want to cancel your registration
+fh.deregistrationConfirm.confirm.error.required=Select yes if you want to cancel your registration
+fh.deregistrationConfirm.noGG.legend=We will send a confirmation to the email address you enter below
+fh.deregistrationConfirm.noGG.email.label=Enter the email address
+fh.deregistrationConfirm.noGG.emailConfirm.label=Re-enter the email address
+fh.deregistrationConfirm.hasGG.legend=We will send a confirmation email to 
+fh.deregistrationConfirm.isUseGgEmail.error.required=Select whether this is the correct email address to use
+fh.deregistrationConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.deregistrationConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
+fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid email addresses that match
+fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
+
+fh.ack.deregister=Registration cancelled
+fh.ack.deregister.emailSend=We will send a confirmation email to 
+fh.ack.deregister.waitNotice=You will need to wait until tomorrow before you can submit a new application
+
 # - Not Completed enrollment Status Page
 #============================================================
 fh.status_pending.application_submitted=Fulfilment House Due Diligence Scheme

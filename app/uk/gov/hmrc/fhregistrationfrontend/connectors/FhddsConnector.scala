@@ -17,12 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import java.util.Date
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Reads
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplayWrapper, WithdrawalRequest}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -70,6 +70,11 @@ class FhddsConnector @Inject() (
   def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit headerCarrier: HeaderCarrier): Future[Date] = {
     http.POST[WithdrawalRequest, Date](s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber", request)
   }
+
+  def deregister(fhddsRegistrationNumber: String, request: DeregistrationRequest)(implicit headerCarrier: HeaderCarrier): Future[Date] = {
+    http.POST[DeregistrationRequest, Date](s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber", request)
+  }
+
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
     http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
