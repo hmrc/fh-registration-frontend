@@ -36,8 +36,8 @@ class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val er
     val whenRegistered = request.registrationNumber.map {
       registrationNumber ⇒
         fhddsConnector.getStatus(registrationNumber).map {
-          case Withdrawn | Rejected | Revoked | DeRegistered ⇒ Right(request)
-          case _ ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+          case Withdrawn | Rejected | Revoked | Deregistered ⇒ Right(request)
+          case _                                             ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
         }
     }
 

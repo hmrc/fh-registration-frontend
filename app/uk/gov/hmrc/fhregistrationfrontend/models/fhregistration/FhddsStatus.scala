@@ -29,7 +29,7 @@ object FhddsStatus extends Enumeration {
   val Rejected                = Value("rejected")
   val Revoked                 = Value("revoked")
   val Withdrawn               = Value("withdrawn")
-  val DeRegistered            = Value("deRegistered")
+  val Deregistered            = Value("deregistered")
 
 
   implicit val format = Format(
