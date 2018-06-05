@@ -74,7 +74,8 @@ object LtdLargeUkNew {
             "Director"
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
     BusinessStatus(true, Some(LocalDate.of(2018,7, 30))),
     ImportingActivities(false, None),
     BusinessCustomers("51-100"),
@@ -116,7 +117,8 @@ object LtdLargeUkNew {
           Some("Othertown"),
           "Z9 3WW",
           None),
-        true)))))
+        true)),
+      false)))
 
   val verifiedEmail = "a@w.ro"
 

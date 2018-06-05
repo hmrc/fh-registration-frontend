@@ -20,9 +20,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{Navigation, SummaryP
 
 class SummaryJourney extends JourneyNavigation {
 
-  override def next[_](pageId: String): Option[AnyPage] = None
+  override def next[_](page: AnyPage): Option[AnyPage] = None
 
-  override def previous(pageId: String): Option[AnyPage] = None
+  override def previous(page: AnyPage): Option[AnyPage] = None
 
-  override def navigation(lastUpdateTime: Long, pageId: String): Navigation = Navigation(lastUpdateTime, Some(SummaryPage))
+  override def navigation(lastUpdateTime: Long, page: AnyPage): Navigation = Navigation(lastUpdateTime, Some(SummaryPage))
 }

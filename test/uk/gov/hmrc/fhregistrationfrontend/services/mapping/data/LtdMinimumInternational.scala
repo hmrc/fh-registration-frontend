@@ -64,7 +64,8 @@ object LtdMinimumInternational {
             "Company Secretary"
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
       BusinessStatus(false, None),
       ImportingActivities(false, None),
       BusinessCustomers("11-50"),

@@ -101,7 +101,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
       verifiedEmail ← findVerifiedEmail(cacheMap).toEitherT[Future]
       journeyType = loadJourneyType(cacheMap)
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
-      journeyState = loadJourneyState(journeyPages, cacheMap)
+      journeyState = loadJourneyState(journeyPages)
     } yield {
       new JourneyRequest[A](
         cacheMap,
@@ -147,7 +147,7 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
   }
 
   def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
-    getBusinessType(cacheMap).right flatMap {
+    val pagesForEntityType = getBusinessType(cacheMap).right flatMap {
       _ match {
         case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
         case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages)
@@ -158,9 +158,22 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
 
       }
     }
+
+    pagesForEntityType map {pages ⇒
+      val pagesWithData = pages map { page ⇒ pageWithData(cacheMap)(page)}
+      new JourneyPages(pagesWithData)
+    }
+
   }
 
-  def loadJourneyState(journeyPages: JourneyPages, cacheMap: CacheMap): JourneyState = {
-    Journeys.journeyState(journeyPages, cacheMap)
+  private def pageWithData[T](cacheMap: CacheMap)(page: Page[T]) = {
+    cacheMap.getEntry(page.id)(page.format) match {
+      case Some(data) ⇒ page withData data
+      case None ⇒ page
+    }
+  }
+
+  def loadJourneyState(journeyPages: JourneyPages): JourneyState = {
+    Journeys.journeyState(journeyPages)
   }
 }

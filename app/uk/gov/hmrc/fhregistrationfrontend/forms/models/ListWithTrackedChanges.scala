@@ -29,11 +29,12 @@ object ListWithTrackedChanges {
   case object Added extends Status
 
   implicit val statusFormat: OFormat[Status] = derived.oformat[Status]
-  def empty[T](): ListWithTrackedChanges[T] = ListWithTrackedChanges[T](List.empty, List.empty)
+  def empty[T](): ListWithTrackedChanges[T] = ListWithTrackedChanges[T](List.empty, List.empty, false)
 
   def fromValues[T](values: List[T]): ListWithTrackedChanges[T] = ListWithTrackedChanges(
     values zip Iterable.fill(values.size)(NoChange),
-    List.empty
+    List.empty,
+    false
   )
 
   implicit def valueWithStatusFormat[T](implicit format: Format[T]) = Json.format[(T, Status)]
@@ -41,7 +42,9 @@ object ListWithTrackedChanges {
   implicit private def writes[T](implicit format: Format[T]): Writes[ListWithTrackedChanges[T]] = new Writes[ListWithTrackedChanges[T]] {
     override def writes(o: ListWithTrackedChanges[T]): JsValue = Json obj (
       "valuesWithStatus" → o.valuesWithStatus,
-      "deleted" → o.deleted
+      "deleted" → o.deleted,
+      "addMore" → o.addMore
+
     )
   }
 
@@ -50,8 +53,9 @@ object ListWithTrackedChanges {
       for {
         values ← (json \ "valuesWithStatus").validate[List[(T, Status)]]
         deleted ← (json \ "deleted").validate[List[T]]
+        addMore ← (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
       } yield {
-        ListWithTrackedChanges(values, deleted)
+        ListWithTrackedChanges(values, deleted, addMore)
       }
   }
 
@@ -59,7 +63,7 @@ object ListWithTrackedChanges {
 
 }
 
-case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T]) {
+case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T], addMore: Boolean) {
 
 
   def append(value: T) = this copy (valuesWithStatus = valuesWithStatus :+ (value → Added))
