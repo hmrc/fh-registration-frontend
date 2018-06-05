@@ -38,15 +38,18 @@ case class RepeatingPage[T](
   mapping: Mapping[T],
   value   : ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
   index   : Int = 0,
-  addMore : Boolean = false,
   minItems: Int = 1,
   maxItems: Int = 100
 )(implicit val format: Format[ListWithTrackedChanges[T]]) extends Page[ListWithTrackedChanges[T]] {
 
+
+  val AddMoreKey = "addMore"
+  val ElementKey = "element"
+
   val form: Form[(T, Boolean)] = Form(
     tuple(
-      "element" → skippingOnePrefix(mapping),
-      "addMore" → yesOrNo
+      ElementKey → skippingOnePrefix(mapping),
+      AddMoreKey → yesOrNo
     )
   )
 
@@ -64,13 +67,17 @@ case class RepeatingPage[T](
   }
 
   override def nextSubsection: Option[String] =
-    if (addMore)
+    if (value.addMore)
       Some(section(value.size))
 //    else if (index < value.size - 1)
 //      Some(section(index + 1))
     else
       None
 
+
+  override def previousSubsection: Option[String] =
+    if (index == 0) None
+    else Some(section(index - 1))
 
   def section(index: Int) = (index + 1).toString
 
@@ -79,23 +86,25 @@ case class RepeatingPage[T](
     if (updatedForm.hasErrors)
       withErrors(errorRenderer(updatedForm))
     else if (index > maxItems)
-      withErrors(errorRenderer(updatedForm withError ("element", "too.many.items")))
+      withErrors(errorRenderer(updatedForm withError (ElementKey, "too.many.items")))
     else {
       val (element, more) = updatedForm.value.get
       if (more && (index + 1 > maxItems))
-        withErrors(errorRenderer(updatedForm withError ("addMore", "too.many.items")))
+        withErrors(errorRenderer(updatedForm withError (AddMoreKey, "too.many.items")))
       else {
         val updateValue =
           if (value.size <= index) value append element
           else value.updated(index, element)
-        val updatePage = this copy(value = updateValue, addMore = more)
+        val updatePage = this copy(value = updateValue.copy(addMore = more))
         withData(updatePage)
       }
     }
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
-    val filledForm = if (index < value.size) form fill ((value(index), false)) else form
+    val filledForm =
+      if (index < value.size) form fill ((value(index), value.addMore))
+      else form
 
 
 
@@ -127,6 +136,7 @@ case class RepeatingPage[T](
   override def pageStatus: PageStatus =
     if (value.size == 0 && minItems > 0 ) NotStarted
     else if (value.size < minItems) InProgress
+    else if (value.addMore) InProgress
     else Completed
 
   override def lastSection: Option[String] =
@@ -134,4 +144,7 @@ case class RepeatingPage[T](
       None
     else
       Some(section(value.size - 1))
+
+  override def section = Some(section(index))
+
 }

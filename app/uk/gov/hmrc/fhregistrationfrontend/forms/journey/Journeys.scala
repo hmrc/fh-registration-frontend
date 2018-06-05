@@ -23,7 +23,7 @@ object Journeys {
 
   import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
 
-  val limitedCompanyPages = new JourneyPages(
+  val limitedCompanyPages =
     Seq[AnyPage](
       Page.contactPersonPage,
       Page.mainBusinessAddressPage,
@@ -37,9 +37,8 @@ object Journeys {
       Page.businessCustomersPage,
       Page.otherStoragePremisesPage
     )
-  )
 
-  val soleTraderPages = new JourneyPages(
+  val soleTraderPages =
     Seq[Page[_]](
       Page.contactPersonPage,
       Page.mainBusinessAddressPage,
@@ -51,9 +50,8 @@ object Journeys {
       Page.businessCustomersPage,
       Page.otherStoragePremisesPage
     )
-  )
 
-  val partnershipPages = new JourneyPages(
+  val partnershipPages =
     Seq[Page[_]](
       Page.contactPersonPage,
       Page.mainBusinessAddressPage,
@@ -65,7 +63,6 @@ object Journeys {
       Page.businessCustomersPage,
       Page.otherStoragePremisesPage
     )
-  )
 
   def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) = {
     new JourneyPages(
@@ -160,6 +157,6 @@ object Journeys {
   def linearJourney(journeyPages: JourneyPages) = new LinearJourney(journeyPages)
   def summaryJourney(journeyPages: JourneyPages) = new SummaryJourney()
 
-  def journeyState(journeyPages: JourneyPages, cachedMap: CacheMap) = new CachedJourneyState(cachedMap, journeyPages)
+  def journeyState(journeyPages: JourneyPages) = new CachedJourneyState(journeyPages)
 
 }

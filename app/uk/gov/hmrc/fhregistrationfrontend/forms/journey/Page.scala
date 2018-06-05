@@ -56,12 +56,15 @@ trait Page[T] extends Rendering {
   def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[T] ⇒ X)(implicit r: Request[_]): X
 
   def nextSubsection: Option[String]
+  def previousSubsection: Option[String]
+  def section: Option[String]
 
   /** returns None if the page can not be deleted or Some(new page state)*/
   def delete: Option[Page[T]]
 
   def pageStatus: PageStatus
   def lastSection: Option[String]
+
 }
 
 object Page {

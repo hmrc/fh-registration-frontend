@@ -100,7 +100,7 @@ class FormPageController @Inject()(
     if (newPage.nextSubsection.isDefined)
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
-      request.journey next newPage.id match {
+      request.journey next newPage match {
         case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
         case None           ⇒ Redirect(routes.SummaryController.summary())
       }
@@ -110,9 +110,9 @@ class FormPageController @Inject()(
     save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
       case Some(bpr) ⇒
         if (hasErrors)
-          BadRequest(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
+          BadRequest(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
         else {
-          Ok(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
+          Ok(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
         }
       case None      ⇒
         errorHandler.errorResultsPages(Results.BadRequest)

@@ -57,7 +57,8 @@ object LtdMinimumLessThanThreeYears {
             "Director"
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
     BusinessStatus(false, None),
     ImportingActivities(false, None),
     BusinessCustomers("1-10"),

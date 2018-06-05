@@ -81,7 +81,8 @@ object SPLargeUk {
               "AA01 0AA",
               None),
             false) → changeFlags),
-        List.empty))
+        List.empty,
+        false))
   )
   val verifiedEmail = "a@w.ro"
   val declaration = Declaration(

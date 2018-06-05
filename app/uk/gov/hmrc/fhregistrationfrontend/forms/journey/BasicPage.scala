@@ -63,4 +63,8 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
   override def pageStatus: PageStatus = if (data.isDefined) Completed else NotStarted
 
   override def lastSection: Option[String] = None
+
+  override def previousSubsection: Option[String] = None
+
+  override def section = None
 }

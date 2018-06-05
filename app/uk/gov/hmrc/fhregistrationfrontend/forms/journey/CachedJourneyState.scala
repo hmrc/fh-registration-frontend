@@ -19,16 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.http.cache.client.CacheMap
 
-class CachedJourneyState(cacheMap: CacheMap, journeyPages: JourneyPages) extends JourneyState {
+class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
 
-  val pages = journeyPages.pages map { page ⇒ pageWithData(page) }
-
-  private def pageWithData[T](page: Page[T]) = {
-    cacheMap.getEntry(page.id)(page.format) match {
-      case Some(data) ⇒ page withData data
-      case None ⇒ page
-    }
-  }
+  val pages = journeyPages.pages
 
   override def isComplete: Boolean = pages forall isPageComplete
 

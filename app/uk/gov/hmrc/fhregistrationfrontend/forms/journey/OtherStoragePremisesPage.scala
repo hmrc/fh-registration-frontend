@@ -34,6 +34,8 @@ case class OtherStoragePremisesPage(
   override val id: String = "otherStoragePremises"
   override val format: Format[OtherStoragePremises] = OtherStoragePremises.format
 
+  val mainSection = Some("any")
+
   override def withData(data: OtherStoragePremises): Page[OtherStoragePremises] = {
     val newSection = if (data.hasValue) section else None
     this copy (
@@ -65,7 +67,8 @@ case class OtherStoragePremisesPage(
   }
 
   override val withSubsection: PartialFunction[Option[String], Page[OtherStoragePremises]] = {
-    case None ⇒ this copy (section = None)
+    case None                                                                                        ⇒ this copy (section = mainSection)
+    case `mainSection`                                                                               ⇒ this copy (section = mainSection)
     case newSection if hasOtherPremises && storagePremisePage.withSubsection.isDefinedAt(newSection) ⇒
       this copy (
         section = newSection,
@@ -75,12 +78,18 @@ case class OtherStoragePremisesPage(
   override def nextSubsection: Option[String] =
     if (isMainSection && hasOtherPremises)
       Some("1")
-    else if (isMainSection)
+    else if (isMainSection && !hasOtherPremises)
       None
+    else if (isMainSection)
+      mainSection
     else
       storagePremisePage.nextSubsection
 
-  private def isMainSection = section.isEmpty
+  override def previousSubsection: Option[String] =
+    if (isMainSection) mainSection
+    else storagePremisePage.previousSubsection orElse mainSection
+
+  private def isMainSection = section.isEmpty || (section == mainSection)
   private def hasOtherPremises = mainPage.data contains true
 
 
