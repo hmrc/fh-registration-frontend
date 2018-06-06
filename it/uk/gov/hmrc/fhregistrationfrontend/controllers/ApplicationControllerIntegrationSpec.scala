@@ -33,7 +33,7 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "redirects to the verification of main business address if logged in" in {
+    "redirect to the verification of main business address if logged in" in {
       given
         .audit.writesAuditOrMerged()
         .user.isAuthorised()
@@ -49,7 +49,7 @@ class ApplicationControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"$baseUrl/start").withFollowRedirects(false).get()) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9923/business-customer/FHDDS?backLinkUrl=http://localhost:1118/fhdds/continue"
+          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9923/business-customer/FHDDS"
         }
       }
     }

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
+package uk.gov.hmrc.fhregistrationfrontend.forms.confirmation
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.{alternativeEmailKey, ggEmailKey, isUseGgEmailKey}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{alternativeEmail, email}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{alternativeEmail, email, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 

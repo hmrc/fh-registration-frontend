@@ -59,7 +59,7 @@ case class Save4LaterStub
         ListWithTrackedChanges.NoChange)
     ),
     deleted = List.empty,
-    None
+    false
   )
 
   def businessRecordWasSaved() = {
