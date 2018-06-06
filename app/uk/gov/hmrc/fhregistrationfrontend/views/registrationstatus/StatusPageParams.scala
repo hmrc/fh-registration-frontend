@@ -90,7 +90,7 @@ object StatusPageParams {
     StatusPageParams(
       Deregistered,
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment()),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
       nextTemplate = statusNewApplication.apply,
       category = "no-notification"
     )
