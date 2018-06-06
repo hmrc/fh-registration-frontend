@@ -85,8 +85,14 @@ object StatusPageParams {
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
       secondary = None,
       nextTemplate = statusWithdrawn.apply,
-      showSubHeading = false,
-      category = "pre"
+      showSubHeading = false
+    ),
+    StatusPageParams(
+      Deregistered,
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
+      nextTemplate = statusNewApplication.apply,
+      category = "no-notification"
     )
   )
 

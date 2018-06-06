@@ -25,9 +25,7 @@
 
 <p>
   @Messages("fh.status.generic.apply_again")
-    <a href="@{params.secondary}">
-      @Messages("fh.status.generic.start_new_link_text")
-    </a>.
+  @Messages("fh.status.generic.start_new_link_text").
 </p>
 
 <p>
@@ -36,10 +34,14 @@
   </a>
 </p>
 
-<p class="js-show">
-  <a href="JavaScript: window.print();">
-  @Messages("fh.status.generic.print_page")
+<p>
+  <a href="@{params.secondary}">
+    @Messages(s"fh.status.${params.status}.secondaryLink")
   </a>
 </p>
+
+<h2>
+  @Messages("fh.status.generic.help_us_improve")
+</h2>
 
 @SurveyLink()(Messages, appConfig)
