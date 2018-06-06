@@ -20,20 +20,20 @@ import java.time.LocalDate
 
 import play.api.libs.json.Json
 
-case class Deregistration (
-                        deregistrationDate: LocalDate,
-                        deregistrationReason: String,
-                        deregistrationReasonOther: Option[String]
-                      )
+case class Deregistration(
+  date       : LocalDate,
+  reason     : String,
+  reasonOther: Option[String]
+)
 
 object Deregistration extends DateTimeFormat {
   implicit val format = Json.format[Deregistration]
 }
 
 case class DeregistrationRequest(
-                              emailAddress: String,
-                              deregistration: Deregistration
-                            )
+  emailAddress  : String,
+  deregistration: Deregistration
+)
 
 object DeregistrationRequest {
   implicit val format = Json.format[DeregistrationRequest]

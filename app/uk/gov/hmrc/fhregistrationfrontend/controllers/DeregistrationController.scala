@@ -18,15 +18,16 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
-
 import javax.inject.Inject
+
 import org.joda.time.DateTime
 import play.api.mvc.{Action, AnyContent, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.ConfirmationForm.confirmationForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{Confirmation, DeregistrationReason}
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.deregistrationReasonForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.{deregistration_acknowledgement, deregistration_confirm, deregistration_reason}
@@ -35,11 +36,11 @@ import scala.concurrent.Future
 
 @Inject
 class DeregistrationController @Inject()(
-                                      ds               : CommonPlayDependencies,
-                                      fhddsConnector   : FhddsConnector,
-                                      keyStoreService  : KeyStoreService,
-                                      actions: Actions
-                                    ) extends AppController(ds) {
+  ds             : CommonPlayDependencies,
+  fhddsConnector : FhddsConnector,
+  keyStoreService: KeyStoreService,
+  actions        : Actions
+) extends AppController(ds) {
 
   import actions._
   val EmailSessionKey = "deregistration_confirmation_email"
@@ -74,10 +75,7 @@ class DeregistrationController @Inject()(
 
   def confirm = withDeregistrationReason {
     implicit request ⇒ reason ⇒
-      keyStoreService.fetchDeregistrationReason().map {
-        case Some(_) ⇒ Ok(deregistration_confirm(confirmationForm, request.email))
-        case None    ⇒ errorHandler.errorResultsPages(Results.BadRequest)
-      }
+      Future successful Ok(deregistration_confirm(confirmationForm, request.email))
   }
 
 

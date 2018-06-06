@@ -24,8 +24,9 @@ import org.joda.time.DateTime
 import play.api.mvc.{Action, AnyContent, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.ConfirmationForm.confirmationForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{Confirmation, WithdrawalReason}
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.withdrawalReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
@@ -74,10 +75,7 @@ class WithdrawalController @Inject()(
 
   def confirm = withWithdrawalReason {
     implicit request ⇒ reason ⇒
-        keyStoreService.fetchWithdrawalReason().map {
-          case Some(_) ⇒ Ok(withdrawal_confirm(confirmationForm, request.email))
-          case None    ⇒ errorHandler.errorResultsPages(Results.BadRequest)
-        }
+      Future successful Ok(withdrawal_confirm(confirmationForm, request.email))
   }
 
 

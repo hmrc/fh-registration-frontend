@@ -20,10 +20,10 @@ import play.api.libs.json.{Format, Reads, Writes}
 object DeregistrationReasonEnum extends Enumeration {
   type DeregistrationReasonEnum = Value
 
-  val NoLongerNeeded = Value("No longer needed")
-  val StoppedTrading = Value("Stopped trading")
-  val ChangedLegalEntity = Value("Change of legal entity")
-  val Other = Value("Other")
+  val NoLongerNeeded = Value("CEASES_REGISTERABLE_SCHEME")
+  val StoppedTrading = Value("CEASES_TRADE_FULFILMENT_BUSINESS")
+  val ChangedLegalEntity = Value("CHANGE_LEGAL_ENTITY")
+  val Other = Value("Others")
 
   implicit val format = Format(
     Reads.enumNameReads(DeregistrationReasonEnum),

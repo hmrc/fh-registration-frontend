@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
+package uk.gov.hmrc.fhregistrationfrontend.forms.confirmation
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
 
