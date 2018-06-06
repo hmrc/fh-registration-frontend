@@ -18,5 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.views
 
 object Mode extends Enumeration {
   type Mode = Value
-  val ReadOnly, New, Amendment, Variation = Value
+  val ReadOnlyRegister, ReadOnlyApplication, New, Amendment, Variation = Value
+
+  def isReadOnly(mode: Mode) = mode match {
+    case ReadOnlyApplication | ReadOnlyRegister ⇒ true
+    case _                                      ⇒ false
+  }
+
+  def isEditable(mode: Mode) = !isReadOnly(mode)
 }

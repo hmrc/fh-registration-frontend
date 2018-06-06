@@ -25,6 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.forms.models
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
 
 @ImplementedBy(classOf[DesToFormImpl])
 trait DesToForm {
@@ -41,6 +42,8 @@ trait DesToForm {
 
   def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication
 
+  def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication
+
   def declaration(declaration: des.Declaration): Declaration
 }
 
@@ -54,6 +57,19 @@ class DesToFormImpl extends DesToForm {
 
   override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
+
+
+  override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication = {
+    entityType(display) match {
+      case BusinessType.CorporateBody ⇒
+        limitedCompanyApplication(display)
+      case BusinessType.SoleTrader ⇒
+        soleProprietorApplication(display)
+      case BusinessType.Partnership ⇒
+        partnershipApplication(display)
+    }
+  }
+
 
   override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
     LimitedCompanyApplication(

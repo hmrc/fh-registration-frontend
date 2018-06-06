@@ -16,8 +16,8 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
 @(verifiedEmail: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -28,7 +28,7 @@
     <dt class="cya-question">@Messages("fh.summary.email.label")</dt>
     <dd class="cya-answer">@verifiedEmail</dd>
     <dd class="cya-change">
-    @if(mode != ReadOnly){
+    @if(Mode isEditable mode){
       <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailChange}">Change<span class="visuallyhidden"> @Messages("fh.summary.email.title")</span></a>
     }
     </dd>

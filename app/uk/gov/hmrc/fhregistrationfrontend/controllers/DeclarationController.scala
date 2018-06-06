@@ -90,7 +90,7 @@ class DeclarationController @Inject()(
         sendSubscription(usersDeclaration).fold(
           error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
           _.flatMap { response ⇒
-            keyStoreService.saveSummaryForPrint(getSummaryData()(request).toString())
+            keyStoreService.saveSummaryForPrint(getSummaryPrintable()(request).toString())
               .map(_ ⇒ true)
               .recover{case _ ⇒ false}
               .map { pdfSaved ⇒

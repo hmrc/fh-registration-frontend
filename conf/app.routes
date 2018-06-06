@@ -37,6 +37,7 @@ GET         /form/:page/:section/confirmDelete/:timestamp                       
 GET         /resume                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
+GET         /view                                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
 GET         /downloadPrintable                                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
 
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
