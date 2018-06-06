@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartUpdateRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
@@ -61,7 +61,8 @@ class AmendmentController @Inject()(
       val display = displayWrapper.subScriptionDisplay
       val userId = request.userId
       val entityType = desToForm entityType display
-      val journeyPages = loadJourneyPagesFromDes(display)
+      val application = desToForm loadApplicationFromDes display
+      val journeyPages = Journeys unapplyApplication application
       val bpr = desToForm.businessRegistrationDetails(display)
       val contactEmail = desToForm.contactEmail(display)
 
@@ -111,21 +112,6 @@ class AmendmentController @Inject()(
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) {
       case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)}
-    }
-  }
-
-
-  private def loadJourneyPagesFromDes(display: SubscriptionDisplay) = {
-    desToForm.entityType(display) match {
-      case BusinessType.CorporateBody ⇒
-        val application = desToForm.limitedCompanyApplication(display)
-        Journeys unapplyLimitedCompanyApplication application
-      case BusinessType.SoleTrader ⇒
-        val application = desToForm.soleProprietorApplication(display)
-        Journeys unapplySoleTraderApplication application
-      case BusinessType.Partnership ⇒
-        val application = desToForm partnershipApplication display
-        Journeys unapplyPartnershipApplication application
     }
   }
 

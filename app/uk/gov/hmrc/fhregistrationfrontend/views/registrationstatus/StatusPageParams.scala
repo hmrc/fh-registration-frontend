@@ -67,7 +67,7 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Rejected,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
       nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
@@ -75,7 +75,7 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Revoked,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
       nextTemplate = statusNewApplication.apply,
       category = "post"

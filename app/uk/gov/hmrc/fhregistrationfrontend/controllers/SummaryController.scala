@@ -17,10 +17,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryAction}
+
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
-import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 
 @Inject
@@ -32,7 +33,16 @@ class SummaryController @Inject()(
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-    Ok(getSummaryHtml(request, summaryPageParams(request.journeyRequest)))
+
+    val application = request.businessType match {
+      case BusinessType.CorporateBody ⇒
+        Journeys ltdApplication request
+      case BusinessType.SoleTrader ⇒
+        Journeys soleTraderApplication request
+      case BusinessType.Partnership ⇒
+        Journeys partnershipApplication request
+    }
+    Ok(getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest)))
   }
 
 }

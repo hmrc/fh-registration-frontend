@@ -21,13 +21,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnly
 
 @(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit request: Request[_], messages: Messages)
 
     @changeLink = @{
-      if (mode != ReadOnly) {
+      if (Mode isEditable mode) {
         Some("companyOfficers")
       } else {
         None

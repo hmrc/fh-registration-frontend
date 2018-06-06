@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 object Journeys {
@@ -63,6 +63,14 @@ object Journeys {
       Page.businessCustomersPage,
       Page.otherStoragePremisesPage
     )
+
+  def unapplyApplication(application: BusinessEntityApplication): JourneyPages = {
+    application match {
+      case a: LimitedCompanyApplication ⇒ Journeys unapplyLimitedCompanyApplication a
+      case a: SoleProprietorApplication ⇒ Journeys unapplySoleTraderApplication a
+      case a: PartnershipApplication ⇒ Journeys unapplyPartnershipApplication a
+    }
+  }
 
   def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) = {
     new JourneyPages(
