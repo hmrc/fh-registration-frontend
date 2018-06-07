@@ -74,6 +74,6 @@
     countryCode = Some(s"${formDate(s"$fieldName.countryCode").value.getOrElse("")}"),
     label = Messages("fh.address.country.label"),
     error = Messages("fh.address.country.error"),
-    hasErrors = formDate(s"$fieldName.Line4").hasErrors
+    hasErrors = formDate(s"$fieldName.countryCode").hasErrors
   )
 )
