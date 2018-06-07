@@ -20,14 +20,14 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
 
 case class Confirmation(
   continue: Boolean,
-  isUseGgEmail: Option[Boolean],
-  ggEmail: Option[String],
+  usingDefaultEmail: Option[Boolean],
+  defaultEmail: Option[String],
   alternativeEmail: Option[AlternativeEmail]
 ) {
 
   def email: Option[String] = {
-    isUseGgEmail flatMap {
-      case true  ⇒ ggEmail
+    usingDefaultEmail flatMap {
+      case true  ⇒ defaultEmail
       case false ⇒ alternativeEmail.map(_.email)
     }
   }

@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -83,23 +83,23 @@
     )
 
     <h2 class="small-heading">@{
-      s"${Messages("fh.declaration.has_gg_email")} "
+      s"${Messages("fh.confirmationEmail.has_default_email")} "
     }
       <span><strong>@{
-        s"${ggEmail.getOrElse("")}"
+        s"${defaultEmail.getOrElse("")}"
       }</strong></span>
     </h2>
 
-    @if(ggEmail.filterNot(_.isEmpty) == None) {
+    @if(defaultEmail.filterNot(_.isEmpty) == None) {
 
-      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
+      <input type="hidden" name="@usingDefaultEmailKey" value="false"/>
 
       @EmailConfirmation(
         EmailConfirmationParams(
           name = alternativeEmailKey,
-          label = Messages("fh.declaration.email.label"),
-          labelConfirmation = Messages("fh.declaration.email.confirmation.label"),
-          error = Messages("fh.declaration.email.error"),
+          label = Messages("fh.confirmationEmail.email.label"),
+          labelConfirmation = Messages("fh.confirmationEmail.email.confirmation.label"),
+          error = Messages("fh.confirmationEmail.email.error"),
           isEmail = true,
           value = declarationForm(s"$alternativeEmailKey.email").value,
           valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,
@@ -109,16 +109,16 @@
       )
 
     } else {
-      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
+      <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some(isUseGgEmailKey),
-          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
+          name = Some(usingDefaultEmailKey),
+          legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
           required = true,
-          hasErrors = declarationForm(isUseGgEmailKey).hasErrors,
-          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
-          value = declarationForm(isUseGgEmailKey).value,
+          hasErrors = declarationForm(usingDefaultEmailKey).hasErrors,
+          error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
+          value = declarationForm(usingDefaultEmailKey).value,
           radios = List(
             RadioParams(
               "true",
@@ -138,9 +138,9 @@
           EmailConfirmation(
             EmailConfirmationParams(
               name = alternativeEmailKey,
-              label = Messages("fh.declaration.alternative_email.label"),
-              labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
-              error = Messages("fh.declaration.email.error"),
+              label = Messages("fh.confirmationEmail.alternative_email.label"),
+              labelConfirmation = Messages("fh.confirmationEmail.alternative_email_confirmation.label"),
+              error = Messages("fh.confirmationEmail.email.error"),
               isEmail = true,
               value = declarationForm(s"$alternativeEmailKey.email").value,
               valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,

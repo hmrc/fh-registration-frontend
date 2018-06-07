@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(confirmationForm: Form[Confirmation], ggEmail: Option[String] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(confirmationForm: Form[Confirmation], defaultEmail: Option[String] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @pageScripts = {
@@ -70,16 +70,16 @@
 
     <div class="js-hidden panel" id="emailContainer">
 
-    @if(ggEmail.filterNot(_.isEmpty) == None) {
+    @if(defaultEmail.filterNot(_.isEmpty) == None) {
 
-      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
-      <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.noGG.legend")</legend>
+      <input type="hidden" name="@usingDefaultEmailKey" value="false"/>
+      <legend class="form-label-bold">@Messages("fh.confirmationEmail.noDefaultEmail.legend")</legend>
       @EmailConfirmation(
         EmailConfirmationParams(
           name = alternativeEmailKey,
-          label = Messages("fh.withdrawalConfirm.noGG.email.label"),
-          labelConfirmation = Messages("fh.withdrawalConfirm.noGG.emailConfirm.label"),
-          error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
+          label = Messages("fh.confirmationEmail.noDefaultEmail.email.label"),
+          labelConfirmation = Messages("fh.confirmationEmail.noDefaultEmail.emailConfirm.label"),
+          error = Messages("fh.confirmationEmail.alternativeEmail.email.error.required"),
           isEmail = true,
           hasErrors =  confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors,
           value = confirmationForm(s"$alternativeEmailKey.email").value,
@@ -88,16 +88,16 @@
       )
 
     } else {
-      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
-      <legend class="form-label-bold">@Messages("fh.withdrawalConfirm.hasGG.legend") @ggEmail</legend>
+      <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
+      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend") @defaultEmail</legend>
       @RadioGroup(
         RadioGroupParams(
-          name = Some(isUseGgEmailKey),
-          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
+          name = Some(usingDefaultEmailKey),
+          legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
           required = true,
-          hasErrors = confirmationForm(isUseGgEmailKey).hasErrors,
-          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
-          value = confirmationForm(isUseGgEmailKey).value,
+          hasErrors = confirmationForm(usingDefaultEmailKey).hasErrors,
+          error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
+          value = confirmationForm(usingDefaultEmailKey).value,
           radios = List(
             RadioParams(
               "true",
@@ -117,9 +117,9 @@
           EmailConfirmation(
             EmailConfirmationParams(
               name = alternativeEmailKey,
-              label = Messages("fh.declaration.alternative_email.label"),
-              labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
-              error = Messages("fh.withdrawalConfirm.alternativeEmail.email.error.required"),
+              label = Messages("fh.confirmationEmail.alternative_email.label"),
+              labelConfirmation = Messages("fh.confirmationEmail.alternative_email_confirmation.label"),
+              error = Messages("fh.confirmationEmail.alternativeEmail.email.error.required"),
               isEmail = true,
               value = confirmationForm(s"$alternativeEmailKey.email").value,
               valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,

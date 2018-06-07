@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(emailVerificationForm: Form[EmailVerification], forced: Boolean, ggEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], forced: Boolean, defaultEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
@@ -71,7 +71,7 @@
         radios = List(
           RadioParams(
             "true",
-            ggEmail.get
+            defaultEmail.get
           ),
           RadioParams(
             "false",
@@ -82,7 +82,7 @@
       )
     )
 
-    <input type="hidden" name="@{ggEmailKey}" value="@{ggEmail.get}"/>
+    <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail.get}"/>
 
     <div class="js-hidden panel" id="alternativeEmailContainer">
       <p>@Messages("fh.emailVerification.alternativeEmail.info")</p>
