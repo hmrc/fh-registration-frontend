@@ -25,18 +25,18 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 
 object EmailVerificationForm {
 
-  val emailOptionKey = "usingGgEmailAddress"
-  val ggEmailKey = "ggEmail"
+  val emailOptionKey = "usingDefaultEmailAddress"
+  val defaultEmailKey = "defaultEmail"
   val alternativeEmailKey = "alternativeEmail"
 
-  private val isUseGgEmailMapping = emailOptionKey → yesOrNo
-  private val ggEmailMapping = ggEmailKey → (email onlyWhen (isUseGgEmailMapping is true))
-  private val alternativeEmailMapping = alternativeEmailKey → (email onlyWhen (isUseGgEmailMapping is false))
+  private val usingDefaultEmailMapping = emailOptionKey → yesOrNo
+  private val defaultEmailMapping = defaultEmailKey → (email onlyWhen (usingDefaultEmailMapping is true))
+  private val alternativeEmailMapping = alternativeEmailKey → (email onlyWhen (usingDefaultEmailMapping is false))
 
   val emailVerificationForm = Form(
     mapping(
-      isUseGgEmailMapping,
-      ggEmailMapping,
+      usingDefaultEmailMapping,
+      defaultEmailMapping,
       alternativeEmailMapping
     )(EmailVerification.apply)(EmailVerification.unapply)
   )

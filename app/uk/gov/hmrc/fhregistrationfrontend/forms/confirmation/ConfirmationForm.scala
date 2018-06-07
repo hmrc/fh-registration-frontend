@@ -24,22 +24,22 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{Mappin
 object ConfirmationForm {
 
   val confirmKey = "confirm"
-  val isUseGgEmailKey = "isUseGgEmail"
-  val ggEmailKey = "ggEmail"
+  val usingDefaultEmailKey = "usingDefaultEmail"
+  val defaultEmailKey = "defaultEmail"
   val alternativeEmailKey = "alternativeEmail"
 
 
   private val confirmMapping = confirmKey → yesOrNo
-  private val isUseGgEmailMapping = isUseGgEmailKey → (yesOrNo onlyWhen (confirmMapping is true))
-  private val ggEmailMapping = ggEmailKey → (email onlyWhen (isUseGgEmailMapping is Some(true)))
-  private val alternativeEmailMapping = alternativeEmailKey → (alternativeEmail onlyWhen (isUseGgEmailMapping is Some(false)))
+  private val usingDefaultEmailMapping = usingDefaultEmailKey → (yesOrNo onlyWhen (confirmMapping is true))
+  private val defaultEmailMapping = defaultEmailKey → (email onlyWhen (usingDefaultEmailMapping is Some(true)))
+  private val alternativeEmailMapping = alternativeEmailKey → (alternativeEmail onlyWhen (usingDefaultEmailMapping is Some(false)))
 
 
   val confirmationForm = Form(
     mapping(
       confirmMapping,
-      isUseGgEmailMapping,
-      ggEmailMapping,
+      usingDefaultEmailMapping,
+      defaultEmailMapping,
       alternativeEmailMapping
     )(Confirmation.apply)(Confirmation.unapply)
   )
