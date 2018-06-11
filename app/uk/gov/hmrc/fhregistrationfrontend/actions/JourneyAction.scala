@@ -53,7 +53,7 @@ class JourneyRequest[A](
     cacheMap.getEntry[T](page.id)(page.format)
 
   def registrationNumber = request.registrationNumber
-  def email: Option[String] = request.ggEmail
+//  def email: Option[String] = request.ggEmail
 
   def lastUpdateTimestamp = {
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L

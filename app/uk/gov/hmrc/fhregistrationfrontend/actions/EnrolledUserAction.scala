@@ -29,7 +29,7 @@ class EnrolledUserRequest[A](
 ) extends WrappedRequest[A](request) {
 
   def userId: String = request.userId
-  def email: Option[String] = request.ggEmail
+  def ggEmail: Option[String] = request.ggEmail
 }
 
 class EnrolledUserAction (implicit errorHandler: ErrorHandler)

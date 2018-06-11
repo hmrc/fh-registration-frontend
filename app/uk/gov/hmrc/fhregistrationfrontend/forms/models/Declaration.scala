@@ -24,16 +24,16 @@ case class AlternativeEmail(
 )
 
 case class Declaration(
-  fullName: String,
-  jobTitle: String,
-  isUseGgEmail: Boolean,
-  ggEmail: Option[String],
-  alternativeEmail: Option[AlternativeEmail]
+  fullName         : String,
+  jobTitle         : String,
+  usingDefaultEmail: Boolean,
+  defaultEmail     : Option[String],
+  alternativeEmail : Option[AlternativeEmail]
 ) {
 
   def email: String = {
-    if (isUseGgEmail)
-      ggEmail.get
+    if (usingDefaultEmail)
+      defaultEmail.get
     else
       alternativeEmail.map(_.email).get
   }
