@@ -21,28 +21,31 @@ import java.util.Date
 import javax.inject.Inject
 
 import org.joda.time.DateTime
-import play.api.mvc.{Action, AnyContent, Result, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
-import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.deregistrationReasonForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
+import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.deregistrationReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.{deregistration_acknowledgement, deregistration_confirm, deregistration_reason}
 
 import scala.concurrent.Future
 
 @Inject
 class DeregistrationController @Inject()(
-  ds             : CommonPlayDependencies,
-  fhddsConnector : FhddsConnector,
+  ds: CommonPlayDependencies,
+  val fhddsConnector: FhddsConnector,
+  val desToForm: DesToForm,
   keyStoreService: KeyStoreService,
-  actions        : Actions
-) extends AppController(ds) {
+  actions: Actions
+) extends AppController(ds) with ContactEmailFunctions {
 
   import actions._
+
   val EmailSessionKey = "deregistration_confirmation_email"
   val ProcessingTimestampSessionKey = "deregistration_processing_timestamp"
 
@@ -65,28 +68,28 @@ class DeregistrationController @Inject()(
     )
   }
 
-  def withDeregistrationReason(f: EnrolledUserRequest[_] ⇒ DeregistrationReason ⇒ Future[Result]) =
-    enrolledUserAction.async { implicit request ⇒
-      keyStoreService.fetchDeregistrationReason() flatMap {
-        case Some(reason) ⇒ f(request)(reason)
-        case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
-      }
-    }
-
   def confirm = withDeregistrationReason {
-    implicit request ⇒ reason ⇒
-      Future successful Ok(deregistration_confirm(confirmationForm, request.email))
+    implicit request ⇒
+      reason ⇒
+        contactEmail map (email ⇒ Ok(deregistration_confirm(confirmationForm, email)))
   }
-
 
   def postConfirmation = withDeregistrationReason {
     implicit request ⇒
       reason ⇒
         confirmationForm.bindFromRequest().fold(
-          formWithError ⇒ Future successful BadRequest(deregistration_confirm(formWithError, request.email)),
+          formWithError ⇒ contactEmail map (email ⇒ BadRequest(deregistration_confirm(formWithError, email))),
           handleConfirmation(_, reason)
         )
   }
+
+  def withDeregistrationReason(f: EnrolledUserRequest[_] ⇒ DeregistrationReason ⇒ Future[Result]) =
+    enrolledUserAction.async { implicit request ⇒
+      keyStoreService.fetchDeregistrationReason() flatMap {
+        case Some(reason) ⇒ f(request)(reason)
+        case None         ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
+      }
+    }
 
   private def handleConfirmation(confirmed: Confirmation, reason: DeregistrationReason)(implicit request: EnrolledUserRequest[_]) = {
     if (confirmed.continue) {
@@ -105,7 +108,7 @@ class DeregistrationController @Inject()(
   }
 
   private def sendRequest(email: String, reason: DeregistrationReason)(implicit request: EnrolledUserRequest[_]): Future[Date] = {
-    val deregistrationRequest =  des.DeregistrationRequest(
+    val deregistrationRequest = des.DeregistrationRequest(
       email,
       des.Deregistration(
         LocalDate.now(),

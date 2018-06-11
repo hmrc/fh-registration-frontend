@@ -58,7 +58,7 @@ class DeclarationController @Inject()(
   import actions._
 
   def showDeclaration() = summaryAction { implicit request ⇒
-    Ok(declaration(declarationForm, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType)))
+    Ok(declaration(declarationForm, Some(request.verifiedEmail), request.bpr, summaryPageParams(request.journeyRequest.journeyType)))
   }
 
   def showAcknowledgment() = userAction.async { implicit request ⇒
@@ -85,10 +85,10 @@ class DeclarationController @Inject()(
   def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
-      formWithErrors => Future successful BadRequest(declaration(formWithErrors, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType))),
+      formWithErrors => Future successful BadRequest(declaration(formWithErrors, Some(request.verifiedEmail), request.bpr, summaryPageParams(request.journeyRequest.journeyType))),
       usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
-          error ⇒ Future successful BadRequest(declaration(form, request.email, request.bpr, summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
+          error ⇒ Future successful BadRequest(declaration(form, Some(request.verifiedEmail), request.bpr, summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
           _.flatMap { response ⇒
             keyStoreService.saveSummaryForPrint(getSummaryPrintable()(request).toString())
               .map(_ ⇒ true)

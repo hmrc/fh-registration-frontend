@@ -33,7 +33,6 @@ class SummaryRequest[A](
 ) extends WrappedRequest[A](journeyRequest) with PageDataLoader
 {
   def userId: String = journeyRequest.userId
-  def email: Option[String] = journeyRequest.email
 
   def registrationNumber = journeyRequest.registrationNumber
 
