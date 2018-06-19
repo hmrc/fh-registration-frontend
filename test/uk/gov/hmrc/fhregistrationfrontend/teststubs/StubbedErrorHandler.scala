@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
+import play.api.mvc.{Request, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{Approved, ApprovedWithConditions, FhddsStatus}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
+object StubbedErrorHandler extends ErrorHandler {
 
-class StartVariationAction(fhddsConnector: FhddsConnector)(implicit save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
-  extends StartUpdateAction(fhddsConnector) {
-
-
-
-  def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
-    case Approved | ApprovedWithConditions ⇒ true
-    case _                                 ⇒ false
+  override def errorResultsPages(errorResults: Results.Status, errorMsg: Option[String])(implicit request: Request[_]): Result = {
+    errorResults("")
   }
 
 }

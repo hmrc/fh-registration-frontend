@@ -74,7 +74,7 @@ class UserAction @Inject()(
 
         val ggRedirectParms = Map(
           "continue" -> Seq(externalUrls.continueUrl),
-          "origin" -> Seq(externalUrls.getString("appName"))
+          "origin" -> Seq(externalUrls.ggOrigin)
         )
 
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)

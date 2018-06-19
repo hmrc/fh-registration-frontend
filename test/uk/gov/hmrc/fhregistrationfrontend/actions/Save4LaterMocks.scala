@@ -16,20 +16,21 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{Approved, ApprovedWithConditions, FhddsStatus}
+import org.mockito.ArgumentMatchers.{any, same}
+import org.mockito.Mockito.when
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.http.cache.client.CacheMap
 
+import scala.concurrent.Future
 
-class StartVariationAction(fhddsConnector: FhddsConnector)(implicit save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
-  extends StartUpdateAction(fhddsConnector) {
+trait Save4LaterMocks extends MockitoSugar {
+  this: ActionSpecBase ⇒
 
+  val mockSave4Later = mock[Save4LaterService]
 
+  def setupSave4Later(cacheMap: CacheMap) =
+    when(mockSave4Later.fetch(same(testUserId))(any())) thenReturn Future.successful(Some(cacheMap))
 
-  def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
-    case Approved | ApprovedWithConditions ⇒ true
-    case _                                 ⇒ false
-  }
 
 }

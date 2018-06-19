@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import play.api.mvc.WrappedRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
+import play.api.libs.json.{JsValue, Writes}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
-class StartUpdateRequest[A](
-  val registrationNumber    : String,
-  val currentJourneyType    : Option[JourneyType],
-  request                   : UserRequest[A]
-) extends WrappedRequest[A](request) {
+case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
 
-  def userId: String = request.userId
-  def email: Option[String] = request.ggEmail
+  def withValue[T](key: String, value: T)(implicit writes: Writes[T]) = this.copy(data = data + (key → writes.writes(value)))
+
+  def cacheMap = CacheMap(id, data)
+
 }
-

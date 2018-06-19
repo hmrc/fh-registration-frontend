@@ -33,7 +33,6 @@ class EmailVerificationRequest[A](
   request: UserRequest[A]) extends WrappedRequest(request) {
 
   def userId = request.userId
-  def ggEmail = request.ggEmail
 }
 
 class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
