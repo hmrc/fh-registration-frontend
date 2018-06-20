@@ -75,6 +75,7 @@
         error = Some(Messages("fh.timeAtCurrentAddress.error.required")),
         hasErrors = mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors,
         value = mainBusinessAddressForm(timeAtCurrentAddressKey).value,
+        hintText = Some(Messages("fh.main_business_address.time_at_address.hintText")),
         radios = List(
           RadioParams(
             Messages("fh.main_business_address.0to3years.value"),
@@ -106,6 +107,7 @@
           hasErrors = mainBusinessAddressForm(previousAddressKey).hasErrors,
           error = Some(Messages("fh.previousAddress.error.required")),
           value = mainBusinessAddressForm(previousAddressKey).value,
+          hintText = Some(Messages("fh.main_business_address.previous.hintText")),
           radios = List(
             RadioParams(
               "true",
