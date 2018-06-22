@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page}
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FormTestData, StubbedErrorHandler}
 
 class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
@@ -33,7 +33,7 @@ class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
     "Work when the journey is complete" in {
       val onePage = Page.contactPersonPage withData FormTestData.contactPerson
-      val request = journeyRequest(new JourneyPages(Seq(onePage)))
+      val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
       val refined = refinedRequest(action, request)
 

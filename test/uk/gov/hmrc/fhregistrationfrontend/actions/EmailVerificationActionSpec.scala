@@ -20,7 +20,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, StubbedErrorHandler}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4LaterMocks, StubbedErrorHandler}
 
 class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 

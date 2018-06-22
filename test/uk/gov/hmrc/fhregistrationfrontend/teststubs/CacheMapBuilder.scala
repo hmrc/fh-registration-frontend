@@ -21,6 +21,13 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
 
+  def withOptValue[T](key: String, valueOpt: Option[T])(implicit writes: Writes[T]) =
+    valueOpt.fold(
+      this
+    ) { value ⇒
+      this.copy(data = data + (key → writes.writes(value)))
+    }
+
   def withValue[T](key: String, value: T)(implicit writes: Writes[T]) = this.copy(data = data + (key → writes.writes(value)))
 
   def cacheMap = CacheMap(id, data)

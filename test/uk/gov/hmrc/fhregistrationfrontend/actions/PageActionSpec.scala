@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress}
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FormTestData, StubbedErrorHandler}
 
 class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
@@ -71,7 +71,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
         }
       }
 
-      val request = journeyRequest(new JourneyPages(seqPages))
+      val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(Page.mainBusinessAddressPage.id, None)(StubbedErrorHandler)
 
       val refined = refinedRequest(action, request)
@@ -82,7 +82,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load page section" in {
       val onePage = Page.companyOfficersPage withData FormTestData.companyOfficers
 
-      val request = journeyRequest(new JourneyPages(Seq(onePage)))
+      val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
       val action = new PageAction(Page.companyOfficersPage.id, Some("2"))(StubbedErrorHandler)
       val refined = refinedRequest(action, request)

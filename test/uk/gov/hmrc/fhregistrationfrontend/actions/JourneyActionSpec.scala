@@ -16,18 +16,25 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import org.mockito.Mockito.reset
+import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, Page}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, StubbedErrorHandler}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestData, Save4LaterMocks, StubbedErrorHandler}
 
-class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks {
+class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach {
 
   lazy val action = new JourneyAction()(mockSave4Later, StubbedErrorHandler)
   val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockSave4Later)
+  }
 
   "JourenyAction" should {
     "Fail when no bpr" in {

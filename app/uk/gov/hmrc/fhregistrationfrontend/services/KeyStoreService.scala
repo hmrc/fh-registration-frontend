@@ -61,9 +61,9 @@ trait KeyStoreService {
   def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_]
   def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]
 
-  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_]
+  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Any]
   def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]]
 
-  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[_]
+  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[Any]
   def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]]
 }

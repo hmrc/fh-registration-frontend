@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
 
 class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMocks {

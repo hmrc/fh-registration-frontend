@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import java.time.LocalDate
 
@@ -24,7 +24,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk.verifiedEmail
 
 object FormTestData {
-
 
   val contactPerson = ContactPerson(
     "Cosmin",
@@ -127,6 +126,122 @@ object FormTestData {
           true) → Added),
       List.empty,
       false))
+
+  val partners = ListWithTrackedChanges(
+    List(BusinessPartner(
+      BusinessPartnerType.Individual,
+      BusinessPartnerIndividual(
+        "mr partner",
+        "ship",
+        true,
+        Some("AA123123A"),
+        Address(
+          "individual line one",
+          None,
+          None,
+          Some("Othertown"),
+          "Z9 3WW",
+          None)
+      )) → Added,
+      BusinessPartner(
+        BusinessPartnerType.SoleProprietor,
+        BusinessPartnerSoleProprietor(
+          "ms sole",
+          "trader",
+          true,
+          Some("dodgy sole trader"),
+          true,
+          Some("AA123231"),
+          true,
+          Some("223456789"),
+          None,
+          Address(
+            "sole line one",
+            None,
+            None,
+            Some("sole town"),
+            "AA13 1AA",
+            None)
+        )
+      ) → Added,
+      BusinessPartner(
+        BusinessPartnerType.LimitedLiabilityPartnership,
+        BusinessPartnerLimitedLiabilityPartnership(
+          "fulfilment llp",
+          true,
+          Some("dodgy llp"),
+          "SC123456",
+          true,
+          Some("323456789"),
+          None,
+          Address(
+            "llp line one",
+            Some("llp line two"),
+            Some("llp line three"),
+            Some("llp town"),
+            "AA14 1AA",
+            None)
+        )
+      ) → Added,
+      BusinessPartner(
+        BusinessPartnerType.Partnership,
+        BusinessPartnerPartnership(
+          "fulfilment partNers",
+          true,
+          Some("dodgy partners"),
+          true,
+          Some("423456789"),
+          true,
+          Some("2234567890"),
+          Address(
+            "partner line one",
+            Some("partner line two"),
+            None,
+            Some("partner town"),
+            "AA15 1AA",
+            None)
+        )
+      ) → Added,
+      BusinessPartner(
+        BusinessPartnerType.CorporateBody,
+        BusinessPartnerCorporateBody(
+          "fulfilment ltd",
+          true,
+          Some("dodgy ltd"),
+          "12345679",
+          false,
+          None,
+          Some("1234567890"),
+          Address(
+            "ltd line one",
+            None,
+            None,
+            Some("ltd town"),
+            "AA16 1AA",
+            None)
+        )
+      ) → Added,
+      BusinessPartner(
+        BusinessPartnerType.UnincorporatedBody,
+        BusinessPartnerUnincorporatedBody(
+          "church of fulfilment",
+          true,
+          Some("dodgy church"),
+          false,
+          None,
+          false,
+          None,
+          Address(
+            "church one",
+            None,
+            None,
+            Some("church town"),
+            "AA17 1AA",
+            None)
+        )
+      ) → Added),
+    List.empty,
+    false)
 
 
   val anAddress = businessregistration.Address(

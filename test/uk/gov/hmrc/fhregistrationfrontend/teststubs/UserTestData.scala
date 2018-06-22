@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import org.mockito.ArgumentMatchers.{any, same}
-import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.http.cache.client.CacheMap
-
-import scala.concurrent.Future
-
-trait Save4LaterMocks extends MockitoSugar {
-  this: ActionSpecBase ⇒
-
-  val mockSave4Later = mock[Save4LaterService]
-
-  def setupSave4Later(cacheMap: CacheMap) =
-    when(mockSave4Later.fetch(same(testUserId))(any())) thenReturn Future.successful(Some(cacheMap))
-
+trait UserTestData {
+  val testUserId = "Int-uid"
+  val ggEmail = "gg@test.com"
+  val registrationNumber = "XZFH00000123456"
 
 }

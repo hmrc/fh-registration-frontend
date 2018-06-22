@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, StubbedErrorHandler}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FhddsConnectorMocks, Save4LaterMocks, StubbedErrorHandler}
 
 class StartVariationActionSpec
   extends ActionSpecBase

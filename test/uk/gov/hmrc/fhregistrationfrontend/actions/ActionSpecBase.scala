@@ -22,6 +22,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import play.api.http.Status
 import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.{Await, Promise}
@@ -33,12 +34,10 @@ trait ActionSpecBase
     with BeforeAndAfterEach
     with Matchers
     with Results
-    with Status {
+    with Status
+    with UserTestData {
 
 
-  val testUserId = "Int-uid"
-  val ggEmail = "gg@test.com"
-  val registrationNumber = "XZFH00000123456"
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A])(implicit timeout: Timeout) = {
     val p = Promise[P[_]]

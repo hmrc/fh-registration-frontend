@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.libs.json.Json
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import play.api.http.Status
+import play.api.mvc.Results
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
+import uk.gov.hmrc.play.test.UnitSpec
 
-case class BusinessPartners (
-  businessPartners: List[BusinessPartner]
-)
+trait ControllersSpecBase
+  extends UnitSpec
+  with ScalaFutures
+  with MockitoSugar
+  with BeforeAndAfterEach
+  with Matchers
+  with Results
+  with Status
+  with UserTestData
+{
 
-object BusinessPartners {
-  import BusinessPartner.businessPartnerFormat
-  implicit val format = Json.format[BusinessPartners]
+
+
 }

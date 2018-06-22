@@ -97,7 +97,7 @@ class Save4LaterService @Inject() (
     fetchData4Later[Long](userId, userLastTimeSavedKey)
   }
 
-  def removeUserData(userId: String)(implicit hc: HeaderCarrier) = {
+  def removeUserData(userId: String)(implicit hc: HeaderCarrier): Future[Any] = {
     shortLivedCache.remove(userId)
   }
 
