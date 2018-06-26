@@ -50,7 +50,7 @@ class StartVariationActionSpec
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Variation)
         .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
       val refined = refinedRequest(action, userRequest)
 
       refined.currentJourneyType shouldBe Some(JourneyType.Variation)
@@ -81,7 +81,7 @@ class StartVariationActionSpec
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
         val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler)
 
-        setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+        setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
         val refined = refinedRequest(action, userRequest)
         refined.registrationNumber shouldBe registrationNumber

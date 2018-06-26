@@ -18,17 +18,17 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
+import play.api.mvc.Results
 import play.twirl.api.Html
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserAction}
-import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
-import uk.gov.hmrc.http.BadRequestException
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 
 @Inject
 class PdfDownloadController @Inject()(
   ds            : CommonPlayDependencies,
   keyStoreService      : KeyStoreService,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds){
+) extends AppController(ds){
 
   import actions._
   def downloadPrintable() = userAction.async { implicit request ⇒
@@ -36,7 +36,9 @@ class PdfDownloadController @Inject()(
     keyStoreService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))
-      case _ => throw new BadRequestException("no user summary found")
+      case _ =>
+        errorHandler.errorResultsPages(Results.BadRequest, None)
+
     }
   }
 

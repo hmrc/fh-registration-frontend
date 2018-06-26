@@ -36,20 +36,10 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnector
 import scala.concurrent.Future
 
 class WithdrawalControllerSpec
-  extends ControllersSpecBase
-    with GuiceOneAppPerSuite
-    with I18nSupport
+  extends ControllerSpecWithGuiceApp
     with FhddsConnectorMocks
     with ActionsMock
     with BeforeAndAfterEach {
-
-  val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
-  val Messages = request2Messages(FakeRequest())
-
-  val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
-  val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
-  implicit val materializer = mock[Materializer]
-
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]

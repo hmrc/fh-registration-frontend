@@ -76,6 +76,10 @@ class Save4LaterService @Inject() (
     saveDraftData4Later(userId, v1ContactEmailKey, email)
   }
 
+  def fetchV1ContactEmail(userId: String)(implicit hc: HeaderCarrier) = {
+    fetchData4Later[String](userId, v1ContactEmailKey)
+  }
+
   def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) = {
     savePendingEmail(userId, "")
   }

@@ -16,17 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{ActionBuilder, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.filters.csrf.CSRFAddToken
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EnrolledUserRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum, DeregistrationReasonForm}
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
@@ -36,20 +30,10 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnector
 import scala.concurrent.Future
 
 class DeregistrationControllerSpec
-  extends ControllersSpecBase
-    with GuiceOneAppPerSuite
-    with I18nSupport
+  extends ControllerSpecWithGuiceApp
     with FhddsConnectorMocks
     with ActionsMock
     with BeforeAndAfterEach {
-
-  val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
-  val Messages = request2Messages(FakeRequest())
-
-  val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
-  val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
-  implicit val materializer = mock[Materializer]
-
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]

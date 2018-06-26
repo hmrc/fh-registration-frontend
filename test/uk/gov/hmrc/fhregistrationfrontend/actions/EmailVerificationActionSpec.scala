@@ -38,7 +38,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
           .withValue(Save4LaterKeys.verifiedEmailKey, verifiedEmail)
           .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
 
@@ -57,7 +57,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
           .withValue("contactPerson", contactPerson)
           .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
 
@@ -74,7 +74,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
           .withValue(Save4LaterKeys.v1ContactEmailKey, contactEmail)
           .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
 
@@ -91,7 +91,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
           .withValue(Save4LaterKeys.pendingEmailKey, pendingEmail)
           .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
 
@@ -106,7 +106,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       val cacheMap = CacheMapBuilder(testUserId).cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val userRequest = new UserRequest(testUserId, Some(ggEmail), None, FakeRequest())
 
@@ -118,7 +118,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
     "Have correct user id " in {
       val cacheMap = CacheMapBuilder(testUserId).cacheMap
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
       val userRequest = new UserRequest(testUserId, Some(ggEmail), None, FakeRequest())
 
       val refined = refinedRequest(action, userRequest)

@@ -51,7 +51,7 @@ class StartAmendmentActionSpec
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Amendment)
         .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
       val refined = refinedRequest(action, userRequest)
 
       refined.currentJourneyType shouldBe Some(JourneyType.Amendment)
@@ -82,7 +82,7 @@ class StartAmendmentActionSpec
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
         val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler)
 
-        setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+        setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
         val refined = refinedRequest(action, userRequest)
         refined.registrationNumber shouldBe registrationNumber

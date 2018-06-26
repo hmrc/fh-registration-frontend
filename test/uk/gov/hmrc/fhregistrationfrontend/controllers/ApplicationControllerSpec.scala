@@ -37,26 +37,16 @@ import scala.concurrent.Future
 
 
 class ApplicationControllerSpec
-  extends ControllersSpecBase
-    with GuiceOneAppPerSuite
+  extends ControllerSpecWithGuiceApp
     with FhddsConnectorMocks
     with ActionsMock
     with Save4LaterMocks
     with JourneyRequestBuilder
     with BeforeAndAfterEach
     with BeforeAndAfter
-    with I18nSupport
 {
 
-  val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
-  val Messages = request2Messages(FakeRequest())
-
-  val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
-  val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
-
   val mockBusinessCustomerConnector = mock[BusinessCustomerFrontendConnector]
-
-  implicit val materializer = mock[Materializer]
 
   override def beforeEach() = {
     super.beforeEach()
@@ -113,7 +103,7 @@ class ApplicationControllerSpec
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
         .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
       val request = FakeRequest()
 
       val result = await(csrfAddToken(controller.startOrContinueApplication)(request))
@@ -142,7 +132,7 @@ class ApplicationControllerSpec
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
           .cacheMap
 
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
       val request = FakeRequest()
 
       val result = await(csrfAddToken(controller.startOrContinueApplication)(request))
@@ -161,7 +151,7 @@ class ApplicationControllerSpec
       val cacheMap = CacheMapBuilder(testUserId)
         .withOptValue(Save4LaterKeys.userLastTimeSavedKey, userLastTimeSaved)
         .cacheMap
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
     }
 
     "Fail if no answer was given" in {
@@ -212,7 +202,7 @@ class ApplicationControllerSpec
       val cacheMap = CacheMapBuilder(testUserId)
         .withOptValue(Save4LaterKeys.userLastTimeSavedKey, userLastTimeSaved)
         .cacheMap
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
     }
 
     "Fail when no userLastTimeSaved is present" in {
@@ -253,7 +243,7 @@ class ApplicationControllerSpec
     }
 
     "Redirect to summary page" in {
-      setupJourneAction(rNumber = None, JourneyRequestBuilder.fullyCompleteJourney)
+      setupJourneAction(rNumber = None, JourneyRequestBuilder.fullyCompleteJourney())
       val request = FakeRequest()
       val result = await(controller resumeForm request)
 
@@ -274,7 +264,7 @@ class ApplicationControllerSpec
   "deleteUserData" should {
     "Redirect to startOrContinueApplication" in {
       setupUserAction()
-      setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
       val result = await(controller deleteUserData request)
@@ -287,7 +277,7 @@ class ApplicationControllerSpec
   "savedForLater" should {
     "Fail if no last time saved" in {
       setupUserAction()
-      setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
       val result = await(controller savedForLater request)
@@ -300,7 +290,7 @@ class ApplicationControllerSpec
       val cacheMap = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
         .cacheMap
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val request = FakeRequest()
       val result = await(controller savedForLater request)
@@ -324,7 +314,7 @@ class ApplicationControllerSpec
 
     "Redirect to businessType when no saved data" in {
       setupUserAction()
-      setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
       val result = await(controller.deleteOrContinue(false)(request))
@@ -339,7 +329,7 @@ class ApplicationControllerSpec
       val cacheMap = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
         .cacheMap
-      setupSave4Later(cacheMap)
+      setupSave4LaterFrom(cacheMap)
 
       val request = FakeRequest()
       val result = await(csrfAddToken(controller.deleteOrContinue(false))(request))
@@ -353,7 +343,7 @@ class ApplicationControllerSpec
   "continueWithBpr" should {
     "Redirect to the businessType page" in {
       setupNewApplicationAction()
-      setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
       when(mockBusinessCustomerConnector.getReviewDetails(any())) thenReturn Future.successful(FormTestData.someBpr)
 
       val request = FakeRequest()
@@ -389,7 +379,7 @@ class ApplicationControllerSpec
 
     "Redirect to contactEmail" in {
       setupUserAction()
-      setupSave4Later(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest().withFormUrlEncodedBody(
         BusinessTypeForm.businessTypeKey → BusinessType.CorporateBody.toString

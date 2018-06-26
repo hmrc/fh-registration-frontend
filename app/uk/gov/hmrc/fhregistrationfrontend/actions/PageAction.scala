@@ -42,6 +42,7 @@ class PageRequest[A](
 
   val journeyState = request.journeyState
   def lastUpdateTimestamp = request.lastUpdateTimestamp
+  def bpr = request.bpr
 }
 
 //TODO all exceptional results need to be reviewed
