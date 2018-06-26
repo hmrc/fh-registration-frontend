@@ -73,7 +73,6 @@ class Application @Inject()(
       }
   }
 
-
   private val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
 
   def startOrContinueApplication = userAction.async { implicit request ⇒
@@ -208,31 +207,23 @@ class Application @Inject()(
 @Singleton
 abstract class AppController(val ds: CommonPlayDependencies)
   extends FrontendController
-    with I18nSupport
-    with AuthorisedFunctions {
-
-  implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+    with I18nSupport {
 
   override implicit val messagesApi: MessagesApi = ds.messagesApi
 
-  override implicit def authConnector: AuthConnector = ds.authConnector
   implicit val appConfig: AppConfig = ds.appConfig
   implicit val errorHandler: ErrorHandler = ds.errorHandler
 
   val configuration: Configuration = ds.conf
   val messages: MessagesApi = messagesApi
 
-  lazy val authProvider: AuthProviders = AuthProviders(GovernmentGateway)
-  val hasCtUtr: Predicate = Enrolment("IR-CT")
-
 
 }
 
 @Singleton
-final class CommonPlayDependencies @Inject()(
+class CommonPlayDependencies @Inject()(
   val conf: Configuration,
   val appConfig: AppConfig,
   val env: Environment,
   val messagesApi: MessagesApi,
-  val errorHandler: ErrorHandler,
-  val authConnector: AuthConnector)
+  val errorHandler: ErrorHandler)

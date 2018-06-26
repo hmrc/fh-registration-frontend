@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import play.api.mvc.Results
+import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EmailVerificationRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm.emailVerificationForm
@@ -46,20 +46,20 @@ class EmailVerificationController @Inject() (
     Ok(email_options(emailVerificationForm, true, request.candidateEmail, Navigation.noNavigation))
   }
 
-  def submitContactEmail = emailVerificationAction.async { implicit request ⇒
-    emailVerificationForm.bindFromRequest() fold (
-      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, false, request.candidateEmail, Navigation.noNavigation))),
-      emailOptions ⇒ handleContactEmail(emailOptions)
-    )
+  def submitContactEmail() = emailVerificationAction.async { implicit request ⇒
+    doSubmitContactEmail(false)
   }
 
   def submitForcedContactEmail = emailVerificationAction.async { implicit request ⇒
+    doSubmitContactEmail(true)
+  }
+
+  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) = {
     emailVerificationForm.bindFromRequest() fold (
-      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, true, request.candidateEmail, Navigation.noNavigation))),
+      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
       emailOptions ⇒ handleContactEmail(emailOptions)
     )
   }
-
 
   private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) = {
     emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap { isVerified ⇒
@@ -76,8 +76,8 @@ class EmailVerificationController @Inject() (
 
   }
 
-  def emailHash(email: String) = email.hashCode.toHexString.toUpperCase
-  def hashMatches(email: String, hash: String) = emailHash(email) == hash
+  private def emailHash(email: String) = email.hashCode.toHexString.toUpperCase
+  private def hashMatches(email: String, hash: String) = emailHash(email) == hash
 
   def emailVerificationStatus = emailVerificationAction { implicit request ⇒
     (request.pendingEmail, request.verifiedEmail) match {

@@ -18,25 +18,32 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 
 import javax.inject.{Inject, Singleton}
 
+import com.google.inject.ImplementedBy
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{Request, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template
+import play.api.mvc.Results.Status
+
+@ImplementedBy(classOf[DefaultErrorHandler])
+trait ErrorHandler {
+  def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result
+}
 
 @Singleton
-class ErrorHandler @Inject()(
-  val messagesApi: MessagesApi, val configuration: Configuration)(implicit val appConfig: AppConfig) extends FrontendErrorHandler {
+class DefaultErrorHandler @Inject()(
+  val messagesApi: MessagesApi, val configuration: Configuration)(implicit val appConfig: AppConfig)
+  extends FrontendErrorHandler with ErrorHandler {
 
   import Results._
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     error_template(pageTitle, heading, message)
 
-  def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result = {
+  override def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result = {
     val messages = implicitly[Messages]
-
     errorResults match {
       case NotFound ⇒ NotFound(error_template(
         messages("fh.generic.not_found"),

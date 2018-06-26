@@ -45,15 +45,11 @@ class JourneyRequest[A](
   val journeyType: JourneyType,
   val journeyPages: JourneyPages,
   val journeyState: JourneyState
-) extends WrappedRequest[A](request) with PageDataLoader
+) extends WrappedRequest[A](request)
 {
   def userId: String = request.userId
 
-  def pageDataOpt[T](page: Page[T]): Option[T] =
-    cacheMap.getEntry[T](page.id)(page.format)
-
   def registrationNumber = request.registrationNumber
-//  def email: Option[String] = request.ggEmail
 
   def lastUpdateTimestamp = {
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L

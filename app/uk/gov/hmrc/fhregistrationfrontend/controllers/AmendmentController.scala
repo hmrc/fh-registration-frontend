@@ -33,7 +33,6 @@ import scala.concurrent.Future
 @Inject
 class AmendmentController @Inject()(
   ds               : CommonPlayDependencies,
-  links            : ExternalUrls,
   desToForm        : DesToForm,
   fhddsConnector   : FhddsConnector,
   emailVerificationConnector: EmailVerificationConnector,
@@ -84,7 +83,6 @@ class AmendmentController @Inject()(
     contactEmail.fold(
       Future successful ignored
     ) { contactEmail ⇒
-
       def saveIfVerified(verified: Boolean) = {
         if (verified) save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
         else save4LaterService.saveV1ContactEmail(request.userId, contactEmail)

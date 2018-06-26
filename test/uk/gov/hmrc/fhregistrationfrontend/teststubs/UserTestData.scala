@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.actions
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import play.api.mvc.WrappedRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
+trait UserTestData {
+  val testUserId = "Int-uid"
+  val ggEmail = "gg@test.com"
+  val registrationNumber = "XZFH00000123456"
 
-class StartUpdateRequest[A](
-  val registrationNumber    : String,
-  val currentJourneyType    : Option[JourneyType],
-  request                   : UserRequest[A]
-) extends WrappedRequest[A](request) {
-
-  def userId: String = request.userId
-  def email: Option[String] = request.ggEmail
 }
-

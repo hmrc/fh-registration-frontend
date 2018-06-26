@@ -32,11 +32,8 @@ trait ActionFunctions {
   def loadCacheMap(implicit save4LaterService: Save4LaterService,  errorHandler: ErrorHandler, request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
     save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒ Right(new CacheMap(request.userId, Map.empty))
+      case None           ⇒ Right(new CacheMap(request.userId, Map.empty))
 
-    } recover { case t ⇒
-      Logger.error(s"Could not access shortLivedCache", t)
-      Left(errorHandler.errorResultsPages(Results.BadGateway))
     }
   }
 

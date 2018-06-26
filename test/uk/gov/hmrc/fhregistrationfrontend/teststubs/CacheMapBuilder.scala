@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.controllers
+package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import play.api.mvc.Request
-import play.api.data.Form
-import play.api.data.Forms.nonEmptyText
+import play.api.libs.json.{JsValue, Writes}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
-trait SubmitForLater {
-  val submitButtonValueForm = Form("saveAction" → nonEmptyText)
+case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
 
-  /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
-  def isSaveForLate(implicit req:Request[_]): Boolean = submitButtonValueForm.bindFromRequest().fold(
-    _ ⇒ false,
-    value ⇒ value == "saveForLater"
-  )
+  def withOptValue[T](key: String, valueOpt: Option[T])(implicit writes: Writes[T]) =
+    valueOpt.fold(
+      this
+    ) { value ⇒
+      this.copy(data = data + (key → writes.writes(value)))
+    }
+
+  def withValue[T](key: String, value: T)(implicit writes: Writes[T]) = this.copy(data = data + (key → writes.writes(value)))
+
+  def cacheMap = CacheMap(id, data)
+
 }

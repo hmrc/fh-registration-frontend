@@ -27,9 +27,8 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 @Inject
 class SummaryController @Inject()(
   ds                   : CommonPlayDependencies,
-  links                : ExternalUrls,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds)  with SummaryFunctions {
+) extends AppController(ds)  with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒

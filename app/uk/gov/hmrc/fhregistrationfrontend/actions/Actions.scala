@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import javax.inject.Inject
 
+import play.api.mvc.ActionBuilder
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
@@ -31,7 +32,7 @@ class Actions @Inject() (
   errorHandler: ErrorHandler) {
 
 
-  def userAction = new UserAction(externalUrls)
+  def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls)
 
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
   def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction

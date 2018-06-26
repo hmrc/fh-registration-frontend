@@ -76,6 +76,10 @@ class Save4LaterService @Inject() (
     saveDraftData4Later(userId, v1ContactEmailKey, email)
   }
 
+  def fetchV1ContactEmail(userId: String)(implicit hc: HeaderCarrier) = {
+    fetchData4Later[String](userId, v1ContactEmailKey)
+  }
+
   def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) = {
     savePendingEmail(userId, "")
   }
@@ -97,7 +101,7 @@ class Save4LaterService @Inject() (
     fetchData4Later[Long](userId, userLastTimeSavedKey)
   }
 
-  def removeUserData(userId: String)(implicit hc: HeaderCarrier) = {
+  def removeUserData(userId: String)(implicit hc: HeaderCarrier): Future[Any] = {
     shortLivedCache.remove(userId)
   }
 
