@@ -34,7 +34,7 @@ object LtdMinimumLessThanThreeYears {
       "M",
       "director",
       "07231111",
-      "a@a.ro",
+      Some(verifiedEmail),
       true,
       None,
       None,
@@ -57,13 +57,15 @@ object LtdMinimumLessThanThreeYears {
             "Director"
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
     BusinessStatus(false, None),
     ImportingActivities(false, None),
     BusinessCustomers("1-10"),
     OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
   )
 
+  val verifiedEmail = "a@a.ro"
   val declaration = Declaration(
     "C",
     "Director",

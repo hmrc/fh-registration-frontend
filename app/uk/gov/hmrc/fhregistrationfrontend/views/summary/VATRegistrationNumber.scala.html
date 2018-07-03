@@ -18,25 +18,35 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(vatNumberForm: VatNumber)(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: VatNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-  @SummarySectionHead(heading = Messages("fh.vat_registration.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.vat_registration.confirm.label")),
-      vatNumberForm.hasValue,
+  @changeLink = @{
+    if (Mode isEditable mode) {
       Some("vatNumber")
-    )
-  )
+    } else {
+      None
+    }
+  }
 
   @if(vatNumberForm.hasValue) {
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.vatNumber.label")),
         vatNumberForm.value,
-        Some("vatNumber")
+        changeLink
+      )
+    )
+  } else {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.summary.HasVat")),
+        vatNumberForm.hasValue,
+        changeLink,
+        GroupRow.Single
       )
     )
   }

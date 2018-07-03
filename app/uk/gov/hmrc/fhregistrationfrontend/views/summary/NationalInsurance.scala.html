@@ -17,27 +17,37 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(nationalInsuranceForm: NationalInsuranceNumber)(implicit request: Request[_], messages: Messages)
+@(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@SummarySectionHead(heading = Messages("fh.national_insurance_number.title"))
-
-@SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.national_insurance_number.confirm.label")),
-        nationalInsuranceForm.hasValue,
-        Some("nationalInsuranceNumber")
-    )
-)
+@changeLink = @{
+  if (Mode isEditable mode) {
+    Some("nationalInsuranceNumber")
+  } else {
+    None
+  }
+}
 
 @if(nationalInsuranceForm.hasValue) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.national_insurance_number.label")),
-            nationalInsuranceForm.value,
-            Some("nationalInsuranceNumber")
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.national_insurance_number.label")),
+      nationalInsuranceForm.value,
+      changeLink
     )
+  )
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.HasNino")),
+      nationalInsuranceForm.hasValue,
+      changeLink,
+      GroupRow.Single
+    )
+  )
 }
 
 

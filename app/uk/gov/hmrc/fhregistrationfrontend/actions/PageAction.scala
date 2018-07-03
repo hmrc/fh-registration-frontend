@@ -42,11 +42,12 @@ class PageRequest[A](
 
   val journeyState = request.journeyState
   def lastUpdateTimestamp = request.lastUpdateTimestamp
+  def bpr = request.bpr
 }
 
 //TODO all exceptional results need to be reviewed
 class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+  (implicit errorHandler: ErrorHandler)
   extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
@@ -54,9 +55,8 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
 
     val result: EitherT[Future, Result, PageRequest[A]] = for {
 
-      page <- loadPage(input).toEitherT[Future]
-      _ ← accessiblePage(page, input.journeyState).toEitherT[Future]
-      pageWithData = loadPageWithData(input, page)
+      pageWithData <- loadPage(input).toEitherT[Future]
+      _ ← accessiblePage(pageWithData, input.journeyState).toEitherT[Future]
       pageWithSection ← loadPageSection(pageWithData).toEitherT[Future]
       journeyNavigation = loadJourneyNavigation(input.journeyPages, input.journeyState)
     } yield {
@@ -75,16 +75,6 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
     } else {
       Logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
-    }
-  }
-
-  def loadPageData(cacheMap: CacheMap, page: Page[T]): Option[T] =
-    cacheMap.getEntry[T](page.id)(page.format)
-
-
-  def loadPageWithData(pageDataLoader: PageDataLoader, page: Page[T]) = {
-    pageDataLoader.pageDataOpt(page).fold (page) { data ⇒
-      page withData data
     }
   }
 

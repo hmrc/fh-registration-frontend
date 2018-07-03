@@ -18,15 +18,26 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
-@(companyRegistrationNumberForm: CRNModel)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-  @SummarySectionHead(heading = Messages("fh.company_registration_number.title"))
+@(companyRegistrationNumberForm: CRNModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (Mode isEditable mode) {
+      Some("companyRegistrationNumber")
+    } else {
+      None
+    }
+  }
 
   @SummaryRow(
     SummaryRowParams.ofString(
-      Some(Messages("fh.companyRegistrationNumber.label")),
+      Some(Messages("fh.company_registration_number.title")),
       companyRegistrationNumberForm.crn,
-      Some("companyRegistrationNumber")
+      changeLink,
+      GroupRow.Single
     )
   )
 

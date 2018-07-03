@@ -18,15 +18,25 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(businessCustomersForm: BusinessCustomersModel)(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: BusinessCustomersModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-  @SummarySectionHead(heading = Messages("fh.business_customers.title"))
+  @changeLink = @{
+    if (Mode isEditable mode) {
+      Some("businessCustomers")
+    } else {
+      None
+    }
+  }
 
   @SummaryRow(
     SummaryRowParams.ofString(
-      Some(Messages("fh.business_customers.label")),
+      Some(Messages("fh.summary.overseasCustomers")),
       businessCustomersForm.numberOfCustomers,
-      Some("businessCustomers")
+      changeLink,
+      GroupRow.Single
     )
   )

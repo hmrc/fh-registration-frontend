@@ -28,11 +28,11 @@ class JourneyPages(val pages: Seq[AnyPage]) {
 
 trait JourneyNavigation {
 
-  def next[_](pageId: String): Option[AnyPage]
+  def next[_](page: AnyPage): Option[AnyPage]
 
-  def previous(pageId: String): Option[AnyPage]
+  def previous(page: AnyPage): Option[AnyPage]
 
-  def navigation(lastUpdateTime: Long, pageId: String): Navigation
+  def navigation(lastUpdateTime: Long, page: AnyPage): Navigation
 
 }
 

@@ -27,20 +27,20 @@ object DeclarationForm {
 
   val fullNameKey = "fullName"
   val jobTitleKey = "jobTitle"
-  val isUseGgEmailKey = "isUseGgEmail"
-  val ggEmailKey = "ggEmail"
+  val usingDefaultEmailKey = "usingDefaultEmail"
+  val defaultEmailKey = "defaultEmail"
   val alternativeEmailKey = "alternativeEmail"
 
-  private val isUseGgEmailMapping = isUseGgEmailKey → yesOrNo
-  private val ggEmailMapping = ggEmailKey → (email onlyWhen (isUseGgEmailMapping is true))
-  private val alternativeEmailMapping = alternativeEmailKey → (alternativeEmail onlyWhen (isUseGgEmailMapping is false))
+  private val usingDefaultEmailMapping = usingDefaultEmailKey → yesOrNo
+  private val defaultEmailMapping = defaultEmailKey → (email onlyWhen (usingDefaultEmailMapping is true))
+  private val alternativeEmailMapping = alternativeEmailKey → (alternativeEmail onlyWhen (usingDefaultEmailMapping is false))
 
   def declarationForm = Form(
     mapping(
       fullNameKey → personName,
       jobTitleKey → personTitle,
-      isUseGgEmailMapping,
-      ggEmailMapping,
+      usingDefaultEmailMapping,
+      defaultEmailMapping,
       alternativeEmailMapping
     )(Declaration.apply)(Declaration.unapply)
   )

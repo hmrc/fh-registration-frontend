@@ -28,11 +28,16 @@
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
+
+@titlePrefix = @{
+  if (reasonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.withdrawalReason.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason(), 'novalidate -> "novalidate") {
 

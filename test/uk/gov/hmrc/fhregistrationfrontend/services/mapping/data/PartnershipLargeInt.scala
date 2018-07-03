@@ -41,7 +41,7 @@ object PartnershipLargeInt {
       "Marian",
       "Director",
       "11123",
-      "a@w.ro",
+      Some(verifiedEmail),
       false,
       Some(false),
       None,
@@ -168,7 +168,8 @@ object PartnershipLargeInt {
               None)
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
     BusinessStatus(true, Some(LocalDate.of(2018,8,31))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
@@ -193,9 +194,11 @@ object PartnershipLargeInt {
               "Z9 3WW",
               None),
             true) → changeFlags),
-        List.empty))
+        List.empty,
+        false))
   )
 
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "C",
     "D",

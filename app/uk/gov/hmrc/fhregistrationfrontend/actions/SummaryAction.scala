@@ -33,20 +33,19 @@ class SummaryRequest[A](
 ) extends WrappedRequest[A](journeyRequest) with PageDataLoader
 {
   def userId: String = journeyRequest.userId
-  def email: Option[String] = journeyRequest.email
 
   def registrationNumber = journeyRequest.registrationNumber
-  def userIsRegistered = journeyRequest.userIsRegistered
 
   val bpr = journeyRequest.bpr
   val businessType = journeyRequest.businessType
+  val verifiedEmail = journeyRequest.verifiedEmail
 
-  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.pageDataOpt(page)
+  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.journeyPages.get(page.id).flatMap((p: Page[T]) ⇒ p.data)
 
 }
 
 
-class SummaryAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+class SummaryAction(implicit errorHandler: ErrorHandler)
   extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {

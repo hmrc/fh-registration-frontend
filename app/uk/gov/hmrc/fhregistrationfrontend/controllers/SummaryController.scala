@@ -18,20 +18,30 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
 
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryAction}
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 
 @Inject
 class SummaryController @Inject()(
   ds                   : CommonPlayDependencies,
-  links                : ExternalUrls,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds)  with SummaryFunctions {
+) extends AppController(ds)  with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-    Ok(getSummaryHtml(request, hasAmendments = request.journeyRequest.hasAmendments))
+
+    val application = request.businessType match {
+      case BusinessType.CorporateBody ⇒
+        Journeys ltdApplication request
+      case BusinessType.SoleTrader ⇒
+        Journeys soleTraderApplication request
+      case BusinessType.Partnership ⇒
+        Journeys partnershipApplication request
+    }
+    Ok(getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest)))
   }
 
 }

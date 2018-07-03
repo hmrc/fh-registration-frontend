@@ -25,11 +25,14 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.forms.models
+import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
 
 @ImplementedBy(classOf[DesToFormImpl])
 trait DesToForm {
 
   def businessRegistrationDetails(subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails
+
+  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String]
 
   def entityType(subscriptionDisplay: des.SubscriptionDisplay): BusinessType
 
@@ -39,6 +42,8 @@ trait DesToForm {
 
   def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication
 
+  def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication
+
   def declaration(declaration: des.Declaration): Declaration
 }
 
@@ -46,8 +51,25 @@ trait DesToForm {
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
 
+  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String] = {
+    subscriptionDisplay.contactDetail.commonDetails.email
+  }
+
   override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
+
+
+  override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication = {
+    entityType(display) match {
+      case BusinessType.CorporateBody ⇒
+        limitedCompanyApplication(display)
+      case BusinessType.SoleTrader ⇒
+        soleProprietorApplication(display)
+      case BusinessType.Partnership ⇒
+        partnershipApplication(display)
+    }
+  }
+
 
   override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
     LimitedCompanyApplication(
@@ -359,7 +381,7 @@ class DesToFormImpl extends DesToForm {
     cd.names.lastName,
     roleInOrganization(cd.roleInOrganization.get),
     cd.commonDetails.telephone.get,
-    cd.commonDetails.email.get,
+    cd.commonDetails.email,
     cd.usingSameContactAddress,
     ukOtherAddress(cd),
     otherUkContactAddress(cd),

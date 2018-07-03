@@ -31,7 +31,7 @@ class SignOutController  @Inject()(
   def signout() = Action {
     val ggRedirectParms = Map(
       "continue" -> Seq(externalUrls.logoutContinueUrl),
-      "origin" -> Seq(externalUrls.getString("appName"))
+      "origin" -> Seq(externalUrls.ggOrigin)
     )
 
     Redirect(externalUrls.ggLogoutUrl, ggRedirectParms)

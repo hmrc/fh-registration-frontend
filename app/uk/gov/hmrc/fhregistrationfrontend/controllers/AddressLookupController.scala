@@ -35,7 +35,7 @@ class AddressLookupController @Inject()(
   def addressLookup(postcode: String, filter: Option[String]) = Action.async {
     implicit request =>
       implicit val writes = Json.format[RecordSet]
-      val validPostcodeCharacters = "^[A-z0-9 ]*$"
+      val validPostcodeCharacters = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
       if (postcode.matches(validPostcodeCharacters)) {
         addressLookupConnector.lookup(postcode, filter) map {
           case AddressLookupErrorResponse(e: BadRequestException) => BadRequest(e.message)

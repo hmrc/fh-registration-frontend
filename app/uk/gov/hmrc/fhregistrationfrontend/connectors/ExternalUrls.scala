@@ -18,14 +18,37 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Inject
 
+import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 
+@ImplementedBy(classOf[DefaultExternalUrls])
+trait ExternalUrls {
 
-class ExternalUrls @Inject()(
+  val companyAuthUrl: String
+  val loginCallback: String
+  val loginPath: String
+
+  val logoutCallback: String
+  val logoutPath: String
+
+  val ggLoginUrl: String
+  val continueUrl: String
+
+  val ggLogoutUrl: String
+  val logoutContinueUrl: String
+
+  val ggOrigin: String
+
+  val surveyRedirectUrl: String
+}
+
+
+
+class DefaultExternalUrls @Inject()(
   override val runModeConfiguration: Configuration,
   environment: Environment
-) extends RunMode with ServicesConfig {
+) extends ExternalUrls with RunMode with ServicesConfig {
 
   override protected def mode = environment.mode
 
@@ -41,6 +64,7 @@ class ExternalUrls @Inject()(
 
   val ggLogoutUrl = s"$companyAuthUrl$logoutPath"
   val logoutContinueUrl = s"$logoutCallback"
+  val ggOrigin = getString("appName")
 
   val surveyRedirectUrl = getConfString("surveyRedirectUrl", "/feedback-survey?origin=fhdds")
 

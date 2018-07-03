@@ -31,4 +31,6 @@ trait FrontendAction
 
   implicit def mdcExecutionContext(implicit loggingDetails: LoggingDetails): ExecutionContext = MdcLoggingExecutionContext.fromLoggingDetails
 
+
+
 }

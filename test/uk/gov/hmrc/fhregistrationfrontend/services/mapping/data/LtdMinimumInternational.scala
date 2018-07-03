@@ -35,7 +35,7 @@ object LtdMinimumInternational {
       "M",
       "D",
       "123123",
-      "a@a.ro",
+      Some(verifiedEmail),
       false,
       Some(false),
       None,
@@ -64,12 +64,15 @@ object LtdMinimumInternational {
             "Company Secretary"
           )
         ) → changeFlags),
-      List.empty),
+      List.empty,
+      false),
       BusinessStatus(false, None),
       ImportingActivities(false, None),
       BusinessCustomers("11-50"),
       OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
     )
+
+  val verifiedEmail = "a@a.ro"
 
   val declaration = Declaration(
     "R",

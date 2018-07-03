@@ -28,11 +28,15 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
+@titlePrefix = @{
+  if (businessStatusForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.business_status.label")
 }
 
-@main_template(title = title, scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

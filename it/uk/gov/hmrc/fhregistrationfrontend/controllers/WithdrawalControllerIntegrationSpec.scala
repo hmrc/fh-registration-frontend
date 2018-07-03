@@ -2,16 +2,17 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.{TestConfiguration, TestHelper}
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class WithdrawalControllerIntegrationSpec
-  extends TestHelper with TestConfiguration {
+  extends Specifications with TestConfiguration {
 
   "WithdrawalController" should {
 
     "Ask the reason for the withdrawal" in {
 
-      withdrawalPrecondition
+      given
+        .withdrawalPrecondition
 
       WsTestClient.withClient { client ⇒
         val result1 = client.url(s"$baseUrl/withdraw").withFollowRedirects(false).get()
@@ -29,7 +30,8 @@ class WithdrawalControllerIntegrationSpec
 
     "Post the reason for the withdrawal" in {
 
-      withdrawalPrecondition
+      given
+        .withdrawalPrecondition
         .keyStore.saveWithdrawalReason()
 
       WsTestClient.withClient { client ⇒
@@ -39,6 +41,7 @@ class WithdrawalControllerIntegrationSpec
               "Csrf-Token" -> "nocheck",
               "Content-Type" → "application/json")
             .post("""{"reason": "Applied in Error"}""")
+
 
         whenReady(result) { res ⇒
           res.status mustBe 303
@@ -50,7 +53,8 @@ class WithdrawalControllerIntegrationSpec
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      withdrawalPrecondition
+      given
+        .withdrawalPrecondition
         .keyStore.fetchWithdrawalReason()
 
       WsTestClient.withClient { client ⇒
@@ -65,7 +69,8 @@ class WithdrawalControllerIntegrationSpec
 
     "Show bad request to the user if not enrolled" in {
 
-      commonPrecondition
+      given
+        .commonPrecondition
 
       WsTestClient.withClient { client ⇒
         val result1 = client.url(s"$baseUrl/withdraw").withFollowRedirects(false).get()

@@ -14,14 +14,25 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams)(implicit message : Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-<tr>
-  <td style="vertical-align: top" width="45%">@if(params.label.nonEmpty){ @params.label }</td>
-  <td class="form-data" width="45%">@if(params.value.nonEmpty){ @params.value }</td>
-  <td style="vertical-align: top">
-    @if(params.changeLink.nonEmpty){
-    <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change</a>
-    }
-  </td>
-</tr>
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams)(implicit message : Messages)
+@linkClass = @{
+  params.groupRow match {
+    case GroupRow.Top => " group-head"
+    case GroupRow.Bottom => " group-bottom"
+    case _ => ""
+  }
+}
+<div>
+  <dt class="cya-question">@if(params.label.nonEmpty){ @params.label }</dt>
+  <dd class="cya-answer">@if(params.value.nonEmpty){ @params.value }</dd>
+  @if(params.changeLink.nonEmpty){
+    <dd class="cya-change@{linkClass}">
+      <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @{params.label}</span></a>
+    </dd>
+  }
+  @if(params.groupRow == GroupRow.Bottom) {
+    <dd></dd>
+  }
+</div>

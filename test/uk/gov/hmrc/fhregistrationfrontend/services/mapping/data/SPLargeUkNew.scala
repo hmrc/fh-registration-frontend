@@ -34,7 +34,7 @@ object SPLargeUkNew {
       "ZHANG",
       "Director",
       "11123",
-      "a@w.ro",
+      None,
       false,
       Some(true),
       Some(Address(
@@ -91,8 +91,9 @@ object SPLargeUkNew {
           Some("Othertown"),
           "Z9 3WW",
           None),
-        true)))))
-
+        true)),
+      false)))
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "Y",
     "Z",

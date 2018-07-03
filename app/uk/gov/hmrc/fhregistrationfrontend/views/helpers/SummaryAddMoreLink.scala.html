@@ -15,6 +15,7 @@
  *@
 
 @(page:String, section:String, linkText:String)(implicit message : Messages)
-<tr>
-  <td colspan="3"><a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(page, section)}">@linkText</a> </td>
-</tr>
+
+<div class="summary-add-more">
+    <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(page, section)}">@linkText</a>
+</div>

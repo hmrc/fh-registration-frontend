@@ -17,18 +17,19 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(importingActivitiesForm: ImportingActivitiesModel)(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-  @SummarySectionHead(heading = Messages("fh.importing_activities.title"))
-
-  @SummaryRow(
-    SummaryRowParams.ofBoolean(
-      Some(Messages("fh.importing_activities.eori.confirm.label")),
-      importingActivitiesForm.hasEori,
+  @changeLink = @{
+    if (Mode isEditable mode) {
       Some("importingActivities")
-    )
-  )
+    } else {
+      None
+    }
+  }
 
   @if(importingActivitiesForm.hasEori) {
 
@@ -36,16 +37,27 @@
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
         importingActivitiesForm.eoriNumber.map(_.eoriNumber),
-        Some("importingActivities")
+        changeLink,
+        GroupRow.Top
       )
     )
 
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
+        Some(Messages("fh.summary.usesEORI")),
         importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
-        Some("importingActivities")
+        None,
+        GroupRow.Bottom
       )
     )
 
+  } else {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.summary.hasEORI")),
+        importingActivitiesForm.hasEori,
+        changeLink,
+        GroupRow.Single
+      )
+    )
   }

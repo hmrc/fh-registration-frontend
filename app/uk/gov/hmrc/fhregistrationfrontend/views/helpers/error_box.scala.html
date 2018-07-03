@@ -24,47 +24,65 @@
 
       @for(error <- form.errors) {
 
-        @if(error.key.contains("alternativeEmail")) {
-
-          @if(!set.contains("alternativeEmail")) {
-              <li>
-              <a href="#alternativeEmail-inline-error">
-              @{Messages("fh" + context + error.key + "." + error.message, sectionP)}
-              </a>
-              </li>
-              <!-- @set.add("alternativeEmail") -->
-          }
-
-        } else {
-
-          @if(!set.contains(error.key)){
-
+        @if(error.key.contains("countryCode") | error.key.contains("otherInternationalContactAddress_contactAddress.Line4")) {
+          @if(!set.contains(error.key) && !set.contains(error.key.replace("countryCode", "Line4"))) {
             <li>
               <a href=@{
-                "#" + error.key.replace(".day", "").replace(".month", "").replace(".year", "") + "-inline-error"
+                "#" + error.key.replace("countryCode", "Line4") + "-inline-error"
               }>
-                @if(error.key.contains(s"$dateKey.day")) {
-                  <!-- @set.add(error.key)
-                  @set.add(error.key.replace(".day", ".month"))
-                  @set.add(error.key.replace(".day", ".year")) -->
-                  @Messages(s"fh.$dateKey.error.invalid")
-                } else {
-                  @if(error.key.contains(s"$dateKey.month")) {
-                    <!-- @set.add(error.key)
-                    @set.add(error.key.replace(".month", ".year")) -->
-                    @Messages(s"fh.$dateKey.error.invalid")
-                  } else {
-                    @Messages("fh" + context + error.key + "." + error.message, sectionP)
-                  }
-                }
-
+                @{Messages("fh" + context + error.key + "." + error.message, sectionP)}
               </a>
+                <!-- @set.add(error.key)-->
+                <!-- @set.add(error.key.replace("countryCode", "Line4"))-->
             </li>
-              <!-- @set.add(error.key) -->
           }
-        }
 
-      }
+          } else {
+
+            @if(error.key.contains("alternativeEmail")) {
+
+              @if(!set.contains("alternativeEmail")) {
+                <li>
+                  <a href="#alternativeEmail-inline-error">
+                  @{
+                    Messages("fh" + context + error.key + "." + error.message, sectionP)
+                  }
+                  </a>
+                </li>
+                  <!-- @set.add("alternativeEmail") -->
+              }
+
+            } else {
+
+              @if(!set.contains(error.key)) {
+
+                <li>
+                  <a href=@{
+                    "#" + error.key.replace(".day", "").replace(".month", "").replace(".year", "") + "-inline-error"
+                  }>
+                  @if(error.key.contains(s"$dateKey.day")) {
+                      <!-- @set.add(error.key)
+                    @set.add(error.key.replace(".day", ".month"))
+                    @set.add(error.key.replace(".day", ".year")) -->
+                    @Messages(s"fh.$dateKey.error.invalid")
+                    } else {
+                    @if(error.key.contains(s"$dateKey.month")) {
+                      <!-- @set.add(error.key)
+                      @set.add(error.key.replace(".month", ".year")) -->
+                      @Messages(s"fh.$dateKey.error.invalid")
+                    } else {
+                      @Messages("fh" + context + error.key + "." + error.message, sectionP)
+                    }
+                  }
+
+                  </a>
+                </li>
+                  <!-- @set.add(error.key) -->
+              }
+            }
+          }
+
+        }
 
       </ul>
     </div>

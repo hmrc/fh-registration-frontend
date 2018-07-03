@@ -2,16 +2,17 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.http.HeaderNames
 import play.api.test.WsTestClient
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.{TestConfiguration, TestHelper}
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class FormPageControllerIntegrationSpec
-  extends TestHelper with TestConfiguration {
+  extends Specifications with TestConfiguration {
 
   "FormPageController" should {
     "Show the form's first page when the user has selected a business type and the user is new" in {
 
-      commonPrecondition
-        .save4later.businessTypeHasSaved()
+      given
+        .commonPrecondition
+        .save4later.businessTypeWasSaved()
 
       WsTestClient.withClient { client ⇒
         val result1 = client.url(s"$baseUrl/resume")
@@ -24,19 +25,20 @@ class FormPageControllerIntegrationSpec
 
         whenReady(result1) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/startForm")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/contactPerson")
         }
         whenReady(result2) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/mainBusinessAddress")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/resume")
         }
       }
     }
 
     "Show the form's second page when the user has fulfilled the first page" in {
 
-      commonPrecondition
-        .save4later.businessTypeHasSaved()
+      given
+        .commonPrecondition
+        .save4later.businessTypeWasSaved()
         .save4later.savePageData("mainBusinessAddress","""{"timeAtCurrentAddress": "3-5 years"}""")
 
       WsTestClient.withClient { client ⇒
@@ -50,11 +52,12 @@ class FormPageControllerIntegrationSpec
 
     "Show page not found when the user try to call the second or the other pages without fulfilled the first page" in {
 
-      commonPrecondition
-        .save4later.businessTypeHasSaved()
+      given
+        .commonPrecondition
+        .save4later.businessTypeWasSaved()
 
       WsTestClient.withClient { client ⇒
-        val result1 = client.url(s"$baseUrl/form/contactPerson")
+        val result1 = client.url(s"$baseUrl/form/mainBusinessAddress")
           .withFollowRedirects(false)
           .get()
         whenReady(result1) { res ⇒

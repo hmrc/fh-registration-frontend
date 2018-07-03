@@ -17,87 +17,94 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerCorporateBody
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(company: BusinessPartnerCorporateBody)(implicit request: Request[_], messages: Messages)
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.entity_type.label")),
-        Messages("fh.business_partners.entity_type.corporate_body.label"),
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.summary.partnerLegalEntity")),
+    Messages("fh.business_partners.entity_type.corporate_body.label"),
+    None,
+    GroupRow.Member
+  )
 )
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.corporate_body.name.label")),
-        company.companyName,
-        None
-    )
-)
-
-@SummaryRow(
-    SummaryRowParams.ofBoolean(
-        Some(Messages("fh.trading_name.confirm.label")),
-        company.hasTradeName,
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.business_partners.corporate_body.name.label")),
+    company.companyName,
+    None,
+    GroupRow.Member
+  )
 )
 
 @if(company.hasTradeName) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.tradingName.label")),
-            company.tradeName,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.tradingName.title")),
+      company.tradeName,
+      None
     )
-}
-
-@SummaryRow(
+  )
+} else {
+  @SummaryRow(
     SummaryRowParams.ofBoolean(
-        Some(Messages("fh.vat_registration.confirm.label")),
-        company.hasVat,
-        None
+      Some(Messages("fh.summary.partnerTradingName")),
+      company.hasTradeName,
+      None,
+      GroupRow.Member
     )
-)
+  )
+}
 
 @if(company.hasVat) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.vatNumber.label")),
-            company.vat,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.vatNumber.label")),
+      company.vat,
+      None
     )
+  )
 } else {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.ct_utr.label")),
-            company.uniqueTaxpayerReference,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerVat")),
+      company.hasVat,
+      None,
+      GroupRow.Member
     )
+  )
+
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.ct_utr.label")),
+      company.uniqueTaxpayerReference,
+      None
+    )
+  )
 }
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.company_registration_number.title")),
-        company.companyRegistrationNumber,
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.company_registration_number.title")),
+    company.companyRegistrationNumber,
+    None,
+    GroupRow.Member
+  )
 )
 
 @SummaryAddress(
-    SummaryAddressParams(
-        Some(Messages("fh.business_partners.enter.partner_address")),
-        SummaryAddressBlock(
-            Line1 = Some(company.address.addressLine1),
-            Line2 = company.address.addressLine2,
-            Line3 = company.address.addressLine3,
-            Line4 = company.address.addressLine4,
-            postcode = Some(company.address.postcode)
-        ),
-        None
-    )
+  SummaryAddressParams(
+    Some(Messages("fh.summary.partnerAddress")),
+    SummaryAddressBlock(
+      Line1 = Some(company.address.addressLine1),
+      Line2 = company.address.addressLine2,
+      Line3 = company.address.addressLine3,
+      Line4 = company.address.addressLine4,
+      postcode = Some(company.address.postcode)
+    ),
+    None,
+    GroupRow.Bottom
+  )
 )

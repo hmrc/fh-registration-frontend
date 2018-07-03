@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
-@(declarationForm: Form[Declaration], ggEmail: Option[String], bpr: BusinessRegistrationDetails, hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -30,16 +31,20 @@
 @linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
 
 @showAlert = @{
-  hasAmendments.filter(_ == false).map { _ =>
-    Alert(Messages("fh.declaration.hasAmendments.error"), Some(Messages("fh.declaration.hasAmendments.error.linkText")), Some(linkVal))
+  params.hasAmendments.filter(_ == false).map { _ =>
+    Alert(Messages(s"fh.declaration.${params.mode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.mode}hasAmendments.error.linkText")), Some(linkVal))
   }
 }
 
-@title = @{
-  Messages("fh.declaration.title")
+@titlePrefix = @{
+  if (declarationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, scriptElem = Some(pageScripts)) {
+@title = @{
+  Messages(s"fh.declaration.${params.mode}.title")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -78,23 +83,23 @@
     )
 
     <h2 class="small-heading">@{
-      s"${Messages("fh.declaration.has_gg_email")} "
+      s"${Messages("fh.confirmationEmail.has_default_email")} "
     }
       <span><strong>@{
-        s"${ggEmail.getOrElse("")}"
+        s"${defaultEmail.getOrElse("")}"
       }</strong></span>
     </h2>
 
-    @if(ggEmail.filterNot(_.isEmpty) == None) {
+    @if(defaultEmail.filterNot(_.isEmpty) == None) {
 
-      <input type="hidden" name="@isUseGgEmailKey" value="false"/>
+      <input type="hidden" name="@usingDefaultEmailKey" value="false"/>
 
       @EmailConfirmation(
         EmailConfirmationParams(
           name = alternativeEmailKey,
-          label = Messages("fh.declaration.email.label"),
-          labelConfirmation = Messages("fh.declaration.email.confirmation.label"),
-          error = Messages("fh.declaration.email.error"),
+          label = Messages("fh.confirmationEmail.email.label"),
+          labelConfirmation = Messages("fh.confirmationEmail.email.confirmation.label"),
+          error = Messages("fh.confirmationEmail.email.error"),
           isEmail = true,
           value = declarationForm(s"$alternativeEmailKey.email").value,
           valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,
@@ -104,16 +109,16 @@
       )
 
     } else {
-      <input type="hidden" name="@ggEmailKey" value="@{ggEmail.get}"/>
+      <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
 
       @RadioGroup(
         RadioGroupParams(
-          name = Some(isUseGgEmailKey),
-          legend = Some(Messages("fh.declaration.use_gg_email.confirm.label")),
+          name = Some(usingDefaultEmailKey),
+          legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
           required = true,
-          hasErrors = declarationForm(isUseGgEmailKey).hasErrors,
-          error = Some(Messages("fh.declaration.use_gg_email.confirm.error")),
-          value = declarationForm(isUseGgEmailKey).value,
+          hasErrors = declarationForm(usingDefaultEmailKey).hasErrors,
+          error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
+          value = declarationForm(usingDefaultEmailKey).value,
           radios = List(
             RadioParams(
               "true",
@@ -133,9 +138,9 @@
           EmailConfirmation(
             EmailConfirmationParams(
               name = alternativeEmailKey,
-              label = Messages("fh.declaration.alternative_email.label"),
-              labelConfirmation = Messages("fh.declaration.alternative_email_confirmation.label"),
-              error = Messages("fh.declaration.email.error"),
+              label = Messages("fh.confirmationEmail.alternative_email.label"),
+              labelConfirmation = Messages("fh.confirmationEmail.alternative_email_confirmation.label"),
+              error = Messages("fh.confirmationEmail.email.error"),
               isEmail = true,
               value = declarationForm(s"$alternativeEmailKey.email").value,
               valueConfirmation = declarationForm(s"$alternativeEmailKey.emailConfirmation").value,
@@ -150,7 +155,7 @@
 
     <div class="form-group">
       <h2>@Messages("fh.declaration.title")</h2>
-      <p>@Messages("fh.declaration.declaration.title")</p>
+      <p>@Messages(s"fh.declaration.declaration.${params.mode}.title")</p>
       <ul class="bullets">
         <li>
         @Messages("fh.declaration.declaration.point1")
@@ -175,7 +180,7 @@
     <div class="form-group form-actions">
 
       <p>
-        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages("button.accept.send")</button>
+        <button type="submit" class="button" name="saveAction1" value="saveAndContinue">@Messages(s"fh.declaration.${params.mode}.button")</button>
       </p>
 
       <p>

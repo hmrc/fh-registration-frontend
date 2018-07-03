@@ -18,4 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.navigation
 
 case class Navigation(lastUpdateTimestamp: Long, back: Option[Link])
 
+object Navigation {
+  def noNavigation = Navigation(0, None)
+}
+
 

@@ -1,0 +1,76 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+@(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
+
+<h2>
+  @Messages("fh.status.generic.what_happens_next")
+</h2>
+
+@if(params.category == "pre") {
+  <p>
+    @Messages("fh.ack.what_happens_next_1")
+  </p>
+
+  <p>
+    @Messages("fh.ack.what_happens_next_2")
+  </p>
+
+  <h2>
+    @Messages("fh.ack.help_using_service")
+  </h2>
+}
+
+<p>
+  <a href="@Messages("link.guidance_page")">
+    @Messages("fh.ack.guidance_link_text")
+  </a>
+  @Messages("fh.ack.to_find_out")
+</p>
+
+<ul class="bullets">
+  <li>
+    @Messages(s"fh.status.${params.category}.help_bullet_1")
+  </li>
+  <li>
+    @Messages(s"fh.status.${params.category}.help_bullet_2")
+  </li>
+  <li>
+    @Messages(s"fh.status.${params.category}.help_bullet_3")
+  </li>
+</ul>
+
+<p>
+  <a class="button" href="@{params.cta}">
+    @Messages(s"fh.status.${params.status}.cta")
+  </a>
+</p>
+
+<p>
+  <a href="@{params.secondary}">
+    @Messages(s"fh.status.${params.status}.secondaryLink")
+  </a>
+</p>
+
+<h2>
+  @Messages("fh.status.generic.help_us_improve")
+</h2>
+
+@SurveyLink()(Messages, appConfig)

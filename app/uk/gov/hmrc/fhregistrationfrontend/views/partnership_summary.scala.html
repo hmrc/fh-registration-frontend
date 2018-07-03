@@ -19,28 +19,28 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipApplication
-@import play.api.Environment
-@import java.util.Date
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, environment: Option[String], hasAmendments: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-  hasAmendments.filter(_ == true).map { _ =>
-    Alert(Messages("fh.unsaved_summary"))
+  params.hasAmendments.filter(_ == true).map { _ =>
+    Alert(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
   }
 }
 
 @title = @{
-  Messages("fh.generic.check")
+  Messages(s"fh.summary.${params.mode}.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), mainClass = Some("full-width"), environmentUrl = environment) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+
+  @BackHistory()
 
   @showAlert
 
@@ -50,22 +50,31 @@
     )
   )
 
-  <table class="table-font-xsmall">
-    <tbody>
+  @EmailAddress(verifiedEmail, params.mode)
+  @ContactPerson(applicationData.contactPerson, bpr, params.mode)
+  @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+  @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
+  <dl class="govuk-check-your-answers cya-questions-long">
+    @TradingName(applicationData.tradingName, params.mode)
+    @VATRegistrationNumber(applicationData.vatNumber, params.mode)
+    @BusinessPartners(applicationData.businessPartners, params.mode)
+  </dl>
+  @if(Mode isEditable params.mode) {
+    @SummaryAddMoreLink("businessPartners", (applicationData.businessPartners.size+1).toString, Messages("fh.summary.addMoreBusinessPartners"))
+  }
+  @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
+  <dl class="govuk-check-your-answers cya-questions-long">
+    @BusinessStatus(applicationData.businessStatus, params.mode)
+    @ImportingActivities(applicationData.importingActivities, params.mode)
+    @BusinessCustomers(applicationData.businessCustomers, params.mode)
+    @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
+  </dl>
+  @if(applicationData.otherStoragePremises.hasValue && Mode.isEditable(params.mode)) {
+    @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+  }
 
-      @MainBusinessAddress(applicationData.mainBusinessAddress)
-      @ContactPerson(applicationData.contactPerson, bpr)
-      @TradingName(applicationData.tradingName)
-      @VATRegistrationNumber(applicationData.vatNumber)
-      @BusinessPartners(applicationData.businessPartners)
-      @BusinessStatus(applicationData.businessStatus)
-      @ImportingActivities(applicationData.importingActivities)
-      @BusinessCustomers(applicationData.businessCustomers)
-      @OtherStoragePremises(applicationData.otherStoragePremises)
-
-    </tbody>
-  </table>
-
-  @SummaryButtons()
+@if(Mode isEditable params.mode) {
+    @SummaryButtons()
+  }
 
 }

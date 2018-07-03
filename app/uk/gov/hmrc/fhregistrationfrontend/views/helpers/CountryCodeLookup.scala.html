@@ -55,6 +55,7 @@
   <label class="form-label">@{params.label}</label>
 
   <select name="@{countryCodeName}" id="countryCode" class="form-control js-hidden" value="@{params.countryCode}">
+    <option value="" @if(params.countryCode == None) { selected="selected"}>Please select a country</option>
     <option value="AD" @if(params.countryCode == Some("AD")) { selected="selected"}>Andorra</option>
     <option value="AE" @if(params.countryCode == Some("AE")) { selected="selected"}>United Arab Emirates (the)</option>
     <option value="AF" @if(params.countryCode == Some("AF")) { selected="selected"}>Afghanistan</option>
@@ -304,15 +305,6 @@
     <option value="ZW" @if(params.countryCode == Some("ZW")) { selected="selected"}>Zimbabwe</option>
   </select>
 
-  <script>
-    var options = document.getElementById("countryCode");
-    var countries = [];
-    var i;
-    for (i = 0; i < options.options.length; i++) {
-      countries.push({"title": options.options[i].text,"value": options.options[i].value});
-    }
-  </script>
-
   @if(params.hasErrors) {
     <span class="error-message" id="@{fieldName}-inline-error">
     @params.error
@@ -322,7 +314,7 @@
       <input type="text"
               name="@{fieldName}"
               id="@{fieldName}"
-              class="@{inputClass} form-control--block js-choose-country-auto-complete"
+              class="@{inputClass} form-control--block js-hmrc-auto-complete"
               autocomplete="off"
               spellcheck="false"
               required

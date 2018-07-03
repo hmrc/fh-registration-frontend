@@ -18,44 +18,54 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(data: StoragePremisesModel)(implicit request: Request[_], messages: Messages)
+@(data: StoragePremisesModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-    @SummarySectionHead(heading = Messages("fh.other_storage_premises.title"))
+@changeLink = @{
+  if (Mode isEditable mode) {
+    Some("otherStoragePremises")
+  } else {
+    None
+  }
+}
 
-    @SummaryRow(
-        SummaryRowParams.ofBoolean(
-            Some(Messages("fh.other_storage_premises.confirm.label")),
-            data.hasValue,
-            Some("otherStoragePremises")
-        )
+@SummaryRow(
+  SummaryRowParams.ofBoolean(
+    Some(Messages("fh.summary.usesStoragePremises")),
+    data.hasValue,
+    changeLink,
+    GroupRow.Single
+  )
+)
+
+@if(data.hasValue) {
+
+  @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
+
+    @SummaryRepeatingAddress(
+      heading = Messages("fh.other_storage_premises.each.title",{index+1}),
+      address = SummaryAddressBlock(
+        Line1 = Some(storagePremise.address.addressLine1),
+        Line2 = storagePremise.address.addressLine2,
+        Line3 = storagePremise.address.addressLine3,
+        Line4 = storagePremise.address.addressLine4,
+        postcode = Some(storagePremise.address.postcode)
+      ),
+      changeLink = changeLink,
+      section = {index+1}.toString()
     )
 
-    @if(data.hasValue) {
+    @SummaryRow(
+      SummaryRowParams.ofBoolean(
+        Some(Messages("fh.summary.thirdPartyPremises")),
+        storagePremise.isThirdParty,
+        None,
+        GroupRow.Bottom
+      )
+    )
+  }
 
-        @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
-
-            @SummaryRepeatingAddress(
-              heading = Messages("fh.other_storage_premises.each.title",{index+1}),
-              address = SummaryAddressBlock(
-                Line1 = Some(storagePremise.address.addressLine1),
-                Line2 = storagePremise.address.addressLine2,
-                Line3 = storagePremise.address.addressLine3,
-                Line4 = storagePremise.address.addressLine4,
-                postcode = Some(storagePremise.address.postcode)
-              ),
-              changeLink = Some("otherStoragePremises"),
-              section = {index+1}.toString()
-            )
-
-            @SummaryRow(
-                SummaryRowParams.ofBoolean(
-                    Some(Messages("fh.other_storage_premises.third_party.label")),
-                    storagePremise.isThirdParty,
-                    None
-                )
-            )
-        }
-
-        @SummaryAddMoreLink("otherStoragePremises", (data.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
-    }
+}

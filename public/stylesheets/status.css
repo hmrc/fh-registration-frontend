@@ -4,12 +4,19 @@ strong {
 .appstatus {
     background-color: #005ea5;
     color: #fff;
-    margin-bottom: 1.05263em;
-    padding: 2em 2em .94737em 2em;
-    margin-top: 1.7em;
+    margin-top: 30px;
 }
+
+.appstatus h1.heading-xlarge {
+    margin-bottom: .5em;
+}
+
+.appstatus p.lede {
+    margin-bottom: 0;
+}
+
 .sidebar {
-    margin-top:0px;
+    margin-top: 0;
     border-top: 0;
 }
 
@@ -21,16 +28,7 @@ strong {
 .govuk-related-items h2 {
     margin-top: 0.55556em;
 }
-h1.appstatus-title {
-    color: #fff;
-}
-p.lede, .lede {
-    font-family: "nta", Arial, sans-serif;
-    font-size: 24px;
-    line-height: 1.25;
-    font-weight: 400;
-    text-transform: none;
-}
+
 .appstatus-title {
     font-family: "nta", Arial, sans-serif;
     line-height: 1.04167;
@@ -85,4 +83,8 @@ p.lede, .lede {
 }
 .service-info {
     border-top: 0px solid #005ea5;
+}
+
+.button {
+    margin-top: 30px;
 }

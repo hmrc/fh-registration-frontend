@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import javax.inject.Inject
 
+import play.api.mvc.ActionBuilder
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
@@ -31,19 +32,24 @@ class Actions @Inject() (
   errorHandler: ErrorHandler) {
 
 
-  def userAction = new UserAction(externalUrls)
-  def amendmentAction = userAction andThen new AmendmentAction()
+  def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls)
+
+  def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
+  def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction
+
+  def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
+  def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
-  def noEnrolmentCheckAction = userAction andThen new NoEnrolmentCheckAction
-  def journeyAction = userAction andThen noEnrolmentCheckAction andThen new JourneyAction
+  def journeyAction = userAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
-  def continueWithBprAction = userAction andThen new ContinueWithBprAction(fhddsConnector)
+
+  def newApplicationAction = noPendingSubmissionFilter andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)
 
   def summaryAction =
-    userAction andThen noEnrolmentCheckAction andThen journeyAction andThen new SummaryAction
+    userAction andThen journeyAction andThen new SummaryAction
 
 
 

@@ -287,11 +287,30 @@ function init() {
     }
   });
 
-  if ($('.error-summary-list li a').length) {
-    $('.error-summary-list li a').each(function(i, item) {
-      var eventAction = $(item).text();
+  var $errorSummary = $('.error-summary');
+
+  if ($errorSummary.length) {
+    // summary focusing
+    $errorSummary.focus();
+    $('.error-summary-list li a').each(function (i, item) {
+      var $link = $(item);
+      // ga reporting
+      var eventAction = $link.text();
       var eventLabel = $('h1').text();
-      ga('send', 'event', 'error', eventAction, eventLabel)
+      ga('send', 'event', 'error', eventAction, eventLabel);
+      // error focusing
+      $link.on('click', function () {
+        // escape handling for periods in selectors
+        var target = CSS.escape($(this).attr('href').slice(1));
+        window.setTimeout(function () {
+          $('#' + target)
+            .parent()
+            .find('input.form-control-error')
+            .first()
+            .focus()
+        }, 200)
+      })
+
     })
   }
 

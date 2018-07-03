@@ -29,11 +29,15 @@
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
+@titlePrefix = @{
+  if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
 @title = @{
   Messages("fh.business_type.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, pageScripts = Some(scripts)) {
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, pageScripts = Some(scripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
@@ -43,16 +47,12 @@
 
     @helper.CSRF.formField
 
-    @PageHeading(
-      PageHeadingParams(
-        heading = title
-      )
-    )
-
     @RadioGroup(
       RadioGroupParams(
         name = Some("businessType"),
         inline = false,
+        legend = Some(title),
+        legendAsHeading = true,
         error = Some(Messages("fh.businessType.error.required")),
         hasErrors = businessTypeForm("businessType").hasErrors,
         value = businessTypeForm("businessType").value,
@@ -77,7 +77,8 @@
 
     @SubmitButtons(
       SubmitButtonsParams(
-        label = Messages("button.save.continue")
+        label = Messages("button.save.continue"),
+        saveForLaterLink = false
       ),
       navigation = Navigation(0, None)
     )

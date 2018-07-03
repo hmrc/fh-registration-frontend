@@ -34,7 +34,7 @@ object PartnershipLargeIntNew {
       "ZHANG",
       "Director",
       "11123",
-      "a@w.ro",
+      None,
       false,
       Some(true),
       Some(Address(
@@ -161,7 +161,8 @@ object PartnershipLargeIntNew {
             "AA17 1AA",
             None)
         )
-      ))),
+      )),
+      false),
     BusinessStatus(true, Some(LocalDate.of(2018,7, 30))),
     ImportingActivities(false, None),
     BusinessCustomers("51-100"),
@@ -203,8 +204,9 @@ object PartnershipLargeIntNew {
           Some("Othertown"),
           "Z9 3WW",
           None),
-        true)))))
-
+        true)),
+      false)))
+  val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
     "Y",
     "Z",

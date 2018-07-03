@@ -19,9 +19,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.Logger
-import play.api.i18n.Messages
+import play.api.data.Form
+import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, Request, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageAction, PageRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
@@ -31,16 +32,15 @@ import scala.concurrent.Future
 @Singleton
 class FormPageController @Inject()(
   ds               : CommonPlayDependencies,
-  links            : ExternalUrls,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SubmitForLater {
+)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
   import actions._
-  def load(pageId: String) = pageAction(pageId).async { implicit request ⇒
+  def load(pageId: String) = pageAction(pageId) { implicit request ⇒
     renderForm(request.page, false)
   }
 
-  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)).async { implicit request ⇒
+  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)){ implicit request ⇒
     renderForm(request.page, false)
   }
 
@@ -49,7 +49,7 @@ class FormPageController @Inject()(
 
   def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async { implicit request ⇒
     request.page[T].parseFromRequest (
-      pageWithErrors => renderForm(pageWithErrors, true),
+      pageWithErrors => Future successful renderForm(pageWithErrors, true),
       page => {
         save4LaterService
           .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
@@ -57,10 +57,7 @@ class FormPageController @Inject()(
             if (isSaveForLate)
               Redirect(routes.Application.savedForLater)
             else {
-              if (page.nextSubsection.isDefined)
-                Redirect(routes.FormPageController.loadWithSection(page.id, page.nextSubsection.get))
-              else
-                showNextPage(page)
+              showNextPage(page)
             }
           }
       }
@@ -96,27 +93,30 @@ class FormPageController @Inject()(
     }
 
 
-  def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
+  private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
     if (newPage.nextSubsection.isDefined)
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
-      request.journey next newPage.id match {
+      request.journey next newPage match {
         case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
         case None           ⇒ Redirect(routes.SummaryController.summary())
       }
   }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) = {
-    save4LaterService.fetchBusinessRegistrationDetails(request.userId) map {
-      case Some(bpr) ⇒
-        if (hasErrors)
-          BadRequest(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
-        else {
-          Ok(page.render(bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page.id)))
-        }
-      case None      ⇒
-        errorHandler.errorResultsPages(Results.BadRequest)
+    if (hasErrors)
+      BadRequest(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
+    else {
+      Ok(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     }
   }
+
+  val submitButtonValueForm = Form("saveAction" → nonEmptyText)
+
+  /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
+  private def isSaveForLate(implicit req:Request[_]): Boolean = submitButtonValueForm.bindFromRequest().fold(
+    _ ⇒ false,
+    value ⇒ value == "saveForLater"
+  )
 
 }

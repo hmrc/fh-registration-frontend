@@ -17,15 +17,25 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{DateOfIncorporation => DateOfIncorporationModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
-@(dateOfIncorporationForm: DateOfIncorporationModel)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@SummarySectionHead(heading = Messages("fh.date_of_incorporation.title"))
+@(dateOfIncorporationForm: DateOfIncorporationModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+  @changeLink = @{
+    if (Mode isEditable mode) {
+      Some("dateOfIncorporation")
+    } else {
+      None
+    }
+  }
 
   @SummaryRow(
     SummaryRowParams.ofDate(
-      Some(Messages("fh.dateOfIncorporation.label")),
+      Some(Messages("fh.date_of_incorporation.title")),
       dateOfIncorporationForm.dateOfIncorporation,
-      Some("dateOfIncorporation")
+      changeLink,
+      GroupRow.Single
     )
   )

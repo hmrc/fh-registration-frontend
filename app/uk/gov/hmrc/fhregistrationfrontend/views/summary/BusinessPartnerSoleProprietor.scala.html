@@ -17,76 +17,65 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
 @(partner: BusinessPartnerSoleProprietorModel)(implicit request: Request[_], messages: Messages)
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.entity_type.label")),
-        Messages("fh.business_partners.entity_type.sole_proprietor.label"),
-        None
-    )
+  SummaryRowParams.ofString(
+    Some(Messages("fh.summary.partnerLegalEntity")),
+    Messages("fh.business_partners.entity_type.sole_proprietor.label"),
+    None,
+    GroupRow.Member
+  )
 )
 
 @SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.individual.first_name.label")),
-        partner.firstName,
-        None
-    )
-)
-
-@SummaryRow(
-    SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.individual.last_name.label")),
-        partner.lastName,
-        None
-    )
-)
-
-@SummaryRow(
-  SummaryRowParams.ofBoolean(
-    Some(Messages("fh.tradingName.confirm.label")),
-    partner.hasTradeName,
-    None
+  SummaryRowParams.ofString(
+    Some(Messages("fh.generic.name")),
+    partner.firstName + " " + partner.lastName,
+    None,
+    GroupRow.Member
   )
 )
 
 @if(partner.hasTradeName) {
   @SummaryRow(
     SummaryRowParams(
-      Some(Messages("fh.tradingName.label")),
+      Some(Messages("fh.tradingName.title")),
       partner.tradeName,
       None
     )
   )
-}
-
-@SummaryRow(
+} else {
+  @SummaryRow(
     SummaryRowParams.ofBoolean(
-        Some(Messages("fh.business_partners.individual.nino.confirm.label")),
-        partner.hasNino,
-        None
+      Some(Messages("fh.summary.partnerTradingName")),
+      partner.hasTradeName,
+      None,
+      GroupRow.Member
     )
-)
+  )
+}
 
 @if(partner.hasNino) {
-    @SummaryRow(
-        SummaryRowParams(
-            Some(Messages("fh.business_partners.individual.nino.label")),
-            partner.nino,
-            None
-        )
+  @SummaryRow(
+    SummaryRowParams(
+      Some(Messages("fh.business_partners.individual.nino.label")),
+      partner.nino,
+      None
     )
-}
-
-@SummaryRow(
-  SummaryRowParams.ofBoolean(
-    Some(Messages("fh.vatNumber.confirm.label")),
-    partner.hasVat,
-    None
   )
-)
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerHasNino")),
+      partner.hasNino,
+      None,
+      GroupRow.Member
+    )
+  )
+}
 
 @if(partner.hasVat) {
   @SummaryRow(
@@ -96,19 +85,28 @@
       None
     )
   )
+} else {
+  @SummaryRow(
+    SummaryRowParams.ofBoolean(
+      Some(Messages("fh.summary.partnerVat")),
+      partner.hasVat,
+      None,
+      GroupRow.Member
+    )
+  )
 }
 
-
 @SummaryAddress(
-    SummaryAddressParams(
-        Some(Messages("fh.business_partners.enter.partner_address")),
-        SummaryAddressBlock(
-            Line1 = Some(partner.address.addressLine1),
-            Line2 = partner.address.addressLine2,
-            Line3 = partner.address.addressLine3,
-            Line4 = partner.address.addressLine4,
-            postcode = Some(partner.address.postcode)
-        ),
-        None
-    )
+  SummaryAddressParams(
+    Some(Messages("fh.summary.partnerAddress")),
+    SummaryAddressBlock(
+      Line1 = Some(partner.address.addressLine1),
+      Line2 = partner.address.addressLine2,
+      Line3 = partner.address.addressLine3,
+      Line4 = partner.address.addressLine4,
+      postcode = Some(partner.address.postcode)
+    ),
+    None,
+    GroupRow.Bottom
+  )
 )

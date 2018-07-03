@@ -1,12 +1,25 @@
 # microservice specific routes
 
-GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.start()
+GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.main()
+GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startOrContinueApplication()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
 GET         /signed-out                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
 GET         /businessType                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
+
+GET         /contact-email                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.contactEmail
+POST        /contact-email                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail
+GET         /contact-email-unverified                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.forcedContactEmail
+POST        /contact-email-unverified                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitForcedContactEmail
+
+GET         /email-verification-status                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerificationStatus
+GET         /email-change                                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailChange
+GET         /email-edit                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailEdit
+GET         /email-verify/:token                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerify(token)
+GET         /email-verified                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerified
+
 
 GET         /startForm                                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
@@ -24,6 +37,7 @@ GET         /form/:page/:section/confirmDelete/:timestamp                       
 GET         /resume                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
 
 GET         /summary                                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
+GET         /view                                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
 GET         /downloadPrintable                                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
 
 GET         /declaration                                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
@@ -31,6 +45,8 @@ POST        /submit                                                             
 GET         /acknowledgement                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
 
 GET         /amend                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+GET         /update                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation
+
 
 GET         /saved                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
@@ -45,6 +61,13 @@ POST        /withdraw/reason                                                    
 GET         /withdraw/confirm                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.confirm
 POST        /withdraw/confirm                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postConfirmation
 GET         /withdraw/acknowledgment                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.acknowledgment
+
+GET         /deregister                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.startDeregister
+GET         /deregistration/reason                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.reason
+POST        /deregistration/reason                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postReason
+GET         /deregistration/confirm                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.confirm
+POST        /deregistration/confirm                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postConfirmation
+GET         /deregistration/acknowledgment                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.acknowledgment
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)

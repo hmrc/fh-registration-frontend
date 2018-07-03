@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.controllers
+package uk.gov.hmrc.fhregistrationfrontend.views
 
-import play.api.mvc.Request
-import play.api.data.Form
-import play.api.data.Forms.nonEmptyText
+object Mode extends Enumeration {
+  type Mode = Value
+  val ReadOnlyRegister, ReadOnlyApplication, New, Amendment, Variation = Value
 
-trait SubmitForLater {
-  val submitButtonValueForm = Form("saveAction" → nonEmptyText)
+  def isReadOnly(mode: Mode) = mode match {
+    case ReadOnlyApplication | ReadOnlyRegister ⇒ true
+    case _                                      ⇒ false
+  }
 
-  /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
-  def isSaveForLate(implicit req:Request[_]): Boolean = submitButtonValueForm.bindFromRequest().fold(
-    _ ⇒ false,
-    value ⇒ value == "saveForLater"
-  )
+  def isEditable(mode: Mode) = !isReadOnly(mode)
 }

@@ -15,15 +15,12 @@
  *@
 
 @(heading:String, address:Html, changeLink: Option[String] = None, section: String)(implicit message : Messages)
-
-<tr>
-  <td valign="top"><span class="bold-small">@{heading}</span></td>
-  <td>
-    @address
-  </td>
-  <td valign="top">
+<div>
+  <dt class="cya-question">@{heading}</dt>
+  <dd class="cya-answer">@address</dd>
   @if(changeLink.nonEmpty){
-    <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(changeLink.get, section)}">Change</a>
+    <dd class="cya-change group-head">
+        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(changeLink.get, section)}">Change<span class="visuallyhidden"> @heading</span></a>
+    </dd>
   }
-  </td>
-</tr>
+</div>

@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
+package uk.gov.hmrc.fhregistrationfrontend.views.summary
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
-
-case class Confirmation(
-  continue: Boolean,
-  isUseGgEmail: Option[Boolean],
-  ggEmail: Option[String],
-  alternativeEmail: Option[AlternativeEmail]
-) {
-
-  def email: Option[String] = {
-    isUseGgEmail flatMap {
-      case true  ⇒ ggEmail
-      case false ⇒ alternativeEmail.map(_.email)
-    }
-  }
+object GroupRow extends Enumeration {
+  type GroupRow = Value
+  val Top, Member, Bottom, Single = Value
 }

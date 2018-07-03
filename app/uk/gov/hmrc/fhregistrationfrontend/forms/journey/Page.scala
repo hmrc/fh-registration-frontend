@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
+import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
 
 
 trait Rendering {
@@ -55,18 +56,22 @@ trait Page[T] extends Rendering {
   def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[T] ⇒ X)(implicit r: Request[_]): X
 
   def nextSubsection: Option[String]
+  def previousSubsection: Option[String]
+  def section: Option[String]
 
   /** returns None if the page can not be deleted or Some(new page state)*/
   def delete: Option[Page[T]]
 
   def pageStatus: PageStatus
   def lastSection: Option[String]
+
 }
 
 object Page {
 
   import CompanyOfficer.companyOfficerFormat
   import CompanyRegistrationNumber.format
+  import EmailVerification.format
   import ContactPerson.format
   import DateOfIncorporation.format
   import MainBusinessAddress.format
@@ -145,7 +150,6 @@ object Page {
     }
   })
 
-  //todo: should use BusinessPartnersForm.businessPartnersForm. When repeat component ready, replace businessPartnerForm with businessPartnersForm
   val businessPartnersPage = new RepeatingPage[BusinessPartner](
     "businessPartners",
     new RepeatedFormRendering[(BusinessPartner, Boolean)] {

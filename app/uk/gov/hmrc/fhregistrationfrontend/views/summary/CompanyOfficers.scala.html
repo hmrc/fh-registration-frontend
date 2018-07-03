@@ -21,15 +21,22 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerIndividual => CompanyOfficerIndividualModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany => CompanyOfficerCompanyModel}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 
-@(companyOfficers: ListWithTrackedChanges[CompanyOfficer])(implicit request: Request[_], messages: Messages)
+@(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-
-    @SummarySectionHead(heading = Messages("fh.company_officers.title"))
+    @changeLink = @{
+      if (Mode isEditable mode) {
+        Some("companyOfficers")
+      } else {
+        None
+      }
+    }
 
     @for((companyOfficer:CompanyOfficer, index) <- companyOfficers.values.zipWithIndex) {
 
-        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = Some("companyOfficers"), section = {index+1}.toString())
+        @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = changeLink, section = {index+1}.toString())
 
         @{companyOfficer.identification match {
             case individual: CompanyOfficerIndividualModel ⇒
@@ -43,5 +50,3 @@
         }}
 
     }
-
-    @SummaryAddMoreLink("companyOfficers", (companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
