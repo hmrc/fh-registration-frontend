@@ -40,16 +40,14 @@ object StatusPageParams {
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
-      showSubHeading = false,
-      showSteps = true
+      showSubHeading = false
     ),
     StatusPageParams(
       Processing,
       cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
       secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw()),
       nextTemplate = statusWhatHappensNext.apply,
-      showSubHeading = false,
-      showSteps = true
+      showSubHeading = false
     ),
     StatusPageParams(
       Approved,
