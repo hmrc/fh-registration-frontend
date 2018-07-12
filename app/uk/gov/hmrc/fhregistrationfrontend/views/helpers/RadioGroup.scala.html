@@ -40,6 +40,12 @@
   }
 }
 
+@inputClass = @{
+  if(params.hasErrors) {
+    "form-control-error"
+  }
+}
+
 
 @checked(testVal: String) = @{
   params.value match {
@@ -75,7 +81,7 @@
 
     @for(radio <- params.radios){
       <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
-        <input id="@{params.name}-@{makeSelector(radio.value)}" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
+        <input id="@{params.name}-@{makeSelector(radio.value)}" class="@inputClass" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
         <label for="@{params.name}-@{makeSelector(radio.value)}">@radio.label</label>
       </div>
     }
