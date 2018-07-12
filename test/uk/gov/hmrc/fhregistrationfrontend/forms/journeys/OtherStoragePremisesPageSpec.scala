@@ -51,7 +51,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
       "Has more is false" in {
         val page = OtherStoragePremisesPage(
           mainPage withData true,
-          repeatingPage withData (listWithPremises(2)))
+          repeatingPage withData listWithPremises(2))
           .withSubsection(Some("2"))
 
         page.nextSubsection shouldBe None
@@ -84,6 +84,40 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
     }
   }
 
+  "Previous section" should {
+    "Be none" when {
+      "on main section" in {
+        val page = OtherStoragePremisesPage(
+          mainPage withData true,
+          repeatingPage withData (listWithPremises(2) copy (addMore = true)))
+
+        page.previousSubsection shouldBe None
+      }
+    }
+
+    "Be main section" when {
+      "on first premise" in {
+        val page = OtherStoragePremisesPage(
+          mainPage withData true,
+          repeatingPage withData listWithPremises(2))
+          .withSubsection(Some("1"))
+
+        page.previousSubsection shouldBe Some("any")
+      }
+    }
+
+    "Be first premise" when {
+      "on second premise" in {
+        val page = OtherStoragePremisesPage(
+          mainPage withData true,
+          repeatingPage withData listWithPremises(2))
+          .withSubsection(Some("2"))
+
+        page.previousSubsection shouldBe Some("1")
+      }
+    }
+
+  }
 
   def listWithPremises(nPremise: Int) = {
     val aPremise = StoragePremise(TestData.addressUk, false)
