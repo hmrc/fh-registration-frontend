@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{Mappin
 object DeregistrationReasonForm {
 
   val reasonKey = "reason"
-  val reasonOtherKey = "reasonOther"
+  val reasonOtherKey = "reasonOtherText"
 
   val reasonMapping = reasonKey → enum(DeregistrationReasonEnum)
   val reasonOtherMapping = reasonOtherKey → (deregistrationReason onlyWhen (reasonMapping is DeregistrationReasonEnum.Other))

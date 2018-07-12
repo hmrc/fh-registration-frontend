@@ -71,7 +71,7 @@
           RadioParams(
             Other.toString,
             Messages("fh.withdrawalReason.otherReason.label"),
-            dataTarget = Some("otherReason")
+            dataTarget = Some("otherReasonContainer")
           )
         )
       )
@@ -79,13 +79,13 @@
 
     @NestedPanel(
       NestedPanelParams(
-        "otherReason",
+        "otherReasonContainer",
         TextInput(
           TextInputParams(
             name = reasonOtherKey,
-            label = Messages("fh.withdrawalReason.otherReasonText.label"),
+            label = Messages(s"fh.withdrawalReason.$reasonOtherKey.label"),
             hasErrors = reasonForm(reasonOtherKey).hasErrors,
-            error = Messages("fh.reasonOther." + getError(reasonForm(reasonOtherKey).error)),
+            error = Messages("fh." + reasonOtherKey + "." + getError(reasonForm(reasonOtherKey).error)),
             value = reasonForm(reasonOtherKey).value
           )
         )

@@ -810,9 +810,10 @@ fh.withdrawalReason.duplicateApplication.label=Duplicate application
 fh.withdrawalReason.noLongerApplicable.label=Business no longer needs to apply
 fh.withdrawalReason.otherReason.label=Other reason
 fh.reason.error.required=Select a reason for withdrawing your application
-fh.withdrawalReason.otherReasonText.label=Enter your reason for withdrawal
-fh.reasonOther.error.required=Enter your reason for withdrawal
-fh.reasonOther.error.pattern=Reason for withdrawal must be no longer than 40 characters and only include letters a to z, numbers and spaces
+fh.withdrawalReason.reasonOtherText.label=Enter your reason for withdrawal
+fh.reasonOtherText.error.required=Enter your reason for withdrawal
+fh.reasonOtherText.error.maxLength=Reason for withdrawal must be 40 characters or less
+fh.reasonOtherText.error.pattern=Reason for withdrawal must be 40 characters or less and only include letters a to z, numbers and spaces
 
 # - Withdrawal confirm
 #============================================================
@@ -841,9 +842,10 @@ fh.deregistration.stoppedTrading.label=Stopped trading as a fulfilment business
 fh.deregistration.changedLegalEntity.label=Business has changed its legal entity type
 fh.deregistration.otherReason.label=Other reason
 fh.deregistration.reason.error.required=Select a reason for cancelling your registration
-fh.deregistration.otherReasonText.label=Enter your reason
-fh.deregistration.reasonOther.error.required=Enter your reason for cancelling your registration
-fh.deregistration.reasonOther.error.pattern=Reason for cancelling must be no longer than 40 characters and only include letters a to z, numbers and spaces
+fh.deregistration.reasonOtherText.label=Enter your reason
+fh.deregistration.reasonOtherText.error.required=Enter your reason for cancelling your registration
+fh.deregistration.reasonOtherText.error.maxLength=Reason for cancelling your registration must be 40 characters or less
+fh.deregistration.reasonOtherText.error.pattern=Reason for cancelling your registration must be 40 characters or less and only include letters a to z, numbers and spaces
 
 # - Deregistration confirm
 #============================================================
