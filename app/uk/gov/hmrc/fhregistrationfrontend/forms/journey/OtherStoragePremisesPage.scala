@@ -80,13 +80,11 @@ case class OtherStoragePremisesPage(
       Some("1")
     else if (isMainSection && !hasOtherPremises)
       None
-    else if (isMainSection)
-      mainSection
     else
       storagePremisePage.nextSubsection
 
   override def previousSubsection: Option[String] =
-    if (isMainSection) mainSection
+    if (isMainSection) None
     else storagePremisePage.previousSubsection orElse mainSection
 
   private def isMainSection = section.isEmpty || (section == mainSection)
@@ -109,9 +107,9 @@ case class OtherStoragePremisesPage(
   override def delete: Option[Page[OtherStoragePremises]] =
     if(isMainSection)
       None
-    else storagePremisePage.delete map { storagePremisePage ⇒
+    else storagePremisePage.delete map { updatedStoragePremisePage ⇒
       this copy(
-        storagePremisePage = storagePremisePage
+        storagePremisePage = updatedStoragePremisePage
       )
     }
 
