@@ -52,8 +52,7 @@
 
 <div class="@{formGroupClass}">
 
-  <label class="form-label">@{params.label}</label>
-
+  <label class="form-label js-hidden" for="countryCode">@{params.label}</label>
   <select name="@{countryCodeName}" id="countryCode" class="form-control js-hidden" value="@{params.countryCode}">
     <option value="" @if(params.countryCode == None) { selected="selected"}>Please select a country</option>
     <option value="AD" @if(params.countryCode == Some("AD")) { selected="selected"}>Andorra</option>
@@ -304,6 +303,8 @@
     <option value="ZM" @if(params.countryCode == Some("ZM")) { selected="selected"}>Zambia</option>
     <option value="ZW" @if(params.countryCode == Some("ZW")) { selected="selected"}>Zimbabwe</option>
   </select>
+
+  <label class="form-label js-show" for="@{fieldName}">@{params.label}</label>
 
   @if(params.hasErrors) {
     <span class="error-message" id="@{fieldName}-inline-error">
