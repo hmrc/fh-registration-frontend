@@ -68,6 +68,7 @@
         legend = Some(title),
         legendAsHeading = true,
         hasErrors = hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors,
+        hintText = Some(Messages("fh.other_storage_premises.hintText")),
         error = Some(Messages("fh.other_storage_premises.confirm.error")),
         value = hasOtherStoragePremisesForm(otherStoragePremisesKey).value,
         radios = List(
