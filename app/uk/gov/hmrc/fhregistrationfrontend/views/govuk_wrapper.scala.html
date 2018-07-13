@@ -55,12 +55,19 @@
 
 @afterHeader = {}
 
+@polyfills = {<script type="text/javascript" src='@routes.Assets.at("javascripts/details.polyfill.js")'></script>}
+
+@scripts = {
+  @polyfills
+  @scriptElem
+}
+
 @bodyEnd = {
     @uiLayouts.footer(
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
-      scriptElem = scriptElem,
+      scriptElem = Some(scripts),
       gaCalls = None)
 }
 

@@ -238,6 +238,8 @@ function init() {
   var showHideContent = new GOVUK.ShowHideContent()
   showHideContent.init()
 
+  GOVUK.details.init()
+
   // Google Analytics event reporting, using template:
   // ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject])
   // wrapInTimeout function to ensure forms get submitted when GA fails to respond
