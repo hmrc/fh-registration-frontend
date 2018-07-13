@@ -381,7 +381,8 @@ fh.business_customers.101_plus.value=Over 100
 # - Other storage premises
 #===========================================================
 fh.other_storage_premises.title=Other storage premises
-fh.other_storage_premises.confirm.label=Does the business store third-party goods imported from outside the EU at any premises in the UK other than its main business address?
+fh.other_storage_premises.confirm.label=Does the business use any UK premises to store third-party goods imported from outside the EU?
+fh.other_storage_premises.hintText=Only tell us about premises that are not at your registered business address.
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
 fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
