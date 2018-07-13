@@ -24,12 +24,20 @@
     case _ => ""
   }
 }
+@changeLinkText = @{
+  if(params.changeLink.nonEmpty && params.groupRow == GroupRow.Top) {
+    Messages(s"fh.${params.changeLink.get}.title")
+  } else{
+    params.label
+  }
+
+}
 <div>
   <dt class="cya-question">@if(params.label.nonEmpty){ @params.label }</dt>
   <dd class="cya-answer">@if(params.value.nonEmpty){ @params.value }</dd>
   @if(params.changeLink.nonEmpty){
     <dd class="cya-change@{linkClass}">
-      <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @{params.label}</span></a>
+      <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @changeLinkText</span></a>
     </dd>
   }
   @if(params.groupRow == GroupRow.Bottom) {
