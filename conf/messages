@@ -189,12 +189,13 @@ fh.emailVerification.emailSentAgain=We have sent a new email with a verification
 # - Main Business Address
 #============================================================
 fh.main_business_address.title=Business address
+fh.mainBusinessAddress.title=Business address
 fh.mainBusinessAddress.intro=This is the registered business address for the business:
 fh.mainBusinessAddress.point1=receive and deal with orders
 fh.mainBusinessAddress.point2=carry out the day-to-day running of the business
 fh.main_business_address.time_at_address.label=How long has the business operated from this address?
 fh.main_business_address.time_at_address.hintText=If the business does not operate from this address, tell us how long this has been the registered business address
-fh.mainBusinessAddress.summary.yearsAtAddress=Years at current address
+fh.mainBusinessAddress.summary.yearsAtAddress=Years at current business address
 fh.timeAtCurrentAddress.error.required=Select how long the business has operated from this address
 fh.main_business_address.0to3years.label=Less than 3 years
 fh.main_business_address.3to5years.label=3 to 5 years
@@ -241,6 +242,7 @@ fh.previousAddressStartdate.year.error.min=Enter a valid date for when the busin
 # - Contact Person
 #============================================================
 fh.contact_person.title=Contact person''s details
+fh.contactPerson.title=Contact person''s details
 fh.contact_person.intro=Who should we contact if we need to discuss your application?
 fh.contact_person.name.label=Name
 fh.contact_person.first_name.label=First name
@@ -344,6 +346,7 @@ fh.proposedStartDate.error.invalid=Enter a valid date for the intended start dat
 
 # - Importing activities
 #===========================================================
+fh.importingActivities.title=EORI details
 fh.importing_activities.title=Importing activities
 fh.importing_activities.eori.confirm.label=Does the business have an EORI (Economic Operator Registration and Identification) number?
 fh.hasEori.error.required=Select whether the business has an EORI number
