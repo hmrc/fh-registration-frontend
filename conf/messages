@@ -465,9 +465,9 @@ fh.declaration.New.button=Accept and send application
 fh.declaration.Amendment.button=Accept and resend application
 fh.declaration.Variation.button=Accept and send update
 
-fh.declaration.new.hasAmendments.error.linkText=View or change your application
-fh.declaration.amendment.hasAmendments.error.linkText=View or change your application
-fh.declaration.variation.hasAmendments.error.linkText=View or change your registered details
+fh.declaration.New.hasAmendments.error.linkText=View or change your application
+fh.declaration.Amendment.hasAmendments.error.linkText=View or change your application
+fh.declaration.Variation.hasAmendments.error.linkText=View or change your registered details
 fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
 fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
 
