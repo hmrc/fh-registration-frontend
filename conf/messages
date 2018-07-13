@@ -112,10 +112,10 @@ fh.status_pending.finish=Finish and sign out
 fh.generic.create_new_application_link=Create a new application
 
 fh.generic.check=Check your answers before sending your application
-fh.unsaved_summary=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.New.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.Amendment.unsavedChange=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.Variation.unsavedChange=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
+fh.unsaved_summary=Your changes will not be submitted until you click ''Continue'' and complete the declaration on the next page
+fh.summary.New.unsavedChange=Your changes will not be submitted until you click ''Continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsavedChange=Your changes will not be submitted until you click ''Continue'' and complete the declaration on the next page
+fh.summary.Variation.unsavedChange=Your registered details will not be updated until you click ''Continue'' and complete the declaration on the next page
 
 # Generic Radio buttons
 fh.generic.yes=Yes
@@ -413,9 +413,9 @@ fh.summary.ReadOnlyRegister.title=View previously registered details
 fh.summary.addMoreCompanyOfficers=Add more company officers
 fh.summary.addMoreStoragePremises=Add more storage premises
 fh.summary.addMoreBusinessPartners=Add more business partners
-fh.summary.New.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.Amendment.unsubmittedAlert=Your changes will not be submitted until you click ''Save and continue'' and complete the declaration on the next page
-fh.summary.Variation.unsubmittedAlert=Your registered details will not be updated until you click ''Save and continue'' and complete the declaration on the next page
+fh.summary.New.unsubmittedAlert=Your changes will not be submitted until you click ''Continue'' and complete the declaration on the next page
+fh.summary.Amendment.unsubmittedAlert=Your changes will not be submitted until you click ''Continue'' and complete the declaration on the next page
+fh.summary.Variation.unsubmittedAlert=Your registered details will not be updated until you click ''Continue'' and complete the declaration on the next page
 fh.summary.email.title=Email address for notifications
 fh.summary.email.label=Email address
 fh.summary.businessDetails=Business details
