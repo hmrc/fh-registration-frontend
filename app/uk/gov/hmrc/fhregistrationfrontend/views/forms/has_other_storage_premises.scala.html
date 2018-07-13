@@ -49,7 +49,7 @@
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
       <ul class="error-summary-list">
         @if(hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors) {
-          <li id="storagePremise_address-error-link"><a href="#storagePremise_address-inline-error">@{
+          <li id="storagePremise_address-error-link"><a href="#@{otherStoragePremisesKey}-inline-error">@{
             Messages("fh.other_storage_premises.confirm.error")
           }
           </a></li>
