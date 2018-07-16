@@ -65,16 +65,16 @@ object StatusPageParams {
     ),
     StatusPageParams(
       Rejected,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
       nextTemplate = statusNewApplication.apply,
       showSubHeading = false,
       category = "post"
     ),
     StatusPageParams(
       Revoked,
-      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view(),
-      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication()),
+      cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
+      secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
       nextTemplate = statusNewApplication.apply,
       category = "post"
     ),

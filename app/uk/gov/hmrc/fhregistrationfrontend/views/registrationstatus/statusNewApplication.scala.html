@@ -20,8 +20,14 @@
 
 @(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
 <h2>
-  @Messages("fh.status.generic.what_happens_next")
+  @Messages("fh.status.generic.apply_again.title")
 </h2>
+
+@if(params.category == "post") {
+  <p>
+  @Messages(s"fh.status.${params.status}.apply_again.info")
+  </p>
+}
 
 <p>
   @Messages("fh.status.generic.apply_again")
