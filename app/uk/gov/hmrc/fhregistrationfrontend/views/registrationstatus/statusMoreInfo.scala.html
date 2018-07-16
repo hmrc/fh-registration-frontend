@@ -14,12 +14,33 @@
  * limitations under the License.
  *@
 
-@()(implicit message : Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+
+
+@(params: StatusPageParams)(implicit message : Messages)
+
+@heading = @{
+ if(params.category == "post") {
+  Messages("fh.status.generic.what_happens_next")
+ } else {
+  Messages("fh.status.generic.what_this_means")
+ }
+}
+
+@btaInfo = @{
+  if(params.category == "post") {
+    Messages(s"fh.status.${params.status}.bta.info")
+  } else {
+    ""
+  }
+}
+
+
 <h2>
-  @Messages("fh.status.generic.what_this_means")
+  @heading
 </h2>
 
 <p>
   @Messages("fh.status.generic.go_to_bta")
-  <a href="@Messages("link.bta")">@Messages("fh.status.generic.bta_link_text")</a>.
+  <a href="@Messages("link.bta")">@Messages("fh.status.generic.bta_link_text")</a> @btaInfo
 </p>

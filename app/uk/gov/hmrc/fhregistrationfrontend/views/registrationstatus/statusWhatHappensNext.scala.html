@@ -20,11 +20,11 @@
 
 @(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
 
-<h2>
-  @Messages("fh.status.generic.what_happens_next")
-</h2>
-
 @if(params.category == "pre") {
+  <h2>
+  @Messages("fh.status.generic.what_happens_next")
+  </h2>
+
   <p>
     @Messages("fh.ack.what_happens_next_1")
   </p>
