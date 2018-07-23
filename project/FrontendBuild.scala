@@ -29,6 +29,8 @@ object FrontendBuild extends Build with MicroService {
     "org.julienrf"          %% "play-json-derived-codecs"         % "3.3"
   )
 
+  val monocleVersion = "1.5.0"
+
   def test(scope: String = "test,it") = Seq(
     "com.typesafe.play"     %% "play-test"                        % PlayVersion.current % scope,
     "uk.gov.hmrc"           %% "hmrctest"                         % "3.0.0"   % scope,
@@ -40,7 +42,11 @@ object FrontendBuild extends Build with MicroService {
     "org.mockito"            % "mockito-core"                     % "2.7.22"  % scope,
     "org.scalamock"         %% "scalamock-scalatest-support"      % "3.5.0"   % scope,
     "com.github.tomakehurst" %  "wiremock"                        % "2.6.0"   % scope,
-    "com.eclipsesource"     %% "play-json-schema-validator"       % "0.8.9"   % scope
+    "com.eclipsesource"     %% "play-json-schema-validator"       % "0.8.9"   % scope,
+
+    "com.github.julien-truffaut" %%  "monocle-core"  % monocleVersion % "test",
+    "com.github.julien-truffaut" %%  "monocle-macro" % monocleVersion % "test",
+    "com.github.julien-truffaut" %%  "monocle-law"   % monocleVersion % "test"
   )
 
 }

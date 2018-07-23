@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{AllOtherInformation, ChangeIndicators, Subscription}
 
 object Diff {
 
@@ -30,9 +30,16 @@ object Diff {
       original.contactDetail != amended.contactDetail,
       original.GroupInformation != amended.GroupInformation,
       original.additionalBusinessInformation.partnerCorporateBody != amended.additionalBusinessInformation.partnerCorporateBody,
-      original.additionalBusinessInformation != amended.additionalBusinessInformation,
+      additionalBusinessInformationChanged(original.additionalBusinessInformation.allOtherInformation, amended.additionalBusinessInformation.allOtherInformation),
       original.additionalBusinessInformation.allOtherInformation.premises
         != amended.additionalBusinessInformation.allOtherInformation.premises,
       original.declaration != amended.declaration)
+
+
+  def additionalBusinessInformationChanged(original: AllOtherInformation, amended: AllOtherInformation) = {
+    original.numberOfCustomers != amended.numberOfCustomers ||
+      original.doesEORIExist != amended.doesEORIExist ||
+      original.EORINumber != amended.EORINumber
+  }
 
 }
