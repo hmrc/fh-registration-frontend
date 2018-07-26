@@ -16,11 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
-import monocle.macros.GenLens
+import java.time.LocalDate
+
+import monocle.{Optional, Prism}
+import monocle.Monocle.some
+import monocle.macros.{GenLens, GenPrism}
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, LimitedLiabilityPartnershipCorporateBody, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -33,6 +37,9 @@ class DiffSpecs extends UnitSpec {
   val importingActivitiesLens = GenLens[LimitedCompanyApplication](_.importingActivities)
   val companyOfficerLens = GenLens[LimitedCompanyApplication](_.companyOfficers)
   val otherStoragePremisesLens = GenLens[LimitedCompanyApplication](_.otherStoragePremises)
+  val businessStatusLens = GenLens[LimitedCompanyApplication](_.businessStatus)
+  val tradingNameLens = GenLens[LimitedCompanyApplication](_.tradingName)
+
 
   "changeIndicators" should {
     "show no change" in {
@@ -41,7 +48,41 @@ class DiffSpecs extends UnitSpec {
       val result = Diff.changeIndicators(subscription, subscription)
       result shouldBe changeIndicators()
     }
-    
+
+    "flag businessTypeChanged" when {
+      val businessTypeChanged = changeIndicators(businessTypeChanged = true)
+      "is not a new fulfilment" in {
+        testChangeIndicators(businessStatusLens set BusinessStatus(false, None), businessTypeChanged
+        )
+      }
+
+      "proposed start date changed" in {
+        testChangeIndicators(businessStatusLens set BusinessStatus(true, Some(LocalDate.of(2018,7,30))), businessTypeChanged
+        )
+      }
+    }
+
+    "flag businessDetailChanged" when {
+      val businessDetailChanged = changeIndicators(businessDetailChanged = true)
+      "trading name is not provided" in {
+        testChangeIndicators(tradingNameLens set TradingName(false, None), businessDetailChanged)
+      }
+
+      "trading name is changed" in {
+        testChangeIndicators(tradingNameLens set TradingName(true, Some("LegitCo")), businessDetailChanged)
+      }
+
+      "vat number is not provided" in {
+        testChangeIndicators(
+          vatNumberLens set VatNumber(false, None),
+          changeIndicators(businessDetailChanged = true, additionalBusinessInfoChanged = true))
+      }
+
+      "vat number is changed" in {
+        testChangeIndicators(vatNumberLens set VatNumber(true, Some("111111111")), businessDetailChanged)
+      }
+    }
+
     "flag coOfficialsChanged but not additionalBusinessInfoChanged" in {
       testChangeIndicators(
         companyOfficerLens modify { companyOfficers ⇒
@@ -93,6 +134,8 @@ class DiffSpecs extends UnitSpec {
       }
     }
 
+
+
   }
 
   private def testChangeIndicators(
@@ -140,4 +183,19 @@ class DiffSpecs extends UnitSpec {
     application,
     declaration
   )
+
+//  private def test(): Unit = {
+//    val a: Subscription = ???
+//
+//    val psd: Optional[Subscription, LimitedLiabilityPartnershipCorporateBody] = GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
+//    val dateOfIncorporation = GenLens[LimitedLiabilityPartnershipCorporateBody](_.incorporationDetails.dateOfIncorporation)
+//
+//    val z: Optional[Subscription, LocalDate] = psd composeLens dateOfIncorporation composePrism some
+//
+//
+//    a.FHbusinessDetail.proposedStartDate
+//
+//  }
+
+
 }
