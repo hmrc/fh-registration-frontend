@@ -1,6 +1,7 @@
 # microservice specific routes
 
 GET         /                                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.main()
+GET         /enrolment-progress                                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.enrolmentPending()
 GET         /start                                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startOrContinueApplication()
 GET         /continue                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
 GET         /sign-out                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout

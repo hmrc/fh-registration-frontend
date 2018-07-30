@@ -19,6 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.models.fhregistration
 object EnrolmentProgress extends Enumeration {
 
   type EnrolmentProgress = Value
-  val Pending, Unknown = Value
+  val Pending, Unknown, Error = Value
 
 }

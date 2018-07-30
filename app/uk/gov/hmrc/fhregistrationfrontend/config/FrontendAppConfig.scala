@@ -33,6 +33,7 @@ trait AppConfig {
   val phaseBannerFeedbackUnauth: String
   val appName: String
   def emailVerificationCallback(hash: String): String
+  val exciseEnquiryLink: String
 }
 
 @Singleton
@@ -49,6 +50,7 @@ class FrontendAppConfig @Inject()(
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
+  override lazy val exciseEnquiryLink: String = getConfString("exciseEnquiryLink", "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries")
 
   override lazy val appName: String = loadConfig("appName")
 

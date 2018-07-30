@@ -16,15 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import akka.stream.Materializer
-import org.mockito.Mockito.{reset, when}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.connectors.BusinessCustomerFrontendConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm
@@ -67,16 +63,30 @@ class ApplicationControllerSpec
     mockActions
   )(mockSave4Later)
 
-  "Application Controller" should {
+  "main" should {
 
-    "Show status pending page" in {
-      setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
-      setupUserAction()
-      val request = FakeRequest()
-      val result = await(csrfAddToken(controller.main)(request))
+    "redirect to enrolment pending page" when {
+      "enrolment is Pending" in {
+        setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
+        setupUserAction()
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.main)(request))
 
-      status(result) shouldBe OK
-      bodyOf(result) should include(Messages(s"fh.status.received.title"))
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/fhdds/enrolment-progress")
+      }
+
+      "enrolment is Error" in {
+        setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
+        setupUserAction()
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.main)(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/fhdds/enrolment-progress")
+        //      bodyOf(result) should include(Messages(s"fh.status.received.title"))
+      }
+
     }
 
     "Redirect to check status page" in {
@@ -89,6 +99,40 @@ class ApplicationControllerSpec
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/subscription/status")
     }
+  }
+
+  "enrolmentPending" should {
+    "render the enrolment pending page" in {
+      setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
+      setupUserAction()
+      val request = FakeRequest()
+      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+
+      status(result) shouldBe OK
+      bodyOf(result) should include(Messages(s"fh.status.received.title"))
+    }
+
+    "render the enrolment error page" in {
+      setupFhddsEnrolmentProgress(EnrolmentProgress.Error)
+      setupUserAction()
+      val request = FakeRequest()
+      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+
+      status(result) shouldBe OK
+      bodyOf(result) should include(Messages("fh.enrolment_error.message"))
+    }
+
+    "redirect to the main page" in {
+      setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
+      setupUserAction()
+      val request = FakeRequest()
+      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some("/fhdds")
+    }
+
+
   }
 
   "Application Controller for an user with no registartion and no pending submissions" should {

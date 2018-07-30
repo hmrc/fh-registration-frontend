@@ -107,6 +107,23 @@ fh.status_pending.what_happens_next_4=VAT general enquiries
 fh.status_pending.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
 fh.status_pending.finish=Finish and sign out
 
+# - Enrolment error status page
+#============================================================
+fh.enrolment_error.title=Sorry, we could not find your application
+fh.enrolment_error.heading=Sorry, we could not find your application
+fh.enrolment_error.message=Something has gone wrong with this service. It was not your fault.
+fh.enrolment_error.link_text=Contact excise enquiries
+fh.enrolment_error.help= to check the status of your application.
+
+fh.enrolment_error.what_happens_next_1=We need to make a few checks before we can process your application.
+fh.enrolment_error.what_happens_next_2=Once this is done, you will get an email to confirm that your application has been successfully submitted.
+fh.enrolment_error.what_happens_next_3=Contact
+fh.enrolment_error.what_happens_next_4=VAT general enquiries
+fh.enrolment_error.what_happens_next_5=if you have not received a confirmation email within 1 hour of submitting your application.
+fh.enrolment_error.finish=Finish and sign out
+
+
+
 
 
 fh.generic.create_new_application_link=Create a new application

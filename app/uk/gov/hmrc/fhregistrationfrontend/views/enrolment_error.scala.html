@@ -1,0 +1,33 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+@()(implicit request: Request[_], messages: Messages, config: AppConfig)
+@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+
+@title = @{
+  Messages(s"fh.enrolment_error.title")
+}
+
+@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets)) {
+  <h1>@Messages("fh.enrolment_error.heading")</h1>
+
+  <p>@Messages("fh.enrolment_error.message")</p>
+
+  <p><a href="@config.exciseEnquiryLink">@Messages("fh.enrolment_error.link_text")</a> @Messages("fh.enrolment_error.help")</p>
+
+}
