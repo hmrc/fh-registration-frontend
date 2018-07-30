@@ -62,14 +62,25 @@ class Application @Inject()(
 
     fhddsConnector
       .getEnrolmentProgress
-      .flatMap {
-        case EnrolmentProgress.Pending ⇒ Future successful Ok(status_pending())
+      .map {
+        case EnrolmentProgress.Pending ⇒ Redirect(routes.Application.enrolmentPending)
+        case EnrolmentProgress.Error ⇒ Redirect(routes.Application.enrolmentPending)
         case _                         ⇒
           val whenRegistered = request
             .registrationNumber
-            .map { _ ⇒ Future successful Redirect(routes.Application.checkStatus())}
+            .map { _ ⇒ Redirect(routes.Application.checkStatus())}
 
-          whenRegistered getOrElse Future.successful(Redirect(routes.Application.startOrContinueApplication()))
+          whenRegistered getOrElse Redirect(routes.Application.startOrContinueApplication())
+      }
+  }
+
+  def enrolmentPending = userAction.async { implicit  request ⇒
+    fhddsConnector
+      .getEnrolmentProgress
+      .map {
+        case EnrolmentProgress.Pending ⇒ Ok(enrolment_pending())
+        case EnrolmentProgress.Error   ⇒ Ok(enrolment_error())
+        case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
       }
   }
 
