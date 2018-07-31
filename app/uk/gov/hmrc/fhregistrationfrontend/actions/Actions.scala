@@ -32,10 +32,10 @@ class Actions @Inject() (
   errorHandler: ErrorHandler) {
 
 
-  def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls)
+  def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls, errorHandler)
 
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
-  def emailVerificationAction = new UserAction(externalUrls) andThen new EmailVerificationAction
+  def emailVerificationAction = new UserAction(externalUrls, errorHandler) andThen new EmailVerificationAction
 
   def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
   def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)

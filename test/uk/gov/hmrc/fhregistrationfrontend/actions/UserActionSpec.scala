@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import java.io.IOException
 
+import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc._
@@ -25,18 +26,19 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedExternalUrls
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{StubbedErrorHandler, StubbedExternalUrls}
 
 import scala.concurrent.Future
 
 class UserActionSpec extends ActionSpecBase {
 
   val mockAuthConnector = mock[AuthConnector]
+  implicit val materializer = mock[Materializer]
 
   type RetrievalType = Option[String] ~ Option[String] ~ Enrolments
 
   val fakeRequest: Request[Any] = FakeRequest()
-  lazy val action = new UserAction(StubbedExternalUrls)(mockAuthConnector)
+  lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler)(mockAuthConnector)
 
   "UserAction" should {
     "Find the internal user id and email with no enrolments " in {
@@ -62,6 +64,22 @@ class UserActionSpec extends ActionSpecBase {
       val refined = refinedRequest(action, fakeRequest)
       refined.registrationNumber shouldBe Some("XZFH00000123456")
       refined.userIsRegistered shouldBe true
+    }
+
+    "Render the application error page when there are multiple enrolments" in {
+      val fhddsEnrolment = EnrolmentIdentifier("EtmpRegistrationNumber", "XZFH00000123456")
+      val fhddsEnrolment2 = EnrolmentIdentifier("EtmpRegistrationNumber", "XZFH00000123459")
+
+      val enrolments = Set(
+        new Enrolment("HMRC-OBTDS-ORG", Seq(fhddsEnrolment), "Active"),
+        new Enrolment("HMRC-OBTDS-ORG", Seq(fhddsEnrolment2), "Active")
+      )
+
+      setupAuthConnector(enrolments = enrolments)
+      val r = await(result(action, fakeRequest))
+
+      status(r) shouldBe OK
+      bodyOf(r) shouldBe "fh.application_error.title"
     }
 
     "Redirect to gg if user is not logged in" in {
