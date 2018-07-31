@@ -20,14 +20,14 @@
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 
 @title = @{
-  Messages(s"fh.enrolment_error.title")
+  Messages(s"fh.application_error.title")
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets)) {
-  <h1>@Messages("fh.enrolment_error.heading")</h1>
+  <h1>@Messages("fh.application_error.heading")</h1>
 
-  <p>@Messages("fh.enrolment_error.message")</p>
+  <p>@Messages("fh.application_error.message")</p>
 
-  <p><a href="@config.exciseEnquiryLink">@Messages("fh.enrolment_error.link_text")</a> @Messages("fh.enrolment_error.help")</p>
+  <p><a href="@config.exciseEnquiryLink">@Messages("fh.application_error.link_text")</a> @Messages("fh.application_error.help")</p>
 
 }

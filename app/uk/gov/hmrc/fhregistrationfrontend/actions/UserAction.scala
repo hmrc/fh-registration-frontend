@@ -21,9 +21,10 @@ import javax.inject.Inject
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
@@ -35,7 +36,8 @@ class UserRequest[A](val userId: String, val ggEmail: Option[String], val regist
 }
 
 class UserAction @Inject()(
-  externalUrls: ExternalUrls
+  externalUrls: ExternalUrls,
+  errorHandler: ErrorHandler
 )(implicit override val authConnector: AuthConnector) extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
@@ -46,7 +48,7 @@ class UserAction @Inject()(
 
     authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments) {
       case Some(id) ~ anEmail ~ enrolments ⇒
-        val fhddsRegistrationNumber = for {
+        val fhddsRegistrationNumbers = for {
           enrolment ← enrolments.enrolments
           if enrolment.key equalsIgnoreCase Enrolments.serviceName
 
@@ -58,7 +60,10 @@ class UserAction @Inject()(
           identifier.value
         }
 
-        Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumber.headOption, request))
+        if (fhddsRegistrationNumbers.size > 1)
+          Future successful Left(errorHandler.applicationError)
+        else
+          Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumbers.headOption, request))
       case _     ⇒
         throw AuthorisationException.fromString("Can not find user id")
 

@@ -84,7 +84,6 @@ class ApplicationControllerSpec
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/fhdds/enrolment-progress")
-        //      bodyOf(result) should include(Messages(s"fh.status.received.title"))
       }
 
     }
@@ -119,7 +118,7 @@ class ApplicationControllerSpec
       val result = await(csrfAddToken(controller.enrolmentPending)(request))
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.enrolment_error.message"))
+      bodyOf(result) should include(Messages("fh.application_error.message"))
     }
 
     "redirect to the main page" in {

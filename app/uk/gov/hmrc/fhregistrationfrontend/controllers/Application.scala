@@ -79,7 +79,7 @@ class Application @Inject()(
       .getEnrolmentProgress
       .map {
         case EnrolmentProgress.Pending ⇒ Ok(enrolment_pending())
-        case EnrolmentProgress.Error   ⇒ Ok(enrolment_error())
+        case EnrolmentProgress.Error   ⇒ Ok(application_error())
         case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
       }
   }

@@ -24,12 +24,14 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{Request, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.views.html.error_template
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{application_error, error_template}
 import play.api.mvc.Results.Status
 
 @ImplementedBy(classOf[DefaultErrorHandler])
 trait ErrorHandler {
   def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result
+
+  def applicationError(implicit request: Request[_]): Result
 }
 
 @Singleton
@@ -41,6 +43,10 @@ class DefaultErrorHandler @Inject()(
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     error_template(pageTitle, heading, message)
+
+  override def applicationError(implicit request: Request[_]): Result = {
+    Ok(application_error())
+  }
 
   override def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result = {
     val messages = implicitly[Messages]
