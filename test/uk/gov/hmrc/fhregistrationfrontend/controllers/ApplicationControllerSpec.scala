@@ -305,7 +305,7 @@ class ApplicationControllerSpec
   }
 
   "deleteUserData" should {
-    "Redirect to startOrContinueApplication" in {
+    "Redirect to the landing page" in {
       setupUserAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
@@ -313,7 +313,7 @@ class ApplicationControllerSpec
       val result = await(controller deleteUserData request)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some("/fhdds/start")
+      redirectLocation(result) shouldBe Some("/fhdds")
     }
   }
 

@@ -54,7 +54,7 @@ GET         /saved                                                              
 POST        /deleteOrContinue                                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
 GET         /confirmDelete                                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
 
-GET         /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
+POST        /delete                                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
 
 GET         /withdraw                                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.startWithdraw
 GET         /withdraw/reason                                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.reason

@@ -173,7 +173,7 @@ class Application @Inject()(
 
   def deleteUserData = userAction.async { implicit request ⇒
     save4LaterService.removeUserData(request.userId) map {
-      _ ⇒ Redirect(routes.Application.startOrContinueApplication())
+      _ ⇒ Redirect(routes.Application.main())
     }
   }
 
