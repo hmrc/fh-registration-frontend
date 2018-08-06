@@ -67,10 +67,12 @@
       None
     )
   )
-} else {
+}
+
+@if(partner.hasUniqueTaxpayerReference) {
   @SummaryRow(
     SummaryRowParams(
-      Some(Messages("fh.vatNumber.label")),
+      Some(Messages("fh.ct_utr.label")),
       partner.uniqueTaxpayerReference,
       None
     )
