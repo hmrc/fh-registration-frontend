@@ -98,6 +98,7 @@
         hasErrors = formDate(s"$fieldName.postcode").hasErrors
       )
     )
+    <input type="hidden" name="@{fieldName}.lookupId" value="@formDate(s"$fieldName.lookupId").value">
     <div class="form-group lookup-link-container" style="margin: 1em 0; display: none;">
       <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
     </div>

@@ -46,10 +46,11 @@
     });
     $('[name="' + store.context + '.' + 'Line4"]').val(address.town);
     $('[name="' + store.context + '.' + 'postcode"]').val(address.postcode);
+    $('[name="' + store.context + '.' + 'lookupId"]').val(store.addresses[index].id);
   }
 
   function clearAddressFields (context) {
-    $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode'], function (i, line) {
+    $.each( ['Line1', 'Line2', 'Line3', 'Line4', 'postcode', 'lookupId'], function (i, line) {
       $('[name="' + context + '.' + line + '"]').val('');
     });
   }
