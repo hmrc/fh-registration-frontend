@@ -32,6 +32,7 @@ object LtdLargeUk {
         None,
         Some("Testtown"),
         "ZZ11 1ZZ",
+        None,
         None
       )),
       Some(LocalDate.of(2015, 3, 20))
@@ -44,14 +45,7 @@ object LtdLargeUk {
       Some(verifiedEmail),
       false,
       Some(true),
-      Some(Address(
-        "Flat 1B",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1ZZ",
-        None
-      )),
+      Some(Address("Flat 1B", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
       None
     ),
     CompanyRegistrationNumber("12345678"),
@@ -99,22 +93,10 @@ object LtdLargeUk {
       ListWithTrackedChanges(
         List(
           StoragePremise(
-            Address(
-              "1 Some High Street",
-              None,
-              None,
-              Some("Sometown"),
-              "Z99 2YY",
-              None),
+            Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
             false) → changeFlags,
           StoragePremise(
-            Address(
-              "25 Testing Close",
-              None,
-              None,
-              Some("Othertown"),
-              "Z9 3WW",
-              None),
+            Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
             true) → changeFlags),
         List.empty,
         false))

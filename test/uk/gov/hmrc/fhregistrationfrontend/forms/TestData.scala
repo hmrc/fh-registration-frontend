@@ -32,13 +32,6 @@ object TestData {
     }
   }
 
-  val addressUk = Address(
-    "line one",
-    Some("line two"),
-    None,
-    None,
-    "AA11 1AA",
-    None
-  )
+  val addressUk = Address("line one", Some("line two"), None, None, "AA11 1AA", None, None)
 
 }

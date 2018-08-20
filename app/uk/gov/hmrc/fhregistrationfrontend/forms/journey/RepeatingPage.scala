@@ -26,20 +26,22 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ListWithTrackedChanges}
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 import scala.util.Try
 
 
 case class RepeatingPage[T](
-  id      : String,
-  renderer: RepeatedFormRendering[(T, Boolean)],
-  mapping: Mapping[T],
-  value   : ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
-  index   : Int = 0,
-  minItems: Int = 1,
-  maxItems: Int = 100
+  id           : String,
+  renderer     : RepeatedFormRendering[(T, Boolean)],
+  mapping      : Mapping[T],
+  value        : ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
+  updatedAddresses: List[Address] = List.empty,
+  index        : Int = 0,
+  minItems     : Int = 1,
+  maxItems     : Int = 100,
+  addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
 )(implicit val format: Format[ListWithTrackedChanges[T]]) extends Page[ListWithTrackedChanges[T]] {
 
 
@@ -81,22 +83,28 @@ case class RepeatingPage[T](
 
   def section(index: Int) = (index + 1).toString
 
-  override def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[ListWithTrackedChanges[T]] ⇒ X)(implicit r: Request[_]): X = {
+  override def parseFromRequest[X](onErrors: Rendering ⇒ X, onSuccess: Page[ListWithTrackedChanges[T]] ⇒ X)(implicit r: Request[_]): X = {
     val updatedForm = form.bindFromRequest
     if (updatedForm.hasErrors)
-      withErrors(errorRenderer(updatedForm))
+      onErrors(errorRenderer(updatedForm))
     else if (index > maxItems)
-      withErrors(errorRenderer(updatedForm withError (ElementKey, "too.many.items")))
+      onErrors(errorRenderer(updatedForm withError (ElementKey, "too.many.items")))
     else {
       val (element, more) = updatedForm.value.get
       if (more && (index + 1 > maxItems))
-        withErrors(errorRenderer(updatedForm withError (AddMoreKey, "too.many.items")))
+        onErrors(errorRenderer(updatedForm withError (AddMoreKey, "too.many.items")))
       else {
         val updateValue =
           if (value.size <= index) value append element
           else value.updated(index, element)
-        val updatePage = this copy(value = updateValue.copy(addMore = more))
-        withData(updatePage)
+
+        val updatedAddress =
+          if (value.size <= index) addressOnPage(element)
+          else if (addressOnPage(value(index)) != addressOnPage(element)) addressOnPage(element)
+          else None
+
+        val updatePage = this copy (value = updateValue.copy(addMore = more), updatedAddresses = updatedAddress.toList)
+        onSuccess(updatePage)
       }
     }
   }
@@ -146,5 +154,4 @@ case class RepeatingPage[T](
       Some(section(value.size - 1))
 
   override def section = Some(section(index))
-
 }

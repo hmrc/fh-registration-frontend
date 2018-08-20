@@ -24,14 +24,15 @@ import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, Request, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
 
 import scala.concurrent.Future
 
 @Singleton
 class FormPageController @Inject()(
-  ds               : CommonPlayDependencies,
+  ds: CommonPlayDependencies,
+  addressAuditService: AddressAuditService,
   actions: Actions
 )(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
 
@@ -51,6 +52,7 @@ class FormPageController @Inject()(
     request.page[T].parseFromRequest (
       pageWithErrors => Future successful renderForm(pageWithErrors, true),
       page => {
+        addressAuditService.auditAddresses(pageId, page.updatedAddresses)
         save4LaterService
           .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
           .map { _ ⇒

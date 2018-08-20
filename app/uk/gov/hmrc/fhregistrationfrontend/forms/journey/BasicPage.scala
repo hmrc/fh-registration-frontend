@@ -22,24 +22,36 @@ import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
-case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], data: Option[T] = None)(implicit val format: Format[T])
+case class BasicPage[T](
+  id           : String, form: Form[T],
+  rendering    : FormRendering[T],
+  data         : Option[T] = None,
+  updatedAddresses: List[Address] = List.empty,
+  addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
+
+)(implicit val format: Format[T])
   extends Page[T]
     with Rendering {
 
   override def withData(data: T) = this copy (data = Some(data))
 
-
   override def nextSubsection: Option[String] = None
-  override def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[T] ⇒ X)(implicit r: Request[_]): X = {
+  override def parseFromRequest[X](onError: Rendering ⇒ X, onSuccess: Page[T] ⇒ X)(implicit r: Request[_]): X = {
     val updatedForm = form.bindFromRequest()
+    println(s"errors ${updatedForm.errors}")
     if (updatedForm.hasErrors)
-      withErrors(errorRenderer(updatedForm))
+      onError(errorRenderer(updatedForm))
     else {
-      val updatedPage = this.copy(data = updatedForm.value)
-      withData(updatedPage)
+      val newValue = updatedForm.value
+      val updatedAddresses =
+        if (data.flatMap(addressOnPage) != newValue.flatMap(addressOnPage)) newValue.flatMap(addressOnPage).toList
+        else List.empty
+      val updatedPage = this.copy(data = newValue, updatedAddresses = updatedAddresses)
+      onSuccess(updatedPage)
     }
   }
 
@@ -67,4 +79,5 @@ case class BasicPage[T](id: String, form: Form[T], rendering: FormRendering[T], 
   override def previousSubsection: Option[String] = None
 
   override def section = None
+
 }

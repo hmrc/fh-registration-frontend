@@ -26,14 +26,7 @@ object SPLargeUk {
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),
-      Some(Address(
-        "Flat 1A",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1ZZ",
-        None
-      )),
+      Some(Address("Flat 1A", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
       Some(LocalDate.of(2015, 3, 20))
     ),
     ContactPerson(
@@ -44,14 +37,7 @@ object SPLargeUk {
       Some(verifiedEmail),
       false,
       Some(true),
-      Some(Address(
-        "Flat 1B",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1ZZ",
-        None
-      )),
+      Some(Address("Flat 1B", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
       None
     ),
     NationalInsuranceNumber(true, Some("AA123111A")),
@@ -64,22 +50,10 @@ object SPLargeUk {
       ListWithTrackedChanges(
         List(
           StoragePremise(
-            Address(
-              "two flat",
-              Some("two street"),
-              None,
-              Some("two town"),
-              "Z99 2YY",
-              None),
+            Address("two flat", Some("two street"), None, Some("two town"), "Z99 2YY", None, None),
             true) → changeFlags,
           StoragePremise(
-            Address(
-              "25 Testing Close",
-              None,
-              None,
-              Some("Othertown"),
-              "AA01 0AA",
-              None),
+            Address("25 Testing Close", None, None, Some("Othertown"), "AA01 0AA", None, None),
             false) → changeFlags),
         List.empty,
         false))

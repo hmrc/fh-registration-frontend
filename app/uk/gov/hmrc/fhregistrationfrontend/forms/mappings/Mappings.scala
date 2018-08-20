@@ -24,6 +24,7 @@ import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 import Constraints.oneOfConstraint
+import org.apache.commons.lang3.StringUtils
 
 import scala.util.Try
 
@@ -43,7 +44,8 @@ object Mappings {
     "Line3" -> optional(addressLine),
     "Line4" -> optional(addressLine),
     "postcode" -> postcode,
-    "countryCode" -> optional(nonEmptyText)
+    "countryCode" -> optional(nonEmptyText),
+    "lookupId" → optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) ⇒ v)
   )(Address.apply)(Address.unapply)
 
   def postcode: Mapping[String] = nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$".r))

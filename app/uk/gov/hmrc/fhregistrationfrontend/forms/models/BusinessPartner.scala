@@ -24,7 +24,9 @@ case class BusinessPartner(
   identification: BusinessPartnerIdentification
 )
 
-sealed trait BusinessPartnerIdentification
+sealed trait BusinessPartnerIdentification {
+  def address: Address
+}
 
 case class BusinessPartnerIndividual(
   firstName: String,

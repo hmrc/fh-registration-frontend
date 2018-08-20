@@ -33,14 +33,7 @@ object FormTestData {
     Some(verifiedEmail),
     false,
     Some(true),
-    Some(Address(
-      "Flat 1B",
-      None,
-      None,
-      Some("Testtown"),
-      "ZZ11 1ZZ",
-      None
-    )),
+    Some(Address("Flat 1B", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
     None
   )
 
@@ -49,14 +42,7 @@ object FormTestData {
   val mainBusinessAddress = MainBusinessAddress(
     "Less than 3 years",
     Some(true),
-    Some(Address(
-      "Flat 1A",
-      None,
-      None,
-      Some("Testtown"),
-      "ZZ11 1ZZ",
-      None
-    )),
+    Some(Address("Flat 1A", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
     Some(LocalDate.of(2015, 3, 20))
   )
 
@@ -107,22 +93,10 @@ object FormTestData {
     ListWithTrackedChanges(
       List(
         StoragePremise(
-          Address(
-            "1 Some High Street",
-            None,
-            None,
-            Some("Sometown"),
-            "Z99 2YY",
-            None),
+          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
           false) → Added,
         StoragePremise(
-          Address(
-            "25 Testing Close",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None),
+          Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
           true) → Added),
       List.empty,
       false))
@@ -135,13 +109,7 @@ object FormTestData {
         "ship",
         true,
         Some("AA123123A"),
-        Address(
-          "individual line one",
-          None,
-          None,
-          Some("Othertown"),
-          "Z9 3WW",
-          None)
+        Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
       )) → Added,
       BusinessPartner(
         BusinessPartnerType.SoleProprietor,
@@ -155,13 +123,7 @@ object FormTestData {
           true,
           Some("223456789"),
           None,
-          Address(
-            "sole line one",
-            None,
-            None,
-            Some("sole town"),
-            "AA13 1AA",
-            None)
+          Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
         )
       ) → Added,
       BusinessPartner(
@@ -174,13 +136,7 @@ object FormTestData {
           true,
           Some("323456789"),
           None,
-          Address(
-            "llp line one",
-            Some("llp line two"),
-            Some("llp line three"),
-            Some("llp town"),
-            "AA14 1AA",
-            None)
+          Address("llp line one", Some("llp line two"), Some("llp line three"), Some("llp town"), "AA14 1AA", None, None)
         )
       ) → Added,
       BusinessPartner(
@@ -193,13 +149,7 @@ object FormTestData {
           Some("423456789"),
           true,
           Some("2234567890"),
-          Address(
-            "partner line one",
-            Some("partner line two"),
-            None,
-            Some("partner town"),
-            "AA15 1AA",
-            None)
+          Address("partner line one", Some("partner line two"), None, Some("partner town"), "AA15 1AA", None, None)
         )
       ) → Added,
       BusinessPartner(
@@ -212,13 +162,7 @@ object FormTestData {
           false,
           None,
           Some("1234567890"),
-          Address(
-            "ltd line one",
-            None,
-            None,
-            Some("ltd town"),
-            "AA16 1AA",
-            None)
+          Address("ltd line one", None, None, Some("ltd town"), "AA16 1AA", None, None)
         )
       ) → Added,
       BusinessPartner(
@@ -231,13 +175,7 @@ object FormTestData {
           None,
           false,
           None,
-          Address(
-            "church one",
-            None,
-            None,
-            Some("church town"),
-            "AA17 1AA",
-            None)
+          Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
         )
       ) → Added),
     List.empty,
