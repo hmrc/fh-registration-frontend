@@ -18,14 +18,17 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, TradingNameForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm, VatNumberForm}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
 import play.api.test.Helpers._
-import org.mockito.Mockito.reset
+import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, OtherStoragePremises}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
+import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
+
+import scala.concurrent.Future
 
 class FormPageControllerSpec
   extends ControllerSpecWithGuiceApp
@@ -38,11 +41,14 @@ class FormPageControllerSpec
     super.beforeEach()
     reset(
       mockSave4Later,
-      mockActions
+      mockActions,
+      addressAuditService
     )
+    when(addressAuditService.auditAddresses(any(), any())(any())).thenReturn(Future successful true)
   }
 
-  val controller = new FormPageController(commonDependencies, mockActions)(mockSave4Later)
+  val addressAuditService = mock[AddressAuditService]
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockActions)(mockSave4Later)
 
   "load" should {
     "Render the page" in {
@@ -98,6 +104,30 @@ class FormPageControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/form/vatNumber")
     }
 
+    "send an audit address event" in {
+      val page = Page.contactPersonPage
+      setupPageAction(page)
+      setupSave4Later()
+
+      val form = Seq(
+        ContactPersonForm.lastNameKey → "last",
+        ContactPersonForm.firstNameKey → "first",
+        ContactPersonForm.telephoneKey → "0771231231",
+        ContactPersonForm.jobTitleKey → "job",
+        ContactPersonForm.usingSameContactAddressKey → "false",
+        ContactPersonForm.isUkAddressKey → "true"
+      )
+      val addressForm = Seq(
+        "Line1" → "Some",
+        "postcode" → "AA11 1AA"
+      ).map { case (k, v) ⇒ s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v}
+
+      val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
+      val result = await(csrfAddToken(controller.save(page.id))(request))
+      status(result) shouldBe SEE_OTHER
+      verify(addressAuditService).auditAddresses(any(), any())(any())
+    }
+
     "Redirect to summary" in {
       val page = Page.tradingNamePage
       setupPageAction(page, journeyPages = JourneyRequestBuilder.fullyCompleteJourney())
@@ -136,8 +166,6 @@ class FormPageControllerSpec
       val page = Page.businessPartnersPage
       setupPageAction(page)
       setupSave4Later()
-
-
 
       val request = FakeRequest().withFormUrlEncodedBody(
         businessPartnerFormData(addMore = false).toSeq: _*

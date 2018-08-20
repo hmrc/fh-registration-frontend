@@ -37,14 +37,7 @@ object LtdLargeUkNew {
       None,
       false,
       Some(true),
-      Some(Address(
-        "New Flat",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1AA",
-        None
-      )),
+      Some(Address("New Flat", None, None, Some("Testtown"), "ZZ11 1AA", None, None)),
       None
     ),
     CompanyRegistrationNumber("87654321"),
@@ -82,41 +75,17 @@ object LtdLargeUkNew {
     OtherStoragePremises(true, ListWithTrackedChanges(
       List(
         StoragePremise(
-          Address(
-            "1 Some High Street",
-            None,
-            None,
-            Some("Sometown"),
-            "Z99 2YY",
-            None),
+          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
           false) → ListWithTrackedChanges.Added,
         StoragePremise(
-          Address(
-            "25 Testing Close",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None),
+          Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
           true) → ListWithTrackedChanges.Updated,
         StoragePremise(
-          Address(
-            "26 Testing Close",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None),
+          Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
           true) → ListWithTrackedChanges.NoChange
       ),
       List(StoragePremise(
-        Address(
-          "27 Testing Close",
-          None,
-          None,
-          Some("Othertown"),
-          "Z9 3WW",
-          None),
+        Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
         true)),
       false)))
 

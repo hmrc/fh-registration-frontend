@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Inject
 
-import cats.kernel.instances.hash
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig

@@ -21,7 +21,7 @@ import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, OtherStoragePremises, StoragePremise}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ListWithTrackedChanges, OtherStoragePremises, StoragePremise}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
@@ -124,4 +124,8 @@ case class OtherStoragePremisesPage(
       storagePremisePage.lastSection
     else
       None
+
+  override def updatedAddresses: List[Address] =
+    if(isMainSection) mainPage.updatedAddresses
+    else storagePremisePage.updatedAddresses
 }

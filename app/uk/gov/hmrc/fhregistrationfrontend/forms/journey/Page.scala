@@ -28,8 +28,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
-
 
 trait Rendering {
   def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
@@ -65,6 +63,7 @@ trait Page[T] extends Rendering {
   def pageStatus: PageStatus
   def lastSection: Option[String]
 
+  def updatedAddresses: List[Address]
 }
 
 object Page {
@@ -88,7 +87,9 @@ object Page {
         (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         main_business_address(form, bpr, navigation)
       }
-    })
+    },
+    addressOnPage = _.previousAddress
+  )
 
   val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
     "contactPerson",
@@ -98,7 +99,9 @@ object Page {
         (implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
         contact_person(form, bpr, navigation)
       }
-    })
+    },
+    addressOnPage = _.otherUkContactAddress)
+
 
   val companyRegistrationNumberPage: Page[CompanyRegistrationNumber] = new BasicPage[CompanyRegistrationNumber](
     "companyRegistrationNumber",
@@ -160,7 +163,8 @@ object Page {
       }
     },
     BusinessPartnersForm.businessPartnerMapping,
-    minItems = 2
+    minItems = 2,
+    addressOnPage = { bp ⇒ Some(bp.identification.address) }
   )
 
   val companyOfficersPage = RepeatingPage[CompanyOfficer](
@@ -217,7 +221,8 @@ object Page {
         storage_premise(form, navigation, sectionId, params)
       }
     },
-    StoragePremisesForm.storagePremiseMapping
+    StoragePremisesForm.storagePremiseMapping,
+    addressOnPage = { sp ⇒ Some(sp.address) }
   )
 
   val otherStoragePremisesPage = OtherStoragePremisesPage(

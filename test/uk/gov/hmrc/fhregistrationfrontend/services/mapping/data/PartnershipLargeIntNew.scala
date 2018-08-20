@@ -37,14 +37,7 @@ object PartnershipLargeIntNew {
       None,
       false,
       Some(true),
-      Some(Address(
-        "New Flat",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1AA",
-        None
-      )),
+      Some(Address("New Flat", None, None, Some("Testtown"), "ZZ11 1AA", None, None)),
       None
     ),
     TradingName(true, Some("CatCo")),
@@ -57,13 +50,7 @@ object PartnershipLargeIntNew {
           "shipIndividual",
           true,
           Some("AA123123A"),
-          Address(
-            "individual line one",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None)
+          Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
         )) → Updated,
         BusinessPartner(
           BusinessPartnerType.SoleProprietor,
@@ -77,13 +64,7 @@ object PartnershipLargeIntNew {
             true,
             Some("223456789"),
             None,
-            Address(
-              "sole line one",
-              None,
-              None,
-              Some("sole town"),
-              "AA13 1AA",
-              None)
+            Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
           )
         ) → Updated,
         BusinessPartner(
@@ -96,13 +77,7 @@ object PartnershipLargeIntNew {
             true,
             Some("323456789"),
             None,
-            Address(
-              "llp line one",
-              Some("llp line two"),
-              Some("llp line three"),
-              Some("llp town"),
-              "AA14 1AA",
-              None)
+            Address("llp line one", Some("llp line two"), Some("llp line three"), Some("llp town"), "AA14 1AA", None, None)
           )
         ) → Updated,
         BusinessPartner(
@@ -115,13 +90,7 @@ object PartnershipLargeIntNew {
             Some("423456789"),
             true,
             Some("2234567890"),
-            Address(
-              "partner line one",
-              Some("partner line two"),
-              None,
-              Some("partner town"),
-              "AA15 1AA",
-              None)
+            Address("partner line one", Some("partner line two"), None, Some("partner town"), "AA15 1AA", None, None)
           )
         ) → Updated,
         BusinessPartner(
@@ -134,13 +103,7 @@ object PartnershipLargeIntNew {
             false,
             None,
             Some("1234567890"),
-            Address(
-              "ltd line one",
-              None,
-              None,
-              Some("ltd town"),
-              "AA16 1AA",
-              None)
+            Address("ltd line one", None, None, Some("ltd town"), "AA16 1AA", None, None)
           )
         ) → Updated),
       List(BusinessPartner(
@@ -153,13 +116,7 @@ object PartnershipLargeIntNew {
           None,
           false,
           None,
-          Address(
-            "church one",
-            None,
-            None,
-            Some("church town"),
-            "AA17 1AA",
-            None)
+          Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
         )
       )),
       false),
@@ -169,41 +126,17 @@ object PartnershipLargeIntNew {
     OtherStoragePremises(true, ListWithTrackedChanges(
       List(
         StoragePremise(
-          Address(
-            "1 Some High Street",
-            None,
-            None,
-            Some("Sometown"),
-            "Z99 2YY",
-            None),
+          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
           false) → ListWithTrackedChanges.Added,
         StoragePremise(
-          Address(
-            "25 Testing Close",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None),
+          Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
           true) → ListWithTrackedChanges.Updated,
         StoragePremise(
-          Address(
-            "26 Testing Close",
-            None,
-            None,
-            Some("Othertown"),
-            "Z9 3WW",
-            None),
+          Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
           true) → ListWithTrackedChanges.NoChange
       ),
       List(StoragePremise(
-        Address(
-          "27 Testing Close",
-          None,
-          None,
-          Some("Othertown"),
-          "Z9 3WW",
-          None),
+        Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
         true)),
       false)))
   val verifiedEmail = "a@w.ro"

@@ -64,7 +64,7 @@ class AddressLookupControllerSpec extends ControllersSpecBase {
       implicit val reads = Json.format[RecordSet]
       val response = RecordSet(
         Seq(
-          AddressRecord("id1", Address(Seq("Line1", "Line2"), Some("town"), "AA1 1AA", Country("GB", "Great Britain")), "en")
+          AddressRecord("id1", 123342, Address(Seq("Line1", "Line2"), Some("town"), "AA1 1AA", Country("GB", "Great Britain")), "en")
         )
       )
       val action = controller.addressLookup("AA1 1AA", None)
