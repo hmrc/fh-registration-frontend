@@ -54,7 +54,8 @@ class DefaultAddressAuditService  @Inject()(
 ) extends AddressAuditService  {
 
   override def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any] = {
-    Logger.info(s"Auditing: $page, $addresses")
+    if (!addresses.isEmpty)
+      Logger info s"Auditing ${addresses.size} addresses for $page"
     val auditResults = addresses map { address ⇒
       addressAuditData(address)
         .flatMap(sendAuditEvent(page, _))
@@ -82,7 +83,7 @@ class DefaultAddressAuditService  @Inject()(
       tags = headerCarrier.toAuditTags("fh-registration", s"/fhdds/form/$page"),
       detail = headerCarrier.toAuditDetails(addressAuditData.details: _*)
     )
-    Logger.info(s"Submitting event $event")
+    Logger info s"Submitting event with id ${event.eventId}"
     auditConnector sendEvent event
   }
 
@@ -102,7 +103,7 @@ class DefaultAddressAuditService  @Inject()(
         else
           postcodeAddressModifiedSubmitted(address, originalAddress, originalAddressRecord.uprn.toString)
       case None                   ⇒
-        Logger.error(s"Could not find address by id $id")
+        Logger error s"Could not find address by id $id"
         manualAddressSubmitted(address)
     }
   }
