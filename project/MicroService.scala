@@ -13,10 +13,11 @@ trait MicroService {
   import uk.gov.hmrc.SbtAutoBuildPlugin
   import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
   import uk.gov.hmrc.versioning.SbtGitVersioning
+  import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
   import play.sbt.routes.RoutesKeys.routesGenerator
+  import uk.gov.hmrc.SbtArtifactory
 
-
-  import TestPhases._
+  import TestPhases.oneForkedJvmPerTest
 
   val appName: String
 
@@ -46,7 +47,8 @@ trait MicroService {
 
 
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins : _*)
+    .settings(majorVersion := 0)
     .settings(PlayKeys.playDefaultPort := 1118)
     .settings(playSettings : _*)
     .settings(scoverageSettings: _*)
@@ -64,7 +66,7 @@ trait MicroService {
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
     .settings(
       Keys.fork in IntegrationTest := false,
-      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
+      unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest)(base => Seq(base / "it")).value,
       resourceDirectory in IntegrationTest := baseDirectory.value / "it/resources",
       addTestReportOption(IntegrationTest, "int-test-reports"),
       testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
