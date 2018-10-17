@@ -1,9 +1,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import org.scalatest.Ignore
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
+@Ignore
 class WithdrawalControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 

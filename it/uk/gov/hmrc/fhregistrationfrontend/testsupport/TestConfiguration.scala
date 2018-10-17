@@ -49,17 +49,17 @@ trait TestConfiguration
   private def replaceWithWiremock(services: Seq[String]) =
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap + (
-        s"Test.microservice.services.$service.host" -> wiremockHost,
-        s"Test.microservice.services.$service.port" -> wiremockPort,
-        s"Test.microservice.services.cachable.short-lived-cache.domain" -> "save4later",
-        s"Test.microservice.services.cachable.session-cache.domain" -> "keystore",
+        s"microservice.services.$service.host" -> wiremockHost,
+        s"microservice.services.$service.port" -> wiremockPort,
+        s"microservice.services.cachable.short-lived-cache.domain" -> "save4later",
+        s"microservice.services.cachable.session-cache.domain" -> "keystore",
         s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
         s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty
       )
     } +
-      (s"Test.auditing.consumer.baseUri.host" -> wiremockHost, s"Test.auditing.consumer.baseUri.port" -> wiremockPort)
+      (s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
 
   val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 

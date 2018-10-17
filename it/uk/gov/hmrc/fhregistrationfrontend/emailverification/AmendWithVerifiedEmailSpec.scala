@@ -1,8 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
+import org.scalatest.Ignore
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
+@Ignore
 class AmendWithVerifiedEmailSpec
   extends Specifications with TestConfiguration {
 
