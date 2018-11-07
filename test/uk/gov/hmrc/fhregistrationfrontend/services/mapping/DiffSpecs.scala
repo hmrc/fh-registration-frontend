@@ -184,18 +184,6 @@ class DiffSpecs extends UnitSpec {
     declaration
   )
 
-//  private def test(): Unit = {
-//    val a: Subscription = ???
-//
-//    val psd: Optional[Subscription, LimitedLiabilityPartnershipCorporateBody] = GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
-//    val dateOfIncorporation = GenLens[LimitedLiabilityPartnershipCorporateBody](_.incorporationDetails.dateOfIncorporation)
-//
-//    val z: Optional[Subscription, LocalDate] = psd composeLens dateOfIncorporation composePrism some
-//
-//
-//    a.FHbusinessDetail.proposedStartDate
-//
-//  }
 
 
 }
