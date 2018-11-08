@@ -265,7 +265,7 @@
     }
   },
   "changeIndicators": {
-    "businessTypeChanged": false,
+    "businessTypeChanged": true,
     "businessDetailChanged": true,
     "partnersChanged": true,
     "businessAddressChanged": true,
