@@ -37,9 +37,10 @@ class ShortLivedCacheModule extends Module {
 
 @Singleton
 class DefaultShortLivedCache @Inject() (
-  override val shortLiveCache: ShortLivedHttpCaching
+  override val shortLiveCache: ShortLivedHttpCaching,
+  val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit lazy val crypto = ApplicationCrypto.JsonCrypto
+  override implicit lazy val crypto = new ApplicationCrypto(runModeConfiguration.underlying).JsonCrypto
 }
 
 @Singleton
