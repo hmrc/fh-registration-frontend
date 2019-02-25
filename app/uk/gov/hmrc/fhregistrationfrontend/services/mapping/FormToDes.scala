@@ -47,7 +47,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.SoleTrader,
       isNewFulfilmentBusiness(application.businessStatus),
-      None,
+     // None,
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
@@ -60,7 +60,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.Partnership,
       isNewFulfilmentBusiness(application.businessStatus),
-      None,
+      //None,
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
@@ -73,7 +73,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
-      None,
+      //None,
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),

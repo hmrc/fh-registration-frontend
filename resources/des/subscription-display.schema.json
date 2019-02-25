@@ -25,9 +25,6 @@
         "FHbusinessDetail": {
           "$ref": "#/definitions/FHbusinessDetailType"
         },
-        "GroupInformation": {
-          "$ref": "#/definitions/GroupInformationType"
-        },
         "additionalBusinessInformation": {
           "$ref": "#/definitions/additionalBusinessInformationType"
         },
@@ -39,9 +36,6 @@
             },
             "nonProprietor": {
               "$ref": "#/definitions/nonProprietorType"
-            },
-            "limitedLiabilityPartnershipCorporateBody": {
-              "$ref": "#/definitions/llpOrCorporateBodyType"
             },
             "partnership": {
               "$ref": "#/definitions/partnerShipBusinessDetailsType"
@@ -82,101 +76,6 @@
       },
       "required": [
         "isNewFulfilmentBusiness"
-      ],
-      "additionalProperties": false
-    },
-    "GroupInformationType": {
-      "type": "object",
-      "properties": {
-        "creatingFHDDSGroup": {
-          "type": "boolean"
-        },
-        "confirmationByRepresentative": {
-          "type": "boolean"
-        },
-        "GroupMemberDetail": {
-          "$ref": "#/definitions/GroupMemberDetailType"
-        }
-      },
-      "additionalProperties": false
-    },
-    "GroupMemberDetailType": {
-      "type": "object",
-      "properties": {
-        "numberOfMembersInGroup": {
-          "type": "string",
-          "pattern": "^[0-9]{1,10}$"
-        },
-        "memberDetails": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "object",
-            "properties": {
-              "names": {
-                "type": "object",
-                "properties": {
-                  "companyName": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 140
-                  },
-                  "tradingName": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 120
-                  }
-                },
-                "additionalProperties": false
-              },
-              "incorporationDetail": {
-                "type": "object",
-                "properties": {
-                  "companyRegistrationNumber": {
-                    "type": "string",
-                    "pattern": "^[A-Z0-9]{8}$"
-                  },
-                  "dateOfIncorporation": {
-                    "$ref": "#/definitions/dateString"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "identification": {
-                "type": "object",
-                "properties": {
-                  "vatRegistrationNumber": {
-                    "type": "string",
-                    "pattern": "^[0-9]{9}$"
-                  },
-                  "uniqueTaxpayerReference": {
-                    "type": "string",
-                    "pattern": "^[0-9]{10}$"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "groupJoiningDate": {
-                "$ref": "#/definitions/dateString"
-              },
-              "address": {
-                "$ref": "#/definitions/addressType"
-              }
-            },
-            "required": [
-              "names",
-              "incorporationDetail",
-              "identification",
-              "groupJoiningDate",
-              "address"
-            ],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": [
-        "numberOfMembersInGroup",
-        "memberDetails"
       ],
       "additionalProperties": false
     },
@@ -535,7 +434,7 @@
         "postalCode": {
           "description": "This is populated if the address supplied is a UK address.",
           "type": "string",
-          "pattern": "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
+          "pattern": "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$"
         },
         "countryCode": {
           "$ref": "#/definitions/countryCodes"
@@ -655,31 +554,6 @@
       },
       "required": [
         "identification"
-      ],
-      "additionalProperties": false
-    },
-    "llpOrCorporateBodyType": {
-      "type": "object",
-      "properties": {
-        "groupRepresentativeJoinDate": {
-          "$ref": "#/definitions/dateString"
-        },
-        "incorporationDetails": {
-          "type": "object",
-          "properties": {
-            "companyRegistrationNumber": {
-              "type": "string",
-              "pattern": "^[A-Z0-9]{8}$"
-            },
-            "dateOfIncorporation": {
-              "$ref": "#/definitions/dateString"
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "required": [
-        "incorporationDetails"
       ],
       "additionalProperties": false
     },
@@ -894,10 +768,12 @@
       "properties": {
         "EORIVat": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 15
         },
         "EORINonVat": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 15
         },
         "goodsImportedOutEORI": {

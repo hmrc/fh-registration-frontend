@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 case class BusinessDetail(
   soleProprietor: Option[SoleProprietor],
   nonProprietor: Option[NonProprietor],
-  limitedLiabilityPartnershipCorporateBody: Option[LimitedLiabilityPartnershipCorporateBody],
+  //limitedLiabilityPartnershipCorporateBody: Option[LimitedLiabilityPartnershipCorporateBody],
   partnership: Option[Partnership])
 
 object BusinessDetail {
