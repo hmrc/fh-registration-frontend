@@ -63,11 +63,11 @@ object IncorporationDetails extends DateTimeFormat {
   implicit val format = Json.format[IncorporationDetails]
 }
 
-case class LimitedLiabilityPartnershipCorporateBody(
-  groupRepresentativeJoinDate: Option[LocalDate],
-  incorporationDetails: IncorporationDetails)
-
-object LimitedLiabilityPartnershipCorporateBody extends DateTimeFormat {
-
-  implicit val format = Json.format[LimitedLiabilityPartnershipCorporateBody]
-}
+//case class LimitedLiabilityPartnershipCorporateBody(
+//  groupRepresentativeJoinDate: Option[LocalDate],
+//  incorporationDetails: IncorporationDetails)
+//
+//object LimitedLiabilityPartnershipCorporateBody extends DateTimeFormat {
+//
+//  implicit val format = Json.format[LimitedLiabilityPartnershipCorporateBody]
+//}

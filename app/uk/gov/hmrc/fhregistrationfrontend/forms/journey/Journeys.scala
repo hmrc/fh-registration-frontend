@@ -77,8 +77,8 @@ object Journeys {
       Seq[AnyPage](
         mainBusinessAddressPage withData a.mainBusinessAddress,
         contactPersonPage withData a.contactPerson,
-        companyRegistrationNumberPage withData a.companyRegistrationNumber,
-        dateOfIncorporationPage withData a.dateOfIncorporation,
+//        companyRegistrationNumberPage withData a.companyRegistrationNumber,
+//        dateOfIncorporationPage withData a.dateOfIncorporation,
         tradingNamePage withData a.tradingName,
         vatNumberPage withData a.vatNumber,
         companyOfficersPage withData a.companyOfficers,
@@ -151,8 +151,8 @@ object Journeys {
   def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
       pageDataLoader pageData mainBusinessAddressPage,
       pageDataLoader pageData contactPersonPage,
-      pageDataLoader pageData companyRegistrationNumberPage,
-      pageDataLoader pageData dateOfIncorporationPage,
+//      pageDataLoader pageData companyRegistrationNumberPage,
+//      pageDataLoader pageData dateOfIncorporationPage,
       pageDataLoader pageData tradingNamePage,
       pageDataLoader pageData vatNumberPage,
       pageDataLoader pageData companyOfficersPage,

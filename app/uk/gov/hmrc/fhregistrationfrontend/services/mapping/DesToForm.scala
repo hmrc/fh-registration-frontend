@@ -75,8 +75,8 @@ class DesToFormImpl extends DesToForm {
     LimitedCompanyApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
-      companyRegistrationNumber(subscription.businessDetail),
-      dateOfIncorporation(subscription.businessDetail),
+//      companyRegistrationNumber(subscription.businessDetail),
+//      dateOfIncorporation(subscription.businessDetail),
       tradingName(subscription.businessDetail),
       vatNumber(subscription.businessDetail),
       companyOfficers(subscription.additionalBusinessInformation.partnerCorporateBody),
@@ -361,20 +361,20 @@ class DesToFormImpl extends DesToForm {
     ).get
 
 
-  def companyRegistrationNumber(businessDetails: des.BusinessDetail) =
-    CompanyRegistrationNumber(
-      businessDetails
-        .limitedLiabilityPartnershipCorporateBody
-        .flatMap(_.incorporationDetails.companyRegistrationNumber)
-        .get)
-
-  def dateOfIncorporation(businessDetails: des.BusinessDetail) =
-    DateOfIncorporation(
-      businessDetails
-        .limitedLiabilityPartnershipCorporateBody
-        .flatMap(_.incorporationDetails.dateOfIncorporation)
-        .get
-    )
+//  def companyRegistrationNumber(businessDetails: des.BusinessDetail) =
+//    CompanyRegistrationNumber(
+//      businessDetails
+//        .limitedLiabilityPartnershipCorporateBody
+//        .flatMap(_.incorporationDetails.companyRegistrationNumber)
+//        .get)
+//
+//  def dateOfIncorporation(businessDetails: des.BusinessDetail) =
+//    DateOfIncorporation(
+//      businessDetails
+//        .limitedLiabilityPartnershipCorporateBody
+//        .flatMap(_.incorporationDetails.dateOfIncorporation)
+//        .get
+//    )
 
   def contactPerson(cd: des.ContactDetail) = ContactPerson(
     cd.names.firstName,

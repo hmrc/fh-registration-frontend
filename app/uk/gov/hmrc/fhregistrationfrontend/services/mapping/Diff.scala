@@ -49,9 +49,7 @@ object Diff {
   }
 
   private def businessDetailChanged(original: Subscription, amended: Subscription) = {
-    anyChanged(original, amended,
-      soleProprietor, nonProprietor, limitedLiabilityPartnershipCorporateBody
-    )
+    anyChanged(original, amended, soleProprietor, nonProprietor)
   }
 
   private def partnersChanged(original: Subscription, amended: Subscription) = {
@@ -91,7 +89,7 @@ object Diff {
 
     val soleProprietor = GenLens[Subscription](_.businessDetail.soleProprietor) composePrism some
     val nonProprietor = GenLens[Subscription](_.businessDetail.nonProprietor) composePrism some
-    val limitedLiabilityPartnershipCorporateBody = GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
+    //val limitedLiabilityPartnershipCorporateBody = GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
 
     val partnership = GenLens[Subscription](_.businessDetail.partnership) composePrism some
   }

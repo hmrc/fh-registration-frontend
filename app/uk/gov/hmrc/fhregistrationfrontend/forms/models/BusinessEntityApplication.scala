@@ -26,8 +26,8 @@ sealed trait BusinessEntityApplication {
 case class LimitedCompanyApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,
-  companyRegistrationNumber: CompanyRegistrationNumber,
-  dateOfIncorporation: DateOfIncorporation,
+//  companyRegistrationNumber: CompanyRegistrationNumber,
+//  dateOfIncorporation: DateOfIncorporation,
   tradingName: TradingName,
   vatNumber: VatNumber,
   companyOfficers: ListWithTrackedChanges[CompanyOfficer],
