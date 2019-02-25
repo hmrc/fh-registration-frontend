@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,10 @@ class ShortLivedCacheModule extends Module {
 
 @Singleton
 class DefaultShortLivedCache @Inject() (
-  override val shortLiveCache: ShortLivedHttpCaching
+  override val shortLiveCache: ShortLivedHttpCaching,
+  val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit lazy val crypto = ApplicationCrypto.JsonCrypto
+  override implicit lazy val crypto = new ApplicationCrypto(runModeConfiguration.underlying).JsonCrypto
 }
 
 @Singleton
