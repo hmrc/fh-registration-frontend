@@ -24,7 +24,7 @@ import monocle.macros.{GenLens, GenPrism}
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, LimitedLiabilityPartnershipCorporateBody, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -158,7 +158,6 @@ class DiffSpecs extends UnitSpec {
     businessAddressChanged: Boolean = false,
     businessPreviousAddressChanged: Boolean = false,
     contactDetailChanged: Boolean = false,
-    groupMemberChanged: Boolean = false,
     coOfficialsChanged: Boolean = false,
     additionalBusinessInfoChanged: Boolean = false,
     premisesChanged: Boolean = false,
@@ -166,7 +165,7 @@ class DiffSpecs extends UnitSpec {
   ) = ChangeIndicators(
     businessTypeChanged, businessDetailChanged, partnersChanged,
     businessAddressChanged, businessPreviousAddressChanged, contactDetailChanged,
-    groupMemberChanged, coOfficialsChanged, additionalBusinessInfoChanged, premisesChanged, declarationChanged)
+    coOfficialsChanged, additionalBusinessInfoChanged, premisesChanged, declarationChanged)
 
   private def brd(fileName: String): BusinessRegistrationDetails = Json
     .parse(getClass.getResourceAsStream(s"/models/$fileName"))

@@ -60,7 +60,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.Partnership,
       isNewFulfilmentBusiness(application.businessStatus),
-      //None,
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
@@ -73,7 +72,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
-      //None,
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
       businessAddress(bpr, application.mainBusinessAddress),
@@ -160,7 +158,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         des.BusinessDetail(
           None,
           Some(nonProprietor(llt.tradingName, llt.vatNumber, bpr)),
-          //Some(llpOrCorporate(llt.companyRegistrationNumber, llt.dateOfIncorporation))
           None
         )
       }
@@ -169,14 +166,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st, bpr))),
           None,
           None
-          //None
         )
       }
       case ps: PartnershipApplication     ⇒ {
         des.BusinessDetail(
           None,
           Some(nonProprietor(ps.tradingName, ps.vatNumber, bpr)),
-//          None,
           Some(partnershipPartners(ps.businessPartners))
         )
       }
@@ -191,15 +186,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def getAllPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): List[PartnerDetail] =
     repeatedValue[BusinessPartner, des.PartnerDetail](partnerDetail, businessPartners)
-
-//  def llpOrCorporate(crn: CompanyRegistrationNumber, dateOfIncorporation: DateOfIncorporation) =
-//    des.LimitedLiabilityPartnershipCorporateBody(
-//      None,
-//      des.IncorporationDetails(
-//        Some(crn.crn),
-//        Some(dateOfIncorporation.dateOfIncorporation)
-//      )
-//    )
 
   def soleProprietorIdentification(st: SoleProprietorApplication, bpr: BusinessRegistrationDetails): SoleProprietorIdentification =
     SoleProprietorIdentification(

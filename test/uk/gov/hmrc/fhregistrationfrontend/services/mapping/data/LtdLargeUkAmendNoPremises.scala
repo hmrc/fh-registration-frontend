@@ -39,8 +39,6 @@ object LtdLargeUkAmendNoPremises {
       Some(Address("Flat 1B", None, None, Some("Testtown"), "ZZ11 1ZZ", None, None)),
       None
     ),
-    CompanyRegistrationNumber("12345678"),
-    DateOfIncorporation(LocalDate.of(2014, 3, 20)),
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
     ListWithTrackedChanges(

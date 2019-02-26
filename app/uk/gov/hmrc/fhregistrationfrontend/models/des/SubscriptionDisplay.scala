@@ -21,7 +21,6 @@ import play.api.libs.json.Json
 case class SubscriptionDisplay (
   organizationType: String,
   FHbusinessDetail: IsNewFulfilmentBusiness,
-  //GroupInformation: Option[LimitedLiabilityOrCorporateBodyWithOutGroup],
   additionalBusinessInformation: AdditionalBusinessInformationwithType,
   businessDetail: BusinessDetail,
   businessAddressForFHDDS: BusinessAddressForFHDDS,

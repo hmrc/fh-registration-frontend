@@ -77,12 +77,6 @@
           "vatRegistrationNumber": "123456789",
           "uniqueTaxpayerReference": "1111111111"
         }
-      },
-      "limitedLiabilityPartnershipCorporateBody": {
-        "incorporationDetails": {
-          "companyRegistrationNumber": "12345678",
-          "dateOfIncorporation": "2014-03-20"
-        }
       }
     },
     "businessAddressForFHDDS": {

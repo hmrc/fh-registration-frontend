@@ -31,12 +31,6 @@
         "identification": {
           "uniqueTaxpayerReference": "1111111111"
         }
-      },
-      "limitedLiabilityPartnershipCorporateBody": {
-        "incorporationDetails": {
-          "companyRegistrationNumber": "12345678",
-          "dateOfIncorporation": "2015-03-20"
-        }
       }
     },
     "businessAddressForFHDDS": {

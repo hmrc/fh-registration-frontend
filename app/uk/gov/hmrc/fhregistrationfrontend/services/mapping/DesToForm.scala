@@ -75,8 +75,6 @@ class DesToFormImpl extends DesToForm {
     LimitedCompanyApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
-//      companyRegistrationNumber(subscription.businessDetail),
-//      dateOfIncorporation(subscription.businessDetail),
       tradingName(subscription.businessDetail),
       vatNumber(subscription.businessDetail),
       companyOfficers(subscription.additionalBusinessInformation.partnerCorporateBody),

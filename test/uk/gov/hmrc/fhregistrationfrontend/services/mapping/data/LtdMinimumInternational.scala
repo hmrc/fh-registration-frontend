@@ -47,8 +47,6 @@ object LtdMinimumInternational {
         "BG"
       ))
     ),
-    CompanyRegistrationNumber("12345678"),
-    DateOfIncorporation(LocalDate.of(2009, 4, 21)),
     TradingName(false, None),
     VatNumber(false, None),
     ListWithTrackedChanges(
