@@ -31,7 +31,6 @@ object Diff {
       original.businessAddressForFHDDS != amended.businessAddressForFHDDS,
       original.businessAddressForFHDDS.previousOperationalAddress != amended.businessAddressForFHDDS.previousOperationalAddress,
       original.contactDetail != amended.contactDetail,
-      groupMemberChanged(original, amended),
       original.additionalBusinessInformation.partnerCorporateBody != amended.additionalBusinessInformation.partnerCorporateBody,
       additionalBusinessInformationChanged(original.additionalBusinessInformation.allOtherInformation, amended.additionalBusinessInformation.allOtherInformation),
       original.additionalBusinessInformation.allOtherInformation.premises
@@ -41,18 +40,11 @@ object Diff {
   import Lenses._
 
   private def businessTypeChanged(original: Subscription, amended: Subscription) = {
-    anyChanged(original, amended,
-      organizationType, fhBusinessDetail, creatingFHDDSGroup, confirmationByRepresentative)
-  }
-
-  private def groupMemberChanged(original: Subscription, amended: Subscription) = {
-    anyChanged(original, amended, groupMemberDetail)
+    anyChanged(original, amended, organizationType, fhBusinessDetail)
   }
 
   private def businessDetailChanged(original: Subscription, amended: Subscription) = {
-    anyChanged(original, amended,
-      soleProprietor, nonProprietor, limitedLiabilityPartnershipCorporateBody
-    )
+    anyChanged(original, amended, soleProprietor, nonProprietor, limitedLiabilityPartnershipCorporateBody)
   }
 
   private def partnersChanged(original: Subscription, amended: Subscription) = {
@@ -75,18 +67,6 @@ object Diff {
   object Lenses {
     val organizationType = GenLens[Subscription](_.organizationType).asOptional
     val fhBusinessDetail = GenLens[Subscription](_.FHbusinessDetail).asOptional
-
-    val groupInformation = GenLens[Subscription](_.GroupInformation) composePrism some
-    val creatingFHDDSGroup = groupInformation
-      .composeLens(GenLens[LimitedLiabilityOrCorporateBodyWithOutGroup](_.creatingFHDDSGroup))
-
-    val confirmationByRepresentative = groupInformation
-      .composeLens(GenLens[LimitedLiabilityOrCorporateBodyWithOutGroup](_.confirmationByRepresentative))
-
-
-    val groupMemberDetail = groupInformation
-      .composeLens(GenLens[LimitedLiabilityOrCorporateBodyWithOutGroup](_.groupMemberDetail))
-      .composePrism(some)
 
     val numberOfCustomers = GenLens[Subscription](_.additionalBusinessInformation.allOtherInformation.numberOfCustomers)
 

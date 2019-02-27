@@ -25,7 +25,6 @@ case class ChangeIndicators(
   businessAddressChanged: Boolean,
   businessPreviousAddressChanged: Boolean,
   contactDetailChanged: Boolean,
-  groupMemberChanged: Boolean,
   coOfficialsChanged: Boolean,
   additionalBusinessInfoChanged: Boolean,
   premisesChanged: Boolean,
