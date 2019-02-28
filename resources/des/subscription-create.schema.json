@@ -575,9 +575,6 @@
     "llpOrCorporateBodyType": {
       "type": "object",
       "properties": {
-        "groupRepresentativeJoinDate": {
-          "$ref": "#/definitions/dateString"
-        },
         "incorporationDetails": {
           "type": "object",
           "properties": {
