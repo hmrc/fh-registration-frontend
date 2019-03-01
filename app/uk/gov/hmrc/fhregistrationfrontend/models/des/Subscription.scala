@@ -21,7 +21,6 @@ import play.api.libs.json.Json
 case class Subscription(
   organizationType: String,
   FHbusinessDetail: IsNewFulfilmentBusiness,
-  GroupInformation: Option[LimitedLiabilityOrCorporateBodyWithOutGroup],
   additionalBusinessInformation: AdditionalBusinessInformationwithType,
   businessDetail: BusinessDetail,
   businessAddressForFHDDS: BusinessAddressForFHDDS,
@@ -35,7 +34,6 @@ object Subscription {
     Subscription(
       sd.organizationType,
       sd.FHbusinessDetail,
-      sd.GroupInformation,
       sd.additionalBusinessInformation,
       sd.businessDetail,
       sd.businessAddressForFHDDS,

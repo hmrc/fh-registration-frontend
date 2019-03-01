@@ -48,19 +48,19 @@ object Mappings {
     "lookupId" → optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) ⇒ v)
   )(Address.apply)(Address.unapply)
 
-  def postcode: Mapping[String] = nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$".r))
-  def addressLine: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[A-Za-z0-9 !'‘’\"“”(),./—–‐-]{1,35}$".r)
-  def personTitle: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{2,30}$".r)
+  def postcode: Mapping[String] = nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$".r))
+  def addressLine: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[A-Za-z0-9 &!'‘’\"“”(),./\u2014\u2013\u2010\u002d]{1,35}$".r)
+  def personTitle: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z\u00C0-\u00FF '‘’\u2014\u2013\u2010\u002d]{2,30}$".r)
   def roleInOrganization: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
 
-  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-ZÀ-ÿ '‘’—–‐-]{1,30}$".r)
-  def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+‐-]{7,24}$".r)
+  def personName: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z\u00C0-\u00FF '‘’\u2014\u2013\u2010\u002d]{1,35}$".r)
+  def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+\u2010\u002d]{1,24}$".r)
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
-  def companyName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐-]{1,140}$".r)
-  def tradingName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,120}$".r)
+  def companyName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\\u005C\u2014\u2013\u2010\u002d]{1,140}$".r)
+  def tradingName = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
   def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
   def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
@@ -69,8 +69,8 @@ object Mappings {
   def deregistrationReason= nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
   def nino = nonEmptyText verifying Constraints
     .pattern("^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]$".r)
-  def nationalIdNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
-  def passportNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9À-ÿ !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C—–‐_^`-]{1,20}$".r)
+  def nationalIdNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
+  def passportNumber = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
 
   def alternativeEmail: Mapping[AlternativeEmail] = mapping(
     "email" → email,

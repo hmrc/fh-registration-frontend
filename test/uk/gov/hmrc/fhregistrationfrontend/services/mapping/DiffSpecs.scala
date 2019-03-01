@@ -158,7 +158,6 @@ class DiffSpecs extends UnitSpec {
     businessAddressChanged: Boolean = false,
     businessPreviousAddressChanged: Boolean = false,
     contactDetailChanged: Boolean = false,
-    groupMemberChanged: Boolean = false,
     coOfficialsChanged: Boolean = false,
     additionalBusinessInfoChanged: Boolean = false,
     premisesChanged: Boolean = false,
@@ -166,7 +165,7 @@ class DiffSpecs extends UnitSpec {
   ) = ChangeIndicators(
     businessTypeChanged, businessDetailChanged, partnersChanged,
     businessAddressChanged, businessPreviousAddressChanged, contactDetailChanged,
-    groupMemberChanged, coOfficialsChanged, additionalBusinessInfoChanged, premisesChanged, declarationChanged)
+    coOfficialsChanged, additionalBusinessInfoChanged, premisesChanged, declarationChanged)
 
   private def brd(fileName: String): BusinessRegistrationDetails = Json
     .parse(getClass.getResourceAsStream(s"/models/$fileName"))
