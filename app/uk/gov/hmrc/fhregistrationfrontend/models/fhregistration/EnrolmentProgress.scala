@@ -16,9 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.fhregistration
 
+import play.api.libs.json.{Format, Reads, Writes}
+
+
 object EnrolmentProgress extends Enumeration {
 
   type EnrolmentProgress = Value
   val Pending, Unknown, Error = Value
+
+  implicit val format = Format(
+    Reads.enumNameReads(EnrolmentProgress),
+    Writes.enumNameWrites[this.type ])
 
 }

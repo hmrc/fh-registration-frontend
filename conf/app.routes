@@ -72,3 +72,7 @@ GET         /deregistration/acknowledgment                                      
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                                             controllers.Assets.at(path="/public", file)
+
+GET         /admin-page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.showAdminPage
+
+GET         /admin-page/show-submissions                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions

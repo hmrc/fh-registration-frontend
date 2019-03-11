@@ -31,7 +31,8 @@ object FrontendBuild extends Build with MicroService {
 
     "com.github.julien-truffaut"  %%  "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut"  %%  "monocle-macro"                   % monocleVersion,
-    "com.github.julien-truffaut"  %%  "monocle-law"                     % monocleVersion
+    "com.github.julien-truffaut"  %%  "monocle-law"                     % monocleVersion,
+    "org.mindrot"                  % "jbcrypt"                          % "0.4"
   )
 
 

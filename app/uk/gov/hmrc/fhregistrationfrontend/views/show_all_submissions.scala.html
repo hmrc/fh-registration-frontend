@@ -1,0 +1,85 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
+@import uk.gov.hmrc.play.views.html.helpers
+@import helpers._
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
+@import play.api.Configuration
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+
+@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: MessagesApi)
+
+
+@main_template(title = Messages("home.admin.submisson.page.title")) {
+
+    <br/><br/>
+
+    <table>
+            <tr>
+
+            <td>
+                User ID
+            </td>
+            <td>
+                Form Bundle Id
+            </td>
+                <td>
+                Enrolment Progress
+            </td>
+            <td>
+                Email
+            </td>
+                <td>
+                Submission Time
+            </td>
+            <td>
+                Registration Number
+            </td>
+
+        </tr>
+
+
+    @for(elem <- submissionList) {
+                <tr>
+                <td>@{
+                    elem.userId
+                }</td>
+                <td>@{
+                    elem.formBundleId
+                }</td>
+                    <td>@{
+                    elem.enrolmentProgress
+                }</td>
+                <td>@{
+                    elem.email
+                }</td>
+                <td>@{
+                    elem.submissionTime
+                }</td>
+                <td>@{
+                    elem.registrationNumber
+                }</td>
+                </tr>
+
+    }
+    </table>
+
+
+}
