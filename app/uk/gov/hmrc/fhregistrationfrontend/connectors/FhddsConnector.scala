@@ -17,20 +17,22 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import java.util.Date
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Reads
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
+import scala.util.parsing.json.JSONObject
 
 
 
@@ -78,6 +80,10 @@ class FhddsConnector @Inject() (
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
     http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
+  }
+
+  def getAllSubmission()(implicit hc:HeaderCarrier):Future[List[SubmissionTracking]] = {
+    http.GET[List[SubmissionTracking]](s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission")
   }
 
 }

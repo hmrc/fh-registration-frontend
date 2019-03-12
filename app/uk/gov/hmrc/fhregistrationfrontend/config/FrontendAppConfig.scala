@@ -67,5 +67,8 @@ class FrontendAppConfig @Inject()(
   override def emailVerificationCallback(hash: String) = {
     s"$fhddsFrontendUrl/email-verify/$hash"
   }
+
+  lazy val username = getString("credentials.username")
+  lazy val password = getString("credentials.password")
 }
 

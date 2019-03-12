@@ -977,3 +977,10 @@ link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
 link.eoriTeam=https://www.tax.service.gov.uk/shortforms/form/EORIContact
 link.vat=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries
 link.bta=https://www.tax.service.gov.uk/business-tax-account
+
+#Temporary Messages For Admin Page
+home.admin.page.header= FHDDS Admin Page
+home.admin.page.title=  FHDDS Admin Page
+home.admin.retrieve.submission.button= Get Pending Submissions
+home.admin.submisson.page.header= Pending Submissions
+home.admin.submisson.page.title=  Pending Submissions
