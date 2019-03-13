@@ -46,4 +46,10 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       case submissions if submissions.isEmpty => Ok("No Submissions found")
     }
   }
+
+  def getUserInfo(userId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getUserInfo(userId).map {
+      response => Ok(response.json)
+    }
+  }
 }
