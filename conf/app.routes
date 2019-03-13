@@ -76,3 +76,4 @@ GET         /assets/*file                                                       
 GET         /admin-page                                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.showAdminPage
 
 GET         /admin-page/show-submissions                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions
+GET         /admin-page/user-info/:userId                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
