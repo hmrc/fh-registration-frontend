@@ -52,4 +52,10 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       response => Ok(response.json)
     }
   }
+
+  def getGroupInfo(groupId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getGroupInfo(groupId).map {
+      response => Ok(response.json)
+    }
+  }
 }

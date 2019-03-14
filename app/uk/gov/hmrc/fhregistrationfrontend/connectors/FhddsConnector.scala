@@ -90,4 +90,7 @@ class FhddsConnector @Inject() (
     http.GET(s"$FHDSSServiceUrl/fhdds/user-info/$userId")
   }
 
+  def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
+  }
 }
