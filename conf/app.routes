@@ -77,3 +77,4 @@ GET         /admin-page                                                         
 
 GET         /admin-page/show-submissions                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions
 GET         /admin-page/user-info/:userId                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
+GET         /admin-page/group-info/:groupId                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
