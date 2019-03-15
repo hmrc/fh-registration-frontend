@@ -27,7 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, Sub
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
@@ -105,6 +105,15 @@ class FhddsConnector @Inject() (
 
   def deleteEnrolment(userId:String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
     http.DELETE(s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
+  }
+
+
+  def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/user-info/$userId")
+  }
+
+  def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
   }
 
 }

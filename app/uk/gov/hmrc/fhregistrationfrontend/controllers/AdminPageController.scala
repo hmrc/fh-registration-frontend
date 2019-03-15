@@ -120,7 +120,6 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       )
   }
 
-
   def checkStatus(regNo: String) = AuthenticationController(credentials) {
     implicit request  =>
       fhddsConnector
@@ -153,3 +152,17 @@ object EnrolmentForm {
 
   val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm
 }
+
+  def getUserInfo(userId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getUserInfo(userId).map {
+      response => Ok(response.json)
+    }
+  }
+
+  def getGroupInfo(groupId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getGroupInfo(groupId).map {
+      response => Ok(response.json)
+    }
+  }
+}
+
