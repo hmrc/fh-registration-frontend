@@ -78,10 +78,7 @@ class Application @Inject()(
     fhddsConnector
       .getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending ⇒ {
-          Ok(enrolment_pending())
-        }
-
+        case EnrolmentProgress.Pending ⇒ Ok(enrolment_pending())
         case EnrolmentProgress.Error   ⇒ Ok(application_error())
         case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
       }
