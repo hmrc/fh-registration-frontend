@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Reads
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
@@ -84,6 +85,26 @@ class FhddsConnector @Inject() (
 
   def getAllSubmission()(implicit hc:HeaderCarrier):Future[List[SubmissionTracking]] = {
     http.GET[List[SubmissionTracking]](s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission")
+  }
+
+  def getSubMission(formBundleId: String)(implicit headerCarrier: HeaderCarrier):Future[SubmissionTracking] = {
+    http.GET[SubmissionTracking](s"$FHDSSServiceUrl/fhdds/subscription/getSubmission/$formBundleId")
+  }
+
+  def deleteSubmission(formBundleId: String)(implicit hc:HeaderCarrier) = {
+    http.DELETE(s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
+  }
+
+  def addEnrolment(userId:String, groupId:String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
+  }
+
+  def allocateEnrolment(userId:String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo ")
+  }
+
+  def deleteEnrolment(userId:String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+    http.DELETE(s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
   }
 
 }

@@ -17,15 +17,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{Format, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{show_all_submissions, temp_admin_page}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{admin_get_groupID, show_all_submissions, show_submission, temp_admin_page, allocate_enrolment, delete_enrolment}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest.requestForm
+import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.allocateEnrolmentForm
+import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.deleteEnrolmentForm
 
-
+import scala.concurrent.Future
 
 @Singleton
 class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val messagesApi: MessagesApi, appConfig: AppConfig, fhddsConnector: FhddsConnector) extends FrontendController with I18nSupport {
@@ -46,4 +52,104 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       case submissions if submissions.isEmpty => Ok("No Submissions found")
     }
   }
+
+  def loadDeletePage(formBundleId:String)= AuthenticationController(credentials).async { implicit request =>
+
+    fhddsConnector.getSubMission(formBundleId).map {
+      case submission => Ok(show_submission(submission)(request, frontendAppConfig,messagesApi))
+      case _ => Ok(s"No Submission found for $formBundleId")
+    }
+  }
+
+  def deleteSubmission(formBundleId:String): Action[AnyContent] = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.deleteSubmission(formBundleId).map(_ => Ok(s"Submission data for $formBundleId has been deleted "))
+      .recover{case _ => Ok(s"Submission with $formBundleId not found")}
+
+  }
+
+  def loadUserIdPage = AuthenticationController(credentials) { implicit request =>
+
+    Ok(admin_get_groupID(requestForm)(request,frontendAppConfig,messagesApi))
+  }
+
+  def sendAdminRequest() = AuthenticationController(credentials).async { implicit request =>
+    requestForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(admin_get_groupID(formWithErrors)(request, frontendAppConfig, messagesApi)))
+      },
+
+     formData =>
+       fhddsConnector.addEnrolment(formData.userId, formData.groupId, formData.registrationNumber).map(result => Ok(result))
+    )
+  }
+
+  def loadAllocateEnrolment = AuthenticationController(credentials) {
+    implicit request =>
+      Ok(allocate_enrolment(allocateEnrolmentForm)(request, frontendAppConfig, messagesApi))
+  }
+
+  def allocateEnrolment = AuthenticationController(credentials).async {
+    implicit request  =>
+      allocateEnrolmentForm.bindFromRequest.fold (
+        formWithErrors => {
+          Future.successful(BadRequest(allocate_enrolment(formWithErrors)(request, frontendAppConfig, messagesApi)))
+        },
+
+        formData => {
+          fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result))
+        }
+      )
+  }
+
+  def loadDeleteEnrolment = AuthenticationController(credentials) {
+    implicit request =>
+      Ok(delete_enrolment(deleteEnrolmentForm)(request, frontendAppConfig, messagesApi))
+  }
+
+  def deleteEnrolment = AuthenticationController(credentials).async {
+    implicit request =>
+      deleteEnrolmentForm.bindFromRequest.fold (
+        formWithErrors => {
+          Future.successful(BadRequest(delete_enrolment(formWithErrors)(request, frontendAppConfig, messagesApi)))
+
+        },
+
+        formData => {
+          fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result))
+        }
+      )
+  }
+
+
+  def checkStatus(regNo: String) = AuthenticationController(credentials) {
+    implicit request  =>
+      fhddsConnector
+        .getStatus(regNo)(hc).map(result => Ok(result))
+  }
+}
+
+case class AdminRequest(userId:String, groupId:String, registrationNumber: String)
+
+object AdminRequest {
+  val format: Format[AdminRequest] = Json.format[AdminRequest]
+
+  val requestForm: Form[AdminRequest] = Form(mapping(
+    "userId" -> nonEmptyText,
+    "groupId" -> nonEmptyText,
+    "registrationNumber" -> nonEmptyText
+  )(AdminRequest.apply)(AdminRequest.unapply))
+}
+
+case class EnrolmentForm(userId:String, registrationNumber: String)
+
+object EnrolmentForm {
+
+  val format: Format[EnrolmentForm] = Json.format[EnrolmentForm]
+
+  val allocateEnrolmentForm: Form[EnrolmentForm] = Form(mapping(
+    "userId" -> nonEmptyText,
+    "registrationNumber" -> nonEmptyText
+  )(EnrolmentForm.apply)(EnrolmentForm.unapply))
+
+  val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm
 }
