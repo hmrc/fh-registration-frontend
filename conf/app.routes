@@ -94,3 +94,6 @@ GET         /admin-page/user-info/:userId                                       
 GET         /admin-page/group-info/:groupId                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
 
 GET        /admin-page/get-status/:regNo                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
+
+GET        /admin-page/ES2/:userId                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.ES2(userId: String)
+GET        /admin-page/ES3/:groupId                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.ES3(groupId: String)

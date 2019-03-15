@@ -116,4 +116,12 @@ class FhddsConnector @Inject() (
     http.GET(s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
   }
 
+  def ES2(userId: String)(implicit hc: HeaderCarrier) = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
+  }
+
+  def ES3(groupId:String)(implicit hc: HeaderCarrier) = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
+  }
+
 }
