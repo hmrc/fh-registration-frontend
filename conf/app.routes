@@ -93,3 +93,4 @@ POST       /admin-page/delete-enrolment                                         
 GET         /admin-page/user-info/:userId                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
 GET         /admin-page/group-info/:groupId                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
 
+GET        /admin-page/get-status/:regNo                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
