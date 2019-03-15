@@ -24,12 +24,14 @@ import play.api.libs.json.{Format, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{admin_get_groupID, show_all_submissions, show_submission, temp_admin_page, allocate_enrolment, delete_enrolment}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{admin_get_groupID, allocate_enrolment, delete_enrolment, show_all_submissions, show_submission, temp_admin_page}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest.requestForm
 import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.allocateEnrolmentForm
 import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.deleteEnrolmentForm
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 
 import scala.concurrent.Future
 
@@ -79,7 +81,7 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       },
 
      formData =>
-       fhddsConnector.addEnrolment(formData.userId, formData.groupId, formData.registrationNumber).map(result => Ok(result))
+       fhddsConnector.addEnrolment(formData.userId, formData.groupId, formData.registrationNumber).map(result => Ok(result.body))
     )
   }
 
@@ -96,7 +98,7 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
         },
 
         formData => {
-          fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result))
+          fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
         }
       )
   }
@@ -115,16 +117,16 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
         },
 
         formData => {
-          fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result))
+          fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
         }
       )
   }
 
 
-  def checkStatus(regNo: String) = AuthenticationController(credentials) {
+  def checkStatus(regNo: String) = AuthenticationController(credentials).async {
     implicit request  =>
       fhddsConnector
-        .getStatus(regNo)(hc).map(result => Ok(result))
+        .getStatus(regNo)(hc).map(result => Ok(result.toString))
   }
 }
 
