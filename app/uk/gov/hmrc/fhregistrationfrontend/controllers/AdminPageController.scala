@@ -128,6 +128,19 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       fhddsConnector
         .getStatus(regNo)(hc).map(result => Ok(result.toString))
   }
+
+
+  def getUserInfo(userId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getUserInfo(userId).map {
+      response => Ok(response.json)
+    }
+  }
+
+  def getGroupInfo(groupId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.getGroupInfo(groupId).map {
+      response => Ok(response.json)
+    }
+  }
 }
 
 case class AdminRequest(userId:String, groupId:String, registrationNumber: String)
@@ -155,3 +168,6 @@ object EnrolmentForm {
 
   val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm
 }
+
+
+
