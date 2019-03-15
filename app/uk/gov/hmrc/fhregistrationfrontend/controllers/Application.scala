@@ -80,7 +80,6 @@ class Application @Inject()(
       .map {
         case EnrolmentProgress.Pending ⇒ {
           Ok(enrolment_pending())
-          ???
         }
 
         case EnrolmentProgress.Error   ⇒ Ok(application_error())
