@@ -20,69 +20,69 @@
 @import play.api.Play.current
 @import play.api.i18n.Messages.Implicits._
 @import play.api.Configuration
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-
-@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: MessagesApi)
-
+@(submission: SubmissionTracking)(implicit request: Request[_], config: AppConfig,  messagesApi: MessagesApi)
 
 @main_template(title = Messages("home.admin.submisson.page.title")) {
 
-    <br/><br/>
 
-    <table>
+        <table>
             <tr>
 
-            <td>
-                User ID
-            </td>
-            <td>
-                Form Bundle Id
-            </td>
-            <td>
-                Enrolment Progress
-            </td>
-            <td>
-                Email
-            </td>
-            <td>
-                  Submission Time
-            </td>
-            <td>
-                Registration Number
-            </td>
+                <td>
+                    User ID
+                </td>
+                <td>
+                    Form Bundle Id
+                </td>
+                <td>
+                    Enrolment Progress
+                </td>
+                <td>
+                    Email
+                </td>
+                <td>
+                    Submission Time
+                </td>
+                <td>
+                    Registration Number
+                </td>
 
-        </tr>
+            </tr>
 
 
-    @for(elem <- submissionList) {
-                <tr>
+            <tr>
                 <td>@{
-                    elem.userId
-                }</td>
-                <td>@{
-                    elem.formBundleId
-                }</td>
-                    <td>@{
-                    elem.enrolmentProgress
+                    submission.userId
                 }</td>
                 <td>@{
-                    elem.email
+                    submission.formBundleId
                 }</td>
                 <td>@{
-                    elem.submissionTime
+                    submission.enrolmentProgress
                 }</td>
                 <td>@{
-                    elem.registrationNumber
+                    submission.email
                 }</td>
-                 <td>
-                     <a class="button" type="submit" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.loadDeletePage(elem.formBundleId)">@Messages("DELETE")</a>
-                 </td>
-                </tr>
+                <td>@{
+                    submission.submissionTime
+                }</td>
+                <td>@{
+                    submission.registrationNumber
+                }</td>
 
-    }
-    </table>
+                <td>{
+                        <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.deleteSubmission(submission.formBundleId)" >DELETE</a>
+                }</td>
+
+            </tr>
+
+
+        </table>
+
 
 
 }
