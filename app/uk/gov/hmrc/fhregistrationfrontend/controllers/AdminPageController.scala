@@ -141,6 +141,18 @@ class AdminPageController @Inject() (frontendAppConfig: FrontendAppConfig, val m
       response => Ok(response.json)
     }
   }
+
+  def es2(userId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.es2Info(userId).map {
+      response => Ok(response.json)
+    }
+  }
+
+  def es3(groupId: String) = AuthenticationController(credentials).async { implicit request =>
+    fhddsConnector.es3Info(groupId).map {
+      response => Ok(response.json)
+    }
+  }
 }
 
 case class AdminRequest(userId:String, groupId:String, registrationNumber: String)

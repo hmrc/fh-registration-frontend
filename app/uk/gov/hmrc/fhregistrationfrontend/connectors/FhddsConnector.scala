@@ -116,4 +116,12 @@ class FhddsConnector @Inject() (
     http.GET(s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
   }
 
+  def es2Info(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
+  }
+
+  def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
+  }
+
 }
