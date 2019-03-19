@@ -56,6 +56,11 @@ class DefaultErrorHandler @Inject()(
         messages("fh.generic.not_found.label"),
         errorMsg.getOrElse(messages("fh.generic.not_found.inf"))
       ))
+      case Forbidden ⇒ Forbidden(error_template(
+        messages("fh.generic.forbidden"),
+        messages("fh.generic.forbidden.label"),
+        errorMsg.getOrElse(messages("fh.generic.forbidden.inf"))
+      ))
       case BadRequest ⇒ BadRequest(error_template(
         messages("fh.generic.bad_request"),
         messages("fh.generic.bad_request.label"),

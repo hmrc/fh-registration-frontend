@@ -34,6 +34,7 @@ class Actions @Inject() (
 
   def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls, errorHandler)
 
+  def notAdminUser = userAction andThen new NotAdminUserFilter
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
   def emailVerificationAction = new UserAction(externalUrls, errorHandler) andThen new EmailVerificationAction
 
@@ -43,7 +44,7 @@ class Actions @Inject() (
   def journeyAction = userAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
 
-  def newApplicationAction = noPendingSubmissionFilter andThen new NewApplicationAction(fhddsConnector)
+  def newApplicationAction = noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)

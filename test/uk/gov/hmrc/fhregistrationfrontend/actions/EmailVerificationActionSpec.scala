@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.Admin
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4LaterMocks, StubbedErrorHandler}
@@ -40,7 +41,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, None, Some(Admin),FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe Some(verifiedEmail)
@@ -59,7 +60,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -76,7 +77,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -93,7 +94,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -108,7 +109,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -119,7 +120,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
     "Have correct user id " in {
       val cacheMap = CacheMapBuilder(testUserId).cacheMap
       setupSave4LaterFrom(cacheMap)
-      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
 

@@ -47,6 +47,10 @@ fh.generic.bad_gateway.inf=Please try again in a few minutes.
 fh.generic.internal_server_error=Internal Server Error
 fh.generic.internal_server_error.label=Sorry, we’re experiencing technical difficulties
 fh.generic.internal_server_error.inf=Please try again in a few minutes.
+
+fh.generic.forbidden=Forbidden
+fh.generic.forbidden.label=Forbidden
+fh.generic.forbidden.inf=You do not have Admin role to create a new application.
 #============================================================
 
 #Address
