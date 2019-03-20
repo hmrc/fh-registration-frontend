@@ -20,7 +20,7 @@ import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.{any, same}
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{ActionBuilder, Request, Result}
-import uk.gov.hmrc.auth.core.{Admin, CredentialRole}
+import uk.gov.hmrc.auth.core.{Admin, Assistant, CredentialRole}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
@@ -148,10 +148,10 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     }
   }
 
-  def setupUserAction(rNumber: Option[String] = Some(registrationNumber)) = {
+  def setupUserAction(rNumber: Option[String] = Some(registrationNumber), credentialRole: Option[CredentialRole] = Some(Admin)) = {
     when(mockActions.userAction) thenReturn new ActionBuilder[UserRequest] {
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credentialRole, request)
         block(userRequest)
       }
     }

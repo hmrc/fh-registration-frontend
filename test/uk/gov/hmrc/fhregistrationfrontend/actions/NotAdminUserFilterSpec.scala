@@ -17,27 +17,29 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.Assistant
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
+import uk.gov.hmrc.auth.core.{Admin, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
 
-class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
+class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
-  val request = new UserRequest("id", None, None, Some(Assistant), FakeRequest())
-  lazy val filter = new NoPendingSubmissionFilter(mockFhddsConnector)(StubbedErrorHandler)
+  implicit val errorHandler = StubbedErrorHandler
+  lazy val filter = new NotAdminUserFilter()(errorHandler)
 
-  "No pending submission filter" should {
-    "allow user to proceed" in {
-      setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
+  "Not admin user filter" should {
+    "allow user to proceed if has admin role" in {
+      val request = new UserRequest("id", None, None, Some(Admin), FakeRequest())
       status(result(filter, request)) shouldBe OK
-
     }
 
-    "block the user" in {
-      setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
-      status(result(filter, request)) shouldBe BAD_REQUEST
+    "block the user and display forbidden if user has assistant role" in {
+      val request = new UserRequest("id", None, None, Some(Assistant), FakeRequest())
+      status(result(filter, request)) shouldBe FORBIDDEN
+    }
 
+    "block the user and display bad request if user has no credential role" in {
+      val request = new UserRequest("id", None, None, None, FakeRequest())
+      status(result(filter, request)) shouldBe BAD_REQUEST
     }
   }
 
