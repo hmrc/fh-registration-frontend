@@ -5,7 +5,6 @@ import play.api.http.HeaderNames
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-@Ignore
 class ApplicationControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 
@@ -30,7 +29,7 @@ class ApplicationControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false).get()) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9025/gg/sign-in?continue=http%3A%2F%2Flocalhost%3A1118&origin=fh-registration-frontend"
+          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9025/gg/sign-in?continue=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
         }
       }
     }
@@ -67,6 +66,21 @@ class ApplicationControllerIntegrationSpec
         whenReady(result) { res ⇒
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/businessType")
+        }
+      }
+    }
+
+    "continue redirects to business type page when the user has a correct BPR and the user is new assist" in {
+
+      given
+        .commonPreconditionAssist
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl/continue").withFollowRedirects(false).get()
+
+        whenReady(result) { res ⇒
+          res.status mustBe 403
+          res.body.toString.contains("Forbidden") mustBe true
         }
       }
     }
