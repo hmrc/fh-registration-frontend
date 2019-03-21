@@ -70,7 +70,7 @@ class ApplicationControllerIntegrationSpec
       }
     }
 
-    "continue redirects to business type page when the user has a correct BPR and the user is new assist" in {
+    "continue redirects to forbidden page when the user is assistant" in {
 
       given
         .commonPreconditionAssist
@@ -81,6 +81,21 @@ class ApplicationControllerIntegrationSpec
         whenReady(result) { res ⇒
           res.status mustBe 403
           res.body.toString.contains("Forbidden") mustBe true
+        }
+      }
+    }
+
+    "continue redirects to bad request page when the user is not admin/user or assistant" in {
+
+      given
+        .commonPreconditionNoRole
+
+      WsTestClient.withClient { client ⇒
+        val result = client.url(s"$baseUrl/continue").withFollowRedirects(false).get()
+
+        whenReady(result) { res ⇒
+          res.status mustBe 400
+          res.body.toString.contains("Bad Request") mustBe true
         }
       }
     }
