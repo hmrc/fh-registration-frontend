@@ -80,7 +80,7 @@ class ApplicationControllerIntegrationSpec
 
         whenReady(result) { res ⇒
           res.status mustBe 403
-          res.body.toString.contains("Forbidden") mustBe true
+          res.body.toString.contains("You cannot access this page") mustBe true
         }
       }
     }

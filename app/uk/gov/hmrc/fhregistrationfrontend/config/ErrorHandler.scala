@@ -24,7 +24,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{Request, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{application_error, error_template}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.{application_error, error_template, error_forbidden}
 import play.api.mvc.Results.Status
 
 @ImplementedBy(classOf[DefaultErrorHandler])
@@ -56,7 +56,7 @@ class DefaultErrorHandler @Inject()(
         messages("fh.generic.not_found.label"),
         errorMsg.getOrElse(messages("fh.generic.not_found.inf"))
       ))
-      case Forbidden ⇒ Forbidden(error_template(
+      case Forbidden ⇒ Forbidden(error_forbidden(
         messages("fh.generic.forbidden"),
         messages("fh.generic.forbidden.label"),
         errorMsg.getOrElse(messages("fh.generic.forbidden.inf"))

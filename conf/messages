@@ -48,9 +48,11 @@ fh.generic.internal_server_error=Internal Server Error
 fh.generic.internal_server_error.label=Sorry, we’re experiencing technical difficulties
 fh.generic.internal_server_error.inf=Please try again in a few minutes.
 
-fh.generic.forbidden=Forbidden
-fh.generic.forbidden.label=Forbidden
-fh.generic.forbidden.inf=You do not have Admin role to create a new application.
+fh.generic.forbidden=You cannot access this page - Apply for the scheme - GOV.UK
+fh.generic.forbidden.label=You cannot access this page
+fh.generic.forbidden.inf=Check you have permission to access this page.
+fh.generic.forbidden.link=Call excise enquiries
+fh.generic.forbidden.info2=if you need help using the service.
 #============================================================
 
 #Address
