@@ -35,7 +35,7 @@ class UserActionSpec extends ActionSpecBase {
   val mockAuthConnector = mock[AuthConnector]
   implicit val materializer = mock[Materializer]
 
-  type RetrievalType = Option[String] ~ Option[String] ~ Enrolments
+  type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole]
 
   val fakeRequest: Request[Any] = FakeRequest()
   lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler)(mockAuthConnector)
@@ -105,9 +105,10 @@ class UserActionSpec extends ActionSpecBase {
   def setupAuthConnector(
     id        : Option[String] = Some("id"),
     email     : Option[String] = Some("email@test.com"),
-    enrolments: Set[Enrolment] = Set.empty
+    enrolments: Set[Enrolment] = Set.empty,
+    credentialRole: Option[CredentialRole] = Some(Admin)
   ) = {
-    val authResult = Future successful (new ~(new ~(id, email), new Enrolments(enrolments)))
+    val authResult = Future successful (new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole))
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
   }
 

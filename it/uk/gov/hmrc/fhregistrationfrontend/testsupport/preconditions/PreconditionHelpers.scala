@@ -13,6 +13,26 @@ trait PreconditionHelpers {
       .fhddsBackend.hasNoEnrolmentProgress()
   }
 
+  def commonPreconditionAssist = {
+    builder
+      .audit.writesAuditOrMerged()
+      .user.isAuthorisedAssistant()
+      .businessCustomerFrontend.hasBusinessCustomerRecord
+      .save4later.businessRecordWasSaved()
+      .save4later.getNoneData()
+      .fhddsBackend.hasNoEnrolmentProgress()
+  }
+
+  def commonPreconditionNoRole = {
+    builder
+      .audit.writesAuditOrMerged()
+      .user.isAuthorisedNoCredRole()
+      .businessCustomerFrontend.hasBusinessCustomerRecord
+      .save4later.businessRecordWasSaved()
+      .save4later.getNoneData()
+      .fhddsBackend.hasNoEnrolmentProgress()
+  }
+
   def withdrawalPrecondition = {
     builder
       .audit.writesAuditOrMerged()

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
+import uk.gov.hmrc.auth.core.Admin
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -77,7 +78,7 @@ trait JourneyRequestBuilder {
   }
 
   def journeyRequest(
-    userRequest: UserRequest[_] = new UserRequest(testUserId, None, None, FakeRequest()),
+    userRequest: UserRequest[_] = new UserRequest(testUserId, None, None, Some(Admin), FakeRequest()),
     journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages),
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment,

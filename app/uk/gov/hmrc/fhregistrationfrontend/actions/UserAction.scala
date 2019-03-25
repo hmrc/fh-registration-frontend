@@ -22,7 +22,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId, credentialRole}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
@@ -30,7 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], request: Request[A])
+class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], val credentialRole: Option[CredentialRole], request: Request[A])
   extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
@@ -46,8 +46,8 @@ class UserAction @Inject()(
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
 
-    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments) {
-      case Some(id) ~ anEmail ~ enrolments ⇒
+    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments and credentialRole) {
+      case Some(id) ~ anEmail ~ enrolments  ~ credentialRole ⇒
         val fhddsRegistrationNumbers = for {
           enrolment ← enrolments.enrolments
           if enrolment.key equalsIgnoreCase Enrolments.serviceName
@@ -63,7 +63,7 @@ class UserAction @Inject()(
         if (fhddsRegistrationNumbers.size > 1)
           Future successful Left(errorHandler.applicationError)
         else
-          Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumbers.headOption, request))
+          Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumbers.headOption, credentialRole, request))
       case _     ⇒
         throw AuthorisationException.fromString("Can not find user id")
 

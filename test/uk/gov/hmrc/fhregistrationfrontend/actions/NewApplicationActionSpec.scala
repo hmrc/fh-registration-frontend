@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
+import uk.gov.hmrc.auth.core.{Admin, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
@@ -27,7 +28,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
 
   "New Application Action" should {
     "Be denied for some statuses" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), FakeRequest())
       for {
         fhddsStatus ← List(Processing, Received, Approved, ApprovedWithConditions)
       } {
@@ -40,7 +41,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
     }
 
     "Be allowed when there is no registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), FakeRequest())
       val fhddsConnector = mock[FhddsConnector]
       val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler)
 
@@ -48,7 +49,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
     }
 
     "Be allowed for some statuses" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), FakeRequest())
       for {
         fhddsStatus ← List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
