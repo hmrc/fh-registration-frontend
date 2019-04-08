@@ -20,7 +20,7 @@ import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.{any, same}
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{ActionBuilder, Request, Result}
-import uk.gov.hmrc.auth.core.{Admin, Assistant, CredentialRole}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant, CredentialRole}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
@@ -40,12 +40,13 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     page: AnyPage,
     rNumber: Option[String] = Some(registrationNumber),
     credRole: Option[CredentialRole] = Some(adminRole),
+    userAffinityGroup : AffinityGroup = AffinityGroup.Individual,
     journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages),
     cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap
   ) = {
     val actionBuilder = new ActionBuilder[PageRequest] {
       override def invokeBlock[A](request: Request[A], block: PageRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
         val journeyRequest = JourneyRequestBuilder.journeyRequest(
           userRequest,
           journeyPages,
@@ -72,12 +73,13 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     rNumber: Option[String] = Some(registrationNumber),
     journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages),
     credRole: Option[CredentialRole] = Some(adminRole),
+    userAffinityGroup : AffinityGroup = AffinityGroup.Individual,
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment
   ) = {
     when(mockActions.summaryAction) thenReturn new  ActionBuilder[SummaryRequest] {
       override def invokeBlock[A](request: Request[A], block: SummaryRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
         val journeyRequest = JourneyRequestBuilder.journeyRequest(userRequest, journeyPages, businessType, journeyType).asInstanceOf[JourneyRequest[A]]
         val summaryRequest = new SummaryRequest(journeyRequest)
         block(summaryRequest)
@@ -88,7 +90,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupNewApplicationAction(): Unit = {
     when(mockActions.newApplicationAction) thenReturn new ActionBuilder[UserRequest] {
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin),request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(userAffinityGroup), request)
         block(userRequest)
       }
     }
@@ -97,7 +99,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupStartAmendmentAction(currentJourneyType: Option[JourneyType]): Unit = {
     when(mockActions.startAmendmentAction) thenReturn new ActionBuilder[StartUpdateRequest] {
       override def invokeBlock[A](request: Request[A], block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
         block(updateRequest)
       }
@@ -107,7 +109,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupStartVariationAction(currentJourneyType: Option[JourneyType]): Unit = {
     when(mockActions.startVariationAction) thenReturn new ActionBuilder[StartUpdateRequest] {
       override def invokeBlock[A](request: Request[A], block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
         block(updateRequest)
       }
@@ -118,7 +120,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     val candidateEmail = verifiedEmail orElse pendingEmail orElse Some(ggEmail)
     when(mockActions.emailVerificationAction) thenReturn new ActionBuilder[EmailVerificationRequest] {
       override def invokeBlock[A](request: Request[A], block: EmailVerificationRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
         val emailVerificationRequest = new EmailVerificationRequest(
           verifiedEmail, pendingEmail, candidateEmail, userRequest
         )
@@ -131,7 +133,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupJourneAction(rNumber: Option[String] = Some(registrationNumber), journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages)) = {
     when(mockActions.journeyAction) thenReturn new  ActionBuilder[JourneyRequest] {
       override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), Some(userAffinityGroup),  request)
         val journeyRequest = JourneyRequestBuilder.journeyRequest(userRequest, journeyPages).asInstanceOf[JourneyRequest[A]]
         block(journeyRequest)
       }
@@ -141,17 +143,17 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupEnrolledUserAction(registrationNumber: String = registrationNumber): Unit = {
     when(mockActions.enrolledUserAction) thenReturn new  ActionBuilder[EnrolledUserRequest] {
       override def invokeBlock[A](request: Request[A], block: EnrolledUserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), request)
         val enrolledUserRequest = new EnrolledUserRequest(registrationNumber, userRequest)
         block(enrolledUserRequest)
       }
     }
   }
 
-  def setupUserAction(rNumber: Option[String] = Some(registrationNumber), credentialRole: Option[CredentialRole] = Some(Admin)) = {
+  def setupUserAction(rNumber: Option[String] = Some(registrationNumber), credentialRole: Option[CredentialRole] = Some(Admin), userAffinityGroup : AffinityGroup = AffinityGroup.Individual) = {
     when(mockActions.userAction) thenReturn new ActionBuilder[UserRequest] {
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credentialRole, request)
+        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credentialRole,  Some(userAffinityGroup),request)
         block(userRequest)
       }
     }

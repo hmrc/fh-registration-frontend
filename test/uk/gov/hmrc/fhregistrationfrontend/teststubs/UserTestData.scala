@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import uk.gov.hmrc.auth.core.{Admin, Assistant}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
 
 trait UserTestData {
   val testUserId = "Int-uid"
@@ -24,5 +24,6 @@ trait UserTestData {
   val registrationNumber = "XZFH00000123456"
   val adminRole= Admin
   val assistantRole = Assistant
+  val userAffinityGroup = AffinityGroup.Individual
 
 }

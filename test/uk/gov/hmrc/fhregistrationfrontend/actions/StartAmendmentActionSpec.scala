@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Admin, Assistant}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
@@ -39,13 +39,13 @@ class StartAmendmentActionSpec
 
   "Start amendment action " should {
     "Fail when no fhdds registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, None, Some(AffinityGroup.Individual), FakeRequest())
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
 
     "Find the correct journey type" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), None, FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), None, Some(AffinityGroup.Individual), FakeRequest())
 
       setupFhddsStatus(FhddsStatus.Received)
       val cacheMap = CacheMapBuilder(testUserId)
@@ -60,7 +60,7 @@ class StartAmendmentActionSpec
 
     "Fail for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
       for {
         fhddsStatus ← List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
@@ -75,7 +75,7 @@ class StartAmendmentActionSpec
 
     "Work for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
       for {
         fhddsStatus ← List(Received, Processing)
       } {

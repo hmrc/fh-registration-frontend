@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import javax.swing.JFormattedTextField.AbstractFormatterFactory
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, Assistant}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
 
@@ -28,17 +29,17 @@ class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
   "Not admin user filter" should {
     "allow user to proceed if has admin role" in {
-      val request = new UserRequest("id", None, None, Some(Admin), FakeRequest())
+      val request = new UserRequest("id", None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
       status(result(filter, request)) shouldBe OK
     }
 
     "block the user and display forbidden if user has assistant role" in {
-      val request = new UserRequest("id", None, None, Some(Assistant), FakeRequest())
+      val request = new UserRequest("id", None, None, Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
       status(result(filter, request)) shouldBe FORBIDDEN
     }
 
     "block the user and display bad request if user has no credential role" in {
-      val request = new UserRequest("id", None, None, None, FakeRequest())
+      val request = new UserRequest("id", None, None, None, Some(AffinityGroup.Individual), FakeRequest())
       status(result(filter, request)) shouldBe BAD_REQUEST
     }
   }

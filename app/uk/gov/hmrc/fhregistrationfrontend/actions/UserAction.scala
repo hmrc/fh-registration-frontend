@@ -17,12 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import javax.inject.Inject
-
 import play.api.Logger
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AffinityGroup._
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.{allEnrolments, email, internalId, credentialRole}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
@@ -30,15 +30,15 @@ import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.Future
 
-class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], val credentialRole: Option[CredentialRole], request: Request[A])
+class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], val credentialRole: Option[CredentialRole], val userAffinityGroup: Option[AffinityGroup], request: Request[A])
   extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
 
 class UserAction @Inject()(
-  externalUrls: ExternalUrls,
-  errorHandler: ErrorHandler
-)(implicit override val authConnector: AuthConnector) extends ActionBuilder[UserRequest]
+                            externalUrls: ExternalUrls,
+                            errorHandler: ErrorHandler
+                          )(implicit override val authConnector: AuthConnector) extends ActionBuilder[UserRequest]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
   with AuthorisedFunctions {
@@ -46,9 +46,10 @@ class UserAction @Inject()(
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
 
-    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments and credentialRole) {
-      case Some(id) ~ anEmail ~ enrolments  ~ credentialRole ⇒
-        val fhddsRegistrationNumbers = for {
+    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
+      case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup ⇒
+
+        val retrieveEnrolments: Set[String] = for {
           enrolment ← enrolments.enrolments
           if enrolment.key equalsIgnoreCase Enrolments.serviceName
 
@@ -60,11 +61,20 @@ class UserAction @Inject()(
           identifier.value
         }
 
-        if (fhddsRegistrationNumbers.size > 1)
+        val retrieveAffinityGroup: Option[AffinityGroup] = for {
+          userAffinityGroup <- affinityGroup
+          if userAffinityGroup == Individual || userAffinityGroup == Organisation
+        } yield {
+          userAffinityGroup
+        }
+
+        // If the identifier contains FH in the correct location and the affinity group is either Individual or Organisation then they are fine else error
+        // Scenarios: User could have no enrolments, user can have enrolment
+        if (retrieveEnrolments.size > 1 || retrieveAffinityGroup == None) //FIXME : This is dubious logic
           Future successful Left(errorHandler.applicationError)
         else
-          Future successful Right(new UserRequest(id, anEmail, fhddsRegistrationNumbers.headOption, credentialRole, request))
-      case _     ⇒
+          Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))
+      case _ ⇒
         throw AuthorisationException.fromString("Can not find user id")
 
     } recover { case e ⇒
@@ -74,7 +84,7 @@ class UserAction @Inject()(
 
   def handleFailure(e: Throwable)(implicit request: Request[_]): Result =
     e match {
-      case x: NoActiveSession      ⇒
+      case x: NoActiveSession ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
 
         val ggRedirectParms = Map(
@@ -85,7 +95,7 @@ class UserAction @Inject()(
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)
       case e: AuthorisationException ⇒
         Unauthorized
-      case ex                      ⇒
+      case ex ⇒
         Logger.warn(s"could not authenticate user due to: $ex")
         InternalServerError(s"$ex")
     }

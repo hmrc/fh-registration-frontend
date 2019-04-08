@@ -20,7 +20,7 @@ import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.Admin
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, Page}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
@@ -30,7 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestDa
 class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach {
 
   lazy val action = new JourneyAction()(mockSave4Later, StubbedErrorHandler)
-  val userRequest = new UserRequest(testUserId, None, None, Some(Admin), FakeRequest())
+  val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {
     super.beforeEach()
