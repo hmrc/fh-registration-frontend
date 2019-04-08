@@ -17,6 +17,7 @@ class DraftApplicationPreV2
 
         WsTestClient withClient { implicit client ⇒
           val result = user.gets.summaryPage.futureValue
+          println(result.body)
           result.status mustBe 303
           result.header("Location") mustBe Some("/fhdds/email-verification-status")
 

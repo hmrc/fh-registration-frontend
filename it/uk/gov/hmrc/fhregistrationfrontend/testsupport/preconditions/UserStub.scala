@@ -18,7 +18,7 @@ case class UserStub
                |  "email": "test@test.com",
                |  "allEnrolments": [],
                |  "credentialRole": "user",
-               |  "userAffinityGroup" : "Individual",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -42,7 +42,7 @@ case class UserStub
                |  "internalId": "some-id",
                |  "email": "test@test.com",
                |  "allEnrolments": [],
-               |  "userAffinityGroup" : "Individual",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -67,7 +67,7 @@ case class UserStub
                |  "email": "test@test.com",
                |  "allEnrolments": [],
                |  "credentialRole": "assistant",
-               |  "userAffinityGroup" : "Individual",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -97,7 +97,7 @@ case class UserStub
                |       "value": "XEFH01234567890"
                |     }]
                |  }],
-               |  "userAffinityGroup" : "Individual",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
