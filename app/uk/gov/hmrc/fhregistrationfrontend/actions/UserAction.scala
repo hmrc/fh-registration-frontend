@@ -57,20 +57,14 @@ class UserAction @Inject()(
           if identifier.key equalsIgnoreCase Enrolments.identifierName
           if identifier.value.slice(2, 4) == "FH"
 
-        } yield {
-          identifier.value
-        }
+        } yield identifier.value
 
         val retrieveAffinityGroup: Option[AffinityGroup] = for {
           userAffinityGroup <- affinityGroup
           if userAffinityGroup == Individual || userAffinityGroup == Organisation
-        } yield {
-          userAffinityGroup
-        }
+        } yield userAffinityGroup
 
-        // If the identifier contains FH in the correct location and the affinity group is either Individual or Organisation then they are fine else error
-        // Scenarios: User could have no enrolments, user can have enrolment
-        if (retrieveEnrolments.size > 1 || retrieveAffinityGroup == None) //FIXME : This is dubious logic
+        if (retrieveEnrolments.size > 1 || retrieveAffinityGroup.isEmpty)
           Future successful Left(errorHandler.applicationError)
         else
           Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))

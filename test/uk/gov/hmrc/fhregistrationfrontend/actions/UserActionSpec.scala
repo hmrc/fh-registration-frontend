@@ -102,6 +102,8 @@ class UserActionSpec extends ActionSpecBase {
       setupAuthConnector(new IOException())
       status(result(action, fakeRequest)) shouldBe INTERNAL_SERVER_ERROR
     }
+
+    ""
   }
 
   def setupAuthConnector(
