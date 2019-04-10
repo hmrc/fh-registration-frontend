@@ -66,8 +66,7 @@ class UserAction @Inject()(
 
         if (retrieveEnrolments.size > 1 || retrieveAffinityGroup.isEmpty)
           Future successful Left(errorHandler.applicationError)
-        else
-          Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))
+        else Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))
       case _ ⇒
         throw AuthorisationException.fromString("Can not find user id")
 

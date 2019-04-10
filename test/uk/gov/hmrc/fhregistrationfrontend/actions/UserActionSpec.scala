@@ -25,6 +25,7 @@ import org.mockito.stubbing.OngoingStubbing
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{StubbedErrorHandler, StubbedExternalUrls}
@@ -45,6 +46,7 @@ class UserActionSpec extends ActionSpecBase {
     "Find the internal user id and email with no enrolments " in {
 
       setupAuthConnector()
+
       val refined = refinedRequest(action, fakeRequest)
       refined.userId shouldBe "id"
       refined.ggEmail shouldBe Some("email@test.com")
@@ -103,7 +105,6 @@ class UserActionSpec extends ActionSpecBase {
       status(result(action, fakeRequest)) shouldBe INTERNAL_SERVER_ERROR
     }
 
-    ""
   }
 
   def setupAuthConnector(
