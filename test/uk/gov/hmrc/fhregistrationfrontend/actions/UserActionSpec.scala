@@ -21,9 +21,11 @@ import java.io.IOException
 import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.mockito.stubbing.OngoingStubbing
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{StubbedErrorHandler, StubbedExternalUrls}
@@ -35,7 +37,7 @@ class UserActionSpec extends ActionSpecBase {
   val mockAuthConnector = mock[AuthConnector]
   implicit val materializer = mock[Materializer]
 
-  type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole]
+  type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup]
 
   val fakeRequest: Request[Any] = FakeRequest()
   lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler)(mockAuthConnector)
@@ -44,10 +46,12 @@ class UserActionSpec extends ActionSpecBase {
     "Find the internal user id and email with no enrolments " in {
 
       setupAuthConnector()
+
       val refined = refinedRequest(action, fakeRequest)
       refined.userId shouldBe "id"
       refined.ggEmail shouldBe Some("email@test.com")
       refined.registrationNumber shouldBe None
+      refined.userAffinityGroup shouldBe Some(AffinityGroup.Individual)
       refined.userIsRegistered shouldBe false
     }
 
@@ -100,21 +104,24 @@ class UserActionSpec extends ActionSpecBase {
       setupAuthConnector(new IOException())
       status(result(action, fakeRequest)) shouldBe INTERNAL_SERVER_ERROR
     }
+
   }
 
   def setupAuthConnector(
     id        : Option[String] = Some("id"),
     email     : Option[String] = Some("email@test.com"),
     enrolments: Set[Enrolment] = Set.empty,
-    credentialRole: Option[CredentialRole] = Some(Admin)
-  ) = {
-    val authResult = Future successful (new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole))
+    credentialRole: Option[CredentialRole] = Some(Admin),
+    userAffinityGroup : Option[AffinityGroup] = Some(AffinityGroup.Individual)
+  ): OngoingStubbing[Future[RetrievalType]] = {
+
+    val authResult = Future successful (new ~ (new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole), userAffinityGroup))
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
+
   }
 
   def setupAuthConnector(throwable: Throwable) = {
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed throwable)
   }
-
 
 }

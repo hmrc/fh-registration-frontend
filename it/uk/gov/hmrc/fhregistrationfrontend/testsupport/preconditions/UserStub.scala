@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 
 case class UserStub
 ()
-  (implicit builder: PreconditionBuilder) {
+(implicit builder: PreconditionBuilder) {
 
 
   def isAuthorised() = {
@@ -18,6 +18,7 @@ case class UserStub
                |  "email": "test@test.com",
                |  "allEnrolments": [],
                |  "credentialRole": "user",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -41,6 +42,7 @@ case class UserStub
                |  "internalId": "some-id",
                |  "email": "test@test.com",
                |  "allEnrolments": [],
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -65,6 +67,7 @@ case class UserStub
                |  "email": "test@test.com",
                |  "allEnrolments": [],
                |  "credentialRole": "assistant",
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"
@@ -94,6 +97,7 @@ case class UserStub
                |       "value": "XEFH01234567890"
                |     }]
                |  }],
+               |  "affinityGroup" : "Individual",
                |  "loginTimes": {
                |     "currentLogin": "2018-03-27T09:00:00.000Z",
                |     "previousLogin": "2018-03-01T12:00:00.000Z"

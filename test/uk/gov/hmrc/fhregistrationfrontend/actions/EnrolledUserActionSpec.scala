@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.Admin
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
 
 class EnrolledUserActionSpec extends ActionSpecBase {
@@ -27,13 +27,13 @@ class EnrolledUserActionSpec extends ActionSpecBase {
 
   "Enrolled user action" should {
     "Fail when no registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
 
     "Work for user with registration number" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber),Some(Admin), FakeRequest())
+      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber),Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
 

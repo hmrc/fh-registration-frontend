@@ -17,14 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.Assistant
+import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
 
 class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
-  val request = new UserRequest("id", None, None, Some(Assistant), FakeRequest())
+  val request = new UserRequest("id", None, None, Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
   lazy val filter = new NoPendingSubmissionFilter(mockFhddsConnector)(StubbedErrorHandler)
 
   "No pending submission filter" should {
