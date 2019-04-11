@@ -64,8 +64,11 @@ class UserAction @Inject()(
           if userAffinityGroup == Individual || userAffinityGroup == Organisation
         } yield userAffinityGroup
 
-        if (retrieveEnrolments.size > 1 || retrieveAffinityGroup.isEmpty)
+        if (retrieveEnrolments.size > 1)
           Future successful Left(errorHandler.applicationError)
+        else if (retrieveAffinityGroup.isEmpty) {
+          Future successful Left(errorHandler.errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service")))
+        }
         else Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))
       case _ ⇒
         throw AuthorisationException.fromString("Can not find user id")
