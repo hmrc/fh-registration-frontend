@@ -62,4 +62,14 @@ case class FhddsBackendStub()
     builder
   }
 
+  def createSubscription() = {
+    stubFor(
+      post(
+        urlPathMatching("/fhdds/subscription/subscribe/XE0001234567890"))
+        .willReturn(
+          ok(Json.toJson(SubmissionResponse("XEFH01234567890.", new Date)).toString())))
+
+    builder
+  }
+
 }

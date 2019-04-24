@@ -83,6 +83,7 @@ class FhddsConnector @Inject() (
     http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
   }
 
+  // $COVERAGE-OFF$
   def getAllSubmission()(implicit hc:HeaderCarrier):Future[List[SubmissionTracking]] = {
     http.GET[List[SubmissionTracking]](s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission")
   }
@@ -123,5 +124,6 @@ class FhddsConnector @Inject() (
   def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
   }
+  // $COVERAGE-ON$
 
 }
