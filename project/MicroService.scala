@@ -38,6 +38,8 @@ trait MicroService {
           |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
           |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
           |""".stripMargin,
+      ScoverageKeys.coverageExcludedFiles := "<empty>;.*javascript.*;.*models.*;.*Routes.*;.*testonly.*;.*controllers.AdminPageController.*;" +
+        ".*controllers.AuthenticationController.*",
       ScoverageKeys.coverageMinimum := 80.00,
       ScoverageKeys.coverageFailOnMinimum := true,
       ScoverageKeys.coverageHighlighting := true,
