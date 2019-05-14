@@ -127,7 +127,7 @@ tr > td:last-child {
     .hidden-print,
     #content a,
     .header-proposition a,
-    .header-proposition ul, .beta-banner, .phase-banner,
+    .header-proposition ul, .phase-banner,
     h1.heading-large {
         display: none;
     }
