@@ -28,9 +28,6 @@ trait AppConfig {
   val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
-  val exitSurveyUrl: String
-  val phaseBannerFeedback: String
-  val phaseBannerFeedbackUnauth: String
   val appName: String
   def emailVerificationCallback(hash: String): String
   val exciseEnquiryLink: String
@@ -59,10 +56,6 @@ class FrontendAppConfig @Inject()(
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   override lazy val reportAProblemPartialUrl = s"$contactFrontend/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactFrontend/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  override lazy val exitSurveyUrl: String = s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
-
-  override lazy val phaseBannerFeedback: String = s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
-  override lazy val phaseBannerFeedbackUnauth: String = s"$contactFrontend/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
   override def emailVerificationCallback(hash: String) = {
     s"$fhddsFrontendUrl/email-verify/$hash"

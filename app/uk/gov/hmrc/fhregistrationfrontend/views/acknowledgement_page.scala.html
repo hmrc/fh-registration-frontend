@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
 @import java.util.Date
 @import scala.concurrent.Future
 @import play.twirl.api.{Html⇒tHtml}
@@ -105,8 +104,6 @@
           <a href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
         </p>
       }
-
-      @SurveyLink()(messages, config)
 
     </div>
 
