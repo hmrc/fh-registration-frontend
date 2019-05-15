@@ -17,11 +17,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Inject
-
 import com.google.inject.ImplementedBy
+import play.api.libs.json.Json
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.EmailVerificationRequest
+import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -55,19 +55,19 @@ class DefaultEmailVerificationConnector @Inject() (
   val emailVerificationBaseUrl = s"${baseUrl("email-verification")}/email-verification"
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
-    val url = s"$emailVerificationBaseUrl/verified-email-addresses/$email"
+    val url = s"$emailVerificationBaseUrl/verified-email-check"
     implicit val customReads = new HttpReads[Boolean] {
       override def read(method: String, url: String, response: HttpResponse): Boolean = {
         response.status match {
           case status if status == 200 ⇒ true
           case status if status == 404 ⇒ false
-          case status if is4xx(status) ⇒ throw Upstream4xxResponse("email-verification/verified-email-addresses error", response.status, 500)
-          case status if is5xx(status) ⇒ throw Upstream5xxResponse("email-verification/verified-email-addresses error", response.status, 502)
+          case status if is4xx(status) ⇒ throw Upstream4xxResponse("email-verification/verified-email-check error", response.status, 500)
+          case status if is5xx(status) ⇒ throw Upstream5xxResponse("email-verification/verified-email-check error", response.status, 502)
         }
       }
     }
 
-    http.GET[Boolean](url)
+    http.POST(url, Json.toJson(Email(email)))
   }
 
   override def requestVerification(email: String, emailHash: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
