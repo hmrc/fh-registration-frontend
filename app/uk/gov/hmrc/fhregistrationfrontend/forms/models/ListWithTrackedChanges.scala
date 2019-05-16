@@ -28,7 +28,7 @@ object ListWithTrackedChanges {
   case object Updated extends Status
   case object Added extends Status
 
-  implicit val statusFormat: OFormat[Status] = derived.oformat[Status]
+  implicit val statusFormat: OFormat[Status] = derived.oformat[Status]()
   def empty[T](): ListWithTrackedChanges[T] = ListWithTrackedChanges[T](List.empty, List.empty, false)
 
   def fromValues[T](values: List[T]): ListWithTrackedChanges[T] = ListWithTrackedChanges(
@@ -60,11 +60,9 @@ object ListWithTrackedChanges {
   }
 
   implicit def listWithTrackedChangesFormat[T](implicit format: Format[T]): Format[ListWithTrackedChanges[T]] = Format(reads, writes)
-
 }
 
 case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T], addMore: Boolean) {
-
 
   def append(value: T) = this copy (valuesWithStatus = valuesWithStatus :+ (value → Added))
 
@@ -95,6 +93,4 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
   }
 
   def size = valuesWithStatus.size
-
-
 }

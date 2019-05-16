@@ -18,12 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 
 import play.api.mvc.{ActionFilter, Result, Results}
-import uk.gov.hmrc.auth.core.{Admin, Assistant, CredentialRole, User}
+import uk.gov.hmrc.auth.core.{Admin, Assistant, User}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
-
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class NotAdminUserFilter()(implicit val errorHandler: ErrorHandler)
+class NotAdminUserFilter()(implicit val errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
   extends ActionFilter[UserRequest]
     with FrontendAction {
 

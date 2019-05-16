@@ -17,17 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
+
+import scala.concurrent.ExecutionContext
 
 class ReadOnlySummaryController  @Inject()(
   ds               : CommonPlayDependencies,
   desToForm        : DesToForm,
   fhddsConnector   : FhddsConnector,
+  cc               : MessagesControllerComponents,
   actions: Actions
-) extends AppController(ds) with SummaryFunctions {
+)(implicit ec: ExecutionContext) extends AppController(ds, cc) with SummaryFunctions {
 
 
   def view() = actions.enrolledUserAction.async { implicit request ⇒
@@ -44,6 +47,4 @@ class ReadOnlySummaryController  @Inject()(
     }
 
   }
-
-
 }

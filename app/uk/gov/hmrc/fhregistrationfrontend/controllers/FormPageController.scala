@@ -17,24 +17,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
-import play.api.mvc.{Action, AnyContent, Request, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FormPageController @Inject()(
   ds: CommonPlayDependencies,
   addressAuditService: AddressAuditService,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext) extends AppController(ds, cc) {
 
   import actions._
   def load(pageId: String) = pageAction(pageId) { implicit request ⇒
@@ -94,7 +93,6 @@ class FormPageController @Inject()(
       }
     }
 
-
   private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
     if (newPage.nextSubsection.isDefined)
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
@@ -120,5 +118,4 @@ class FormPageController @Inject()(
     _ ⇒ false,
     value ⇒ value == "saveForLater"
   )
-
 }

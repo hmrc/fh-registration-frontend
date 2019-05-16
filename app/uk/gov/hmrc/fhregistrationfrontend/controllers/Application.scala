@@ -17,19 +17,15 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 
-import javax.inject.{Inject, Singleton}
-
 import cats.data.OptionT
 import cats.implicits._
+import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -40,18 +36,17 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Application @Inject()(
-  links            : ExternalUrls,
-  ds               : CommonPlayDependencies,
-  fhddsConnector   : FhddsConnector,
+  links: ExternalUrls,
+  ds: CommonPlayDependencies,
+  fhddsConnector: FhddsConnector,
   businessCustomerConnector: BusinessCustomerFrontendConnector,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
-
+)(implicit save4LaterService: Save4LaterService, ec : ExecutionContext) extends AppController(ds, cc) {
 
   override val configuration: Configuration = ds.conf
 
@@ -107,7 +102,6 @@ class Application @Inject()(
       .map(_ ⇒ Redirect(links.businessCustomerVerificationUrl))
   }
 
-
   def continueWithBpr = newApplicationAction.async { implicit request ⇒
     for {
       details ← businessCustomerConnector.getReviewDetails
@@ -116,7 +110,6 @@ class Application @Inject()(
       Redirect(routes.Application.businessType())
     }
   }
-
 
   def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request ⇒
     if (isNewForm) {
@@ -147,7 +140,6 @@ class Application @Inject()(
       }
     )
   }
-
 
   def confirmDelete = userAction.async { implicit request ⇒
       save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
@@ -212,12 +204,11 @@ class Application @Inject()(
         Ok(status(StatusPageParams(fhddsStatus).get, request.registrationNumber))
       })
   }
-
 }
 
 @Singleton
-abstract class AppController(val ds: CommonPlayDependencies)
-  extends FrontendController
+abstract class AppController(val ds: CommonPlayDependencies, val cc: MessagesControllerComponents)
+  extends FrontendController(cc)
     with I18nSupport {
 
   override implicit val messagesApi: MessagesApi = ds.messagesApi
@@ -227,8 +218,6 @@ abstract class AppController(val ds: CommonPlayDependencies)
 
   val configuration: Configuration = ds.conf
   val messages: MessagesApi = messagesApi
-
-
 }
 
 @Singleton

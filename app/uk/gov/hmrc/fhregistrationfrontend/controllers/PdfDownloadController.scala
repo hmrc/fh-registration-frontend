@@ -17,18 +17,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
-import play.api.mvc.Results
+import play.api.mvc.{MessagesControllerComponents, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import scala.concurrent.ExecutionContext
 
 @Inject
 class PdfDownloadController @Inject()(
   ds            : CommonPlayDependencies,
   keyStoreService      : KeyStoreService,
+  cc:           MessagesControllerComponents,
   actions: Actions
-) extends AppController(ds){
+)(implicit ec: ExecutionContext) extends AppController(ds, cc){
 
   import actions._
   def downloadPrintable() = userAction.async { implicit request ⇒
@@ -43,6 +44,5 @@ class PdfDownloadController @Inject()(
   }
 
   protected def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
-
 }
 

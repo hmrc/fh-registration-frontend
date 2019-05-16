@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.libs.json
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -26,8 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.ShortLivedCache
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 object Save4LaterKeys {
   val businessRegistrationDetailsKey = "businessRegistrationDetails"
@@ -45,7 +43,7 @@ object Save4LaterKeys {
 @Singleton
 class Save4LaterService @Inject() (
   shortLivedCache: ShortLivedCache
-) {
+)(implicit ec: ExecutionContext) {
 
   import Save4LaterKeys._
 
@@ -67,7 +65,6 @@ class Save4LaterService @Inject() (
     fetchData4Later[String](userId, verifiedEmailKey)
   }
 
-
   def savePendingEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
     saveDraftData4Later(userId, pendingEmailKey, email)
   }
@@ -87,7 +84,6 @@ class Save4LaterService @Inject() (
   def fetchPendingEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
     fetchData4Later[String](userId, pendingEmailKey).map { _.filterNot( _.isEmpty) }
   }
-
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
     saveDraftData4Later(userId, businessRegistrationDetailsKey, brd)
@@ -136,6 +132,5 @@ class Save4LaterService @Inject() (
 
   def fetchData4Later[T](utr: String, formId: String)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
     shortLivedCache.fetchAndGetEntry[T](utr, formId)
-
 }
 

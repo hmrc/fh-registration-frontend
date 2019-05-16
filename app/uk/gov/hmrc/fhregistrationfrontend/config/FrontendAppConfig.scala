@@ -17,10 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.config
 
 import javax.inject.{Inject, Singleton}
-
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
@@ -37,14 +36,11 @@ trait AppConfig {
 @Singleton
 class FrontendAppConfig @Inject()(
   configuration: play.api.Configuration,
-  override val runModeConfiguration: Configuration,
-  environment: Environment) extends AppConfig with ServicesConfig {
+  val runModeConfiguration: Configuration,
+  val runMode: RunMode,
+  environment: Environment) extends ServicesConfig(runModeConfiguration, runMode) with AppConfig {
 
-
-  override protected def mode = environment.mode
   private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-
-//  private val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")

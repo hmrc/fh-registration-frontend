@@ -15,13 +15,11 @@
  *@
 
 @import helper._
-@import play.api.Play.current
-@import play.api.i18n.Messages.Implicits._
 @import play.api.Configuration
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest
 
-@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messages: MessagesApi)
+@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messagesProvider: MessagesProvider)
 
 @main_template(title = Messages("home.admin.submisson.page.title")) {
 

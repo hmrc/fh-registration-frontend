@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
-import javax.inject.Inject
 
+import javax.inject.Inject
 import org.joda.time.DateTime
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
@@ -33,7 +33,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.{withdrawal_acknowledgement, withdrawal_confirm, withdrawal_reason}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
 class WithdrawalController @Inject()(
@@ -41,13 +41,13 @@ class WithdrawalController @Inject()(
   val fhddsConnector   : FhddsConnector,
   val desToForm: DesToForm,
   keyStoreService      : KeyStoreService,
+  cc                   : MessagesControllerComponents,
   actions: Actions
-) extends AppController(ds) with ContactEmailFunctions {
+)(implicit ec: ExecutionContext) extends AppController(ds, cc) with ContactEmailFunctions {
 
   import actions._
   val EmailSessionKey = "withdrawal_confirmation_email"
   val ProcessingTimestampSessionKey = "withdrawal_processing_timestamp"
-
 
   def startWithdraw = Action {
     Redirect(routes.WithdrawalController.reason())

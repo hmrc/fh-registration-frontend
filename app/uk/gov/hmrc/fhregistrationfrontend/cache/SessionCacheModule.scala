@@ -17,13 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.cache
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.SessionCache
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.{AppName, ServicesConfig}
 
 class SessionCacheModule extends Module {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
@@ -35,14 +34,14 @@ class SessionCacheModule extends Module {
 class DefaultSessionCache @Inject() (
   override val http: HttpClient,
   val configuration: Configuration,
+  val runMode: RunMode,
   environment: Environment
-) extends client.SessionCache with AppName with ServicesConfig {
+) extends ServicesConfig(configuration, runMode) with client.SessionCache{
 
-  override val appNameConfiguration = configuration
-  override val runModeConfiguration = configuration
+  val appNameConfiguration = configuration
+  val runModeConfiguration = configuration
 
-  override protected def mode = environment.mode
-  override lazy val defaultSource = appName
+  override lazy val defaultSource = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri = baseUrl("cachable.session-cache")
   override lazy val domain = getConfString("cachable.session-cache.domain",
     throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))

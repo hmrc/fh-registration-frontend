@@ -17,10 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.Inject
-
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[DefaultExternalUrls])
 trait ExternalUrls {
@@ -43,14 +42,11 @@ trait ExternalUrls {
   val surveyRedirectUrl: String
 }
 
-
-
 class DefaultExternalUrls @Inject()(
-  override val runModeConfiguration: Configuration,
+  val runModeConfiguration: Configuration,
+  val runMode: RunMode,
   environment: Environment
-) extends ExternalUrls with RunMode with ServicesConfig {
-
-  override protected def mode = environment.mode
+) extends ServicesConfig(runModeConfiguration, runMode) with ExternalUrls {
 
   val companyAuthUrl: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
   val loginCallback: String = getConfString("auth.login-callback.url", "/fhdds")

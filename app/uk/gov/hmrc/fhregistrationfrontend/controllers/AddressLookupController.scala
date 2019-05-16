@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
@@ -25,12 +24,13 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AddressLookupController @Inject()(
-  addressLookupConnector: AddressLookupConnector
-) extends FrontendController {
+  addressLookupConnector: AddressLookupConnector,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) {
 
   def addressLookup(postcode: String, filter: Option[String]) = Action.async {
     implicit request =>
@@ -46,7 +46,4 @@ class AddressLookupController @Inject()(
         Future.successful(BadRequest("missing or badly-formed postcode parameter"))
       }
   }
-
-
-
 }

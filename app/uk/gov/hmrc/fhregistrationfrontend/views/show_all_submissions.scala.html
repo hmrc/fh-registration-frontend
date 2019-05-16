@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 
-@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: MessagesApi)
+@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: MessagesProvider)
 
 
 @main_template(title = Messages("home.admin.submisson.page.title")) {

@@ -28,20 +28,23 @@ import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], val credentialRole: Option[CredentialRole], val userAffinityGroup: Option[AffinityGroup], request: Request[A])
   extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
 
-class UserAction @Inject()(
+case class UserAction @Inject()(
                             externalUrls: ExternalUrls,
-                            errorHandler: ErrorHandler
-                          )(implicit override val authConnector: AuthConnector) extends ActionBuilder[UserRequest]
+                            errorHandler: ErrorHandler,
+                            cc: ControllerComponents
+                          )(implicit override val authConnector: AuthConnector, override val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
   with AuthorisedFunctions {
+
+  override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request

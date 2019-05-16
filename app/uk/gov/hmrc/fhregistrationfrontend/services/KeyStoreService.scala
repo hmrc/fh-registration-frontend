@@ -17,14 +17,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import javax.inject.Inject
-
 import com.google.inject.{ImplementedBy, Singleton}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.cache.client.SessionCache
 
 object KeyStoreKeys {
@@ -34,10 +31,11 @@ object KeyStoreKeys {
 }
 
 @Singleton
-class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache) extends KeyStoreService {
+class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) extends KeyStoreService {
   import KeyStoreKeys._
 
   override def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_] = sessionCache.cache(SummaryForPrintKey, o)
+
   override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]= {
     sessionCache.fetchAndGetEntry[String](SummaryForPrintKey)
   }

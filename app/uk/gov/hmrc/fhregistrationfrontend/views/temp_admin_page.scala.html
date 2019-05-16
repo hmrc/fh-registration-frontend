@@ -19,9 +19,10 @@
 @import play.api.Play.current
 @import play.api.i18n.Messages.Implicits._
 @import play.api.Configuration
-
+@import play.api.i18n.MessagesProvider
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@(implicit request: Request[_],config: AppConfig,  messagesApi: MessagesApi)
+
+@(implicit request: Request[_],config: AppConfig, messagesApi: MessagesProvider)
 
 @main_template(title = Messages("home.admin.page.title")) {
  <h1>@Messages("home.admin.page.header")</h1>

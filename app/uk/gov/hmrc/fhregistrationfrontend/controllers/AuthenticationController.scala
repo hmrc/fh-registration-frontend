@@ -18,20 +18,28 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.util.Base64
 
+import javax.inject.Inject
 import org.mindrot.jbcrypt.BCrypt
 import play.api.mvc.Security.AuthenticatedBuilder
 import play.api.mvc._
-
+import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 case class Credentials(username: String, password:String) {
   def check(providedUsername: String, providedPassword: String): Boolean = {
     (providedUsername == username) && BCrypt.checkpw(providedPassword, password)
-
   }
 }
 
-case class AuthenticationController(credentials: Credentials) extends AuthenticatedBuilder[String](AuthenticationController.extractCredentials(credentials), AuthenticationController.onUnauthorised)
+case class AuthenticationController @Inject()(
+  credentials: Credentials,
+  bodyParser: BodyParser[AnyContent])
+(implicit ec: ExecutionContext)
+  extends AuthenticatedBuilder[String](
+    AuthenticationController.extractCredentials(credentials),
+    bodyParser,
+    AuthenticationController.onUnauthorised
+  )
 
 object AuthenticationController {
   def extractCredentials(storedCredentials: Credentials): RequestHeader => Option[String] = { header =>
@@ -44,7 +52,6 @@ object AuthenticationController {
       }.toOption
       authenticatedUsername <- if (storedCredentials.check(username, password)) Some(username) else None
     } yield authenticatedUsername
-
   }
 
   def onUnauthorised: RequestHeader => Result = { header =>
