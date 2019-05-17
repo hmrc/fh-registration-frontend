@@ -26,8 +26,8 @@ object FrontendBuild extends Build with MicroService {
     "org.typelevel"               %% "cats-kernel"                      % "1.6.0",
 
     "org.pegdown"                  % "pegdown"                          % "1.6.0",
-    "com.github.tototoshi"        %% "play-json-naming"                 % "1.3.0",
-    "org.julienrf"                %% "play-json-derived-codecs"         % "5.0.0",
+    "com.github.tototoshi"        %% "play-json-naming"                 % "1.2.0",
+    "org.julienrf"                %% "play-json-derived-codecs"         % "4.0.1",
 
     "com.github.julien-truffaut"  %%  "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut"  %%  "monocle-macro"                   % monocleVersion,
