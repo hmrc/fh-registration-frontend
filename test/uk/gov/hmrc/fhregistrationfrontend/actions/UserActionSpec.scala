@@ -36,11 +36,12 @@ class UserActionSpec extends ActionSpecBase {
 
   val mockAuthConnector = mock[AuthConnector]
   implicit val materializer = mock[Materializer]
+  val mockMessagesControllerComponent = mock[MessagesControllerComponents]
 
   type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup]
 
   val fakeRequest: Request[Any] = FakeRequest()
-  lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler)(mockAuthConnector)
+  lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler, mockMessagesControllerComponent)(mockAuthConnector, scala.concurrent.ExecutionContext.Implicits.global)
 
   "UserAction" should {
     "Find the internal user id and email with no enrolments " in {

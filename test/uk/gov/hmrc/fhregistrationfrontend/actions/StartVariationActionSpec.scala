@@ -34,7 +34,7 @@ class StartVariationActionSpec
 
   val errorHandler = StubbedErrorHandler
 
-  lazy val action = new StartVariationAction(mockFhddsConnector)(mockSave4Later, errorHandler)
+  lazy val action = new StartVariationAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start variation action " should {
     "Fail when no fhdds registration number" in {

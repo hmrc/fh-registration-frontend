@@ -25,8 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4Later
 
 class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
-
-  lazy val action = new EmailVerificationAction()(mockSave4Later, StubbedErrorHandler)
+  lazy val action = new EmailVerificationAction()(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
   val verifiedEmail = "verified@test.com"
   val contactEmail = "contact@test.com"
   val pendingEmail = "pending@test.com"

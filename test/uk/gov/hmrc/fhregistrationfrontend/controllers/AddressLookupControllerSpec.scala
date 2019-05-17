@@ -22,6 +22,7 @@ import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.libs.json.Json
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{AddressLookupConnector, AddressLookupErrorResponse, AddressLookupSuccessResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address, AddressRecord, Country, RecordSet}
@@ -32,7 +33,8 @@ class AddressLookupControllerSpec extends ControllersSpecBase {
 
   private implicit val materializer = mock[Materializer]
   val mockAddressLookupConnector = mock[AddressLookupConnector]
-  val controller = new AddressLookupController(mockAddressLookupConnector)
+  val mockMessagesControllerComponent = mock[MessagesControllerComponents]
+  val controller = new AddressLookupController(mockAddressLookupConnector, mockMessagesControllerComponent)(scala.concurrent.ExecutionContext.Implicits.global)
 
   "Address lookup controller" should {
     "Fail with wrong postcode" in {
