@@ -66,7 +66,7 @@ class StartVariationActionSpec
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
 
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -80,7 +80,7 @@ class StartVariationActionSpec
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 

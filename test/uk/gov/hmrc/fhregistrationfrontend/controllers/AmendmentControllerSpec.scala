@@ -55,7 +55,7 @@ class AmendmentControllerSpec
     mockFhddsConnector,
     mockEmailVerifcationConnector,
     mockActions
-  )(inMemorySave4Later)
+  )(inMemorySave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "startAmendment" should {
     "Redirect to summary when an amendment is already in progress" in {

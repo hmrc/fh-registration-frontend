@@ -31,7 +31,7 @@ class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
 
   val controller = new ReadOnlySummaryController(
     commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockActions
-  )
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {
     "Render the summary for an approved application" in {

@@ -61,7 +61,7 @@ class ApplicationControllerSpec
     mockFhddsConnector,
     mockBusinessCustomerConnector,
     mockActions
-  )(mockSave4Later)
+  )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
 

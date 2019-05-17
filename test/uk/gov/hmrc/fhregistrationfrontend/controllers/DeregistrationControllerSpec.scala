@@ -44,7 +44,7 @@ class DeregistrationControllerSpec
     desToForm,
     mockKeyStoreService,
     mockActions
-  )
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()

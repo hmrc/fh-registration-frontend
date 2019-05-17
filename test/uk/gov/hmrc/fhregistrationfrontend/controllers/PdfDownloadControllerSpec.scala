@@ -33,7 +33,7 @@ class PdfDownloadControllerSpec
 
   val mockKeyStore = mock[KeyStoreService]
 
-  val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockActions)
+  val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockActions)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
