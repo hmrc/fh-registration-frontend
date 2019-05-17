@@ -25,8 +25,6 @@ trait TestConfiguration
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
 
-  override lazy val port: Int = Port.randomAvailable
-
   val baseUrl = s"http://localhost:$port/fhdds"
 
   abstract override implicit val patienceConfig: PatienceConfig =
