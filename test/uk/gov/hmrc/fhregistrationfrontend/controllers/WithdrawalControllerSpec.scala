@@ -22,7 +22,7 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{ActionBuilder, Request, Result}
+import play.api.mvc.{ActionBuilder, MessagesControllerComponents, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.filters.csrf.CSRFAddToken
@@ -43,15 +43,16 @@ class WithdrawalControllerSpec
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
-
+  val mockControllerComponents = mock[MessagesControllerComponents]
 
   val controller = new WithdrawalController(
     commonDependencies,
     mockFhddsConnector,
     desToForm,
     mockKeyStoreService,
+    mockControllerComponents,
     mockActions
-  )
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()

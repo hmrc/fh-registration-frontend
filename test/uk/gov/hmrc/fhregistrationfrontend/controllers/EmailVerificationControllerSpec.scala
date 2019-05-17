@@ -31,10 +31,10 @@ class EmailVerificationControllerSpec
     with ActionsMock
     with BeforeAndAfterEach {
 
-  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))
+  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
   implicit val hc = HeaderCarrier()
   val controller = new EmailVerificationController(
-    commonDependencies, mockActions, mockEmailVerifcationConnector, inMemorySave4Later)
+    commonDependencies, mockActions, mockEmailVerifcationConnector, inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()

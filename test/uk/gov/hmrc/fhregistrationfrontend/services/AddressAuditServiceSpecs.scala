@@ -44,7 +44,7 @@ class AddressAuditServiceSpecs
   val addressLookupConnector = mock[AddressLookupConnector]
   implicit val hc = HeaderCarrier()
 
-  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)
+  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(scala.concurrent.ExecutionContext.Implicits.global)
   val ac: ArgumentCaptor[DataEvent] = ArgumentCaptor.forClass(classOf[DataEvent])
 
   override def beforeEach(): Unit = {

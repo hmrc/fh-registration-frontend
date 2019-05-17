@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.mockito.Mockito.reset
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
@@ -30,7 +31,8 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp
   with ActionsMock
 {
 
-  val controller = new SummaryController(commonDependencies, mockActions)
+  val mockControllerComponents = mock[MessagesControllerComponents]
+  val controller = new SummaryController(commonDependencies, mockControllerComponents, mockActions)
 
   "summary" should {
     "Render the summary html for all journey types" in {

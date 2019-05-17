@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilde
 import play.api.test.Helpers._
 import org.mockito.Mockito.{reset, verify, when}
 import org.mockito.ArgumentMatchers.any
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, OtherStoragePremises}
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
@@ -48,7 +49,8 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockActions)(mockSave4Later)
+  val mockControllerComponents = mock[MessagesControllerComponents]
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockControllerComponents, mockActions)(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "load" should {
     "Render the page" in {

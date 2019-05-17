@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
@@ -37,12 +38,14 @@ class DeregistrationControllerSpec
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
+  val mockControllerComponents = mock[MessagesControllerComponents]
 
   val controller = new DeregistrationController(
     commonDependencies,
     mockFhddsConnector,
     desToForm,
     mockKeyStoreService,
+    mockControllerComponents,
     mockActions
   )(scala.concurrent.ExecutionContext.Implicits.global)
 

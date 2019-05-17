@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.Mockito.when
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.connectors
@@ -23,8 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors
 class SignOutControllerSpec extends ControllersSpecBase {
   val mockExternalUrls = mock[connectors.ExternalUrls]
   val mockCommonDependencies = mock[CommonPlayDependencies]
+  val mockControllerComponents = mock[MessagesControllerComponents]
 
-  val controller = new SignOutController(mockCommonDependencies, mockExternalUrls)
+  val controller = new SignOutController(mockCommonDependencies, mockExternalUrls, mockControllerComponents)
 
   "SignOut Controller" should {
     "Redirect to logout" in {

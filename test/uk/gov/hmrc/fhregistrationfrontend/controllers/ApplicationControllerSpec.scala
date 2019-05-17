@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
@@ -55,11 +56,13 @@ class ApplicationControllerSpec
 
   }
 
+  val mockControllerComponents = mock[MessagesControllerComponents]
   val controller = new Application(
     app.injector.instanceOf(classOf[ExternalUrls]),
     commonDependencies,
     mockFhddsConnector,
     mockBusinessCustomerConnector,
+    mockControllerComponents,
     mockActions
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
