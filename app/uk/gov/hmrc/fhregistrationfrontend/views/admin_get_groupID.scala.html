@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest
 
-@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messagesProvider: MessagesProvider)
+@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messagesProvider: Messages)
 
 @main_template(title = Messages("home.admin.submisson.page.title")) {
 

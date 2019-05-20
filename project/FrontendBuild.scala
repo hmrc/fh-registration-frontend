@@ -12,7 +12,7 @@ object FrontendBuild extends Build with MicroService {
   val compile = Seq(
     ws,
     "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "0.39.0",
-    "uk.gov.hmrc"                 %% "govuk-template"                   % "5.19.0",
+    "uk.gov.hmrc"                 %% "govuk-template"                   % "5.35.0-play-26",
     "uk.gov.hmrc"                 %% "play-ui"                          % "7.39.0-play-26",
 
     "uk.gov.hmrc"                 %% "play-partials"                    % "6.9.0-play-26",
@@ -26,8 +26,8 @@ object FrontendBuild extends Build with MicroService {
     "org.typelevel"               %% "cats-kernel"                      % "1.6.0",
 
     "org.pegdown"                  % "pegdown"                          % "1.6.0",
-    "com.github.tototoshi"        %% "play-json-naming"                 % "1.3.0",
-    "org.julienrf"                %% "play-json-derived-codecs"         % "5.0.0",
+    "com.github.tototoshi"        %% "play-json-naming"                 % "1.2.0",
+    "org.julienrf"                %% "play-json-derived-codecs"         % "4.0.1",
 
     "com.github.julien-truffaut"  %%  "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut"  %%  "monocle-macro"                   % monocleVersion,

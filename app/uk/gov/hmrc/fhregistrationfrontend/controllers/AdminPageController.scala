@@ -17,9 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-import play.api.i18n.MessagesProvider
+import play.api.i18n._
 import play.api.libs.json.{Format, Json}
 import play.api.mvc.{Action, AnyContent, BodyParser, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
@@ -29,15 +30,17 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.{allocateEnr
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AdminPageController @Inject()(
   frontendAppConfig: FrontendAppConfig,
-  appConfig: AppConfig,
+  implicit val appConfig: AppConfig,
   fhddsConnector: FhddsConnector,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext, messagesProvider: MessagesProvider) extends FrontendController(cc) {
+  cc: MessagesControllerComponents,
+  messagesapi: MessagesApi
+)(implicit ec: ExecutionContext, config: Configuration) extends FrontendController(cc) with play.api.i18n.I18nSupport{
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   lazy val credentials = Credentials(frontendAppConfig.username, frontendAppConfig.password)
@@ -46,13 +49,13 @@ class AdminPageController @Inject()(
 
   def showAdminPage: Action[AnyContent] = authAction { implicit request =>
 
-    Ok(temp_admin_page(request, frontendAppConfig, messagesProvider))
+    Ok(temp_admin_page())
   }
 
   def getSubmissions: Action[AnyContent] = authAction.async { implicit request =>
 
     fhddsConnector.getAllSubmission().map {
-      case submissions if submissions.nonEmpty => Ok(show_all_submissions(submissions)(request,frontendAppConfig, messagesProvider))
+      case submissions if submissions.nonEmpty => Ok(show_all_submissions(submissions))
       case submissions if submissions.isEmpty => Ok("No Submissions found")
     }
   }
@@ -60,7 +63,7 @@ class AdminPageController @Inject()(
   def loadDeletePage(formBundleId:String)= authAction.async { implicit request =>
 
     fhddsConnector.getSubMission(formBundleId).map {
-      case submission => Ok(show_submission(submission)(request, frontendAppConfig, messagesProvider))
+      case submission => Ok(show_submission(submission))
       case _ => Ok(s"No Submission found for $formBundleId")
     }
   }
@@ -73,13 +76,13 @@ class AdminPageController @Inject()(
 
   def loadUserIdPage = authAction { implicit request =>
 
-    Ok(admin_get_groupID(requestForm)(request, frontendAppConfig, messagesProvider))
+    Ok(admin_get_groupID(requestForm))
   }
 
   def sendAdminRequest() = authAction.async { implicit request =>
     requestForm.bindFromRequest.fold(
       formWithErrors => {
-        Future.successful(BadRequest(admin_get_groupID(formWithErrors)(request, frontendAppConfig, messagesProvider)))
+        Future.successful(BadRequest(admin_get_groupID(formWithErrors)))
       },
 
      formData =>
@@ -89,14 +92,14 @@ class AdminPageController @Inject()(
 
   def loadAllocateEnrolment = authAction {
     implicit request =>
-      Ok(allocate_enrolment(allocateEnrolmentForm)(request, frontendAppConfig, messagesProvider))
+      Ok(allocate_enrolment(allocateEnrolmentForm))
   }
 
   def allocateEnrolment = authAction.async {
     implicit request  =>
       allocateEnrolmentForm.bindFromRequest.fold (
         formWithErrors => {
-          Future.successful(BadRequest(allocate_enrolment(formWithErrors)(request, frontendAppConfig, messagesProvider)))
+          Future.successful(BadRequest(allocate_enrolment(formWithErrors)))
         },
 
         formData => {
@@ -107,14 +110,14 @@ class AdminPageController @Inject()(
 
   def loadDeleteEnrolment = authAction {
     implicit request =>
-      Ok(delete_enrolment(deleteEnrolmentForm)(request, frontendAppConfig, messagesProvider))
+      Ok(delete_enrolment(deleteEnrolmentForm))
   }
 
   def deleteEnrolment = authAction.async {
     implicit request =>
       deleteEnrolmentForm.bindFromRequest.fold (
         formWithErrors => {
-          Future.successful(BadRequest(delete_enrolment(formWithErrors)(request, frontendAppConfig, messagesProvider)))
+          Future.successful(BadRequest(delete_enrolment(formWithErrors)))
 
         },
 
