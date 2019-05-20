@@ -34,7 +34,7 @@ class EmailVerificationControllerSpec
   val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
   implicit val hc = HeaderCarrier()
   val controller = new EmailVerificationController(
-    commonDependencies, mockActions, mockEmailVerifcationConnector, inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
+    commonDependencies, mockActions, mockMcc, mockEmailVerifcationConnector, inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()

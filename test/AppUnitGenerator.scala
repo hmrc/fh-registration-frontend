@@ -25,7 +25,7 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.auth.core.PlayAuthConnector
@@ -50,12 +50,11 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   implicit val materializer: Materializer = appInjector.instanceOf[Materializer]
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
-  implicit val messages: Messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
+//  implicit val messages: Messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
   implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
   val mockBusinessCustomerFrontendConnector: BusinessCustomerFrontendConnector = mock[BusinessCustomerFrontendConnector]
-  val mockActions: Actions = mock[Actions]
 
   val mockAuthConnector = mock[PlayAuthConnector]
   val mockConfiguration = mock[Configuration]

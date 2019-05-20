@@ -8,6 +8,8 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class ApplicationControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 
+
+
   "Application" should {
 
     "be reachable" in {

@@ -6,6 +6,8 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class DraftApplication
   extends Specifications with TestConfiguration {
 
+
+
   "Loading a page w/o verified email" should {
 
     "redirect to " in {
