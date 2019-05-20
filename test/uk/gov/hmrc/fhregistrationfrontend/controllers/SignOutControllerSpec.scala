@@ -21,12 +21,11 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.connectors
 
-class SignOutControllerSpec extends ControllersSpecBase {
+class SignOutControllerSpec extends ControllerSpecWithGuiceApp {
   val mockExternalUrls = mock[connectors.ExternalUrls]
   val mockCommonDependencies = mock[CommonPlayDependencies]
-  val mockControllerComponents = mock[MessagesControllerComponents]
 
-  val controller = new SignOutController(mockCommonDependencies, mockExternalUrls, mockControllerComponents)
+  val controller = new SignOutController(mockCommonDependencies, mockExternalUrls, mockMcc)
 
   "SignOut Controller" should {
     "Redirect to logout" in {

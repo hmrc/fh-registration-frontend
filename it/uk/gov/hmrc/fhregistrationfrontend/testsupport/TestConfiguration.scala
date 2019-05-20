@@ -23,10 +23,6 @@ trait TestConfiguration
 
   me: Suite with TestSuite ⇒
 
-  val injector = app.injector
-
-  injector.instanceOf[HealthController]
-
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
 
@@ -47,8 +43,14 @@ trait TestConfiguration
       "cachable.session-cache"
     )))
     .build()
+        app.injector.instanceOf[HealthController]
 
 
+//  controllers {
+//    uk.gov.hmrc.play.health.HealthController = {
+//      needsAuth = false
+//    }
+//  }
 
 
   private def replaceWithWiremock(services: Seq[String]) =
@@ -91,6 +93,4 @@ trait TestConfiguration
       .foreach(println)
     println("===== END =====")
   }
-
-
 }

@@ -2,11 +2,9 @@ import play.core.PlayVersion
 import play.sbt.PlayImport._
 import sbt._
 
-object FrontendBuild extends Build with MicroService {
+object FrontendBuild {
 
-  val appName = "fh-registration-frontend"
-
-  override lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+  lazy val appDependencies: Seq[ModuleID] = compile ++ test()
   val monocleVersion = "1.5.0"
 
   val compile = Seq(
@@ -35,20 +33,17 @@ object FrontendBuild extends Build with MicroService {
     "org.mindrot"                  % "jbcrypt"                          % "0.4"
   )
 
-
-
   def test(scope: String = "test,it") = Seq(
     "com.typesafe.play"           %% "play-test"                        % PlayVersion.current % scope,
     "uk.gov.hmrc"                 %% "hmrctest"                         % "3.8.0-play-26"   % scope,
     "org.scalatest"                % "scalatest_2.11"                   % "3.0.7"   % scope,
     "org.pegdown"                  % "pegdown"                          % "1.6.0"   % scope,
     "org.jsoup"                    % "jsoup"                            % "1.12.1"   % scope,
-    "org.scalatestplus.play"       %% "scalatestplus-play"              % "4.0.2"   % scope,
+    "org.scalatestplus.play"       %% "scalatestplus-play"              % "3.1.2"   % scope,
     "org.scalacheck"              %% "scalacheck"                       % "1.14.0"  % scope,
     "org.mockito"                  % "mockito-core"                     % "2.27.0"  % scope,
     "org.scalamock"               %% "scalamock-scalatest-support"      % "3.5.0"   % scope,
-    "com.github.tomakehurst"       %  "wiremock"                        % "2.23.2"   % scope,
-    "com.eclipsesource"           %% "play-json-schema-validator"       % "0.8.9"   % scope
+    "com.github.tomakehurst"       %  "wiremock-jre8"                   % "2.23.2"   % scope,
+    "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.4"   % scope
   )
-
 }

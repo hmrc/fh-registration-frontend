@@ -43,14 +43,13 @@ class WithdrawalControllerSpec
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
-  val mockControllerComponents = mock[MessagesControllerComponents]
 
   val controller = new WithdrawalController(
     commonDependencies,
     mockFhddsConnector,
     desToForm,
     mockKeyStoreService,
-    mockControllerComponents,
+    mockMcc,
     mockActions
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
