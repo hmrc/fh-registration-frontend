@@ -39,7 +39,7 @@ case class UserAction @Inject()(
                             externalUrls: ExternalUrls,
                             errorHandler: ErrorHandler,
                             cc: ControllerComponents
-                          )(implicit override val authConnector: AuthConnector, override val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent]
+                          )(implicit val authConnector: AuthConnector, val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent]
   with ActionRefiner[Request, UserRequest]
   with FrontendAction
   with AuthorisedFunctions {

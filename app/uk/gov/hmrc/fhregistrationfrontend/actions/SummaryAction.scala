@@ -22,6 +22,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyState, Page, PageDataLoader}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class SummaryRequest[A](
@@ -39,7 +40,7 @@ class SummaryRequest[A](
 
 }
 
-class SummaryAction(implicit errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
+class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {

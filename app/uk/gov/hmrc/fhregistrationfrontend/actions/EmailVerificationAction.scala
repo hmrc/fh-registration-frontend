@@ -23,6 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmailVerificationRequest[A](
@@ -34,7 +35,7 @@ class EmailVerificationRequest[A](
   def userId = request.userId
 }
 
-class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
+class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[UserRequest, EmailVerificationRequest]
     with FrontendAction
     with ActionFunctions

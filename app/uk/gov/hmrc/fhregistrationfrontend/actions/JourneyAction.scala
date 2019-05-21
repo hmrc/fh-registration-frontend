@@ -27,12 +27,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys.businessRegistrationDetailsKey
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys.displayKeyForPage
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys.displayDesDeclarationKey
+import uk.gov.hmrc.fhregistrationfrontend.models.des
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys.{businessRegistrationDetailsKey, displayDesDeclarationKey, displayKeyForPage}
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.fhregistrationfrontend.models.des
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class JourneyRequest[A](
@@ -80,7 +79,7 @@ class JourneyRequest[A](
 
 }
 
-class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
+class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[UserRequest, JourneyRequest]
     with FrontendAction
     with ActionFunctions

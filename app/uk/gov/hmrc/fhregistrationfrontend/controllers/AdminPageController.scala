@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-import play.api.i18n._
 import play.api.libs.json.{Format, Json}
 import play.api.mvc.{Action, AnyContent, BodyParser, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
@@ -38,8 +37,7 @@ class AdminPageController @Inject()(
   frontendAppConfig: FrontendAppConfig,
   implicit val appConfig: AppConfig,
   fhddsConnector: FhddsConnector,
-  cc: MessagesControllerComponents,
-  messagesapi: MessagesApi
+  cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext, config: Configuration) extends FrontendController(cc) with play.api.i18n.I18nSupport{
 
   implicit val hc: HeaderCarrier = HeaderCarrier()

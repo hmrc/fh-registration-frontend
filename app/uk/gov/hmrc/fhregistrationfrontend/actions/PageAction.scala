@@ -42,7 +42,7 @@ class PageRequest[A](
 
 //TODO all exceptional results need to be reviewed
 class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
+  (implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
