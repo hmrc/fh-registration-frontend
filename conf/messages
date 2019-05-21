@@ -982,7 +982,7 @@ link.guidance_page=https://www.gov.uk/guidance/fulfilment-house-due-diligence-sc
 link.searchCompaniesHouse=https://beta.companieshouse.gov.uk/
 link.eoriTeam=https://www.tax.service.gov.uk/shortforms/form/EORIContact
 link.vat=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries
-link.bta=https://www.tax.service.gov.uk/business-tax-account
+link.bta=https://www.tax.service.gov.uk/business-account/messages
 
 #Temporary Messages For Admin Page
 home.admin.page.header= FHDDS Admin Page
