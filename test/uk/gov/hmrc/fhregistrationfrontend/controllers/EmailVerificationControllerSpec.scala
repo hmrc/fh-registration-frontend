@@ -271,7 +271,6 @@ class EmailVerificationControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/email-verified")
     }
 
-
     "Show the email pending verification if the token does not match" in {
       setupEmailVerificationAction(None, pendingEmail = Some("c@c.co"))
 

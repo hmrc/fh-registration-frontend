@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
-
 import javax.inject.Inject
 import org.joda.time.DateTime
 import play.api.mvc._
@@ -79,7 +78,6 @@ class WithdrawalController @Inject()(
     implicit request ⇒ reason ⇒
       contactEmail map (email ⇒ Ok(withdrawal_confirm(confirmationForm, email)))
   }
-
 
   def postConfirmation = withWithdrawalReason {
     implicit request ⇒

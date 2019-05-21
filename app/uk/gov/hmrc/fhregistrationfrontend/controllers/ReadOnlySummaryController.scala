@@ -45,6 +45,5 @@ class ReadOnlySummaryController  @Inject()(
 
       Ok(getSummaryHtml(application, bpr, contactEmail.get, readOnlySummaryPageParams(status)))
     }
-
   }
 }

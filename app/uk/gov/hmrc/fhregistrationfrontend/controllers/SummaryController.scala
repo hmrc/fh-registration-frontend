@@ -21,8 +21,6 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-
 
 @Inject
 class SummaryController @Inject()(

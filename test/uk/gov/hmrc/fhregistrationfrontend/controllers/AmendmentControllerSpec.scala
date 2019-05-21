@@ -148,6 +148,4 @@ class AmendmentControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/summary")
     }
   }
-
-
 }

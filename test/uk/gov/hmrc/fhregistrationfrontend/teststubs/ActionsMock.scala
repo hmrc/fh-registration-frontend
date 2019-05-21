@@ -73,7 +73,6 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     }
     when(mockActions.pageAction(page.id)) thenReturn actionBuilder
     when(mockActions.pageAction(same(page.id), any())) thenReturn actionBuilder
-
   }
 
   def setupSummaryAction(

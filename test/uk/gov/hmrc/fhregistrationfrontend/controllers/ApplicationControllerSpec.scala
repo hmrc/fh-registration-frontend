@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
@@ -31,7 +30,6 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
 
 import scala.concurrent.Future
-
 
 class ApplicationControllerSpec
   extends ControllerSpecWithGuiceApp
@@ -53,16 +51,14 @@ class ApplicationControllerSpec
       mockActions,
       mockSave4Later
     )
-
   }
 
-  val mockControllerComponents = mock[MessagesControllerComponents]
   val controller = new Application(
     app.injector.instanceOf(classOf[ExternalUrls]),
     commonDependencies,
     mockFhddsConnector,
     mockBusinessCustomerConnector,
-    mockControllerComponents,
+    mockMcc,
     mockActions
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
@@ -133,7 +129,6 @@ class ApplicationControllerSpec
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds")
     }
-
 
   }
 
@@ -462,5 +457,4 @@ class ApplicationControllerSpec
       bodyOf(result) should include(Messages(s"fh.status.${FhddsStatus.Deregistered.toString}.title"))
     }
   }
-
 }

@@ -9,7 +9,6 @@ import FrontendBuild.appDependencies
 
 val appName = "fh-registration-frontend"
 
-//lazy val appDependencies : Seq[ModuleID] = FrontendBuild.appDependencies
 lazy val plugins : Seq[Plugins] = Seq.empty
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
@@ -64,8 +63,6 @@ lazy val microservice = Project(appName, file("."))
     Resolver.jcenterRepo,
     "emueller-bintray" at "http://dl.bintray.com/emueller/maven"
   ))
-
-
 
   def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
     tests map {

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
@@ -29,9 +28,8 @@ class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
   with Save4LaterMocks
 {
 
-  val mockControllerComponents = mock[MessagesControllerComponents]
   val controller = new ReadOnlySummaryController(
-    commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockControllerComponents, mockActions
+    commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockMcc, mockActions
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {
@@ -59,5 +57,4 @@ class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
       bodyOf(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyRegister}.title"))
     }
   }
-
 }

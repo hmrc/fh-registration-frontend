@@ -46,8 +46,5 @@ class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       refined.pageDataOpt(Page.contactPersonPage) shouldBe Some(FormTestData.contactPerson)
 
     }
-
-
   }
-
 }

@@ -57,7 +57,6 @@ class DesToFormSpec extends UnitSpec {
     }
   }
 
-
   def validatesFor(file: String, application: BusinessEntityApplication) = {
     val display = loadDesDataFile(file)
     val loadedApplication = display.organizationType match {
@@ -78,7 +77,6 @@ class DesToFormSpec extends UnitSpec {
 
       validationResult.isSuccess shouldEqual true
       validationResult.get.as[SubscriptionDisplayWrapper].subScriptionDisplay
-
     }
   }
 

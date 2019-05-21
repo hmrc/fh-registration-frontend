@@ -46,13 +46,6 @@ trait TestConfiguration
         app.injector.instanceOf[HealthController]
 
 
-//  controllers {
-//    uk.gov.hmrc.play.health.HealthController = {
-//      needsAuth = false
-//    }
-//  }
-
-
   private def replaceWithWiremock(services: Seq[String]) =
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap + (

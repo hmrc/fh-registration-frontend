@@ -283,5 +283,4 @@ class FormToDesSpecs extends UnitSpec {
     val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
     Json.parse(resource).as[SubScriptionCreate]
   }
-
 }

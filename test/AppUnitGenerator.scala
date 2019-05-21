@@ -23,13 +23,11 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Configuration
-import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
 import uk.gov.hmrc.auth.core.PlayAuthConnector
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -38,7 +36,6 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
-
 
 trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
 
@@ -50,7 +47,6 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   implicit val materializer: Materializer = appInjector.instanceOf[Materializer]
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
-//  implicit val messages: Messages = Messages(Lang.defaultLang, appInjector.instanceOf[MessagesApi])
   implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
@@ -60,5 +56,4 @@ trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite wi
   val mockConfiguration = mock[Configuration]
   val ds: CommonPlayDependencies = app.injector.instanceOf[CommonPlayDependencies]
   val mockSave4Later = mock[Save4LaterService]
-
 }

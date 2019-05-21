@@ -32,9 +32,7 @@ class StartAmendmentActionSpec
     with Save4LaterMocks
     with FhddsConnectorMocks {
 
-
   val errorHandler = StubbedErrorHandler
-
   lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start amendment action " should {
@@ -91,7 +89,5 @@ class StartAmendmentActionSpec
         refined.currentJourneyType shouldBe Some(JourneyType.New)
       }
     }
-
   }
-
 }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
@@ -179,9 +178,7 @@ class DeregistrationControllerSpec
       val result = await(csrfAddToken(controller.acknowledgment)(request))
       status(result) shouldBe OK
       bodyOf(result) should include(Messages("fh.ack.deregister"))
-
     }
-
   }
 
   def setupSaveDeregistrationReason() = {
@@ -191,6 +188,4 @@ class DeregistrationControllerSpec
   def setupKeyStoreDeregistrationReason(reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))): Unit = {
     when(mockKeyStoreService.fetchDeregistrationReason()(any())) thenReturn Future.successful(reason)
   }
-
-
 }

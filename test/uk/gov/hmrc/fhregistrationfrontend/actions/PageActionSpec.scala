@@ -90,6 +90,4 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       refined.page.data shouldBe Some(FormTestData.companyOfficers)
     }
   }
-
-
 }

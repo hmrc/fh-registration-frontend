@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import javax.swing.JFormattedTextField.AbstractFormatterFactory
 import play.api.test.FakeRequest
 import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
-
 
 class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
@@ -43,6 +41,4 @@ class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
       status(result(filter, request)) shouldBe BAD_REQUEST
     }
   }
-
-
 }

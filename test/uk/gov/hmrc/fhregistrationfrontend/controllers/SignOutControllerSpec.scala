@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.Mockito.when
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.connectors
@@ -48,6 +47,4 @@ class SignOutControllerSpec extends ControllerSpecWithGuiceApp {
 
     }
   }
-
-
 }

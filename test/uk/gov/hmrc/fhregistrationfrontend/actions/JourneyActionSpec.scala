@@ -227,7 +227,5 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       .withValue(Save4LaterKeys.displayKeyForPage(Save4LaterKeys.verifiedEmailKey), ggEmail)
 
   }
-
-
 }
 

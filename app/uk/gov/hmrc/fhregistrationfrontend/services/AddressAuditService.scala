@@ -38,7 +38,6 @@ object AddressAuditService {
   val AuditTypePostcodeAddressModifiedSubmitted = "postcodeAddressModifiedSubmitted"
   val AuditTypeManualAddressSubmitted = "manualAddressSubmitted"
   val AuditTypePostcodeAddressSubmitted = "postcodeAddressSubmitted"
-
   val AuditSource = "fh-registration-frontend"
 }
 

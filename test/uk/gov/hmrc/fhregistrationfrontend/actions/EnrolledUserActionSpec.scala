@@ -39,8 +39,6 @@ class EnrolledUserActionSpec extends ActionSpecBase {
 
       refined.userId shouldBe testUserId
       refined.registrationNumber shouldBe registrationNumber
-
-
     }
   }
 }

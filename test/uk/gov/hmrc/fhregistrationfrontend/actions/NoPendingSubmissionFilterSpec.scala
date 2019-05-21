@@ -21,7 +21,6 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
-
 class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
   val request = new UserRequest("id", None, None, Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
@@ -37,9 +36,6 @@ class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMo
     "block the user" in {
       setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
       status(result(filter, request)) shouldBe BAD_REQUEST
-
     }
   }
-
-
 }

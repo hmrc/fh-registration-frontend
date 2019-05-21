@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler

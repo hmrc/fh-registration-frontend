@@ -20,7 +20,6 @@ import julienrf.json.derived
 import play.api.libs.json._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges._
 
-
 object ListWithTrackedChanges {
 
   sealed trait Status

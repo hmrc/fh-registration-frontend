@@ -25,7 +25,6 @@ import org.mockito.stubbing.OngoingStubbing
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{StubbedErrorHandler, StubbedExternalUrls}
@@ -118,11 +117,9 @@ class UserActionSpec extends ActionSpecBase {
 
     val authResult = Future successful (new ~ (new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole), userAffinityGroup))
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
-
   }
 
   def setupAuthConnector(throwable: Throwable) = {
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed throwable)
   }
-
 }
