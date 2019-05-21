@@ -9,6 +9,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.play.health.HealthController
 import uk.gov.hmrc.play.it.Port
 
 import scala.collection.JavaConversions._
@@ -24,8 +25,6 @@ trait TestConfiguration
 
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
-
-  override lazy val port: Int = Port.randomAvailable
 
   val baseUrl = s"http://localhost:$port/fhdds"
 
@@ -44,6 +43,7 @@ trait TestConfiguration
       "cachable.session-cache"
     )))
     .build()
+        app.injector.instanceOf[HealthController]
 
 
   private def replaceWithWiremock(services: Seq[String]) =
@@ -86,6 +86,4 @@ trait TestConfiguration
       .foreach(println)
     println("===== END =====")
   }
-
-
 }

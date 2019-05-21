@@ -21,8 +21,9 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{FhddsStatus, Processing, Received}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
+import scala.concurrent.ExecutionContext
 
-class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit save4LaterService: Save4LaterService, errorHandler: ErrorHandler)
+class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
     extends StartUpdateAction(fhddsConnector)
 {
 
@@ -30,5 +31,4 @@ class StartAmendmentAction(fhddsConnector: FhddsConnector) (implicit save4LaterS
     case Received | Processing ⇒ true
     case _                     ⇒ false
   }
-
 }

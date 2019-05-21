@@ -19,21 +19,17 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyState, Page, PageDataLoader}
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SummaryRequest[A](
   val journeyRequest: JourneyRequest[A]
 ) extends WrappedRequest[A](journeyRequest) with PageDataLoader
 {
   def userId: String = journeyRequest.userId
-
   def registrationNumber = journeyRequest.registrationNumber
 
   val bpr = journeyRequest.bpr
@@ -44,8 +40,7 @@ class SummaryRequest[A](
 
 }
 
-
-class SummaryAction(implicit errorHandler: ErrorHandler)
+class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
@@ -67,5 +62,4 @@ class SummaryAction(implicit errorHandler: ErrorHandler)
       Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
   }
-
 }

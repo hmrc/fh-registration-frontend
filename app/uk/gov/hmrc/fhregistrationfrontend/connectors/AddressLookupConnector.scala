@@ -17,17 +17,16 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.{Inject, Singleton}
-
 import play.Logger
 import play.api.{Configuration, Environment}
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.play.bootstrap.config.RunMode
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-
 import scala.concurrent.Future
 
 sealed trait AddressLookupResponse
@@ -37,13 +36,12 @@ case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupRes
 
 @Singleton
 class AddressLookupConnector @Inject() (
-  val http: HttpClient,
-  override val runModeConfiguration: Configuration,
-  environment: Environment
-) extends ServicesConfig with HttpErrorFunctions {
+   val http: HttpClient,
+   val runModeConfiguration: Configuration,
+   val runMode: RunMode,
+   environment: Environment
+) extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
 
-
-  override protected def mode = environment.mode
   val addressLookupUrl: String = baseUrl("address-lookup")
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
@@ -64,7 +62,6 @@ class AddressLookupConnector @Inject() (
     http.GET[Option[AddressRecord]](s"$addressLookupUrl/uk/addresses/$id")(addressRecordReads, fhddsHc, MdcLoggingExecutionContext.fromLoggingDetails(hc))
   }
 
-
   private val addressRecordReads = new HttpReads[Option[AddressRecord]] {
     override def read(method: String, url: String, response: HttpResponse): Option[AddressRecord] = {
       response.status match {
@@ -75,7 +72,6 @@ class AddressLookupConnector @Inject() (
       }
     }
   }
-
 }
 
 

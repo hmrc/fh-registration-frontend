@@ -22,30 +22,24 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Reads
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-
 import scala.concurrent.Future
-import scala.util.parsing.json.JSONObject
-
-
 
 @Singleton
 class FhddsConnector @Inject() (
-  val http: HttpClient,
-  override val runModeConfiguration: Configuration,
-  environment: Environment
-) extends ServicesConfig
+   val http: HttpClient,
+   val runModeConfiguration: Configuration,
+   val runMode: RunMode,
+   environment: Environment
+) extends ServicesConfig(runModeConfiguration, runMode)
 {
-
-  override protected def mode = environment.mode
   val FHDSSServiceUrl: String = baseUrl("fhdds")
 
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] = {
@@ -125,5 +119,4 @@ class FhddsConnector @Inject() (
     http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
   }
   // $COVERAGE-ON$
-
 }

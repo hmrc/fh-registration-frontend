@@ -31,7 +31,6 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs._
 
 import scala.concurrent.Future
 
-
 class ApplicationControllerSpec
   extends ControllerSpecWithGuiceApp
     with FhddsConnectorMocks
@@ -52,7 +51,6 @@ class ApplicationControllerSpec
       mockActions,
       mockSave4Later
     )
-
   }
 
   val controller = new Application(
@@ -60,8 +58,9 @@ class ApplicationControllerSpec
     commonDependencies,
     mockFhddsConnector,
     mockBusinessCustomerConnector,
+    mockMcc,
     mockActions
-  )(mockSave4Later)
+  )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
 
@@ -130,7 +129,6 @@ class ApplicationControllerSpec
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds")
     }
-
 
   }
 
@@ -459,5 +457,4 @@ class ApplicationControllerSpec
       bodyOf(result) should include(Messages(s"fh.status.${FhddsStatus.Deregistered.toString}.title"))
     }
   }
-
 }

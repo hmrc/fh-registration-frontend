@@ -21,9 +21,9 @@ import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(implicit val errorHandler: ErrorHandler)
+class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(implicit val errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionFilter[UserRequest]
     with FrontendAction {
 

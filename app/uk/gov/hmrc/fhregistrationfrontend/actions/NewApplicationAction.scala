@@ -20,16 +20,15 @@ import play.api.mvc.{ActionRefiner, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler)
+class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
   extends ActionRefiner[UserRequest, UserRequest]
     with FrontendAction {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] = {
 
     implicit val r = request
-
 
     import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
@@ -42,8 +41,5 @@ class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val er
     }
 
     whenRegistered getOrElse Future.successful(Right(request))
-
   }
-
-
 }

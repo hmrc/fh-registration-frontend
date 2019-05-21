@@ -18,10 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.Logger
 import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
-import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolledUserRequest[A](
   val registrationNumber: String,
@@ -31,7 +30,7 @@ class EnrolledUserRequest[A](
   def userId: String = request.userId
 }
 
-class EnrolledUserAction (implicit errorHandler: ErrorHandler)
+class EnrolledUserAction (implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
     extends ActionRefiner[UserRequest, EnrolledUserRequest]
       with FrontendAction
 {
@@ -48,5 +47,4 @@ class EnrolledUserAction (implicit errorHandler: ErrorHandler)
       }
     }
   }
-
 }

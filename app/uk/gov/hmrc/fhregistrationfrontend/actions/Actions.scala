@@ -17,26 +17,28 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import javax.inject.Inject
-
-import play.api.mvc.ActionBuilder
+import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import scala.concurrent.ExecutionContext
 
 class Actions @Inject() (
   externalUrls: ExternalUrls,
-  fhddsConnector: FhddsConnector
+  fhddsConnector: FhddsConnector,
+  cc: ControllerComponents
 )(implicit val authConnector: AuthConnector,
   save4LaterService: Save4LaterService,
-  errorHandler: ErrorHandler) {
+  errorHandler: ErrorHandler,
+  ec: ExecutionContext
+) {
 
-
-  def userAction: ActionBuilder[UserRequest] = new UserAction(externalUrls, errorHandler)
+  def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
 
   def notAdminUser = userAction andThen new NotAdminUserFilter
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
-  def emailVerificationAction = new UserAction(externalUrls, errorHandler) andThen new EmailVerificationAction
+  def emailVerificationAction = new UserAction(externalUrls, errorHandler, cc) andThen new EmailVerificationAction
 
   def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
   def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)
@@ -51,7 +53,4 @@ class Actions @Inject() (
 
   def summaryAction =
     userAction andThen journeyAction andThen new SummaryAction
-
-
-
 }

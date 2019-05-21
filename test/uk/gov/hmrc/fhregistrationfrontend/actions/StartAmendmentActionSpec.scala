@@ -32,10 +32,8 @@ class StartAmendmentActionSpec
     with Save4LaterMocks
     with FhddsConnectorMocks {
 
-
   val errorHandler = StubbedErrorHandler
-
-  lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler)
+  lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start amendment action " should {
     "Fail when no fhdds registration number" in {
@@ -67,7 +65,7 @@ class StartAmendmentActionSpec
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
 
-        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -81,7 +79,7 @@ class StartAmendmentActionSpec
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
@@ -91,7 +89,5 @@ class StartAmendmentActionSpec
         refined.currentJourneyType shouldBe Some(JourneyType.New)
       }
     }
-
   }
-
 }

@@ -266,7 +266,7 @@ class FormToDesSpecs extends UnitSpec {
 
     val validationResult = validator(json)
     validationResult.fold(
-      invalid = {errors ⇒ println(errors.toJson)},
+      invalid = {errors ⇒ println(errors)},
       valid = {v ⇒ }
     )
 
@@ -283,5 +283,4 @@ class FormToDesSpecs extends UnitSpec {
     val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
     Json.parse(resource).as[SubScriptionCreate]
   }
-
 }

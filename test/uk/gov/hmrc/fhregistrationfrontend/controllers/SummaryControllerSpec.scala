@@ -17,20 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.mockito.Mockito.reset
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, Save4LaterMocks}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
-class SummaryControllerSpec extends ControllerSpecWithGuiceApp
-  with ActionsMock
-{
+class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
-  val controller = new SummaryController(commonDependencies, mockActions)
+  val controller = new SummaryController(commonDependencies, mockMcc, mockActions)
 
   "summary" should {
     "Render the summary html for all journey types" in {
@@ -80,6 +78,4 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp
     case JourneyType.New       ⇒ Mode.New
     case JourneyType.Variation ⇒ Mode.Variation
   }
-
-
 }

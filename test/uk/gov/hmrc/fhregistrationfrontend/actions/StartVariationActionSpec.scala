@@ -33,8 +33,7 @@ class StartVariationActionSpec
     with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
-
-  lazy val action = new StartVariationAction(mockFhddsConnector)(mockSave4Later, errorHandler)
+  lazy val action = new StartVariationAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start variation action " should {
     "Fail when no fhdds registration number" in {
@@ -66,7 +65,7 @@ class StartVariationActionSpec
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
 
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -80,7 +79,7 @@ class StartVariationActionSpec
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler)
+        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
@@ -90,7 +89,5 @@ class StartVariationActionSpec
         refined.currentJourneyType shouldBe Some(JourneyType.New)
       }
     }
-
   }
-
 }

@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
-import play.api.mvc.{Result, Results}
+import play.api.mvc.{MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EmailVerificationRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm.emailVerificationForm
@@ -26,15 +25,15 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
 class EmailVerificationController @Inject() (
   ds: CommonPlayDependencies,
   actions: Actions,
+  cc: MessagesControllerComponents,
   emailVerificationConnector: EmailVerificationConnector,
-  save4LaterService: Save4LaterService) extends AppController(ds)
+  save4LaterService: Save4LaterService)(implicit ec: ExecutionContext) extends AppController(ds, cc)
 {
   import actions._
 
@@ -147,5 +146,4 @@ class EmailVerificationController @Inject() (
         Future successful Redirect(routes.Application.resumeForm())
     }
   }
-
 }

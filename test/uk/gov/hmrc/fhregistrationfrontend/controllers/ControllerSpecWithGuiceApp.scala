@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import akka.stream.Materializer
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
 
@@ -35,5 +36,5 @@ trait ControllerSpecWithGuiceApp
   val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
   val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
 
-
+  implicit val mockMcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
 }

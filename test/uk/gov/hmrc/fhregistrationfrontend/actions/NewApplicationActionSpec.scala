@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
+import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
@@ -34,7 +34,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler)
+        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
         status(result(action, userRequest)) shouldBe BAD_REQUEST
       }
@@ -43,7 +43,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
     "Be allowed when there is no registration number" in {
       val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
       val fhddsConnector = mock[FhddsConnector]
-      val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler)
+      val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
       status(result(action, userRequest)) shouldBe OK
     }
@@ -55,7 +55,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler)
+        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
         status(result(action, userRequest)) shouldBe OK
       }

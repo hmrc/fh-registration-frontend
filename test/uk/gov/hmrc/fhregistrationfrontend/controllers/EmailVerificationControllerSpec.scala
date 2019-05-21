@@ -31,10 +31,10 @@ class EmailVerificationControllerSpec
     with ActionsMock
     with BeforeAndAfterEach {
 
-  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))
+  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
   implicit val hc = HeaderCarrier()
   val controller = new EmailVerificationController(
-    commonDependencies, mockActions, mockEmailVerifcationConnector, inMemorySave4Later)
+    commonDependencies, mockActions, mockMcc, mockEmailVerifcationConnector, inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -270,7 +270,6 @@ class EmailVerificationControllerSpec
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/email-verified")
     }
-
 
     "Show the email pending verification if the token does not match" in {
       setupEmailVerificationAction(None, pendingEmail = Some("c@c.co"))

@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, FhddsConnectorMocks, InMemoryShortLivedCache}
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendmentControllerSpec
   extends ControllerSpecWithGuiceApp
@@ -50,12 +51,13 @@ class AmendmentControllerSpec
   }
 
   val controller = new AmendmentController(
-    commonDependencies,
     new DesToFormImpl,
+    commonDependencies,
     mockFhddsConnector,
     mockEmailVerifcationConnector,
+    mockMcc,
     mockActions
-  )(inMemorySave4Later)
+  )(inMemorySave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "startAmendment" should {
     "Redirect to summary when an amendment is already in progress" in {
@@ -146,6 +148,4 @@ class AmendmentControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/summary")
     }
   }
-
-
 }

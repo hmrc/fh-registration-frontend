@@ -17,18 +17,17 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-
 
 @Inject
 class SummaryController @Inject()(
   ds                   : CommonPlayDependencies,
+  cc                   : MessagesControllerComponents,
   actions: Actions
-) extends AppController(ds)  with SummaryFunctions {
+) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
@@ -43,5 +42,4 @@ class SummaryController @Inject()(
     }
     Ok(getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest)))
   }
-
 }

@@ -17,16 +17,15 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Action
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.connectors
 
 @Singleton
 class SignOutController  @Inject()(
   ds               : CommonPlayDependencies,
-  externalUrls     : connectors.ExternalUrls
-) extends AppController(ds) {
-
+  externalUrls     : connectors.ExternalUrls,
+  cc               : MessagesControllerComponents
+) extends AppController(ds, cc) {
 
   def signout() = Action {
     val ggRedirectParms = Map(
@@ -40,7 +39,4 @@ class SignOutController  @Inject()(
   def signedout() = Action {
     Redirect(externalUrls.surveyRedirectUrl)
   }
-
-
-
 }

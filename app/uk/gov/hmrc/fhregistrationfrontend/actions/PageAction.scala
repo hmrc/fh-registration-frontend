@@ -18,18 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import play.api.Logger
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthConnector
+import play.api.mvc.{ActionRefiner, Result, WrappedRequest, _}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.http.cache.client.CacheMap
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PageRequest[A](
   val journey: JourneyNavigation,
@@ -47,7 +42,7 @@ class PageRequest[A](
 
 //TODO all exceptional results need to be reviewed
 class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit errorHandler: ErrorHandler)
+  (implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
   extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
@@ -101,6 +96,4 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
     else
       Journeys.linearJourney(journeyPages)
   }
-
-
 }

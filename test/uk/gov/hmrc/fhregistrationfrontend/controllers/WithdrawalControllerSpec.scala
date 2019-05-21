@@ -16,23 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{ActionBuilder, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.filters.csrf.CSRFAddToken
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EnrolledUserRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum, WithdrawalReasonForm}
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
-
 import scala.concurrent.Future
 
 class WithdrawalControllerSpec
@@ -44,14 +37,14 @@ class WithdrawalControllerSpec
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
 
-
   val controller = new WithdrawalController(
     commonDependencies,
     mockFhddsConnector,
     desToForm,
     mockKeyStoreService,
+    mockMcc,
     mockActions
-  )
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()
@@ -186,7 +179,6 @@ class WithdrawalControllerSpec
       bodyOf(result) should include(Messages("fh.ack.withdrawal"))
 
     }
-
   }
 
   def setupSaveWithdrawalReason() = {
@@ -196,6 +188,4 @@ class WithdrawalControllerSpec
   def setupKeyStoreWithdrawalReason(reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))): Unit = {
     when(mockKeyStoreService.fetchWithdrawalReason()(any())) thenReturn Future.successful(reason)
   }
-
-
 }

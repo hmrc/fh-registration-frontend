@@ -1,6 +1,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.scalatest.Ignore
 import play.api.http.HeaderNames
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
@@ -99,7 +98,5 @@ class ApplicationControllerIntegrationSpec
         }
       }
     }
-
   }
-
 }

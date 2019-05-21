@@ -17,16 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.cache
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
-
-
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 class ShortLivedCacheModule extends Module {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
@@ -46,11 +43,11 @@ class DefaultShortLivedCache @Inject() (
 @Singleton
 class DefaultShortLivedHttpCaching @Inject() (
   override val http: HttpClient,
-  override val runModeConfiguration: Configuration,
+  val runModeConfiguration: Configuration,
+  val runMode: RunMode,
   environment: Environment
-) extends client.ShortLivedHttpCaching with ServicesConfig {
+) extends ServicesConfig(runModeConfiguration, runMode) with client.ShortLivedHttpCaching {
 
-  override protected def mode = environment.mode
   override lazy val defaultSource: String = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri: String = baseUrl("cachable.short-lived-cache")
   override lazy val domain: String = getConfString("cachable.short-lived-cache.domain", throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))

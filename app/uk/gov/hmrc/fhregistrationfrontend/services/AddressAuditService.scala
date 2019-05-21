@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import javax.inject.{Inject, Singleton}
-
 import com.google.inject.ImplementedBy
 import org.apache.commons.lang3.StringUtils
 import play.api.Logger
@@ -28,9 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.audit.AuditExtensions.auditHeaderCarrier
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[DefaultAddressAuditService])
 trait AddressAuditService {
@@ -41,7 +38,6 @@ object AddressAuditService {
   val AuditTypePostcodeAddressModifiedSubmitted = "postcodeAddressModifiedSubmitted"
   val AuditTypeManualAddressSubmitted = "manualAddressSubmitted"
   val AuditTypePostcodeAddressSubmitted = "postcodeAddressSubmitted"
-
   val AuditSource = "fh-registration-frontend"
 }
 
@@ -51,7 +47,7 @@ private case class AddressAuditData(auditType: String, details: Seq[(String, Str
 class DefaultAddressAuditService  @Inject()(
   addressLookupConnector: AddressLookupConnector,
   auditConnector: AuditConnector
-) extends AddressAuditService  {
+)(implicit ec: ExecutionContext) extends AddressAuditService  {
 
   override def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any] = {
     if (!addresses.isEmpty)
@@ -142,7 +138,6 @@ class DefaultAddressAuditService  @Inject()(
     ).map { case (k, v) ⇒ s"$prefix$k" -> v}
   }
 
-
   private def addressRecordToAddress(addressRecord: AddressRecord) = {
     Address(
       addressRecord.address.line1,
@@ -152,9 +147,6 @@ class DefaultAddressAuditService  @Inject()(
       addressRecord.address.postcode,
       Some(addressRecord.address.country.code),
       Some(addressRecord.id)
-
-
     )
   }
-
 }

@@ -16,16 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import javax.swing.JFormattedTextField.AbstractFormatterFactory
 import play.api.test.FakeRequest
 import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
-
 class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
   implicit val errorHandler = StubbedErrorHandler
-  lazy val filter = new NotAdminUserFilter()(errorHandler)
+  lazy val filter = new NotAdminUserFilter()(errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Not admin user filter" should {
     "allow user to proceed if has admin role" in {
@@ -43,6 +41,4 @@ class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
       status(result(filter, request)) shouldBe BAD_REQUEST
     }
   }
-
-
 }

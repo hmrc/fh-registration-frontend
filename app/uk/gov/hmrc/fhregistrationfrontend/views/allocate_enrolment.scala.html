@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm
 
-@(form: Form[EnrolmentForm])(implicit request: Request[_], config: AppConfig, messages: MessagesApi)
+@(form: Form[EnrolmentForm])(implicit request: Request[_], config: AppConfig, messages: Messages)
 
 @main_template(title = Messages("home.admin.submisson.page.title")) {
 

@@ -17,15 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
-
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import java.util.Date
 
 import javax.inject.Inject
 import play.api.libs.json.Json
-import play.api.mvc.{Result, Results}
+import play.api.mvc.{MessagesControllerComponents, Result, Results}
+import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{SummaryRequest, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
@@ -34,10 +33,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
-import play.twirl.api.Html
-
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
 class DeclarationController @Inject()(
@@ -46,9 +42,9 @@ class DeclarationController @Inject()(
   desToForm     : DesToForm,
   fhddsConnector: FhddsConnector,
   keyStoreService      : KeyStoreService,
+  cc            : MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) with SummaryFunctions {
-
+)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext) extends AppController(ds, cc) with SummaryFunctions {
 
   val emailSessionKey = "declaration_email"
   val processingTimestampSessionKey = "declaration_processing_timestamp"
@@ -128,10 +124,8 @@ class DeclarationController @Inject()(
       Json toJson payload
     )
 
-
     Right(
       fhddsConnector.createSubmission(request.bpr.safeId.get, request.registrationNumber, submissionRequest))
-
   }
 
   def amendedSubmission(declaration: Declaration)(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
@@ -175,5 +169,4 @@ class DeclarationController @Inject()(
       case BusinessType.Partnership   ⇒ formToDes partnership(request.bpr, verifiedEmail, Journeys partnershipApplication pageDataLoader, d)
     }
   }
-
 }

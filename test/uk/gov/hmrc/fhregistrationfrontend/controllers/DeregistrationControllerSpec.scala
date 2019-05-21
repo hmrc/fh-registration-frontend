@@ -43,8 +43,9 @@ class DeregistrationControllerSpec
     mockFhddsConnector,
     desToForm,
     mockKeyStoreService,
+    mockMcc,
     mockActions
-  )
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()
@@ -177,9 +178,7 @@ class DeregistrationControllerSpec
       val result = await(csrfAddToken(controller.acknowledgment)(request))
       status(result) shouldBe OK
       bodyOf(result) should include(Messages("fh.ack.deregister"))
-
     }
-
   }
 
   def setupSaveDeregistrationReason() = {
@@ -189,6 +188,4 @@ class DeregistrationControllerSpec
   def setupKeyStoreDeregistrationReason(reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))): Unit = {
     when(mockKeyStoreService.fetchDeregistrationReason()(any())) thenReturn Future.successful(reason)
   }
-
-
 }

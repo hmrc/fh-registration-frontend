@@ -17,27 +17,25 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartUpdateRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
-import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplay
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
 class AmendmentController @Inject()(
-  ds               : CommonPlayDependencies,
-  desToForm        : DesToForm,
-  fhddsConnector   : FhddsConnector,
+  desToForm: DesToForm,
+  ds: CommonPlayDependencies,
+  fhddsConnector: FhddsConnector,
   emailVerificationConnector: EmailVerificationConnector,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService) extends AppController(ds) {
+)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext) extends AppController(ds, cc) {
   import actions._
 
   def startAmendment() = startAmendmentAction.async { implicit request ⇒
@@ -112,5 +110,4 @@ class AmendmentController @Inject()(
       case (acc, page) ⇒  acc flatMap { _ ⇒ save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)}
     }
   }
-
 }

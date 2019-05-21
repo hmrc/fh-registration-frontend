@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.io.IOException
 
-import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.libs.json.Json
@@ -27,12 +26,10 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.{AddressLookupConnector, Ad
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address, AddressRecord, Country, RecordSet}
 import uk.gov.hmrc.http.BadRequestException
 
+class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
 
-class AddressLookupControllerSpec extends ControllersSpecBase {
-
-  private implicit val materializer = mock[Materializer]
   val mockAddressLookupConnector = mock[AddressLookupConnector]
-  val controller = new AddressLookupController(mockAddressLookupConnector)
+  val controller = new AddressLookupController(mockAddressLookupConnector, mockMcc)(scala.concurrent.ExecutionContext.Implicits.global)
 
   "Address lookup controller" should {
     "Fail with wrong postcode" in {
@@ -78,6 +75,4 @@ class AddressLookupControllerSpec extends ControllersSpecBase {
       jsonBodyOf(result).as[RecordSet] shouldBe response
     }
   }
-
-
 }

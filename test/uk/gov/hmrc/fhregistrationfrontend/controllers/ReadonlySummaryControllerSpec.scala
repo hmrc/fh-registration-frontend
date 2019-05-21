@@ -28,10 +28,9 @@ class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
   with Save4LaterMocks
 {
 
-
   val controller = new ReadOnlySummaryController(
-    commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockActions
-  )
+    commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockMcc, mockActions
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {
     "Render the summary for an approved application" in {
@@ -58,5 +57,4 @@ class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
       bodyOf(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyRegister}.title"))
     }
   }
-
 }

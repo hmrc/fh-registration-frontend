@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm, VatNumberForm}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
 import play.api.test.Helpers._
-import org.mockito.Mockito.{reset, verify, when}
-import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, OtherStoragePremises}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
 
 import scala.concurrent.Future
 
@@ -48,7 +48,7 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockActions)(mockSave4Later)
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions)(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "load" should {
     "Render the page" in {
@@ -295,12 +295,8 @@ class FormPageControllerSpec
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/businessStatus")
-
-
     }
-
   }
-
 
   def businessPartnerFormData(addMore: Boolean) = {
     val addressForm = Map(
@@ -314,12 +310,10 @@ class FormPageControllerSpec
       BusinessPartnersForm.hasNationalInsuranceNumberKey → "false"
     ) ++ addressForm
 
-
     individualPartner.map {
       case (k, v ) ⇒ s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
     } +
       (BusinessPartnersForm.businessPartnersTypeKey → BusinessPartnerType.Individual.toString) +
       ("addMore" → addMore.toString)
   }
-
 }

@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 
 import org.mockito.ArgumentCaptor
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
@@ -26,7 +25,8 @@ import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.test.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Country, Address ⇒ LookupAddress}
+import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Country, Address => LookupAddress}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.model.DataEvent
 
@@ -39,12 +39,11 @@ class AddressAuditServiceSpecs
     with BeforeAndAfterEach
     with Matchers {
 
-
   val auditConnector = mock[AuditConnector]
   val addressLookupConnector = mock[AddressLookupConnector]
   implicit val hc = HeaderCarrier()
 
-  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)
+  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(scala.concurrent.ExecutionContext.Implicits.global)
   val ac: ArgumentCaptor[DataEvent] = ArgumentCaptor.forClass(classOf[DataEvent])
 
   override def beforeEach(): Unit = {
@@ -124,7 +123,6 @@ class AddressAuditServiceSpecs
     ac.getValue
   }
 
-
   def setupAddressLookupConnector(addressRecord: Option[AddressRecord]) = {
     when(addressLookupConnector.lookupById(any())(any())).thenReturn(Future successful addressRecord)
   }
@@ -132,7 +130,4 @@ class AddressAuditServiceSpecs
   def setupAuditConnector() = {
     when(auditConnector.sendEvent(any())(any(), any())).thenReturn(Future successful AuditResult.Success)
   }
-
-
-
 }
