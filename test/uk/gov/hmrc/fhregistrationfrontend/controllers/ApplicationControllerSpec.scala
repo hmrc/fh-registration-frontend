@@ -385,7 +385,7 @@ class ApplicationControllerSpec
     "Redirect to the businessType page" in {
       setupNewApplicationAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
-      when(mockBusinessCustomerConnector.getReviewDetails(any())) thenReturn Future.successful(FormTestData.someBpr)
+      when(mockBusinessCustomerConnector.getReviewDetails(any(), any())) thenReturn Future.successful(FormTestData.someBpr)
 
       val request = FakeRequest()
       val result = await(controller continueWithBpr request)
