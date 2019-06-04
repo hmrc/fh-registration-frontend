@@ -33,7 +33,7 @@
 
 @sidebar = {
     @if(sidebarLinks.isDefined) {
-        @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
+        @(new layouts.Sidebar)(sidebarLinks.get, Some("sidebar"))
     }
 }
 
