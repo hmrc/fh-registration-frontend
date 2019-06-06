@@ -25,8 +25,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import scala.concurrent.Future
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
+
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.RunMode
 
@@ -42,7 +42,7 @@ class DefaultEmailVerificationConnector @Inject() (
   val runModeConfiguration: Configuration,
   val runMode: RunMode,
   environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode)
+)(implicit ec: ExecutionContext) extends ServicesConfig(runModeConfiguration, runMode)
   with EmailVerificationConnector
   with HttpErrorFunctions
 {

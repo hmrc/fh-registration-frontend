@@ -29,8 +29,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTr
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FhddsConnector @Inject() (
@@ -38,7 +38,7 @@ class FhddsConnector @Inject() (
    val runModeConfiguration: Configuration,
    val runMode: RunMode,
    environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode)
+)(implicit ec: ExecutionContext) extends ServicesConfig(runModeConfiguration, runMode)
 {
   val FHDSSServiceUrl: String = baseUrl("fhdds")
 

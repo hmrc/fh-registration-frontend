@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap

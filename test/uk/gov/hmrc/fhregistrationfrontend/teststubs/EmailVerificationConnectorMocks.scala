@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.teststubs
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.play.test.UnitSpec
 
