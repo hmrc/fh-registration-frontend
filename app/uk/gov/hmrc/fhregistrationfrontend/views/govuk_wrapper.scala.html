@@ -20,16 +20,16 @@
 @import uk.gov.hmrc.play.config.AssetsConfig
 
 @(title: String,
-  mainClass: Option[String] = None,
-  mainDataAttributes: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  sidebar: Html = HtmlFormat.empty,
-  contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
-  linkElement : Option[Html] = None,
-  serviceInfoContent: Html = HtmlFormat.empty,
-  environmentUrl: Option[String] = None,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+        mainClass: Option[String] = None,
+        mainDataAttributes: Option[Html] = None,
+        bodyClasses: Option[String] = None,
+        sidebar: Html = HtmlFormat.empty,
+        contentHeader: Option[Html] = None,
+        mainContent: Html = HtmlFormat.empty,
+        linkElement: Option[Html] = None,
+        serviceInfoContent: Html = HtmlFormat.empty,
+        environmentUrl: Option[String] = None,
+        scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
@@ -51,82 +51,103 @@
 }
 
 @head = {
-    @{new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
+@{
+    new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
         linkElem = linkElement,
         headScripts = None
-      )}
-    @environmentUrl.map { url => <base href="@url"/> }
+    )
+}
+@environmentUrl.map { url => <base href="@url"/> }
     <meta name="format-detection" content="telephone=no" />
 }
 
 
 @signOutLink = {
-  <li><a id="logOutNavHref" href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout>@Messages("link.signout")</a></li>
+    <li><a id="logOutNavHref" href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout>@Messages("link.signout")</a></li>
 }
 
 @insideHeader = {
-    @(new uiLayouts.HeaderNav).apply(
+@{
+    (new uiLayouts.HeaderNav).apply(
         Some(Messages("app.name")),
         None,
         false,
         Some(signOutLink)
     )
 }
+}
 
 @afterHeader = {}
 
-@polyfills = {<script type="text/javascript" src='@routes.Assets.at("javascripts/details.polyfill.js")'></script>}
+@polyfills = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/details.polyfill.js")'></script>
+}
 
 @scripts = {
-  @polyfills
-  @scriptElem
+@polyfills
+@scriptElem
 }
 
 @bodyEnd = {
-    @{new uiLayouts.Footer(assetsConfig).apply(
-    analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
-      ssoUrl = None,
-      scriptElem = Some(scripts),
-      gaCalls = None
-    )}
+@{
+    new uiLayouts.Footer(assetsConfig).apply(
+        analyticsToken = Some(appConfig.analyticsToken),
+        analyticsHost = appConfig.analyticsHost,
+        ssoUrl = None,
+        scriptElem = Some(scripts),
+        gaCalls = None
+    )
+}
 }
 
 @footerTop = {}
 @footerLinks = {}
 
 @serviceInfo = {
-    @(new uiLayouts.ServiceInfo).apply(
+@{
+    (new uiLayouts.ServiceInfo).apply(
         HtmlFormat.empty,
         includeGridWrapper = false,
         Some(serviceInfoContent)
     )
 }
+}
 
 @mainContentHeader = {
-    @if(contentHeader.isDefined) {
+@if(contentHeader.isDefined) {
 
-        @(new uiLayouts.MainContentHeader).apply(
+    @{
+        (new uiLayouts.MainContentHeader).apply(
             contentHeader.get
         )
     }
 }
+}
 
-@getHelpForm = {@(new uiHelpers.ReportAProblemLink).apply(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = {
+@{
+    (new uiHelpers.ReportAProblemLink).apply(
+        appConfig.reportAProblemPartialUrl,
+        appConfig.reportAProblemNonJSUrl)
+}
+}
 
 @content = {
-    @uiLayouts.main_content(
-      article = mainContent,
-      mainClass = mainClass,
-      mainDataAttributes = mainDataAttributes,
-      mainContentHeader = mainContentHeader,
-      serviceInfo = serviceInfo,
-      getHelpForm = getHelpForm,
-      sidebar = sidebar)
+@uiLayouts.main_content(
+    article = mainContent,
+    mainClass = mainClass,
+    mainDataAttributes = mainDataAttributes,
+    mainContentHeader = mainContentHeader,
+    serviceInfo = serviceInfo,
+    getHelpForm = getHelpForm,
+    sidebar = sidebar)
 }
 
 @getFooterLinks = {
-    @(new uiLayouts.FooterLinks)
+@(new uiLayouts.FooterLinks)
 }
 
-@{new GovUkTemplate().apply(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(getFooterLinks), true)(content)}
+
+@{
+    new GovUkTemplate().apply(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(getFooterLinks), true)(content)
+}
