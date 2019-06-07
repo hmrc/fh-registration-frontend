@@ -19,9 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend
 import akka.stream.Materializer
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
@@ -37,7 +37,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
 
-trait AppUnitGenerator extends UnitSpec with ScalaFutures with OneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
+trait AppUnitGenerator extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global

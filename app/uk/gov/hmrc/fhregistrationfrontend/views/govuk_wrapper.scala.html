@@ -16,89 +16,138 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.play.config.{OptimizelyConfig, GTMConfig}
+@import uk.gov.hmrc.play.config.AssetsConfig
 
 @(title: String,
-  mainClass: Option[String] = None,
-  mainDataAttributes: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  sidebar: Html = HtmlFormat.empty,
-  contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
-  linkElement : Option[Html] = None,
-  serviceInfoContent: Html = HtmlFormat.empty,
-  environmentUrl: Option[String] = None,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+        mainClass: Option[String] = None,
+        mainDataAttributes: Option[Html] = None,
+        bodyClasses: Option[String] = None,
+        sidebar: Html = HtmlFormat.empty,
+        contentHeader: Option[Html] = None,
+        mainContent: Html = HtmlFormat.empty,
+        linkElement: Option[Html] = None,
+        serviceInfoContent: Html = HtmlFormat.empty,
+        environmentUrl: Option[String] = None,
+        scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import layouts.GovUkTemplate
+
+@optimizelySnippet = @{
+    val config = new OptimizelyConfig(appConfig.getConfiguration)
+    new uiLayouts.OptimizelySnippet(config)
+}
+
+@gtmSnippet = @{
+    val config = new GTMConfig(appConfig.getConfiguration)
+    new uiLayouts.GTMSnippet(config)
+}
+
+@assetsConfig = @{
+    new AssetsConfig(appConfig.getConfiguration)
+}
 
 @head = {
-  @uiLayouts.head(
-    linkElem = linkElement,
-    headScripts = None)
-    @environmentUrl.map { url => <base href="@url"/> }
+@{
+    new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
+        linkElem = linkElement,
+        headScripts = None
+    )
+}
+@environmentUrl.map { url => <base href="@url"/> }
     <meta name="format-detection" content="telephone=no" />
 }
 
 
 @signOutLink = {
-  <li><a id="logOutNavHref" href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout>@Messages("link.signout")</a></li>
+    <li><a id="logOutNavHref" href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout>@Messages("link.signout")</a></li>
 }
 
 @insideHeader = {
-    @uiLayouts.header_nav(
-      navTitle = Some(Messages("app.name")),
-      navTitleLink = None,
-      showBetaLink = false,
-      navLinks = Some(signOutLink))
+@{
+    (new uiLayouts.HeaderNav).apply(
+        Some(Messages("app.name")),
+        None,
+        false,
+        Some(signOutLink)
+    )
+}
 }
 
 @afterHeader = {}
 
-@polyfills = {<script type="text/javascript" src='@routes.Assets.at("javascripts/details.polyfill.js")'></script>}
+@polyfills = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/details.polyfill.js")'></script>
+}
 
 @scripts = {
-  @polyfills
-  @scriptElem
+@polyfills
+@scriptElem
 }
 
 @bodyEnd = {
-    @uiLayouts.footer(
-      analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
-      ssoUrl = None,
-      scriptElem = Some(scripts),
-      gaCalls = None)
+@{
+    new uiLayouts.Footer(assetsConfig).apply(
+        analyticsToken = Some(appConfig.analyticsToken),
+        analyticsHost = appConfig.analyticsHost,
+        ssoUrl = None,
+        scriptElem = Some(scripts),
+        gaCalls = None
+    )
+}
 }
 
 @footerTop = {}
 @footerLinks = {}
 
 @serviceInfo = {
-    @uiLayouts.serviceInfo(
-      betaBanner = HtmlFormat.empty,
-      includeGridWrapper = false,
-      serviceInfoContent = Some(serviceInfoContent))
+@{
+    (new uiLayouts.ServiceInfo).apply(
+        HtmlFormat.empty,
+        includeGridWrapper = false,
+        Some(serviceInfoContent)
+    )
+}
 }
 
 @mainContentHeader = {
-    @if(contentHeader.isDefined) {
-        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+@if(contentHeader.isDefined) {
+
+    @{
+        (new uiLayouts.MainContentHeader).apply(
+            contentHeader.get
+        )
     }
 }
-
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
-
-@content = {
-    @uiLayouts.main_content(
-      article = mainContent,
-      mainClass = mainClass,
-      mainDataAttributes = mainDataAttributes,
-      mainContentHeader = mainContentHeader,
-      serviceInfo = serviceInfo,
-      getHelpForm = getHelpForm,
-      sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@getHelpForm = {
+@{
+    (new uiHelpers.ReportAProblemLink).apply(
+        appConfig.reportAProblemPartialUrl,
+        appConfig.reportAProblemNonJSUrl)
+}
+}
+
+@content = {
+@uiLayouts.main_content(
+    article = mainContent,
+    mainClass = mainClass,
+    mainDataAttributes = mainDataAttributes,
+    mainContentHeader = mainContentHeader,
+    serviceInfo = serviceInfo,
+    getHelpForm = getHelpForm,
+    sidebar = sidebar)
+}
+
+@getFooterLinks = {
+@(new uiLayouts.FooterLinks)
+}
+
+
+@{
+    new GovUkTemplate().apply(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(getFooterLinks), true)(content)
+}

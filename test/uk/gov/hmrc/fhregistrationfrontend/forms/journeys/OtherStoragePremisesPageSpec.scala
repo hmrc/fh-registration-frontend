@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journeys
 
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.fhregistrationfrontend.forms.TestData

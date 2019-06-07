@@ -25,9 +25,8 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.RunMode
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait AddressLookupResponse
 
@@ -40,13 +39,13 @@ class AddressLookupConnector @Inject() (
    val runModeConfiguration: Configuration,
    val runMode: RunMode,
    environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
+) (implicit ec: ExecutionContext) extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
 
   val addressLookupUrl: String = baseUrl("address-lookup")
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(implicitly[HttpReads[JsValue]], fhddsHc, MdcLoggingExecutionContext.fromLoggingDetails(hc)
+    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(implicitly[HttpReads[JsValue]], fhddsHc, ec
     ) map {
       addressListJson =>
         AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
@@ -59,7 +58,7 @@ class AddressLookupConnector @Inject() (
 
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[Option[AddressRecord]](s"$addressLookupUrl/uk/addresses/$id")(addressRecordReads, fhddsHc, MdcLoggingExecutionContext.fromLoggingDetails(hc))
+    http.GET[Option[AddressRecord]](s"$addressLookupUrl/uk/addresses/$id")(addressRecordReads, fhddsHc, ec)
   }
 
   private val addressRecordReads = new HttpReads[Option[AddressRecord]] {

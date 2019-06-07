@@ -21,7 +21,7 @@ import java.util.Date
 
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper

@@ -31,6 +31,7 @@ trait AppConfig {
   val appName: String
   def emailVerificationCallback(hash: String): String
   val exciseEnquiryLink: String
+  def getConfiguration: Configuration
 }
 
 @Singleton
@@ -61,5 +62,7 @@ class FrontendAppConfig @Inject()(
 
   lazy val username = getString("credentials.username")
   lazy val password = getString("credentials.password")
+
+  override def getConfiguration: Configuration = configuration
 }
 
