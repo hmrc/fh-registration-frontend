@@ -54,7 +54,7 @@
 @{
     new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
         linkElem = linkElement,
-        headScripts = None
+        headScripts = Some(analyticsGA)
     )
 }
 @environmentUrl.map { url => <base href="@url"/> }
@@ -97,24 +97,22 @@
             ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
             ga('govuk_shared.send', 'pageview');
     </script>
-}
+  }
 
 @scripts = {
 @polyfills
 @scriptElem
-@analyticsGA
 }
 
 @bodyEnd = {
 @{
-//    new uiLayouts.Footer(assetsConfig).apply(
-//        analyticsToken = Some(appConfig.analyticsToken),
-//        analyticsHost = appConfig.analyticsHost,
-//        ssoUrl = None,
-//        scriptElem = Some(scripts),
-//        gaCalls = None
-//    )
-    scripts
+    new uiLayouts.Footer(assetsConfig).apply(
+        analyticsToken = Some(appConfig.analyticsToken),
+        analyticsHost = appConfig.analyticsHost,
+        ssoUrl = None,
+        scriptElem = Some(scripts),
+        gaCalls = None
+    )
 }
 }
 
