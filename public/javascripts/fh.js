@@ -256,11 +256,13 @@ function init() {
   }
 
   $('a[target="_blank"]').click(function() {
+    ga('send', 'event', 'external link', 'click', this.innerText)
     ga('govuk_shared.send', 'event', 'external link', 'click', this.innerText)
   });
 
   $('summary span.summary').click(function() {
     var eventLabel = $(this).text();
+    ga('send', 'event', 'help', 'click', eventLabel);
     ga('govuk_shared.send', 'event', 'help', 'click', eventLabel);
   });
 
@@ -277,11 +279,12 @@ function init() {
       var form = $form[0];
       var $selectedRadios = $form.find('input:radio:checked');
       $selectedRadios.each(function (i, option) {
+        ga('send', 'event', 'radio selection', option.value, option.name)
         ga('govuk_shared.send', 'event', 'radio selection', option.value, option.name)
       });
 
       var eventAction = $actionField.val();
-      ga('govuk_shared.send', 'event', 'submit', eventAction, eventLabel, {
+      ga('send', 'event', 'submit', eventAction, eventLabel, {
         hitCallback: wrapInTimeout(function() {
           form.submit();
         })
@@ -299,6 +302,7 @@ function init() {
       // ga reporting
       var eventAction = $link.text();
       var eventLabel = $('h1').text();
+      ga('send', 'event', 'error', eventAction, eventLabel);
       ga('govuk_shared.send', 'event', 'error', eventAction, eventLabel);
       // error focusing
       $link.on('click', function () {
@@ -318,21 +322,25 @@ function init() {
 
   $('a.address-lookup').click(function() {
     var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup', 'click', eventLabel)
     ga('govuk_shared.send', 'event', 'postcode lookup', 'click', eventLabel)
   });
 
   $('a.manual-address-mode').click(function() {
     var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
+    ga('send', 'event', 'manual address preference', 'click', eventLabel)
     ga('govuk_shared.send', 'event', 'manual address preference', 'click', eventLabel)
   });
 
   $('a.lookup-address-mode').click(function() {
     var eventLabel = $(this).parents('.address-manual-container').siblings('legend').text();
+    ga('send', 'event', 'postcode lookup preference', 'click', eventLabel)
     ga('govuk_shared.send', 'event', 'postcode lookup preference', 'click', eventLabel)
   });
 
   if ($('.transaction-banner--complete').length) {
     var eventLabel = $('.transaction-banner--complete').find('h1').text();
+    ga('send', 'event', 'transaction complete', 'report', eventLabel)
     ga('govuk_shared.send', 'event', 'transaction complete', 'report', eventLabel)
   }
 
