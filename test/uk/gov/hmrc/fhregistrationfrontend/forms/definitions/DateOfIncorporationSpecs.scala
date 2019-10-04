@@ -20,7 +20,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class DateOfIncorporationSpecs extends UnitSpec {
   val form = DateOfIncorporationForm.dateOfIncorporationForm

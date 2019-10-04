@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
 

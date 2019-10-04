@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
 

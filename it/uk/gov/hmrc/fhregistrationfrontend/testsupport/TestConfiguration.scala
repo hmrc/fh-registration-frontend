@@ -10,7 +10,6 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.play.health.HealthController
-import uk.gov.hmrc.play.it.Port
 
 import scala.collection.JavaConversions._
 

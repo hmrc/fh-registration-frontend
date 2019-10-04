@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class BusinessTypeFormSpec extends UnitSpec with FormSpecsHelper[BusinessType] {
 

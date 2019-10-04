@@ -33,7 +33,7 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.HeaderCarrierConverter
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
 

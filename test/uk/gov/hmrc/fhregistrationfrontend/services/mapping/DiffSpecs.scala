@@ -26,7 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, LimitedLiabilityPartnershipCorporateBody, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class DiffSpecs extends UnitSpec {
 

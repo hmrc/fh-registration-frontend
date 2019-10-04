@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class BasicPageSpecs extends UnitSpec with MockitoSugar {
 

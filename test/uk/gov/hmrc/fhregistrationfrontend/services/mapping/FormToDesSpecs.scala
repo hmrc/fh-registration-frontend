@@ -24,7 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 
 class FormToDesSpecs extends UnitSpec {

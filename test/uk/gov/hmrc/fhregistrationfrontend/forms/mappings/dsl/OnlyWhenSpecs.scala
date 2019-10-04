@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 import play.api.data.Forms._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.MappingSpecsHelper
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class OnlyWhenSpecs extends UnitSpec with MappingSpecsHelper[Option[String]] {
 

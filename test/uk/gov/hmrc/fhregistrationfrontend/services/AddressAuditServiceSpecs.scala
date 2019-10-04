@@ -22,7 +22,7 @@ import org.scalatest.{BeforeAndAfterEach, Matchers}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
