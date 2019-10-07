@@ -9,13 +9,13 @@ object FrontendBuild {
 
   val compile = Seq(
     ws,
-    "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "0.40.0",
+    "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "1.1.0",
     "uk.gov.hmrc"                 %% "govuk-template"                   % "5.35.0-play-26",
-    "uk.gov.hmrc"                 %% "play-ui"                          % "7.39.0-play-26",
+    "uk.gov.hmrc"                 %% "play-ui"                          % "8.2.0-play-26",
 
     "uk.gov.hmrc"                 %% "play-partials"                    % "6.9.0-play-26",
     "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "3.4.0-play-26",
-    "uk.gov.hmrc"                 %% "http-caching-client"              % "8.4.0-play-26",
+    "uk.gov.hmrc"                 %% "http-caching-client"              % "9.0.0-play-26",
     "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"                 %% "time"                             % "3.6.0",
 
