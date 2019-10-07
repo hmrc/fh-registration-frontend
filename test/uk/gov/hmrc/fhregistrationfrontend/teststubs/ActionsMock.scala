@@ -30,7 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyTy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 

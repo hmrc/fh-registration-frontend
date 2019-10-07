@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class DeregistrationReasonFormSpec extends UnitSpec with FormSpecsHelper[DeregistrationReason] {
 

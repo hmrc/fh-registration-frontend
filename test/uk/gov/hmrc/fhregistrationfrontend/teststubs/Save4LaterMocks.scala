@@ -22,7 +22,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.Future
 

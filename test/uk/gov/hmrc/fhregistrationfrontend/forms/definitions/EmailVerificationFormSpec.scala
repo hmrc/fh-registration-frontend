@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
 

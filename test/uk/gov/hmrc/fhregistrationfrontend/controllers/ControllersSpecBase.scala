@@ -22,7 +22,7 @@ import org.scalatest.{BeforeAndAfterEach, Matchers}
 import play.api.http.Status
 import play.api.mvc.Results
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 trait ControllersSpecBase
   extends UnitSpec

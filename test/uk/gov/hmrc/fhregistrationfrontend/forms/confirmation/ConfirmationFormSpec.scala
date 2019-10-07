@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.confirmation
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.AlternativeEmail
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
 

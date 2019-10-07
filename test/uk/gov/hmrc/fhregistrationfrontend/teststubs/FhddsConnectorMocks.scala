@@ -27,7 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubscriptionDisplayWrapper
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.Future
 

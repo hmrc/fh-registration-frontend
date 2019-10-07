@@ -35,7 +35,6 @@ object FrontendBuild {
 
   def test(scope: String = "test,it") = Seq(
     "com.typesafe.play"           %% "play-test"                        % PlayVersion.current % scope,
-    "uk.gov.hmrc"                 %% "hmrctest"                         % "3.8.0-play-26"   % scope,
     "org.scalatest"                % "scalatest_2.11"                   % "3.0.7"   % scope,
     "org.pegdown"                  % "pegdown"                          % "1.6.0"   % scope,
     "org.jsoup"                    % "jsoup"                            % "1.12.1"   % scope,

@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.NoChange
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplay, SubscriptionDisplayWrapper}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class DesToFormSpec extends UnitSpec {
 

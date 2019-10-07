@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.journeys
 
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, StoragePremise}

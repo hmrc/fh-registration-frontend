@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerCompany, CompanyOfficerIndividual}
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOfficer] {
 

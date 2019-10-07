@@ -21,7 +21,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 
 trait EmailVerificationConnectorMocks extends MockitoSugar {

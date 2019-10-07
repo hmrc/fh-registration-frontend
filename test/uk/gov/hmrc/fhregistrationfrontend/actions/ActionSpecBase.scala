@@ -23,7 +23,7 @@ import org.scalatest.{BeforeAndAfterEach, Matchers}
 import play.api.http.Status
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.{Await, Promise}
 

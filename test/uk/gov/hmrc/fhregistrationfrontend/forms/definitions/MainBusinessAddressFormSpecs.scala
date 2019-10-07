@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBusinessAddress] {
 
