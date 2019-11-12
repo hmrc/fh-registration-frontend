@@ -22,7 +22,7 @@ trait UserTestData {
   val testUserId = "Int-uid"
   val ggEmail = "gg@test.com"
   val registrationNumber = "XZFH00000123456"
-  val adminRole= Admin
+  val adminRole = Admin
   val assistantRole = Assistant
   val userAffinityGroup = AffinityGroup.Individual
 

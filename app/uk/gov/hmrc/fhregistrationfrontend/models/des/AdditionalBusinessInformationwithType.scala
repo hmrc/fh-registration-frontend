@@ -18,18 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json.Json
 
-
-case class EORINumberType(EORIVat: Option[String],
-                          EORINonVat: Option[String],
-                          goodsImportedOutEORI: Option[Boolean])
+case class EORINumberType(EORIVat: Option[String], EORINonVat: Option[String], goodsImportedOutEORI: Option[Boolean])
 
 object EORINumberType {
   implicit val format = Json.format[EORINumberType]
 }
 
-case class PartnerCorporateBody(
-  numberOfOtherOfficials: String,
-  companyOfficials: Option[List[CompanyOfficial]])
+case class PartnerCorporateBody(numberOfOtherOfficials: String, companyOfficials: Option[List[CompanyOfficial]])
 
 object PartnerCorporateBody {
   implicit val format = Json.format[PartnerCorporateBody]

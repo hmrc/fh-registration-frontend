@@ -25,16 +25,5 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 trait ControllersSpecBase
-  extends UnitSpec
-  with ScalaFutures
-  with MockitoSugar
-  with BeforeAndAfterEach
-  with Matchers
-  with Results
-  with Status
-  with UserTestData
-{
-
-
-
-}
+    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterEach with Matchers with Results with Status
+    with UserTestData {}

@@ -52,16 +52,19 @@ object FormTestData {
   val tradingName = TradingName(true, Some("DodgyCo"))
   val vatNumber = VatNumber(true, Some("123456789"))
   val companyOfficers = ListWithTrackedChanges(
-    List(CompanyOfficer(
-      CompanyOfficerType.Individual,
-      CompanyOfficerIndividual(
-        "Cosmin",
-        "M",
-        true,
-        Some("AA123123A"),
-        None, None, None,
-        "Company Secretary"
-      )) → Added,
+    List(
+      CompanyOfficer(
+        CompanyOfficerType.Individual,
+        CompanyOfficerIndividual(
+          "Cosmin",
+          "M",
+          true,
+          Some("AA123123A"),
+          None,
+          None,
+          None,
+          "Company Secretary"
+        )) → Added,
       CompanyOfficer(
         CompanyOfficerType.Individual,
         CompanyOfficerIndividual(
@@ -69,7 +72,9 @@ object FormTestData {
           "M",
           true,
           Some("AA123231"),
-          None, None, None,
+          None,
+          None,
+          None,
           "Director"
         )
       ) → Added,
@@ -82,9 +87,11 @@ object FormTestData {
           None,
           "Company Secretary"
         )
-      ) → Added),
+      ) → Added
+    ),
     List.empty,
-    false)
+    false
+  )
   val businessStatus = BusinessStatus(true, Some(LocalDate.of(2018, 6, 30)))
   val importingActivities = ImportingActivities(true, Some(EoriNumber("1234123132", true)))
   val businessCustomers = BusinessCustomers("Over 100")
@@ -92,25 +99,26 @@ object FormTestData {
     true,
     ListWithTrackedChanges(
       List(
-        StoragePremise(
-          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
-          false) → Added,
-        StoragePremise(
-          Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
-          true) → Added),
+        StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → Added,
+        StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → Added
+      ),
       List.empty,
-      false))
+      false
+    )
+  )
 
   val partners = ListWithTrackedChanges(
-    List(BusinessPartner(
-      BusinessPartnerType.Individual,
-      BusinessPartnerIndividual(
-        "mr partner",
-        "ship",
-        true,
-        Some("AA123123A"),
-        Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
-      )) → Added,
+    List(
+      BusinessPartner(
+        BusinessPartnerType.Individual,
+        BusinessPartnerIndividual(
+          "mr partner",
+          "ship",
+          true,
+          Some("AA123123A"),
+          Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
+        )
+      ) → Added,
       BusinessPartner(
         BusinessPartnerType.SoleProprietor,
         BusinessPartnerSoleProprietor(
@@ -136,7 +144,14 @@ object FormTestData {
           true,
           Some("323456789"),
           None,
-          Address("llp line one", Some("llp line two"), Some("llp line three"), Some("llp town"), "AA14 1AA", None, None)
+          Address(
+            "llp line one",
+            Some("llp line two"),
+            Some("llp line three"),
+            Some("llp town"),
+            "AA14 1AA",
+            None,
+            None)
         )
       ) → Added,
       BusinessPartner(
@@ -177,18 +192,14 @@ object FormTestData {
           None,
           Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
         )
-      ) → Added),
+      ) → Added
+    ),
     List.empty,
-    false)
+    false
+  )
 
-
-  val anAddress = businessregistration.Address(
-    line1 = "line1",
-    line2 = "line2",
-    line3 = None,
-    line4 = None,
-    postcode = Some("NE98 1ZZ"),
-    country = "GB")
+  val anAddress = businessregistration
+    .Address(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postcode = Some("NE98 1ZZ"), country = "GB")
 
   val someBpr =
     businessregistration.BusinessRegistrationDetails(

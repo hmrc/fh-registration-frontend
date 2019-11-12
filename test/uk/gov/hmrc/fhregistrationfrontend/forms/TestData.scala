@@ -26,11 +26,11 @@ object TestData {
     "postcode" → "AA11 1AA"
   )
 
-  def addressDataUk(prefix: String) = {
-    addressData map { case (k, v) ⇒
-      s"$prefix.$k" -> v
+  def addressDataUk(prefix: String) =
+    addressData map {
+      case (k, v) ⇒
+        s"$prefix.$k" -> v
     }
-  }
 
   val addressUk = Address("line one", Some("line two"), None, None, "AA11 1AA", None, None)
 

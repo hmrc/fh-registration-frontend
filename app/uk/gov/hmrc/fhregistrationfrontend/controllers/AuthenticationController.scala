@@ -25,31 +25,28 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 
-case class Credentials(username: String, password:String) {
-  def check(providedUsername: String, providedPassword: String): Boolean = {
+case class Credentials(username: String, password: String) {
+  def check(providedUsername: String, providedPassword: String): Boolean =
     (providedUsername == username) && BCrypt.checkpw(providedPassword, password)
-  }
 }
 
-case class AuthenticationController @Inject()(
-  credentials: Credentials,
-  bodyParser: BodyParser[AnyContent])
-(implicit ec: ExecutionContext)
-  extends AuthenticatedBuilder[String](
-    AuthenticationController.extractCredentials(credentials),
-    bodyParser,
-    AuthenticationController.onUnauthorised
-  )
+case class AuthenticationController @Inject()(credentials: Credentials, bodyParser: BodyParser[AnyContent])(
+  implicit ec: ExecutionContext)
+    extends AuthenticatedBuilder[String](
+      AuthenticationController.extractCredentials(credentials),
+      bodyParser,
+      AuthenticationController.onUnauthorised
+    )
 
 object AuthenticationController {
   def extractCredentials(storedCredentials: Credentials): RequestHeader => Option[String] = { header =>
     for {
       authHeader <- header.headers.get("Authorization")
-      encoded <- authHeader.split(" ").drop(1).headOption
+      encoded    <- authHeader.split(" ").drop(1).headOption
       (username, password) <- Try {
-        val authInfo = new String(Base64.getDecoder.decode(encoded)).split(":").toList
-        (authInfo(0), authInfo(1))
-      }.toOption
+                               val authInfo = new String(Base64.getDecoder.decode(encoded)).split(":").toList
+                               (authInfo(0), authInfo(1))
+                             }.toOption
       authenticatedUsername <- if (storedCredentials.check(username, password)) Some(username) else None
     } yield authenticatedUsername
   }

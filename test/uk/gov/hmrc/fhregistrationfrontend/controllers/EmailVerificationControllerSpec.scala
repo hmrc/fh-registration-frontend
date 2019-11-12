@@ -26,15 +26,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers._
 
 class EmailVerificationControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with EmailVerificationConnectorMocks
-    with ActionsMock
-    with BeforeAndAfterEach {
+    extends ControllerSpecWithGuiceApp with EmailVerificationConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
-  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
+  val inMemorySave4Later =
+    new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
   implicit val hc = HeaderCarrier()
   val controller = new EmailVerificationController(
-    commonDependencies, mockActions, mockMcc, mockEmailVerifcationConnector, inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
+    commonDependencies,
+    mockActions,
+    mockMcc,
+    mockEmailVerifcationConnector,
+    inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -108,7 +110,6 @@ class EmailVerificationControllerSpec
 
       val result = await(csrfAddToken(controller.submitContactEmail())(request))
 
-
       await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe None
       await(inMemorySave4Later.fetchPendingEmail(testUserId)) shouldBe Some("c@c.co")
 
@@ -160,7 +161,6 @@ class EmailVerificationControllerSpec
       bodyOf(result) should include(Messages("fh.emailVerification.pending.title"))
     }
 
-
     "Redirect to resume when the email is verified" in {
       setupEmailVerificationAction(Some(ggEmail), None)
 
@@ -171,7 +171,6 @@ class EmailVerificationControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/resume")
     }
   }
-
 
   "emailEdit" should {
     "Show the edit form page when there is a verified email" in {
@@ -193,7 +192,6 @@ class EmailVerificationControllerSpec
       status(result) shouldBe OK
       bodyOf(result) should include(Messages("fh.emailVerification.edit.title"))
     }
-
 
     "Fail when there is no email to edit" in {
       setupEmailVerificationAction(None, None)
@@ -226,7 +224,6 @@ class EmailVerificationControllerSpec
       status(result) shouldBe OK
       bodyOf(result) should include(Messages("fh.emailVerification.edit.start.title"))
     }
-
 
     "Fail when there is no email to edit" in {
       setupEmailVerificationAction(None, None)

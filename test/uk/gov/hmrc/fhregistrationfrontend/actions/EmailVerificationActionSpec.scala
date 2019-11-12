@@ -25,11 +25,13 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4Later
 
 class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
-  lazy val action = new EmailVerificationAction()(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new EmailVerificationAction()(
+    mockSave4Later,
+    StubbedErrorHandler,
+    scala.concurrent.ExecutionContext.Implicits.global)
   val verifiedEmail = "verified@test.com"
   val contactEmail = "contact@test.com"
   val pendingEmail = "pending@test.com"
-
 
   "EmailVerificationAction" should {
     "Find the verified email" in {
@@ -40,7 +42,8 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe Some(verifiedEmail)
@@ -49,8 +52,7 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
     }
 
     "Find the from contact person" in {
-      val contactPerson = ContactPerson(
-        "f", "l", "job", "1231231", Some(contactEmail), true, None, None, None)
+      val contactPerson = ContactPerson("f", "l", "job", "1231231", Some(contactEmail), true, None, None, None)
 
       val cacheMap =
         CacheMapBuilder(testUserId)
@@ -59,7 +61,8 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -76,13 +79,13 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
       refined.candidateEmail shouldBe Some(contactEmail)
     }
-
 
     "Find the pending email" in {
 
@@ -93,7 +96,8 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -101,14 +105,14 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
       refined.candidateEmail shouldBe Some(pendingEmail)
     }
 
-
     "Find the gg email" in {
 
       val cacheMap = CacheMapBuilder(testUserId).cacheMap
 
       setupSave4LaterFrom(cacheMap)
 
-      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
       refined.verifiedEmail shouldBe None
@@ -119,13 +123,13 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
     "Have correct user id " in {
       val cacheMap = CacheMapBuilder(testUserId).cacheMap
       setupSave4LaterFrom(cacheMap)
-      val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
       val refined = refinedRequest(action, userRequest)
 
       refined.userId shouldBe testUserId
     }
   }
-
 
 }

@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.Json
 
-case class MainBusinessAddress (
+case class MainBusinessAddress(
   timeAtCurrentAddress: String,
   hasPreviousAddress: Option[Boolean],
   previousAddress: Option[Address],
@@ -38,4 +38,3 @@ object MainBusinessAddress {
     "10 or more years"
   )
 }
-

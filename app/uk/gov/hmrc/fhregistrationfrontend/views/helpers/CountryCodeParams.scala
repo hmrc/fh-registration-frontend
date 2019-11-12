@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-
 case class CountryCodeParams(
   context: Option[String] = None,
-  name   : String,
-  label  : String,
-  error  : String,
+  name: String,
+  label: String,
+  error: String,
   value: Option[String] = None,
   countryCode: Option[String] = None,
   hasErrors: Boolean = false
 )
-

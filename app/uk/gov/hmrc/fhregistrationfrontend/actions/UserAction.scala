@@ -30,54 +30,69 @@ import uk.gov.hmrc.fhregistrationfrontend.models.Enrolments
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserRequest[A](val userId: String, val ggEmail: Option[String], val registrationNumber: Option[String], val credentialRole: Option[CredentialRole], val userAffinityGroup: Option[AffinityGroup], request: Request[A])
-  extends WrappedRequest(request) {
+class UserRequest[A](
+  val userId: String,
+  val ggEmail: Option[String],
+  val registrationNumber: Option[String],
+  val credentialRole: Option[CredentialRole],
+  val userAffinityGroup: Option[AffinityGroup],
+  request: Request[A])
+    extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
 
 case class UserAction @Inject()(
-                            externalUrls: ExternalUrls,
-                            errorHandler: ErrorHandler,
-                            cc: ControllerComponents
-                          )(implicit val authConnector: AuthConnector, val executionContext: ExecutionContext) extends ActionBuilder[UserRequest, AnyContent]
-  with ActionRefiner[Request, UserRequest]
-  with FrontendAction
-  with AuthorisedFunctions {
+  externalUrls: ExternalUrls,
+  errorHandler: ErrorHandler,
+  cc: ControllerComponents
+)(implicit val authConnector: AuthConnector, val executionContext: ExecutionContext)
+    extends ActionBuilder[UserRequest, AnyContent] with ActionRefiner[Request, UserRequest] with FrontendAction
+    with AuthorisedFunctions {
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
 
-    authorised(AuthProviders(GovernmentGateway)).retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
-      case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup ⇒
+    authorised(AuthProviders(GovernmentGateway))
+      .retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
+        case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup ⇒
+          val retrieveEnrolments: Set[String] = for {
+            enrolment ← enrolments.enrolments
+            if enrolment.key equalsIgnoreCase Enrolments.serviceName
 
-        val retrieveEnrolments: Set[String] = for {
-          enrolment ← enrolments.enrolments
-          if enrolment.key equalsIgnoreCase Enrolments.serviceName
+            identifier ← enrolment.identifiers
+            if identifier.key equalsIgnoreCase Enrolments.identifierName
+            if identifier.value.slice(2, 4) == "FH"
 
-          identifier ← enrolment.identifiers
-          if identifier.key equalsIgnoreCase Enrolments.identifierName
-          if identifier.value.slice(2, 4) == "FH"
+          } yield identifier.value
 
-        } yield identifier.value
+          val retrieveAffinityGroup: Option[AffinityGroup] = for {
+            userAffinityGroup <- affinityGroup
+            if userAffinityGroup == Individual || userAffinityGroup == Organisation
+          } yield userAffinityGroup
 
-        val retrieveAffinityGroup: Option[AffinityGroup] = for {
-          userAffinityGroup <- affinityGroup
-          if userAffinityGroup == Individual || userAffinityGroup == Organisation
-        } yield userAffinityGroup
+          if (retrieveEnrolments.size > 1)
+            Future successful Left(errorHandler.applicationError)
+          else if (retrieveAffinityGroup.isEmpty) {
+            Future successful Left(
+              errorHandler
+                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service")))
+          } else
+            Future successful Right(
+              new UserRequest(
+                id,
+                anEmail,
+                retrieveEnrolments.headOption,
+                credentialRole,
+                retrieveAffinityGroup,
+                request))
+        case _ ⇒
+          throw AuthorisationException.fromString("Can not find user id")
 
-        if (retrieveEnrolments.size > 1)
-          Future successful Left(errorHandler.applicationError)
-        else if (retrieveAffinityGroup.isEmpty) {
-          Future successful Left(errorHandler.errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service")))
-        }
-        else Future successful Right(new UserRequest(id, anEmail, retrieveEnrolments.headOption, credentialRole, retrieveAffinityGroup, request))
-      case _ ⇒
-        throw AuthorisationException.fromString("Can not find user id")
-
-    } recover { case e ⇒
-      Left(handleFailure(e))
+      } recover {
+      case e ⇒
+        Left(handleFailure(e))
     }
   }
 
@@ -88,7 +103,7 @@ case class UserAction @Inject()(
 
         val ggRedirectParms = Map(
           "continue" -> Seq(externalUrls.continueUrl),
-          "origin" -> Seq(externalUrls.ggOrigin)
+          "origin"   -> Seq(externalUrls.ggOrigin)
         )
 
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)

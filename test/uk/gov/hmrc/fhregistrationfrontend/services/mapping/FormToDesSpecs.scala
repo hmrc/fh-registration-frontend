@@ -26,7 +26,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscr
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-
 class FormToDesSpecs extends UnitSpec {
 
   val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-create.schema.json")
@@ -34,9 +33,10 @@ class FormToDesSpecs extends UnitSpec {
   val validator = new SchemaValidator().validate(schema) _
   val service = new FormToDesImpl()
 
-  def brd(fileName: String): BusinessRegistrationDetails = Json
-    .parse(getClass.getResourceAsStream(s"/models/$fileName"))
-    .as[BusinessRegistrationDetails]
+  def brd(fileName: String): BusinessRegistrationDetails =
+    Json
+      .parse(getClass.getResourceAsStream(s"/models/$fileName"))
+      .as[BusinessRegistrationDetails]
 
   "Form for amendment service" should {
     "Compute the differences between initial subscription and the amendment for Corporate Body" in {
@@ -109,14 +109,16 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-partnership.json"),
           PartnershipLargeInt.verifiedEmail,
           PartnershipLargeInt.application(),
-          PartnershipLargeInt.declaration)
+          PartnershipLargeInt.declaration
+        )
 
       val amendedSubscription: Subscription =
         service.partnership(
           brd("business-registration-details-partnership.json"),
           PartnershipLargeIntNew.verifiedEmail,
           PartnershipLargeIntNew.application(),
-          PartnershipLargeIntNew.declaration)
+          PartnershipLargeIntNew.declaration
+        )
 
       val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
 
@@ -128,7 +130,8 @@ class FormToDesSpecs extends UnitSpec {
             brd("business-registration-details-sole-trader.json"),
             PartnershipLargeIntNew.verifiedEmail,
             PartnershipLargeIntNew.application(),
-            PartnershipLargeIntNew.declaration)
+            PartnershipLargeIntNew.declaration
+          )
       )
 
       validatesFor(submission, "partnership-large-int-amendment", "partnership")
@@ -144,7 +147,8 @@ class FormToDesSpecs extends UnitSpec {
           LtdMinimum.verifiedEmail,
           LtdMinimum.application(),
           LtdMinimum.declaration),
-        None)
+        None
+      )
 
       validatesFor(submission, "fhdds-limited-company-minimum", "limited-company")
     }
@@ -158,8 +162,10 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-limited-company.json"),
           LtdMinimumLessThanThreeYears.verifiedEmail,
           LtdMinimumLessThanThreeYears.application(),
-          LtdMinimumLessThanThreeYears.declaration),
-        None)
+          LtdMinimumLessThanThreeYears.declaration
+        ),
+        None
+      )
 
       validatesFor(submission, "fhdds-limited-company-minimum-less-than-three-years", "limited-company")
     }
@@ -172,15 +178,16 @@ class FormToDesSpecs extends UnitSpec {
         brd("business-registration-details-limited-company.json"),
         LtdMinimumInternational.verifiedEmail,
         LtdMinimumInternational.application(),
-        LtdMinimumInternational.declaration),
-      None)
+        LtdMinimumInternational.declaration
+      ),
+      None
+    )
 
     validatesFor(submission, "fhdds-limited-company-minimum-international", "limited-company")
 
     submission.subScriptionCreate.contactDetail.address.map(_.countryCode) shouldEqual Some("BG")
     submission.subScriptionCreate.contactDetail.address.flatMap(_.line4) shouldEqual Some("Bulgaria")
   }
-
 
   "Create a correct json for fhdds-limited-company-large-uk" in {
     val submission = SubScriptionCreate(
@@ -205,13 +212,13 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-limited-company.json"),
           LtdLargeUkWithModifications.verifiedEmail,
           LtdLargeUkWithModifications.application,
-          LtdLargeUkWithModifications.declaration),
+          LtdLargeUkWithModifications.declaration
+        ),
       None
     )
 
     validatesFor(submission, "fhdds-limited-company-large-uk-updated", "limited-company")
   }
-
 
   "Create a correct json for fhdds-limited-company-large-uk-amend-no-premises" in {
     val submission = SubScriptionCreate(
@@ -222,7 +229,8 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-limited-company.json"),
           LtdLargeUkAmendNoPremises.verifiedEmail,
           LtdLargeUkAmendNoPremises.application,
-          LtdLargeUkAmendNoPremises.declaration),
+          LtdLargeUkAmendNoPremises.declaration
+        ),
       None
     )
 
@@ -238,7 +246,8 @@ class FormToDesSpecs extends UnitSpec {
           SPLargeUk.verifiedEmail,
           SPLargeUk.application(),
           SPLargeUk.declaration),
-        None)
+        None
+      )
 
       validatesFor(submission, "sole-proprietor-large-uk", "sole-proprietor")
     }
@@ -253,8 +262,10 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-partnership.json"),
           PartnershipLargeInt.verifiedEmail,
           PartnershipLargeInt.application(),
-          PartnershipLargeInt.declaration),
-        None)
+          PartnershipLargeInt.declaration
+        ),
+        None
+      )
 
       validatesFor(submission, "partnership-large-int", "partnership")
     }
@@ -266,8 +277,11 @@ class FormToDesSpecs extends UnitSpec {
 
     val validationResult = validator(json)
     validationResult.fold(
-      invalid = {errors ⇒ println(errors)},
-      valid = {v ⇒ }
+      invalid = { errors ⇒
+        println(errors)
+      },
+      valid = { v ⇒
+        }
     )
 
     validationResult.isSuccess shouldEqual true

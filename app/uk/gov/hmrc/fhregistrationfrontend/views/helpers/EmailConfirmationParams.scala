@@ -33,7 +33,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
   * @param hintText  any hint text for the question
   * @param hasErrors boolean to inform styling of component and use of error msg
   */
-
 case class EmailConfirmationParams(
   name: String,
   context: Option[String] = None,
@@ -48,4 +47,3 @@ case class EmailConfirmationParams(
   isNumber: Boolean = false,
   isEmail: Boolean = false
 )
-

@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import play.api.libs.json._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficerType._
 
-
 //TODO add enum for role
 case class CompanyOfficer(
   officialType: CompanyOfficialType,
@@ -47,33 +46,32 @@ case class CompanyOfficerCompany(
   role: String
 ) extends CompanyOfficerIdentification
 
-
 object CompanyOfficer {
   implicit val companyOfficerCompanyFormat = Json.format[CompanyOfficerCompany]
   implicit val companyOfficerIndividualFormat = Json.format[CompanyOfficerIndividual]
 
   implicit val companyOfficerIdentificationWrites = new Writes[CompanyOfficerIdentification] {
-    override def writes(o: CompanyOfficerIdentification): JsValue = {
+    override def writes(o: CompanyOfficerIdentification): JsValue =
       o match {
         case i: CompanyOfficerIndividual ⇒ Json toJson i
-        case c: CompanyOfficerCompany    ⇒ Json toJson c
+        case c: CompanyOfficerCompany ⇒ Json toJson c
       }
-    }
   }
 
   implicit val writes = Json.writes[CompanyOfficer]
   implicit val reads = new Reads[CompanyOfficer] {
-    override def reads(value: JsValue): JsResult[CompanyOfficer] = {
+    override def reads(value: JsValue): JsResult[CompanyOfficer] =
       value.validate[JsObject].flatMap { json ⇒
         (json \ "officialType") match {
-          case JsDefined(JsString(t)) if t == Individual.toString ⇒ (json \ "identification").validate[CompanyOfficerIndividual].map(CompanyOfficer(Individual, _))
-          case JsDefined(JsString(t)) if t == Company.toString ⇒ (json \ "identification").validate[CompanyOfficerCompany].map(CompanyOfficer(Company, _))
+          case JsDefined(JsString(t)) if t == Individual.toString ⇒
+            (json \ "identification").validate[CompanyOfficerIndividual].map(CompanyOfficer(Individual, _))
+          case JsDefined(JsString(t)) if t == Company.toString ⇒
+            (json \ "identification").validate[CompanyOfficerCompany].map(CompanyOfficer(Company, _))
           case e: JsError => e
           case _ ⇒ JsError("unknown official type")
         }
       }
 
-    }
   }
 
   implicit val companyOfficerFormat = Format(reads, writes)

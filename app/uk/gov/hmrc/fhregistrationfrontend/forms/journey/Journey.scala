@@ -21,9 +21,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 
 class JourneyPages(val pages: Seq[AnyPage]) {
 
-  def get[T](pageId: String): Option[Page[T]] = {
-    pages find ( _.id == pageId) map (_.asInstanceOf[Page[T]])
-  }
+  def get[T](pageId: String): Option[Page[T]] =
+    pages find (_.id == pageId) map (_.asInstanceOf[Page[T]])
 }
 
 trait JourneyNavigation {

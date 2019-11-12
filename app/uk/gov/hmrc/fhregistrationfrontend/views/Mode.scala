@@ -22,7 +22,7 @@ object Mode extends Enumeration {
 
   def isReadOnly(mode: Mode) = mode match {
     case ReadOnlyApplication | ReadOnlyRegister ⇒ true
-    case _                                      ⇒ false
+    case _ ⇒ false
   }
 
   def isEditable(mode: Mode) = !isReadOnly(mode)

@@ -22,7 +22,6 @@ import play.api.data.Mapping
 trait MappingSpecsHelper[T] extends Matchers {
   def mapping: Mapping[T]
 
-
   def dataFromValidForm(post: Map[String, String]) = {
     val bound = mapping bind post
 

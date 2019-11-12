@@ -23,10 +23,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-
 trait EmailVerificationConnectorMocks extends MockitoSugar {
   this: UnitSpec ⇒
-
 
   val mockEmailVerifcationConnector = mock[EmailVerificationConnector]
 

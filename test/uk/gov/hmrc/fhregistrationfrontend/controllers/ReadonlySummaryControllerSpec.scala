@@ -22,14 +22,15 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks, Save4LaterMocks}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
-class ReadonlySummaryControllerSpec extends ControllerSpecWithGuiceApp
-  with FhddsConnectorMocks
-  with ActionsMock
-  with Save4LaterMocks
-{
+class ReadonlySummaryControllerSpec
+    extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks {
 
   val controller = new ReadOnlySummaryController(
-    commonDependencies, new DesToFormImpl(), mockFhddsConnector, mockMcc, mockActions
+    commonDependencies,
+    new DesToFormImpl(),
+    mockFhddsConnector,
+    mockMcc,
+    mockActions
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {

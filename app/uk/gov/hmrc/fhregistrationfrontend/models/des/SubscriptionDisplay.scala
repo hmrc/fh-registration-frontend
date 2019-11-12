@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json.Json
 
-case class SubscriptionDisplay (
+case class SubscriptionDisplay(
   organizationType: String,
   FHbusinessDetail: IsNewFulfilmentBusiness,
   additionalBusinessInformation: AdditionalBusinessInformationwithType,

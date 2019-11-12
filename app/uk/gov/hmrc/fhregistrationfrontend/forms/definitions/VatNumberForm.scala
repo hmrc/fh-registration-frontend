@@ -22,7 +22,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{vatRegistrati
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 
-
 object VatNumberForm {
 
   val hasVatNumberKey = "vatNumber_yesNo"

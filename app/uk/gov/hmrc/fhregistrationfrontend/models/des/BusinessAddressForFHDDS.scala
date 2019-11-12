@@ -21,8 +21,7 @@ import java.time.format.DateTimeFormatter
 
 import play.api.libs.json.{JsString, Json, Reads, Writes}
 
-case class PreviousOperationalAddressDetail(previousAddress: Address,
-                                            previousAddressStartdate: LocalDate)
+case class PreviousOperationalAddressDetail(previousAddress: Address, previousAddressStartdate: LocalDate)
 
 object PreviousOperationalAddressDetail extends DateTimeFormat {
   implicit val format = Json.format[PreviousOperationalAddressDetail]
@@ -37,10 +36,11 @@ object PreviousOperationalAddress {
   implicit val format = Json.format[PreviousOperationalAddress]
 }
 
-case class BusinessAddressForFHDDS(currentAddress: Address,
-                                   commonDetails: CommonDetails,
-                                   timeOperatedAtCurrentAddress: String,
-                                   previousOperationalAddress: Option[PreviousOperationalAddress])
+case class BusinessAddressForFHDDS(
+  currentAddress: Address,
+  commonDetails: CommonDetails,
+  timeOperatedAtCurrentAddress: String,
+  previousOperationalAddress: Option[PreviousOperationalAddress])
 
 object BusinessAddressForFHDDS {
   implicit val format = Json.format[BusinessAddressForFHDDS]

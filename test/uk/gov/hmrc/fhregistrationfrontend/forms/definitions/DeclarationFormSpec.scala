@@ -51,9 +51,7 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
 
     "Fail if alternative email but email is malformed" in {
       formDataHasErrors(
-        personsData ++ Map(
-          usingDefaultEmailKey → "false",
-          s"$alternativeEmailKey.email" → "malformed"),
+        personsData ++ Map(usingDefaultEmailKey → "false", s"$alternativeEmailKey.email" → "malformed"),
         Seq(s"$alternativeEmailKey.email" → "error.email")
       )
     }
@@ -67,7 +65,6 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
         Seq(s"$alternativeEmailKey.emailConfirmation" → "no_match.error")
       )
     }
-
 
     "Accept data using default email" in {
       val parsed = dataFromValidForm(
@@ -98,7 +95,5 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
     }
 
   }
-
-
 
 }

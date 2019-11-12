@@ -18,8 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{personName,
-  roleInOrganization, telephone, yesOrNo, address, internationalAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, internationalAddress, personName, roleInOrganization, telephone, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 
@@ -34,7 +33,6 @@ object ContactPersonForm {
   val isUkAddressKey = "isUkAddress"
   val otherUkContactAddressKey = "otherUkContactAddress_contactAddress"
   val otherInternationalContactAddressKey = "otherInternationalContactAddress_contactAddress"
-
 
   private val usingSameContactAddressMapping = usingSameContactAddressKey → yesOrNo
   private val ukAddressMapping = isUkAddressKey → (yesOrNo onlyWhen (usingSameContactAddressMapping is false))

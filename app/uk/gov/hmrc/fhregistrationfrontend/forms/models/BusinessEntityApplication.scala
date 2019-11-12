@@ -49,7 +49,6 @@ case class SoleProprietorApplication(
   otherStoragePremises: OtherStoragePremises
 ) extends BusinessEntityApplication
 
-
 case class PartnershipApplication(
   mainBusinessAddress: MainBusinessAddress,
   contactPerson: ContactPerson,

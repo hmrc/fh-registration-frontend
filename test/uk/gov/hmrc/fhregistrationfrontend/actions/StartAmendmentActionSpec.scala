@@ -27,23 +27,30 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FhddsConnectorMocks, Save4LaterMocks, StubbedErrorHandler}
 
-class StartAmendmentActionSpec
-  extends ActionSpecBase
-    with Save4LaterMocks
-    with FhddsConnectorMocks {
+class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
-  lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new StartAmendmentAction(mockFhddsConnector)(
+    mockSave4Later,
+    errorHandler,
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start amendment action " should {
     "Fail when no fhdds registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, None, Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        registrationNumber = None,
+        None,
+        Some(AffinityGroup.Individual),
+        FakeRequest())
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
 
     "Find the correct journey type" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), None, Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest =
+        new UserRequest(testUserId, None, Some(registrationNumber), None, Some(AffinityGroup.Individual), FakeRequest())
 
       setupFhddsStatus(FhddsStatus.Received)
       val cacheMap = CacheMapBuilder(testUserId)
@@ -58,14 +65,23 @@ class StartAmendmentActionSpec
 
     "Fail for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Admin),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
 
-        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new StartAmendmentAction(fhddsConnector)(
+          mockSave4Later,
+          errorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -73,13 +89,22 @@ class StartAmendmentActionSpec
 
     "Work for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Assistant),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Received, Processing)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new StartAmendmentAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new StartAmendmentAction(fhddsConnector)(
+          mockSave4Later,
+          errorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 

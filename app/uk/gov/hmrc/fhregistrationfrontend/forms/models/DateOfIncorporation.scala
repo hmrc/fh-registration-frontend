@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.Json
 
-case class DateOfIncorporation (
+case class DateOfIncorporation(
   dateOfIncorporation: LocalDate
 )
 

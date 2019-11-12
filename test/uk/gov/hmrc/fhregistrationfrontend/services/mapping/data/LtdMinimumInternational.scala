@@ -39,13 +39,14 @@ object LtdMinimumInternational {
       false,
       Some(false),
       None,
-      Some(InternationalAddress(
-        "some street",
-        Some("Sofia"),
-        None,
-        "Bulgaria",
-        "BG"
-      ))
+      Some(
+        InternationalAddress(
+          "some street",
+          Some("Sofia"),
+          None,
+          "Bulgaria",
+          "BG"
+        ))
     ),
     CompanyRegistrationNumber("12345678"),
     DateOfIncorporation(LocalDate.of(2009, 4, 21)),
@@ -60,17 +61,20 @@ object LtdMinimumInternational {
             "G",
             false,
             None,
-            Some(true), Some("1231231"), None,
+            Some(true),
+            Some("1231231"),
+            None,
             "Company Secretary"
           )
         ) → changeFlags),
       List.empty,
-      false),
-      BusinessStatus(false, None),
-      ImportingActivities(false, None),
-      BusinessCustomers("11-50"),
-      OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
-    )
+      false
+    ),
+    BusinessStatus(false, None),
+    ImportingActivities(false, None),
+    BusinessCustomers("11-50"),
+    OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
+  )
 
   val verifiedEmail = "a@a.ro"
 

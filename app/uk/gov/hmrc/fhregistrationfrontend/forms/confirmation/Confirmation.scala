@@ -25,10 +25,9 @@ case class Confirmation(
   alternativeEmail: Option[AlternativeEmail]
 ) {
 
-  def email: Option[String] = {
+  def email: Option[String] =
     usingDefaultEmail flatMap {
-      case true  ⇒ defaultEmail
+      case true ⇒ defaultEmail
       case false ⇒ alternativeEmail.map(_.email)
     }
-  }
 }

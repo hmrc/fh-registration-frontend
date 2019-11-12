@@ -36,13 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
 class WithdrawalController @Inject()(
-  ds               : CommonPlayDependencies,
-  val fhddsConnector   : FhddsConnector,
+  ds: CommonPlayDependencies,
+  val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  keyStoreService      : KeyStoreService,
-  cc                   : MessagesControllerComponents,
+  keyStoreService: KeyStoreService,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit ec: ExecutionContext) extends AppController(ds, cc) with ContactEmailFunctions {
+)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) with ContactEmailFunctions {
 
   import actions._
   val EmailSessionKey = "withdrawal_confirmation_email"
@@ -53,17 +54,19 @@ class WithdrawalController @Inject()(
   }
 
   def reason = enrolledUserAction { implicit request ⇒
-      Ok(withdrawal_reason(withdrawalReasonForm))
+    Ok(withdrawal_reason(withdrawalReasonForm))
   }
 
   def postReason = enrolledUserAction.async { implicit request ⇒
-    withdrawalReasonForm.bindFromRequest().fold(
-      formWithError ⇒ Future successful BadRequest(withdrawal_reason(formWithError)),
-      withdrawalReason ⇒
-        keyStoreService
-          .saveWithdrawalReason(withdrawalReason)
-          .map(_ ⇒ Redirect(routes.WithdrawalController.confirm()))
-    )
+    withdrawalReasonForm
+      .bindFromRequest()
+      .fold(
+        formWithError ⇒ Future successful BadRequest(withdrawal_reason(formWithError)),
+        withdrawalReason ⇒
+          keyStoreService
+            .saveWithdrawalReason(withdrawalReason)
+            .map(_ ⇒ Redirect(routes.WithdrawalController.confirm()))
+      )
   }
 
   def withWithdrawalReason(f: EnrolledUserRequest[_] ⇒ WithdrawalReason ⇒ Future[Result]) =
@@ -74,21 +77,21 @@ class WithdrawalController @Inject()(
       }
     }
 
-  def confirm = withWithdrawalReason {
-    implicit request ⇒ reason ⇒
-      contactEmail map (email ⇒ Ok(withdrawal_confirm(confirmationForm, email)))
+  def confirm = withWithdrawalReason { implicit request ⇒ reason ⇒
+    contactEmail map (email ⇒ Ok(withdrawal_confirm(confirmationForm, email)))
   }
 
-  def postConfirmation = withWithdrawalReason {
-    implicit request ⇒
-      reason ⇒
-        confirmationForm.bindFromRequest().fold(
-          formWithError ⇒ contactEmail map (email ⇒ BadRequest(withdrawal_confirm(formWithError, email))),
-          handleConfirmation(_, reason)
-        )
+  def postConfirmation = withWithdrawalReason { implicit request ⇒ reason ⇒
+    confirmationForm
+      .bindFromRequest()
+      .fold(
+        formWithError ⇒ contactEmail map (email ⇒ BadRequest(withdrawal_confirm(formWithError, email))),
+        handleConfirmation(_, reason)
+      )
   }
 
-  private def handleConfirmation(confirmed: Confirmation, reason: WithdrawalReason)(implicit request: EnrolledUserRequest[_]) = {
+  private def handleConfirmation(confirmed: Confirmation, reason: WithdrawalReason)(
+    implicit request: EnrolledUserRequest[_]) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
         .map { processingDate ⇒
@@ -102,10 +105,10 @@ class WithdrawalController @Inject()(
     } else {
       Future successful Redirect(routes.Application.checkStatus)
     }
-  }
 
-  private def sendRequest(email: String, reason: WithdrawalReason)(implicit request: EnrolledUserRequest[_]): Future[Date] = {
-    val withdrawRequest =  des.WithdrawalRequest(
+  private def sendRequest(email: String, reason: WithdrawalReason)(
+    implicit request: EnrolledUserRequest[_]): Future[Date] = {
+    val withdrawRequest = des.WithdrawalRequest(
       email,
       des.Withdrawal(
         LocalDate.now(),
@@ -121,7 +124,7 @@ class WithdrawalController @Inject()(
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
-  private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) = {
+  private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
@@ -129,5 +132,4 @@ class WithdrawalController @Inject()(
     } yield {
       Ok(withdrawal_acknowledgement(processingDate, email))
     }
-  }
 }

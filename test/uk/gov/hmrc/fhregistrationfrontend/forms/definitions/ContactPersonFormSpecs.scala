@@ -53,7 +53,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     "reject data with other uk address but no address" in {
       formDataHasErrors(
         dataWithOtherAddress + (isUkAddressKey → "true"),
-        List(s"$otherUkContactAddressKey.Line1"  → "error.required")
+        List(s"$otherUkContactAddressKey.Line1" → "error.required")
       )
     }
 
@@ -92,7 +92,6 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       fieldHasErrors(jobTitleKey, "", "error.pattern")
       fieldHasErrors(jobTitleKey, Array.fill(41)('a').mkString, "error.pattern")
       fieldHasErrors(jobTitleKey, "@", "error.pattern")
-
 
       fieldHasErrors(telephoneKey, "", "error.pattern")
 

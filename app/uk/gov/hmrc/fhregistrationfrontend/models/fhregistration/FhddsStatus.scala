@@ -22,18 +22,15 @@ object FhddsStatus extends Enumeration {
 
   type FhddsStatus = Value
 
-  val Processing              = Value("processing")
-  val Received                = Value("received")
-  val Approved                = Value("approved")
-  val ApprovedWithConditions  = Value("approvedWithConditions")
-  val Rejected                = Value("rejected")
-  val Revoked                 = Value("revoked")
-  val Withdrawn               = Value("withdrawn")
-  val Deregistered            = Value("deregistered")
+  val Processing = Value("processing")
+  val Received = Value("received")
+  val Approved = Value("approved")
+  val ApprovedWithConditions = Value("approvedWithConditions")
+  val Rejected = Value("rejected")
+  val Revoked = Value("revoked")
+  val Withdrawn = Value("withdrawn")
+  val Deregistered = Value("deregistered")
 
-
-  implicit val format = Format(
-    Reads.enumNameReads(FhddsStatus),
-    Writes.enumNameWrites[this.type ])
+  implicit val format = Format(Reads.enumNameReads(FhddsStatus), Writes.enumNameWrites[this.type])
 
 }

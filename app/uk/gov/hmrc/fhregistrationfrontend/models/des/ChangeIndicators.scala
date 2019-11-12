@@ -30,7 +30,6 @@ case class ChangeIndicators(
   premisesChanged: Boolean,
   declarationChanged: Boolean)
 
-
 object ChangeIndicators {
   implicit val formatter = Json.format[ChangeIndicators]
 }

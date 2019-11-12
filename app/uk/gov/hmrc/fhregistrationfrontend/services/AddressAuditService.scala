@@ -44,18 +44,20 @@ object AddressAuditService {
 private case class AddressAuditData(auditType: String, details: Seq[(String, String)])
 
 @Singleton
-class DefaultAddressAuditService  @Inject()(
+class DefaultAddressAuditService @Inject()(
   addressLookupConnector: AddressLookupConnector,
   auditConnector: AuditConnector
-)(implicit ec: ExecutionContext) extends AddressAuditService  {
+)(implicit ec: ExecutionContext)
+    extends AddressAuditService {
 
-  override def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any] = {
+  override def auditAddresses(page: String, addresses: List[Address])(
+    implicit headerCarrier: HeaderCarrier): Future[Any] = {
     if (!addresses.isEmpty)
       Logger info s"Auditing ${addresses.size} addresses for $page"
     val auditResults = addresses map { address ⇒
       addressAuditData(address)
         .flatMap(sendAuditEvent(page, _))
-        .recover({ case t ⇒ AuditResult.Failure("failed to generate the event", Some(t))})
+        .recover({ case t ⇒ AuditResult.Failure("failed to generate the event", Some(t)) })
     }
 
     Future sequence auditResults
@@ -72,7 +74,8 @@ class DefaultAddressAuditService  @Inject()(
       false
   }
 
-  private def sendAuditEvent(page: String, addressAuditData: AddressAuditData)(implicit headerCarrier: HeaderCarrier) = {
+  private def sendAuditEvent(page: String, addressAuditData: AddressAuditData)(
+    implicit headerCarrier: HeaderCarrier) = {
     val event = DataEvent(
       AddressAuditService.AuditSource,
       addressAuditData.auditType,
@@ -83,30 +86,28 @@ class DefaultAddressAuditService  @Inject()(
     auditConnector sendEvent event
   }
 
-  private def addressAuditData(address: Address)(implicit headerCarrier: HeaderCarrier) = {
+  private def addressAuditData(address: Address)(implicit headerCarrier: HeaderCarrier) =
     address.lookupId match {
       case None ⇒ Future successful manualAddressSubmitted(address)
       case Some(id) ⇒ postcodeAddress(id, address)
     }
-  }
 
-  private def postcodeAddress(id: String, address: Address)(implicit headerCarrier: HeaderCarrier): Future[AddressAuditData] = {
+  private def postcodeAddress(id: String, address: Address)(
+    implicit headerCarrier: HeaderCarrier): Future[AddressAuditData] =
     addressLookupConnector lookupById id map {
-      case Some(originalAddressRecord)  ⇒
+      case Some(originalAddressRecord) ⇒
         val originalAddress = addressRecordToAddress(originalAddressRecord)
         if (sameUkAddresses(address, originalAddress))
           postcodeAddressSubmitted(address, originalAddressRecord.uprn.toString)
         else
           postcodeAddressModifiedSubmitted(address, originalAddress, originalAddressRecord.uprn.toString)
-      case None                   ⇒
+      case None ⇒
         Logger error s"Could not find address by id $id"
         manualAddressSubmitted(address)
     }
-  }
 
-  private def sameUkAddresses(address: Address, otherAddress: Address) = {
+  private def sameUkAddresses(address: Address, otherAddress: Address) =
     address.copy(countryCode = None) == otherAddress.copy(countryCode = None)
-  }
 
   private def manualAddressSubmitted(address: Address)(implicit headerCarrier: HeaderCarrier) =
     AddressAuditData(
@@ -120,14 +121,14 @@ class DefaultAddressAuditService  @Inject()(
       addressDetails("submitted", address) :+ ("submittedUPRN" → originalUprn)
     )
 
-  private def postcodeAddressModifiedSubmitted(address: Address, originalAddress: Address, originalUprn: String)(implicit headerCarrier: HeaderCarrier): AddressAuditData = {
-
+  private def postcodeAddressModifiedSubmitted(address: Address, originalAddress: Address, originalUprn: String)(
+    implicit headerCarrier: HeaderCarrier): AddressAuditData =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressModifiedSubmitted,
-      addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" → originalUprn))
-  }
+      addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" → originalUprn)
+    )
 
-  private def addressDetails(prefix: String, address: Address) = {
+  private def addressDetails(prefix: String, address: Address) =
     Seq(
       "Line1" → address.addressLine1,
       "Line2" → address.addressLine2.getOrElse(""),
@@ -135,10 +136,9 @@ class DefaultAddressAuditService  @Inject()(
       "Line4" → address.addressLine4.getOrElse(""),
       "Postcode" → address.postcode,
       "Country" → address.countryCode.getOrElse("")
-    ).map { case (k, v) ⇒ s"$prefix$k" -> v}
-  }
+    ).map { case (k, v) ⇒ s"$prefix$k" -> v }
 
-  private def addressRecordToAddress(addressRecord: AddressRecord) = {
+  private def addressRecordToAddress(addressRecord: AddressRecord) =
     Address(
       addressRecord.address.line1,
       Some(addressRecord.address.line2) filterNot StringUtils.isBlank,
@@ -148,5 +148,4 @@ class DefaultAddressAuditService  @Inject()(
       Some(addressRecord.address.country.code),
       Some(addressRecord.id)
     )
-  }
 }

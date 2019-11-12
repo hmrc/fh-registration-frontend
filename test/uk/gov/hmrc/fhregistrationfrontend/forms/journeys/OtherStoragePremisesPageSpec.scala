@@ -23,9 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, StoragePremise}
 
-
 class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
-
 
   val repeatingPage = RepeatingPage(
     "storagePremises",
@@ -41,17 +39,13 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
   "Next section" should {
     "Be None" when {
       "Answer is No" in {
-        val page = OtherStoragePremisesPage(
-          mainPage withData false,
-          repeatingPage)
+        val page = OtherStoragePremisesPage(mainPage withData false, repeatingPage)
 
         page.nextSubsection shouldBe None
       }
 
       "Has more is false" in {
-        val page = OtherStoragePremisesPage(
-          mainPage withData true,
-          repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
           .withSubsection(Some("2"))
 
         page.nextSubsection shouldBe None
@@ -63,13 +57,11 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
     "Be a number" when {
       "Answer is Yes" in {
 
-        val page = OtherStoragePremisesPage(
-          mainPage withData true ,
-          repeatingPage withData ListWithTrackedChanges.empty())
+        val page =
+          OtherStoragePremisesPage(mainPage withData true, repeatingPage withData ListWithTrackedChanges.empty())
 
         page.nextSubsection shouldBe Some("1")
       }
-
 
       "Has more is True" in {
 
@@ -97,9 +89,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
 
     "Be main section" when {
       "on first premise" in {
-        val page = OtherStoragePremisesPage(
-          mainPage withData true,
-          repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
           .withSubsection(Some("1"))
 
         page.previousSubsection shouldBe Some("any")
@@ -108,9 +98,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
 
     "Be first premise" when {
       "on second premise" in {
-        val page = OtherStoragePremisesPage(
-          mainPage withData true,
-          repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
           .withSubsection(Some("2"))
 
         page.previousSubsection shouldBe Some("1")
@@ -124,9 +112,5 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
     ListWithTrackedChanges.fromValues(List.fill(nPremise)(aPremise))
 
   }
-
-
-
-
 
 }

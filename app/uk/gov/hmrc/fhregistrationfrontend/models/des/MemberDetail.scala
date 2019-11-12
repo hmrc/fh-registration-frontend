@@ -20,18 +20,13 @@ import java.time.LocalDate
 
 import play.api.libs.json.Json
 
-
-case class IdentificationBusiness(
-  vatRegistrationNumber: Option[String],
-  uniqueTaxpayerReference: Option[String])
+case class IdentificationBusiness(vatRegistrationNumber: Option[String], uniqueTaxpayerReference: Option[String])
 
 object IdentificationBusiness {
   implicit val format = Json.format[IdentificationBusiness]
 }
 
-case class IncorporationDetail(
-  companyRegistrationNumber: Option[String],
-  dateOfIncorporation: Option[LocalDate])
+case class IncorporationDetail(companyRegistrationNumber: Option[String], dateOfIncorporation: Option[LocalDate])
 
 object IncorporationDetail extends DateTimeFormat {
 
@@ -45,7 +40,6 @@ case class MemberDetail(
   groupJoiningDate: Option[LocalDate],
   address: Address,
   modification: Modification)
-
 
 object MemberDetail {
   implicit val format = Json.format[MemberDetail]

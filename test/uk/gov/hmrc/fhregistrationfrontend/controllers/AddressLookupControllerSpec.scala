@@ -29,7 +29,8 @@ import uk.gov.hmrc.http.BadRequestException
 class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
 
   val mockAddressLookupConnector = mock[AddressLookupConnector]
-  val controller = new AddressLookupController(mockAddressLookupConnector, mockMcc)(scala.concurrent.ExecutionContext.Implicits.global)
+  val controller =
+    new AddressLookupController(mockAddressLookupConnector, mockMcc)(scala.concurrent.ExecutionContext.Implicits.global)
 
   "Address lookup controller" should {
     "Fail with wrong postcode" in {
@@ -42,7 +43,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails" in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(new BadRequestException("unkown"))
+      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(
+        new BadRequestException("unkown"))
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_REQUEST
@@ -51,7 +53,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails with unknown " in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(new IOException())
+      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(
+        new IOException())
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_GATEWAY
@@ -61,7 +64,11 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
       implicit val reads = Json.format[RecordSet]
       val response = RecordSet(
         Seq(
-          AddressRecord("id1", 123342, Address(Seq("Line1", "Line2"), Some("town"), "AA1 1AA", Country("GB", "Great Britain")), "en")
+          AddressRecord(
+            "id1",
+            123342,
+            Address(Seq("Line1", "Line2"), Some("town"), "AA1 1AA", Country("GB", "Great Britain")),
+            "en")
         )
       )
       val action = controller.addressLookup("AA1 1AA", None)

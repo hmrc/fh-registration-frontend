@@ -30,16 +30,17 @@ class EmailVerificationRequest[A](
   val verifiedEmail: Option[String],
   val pendingEmail: Option[String],
   val candidateEmail: Option[String],
-  request: UserRequest[A]) extends WrappedRequest(request) {
+  request: UserRequest[A])
+    extends WrappedRequest(request) {
 
   def userId = request.userId
 }
 
-class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-  extends ActionRefiner[UserRequest, EmailVerificationRequest]
-    with FrontendAction
-    with ActionFunctions
-{
+class EmailVerificationAction(
+  implicit val save4LaterService: Save4LaterService,
+  errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext)
+    extends ActionRefiner[UserRequest, EmailVerificationRequest] with FrontendAction with ActionFunctions {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EmailVerificationRequest[A]]] = {
     implicit val r = request
@@ -65,10 +66,10 @@ class EmailVerificationAction(implicit val save4LaterService: Save4LaterService,
     result.value
   }
 
-  private def getPendingEmail(cacheMap: CacheMap) = cacheMap
-    .getEntry[String](Save4LaterKeys.pendingEmailKey)
-    .filterNot(_.isEmpty)
-
+  private def getPendingEmail(cacheMap: CacheMap) =
+    cacheMap
+      .getEntry[String](Save4LaterKeys.pendingEmailKey)
+      .filterNot(_.isEmpty)
 
   private def getContactPersonEmail(cacheMap: CacheMap) =
     cacheMap

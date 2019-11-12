@@ -38,7 +38,8 @@ class AdminPageController @Inject()(
   implicit val appConfig: AppConfig,
   fhddsConnector: FhddsConnector,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext, config: Configuration) extends FrontendController(cc) with play.api.i18n.I18nSupport{
+)(implicit ec: ExecutionContext, config: Configuration)
+    extends FrontendController(cc) with play.api.i18n.I18nSupport {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   lazy val credentials = Credentials(frontendAppConfig.username, frontendAppConfig.password)
@@ -46,34 +47,32 @@ class AdminPageController @Inject()(
   val authAction = AuthenticationController(credentials, bodyParser)
 
   def showAdminPage: Action[AnyContent] = authAction { implicit request =>
-
     Ok(temp_admin_page())
   }
 
   def getSubmissions: Action[AnyContent] = authAction.async { implicit request =>
-
     fhddsConnector.getAllSubmission().map {
       case submissions if submissions.nonEmpty => Ok(show_all_submissions(submissions))
-      case submissions if submissions.isEmpty => Ok("No Submissions found")
+      case submissions if submissions.isEmpty  => Ok("No Submissions found")
     }
   }
 
-  def loadDeletePage(formBundleId:String)= authAction.async { implicit request =>
-
+  def loadDeletePage(formBundleId: String) = authAction.async { implicit request =>
     fhddsConnector.getSubMission(formBundleId).map {
       case submission => Ok(show_submission(submission))
-      case _ => Ok(s"No Submission found for $formBundleId")
+      case _          => Ok(s"No Submission found for $formBundleId")
     }
   }
 
-  def deleteSubmission(formBundleId:String): Action[AnyContent] = authAction.async { implicit request =>
-    fhddsConnector.deleteSubmission(formBundleId).map(_ => Ok(s"Submission data for $formBundleId has been deleted "))
-      .recover{case _ => Ok(s"Submission with $formBundleId not found")}
+  def deleteSubmission(formBundleId: String): Action[AnyContent] = authAction.async { implicit request =>
+    fhddsConnector
+      .deleteSubmission(formBundleId)
+      .map(_ => Ok(s"Submission data for $formBundleId has been deleted "))
+      .recover { case _ => Ok(s"Submission with $formBundleId not found") }
 
   }
 
   def loadUserIdPage = authAction { implicit request =>
-
     Ok(admin_get_groupID(requestForm))
   }
 
@@ -82,105 +81,99 @@ class AdminPageController @Inject()(
       formWithErrors => {
         Future.successful(BadRequest(admin_get_groupID(formWithErrors)))
       },
-
-     formData =>
-       fhddsConnector.addEnrolment(formData.userId, formData.groupId, formData.registrationNumber).map(result => Ok(result.body))
+      formData =>
+        fhddsConnector
+          .addEnrolment(formData.userId, formData.groupId, formData.registrationNumber)
+          .map(result => Ok(result.body))
     )
   }
 
-  def loadAllocateEnrolment = authAction {
-    implicit request =>
-      Ok(allocate_enrolment(allocateEnrolmentForm))
+  def loadAllocateEnrolment = authAction { implicit request =>
+    Ok(allocate_enrolment(allocateEnrolmentForm))
   }
 
-  def allocateEnrolment = authAction.async {
-    implicit request  =>
-      allocateEnrolmentForm.bindFromRequest.fold (
-        formWithErrors => {
-          Future.successful(BadRequest(allocate_enrolment(formWithErrors)))
-        },
-
-        formData => {
-          fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-        }
-      )
+  def allocateEnrolment = authAction.async { implicit request =>
+    allocateEnrolmentForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(allocate_enrolment(formWithErrors)))
+      },
+      formData => {
+        fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
+      }
+    )
   }
 
-  def loadDeleteEnrolment = authAction {
-    implicit request =>
-      Ok(delete_enrolment(deleteEnrolmentForm))
+  def loadDeleteEnrolment = authAction { implicit request =>
+    Ok(delete_enrolment(deleteEnrolmentForm))
   }
 
-  def deleteEnrolment = authAction.async {
-    implicit request =>
-      deleteEnrolmentForm.bindFromRequest.fold (
-        formWithErrors => {
-          Future.successful(BadRequest(delete_enrolment(formWithErrors)))
+  def deleteEnrolment = authAction.async { implicit request =>
+    deleteEnrolmentForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(delete_enrolment(formWithErrors)))
 
-        },
-
-        formData => {
-          fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-        }
-      )
+      },
+      formData => {
+        fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
+      }
+    )
   }
 
-  def checkStatus(regNo: String) = authAction.async {
-    implicit request  =>
-      fhddsConnector
-        .getStatus(regNo)(hc).map(result => Ok(result.toString))
+  def checkStatus(regNo: String) = authAction.async { implicit request =>
+    fhddsConnector
+      .getStatus(regNo)(hc)
+      .map(result => Ok(result.toString))
   }
 
   def getUserInfo(userId: String) = authAction.async { implicit request =>
-    fhddsConnector.getUserInfo(userId).map {
-      response => Ok(response.json)
+    fhddsConnector.getUserInfo(userId).map { response =>
+      Ok(response.json)
     }
   }
 
   def getGroupInfo(groupId: String) = authAction.async { implicit request =>
-    fhddsConnector.getGroupInfo(groupId).map {
-      response => Ok(response.json)
+    fhddsConnector.getGroupInfo(groupId).map { response =>
+      Ok(response.json)
     }
   }
 
   def es2(userId: String) = authAction.async { implicit request =>
-    fhddsConnector.es2Info(userId).map {
-      response => Ok(response.json)
+    fhddsConnector.es2Info(userId).map { response =>
+      Ok(response.json)
     }
   }
 
   def es3(groupId: String) = authAction.async { implicit request =>
-    fhddsConnector.es3Info(groupId).map {
-      response => Ok(response.json)
+    fhddsConnector.es3Info(groupId).map { response =>
+      Ok(response.json)
     }
   }
 }
 
-case class AdminRequest(userId:String, groupId:String, registrationNumber: String)
+case class AdminRequest(userId: String, groupId: String, registrationNumber: String)
 
 object AdminRequest {
   val format: Format[AdminRequest] = Json.format[AdminRequest]
 
-  val requestForm: Form[AdminRequest] = Form(mapping(
-    "userId" -> nonEmptyText,
-    "groupId" -> nonEmptyText,
-    "registrationNumber" -> nonEmptyText
-  )(AdminRequest.apply)(AdminRequest.unapply))
+  val requestForm: Form[AdminRequest] = Form(
+    mapping(
+      "userId"             -> nonEmptyText,
+      "groupId"            -> nonEmptyText,
+      "registrationNumber" -> nonEmptyText
+    )(AdminRequest.apply)(AdminRequest.unapply))
 }
 
-case class EnrolmentForm(userId:String, registrationNumber: String)
+case class EnrolmentForm(userId: String, registrationNumber: String)
 
 object EnrolmentForm {
 
   val format: Format[EnrolmentForm] = Json.format[EnrolmentForm]
 
-  val allocateEnrolmentForm: Form[EnrolmentForm] = Form(mapping(
-    "userId" -> nonEmptyText,
-    "registrationNumber" -> nonEmptyText
-  )(EnrolmentForm.apply)(EnrolmentForm.unapply))
+  val allocateEnrolmentForm: Form[EnrolmentForm] = Form(
+    mapping(
+      "userId"             -> nonEmptyText,
+      "registrationNumber" -> nonEmptyText
+    )(EnrolmentForm.apply)(EnrolmentForm.unapply))
 
   val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm
 }
-
-
-

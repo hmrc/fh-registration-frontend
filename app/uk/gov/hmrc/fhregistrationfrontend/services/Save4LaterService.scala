@@ -36,12 +36,12 @@ object Save4LaterKeys {
   val verifiedEmailKey = "verifiedEmail"
   val v1ContactEmailKey = "v1ContactEmail"
   val pendingEmailKey = "pendingEmail"
-  def displayKeyForPage(pageId: String) =  s"display_$pageId"
-  val displayDesDeclarationKey =  s"display_des_declaration"
+  def displayKeyForPage(pageId: String) = s"display_$pageId"
+  val displayDesDeclarationKey = s"display_des_declaration"
 }
 
 @Singleton
-class Save4LaterService @Inject() (
+class Save4LaterService @Inject()(
   shortLivedCache: ShortLivedCache
 )(implicit ec: ExecutionContext) {
 
@@ -49,88 +49,77 @@ class Save4LaterService @Inject() (
 
   def fetch(userId: String)(implicit hc: HeaderCarrier) = shortLivedCache.fetch(userId)
 
-  def saveBusinessType(userId: String, businessType: BusinessType)(implicit hc: HeaderCarrier) = {
+  def saveBusinessType(userId: String, businessType: BusinessType)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, businessTypeKey, businessType)
-  }
 
-  def fetchBusinessType(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def fetchBusinessType(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] =
     fetchData4Later[String](userId, businessTypeKey)
-  }
 
-  def saveVerifiedEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+  def saveVerifiedEmail(userId: String, email: String)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, verifiedEmailKey, email)
-  }
 
-  def fetchVerifiedEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def fetchVerifiedEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] =
     fetchData4Later[String](userId, verifiedEmailKey)
-  }
 
-  def savePendingEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+  def savePendingEmail(userId: String, email: String)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, pendingEmailKey, email)
-  }
 
-  def saveV1ContactEmail(userId: String, email: String)(implicit hc: HeaderCarrier) = {
+  def saveV1ContactEmail(userId: String, email: String)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, v1ContactEmailKey, email)
-  }
 
-  def fetchV1ContactEmail(userId: String)(implicit hc: HeaderCarrier) = {
+  def fetchV1ContactEmail(userId: String)(implicit hc: HeaderCarrier) =
     fetchData4Later[String](userId, v1ContactEmailKey)
-  }
 
-  def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) = {
+  def deletePendingEmail(userId: String)(implicit hc: HeaderCarrier) =
     savePendingEmail(userId, "")
-  }
 
-  def fetchPendingEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    fetchData4Later[String](userId, pendingEmailKey).map { _.filterNot( _.isEmpty) }
-  }
+  def fetchPendingEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] =
+    fetchData4Later[String](userId, pendingEmailKey).map { _.filterNot(_.isEmpty) }
 
-  def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) = {
+  def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, businessRegistrationDetailsKey, brd)
-  }
 
-  def fetchBusinessRegistrationDetails(userId: String)(implicit hc: HeaderCarrier) = {
+  def fetchBusinessRegistrationDetails(userId: String)(implicit hc: HeaderCarrier) =
     fetchData4Later[BusinessRegistrationDetails](userId, businessRegistrationDetailsKey)
-  }
 
-  def fetchLastUpdateTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[Long]] = {
+  def fetchLastUpdateTime(userId: String)(implicit hc: HeaderCarrier): Future[Option[Long]] =
     fetchData4Later[Long](userId, userLastTimeSavedKey)
-  }
 
-  def removeUserData(userId: String)(implicit hc: HeaderCarrier): Future[Any] = {
+  def removeUserData(userId: String)(implicit hc: HeaderCarrier): Future[Any] =
     shortLivedCache.remove(userId)
-  }
 
-  def saveDraftData4Later[T](userId: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+  def saveDraftData4Later[T](userId: String, formId: String, data: T)(
+    implicit hc: HeaderCarrier,
+    formats: json.Format[T]): Future[Option[T]] = {
     val lastTimeUserSaved = System.currentTimeMillis()
     shortLivedCache.cache(userId, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
-      shortLivedCache.cache(userId, formId, data) map {
-        data ⇒ data.getEntry[T](formId)
+      shortLivedCache.cache(userId, formId, data) map { data ⇒
+        data.getEntry[T](formId)
       }
     }
   }
 
-  def saveJourneyType(userId: String, journeyType: JourneyType)(implicit hc: HeaderCarrier) = {
-    shortLivedCache.cache(userId, journeyTypeKey, journeyType) map {
-      data ⇒ data.getEntry[JourneyType](journeyTypeKey)
+  def saveJourneyType(userId: String, journeyType: JourneyType)(implicit hc: HeaderCarrier) =
+    shortLivedCache.cache(userId, journeyTypeKey, journeyType) map { data ⇒
+      data.getEntry[JourneyType](journeyTypeKey)
     }
-  }
 
-
-  def saveDisplayData4Later[T](userId: String, formId: String, data: T)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] = {
+  def saveDisplayData4Later[T](userId: String, formId: String, data: T)(
+    implicit hc: HeaderCarrier,
+    formats: json.Format[T]): Future[Option[T]] = {
     val key = displayKeyForPage(formId)
-    shortLivedCache.cache(userId, key, data) map {
-      data ⇒ data.getEntry[T](key)
+    shortLivedCache.cache(userId, key, data) map { data ⇒
+      data.getEntry[T](key)
     }
   }
 
-  def saveDisplayDeclaration(userId: String, declaration: des.Declaration)(implicit hc: HeaderCarrier) = {
-    shortLivedCache.cache(userId, displayDesDeclarationKey, declaration) map {
-      data ⇒ data.getEntry[des.Declaration](displayDesDeclarationKey)
+  def saveDisplayDeclaration(userId: String, declaration: des.Declaration)(implicit hc: HeaderCarrier) =
+    shortLivedCache.cache(userId, displayDesDeclarationKey, declaration) map { data ⇒
+      data.getEntry[des.Declaration](displayDesDeclarationKey)
     }
-  }
 
-  def fetchData4Later[T](utr: String, formId: String)(implicit hc: HeaderCarrier, formats: json.Format[T]): Future[Option[T]] =
+  def fetchData4Later[T](utr: String, formId: String)(
+    implicit hc: HeaderCarrier,
+    formats: json.Format[T]): Future[Option[T]] =
     shortLivedCache.fetchAndGetEntry[T](utr, formId)
 }
-

@@ -26,15 +26,12 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 
 import scala.concurrent.Future
 
-class PdfDownloadControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with ActionsMock
-    with BeforeAndAfterEach
-{
+class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock with BeforeAndAfterEach {
 
   val mockKeyStore = mock[KeyStoreService]
 
-  val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockMcc, mockActions)(scala.concurrent.ExecutionContext.Implicits.global)
+  val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockMcc, mockActions)(
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -67,7 +64,6 @@ class PdfDownloadControllerSpec
     }
   }
 
-  def setupKeyStore(summaryText: Option[String]): Unit = {
+  def setupKeyStore(summaryText: Option[String]): Unit =
     when(mockKeyStore.fetchSummaryForPrint()(any())) thenReturn Future.successful(summaryText)
-  }
 }

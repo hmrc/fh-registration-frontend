@@ -24,14 +24,14 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.Fhdd
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
 case class StatusPageParams(
-                             status: FhddsStatus,
-                             cta: Call,
-                             secondary: Option[Call],
-                             nextTemplate: (StatusPageParams, Messages, AppConfig) => HtmlFormat.Appendable,
-                             category: String = "pre",
-                             showSubHeading: Boolean = true,
-                             showSteps: Boolean = false
-                           )
+  status: FhddsStatus,
+  cta: Call,
+  secondary: Option[Call],
+  nextTemplate: (StatusPageParams, Messages, AppConfig) => HtmlFormat.Appendable,
+  category: String = "pre",
+  showSubHeading: Boolean = true,
+  showSteps: Boolean = false
+)
 
 object StatusPageParams {
   val statusParams = List(

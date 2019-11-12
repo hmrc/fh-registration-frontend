@@ -31,11 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilde
 import scala.concurrent.Future
 
 class FormPageControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with ActionsMock
-    with Save4LaterMocks
-    with BeforeAndAfterEach
-{
+    extends ControllerSpecWithGuiceApp with ActionsMock with Save4LaterMocks with BeforeAndAfterEach {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -48,7 +44,9 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions)(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions)(
+    mockSave4Later,
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   "load" should {
     "Render the page" in {
@@ -120,7 +118,7 @@ class FormPageControllerSpec
       val addressForm = Seq(
         "Line1" → "Some",
         "postcode" → "AA11 1AA"
-      ).map { case (k, v) ⇒ s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v}
+      ).map { case (k, v) ⇒ s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
 
       val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
       val result = await(csrfAddToken(controller.save(page.id))(request))
@@ -221,10 +219,7 @@ class FormPageControllerSpec
 
       val page = Page.businessPartnersPage
 
-      setupPageAction(
-        page,
-        journeyPages = JourneyRequestBuilder.fullyCompleteJourney(),
-        cacheMap = cacheMap)
+      setupPageAction(page, journeyPages = JourneyRequestBuilder.fullyCompleteJourney(), cacheMap = cacheMap)
 
       setupSave4LaterFrom(cacheMap)
 
@@ -311,7 +306,7 @@ class FormPageControllerSpec
     ) ++ addressForm
 
     individualPartner.map {
-      case (k, v ) ⇒ s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
+      case (k, v) ⇒ s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
     } +
       (BusinessPartnersForm.businessPartnersTypeKey → BusinessPartnerType.Individual.toString) +
       ("addMore" → addMore.toString)

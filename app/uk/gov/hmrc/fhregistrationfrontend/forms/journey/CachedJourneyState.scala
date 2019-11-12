@@ -30,17 +30,18 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
     case index ⇒ pages take index forall isPageComplete
   }
 
-  override def nextPageToComplete(): Option[String] = pages find { p ⇒ !isPageComplete(p)} map (_.id)
-
+  override def nextPageToComplete(): Option[String] =
+    pages find { p ⇒
+      !isPageComplete(p)
+    } map (_.id)
 
   override def isPageComplete(page: AnyPage) = page.pageStatus == Completed
 
-  def get[T](pageId: String): Option[Page[T]] = {
-    pages find ( _.id == pageId) map (_.asInstanceOf[Page[T]])
-  }
+  def get[T](pageId: String): Option[Page[T]] =
+    pages find (_.id == pageId) map (_.asInstanceOf[Page[T]])
 
   override def lastEditedPage: Option[AnyPage] = {
-    val firstNotCompletedIndex = pages indexWhere ( _.pageStatus != Completed)
+    val firstNotCompletedIndex = pages indexWhere (_.pageStatus != Completed)
 
     if (firstNotCompletedIndex < 0)
       None

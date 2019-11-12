@@ -32,14 +32,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs._
 import scala.concurrent.Future
 
 class ApplicationControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with FhddsConnectorMocks
-    with ActionsMock
-    with Save4LaterMocks
-    with JourneyRequestBuilder
-    with BeforeAndAfterEach
-    with BeforeAndAfter
-{
+    extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks
+    with JourneyRequestBuilder with BeforeAndAfterEach with BeforeAndAfter {
 
   val mockBusinessCustomerConnector = mock[BusinessCustomerFrontendConnector]
 
@@ -171,7 +165,7 @@ class ApplicationControllerSpec
 
       val cacheMap = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
-          .cacheMap
+        .cacheMap
 
       setupSave4LaterFrom(cacheMap)
       val request = FakeRequest()
@@ -364,7 +358,6 @@ class ApplicationControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/businessType")
     }
 
-
     "Render the continue_delete page" in {
       setupUserAction()
       val cacheMap = CacheMapBuilder(testUserId)
@@ -385,7 +378,8 @@ class ApplicationControllerSpec
     "Redirect to the businessType page" in {
       setupNewApplicationAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
-      when(mockBusinessCustomerConnector.getReviewDetails(any(), any())) thenReturn Future.successful(FormTestData.someBpr)
+      when(mockBusinessCustomerConnector.getReviewDetails(any(), any())) thenReturn Future.successful(
+        FormTestData.someBpr)
 
       val request = FakeRequest()
       val result = await(controller continueWithBpr request)

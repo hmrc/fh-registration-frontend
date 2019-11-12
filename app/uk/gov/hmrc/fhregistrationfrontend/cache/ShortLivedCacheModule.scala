@@ -33,7 +33,7 @@ class ShortLivedCacheModule extends Module {
 }
 
 @Singleton
-class DefaultShortLivedCache @Inject() (
+class DefaultShortLivedCache @Inject()(
   override val shortLiveCache: ShortLivedHttpCaching,
   val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
@@ -41,15 +41,18 @@ class DefaultShortLivedCache @Inject() (
 }
 
 @Singleton
-class DefaultShortLivedHttpCaching @Inject() (
+class DefaultShortLivedHttpCaching @Inject()(
   override val http: HttpClient,
   val runModeConfiguration: Configuration,
   val runMode: RunMode,
   environment: Environment
 ) extends ServicesConfig(runModeConfiguration, runMode) with client.ShortLivedHttpCaching {
 
-  override lazy val defaultSource: String = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
+  override lazy val defaultSource: String =
+    getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri: String = baseUrl("cachable.short-lived-cache")
-  override lazy val domain: String = getConfString("cachable.short-lived-cache.domain", throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))
+  override lazy val domain: String = getConfString(
+    "cachable.short-lived-cache.domain",
+    throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))
 
 }

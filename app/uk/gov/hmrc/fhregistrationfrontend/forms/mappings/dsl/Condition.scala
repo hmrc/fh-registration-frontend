@@ -24,12 +24,14 @@ trait Condition {
   def withPrefix(prefix: String): Condition
 }
 
-
 class ConditionIs[T](mapping: Mapping[T], value: T) extends Condition {
-  override def eval(data: Map[String, String]): Boolean = mapping.bind(data).fold(
-    _ ⇒ false,
-    _ == value
-  )
+  override def eval(data: Map[String, String]): Boolean =
+    mapping
+      .bind(data)
+      .fold(
+        _ ⇒ false,
+        _ == value
+      )
 
   override def withPrefix(prefix: String): Condition = new ConditionIs(mapping withPrefix prefix, value)
 }

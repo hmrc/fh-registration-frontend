@@ -31,19 +31,18 @@ import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 import scala.util.Try
 
-
 case class RepeatingPage[T](
-  id           : String,
-  renderer     : RepeatedFormRendering[(T, Boolean)],
-  mapping      : Mapping[T],
-  value        : ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
+  id: String,
+  renderer: RepeatedFormRendering[(T, Boolean)],
+  mapping: Mapping[T],
+  value: ListWithTrackedChanges[T] = ListWithTrackedChanges.empty[T](),
   updatedAddresses: List[Address] = List.empty,
-  index        : Int = 0,
-  minItems     : Int = 1,
-  maxItems     : Int = 100,
+  index: Int = 0,
+  minItems: Int = 1,
+  maxItems: Int = 100,
   addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
-)(implicit val format: Format[ListWithTrackedChanges[T]]) extends Page[ListWithTrackedChanges[T]] {
-
+)(implicit val format: Format[ListWithTrackedChanges[T]])
+    extends Page[ListWithTrackedChanges[T]] {
 
   val AddMoreKey = "addMore"
   val ElementKey = "element"
@@ -58,15 +57,14 @@ case class RepeatingPage[T](
   override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
-    case None                       ⇒ this copy (index = 0)
+    case None ⇒ this copy (index = 0)
     case Some(v) if validSection(v) ⇒ this copy (index = v.toInt - 1)
   }
 
-  private def validSection(sectionId: String): Boolean = {
+  private def validSection(sectionId: String): Boolean =
     Try(sectionId.toInt)
       .map(s ⇒ s >= 1 && s <= value.size + 1 && s <= maxItems)
       .getOrElse(false)
-  }
 
   override def nextSubsection: Option[String] =
     if (value.addMore)
@@ -76,14 +74,14 @@ case class RepeatingPage[T](
     else
       None
 
-
   override def previousSubsection: Option[String] =
     if (index == 0) None
     else Some(section(index - 1))
 
   def section(index: Int) = (index + 1).toString
 
-  override def parseFromRequest[X](onErrors: Rendering ⇒ X, onSuccess: Page[ListWithTrackedChanges[T]] ⇒ X)(implicit r: Request[_]): X = {
+  override def parseFromRequest[X](onErrors: Rendering ⇒ X, onSuccess: Page[ListWithTrackedChanges[T]] ⇒ X)(
+    implicit r: Request[_]): X = {
     val updatedForm = form.bindFromRequest
     if (updatedForm.hasErrors)
       onErrors(errorRenderer(updatedForm))
@@ -109,20 +107,21 @@ case class RepeatingPage[T](
     }
   }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+  override def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     val filledForm =
       if (index < value.size) form fill ((value(index), value.addMore))
       else form
-
-
 
     renderer.render(filledForm, bpr, navigation, section(index), renderingParams)
   }
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+    override def render(
+      bpr: BusinessRegistrationDetails,
+      navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
       renderer.render(form, bpr, navigation, section(index), renderingParams)
-    }
   }
 
   def renderingParams = RepeatingPageParams(
@@ -142,7 +141,7 @@ case class RepeatingPage[T](
       Some(this copy (value = value remove index))
 
   override def pageStatus: PageStatus =
-    if (value.size == 0 && minItems > 0 ) NotStarted
+    if (value.size == 0 && minItems > 0) NotStarted
     else if (value.size < minItems) InProgress
     else if (value.addMore) InProgress
     else Completed

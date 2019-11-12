@@ -21,5 +21,3 @@ case class Navigation(lastUpdateTimestamp: Long, back: Option[Link])
 object Navigation {
   def noNavigation = Navigation(0, None)
 }
-
-

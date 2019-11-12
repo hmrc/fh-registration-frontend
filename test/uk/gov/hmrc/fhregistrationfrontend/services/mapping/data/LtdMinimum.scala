@@ -53,12 +53,15 @@ object LtdMinimum {
             "M",
             true,
             Some("AA123456A"),
-            None, None, None,
+            None,
+            None,
+            None,
             "Director"
           )
         ) → changeFlags),
       List.empty,
-      false),
+      false
+    ),
     BusinessStatus(false, None),
     ImportingActivities(false, None),
     BusinessCustomers("1-10"),
@@ -71,9 +74,10 @@ object LtdMinimum {
     "Director",
     false,
     None,
-    Some(AlternativeEmail(
-      "a@a.ro",
-      "a@a.ro"
-    ))
+    Some(
+      AlternativeEmail(
+        "a@a.ro",
+        "a@a.ro"
+      ))
   )
 }

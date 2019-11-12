@@ -28,31 +28,23 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.concurrent.{Await, Promise}
 
 trait ActionSpecBase
-  extends UnitSpec
-    with ScalaFutures
-    with MockitoSugar
-    with BeforeAndAfterEach
-    with Matchers
-    with Results
-    with Status
+    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterEach with Matchers with Results with Status
     with UserTestData {
-
-
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A])(implicit timeout: Timeout) = {
     val p = Promise[P[_]]
-    val result = action.invokeBlock(request, {
-      r: P[A] ⇒
-        p success r
-        Ok
+    val result = action.invokeBlock(request, { r: P[A] ⇒
+      p success r
+      Ok
     })
 
     status(result) shouldBe OK
     Await.result(p.future, timeout.duration)
   }
 
-  def result[P[_], R[_], A](action: ActionFunction[R, P], request: R[A]) = {
-    action.invokeBlock(request, { r: P[A] ⇒ Ok })
-  }
+  def result[P[_], R[_], A](action: ActionFunction[R, P], request: R[A]) =
+    action.invokeBlock(request, { r: P[A] ⇒
+      Ok
+    })
 
 }

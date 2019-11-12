@@ -22,7 +22,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{nino, yesOrNo
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 
-
 object NationalInsuranceNumberForm {
 
   val hasNationalInsuranceNumberKey = "nationalInsuranceNumber_yesNo"

@@ -36,30 +36,27 @@ trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
 
   val mockFhddsConnector = mock[FhddsConnector]
 
-  def setupFhddsEnrolmentProgress(enrolmentProgress: EnrolmentProgress) = {
+  def setupFhddsEnrolmentProgress(enrolmentProgress: EnrolmentProgress) =
     when(mockFhddsConnector.getEnrolmentProgress(any())) thenReturn enrolmentProgress
-  }
 
-  def setupFhddsStatus(fhddsStatus: FhddsStatus, registrationNumber: String = registrationNumber) = {
+  def setupFhddsStatus(fhddsStatus: FhddsStatus, registrationNumber: String = registrationNumber) =
     when(mockFhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-  }
 
-
-  def setupDesDisplayResult(jsonFile: String = "limited-company/fhdds-limited-company-large-uk", registrationNumber: String = registrationNumber) = {
-    when(mockFhddsConnector.getSubmission(same(registrationNumber))(any())) thenReturn Future.successful(loadDesDataFile(jsonFile))
-  }
+  def setupDesDisplayResult(
+    jsonFile: String = "limited-company/fhdds-limited-company-large-uk",
+    registrationNumber: String = registrationNumber) =
+    when(mockFhddsConnector.getSubmission(same(registrationNumber))(any())) thenReturn Future.successful(
+      loadDesDataFile(jsonFile))
 
   private def loadDesDataFile(jsonFile: String): SubscriptionDisplayWrapper = {
     val resource = getClass.getResourceAsStream(s"/json/valid/display/$jsonFile.json")
     Json.parse(resource).as[SubscriptionDisplayWrapper]
   }
 
-  def setupDeregister(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) = {
+  def setupDeregister(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) =
     when(mockFhddsConnector.deregister(same(registrationNumber), any())(any())) thenReturn Future.successful(new Date())
-  }
 
-  def setupWithdrawal(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) = {
+  def setupWithdrawal(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) =
     when(mockFhddsConnector.withdraw(same(registrationNumber), any())(any())) thenReturn Future.successful(new Date())
 
-  }
 }

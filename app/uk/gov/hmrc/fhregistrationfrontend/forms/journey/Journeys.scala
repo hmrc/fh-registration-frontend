@@ -64,15 +64,14 @@ object Journeys {
       Page.otherStoragePremisesPage
     )
 
-  def unapplyApplication(application: BusinessEntityApplication): JourneyPages = {
+  def unapplyApplication(application: BusinessEntityApplication): JourneyPages =
     application match {
       case a: LimitedCompanyApplication ⇒ Journeys unapplyLimitedCompanyApplication a
       case a: SoleProprietorApplication ⇒ Journeys unapplySoleTraderApplication a
       case a: PartnershipApplication ⇒ Journeys unapplyPartnershipApplication a
     }
-  }
 
-  def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) = {
+  def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) =
     new JourneyPages(
       Seq[AnyPage](
         mainBusinessAddressPage withData a.mainBusinessAddress,
@@ -88,9 +87,8 @@ object Journeys {
         otherStoragePremisesPage withData a.otherStoragePremises
       )
     )
-  }
 
-  def unapplySoleTraderApplication(a: SoleProprietorApplication) = {
+  def unapplySoleTraderApplication(a: SoleProprietorApplication) =
     new JourneyPages(
       Seq[Page[_]](
         mainBusinessAddressPage withData a.mainBusinessAddress,
@@ -104,37 +102,33 @@ object Journeys {
         otherStoragePremisesPage withData a.otherStoragePremises
       )
     )
-  }
 
-
-  def unapplyPartnershipApplication(a: PartnershipApplication) = {
+  def unapplyPartnershipApplication(a: PartnershipApplication) =
     new JourneyPages(
       Seq[Page[_]](
         mainBusinessAddressPage withData a.mainBusinessAddress,
         contactPersonPage withData a.contactPerson,
         tradingNamePage withData a.tradingName,
-        vatNumberPage  withData a.vatNumber,
+        vatNumberPage withData a.vatNumber,
         businessPartnersPage withData a.businessPartners,
         businessStatusPage withData a.businessStatus,
         importingActivitiesPage withData a.importingActivities,
         businessCustomersPage withData a.businessCustomers,
         otherStoragePremisesPage withData a.otherStoragePremises
-
       )
     )
-  }
 
-  def partnershipApplication(pageDataLoader: PageDataLoader) =  PartnershipApplication(
-      pageDataLoader pageData mainBusinessAddressPage,
-      pageDataLoader pageData contactPersonPage,
-      pageDataLoader pageData tradingNamePage,
-      pageDataLoader pageData vatNumberPage,
-      pageDataLoader pageData businessPartnersPage,
-      pageDataLoader pageData businessStatusPage,
-      pageDataLoader pageData importingActivitiesPage,
-      pageDataLoader pageData businessCustomersPage,
-      pageDataLoader pageData otherStoragePremisesPage
-    )
+  def partnershipApplication(pageDataLoader: PageDataLoader) = PartnershipApplication(
+    pageDataLoader pageData mainBusinessAddressPage,
+    pageDataLoader pageData contactPersonPage,
+    pageDataLoader pageData tradingNamePage,
+    pageDataLoader pageData vatNumberPage,
+    pageDataLoader pageData businessPartnersPage,
+    pageDataLoader pageData businessStatusPage,
+    pageDataLoader pageData importingActivitiesPage,
+    pageDataLoader pageData businessCustomersPage,
+    pageDataLoader pageData otherStoragePremisesPage
+  )
 
   def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
     pageDataLoader pageData mainBusinessAddressPage,
@@ -149,18 +143,18 @@ object Journeys {
   )
 
   def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
-      pageDataLoader pageData mainBusinessAddressPage,
-      pageDataLoader pageData contactPersonPage,
-      pageDataLoader pageData companyRegistrationNumberPage,
-      pageDataLoader pageData dateOfIncorporationPage,
-      pageDataLoader pageData tradingNamePage,
-      pageDataLoader pageData vatNumberPage,
-      pageDataLoader pageData companyOfficersPage,
-      pageDataLoader pageData businessStatusPage,
-      pageDataLoader pageData importingActivitiesPage,
-      pageDataLoader pageData businessCustomersPage,
-      pageDataLoader pageData otherStoragePremisesPage
-    )
+    pageDataLoader pageData mainBusinessAddressPage,
+    pageDataLoader pageData contactPersonPage,
+    pageDataLoader pageData companyRegistrationNumberPage,
+    pageDataLoader pageData dateOfIncorporationPage,
+    pageDataLoader pageData tradingNamePage,
+    pageDataLoader pageData vatNumberPage,
+    pageDataLoader pageData companyOfficersPage,
+    pageDataLoader pageData businessStatusPage,
+    pageDataLoader pageData importingActivitiesPage,
+    pageDataLoader pageData businessCustomersPage,
+    pageDataLoader pageData otherStoragePremisesPage
+  )
 
   def linearJourney(journeyPages: JourneyPages) = new LinearJourney(journeyPages)
   def summaryJourney(journeyPages: JourneyPages) = new SummaryJourney()

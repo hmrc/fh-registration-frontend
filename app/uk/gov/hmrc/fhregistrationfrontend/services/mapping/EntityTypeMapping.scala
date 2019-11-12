@@ -22,17 +22,16 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 object EntityTypeMapping {
 
   def desToForm(organizationType: String) = organizationType match {
-    case "Corporate Body"  ⇒ BusinessType.CorporateBody
-    case "Partnership"     ⇒ BusinessType.Partnership
+    case "Corporate Body" ⇒ BusinessType.CorporateBody
+    case "Partnership" ⇒ BusinessType.Partnership
     case "Sole Proprietor" ⇒ BusinessType.SoleTrader
-    case _                 ⇒ throw new ReverseMappingException("unknwon entity type")
+    case _ ⇒ throw new ReverseMappingException("unknwon entity type")
   }
 
-  def formToDes(businessType       : BusinessType) = businessType match {
+  def formToDes(businessType: BusinessType) = businessType match {
     case BusinessType.CorporateBody ⇒ "Corporate Body"
-    case BusinessType.Partnership   ⇒ "Partnership"
-    case BusinessType.SoleTrader    ⇒ "Sole Proprietor"
+    case BusinessType.Partnership ⇒ "Partnership"
+    case BusinessType.SoleTrader ⇒ "Sole Proprietor"
   }
-
 
 }

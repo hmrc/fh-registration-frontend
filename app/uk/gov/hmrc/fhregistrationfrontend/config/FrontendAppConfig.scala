@@ -40,13 +40,17 @@ class FrontendAppConfig @Inject()(
   configuration: play.api.Configuration,
   val runModeConfiguration: Configuration,
   val runMode: RunMode,
-  environment: Environment) extends ServicesConfig(runModeConfiguration, runMode) with AppConfig {
+  environment: Environment)
+    extends ServicesConfig(runModeConfiguration, runMode) with AppConfig {
 
-  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def loadConfig(key: String) =
+    configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
-  override lazy val exciseEnquiryLink: String = getConfString("exciseEnquiryLink", "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries")
+  override lazy val exciseEnquiryLink: String = getConfString(
+    "exciseEnquiryLink",
+    "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries")
 
   override lazy val appName: String = loadConfig("appName")
 
@@ -54,17 +58,18 @@ class FrontendAppConfig @Inject()(
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   override lazy val analyticsGovUkToken: String = loadConfig(s"google-analytics.govuk-token")
-  override lazy val reportAProblemPartialUrl = s"$contactFrontend/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  override lazy val reportAProblemNonJSUrl = s"$contactFrontend/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  override lazy val exitSurveyUrl: String = s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
+  override lazy val reportAProblemPartialUrl =
+    s"$contactFrontend/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  override lazy val reportAProblemNonJSUrl =
+    s"$contactFrontend/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  override lazy val exitSurveyUrl: String =
+    s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
 
-  override def emailVerificationCallback(hash: String) = {
+  override def emailVerificationCallback(hash: String) =
     s"$fhddsFrontendUrl/email-verify/$hash"
-  }
 
   lazy val username = getString("credentials.username")
   lazy val password = getString("credentials.password")
 
   override def getConfiguration: Configuration = configuration
 }
-

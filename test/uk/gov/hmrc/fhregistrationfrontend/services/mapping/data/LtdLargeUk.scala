@@ -26,15 +26,16 @@ object LtdLargeUk {
     MainBusinessAddress(
       "Less than 3 years",
       Some(true),
-      Some(Address(
-        "Flat 1A",
-        None,
-        None,
-        Some("Testtown"),
-        "ZZ11 1ZZ",
-        None,
-        None
-      )),
+      Some(
+        Address(
+          "Flat 1A",
+          None,
+          None,
+          Some("Testtown"),
+          "ZZ11 1ZZ",
+          None,
+          None
+        )),
       Some(LocalDate.of(2015, 3, 20))
     ),
     ContactPerson(
@@ -53,16 +54,19 @@ object LtdLargeUk {
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
     ListWithTrackedChanges(
-      List(CompanyOfficer(
-        CompanyOfficerType.Individual,
-        CompanyOfficerIndividual(
-          "Cosmin",
-          "M",
-          true,
-          Some("AA123123A"),
-          None, None, None,
-          "Company Secretary"
-        )) → changeFlags,
+      List(
+        CompanyOfficer(
+          CompanyOfficerType.Individual,
+          CompanyOfficerIndividual(
+            "Cosmin",
+            "M",
+            true,
+            Some("AA123123A"),
+            None,
+            None,
+            None,
+            "Company Secretary"
+          )) → changeFlags,
         CompanyOfficer(
           CompanyOfficerType.Individual,
           CompanyOfficerIndividual(
@@ -70,7 +74,9 @@ object LtdLargeUk {
             "M",
             true,
             Some("AA123231"),
-            None, None, None,
+            None,
+            None,
+            None,
             "Director"
           )
         ) → changeFlags,
@@ -83,23 +89,25 @@ object LtdLargeUk {
             None,
             "Company Secretary"
           )
-        ) → changeFlags),
+        ) → changeFlags
+      ),
       List.empty,
-      false),
-    BusinessStatus(true, Some(LocalDate.of(2018,6, 30))),
+      false
+    ),
+    BusinessStatus(true, Some(LocalDate.of(2018, 6, 30))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
-    OtherStoragePremises(true,
+    OtherStoragePremises(
+      true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(
-            Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
-            false) → changeFlags,
-          StoragePremise(
-            Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
-            true) → changeFlags),
+          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → changeFlags,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → changeFlags
+        ),
         List.empty,
-        false))
+        false
+      )
+    )
   )
 
   val verifiedEmail = "a@w.ro"
@@ -108,9 +116,10 @@ object LtdLargeUk {
     "D",
     false,
     Some("cosmin@cosmin.co.uk"),
-    Some(AlternativeEmail(
-      "a@b.co",
-      "a@b.co"
-    ))
+    Some(
+      AlternativeEmail(
+        "a@b.co",
+        "a@b.co"
+      ))
   )
 }

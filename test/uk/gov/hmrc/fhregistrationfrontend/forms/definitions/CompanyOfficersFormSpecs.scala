@@ -23,7 +23,6 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
   override val form = CompanyOfficersForm.companyOfficerForm
 
-
   val validIndividual = Map(
     "firstName" → "George",
     "lastName" → "Costanza",
@@ -35,8 +34,11 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
   "Company Officer as Individual" should {
     "reject when missing values" in {
       val required = Seq(
-        "firstName", "lastName", "hasNationalInsuranceNumber", "role"
-      ) map {_ → "error.required"}
+        "firstName",
+        "lastName",
+        "hasNationalInsuranceNumber",
+        "role"
+      ) map { _ → "error.required" }
 
       formDataHasErrors(
         individual(),
@@ -78,7 +80,6 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
       )
     }
 
-
     "reject when wrong role" in {
       formDataHasErrors(
         individual(
@@ -105,15 +106,16 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
   "Company Officer as Company" should {
     "reject when missing values" in {
       val required = Seq(
-        "companyName", "hasVat", "role"
-      ) map {_ → "error.required"}
+        "companyName",
+        "hasVat",
+        "role"
+      ) map { _ → "error.required" }
 
       formDataHasErrors(
         company(),
         companyErrors(required: _*)
       )
     }
-
 
     "reject when no vat" in {
       formDataHasErrors(
@@ -152,19 +154,15 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
   }
 
   def individualErrors(errors: (String, String)*) =
-    errors map { case (k,v) ⇒ s"individualIdentification.$k" -> v} toList
+    errors map { case (k, v) ⇒ s"individualIdentification.$k" -> v } toList
 
-  def individual(data: (String, String)*) = {
+  def individual(data: (String, String)*) =
     (data map { case (k, v) ⇒ s"individualIdentification.$k" -> v }).toMap + ("identificationType" → "Individual")
-  }
-
 
   def companyErrors(errors: (String, String)*) =
-    errors map { case (k,v) ⇒ s"companyIdentification.$k" -> v} toList
+    errors map { case (k, v) ⇒ s"companyIdentification.$k" -> v } toList
 
-  def company(data: (String, String)*) = {
+  def company(data: (String, String)*) =
     (data map { case (k, v) ⇒ s"companyIdentification.$k" -> v }).toMap + ("identificationType" → "Company")
-  }
-
 
 }

@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl
 
-
 import play.api.data.validation.Constraint
 import play.api.data.{FormError, Mapping}
 
-case class OnlyWhen[T](
-  wrapped: Mapping[T],
-  condition: Condition,
-  val constraints: Seq[Constraint[Option[T]]] = Nil) extends Mapping[Option[T]] {
+case class OnlyWhen[T](wrapped: Mapping[T], condition: Condition, val constraints: Seq[Constraint[Option[T]]] = Nil)
+    extends Mapping[Option[T]] {
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
@@ -38,7 +35,7 @@ case class OnlyWhen[T](
     else
       wrapped bind data fold (
         errors ⇒ Left(errors),
-        valid ⇒  Right(Some(valid))
+        valid ⇒ Right(Some(valid))
       )
   }
 
@@ -53,9 +50,7 @@ case class OnlyWhen[T](
 //    copy(wrapped = wrapped withPrefix prefix, condition = condition withPrefix prefix)
     copy(wrapped = wrapped withPrefix prefix)
 
-  def verifying(addConstraints: Constraint[Option[T]]*): Mapping[Option[T]] = {
+  def verifying(addConstraints: Constraint[Option[T]]*): Mapping[Option[T]] =
     this.copy(constraints = constraints ++ addConstraints.toSeq)
-  }
-
 
 }

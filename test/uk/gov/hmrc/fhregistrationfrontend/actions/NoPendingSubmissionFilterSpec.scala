@@ -24,7 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, Stubbe
 class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
   val request = new UserRequest("id", None, None, Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
-  lazy val filter = new NoPendingSubmissionFilter(mockFhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val filter = new NoPendingSubmissionFilter(mockFhddsConnector)(
+    StubbedErrorHandler,
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   "No pending submission filter" should {
     "allow user to proceed" in {

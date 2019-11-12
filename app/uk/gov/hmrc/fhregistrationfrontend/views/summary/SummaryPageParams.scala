@@ -19,6 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 
 case class SummaryPageParams(
-                              mode: Mode,
-                              hasAmendments: Option[Boolean] = None
-                            )
+  mode: Mode,
+  hasAmendments: Option[Boolean] = None
+)

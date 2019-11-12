@@ -31,12 +31,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendmentControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with BeforeAndAfterEach
-    with ActionsMock
-    with FhddsConnectorMocks
-    with EmailVerificationConnectorMocks
-{
+    extends ControllerSpecWithGuiceApp with BeforeAndAfterEach with ActionsMock with FhddsConnectorMocks
+    with EmailVerificationConnectorMocks {
 
   val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))
 
@@ -85,11 +81,11 @@ class AmendmentControllerSpec
 
       for (page ← Journeys.limitedCompanyPages) {
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
-        await(inMemorySave4Later.fetchData4Later[JsValue](
-          testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
+        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
       }
 
-      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(JourneyType.Amendment)
+      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(
+        JourneyType.Amendment)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
@@ -138,11 +134,11 @@ class AmendmentControllerSpec
 
       for (page ← Journeys.limitedCompanyPages) {
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
-        await(inMemorySave4Later.fetchData4Later[JsValue](
-          testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
+        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
       }
 
-      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(JourneyType.Amendment)
+      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(
+        JourneyType.Amendment)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")

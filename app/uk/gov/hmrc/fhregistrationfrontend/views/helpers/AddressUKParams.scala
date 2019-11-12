@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
-
 case class AddressUKParams(
   context: Option[String] = None,
-  name   : String,
-  label  : String,
+  name: String,
+  label: String,
   hasErrors: Boolean = false,
   error: Option[String] = None
 )

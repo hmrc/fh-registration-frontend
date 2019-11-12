@@ -31,7 +31,6 @@ import play.api.mvc.Call
   * @param changeLink uri for change links
   * @param groupRow  Enum for position in a group of rows
   */
-
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow.GroupRow
 
@@ -44,26 +43,35 @@ case class SummaryRowParams(
 
 object SummaryRowParams {
 
-  def ofString(label: Option[String], value: String, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+  def ofString(label: Option[String], value: String, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams =
     SummaryRowParams(label, Some(value), changeLink, groupRow)
-  }
 
-  def ofBoolean(label: Option[String], value: Option[Boolean], changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
-    SummaryRowParams(label, value map (if(_) "Yes" else "No"), changeLink, groupRow)
-  }
+  def ofBoolean(
+    label: Option[String],
+    value: Option[Boolean],
+    changeLink: Option[String],
+    groupRow: GroupRow): SummaryRowParams =
+    SummaryRowParams(label, value map (if (_) "Yes" else "No"), changeLink, groupRow)
 
-  def ofBoolean(label: Option[String], value: Boolean, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+  def ofBoolean(
+    label: Option[String],
+    value: Boolean,
+    changeLink: Option[String],
+    groupRow: GroupRow): SummaryRowParams =
     ofBoolean(label, Some(value), changeLink, groupRow)
-  }
 
-  def ofDate(label: Option[String], value: Option[LocalDate], changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+  def ofDate(
+    label: Option[String],
+    value: Option[LocalDate],
+    changeLink: Option[String],
+    groupRow: GroupRow): SummaryRowParams =
     SummaryRowParams(label, value map (_.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))), changeLink, groupRow)
-  }
 
-  def ofDate(label: Option[String], value: LocalDate, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams = {
+  def ofDate(
+    label: Option[String],
+    value: LocalDate,
+    changeLink: Option[String],
+    groupRow: GroupRow): SummaryRowParams =
     ofDate(label, Some(value), changeLink, groupRow)
-  }
 
 }
-
-

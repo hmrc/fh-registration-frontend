@@ -43,20 +43,20 @@ object SPLargeUk {
     NationalInsuranceNumber(true, Some("AA123111A")),
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
-    BusinessStatus(true, Some(LocalDate.of(2018,6, 30))),
+    BusinessStatus(true, Some(LocalDate.of(2018, 6, 30))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
-    OtherStoragePremises(true,
+    OtherStoragePremises(
+      true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(
-            Address("two flat", Some("two street"), None, Some("two town"), "Z99 2YY", None, None),
-            true) → changeFlags,
-          StoragePremise(
-            Address("25 Testing Close", None, None, Some("Othertown"), "AA01 0AA", None, None),
-            false) → changeFlags),
+          StoragePremise(Address("two flat", Some("two street"), None, Some("two town"), "Z99 2YY", None, None), true) → changeFlags,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "AA01 0AA", None, None), false) → changeFlags
+        ),
         List.empty,
-        false))
+        false
+      )
+    )
   )
   val verifiedEmail = "a@w.ro"
   val declaration = Declaration(
@@ -64,9 +64,10 @@ object SPLargeUk {
     "D",
     false,
     Some("cosmin@cosmin.co.uk"),
-    Some(AlternativeEmail(
-      "a@b.co",
-      "a@b.co"
-    ))
+    Some(
+      AlternativeEmail(
+        "a@b.co",
+        "a@b.co"
+      ))
   )
 }

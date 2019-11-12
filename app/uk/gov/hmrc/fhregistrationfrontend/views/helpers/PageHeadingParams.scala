@@ -17,6 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 case class PageHeadingParams(
-  heading   : String,
+  heading: String,
   classNames: Option[String] = None
 )

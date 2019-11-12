@@ -27,7 +27,7 @@ object DeregistrationReasonEnum extends Enumeration {
 
   implicit val format = Format(
     Reads.enumNameReads(DeregistrationReasonEnum),
-    Writes.enumNameWrites[this.type ]
+    Writes.enumNameWrites[this.type]
   )
 
 }

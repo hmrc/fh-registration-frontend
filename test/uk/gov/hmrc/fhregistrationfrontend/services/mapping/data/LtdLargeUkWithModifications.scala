@@ -44,16 +44,19 @@ object LtdLargeUkWithModifications {
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
     ListWithTrackedChanges(
-      List(CompanyOfficer(
-        CompanyOfficerType.Individual,
-        CompanyOfficerIndividual(
-          "Cosmin",
-          "M",
-          true,
-          Some("AA123123A"),
-          None, None, None,
-          "Company Secretary"
-        )) → ListWithTrackedChanges.Added,
+      List(
+        CompanyOfficer(
+          CompanyOfficerType.Individual,
+          CompanyOfficerIndividual(
+            "Cosmin",
+            "M",
+            true,
+            Some("AA123123A"),
+            None,
+            None,
+            None,
+            "Company Secretary"
+          )) → ListWithTrackedChanges.Added,
         CompanyOfficer(
           CompanyOfficerType.Individual,
           CompanyOfficerIndividual(
@@ -61,7 +64,9 @@ object LtdLargeUkWithModifications {
             "M",
             true,
             Some("AA123231"),
-            None, None, None,
+            None,
+            None,
+            None,
             "Director"
           )) → ListWithTrackedChanges.NoChange,
         CompanyOfficer(
@@ -73,7 +78,8 @@ object LtdLargeUkWithModifications {
             None,
             "Company Secretary"
           )
-        ) → ListWithTrackedChanges.Updated),
+        ) → ListWithTrackedChanges.Updated
+      ),
       List(
         CompanyOfficer(
           CompanyOfficerType.Company,
@@ -86,33 +92,24 @@ object LtdLargeUkWithModifications {
           )
         )
       ),
-      false),
+      false
+    ),
     BusinessStatus(true, Some(LocalDate.of(2018, 6, 30))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
-    OtherStoragePremises(true, ListWithTrackedChanges(
-      List(
-        StoragePremise(
-          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
-          false) → ListWithTrackedChanges.Added,
-        StoragePremise(
-          Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
-          true) → ListWithTrackedChanges.Updated,
-        StoragePremise(
-          Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
-          true) → ListWithTrackedChanges.NoChange
-      ),
-      List(StoragePremise(
-        Address(
-          "27 Testing Close",
-          None,
-          None,
-          Some("Othertown"),
-          "Z9 3WW",
-          None,
-          None),
-        true)),
-      false)))
+    OtherStoragePremises(
+      true,
+      ListWithTrackedChanges(
+        List(
+          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → ListWithTrackedChanges.Added,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.Updated,
+          StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.NoChange
+        ),
+        List(StoragePremise(Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)),
+        false
+      )
+    )
+  )
 
   val verifiedEmail = "a@w.ro"
 
@@ -121,9 +118,10 @@ object LtdLargeUkWithModifications {
     "D",
     false,
     Some("cosmin@cosmin.co.uk"),
-    Some(AlternativeEmail(
-      "a@b.co",
-      "a@b.co"
-    ))
+    Some(
+      AlternativeEmail(
+        "a@b.co",
+        "a@b.co"
+      ))
   )
 }

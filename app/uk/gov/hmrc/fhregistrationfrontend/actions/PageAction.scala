@@ -26,11 +26,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PageRequest[A](
-  val journey: JourneyNavigation,
-  p: AnyPage,
-  request: JourneyRequest[A]) extends WrappedRequest[A](request)
-{
+class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: JourneyRequest[A])
+    extends WrappedRequest[A](request) {
 
   def page[T]: Page[T] = p.asInstanceOf[Page[T]]
   def userId: String = request.userId
@@ -41,9 +38,10 @@ class PageRequest[A](
 }
 
 //TODO all exceptional results need to be reviewed
-class PageAction[T, V](pageId: String, sectionId: Option[String])
-  (implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-  extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
+class PageAction[T, V](pageId: String, sectionId: Option[String])(
+  implicit errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext)
+    extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
     implicit val r: JourneyRequest[A] = input
@@ -64,36 +62,33 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])
     result.value
   }
 
-  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]):  Either[Result, Boolean] = {
+  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
     if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
       Right(true)
     } else {
       Logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
-  }
 
-  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] = {
+  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] =
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else {
       Logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
-  }
 
   def loadPage[A](request: JourneyRequest[A]): Either[Result, Page[T]] =
     request.journeyState.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
-      case None       ⇒
+      case None ⇒
         Logger.error(s"Not found")
         Left(errorHandler.errorResultsPages(Results.NotFound)(request))
     }
 
-  def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) = {
+  def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) =
     if (state.isComplete)
       Journeys.summaryJourney(journeyPages)
     else
       Journeys.linearJourney(journeyPages)
-  }
 }

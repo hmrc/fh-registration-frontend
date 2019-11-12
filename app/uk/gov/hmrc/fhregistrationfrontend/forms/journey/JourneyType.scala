@@ -23,8 +23,5 @@ object JourneyType extends Enumeration {
 
   val New, Amendment, Variation = Value
 
-
-  implicit val businessTypeFormat = Format(
-    Reads.enumNameReads(JourneyType),
-    Writes.enumNameWrites[this.type ])
+  implicit val businessTypeFormat = Format(Reads.enumNameReads(JourneyType), Writes.enumNameWrites[this.type])
 }

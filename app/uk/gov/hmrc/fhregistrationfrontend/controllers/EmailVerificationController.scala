@@ -28,13 +28,13 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
-class EmailVerificationController @Inject() (
+class EmailVerificationController @Inject()(
   ds: CommonPlayDependencies,
   actions: Actions,
   cc: MessagesControllerComponents,
   emailVerificationConnector: EmailVerificationConnector,
-  save4LaterService: Save4LaterService)(implicit ec: ExecutionContext) extends AppController(ds, cc)
-{
+  save4LaterService: Save4LaterService)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) {
   import actions._
 
   def contactEmail = emailVerificationAction { implicit request ⇒
@@ -53,46 +53,50 @@ class EmailVerificationController @Inject() (
     doSubmitContactEmail(true)
   }
 
-  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) = {
+  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) =
     emailVerificationForm.bindFromRequest() fold (
-      formWithErrors ⇒ Future.successful(BadRequest(email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
+      formWithErrors ⇒
+        Future.successful(
+          BadRequest(email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
       emailOptions ⇒ handleContactEmail(emailOptions)
     )
-  }
 
-  private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) = {
-    emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap { isVerified ⇒
-      if (isVerified) {
-        save4LaterService
-          .saveVerifiedEmail(request.userId, emailOptions.email)
-          .map { _ ⇒ Redirect(routes.Application.resumeForm())}
-      } else {
-        save4LaterService
-          .savePendingEmail (request.userId, emailOptions.email)
-          .map { _ ⇒ Redirect(routes.EmailVerificationController.emailVerificationStatus())}
-      }
+  private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) =
+    emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap {
+      isVerified ⇒
+        if (isVerified) {
+          save4LaterService
+            .saveVerifiedEmail(request.userId, emailOptions.email)
+            .map { _ ⇒
+              Redirect(routes.Application.resumeForm())
+            }
+        } else {
+          save4LaterService
+            .savePendingEmail(request.userId, emailOptions.email)
+            .map { _ ⇒
+              Redirect(routes.EmailVerificationController.emailVerificationStatus())
+            }
+        }
     }
-
-  }
 
   private def emailHash(email: String) = email.hashCode.toHexString.toUpperCase
   private def hashMatches(email: String, hash: String) = emailHash(email) == hash
 
   def emailVerificationStatus = emailVerificationAction { implicit request ⇒
     (request.pendingEmail, request.verifiedEmail) match {
-      case (Some(pendingEmail), None)    ⇒
+      case (Some(pendingEmail), None) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
-      case (Some(pendingEmail), Some(verifiedEmail))
-        if pendingEmail == verifiedEmail ⇒ Redirect(routes.Application.resumeForm())
+      case (Some(pendingEmail), Some(verifiedEmail)) if pendingEmail == verifiedEmail ⇒
+        Redirect(routes.Application.resumeForm())
 
       case (Some(pendingEmail), Some(_)) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
-      case (None, Some(_))               ⇒ Redirect(routes.Application.resumeForm())
-      case (None, None)                  ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail())
+      case (None, Some(_)) ⇒ Redirect(routes.Application.resumeForm())
+      case (None, None) ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail())
 
     }
   }
@@ -133,16 +137,16 @@ class EmailVerificationController @Inject() (
     request.pendingEmail match {
       case Some(pendingEmail) if hashMatches(pendingEmail, token) ⇒
         for {
-          _ ←  save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
+          _ ← save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
           _ ← save4LaterService deletePendingEmail request.userId
         } yield {
           Redirect(routes.EmailVerificationController.emailVerified)
         }
-      case Some(pendingEmail)                                     ⇒
+      case Some(pendingEmail) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Future successful Ok(email_pending_verification(form, Navigation.noNavigation, None))
 
-      case None                                                   ⇒
+      case None ⇒
         Future successful Redirect(routes.Application.resumeForm())
     }
   }

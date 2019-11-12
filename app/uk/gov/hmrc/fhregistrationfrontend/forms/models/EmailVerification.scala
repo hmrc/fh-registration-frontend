@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class EmailVerification (
+case class EmailVerification(
   usingGgEmailAddress: Boolean,
   ggEmail: Option[String],
   alternativeEmail: Option[String]

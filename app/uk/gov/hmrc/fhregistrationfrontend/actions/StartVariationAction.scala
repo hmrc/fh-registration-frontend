@@ -23,11 +23,14 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.ExecutionContext
 
-class StartVariationAction(fhddsConnector: FhddsConnector)(implicit save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-  extends StartUpdateAction(fhddsConnector) {
+class StartVariationAction(fhddsConnector: FhddsConnector)(
+  implicit save4LaterService: Save4LaterService,
+  errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext)
+    extends StartUpdateAction(fhddsConnector) {
 
   def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
     case Approved | ApprovedWithConditions ⇒ true
-    case _                                 ⇒ false
+    case _ ⇒ false
   }
 }

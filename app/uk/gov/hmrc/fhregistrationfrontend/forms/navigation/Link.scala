@@ -20,5 +20,3 @@ trait Link
 
 case object SummaryPage extends Link
 case class FormPage(pageId: String, subsection: Option[String]) extends Link
-
-

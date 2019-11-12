@@ -40,7 +40,6 @@ class DiffSpecs extends UnitSpec {
   val businessStatusLens = GenLens[LimitedCompanyApplication](_.businessStatus)
   val tradingNameLens = GenLens[LimitedCompanyApplication](_.tradingName)
 
-
   "changeIndicators" should {
     "show no change" in {
       val subscription: Subscription = mkSubscription()
@@ -52,13 +51,13 @@ class DiffSpecs extends UnitSpec {
     "flag businessTypeChanged" when {
       val businessTypeChanged = changeIndicators(businessTypeChanged = true)
       "is not a new fulfilment" in {
-        testChangeIndicators(businessStatusLens set BusinessStatus(false, None), businessTypeChanged
-        )
+        testChangeIndicators(businessStatusLens set BusinessStatus(false, None), businessTypeChanged)
       }
 
       "proposed start date changed" in {
-        testChangeIndicators(businessStatusLens set BusinessStatus(true, Some(LocalDate.of(2018,7,30))), businessTypeChanged
-        )
+        testChangeIndicators(
+          businessStatusLens set BusinessStatus(true, Some(LocalDate.of(2018, 7, 30))),
+          businessTypeChanged)
       }
     }
 
@@ -86,7 +85,10 @@ class DiffSpecs extends UnitSpec {
     "flag coOfficialsChanged but not additionalBusinessInfoChanged" in {
       testChangeIndicators(
         companyOfficerLens modify { companyOfficers ⇒
-          ListWithTrackedChanges(companyOfficers.valuesWithStatus.tail, List(companyOfficers.valuesWithStatus.head._1), addMore = false)
+          ListWithTrackedChanges(
+            companyOfficers.valuesWithStatus.tail,
+            List(companyOfficers.valuesWithStatus.head._1),
+            addMore = false)
         },
         changeIndicators(coOfficialsChanged = true)
       )
@@ -96,9 +98,7 @@ class DiffSpecs extends UnitSpec {
       testChangeIndicators(
         otherStoragePremisesLens modify { otherStoragePremises ⇒
           val entries = otherStoragePremises.value.valuesWithStatus
-          OtherStoragePremises(
-            true,
-            ListWithTrackedChanges(entries.tail, List(entries.head._1), addMore = false))
+          OtherStoragePremises(true, ListWithTrackedChanges(entries.tail, List(entries.head._1), addMore = false))
         },
         changeIndicators(premisesChanged = true)
       )
@@ -116,11 +116,15 @@ class DiffSpecs extends UnitSpec {
       }
 
       "eori number changes" in {
-        testChangeIndicators(importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1111111111", true))), onlyAdditionalInfoChanged)
+        testChangeIndicators(
+          importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1111111111", true))),
+          onlyAdditionalInfoChanged)
       }
 
       "goods imported outside eori changes" in {
-        testChangeIndicators(importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1234123132", false))), onlyAdditionalInfoChanged)
+        testChangeIndicators(
+          importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1234123132", false))),
+          onlyAdditionalInfoChanged)
       }
 
       "number of customers changes" in {
@@ -133,8 +137,6 @@ class DiffSpecs extends UnitSpec {
           changeIndicators(additionalBusinessInfoChanged = true, businessDetailChanged = true))
       }
     }
-
-
 
   }
 
@@ -150,7 +152,6 @@ class DiffSpecs extends UnitSpec {
     result shouldBe expectedChangeIndicators
   }
 
-
   private def changeIndicators(
     businessTypeChanged: Boolean = false,
     businessDetailChanged: Boolean = false,
@@ -162,14 +163,24 @@ class DiffSpecs extends UnitSpec {
     additionalBusinessInfoChanged: Boolean = false,
     premisesChanged: Boolean = false,
     declarationChanged: Boolean = false
-  ) = ChangeIndicators(
-    businessTypeChanged, businessDetailChanged, partnersChanged,
-    businessAddressChanged, businessPreviousAddressChanged, contactDetailChanged,
-    coOfficialsChanged, additionalBusinessInfoChanged, premisesChanged, declarationChanged)
+  ) =
+    ChangeIndicators(
+      businessTypeChanged,
+      businessDetailChanged,
+      partnersChanged,
+      businessAddressChanged,
+      businessPreviousAddressChanged,
+      contactDetailChanged,
+      coOfficialsChanged,
+      additionalBusinessInfoChanged,
+      premisesChanged,
+      declarationChanged
+    )
 
-  private def brd(fileName: String): BusinessRegistrationDetails = Json
-    .parse(getClass.getResourceAsStream(s"/models/$fileName"))
-    .as[BusinessRegistrationDetails]
+  private def brd(fileName: String): BusinessRegistrationDetails =
+    Json
+      .parse(getClass.getResourceAsStream(s"/models/$fileName"))
+      .as[BusinessRegistrationDetails]
 
   private def mkSubscription(
     application: LimitedCompanyApplication = LtdLargeUk.application(),
@@ -182,7 +193,5 @@ class DiffSpecs extends UnitSpec {
     application,
     declaration
   )
-
-
 
 }

@@ -18,8 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-
-case class NationalInsuranceNumber (
+case class NationalInsuranceNumber(
   hasValue: Boolean,
   value: Option[String]
 )
