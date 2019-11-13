@@ -37,16 +37,19 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
 
-trait AppUnitGenerator extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
+trait AppUnitGenerator
+    extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
+  override implicit val patienceConfig: PatienceConfig =
+    PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
   val appInjector: Injector = app.injector
 
   implicit val materializer: Materializer = appInjector.instanceOf[Materializer]
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
   implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]

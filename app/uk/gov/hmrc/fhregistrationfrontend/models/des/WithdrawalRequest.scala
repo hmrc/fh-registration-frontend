@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.Json
 
-case class Withdrawal (
+case class Withdrawal(
   withdrawalDate: LocalDate,
   withdrawalReason: String,
   withdrawalReasonOther: Option[String]

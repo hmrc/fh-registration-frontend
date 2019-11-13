@@ -21,8 +21,8 @@ import java.time.LocalDate
 import play.api.libs.json.Json
 
 case class Deregistration(
-  date       : LocalDate,
-  reason     : String,
+  date: LocalDate,
+  reason: String,
   reasonOther: Option[String]
 )
 
@@ -31,7 +31,7 @@ object Deregistration extends DateTimeFormat {
 }
 
 case class DeregistrationRequest(
-  emailAddress  : String,
+  emailAddress: String,
   deregistration: Deregistration
 )
 

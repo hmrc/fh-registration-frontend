@@ -18,19 +18,20 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json.Json
 
-case class RoleInOrganization(beneficialShareHolder: Boolean,
-                              director: Boolean,
-                              partner: Boolean,
-                              internalAccountant: Boolean,
-                              soleProprietor: Boolean,
-                              nominatedOfficer: Boolean,
-                              designatedmember: Boolean,
-                              otherRoleType: Boolean,
-                              otherRoleDescription: Option[String])
+case class RoleInOrganization(
+  beneficialShareHolder: Boolean,
+  director: Boolean,
+  partner: Boolean,
+  internalAccountant: Boolean,
+  soleProprietor: Boolean,
+  nominatedOfficer: Boolean,
+  designatedmember: Boolean,
+  otherRoleType: Boolean,
+  otherRoleDescription: Option[String])
 
 object RoleInOrganization {
   implicit val format = Json.format[RoleInOrganization]
-  
+
   def otherRole(description: String) = RoleInOrganization(
     beneficialShareHolder = false,
     director = false,
@@ -42,24 +43,23 @@ object RoleInOrganization {
     otherRoleType = true,
     otherRoleDescription = Some(description)
   )
-  
+
 }
 
-case class CommonDetails(telephone: Option[String],
-                         mobileNumber: Option[String],
-                         email: Option[String])
+case class CommonDetails(telephone: Option[String], mobileNumber: Option[String], email: Option[String])
 
 object CommonDetails {
   implicit val format = Json.format[CommonDetails]
   def apply(): CommonDetails = CommonDetails(None, None, None)
 }
 
-case class ContactDetail(title: Option[String],
-                         names: Name,
-                         usingSameContactAddress: Boolean,
-                         address: Option[Address],
-                         commonDetails: CommonDetails,
-                         roleInOrganization: Option[RoleInOrganization])
+case class ContactDetail(
+  title: Option[String],
+  names: Name,
+  usingSameContactAddress: Boolean,
+  address: Option[Address],
+  commonDetails: CommonDetails,
+  roleInOrganization: Option[RoleInOrganization])
 
 object ContactDetail {
   implicit val format = Json.format[ContactDetail]

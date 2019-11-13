@@ -27,23 +27,35 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FhddsConnectorMocks, Save4LaterMocks, StubbedErrorHandler}
 
-class StartVariationActionSpec
-  extends ActionSpecBase
-    with Save4LaterMocks
-    with FhddsConnectorMocks {
+class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
-  lazy val action = new StartVariationAction(mockFhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new StartVariationAction(mockFhddsConnector)(
+    mockSave4Later,
+    errorHandler,
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   "Start variation action " should {
     "Fail when no fhdds registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        registrationNumber = None,
+        Some(Admin),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
 
     "Find the correct journey type" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Assistant),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
 
       setupFhddsStatus(FhddsStatus.ApprovedWithConditions)
       val cacheMap = CacheMapBuilder(testUserId)
@@ -58,14 +70,23 @@ class StartVariationActionSpec
 
     "Fail for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Assistant),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
 
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new StartVariationAction(fhddsConnector)(
+          mockSave4Later,
+          errorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -73,13 +94,22 @@ class StartVariationActionSpec
 
     "Work for some statuses" in {
       import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Assistant),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new StartVariationAction(fhddsConnector)(mockSave4Later, errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new StartVariationAction(fhddsConnector)(
+          mockSave4Later,
+          errorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 

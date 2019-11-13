@@ -29,10 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnector
 import scala.concurrent.Future
 
 class WithdrawalControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with FhddsConnectorMocks
-    with ActionsMock
-    with BeforeAndAfterEach {
+    extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
@@ -172,7 +169,6 @@ class WithdrawalControllerSpec
       val request = FakeRequest().withSession(
         controller.EmailSessionKey → "some@email.com",
         controller.ProcessingTimestampSessionKey → System.currentTimeMillis.toString
-
       )
       val result = await(csrfAddToken(controller.acknowledgment)(request))
       status(result) shouldBe OK
@@ -181,11 +177,10 @@ class WithdrawalControllerSpec
     }
   }
 
-  def setupSaveWithdrawalReason() = {
+  def setupSaveWithdrawalReason() =
     when(mockKeyStoreService.saveWithdrawalReason(any())(any())) thenReturn Future.successful(())
-  }
 
-  def setupKeyStoreWithdrawalReason(reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))): Unit = {
+  def setupKeyStoreWithdrawalReason(
+    reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))): Unit =
     when(mockKeyStoreService.fetchWithdrawalReason()(any())) thenReturn Future.successful(reason)
-  }
 }

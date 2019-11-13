@@ -37,26 +37,24 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
   * @param hasNoValueError boolean to say whether the target field for No has errors
   * @param hasErrors boolean to say whether the yes/no radio has errors (e.g. is empty)
   */
-
-case class YesNoDateParams (
-                             name: String,
-                             context: Option[String] = None,
-                             day: Option[String] = None,
-                             month: Option[String] = None,
-                             year: Option[String] = None,
-                             yesNoValue: Option[String] = None,
-                             yesNoLabel: String,
-                             yesNoHintText: Option[String] = None,
-                             yesNoError: String,
-                             valueLabel: String,
-                             valueHintText: Option[String] = None,
-                             valueError: String,
-                             hasValueError: Boolean = false,
-                             targetForNo: Option[String] = None,
-                             noInputLabel: Option[String] = None,
-                             noInputHintText: Option[String] = None,
-                             noInputError: Option[String] = None,
-                             hasNoValueError: Boolean = false,
-                             hasErrors: Boolean = false
-                           )
-
+case class YesNoDateParams(
+  name: String,
+  context: Option[String] = None,
+  day: Option[String] = None,
+  month: Option[String] = None,
+  year: Option[String] = None,
+  yesNoValue: Option[String] = None,
+  yesNoLabel: String,
+  yesNoHintText: Option[String] = None,
+  yesNoError: String,
+  valueLabel: String,
+  valueHintText: Option[String] = None,
+  valueError: String,
+  hasValueError: Boolean = false,
+  targetForNo: Option[String] = None,
+  noInputLabel: Option[String] = None,
+  noInputHintText: Option[String] = None,
+  noInputError: Option[String] = None,
+  hasNoValueError: Boolean = false,
+  hasErrors: Boolean = false
+)

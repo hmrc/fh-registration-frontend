@@ -39,9 +39,10 @@ class DeregistrationController @Inject()(
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
   keyStoreService: KeyStoreService,
-  cc : MessagesControllerComponents,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit ec: ExecutionContext) extends AppController(ds, cc) with ContactEmailFunctions {
+)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) with ContactEmailFunctions {
 
   import actions._
 
@@ -57,39 +58,40 @@ class DeregistrationController @Inject()(
   }
 
   def postReason = enrolledUserAction.async { implicit request ⇒
-    deregistrationReasonForm.bindFromRequest().fold(
-      formWithError ⇒ Future successful BadRequest(deregistration_reason(formWithError)),
-      deregistrationReason ⇒
-        keyStoreService
-          .saveDeregistrationReason(deregistrationReason)
-          .map(_ ⇒ Redirect(routes.DeregistrationController.confirm()))
-    )
+    deregistrationReasonForm
+      .bindFromRequest()
+      .fold(
+        formWithError ⇒ Future successful BadRequest(deregistration_reason(formWithError)),
+        deregistrationReason ⇒
+          keyStoreService
+            .saveDeregistrationReason(deregistrationReason)
+            .map(_ ⇒ Redirect(routes.DeregistrationController.confirm()))
+      )
   }
 
-  def confirm = withDeregistrationReason {
-    implicit request ⇒
-      reason ⇒
-        contactEmail map (email ⇒ Ok(deregistration_confirm(confirmationForm, email)))
+  def confirm = withDeregistrationReason { implicit request ⇒ reason ⇒
+    contactEmail map (email ⇒ Ok(deregistration_confirm(confirmationForm, email)))
   }
 
-  def postConfirmation = withDeregistrationReason {
-    implicit request ⇒
-      reason ⇒
-        confirmationForm.bindFromRequest().fold(
-          formWithError ⇒ contactEmail map (email ⇒ BadRequest(deregistration_confirm(formWithError, email))),
-          handleConfirmation(_, reason)
-        )
+  def postConfirmation = withDeregistrationReason { implicit request ⇒ reason ⇒
+    confirmationForm
+      .bindFromRequest()
+      .fold(
+        formWithError ⇒ contactEmail map (email ⇒ BadRequest(deregistration_confirm(formWithError, email))),
+        handleConfirmation(_, reason)
+      )
   }
 
   def withDeregistrationReason(f: EnrolledUserRequest[_] ⇒ DeregistrationReason ⇒ Future[Result]) =
     enrolledUserAction.async { implicit request ⇒
       keyStoreService.fetchDeregistrationReason() flatMap {
         case Some(reason) ⇒ f(request)(reason)
-        case None         ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
+        case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
-  private def handleConfirmation(confirmed: Confirmation, reason: DeregistrationReason)(implicit request: EnrolledUserRequest[_]) = {
+  private def handleConfirmation(confirmed: Confirmation, reason: DeregistrationReason)(
+    implicit request: EnrolledUserRequest[_]) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
         .map { processingDate ⇒
@@ -103,9 +105,9 @@ class DeregistrationController @Inject()(
     } else {
       Future successful Redirect(routes.Application.checkStatus)
     }
-  }
 
-  private def sendRequest(email: String, reason: DeregistrationReason)(implicit request: EnrolledUserRequest[_]): Future[Date] = {
+  private def sendRequest(email: String, reason: DeregistrationReason)(
+    implicit request: EnrolledUserRequest[_]): Future[Date] = {
     val deregistrationRequest = des.DeregistrationRequest(
       email,
       des.Deregistration(
@@ -122,7 +124,7 @@ class DeregistrationController @Inject()(
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
-  private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) = {
+  private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
@@ -130,5 +132,4 @@ class DeregistrationController @Inject()(
     } yield {
       Ok(deregistration_acknowledgement(processingDate, email))
     }
-  }
 }

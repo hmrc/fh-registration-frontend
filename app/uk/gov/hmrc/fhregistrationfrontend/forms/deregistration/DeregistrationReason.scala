@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum.DeregistrationReasonEnum
 
 case class DeregistrationReason(
-  deregistrationReason     : DeregistrationReasonEnum,
+  deregistrationReason: DeregistrationReasonEnum,
   deregistrationReasonOther: Option[String]
 )
 

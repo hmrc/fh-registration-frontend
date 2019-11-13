@@ -51,15 +51,13 @@ trait DesToForm {
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
 
-  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String] = {
+  def contactEmail(subscriptionDisplay: des.SubscriptionDisplay): Option[String] =
     subscriptionDisplay.contactDetail.commonDetails.email
-  }
 
   override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
     EntityTypeMapping desToForm subscriptionDisplay.organizationType
 
-
-  override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication = {
+  override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication =
     entityType(display) match {
       case BusinessType.CorporateBody ⇒
         limitedCompanyApplication(display)
@@ -68,10 +66,8 @@ class DesToFormImpl extends DesToForm {
       case BusinessType.Partnership ⇒
         partnershipApplication(display)
     }
-  }
 
-
-  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication = {
+  override def limitedCompanyApplication(subscription: des.SubscriptionDisplay): LimitedCompanyApplication =
     LimitedCompanyApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
@@ -85,9 +81,8 @@ class DesToFormImpl extends DesToForm {
       businessCustomers(subscription.additionalBusinessInformation.allOtherInformation),
       otherStoragePremises(subscription.additionalBusinessInformation.allOtherInformation)
     )
-  }
 
-  override def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorApplication = {
+  override def soleProprietorApplication(subscription: des.SubscriptionDisplay): SoleProprietorApplication =
     SoleProprietorApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
@@ -99,9 +94,8 @@ class DesToFormImpl extends DesToForm {
       businessCustomers(subscription.additionalBusinessInformation.allOtherInformation),
       otherStoragePremises(subscription.additionalBusinessInformation.allOtherInformation)
     )
-  }
 
-  override def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication = {
+  override def partnershipApplication(subscription: des.SubscriptionDisplay): PartnershipApplication =
     PartnershipApplication(
       mainBusinessAddress(subscription.businessAddressForFHDDS),
       contactPerson(subscription.contactDetail),
@@ -113,15 +107,15 @@ class DesToFormImpl extends DesToForm {
       businessCustomers(subscription.additionalBusinessInformation.allOtherInformation),
       otherStoragePremises(subscription.additionalBusinessInformation.allOtherInformation)
     )
-  }
 
-  override def businessRegistrationDetails(subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails = {
+  override def businessRegistrationDetails(
+    subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails = {
     val utr: Option[String] = entityType(subscriptionDisplay) match {
       case BusinessType.CorporateBody ⇒
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
-      case BusinessType.Partnership   ⇒
+      case BusinessType.Partnership ⇒
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
-      case BusinessType.SoleTrader    ⇒
+      case BusinessType.SoleTrader ⇒
         subscriptionDisplay.businessDetail.soleProprietor.flatMap(_.identification.uniqueTaxpayerReference)
     }
 
@@ -171,8 +165,7 @@ class DesToFormImpl extends DesToForm {
         number ← eori.EORINonVat orElse eori.EORIVat
       } yield {
         EoriNumber(number, importedOutsideEori)
-      }
-    else
+      } else
       None
 
   def businessPartners(partnership: Option[des.Partnership]): ListWithTrackedChanges[BusinessPartner] = {
@@ -182,34 +175,36 @@ class DesToFormImpl extends DesToForm {
     ListWithTrackedChanges.fromValues(businessPartners)
   }
 
-  def businessPartner(partner: des.PartnerDetail): BusinessPartner = {
+  def businessPartner(partner: des.PartnerDetail): BusinessPartner =
     partner.partnerTypeDetail match {
-      case i: des.IndividualPartnerType                      ⇒ BusinessPartner(
-        BusinessPartnerType.Individual,
-        BusinessPartnerIndividual(
-          i.name.firstName,
-          i.name.lastName,
-          i.nino.nonEmpty,
-          i.nino,
-          address(partner.partnerAddress)
+      case i: des.IndividualPartnerType ⇒
+        BusinessPartner(
+          BusinessPartnerType.Individual,
+          BusinessPartnerIndividual(
+            i.name.firstName,
+            i.name.lastName,
+            i.nino.nonEmpty,
+            i.nino,
+            address(partner.partnerAddress)
+          )
         )
-      )
-      case s: des.SoleProprietorPartnerType                  ⇒ BusinessPartner(
-        BusinessPartnerType.SoleProprietor,
-        BusinessPartnerSoleProprietor(
-          s.name.firstName,
-          s.name.lastName,
-          s.tradingName.nonEmpty,
-          s.tradingName,
-          s.nino.nonEmpty,
-          s.nino,
-          s.identification.vatRegistrationNumber.nonEmpty,
-          s.identification.vatRegistrationNumber,
-          s.identification.uniqueTaxpayerReference,
-          address(partner.partnerAddress)
+      case s: des.SoleProprietorPartnerType ⇒
+        BusinessPartner(
+          BusinessPartnerType.SoleProprietor,
+          BusinessPartnerSoleProprietor(
+            s.name.firstName,
+            s.name.lastName,
+            s.tradingName.nonEmpty,
+            s.tradingName,
+            s.nino.nonEmpty,
+            s.nino,
+            s.identification.vatRegistrationNumber.nonEmpty,
+            s.identification.vatRegistrationNumber,
+            s.identification.uniqueTaxpayerReference,
+            address(partner.partnerAddress)
+          )
         )
-      )
-      case l: des.LimitedLiabilityPartnershipType            ⇒
+      case l: des.LimitedLiabilityPartnershipType ⇒
         if (partner.entityType == "Limited Liability Partnership") {
           BusinessPartner(
             BusinessPartnerType.LimitedLiabilityPartnership,
@@ -271,7 +266,6 @@ class DesToFormImpl extends DesToForm {
         }
 
     }
-  }
 
   def businessStatus(businessDetail: des.IsNewFulfilmentBusiness) =
     BusinessStatus(
@@ -285,7 +279,7 @@ class DesToFormImpl extends DesToForm {
       .map(_ map companyOfficial)
       .get
 
-  def companyOfficial(official: des.CompanyOfficial): CompanyOfficer = {
+  def companyOfficial(official: des.CompanyOfficial): CompanyOfficer =
     official match {
       case i: des.IndividualAsOfficial ⇒
         val hasNino = i.identification.nino.isDefined
@@ -303,75 +297,69 @@ class DesToFormImpl extends DesToForm {
             i.role
           )
         )
-      case c: des.CompanyAsOfficial    ⇒ CompanyOfficer(
-        CompanyOfficerType.Company,
-        CompanyOfficerCompany(
-          c.name.companyName.get,
-          c.identification.vatRegistrationNumber.isDefined,
-          c.identification.vatRegistrationNumber,
-          c.identification.companyRegistrationNumber,
-          c.role
+      case c: des.CompanyAsOfficial ⇒
+        CompanyOfficer(
+          CompanyOfficerType.Company,
+          CompanyOfficerCompany(
+            c.name.companyName.get,
+            c.identification.vatRegistrationNumber.isDefined,
+            c.identification.vatRegistrationNumber,
+            c.identification.companyRegistrationNumber,
+            c.role
+          )
         )
-      )
 
     }
-  }
 
-  def vatNumber(detail: des.BusinessDetail) = {
-    detail
-      .nonProprietor
+  def vatNumber(detail: des.BusinessDetail) =
+    detail.nonProprietor
       .flatMap(_.identification.vatRegistrationNumber)
-      .fold(VatNumber(false, None)) {
-        name ⇒ VatNumber(true, Some(name))
+      .fold(VatNumber(false, None)) { name ⇒
+        VatNumber(true, Some(name))
       }
-  }
 
-  def vatNumberForSoleProprietor(detail: des.BusinessDetail) = {
+  def vatNumberForSoleProprietor(detail: des.BusinessDetail) =
     detail.soleProprietor
       .flatMap(_.identification.vatRegistrationNumber)
-      .fold(VatNumber(false, None)) {
-        name ⇒ VatNumber(true, Some(name))
+      .fold(VatNumber(false, None)) { name ⇒
+        VatNumber(true, Some(name))
       }
-  }
 
-  def tradingName(detail: des.BusinessDetail) = {
-    detail
-      .nonProprietor
+  def tradingName(detail: des.BusinessDetail) =
+    detail.nonProprietor
       .flatMap(_.tradingName)
-      .fold(TradingName(false, None)) {
-        name ⇒ TradingName(true, Some(name))
+      .fold(TradingName(false, None)) { name ⇒
+        TradingName(true, Some(name))
       }
-  }
 
-  def tradingNameForSoleProprietor(detail: des.BusinessDetail) = {
-    detail.soleProprietor.flatMap(_.tradingName)
-      .fold(TradingName(false, None)) {
-        name ⇒ TradingName(true, Some(name))
+  def tradingNameForSoleProprietor(detail: des.BusinessDetail) =
+    detail.soleProprietor
+      .flatMap(_.tradingName)
+      .fold(TradingName(false, None)) { name ⇒
+        TradingName(true, Some(name))
       }
-  }
 
   def nationalInsuranceNumber(businessDetails: des.BusinessDetail): NationalInsuranceNumber =
-    businessDetails.soleProprietor.map(
-      id ⇒ {
-        NationalInsuranceNumber(
-          id.identification.nino.nonEmpty,
-          id.identification.nino
-        )
-      }
-    ).get
-
+    businessDetails.soleProprietor
+      .map(
+        id ⇒ {
+          NationalInsuranceNumber(
+            id.identification.nino.nonEmpty,
+            id.identification.nino
+          )
+        }
+      )
+      .get
 
   def companyRegistrationNumber(businessDetails: des.BusinessDetail) =
     CompanyRegistrationNumber(
-      businessDetails
-        .limitedLiabilityPartnershipCorporateBody
+      businessDetails.limitedLiabilityPartnershipCorporateBody
         .flatMap(_.incorporationDetails.companyRegistrationNumber)
         .get)
 
   def dateOfIncorporation(businessDetails: des.BusinessDetail) =
     DateOfIncorporation(
-      businessDetails
-        .limitedLiabilityPartnershipCorporateBody
+      businessDetails.limitedLiabilityPartnershipCorporateBody
         .flatMap(_.incorporationDetails.dateOfIncorporation)
         .get
     )
@@ -388,24 +376,21 @@ class DesToFormImpl extends DesToForm {
     otherInternationalContactAddress(cd)
   )
 
-  def roleInOrganization(roleInOrganization: des.RoleInOrganization): String = {
+  def roleInOrganization(roleInOrganization: des.RoleInOrganization): String =
     roleInOrganization.otherRoleDescription get
-  }
 
   def otherInternationalContactAddress(cd: des.ContactDetail): Option[InternationalAddress] =
     cd.address.filter(_.countryCode != GBCountryCode) map internationalAddress
 
-  def ukOtherAddress(cd: des.ContactDetail): Option[Boolean] = {
+  def ukOtherAddress(cd: des.ContactDetail): Option[Boolean] =
     if (cd.usingSameContactAddress)
       None
     else {
       cd.address map (_.countryCode == GBCountryCode)
     }
-  }
 
-  def otherUkContactAddress(cd: des.ContactDetail): Option[models.Address] = {
+  def otherUkContactAddress(cd: des.ContactDetail): Option[models.Address] =
     cd.address.filter(_.countryCode == GBCountryCode) map address
-  }
 
   def internationalAddress(a: des.Address) =
     InternationalAddress(
@@ -416,7 +401,7 @@ class DesToFormImpl extends DesToForm {
       a.countryCode
     )
 
-  def address(a: des.Address): models.Address=
+  def address(a: des.Address): models.Address =
     models.Address(
       a.line1,
       a.line2,
@@ -434,23 +419,21 @@ class DesToFormImpl extends DesToForm {
     mainAddress.previousOperationalAddress.flatMap(previousAddressStartDate)
   )
 
-  def previousAddressStartDate(pa: des.PreviousOperationalAddress) = {
+  def previousAddressStartDate(pa: des.PreviousOperationalAddress) =
     for {
       prevAddressesDetail ← pa.previousOperationalAddressDetail
       prevAddressDetail ← prevAddressesDetail.headOption
     } yield {
       prevAddressDetail.previousAddressStartdate
     }
-  }
 
-  def previousAddress(pa: des.PreviousOperationalAddress) = {
+  def previousAddress(pa: des.PreviousOperationalAddress) =
     for {
       prevAddressesDetail ← pa.previousOperationalAddressDetail
       prevAddressDetail ← prevAddressesDetail.headOption
     } yield {
       address(prevAddressDetail.previousAddress)
     }
-  }
 
   override def declaration(declaration: des.Declaration): Declaration = Declaration(
     declaration.personName,

@@ -31,23 +31,30 @@ class InMemoryShortLivedCache(userId: String) extends ShortLivedCache {
   override implicit val crypto: CompositeSymmetricCrypto = null
   override def shortLiveCache: ShortLivedHttpCaching = null
 
-  override def cache[A](cacheId: String, formId: String, body: A)(implicit hc: HeaderCarrier, wts: Writes[A], executionContext: ExecutionContext): Future[CacheMap] = {
+  override def cache[A](cacheId: String, formId: String, body: A)(
+    implicit hc: HeaderCarrier,
+    wts: Writes[A],
+    executionContext: ExecutionContext): Future[CacheMap] = {
     require(userId == cacheId)
     cache.put(formId, wts writes body)
     Future successful CacheMap(cacheId, cache.toMap)
   }
 
-  override def fetch(cacheId: String)(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[Option[CacheMap]] = {
+  override def fetch(
+    cacheId: String)(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[Option[CacheMap]] = {
     require(userId == cacheId)
     Future successful Some(CacheMap(cacheId, cache.toMap))
   }
 
-  override def fetchAndGetEntry[T](cacheId: String, key: String)(implicit hc: HeaderCarrier, rds: Reads[T], executionContext: ExecutionContext): Future[Option[T]] = {
+  override def fetchAndGetEntry[T](
+    cacheId: String,
+    key: String)(implicit hc: HeaderCarrier, rds: Reads[T], executionContext: ExecutionContext): Future[Option[T]] = {
     require(userId == cacheId)
-    Future successful (cache get key map(_.as[T]))
+    Future successful (cache get key map (_.as[T]))
   }
 
-  override def remove(cacheId: String)(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[HttpResponse] = {
+  override def remove(
+    cacheId: String)(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[HttpResponse] = {
     require(userId == cacheId)
     cache.clear()
     Future successful HttpResponse(200)

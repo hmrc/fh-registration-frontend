@@ -44,7 +44,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     page: AnyPage,
     rNumber: Option[String] = Some(registrationNumber),
     credRole: Option[CredentialRole] = Some(adminRole),
-    userAffinityGroup : AffinityGroup = AffinityGroup.Individual,
+    userAffinityGroup: AffinityGroup = AffinityGroup.Individual,
     journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages),
     cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap
   ) = {
@@ -53,15 +53,16 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: PageRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
-        val journeyRequest = JourneyRequestBuilder.journeyRequest(
-          userRequest,
-          journeyPages,
-          cacheMap = cacheMap).asInstanceOf[JourneyRequest[A]]
-        val journeyNavigation = if (journeyRequest.journeyState.isComplete)
-          Journeys.summaryJourney(journeyRequest.journeyPages)
-        else
-          Journeys.linearJourney(journeyRequest.journeyPages)
+        val userRequest =
+          new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
+        val journeyRequest = JourneyRequestBuilder
+          .journeyRequest(userRequest, journeyPages, cacheMap = cacheMap)
+          .asInstanceOf[JourneyRequest[A]]
+        val journeyNavigation =
+          if (journeyRequest.journeyState.isComplete)
+            Journeys.summaryJourney(journeyRequest.journeyPages)
+          else
+            Journeys.linearJourney(journeyRequest.journeyPages)
 
         val pageRequest = new PageRequest(
           journeyNavigation,
@@ -79,66 +80,93 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     rNumber: Option[String] = Some(registrationNumber),
     journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages),
     credRole: Option[CredentialRole] = Some(adminRole),
-    userAffinityGroup : AffinityGroup = AffinityGroup.Individual,
+    userAffinityGroup: AffinityGroup = AffinityGroup.Individual,
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment
-  ) = {
-    when(mockActions.summaryAction) thenReturn new  ActionBuilder[SummaryRequest, AnyContent] {
+  ) =
+    when(mockActions.summaryAction) thenReturn new ActionBuilder[SummaryRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: SummaryRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
-        val journeyRequest = JourneyRequestBuilder.journeyRequest(userRequest, journeyPages, businessType, journeyType).asInstanceOf[JourneyRequest[A]]
+        val userRequest =
+          new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
+        val journeyRequest = JourneyRequestBuilder
+          .journeyRequest(userRequest, journeyPages, businessType, journeyType)
+          .asInstanceOf[JourneyRequest[A]]
         val summaryRequest = new SummaryRequest(journeyRequest)
         block(summaryRequest)
       }
     }
-  }
 
-  def setupNewApplicationAction(): Unit = {
+  def setupNewApplicationAction(): Unit =
     when(mockActions.newApplicationAction) thenReturn new ActionBuilder[UserRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(userAffinityGroup), request)
+        val userRequest =
+          new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(userAffinityGroup), request)
         block(userRequest)
       }
     }
-  }
 
-  def setupStartAmendmentAction(currentJourneyType: Option[JourneyType]): Unit = {
+  def setupStartAmendmentAction(currentJourneyType: Option[JourneyType]): Unit =
     when(mockActions.startAmendmentAction) thenReturn new ActionBuilder[StartUpdateRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
-      override def invokeBlock[A](request: Request[A], block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
+      override def invokeBlock[A](
+        request: Request[A],
+        block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(Admin),
+          Some(userAffinityGroup),
+          request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
         block(updateRequest)
       }
     }
-  }
 
-  def setupStartVariationAction(currentJourneyType: Option[JourneyType]): Unit = {
+  def setupStartVariationAction(currentJourneyType: Option[JourneyType]): Unit =
     when(mockActions.startVariationAction) thenReturn new ActionBuilder[StartUpdateRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
-      override def invokeBlock[A](request: Request[A], block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
+      override def invokeBlock[A](
+        request: Request[A],
+        block: StartUpdateRequest[A] ⇒ Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(Admin),
+          Some(userAffinityGroup),
+          request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
         block(updateRequest)
       }
     }
-  }
 
   def setupEmailVerificationAction(verifiedEmail: Option[String], pendingEmail: Option[String]): Any = {
     val candidateEmail = verifiedEmail orElse pendingEmail orElse Some(ggEmail)
     when(mockActions.emailVerificationAction) thenReturn new ActionBuilder[EmailVerificationRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
-      override def invokeBlock[A](request: Request[A], block: EmailVerificationRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(userAffinityGroup), request)
+      override def invokeBlock[A](
+        request: Request[A],
+        block: EmailVerificationRequest[A] ⇒ Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(Admin),
+          Some(userAffinityGroup),
+          request)
         val emailVerificationRequest = new EmailVerificationRequest(
-          verifiedEmail, pendingEmail, candidateEmail, userRequest
+          verifiedEmail,
+          pendingEmail,
+          candidateEmail,
+          userRequest
         )
         block(emailVerificationRequest)
       }
@@ -146,38 +174,51 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   }
 
-  def setupJourneAction(rNumber: Option[String] = Some(registrationNumber), journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages)) = {
-    when(mockActions.journeyAction) thenReturn new  ActionBuilder[JourneyRequest, AnyContent] {
+  def setupJourneAction(
+    rNumber: Option[String] = Some(registrationNumber),
+    journeyPages: JourneyPages = new JourneyPages(Journeys.partnershipPages)) =
+    when(mockActions.journeyAction) thenReturn new ActionBuilder[JourneyRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), Some(userAffinityGroup),  request)
-        val journeyRequest = JourneyRequestBuilder.journeyRequest(userRequest, journeyPages).asInstanceOf[JourneyRequest[A]]
+        val userRequest =
+          new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), Some(userAffinityGroup), request)
+        val journeyRequest =
+          JourneyRequestBuilder.journeyRequest(userRequest, journeyPages).asInstanceOf[JourneyRequest[A]]
         block(journeyRequest)
       }
     }
-  }
 
-  def setupEnrolledUserAction(registrationNumber: String = registrationNumber): Unit = {
-    when(mockActions.enrolledUserAction) thenReturn new  ActionBuilder[EnrolledUserRequest, AnyContent] {
+  def setupEnrolledUserAction(registrationNumber: String = registrationNumber): Unit =
+    when(mockActions.enrolledUserAction) thenReturn new ActionBuilder[EnrolledUserRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
-      override def invokeBlock[A](request: Request[A], block: EnrolledUserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), request)
+      override def invokeBlock[A](
+        request: Request[A],
+        block: EnrolledUserRequest[A] ⇒ Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(Admin),
+          Some(AffinityGroup.Individual),
+          request)
         val enrolledUserRequest = new EnrolledUserRequest(registrationNumber, userRequest)
         block(enrolledUserRequest)
       }
     }
-  }
 
-  def setupUserAction(rNumber: Option[String] = Some(registrationNumber), credentialRole: Option[CredentialRole] = Some(Admin), userAffinityGroup : AffinityGroup = AffinityGroup.Individual) = {
+  def setupUserAction(
+    rNumber: Option[String] = Some(registrationNumber),
+    credentialRole: Option[CredentialRole] = Some(Admin),
+    userAffinityGroup: AffinityGroup = AffinityGroup.Individual) =
     when(mockActions.userAction) thenReturn new ActionBuilder[UserRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
-        val userRequest = new UserRequest(testUserId, Some(ggEmail), rNumber, credentialRole,  Some(userAffinityGroup),request)
+        val userRequest =
+          new UserRequest(testUserId, Some(ggEmail), rNumber, credentialRole, Some(userAffinityGroup), request)
         block(userRequest)
       }
     }
-  }
 }

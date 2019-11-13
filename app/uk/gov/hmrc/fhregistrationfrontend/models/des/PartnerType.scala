@@ -17,13 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 import play.api.libs.json._
 
-
-
 sealed trait PartnerType
 
-case class IndividualPartnerType(
-  name: Name,
-  nino: Option[String]) extends PartnerType
+case class IndividualPartnerType(name: Name, nino: Option[String]) extends PartnerType
 
 case class SoleProprietorPartnerType(
   name: Name,
@@ -33,8 +29,8 @@ case class SoleProprietorPartnerType(
 ) extends PartnerType
 
 case class LimitedLiabilityPartnershipType(
-  names               : CompanyName,
-  identification      : PartnerIdentification,
+  names: CompanyName,
+  identification: PartnerIdentification,
   incorporationDetails: IncorporationDetail
 ) extends PartnerType
 
@@ -54,9 +50,8 @@ object PartnerType {
   implicit val individualPartnerTypeFormat = Json.format[IndividualPartnerType]
   implicit val soleProprietorPartnerTypeFormat = Json.format[SoleProprietorPartnerType]
   implicit val limitedLiabilityPartnershipTypeFormat = Json.format[LimitedLiabilityPartnershipType]
-  implicit val partnershipOrUnIncorporatedBodyPartnerTypeFormat = Json.format[PartnershipOrUnIncorporatedBodyPartnerType]
-
-
+  implicit val partnershipOrUnIncorporatedBodyPartnerTypeFormat =
+    Json.format[PartnershipOrUnIncorporatedBodyPartnerType]
 
 //  val writes: Writes[PartnerType] = new Writes[PartnerType](
 //
@@ -76,9 +71,9 @@ object PartnerType {
   val reads: Reads[PartnerType] = new Reads[PartnerType] {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o ⇒
       if ((o \ "name").toOption.isDefined
-        && (o \ "identification").toOption.isDefined) {
+          && (o \ "identification").toOption.isDefined) {
         soleProprietorPartnerTypeFormat reads json
-      } else if ((o \ "name").toOption.isDefined){
+      } else if ((o \ "name").toOption.isDefined) {
         individualPartnerTypeFormat reads json
       } else if ((o \ "incorporationDetails").toOption.isDefined) {
         limitedLiabilityPartnershipTypeFormat reads json

@@ -21,7 +21,6 @@ import play.api.data.Forms._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.companyRegistrationNumber
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 
-
 object CompanyRegistrationNumberForm {
 
   val companyRegistrationNumberKey = "companyRegistrationNumber"

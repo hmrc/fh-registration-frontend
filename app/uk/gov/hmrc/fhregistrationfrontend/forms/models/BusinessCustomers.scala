@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class BusinessCustomers (
+case class BusinessCustomers(
   numberOfCustomers: String
 )
 

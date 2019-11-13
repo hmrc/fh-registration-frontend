@@ -24,19 +24,18 @@ case class AlternativeEmail(
 )
 
 case class Declaration(
-  fullName         : String,
-  jobTitle         : String,
+  fullName: String,
+  jobTitle: String,
   usingDefaultEmail: Boolean,
-  defaultEmail     : Option[String],
-  alternativeEmail : Option[AlternativeEmail]
+  defaultEmail: Option[String],
+  alternativeEmail: Option[AlternativeEmail]
 ) {
 
-  def email: String = {
+  def email: String =
     if (usingDefaultEmail)
       defaultEmail.get
     else
       alternativeEmail.map(_.email).get
-  }
 }
 
 object Declaration {

@@ -18,10 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{email, personName, personTitle, yesOrNo, alternativeEmail}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{alternativeEmail, email, personName, personTitle, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Declaration
-
 
 object DeclarationForm {
 

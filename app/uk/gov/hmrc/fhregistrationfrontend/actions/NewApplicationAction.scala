@@ -22,9 +22,10 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val errorHandler: ErrorHandler, override val executionContext: ExecutionContext)
-  extends ActionRefiner[UserRequest, UserRequest]
-    with FrontendAction {
+class NewApplicationAction(val fhddsConnector: FhddsConnector)(
+  implicit val errorHandler: ErrorHandler,
+  override val executionContext: ExecutionContext)
+    extends ActionRefiner[UserRequest, UserRequest] with FrontendAction {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] = {
 
@@ -32,12 +33,11 @@ class NewApplicationAction (val fhddsConnector: FhddsConnector) (implicit val er
 
     import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
-    val whenRegistered = request.registrationNumber.map {
-      registrationNumber ⇒
-        fhddsConnector.getStatus(registrationNumber).map {
-          case Withdrawn | Rejected | Revoked | Deregistered ⇒ Right(request)
-          case _                                             ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
-        }
+    val whenRegistered = request.registrationNumber.map { registrationNumber ⇒
+      fhddsConnector.getStatus(registrationNumber).map {
+        case Withdrawn | Rejected | Revoked | Deregistered ⇒ Right(request)
+        case _ ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+      }
     }
 
     whenRegistered getOrElse Future.successful(Right(request))

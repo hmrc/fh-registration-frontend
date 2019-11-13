@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-
 import play.api.data.Form
-import play.api.data.Forms.{tuple, mapping}
+import play.api.data.Forms.{mapping, tuple}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises, StoragePremise}
@@ -38,7 +37,7 @@ object StoragePremisesForm {
   val optionalStorageAddressMapping = storagePremise_addressKey → (address onlyWhen (hasOtherStoragePremisesMapping is true))
   val isThirdPartyMapping = isThirdPartyKey → (yesOrNo onlyWhen (hasOtherStoragePremisesMapping is true))
 
-  val hasOtherStoragePrmisesForm = Form (
+  val hasOtherStoragePrmisesForm = Form(
     otherStoragePremisesKey → yesOrNo
   )
 

@@ -34,21 +34,23 @@ case class AddressLookupSuccessResponse(addressList: RecordSet) extends AddressL
 case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupResponse
 
 @Singleton
-class AddressLookupConnector @Inject() (
-   val http: HttpClient,
-   val runModeConfiguration: Configuration,
-   val runMode: RunMode,
-   environment: Environment
-) (implicit ec: ExecutionContext) extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
+class AddressLookupConnector @Inject()(
+  val http: HttpClient,
+  val runModeConfiguration: Configuration,
+  val runMode: RunMode,
+  environment: Environment
+)(implicit ec: ExecutionContext)
+    extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
 
   val addressLookupUrl: String = baseUrl("address-lookup")
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(implicitly[HttpReads[JsValue]], fhddsHc, ec
-    ) map {
-      addressListJson =>
-        AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
+    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(
+      implicitly[HttpReads[JsValue]],
+      fhddsHc,
+      ec) map { addressListJson =>
+      AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
     } recover {
       case e: Exception =>
         Logger.warn(s"Error received from address lookup service: $e")
@@ -62,15 +64,14 @@ class AddressLookupConnector @Inject() (
   }
 
   private val addressRecordReads = new HttpReads[Option[AddressRecord]] {
-    override def read(method: String, url: String, response: HttpResponse): Option[AddressRecord] = {
+    override def read(method: String, url: String, response: HttpResponse): Option[AddressRecord] =
       response.status match {
         case status if status == 200 ⇒ Some(response.json.as[AddressRecord])
         case status if status == 404 ⇒ None
-        case status if is4xx(status) ⇒ throw Upstream4xxResponse("address-lookup/uk/address error", response.status, 500)
-        case status if is5xx(status) ⇒ throw Upstream5xxResponse("address-lookup/uk/address error", response.status, 502)
+        case status if is4xx(status) ⇒
+          throw Upstream4xxResponse("address-lookup/uk/address error", response.status, 500)
+        case status if is5xx(status) ⇒
+          throw Upstream5xxResponse("address-lookup/uk/address error", response.status, 502)
       }
-    }
   }
 }
-
-

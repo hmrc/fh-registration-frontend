@@ -21,17 +21,17 @@ import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow.GroupRow
 
 /*
-* for a single row in a summary
-*
-* @param value     the value stored for this field
-* @param label     the label for the actual question
-* @param changeLink  uri for change links
-* @param groupRow position in a summary group of rows
-*/
+ * for a single row in a summary
+ *
+ * @param value     the value stored for this field
+ * @param label     the label for the actual question
+ * @param changeLink  uri for change links
+ * @param groupRow position in a summary group of rows
+ */
 
 case class SummaryAddressParams(
- label: Option[String] = None,
- value: Html,
- changeLink: Option[String] = None,
- groupRow: GroupRow = GroupRow.Single
+  label: Option[String] = None,
+  value: Html,
+  changeLink: Option[String] = None,
+  groupRow: GroupRow = GroupRow.Single
 )

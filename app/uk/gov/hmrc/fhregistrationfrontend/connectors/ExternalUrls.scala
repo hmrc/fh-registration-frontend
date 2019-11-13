@@ -48,7 +48,8 @@ class DefaultExternalUrls @Inject()(
   environment: Environment
 ) extends ServicesConfig(runModeConfiguration, runMode) with ExternalUrls {
 
-  val companyAuthUrl: String = getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
+  val companyAuthUrl: String =
+    getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
   val loginCallback: String = getConfString("auth.login-callback.url", "/fhdds")
   val loginPath: String = getConfString("auth.login_path", "")
 

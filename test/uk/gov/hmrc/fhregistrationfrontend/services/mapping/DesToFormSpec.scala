@@ -37,11 +37,15 @@ class DesToFormSpec extends UnitSpec {
     }
 
     "Correctly load fhdds-limited-company-minimum-less-than-three-years" in {
-      validatesFor("limited-company/fhdds-limited-company-minimum-less-than-three-years", LtdMinimumLessThanThreeYears.application(NoChange))
+      validatesFor(
+        "limited-company/fhdds-limited-company-minimum-less-than-three-years",
+        LtdMinimumLessThanThreeYears.application(NoChange))
     }
 
     "Correctly load limited-company-minimum-international" in {
-      validatesFor("limited-company/fhdds-limited-company-minimum-international", LtdMinimumInternational.application(NoChange))
+      validatesFor(
+        "limited-company/fhdds-limited-company-minimum-international",
+        LtdMinimumInternational.application(NoChange))
     }
 
     "Correctly load limited-company-large-uk" in {
@@ -64,19 +68,22 @@ class DesToFormSpec extends UnitSpec {
       case "Sole Proprietor" ⇒ service soleProprietorApplication display
       case "Partnership" ⇒ service partnershipApplication display
     }
-        loadedApplication shouldEqual application
-    }
-
-    def loadDesDataFile(filePath: String): SubscriptionDisplay = {
-      val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
-      val validationResult = validator(Json parse resource)
-      validationResult.fold(
-        invalid = { errors ⇒ println(errors)},
-        valid = { v ⇒ v }
-      )
-
-      validationResult.isSuccess shouldEqual true
-      validationResult.get.as[SubscriptionDisplayWrapper].subScriptionDisplay
-    }
+    loadedApplication shouldEqual application
   }
 
+  def loadDesDataFile(filePath: String): SubscriptionDisplay = {
+    val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
+    val validationResult = validator(Json parse resource)
+    validationResult.fold(
+      invalid = { errors ⇒
+        println(errors)
+      },
+      valid = { v ⇒
+        v
+      }
+    )
+
+    validationResult.isSuccess shouldEqual true
+    validationResult.get.as[SubscriptionDisplayWrapper].subScriptionDisplay
+  }
+}

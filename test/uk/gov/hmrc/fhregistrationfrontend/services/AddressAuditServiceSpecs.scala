@@ -33,17 +33,14 @@ import uk.gov.hmrc.play.audit.model.DataEvent
 import scala.concurrent.Future
 
 class AddressAuditServiceSpecs
-  extends UnitSpec
-    with ScalaFutures
-    with MockitoSugar
-    with BeforeAndAfterEach
-    with Matchers {
+    extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterEach with Matchers {
 
   val auditConnector = mock[AuditConnector]
   val addressLookupConnector = mock[AddressLookupConnector]
   implicit val hc = HeaderCarrier()
 
-  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(scala.concurrent.ExecutionContext.Implicits.global)
+  val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(
+    scala.concurrent.ExecutionContext.Implicits.global)
   val ac: ArgumentCaptor[DataEvent] = ArgumentCaptor.forClass(classOf[DataEvent])
 
   override def beforeEach(): Unit = {
@@ -56,8 +53,7 @@ class AddressAuditServiceSpecs
 
     "send a manualAddressSubmitted" when {
       "lookup id is not present" in {
-        val address = Address(
-          "line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, None)
+        val address = Address("line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, None)
         setupAuditConnector()
 
         auditEventFor(address).auditType shouldBe "manualAddressSubmitted"
@@ -65,8 +61,7 @@ class AddressAuditServiceSpecs
       }
 
       "lookup id is not found in address lookup" in {
-        val address = Address(
-          "line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, Some("1234"))
+        val address = Address("line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, Some("1234"))
 
         setupAddressLookupConnector(addressRecord = None)
         setupAuditConnector()
@@ -76,11 +71,11 @@ class AddressAuditServiceSpecs
     }
 
     "send a postcodeAddressSubmitted message when the address matches" in {
-      val address = Address(
-        "line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, Some("1234"))
+      val address = Address("line1", Some("line2"), None, Some("Worthing"), "BN11 1XX", None, Some("1234"))
 
       val addressRecord = AddressRecord(
-        "1234", 12345,
+        "1234",
+        12345,
         LookupAddress(
           Seq(address.addressLine1, address.addressLine2.get),
           town = address.addressLine4,
@@ -97,11 +92,11 @@ class AddressAuditServiceSpecs
     }
 
     "send a postcodeAddressModifiedSubmitted message when the address don't match" in {
-      val address = Address(
-        "line1", Some("line2"), Some(""), Some("Worthing"), "BN11 1XX", None, Some("1234"))
+      val address = Address("line1", Some("line2"), Some(""), Some("Worthing"), "BN11 1XX", None, Some("1234"))
 
       val addressRecord = AddressRecord(
-        "1234", 12345,
+        "1234",
+        12345,
         LookupAddress(
           Seq(address.addressLine1 + " changed", address.addressLine2.get),
           town = address.addressLine4,
@@ -123,11 +118,9 @@ class AddressAuditServiceSpecs
     ac.getValue
   }
 
-  def setupAddressLookupConnector(addressRecord: Option[AddressRecord]) = {
+  def setupAddressLookupConnector(addressRecord: Option[AddressRecord]) =
     when(addressLookupConnector.lookupById(any())(any())).thenReturn(Future successful addressRecord)
-  }
 
-  def setupAuditConnector() = {
+  def setupAuditConnector() =
     when(auditConnector.sendEvent(any())(any(), any())).thenReturn(Future successful AuditResult.Success)
-  }
 }

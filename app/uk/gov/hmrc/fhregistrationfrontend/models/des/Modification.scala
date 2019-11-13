@@ -20,9 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json._
 
-
-case class Modification(changeIndicator: String,
-                        changeDate: Option[LocalDate])
+case class Modification(changeIndicator: String, changeDate: Option[LocalDate])
 
 object Modification extends DateTimeFormat {
 

@@ -40,13 +40,10 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
   val validWithPreviousAddress = Map(
     timeAtCurrentAddressKey → "Less than 3 years",
     previousAddressKey → "true",
-    s"$previousAddressStartdateKey.day" -> "31",
+    s"$previousAddressStartdateKey.day"   -> "31",
     s"$previousAddressStartdateKey.month" -> "7",
-    s"$previousAddressStartdateKey.year" -> "2015"
-
+    s"$previousAddressStartdateKey.year"  -> "2015"
   ) ++ TestData.addressDataUk(mainPreviousAddressKey)
-
-
 
   "Business address form " should {
 
@@ -95,9 +92,5 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
       data.previousAddress shouldBe Some(TestData.addressUk)
     }
   }
-
-
-
-
 
 }

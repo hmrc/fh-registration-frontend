@@ -30,9 +30,9 @@ class DateOfIncorporationSpecs extends UnitSpec {
 
     "validate a form with date" in {
       val data = Map(
-        "dateOfIncorporation.day" -> "31",
+        "dateOfIncorporation.day"   -> "31",
         "dateOfIncorporation.month" -> "7",
-        "dateOfIncorporation.year" -> "2015"
+        "dateOfIncorporation.year"  -> "2015"
       )
       val result = form.bind(data).value.get
       result shouldBe DateOfIncorporation(LocalDate.parse("31/07/2015", dtf))
@@ -41,38 +41,38 @@ class DateOfIncorporationSpecs extends UnitSpec {
     "validate a form with some date missing" in {
       val data = Map(
         "dateOfIncorporation.month" -> "7",
-        "dateOfIncorporation.year" -> "2015"
+        "dateOfIncorporation.year"  -> "2015"
       )
       val result = form.bind(data)
       val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
-      errors should contain ("dateOfIncorporation.day" → "error.required")
+      errors should contain("dateOfIncorporation.day" → "error.required")
 
       result.value shouldBe None
     }
 
     "validate a form with invalid date" in {
       val data = Map(
-        "dateOfIncorporation.day" -> "30",
+        "dateOfIncorporation.day"   -> "30",
         "dateOfIncorporation.month" -> "2",
-        "dateOfIncorporation.year" -> "2015"
+        "dateOfIncorporation.year"  -> "2015"
       )
       val result = form.bind(data)
       val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
-      errors should contain ("dateOfIncorporation" → "error.invalid")
+      errors should contain("dateOfIncorporation" → "error.invalid")
 
       result.value shouldBe None
     }
 
     "validate a form with out of range dates" in {
       val data = Map(
-        "dateOfIncorporation.day" -> "311",
+        "dateOfIncorporation.day"   -> "311",
         "dateOfIncorporation.month" -> "7",
-        "dateOfIncorporation.year" -> "2015"
+        "dateOfIncorporation.year"  -> "2015"
       )
       val result = form.bind(data)
 
       val errors = result.errors.flatMap(v ⇒ v.messages)
-      errors should contain ("error.max")
+      errors should contain("error.max")
       result.value shouldBe None
     }
 

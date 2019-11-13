@@ -21,16 +21,16 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.connectors
 
 @Singleton
-class SignOutController  @Inject()(
-  ds               : CommonPlayDependencies,
-  externalUrls     : connectors.ExternalUrls,
-  cc               : MessagesControllerComponents
+class SignOutController @Inject()(
+  ds: CommonPlayDependencies,
+  externalUrls: connectors.ExternalUrls,
+  cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
   def signout() = Action {
     val ggRedirectParms = Map(
       "continue" -> Seq(externalUrls.logoutContinueUrl),
-      "origin" -> Seq(externalUrls.ggOrigin)
+      "origin"   -> Seq(externalUrls.ggOrigin)
     )
 
     Redirect(externalUrls.ggLogoutUrl, ggRedirectParms)

@@ -27,8 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SummaryRequest[A](
   val journeyRequest: JourneyRequest[A]
-) extends WrappedRequest[A](journeyRequest) with PageDataLoader
-{
+) extends WrappedRequest[A](journeyRequest) with PageDataLoader {
   def userId: String = journeyRequest.userId
   def registrationNumber = journeyRequest.registrationNumber
 
@@ -41,7 +40,7 @@ class SummaryRequest[A](
 }
 
 class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-  extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
+    extends ActionRefiner[JourneyRequest, SummaryRequest] with FrontendAction {
 
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
     implicit val r: JourneyRequest[A] = input
@@ -54,12 +53,11 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
     result.value
   }
 
-  def journeyIsComplete(journeyState: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] = {
-    if(journeyState.isComplete)
+  def journeyIsComplete(journeyState: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
+    if (journeyState.isComplete)
       Right(true)
     else {
       Logger.error(s"Bad Request")
       Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
-  }
 }

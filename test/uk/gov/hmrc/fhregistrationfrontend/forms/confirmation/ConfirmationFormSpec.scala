@@ -28,53 +28,65 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
 
   "Confirmation form" should {
     "Have errors when no answer is given" in {
-      formDataHasErrors(Map.empty, Seq(
-        confirmKey → "error.required"
-      ))
+      formDataHasErrors(
+        Map.empty,
+        Seq(
+          confirmKey → "error.required"
+        ))
     }
 
     "Have errors when yes but 'use default email' is not answered" in {
-      formDataHasErrors(Map(confirmKey → "true"), Seq(
-        usingDefaultEmailKey → "error.required"
-      ))
+      formDataHasErrors(
+        Map(confirmKey → "true"),
+        Seq(
+          usingDefaultEmailKey → "error.required"
+        ))
     }
 
     "Have errors when default email is missing" in {
-      formDataHasErrors(Map(confirmKey → "true", usingDefaultEmailKey → "true"), Seq(
-        defaultEmailKey → "error.required"
-      ))
+      formDataHasErrors(
+        Map(confirmKey → "true", usingDefaultEmailKey → "true"),
+        Seq(
+          defaultEmailKey → "error.required"
+        ))
     }
 
     "Have errors when default email is wrong format" in {
-      formDataHasErrors(Map(
-        confirmKey → "true",
-        usingDefaultEmailKey → "true",
-        defaultEmailKey → "not an email"
-      ), Seq(
-        defaultEmailKey → "error.email"
-      ))
+      formDataHasErrors(
+        Map(
+          confirmKey → "true",
+          usingDefaultEmailKey → "true",
+          defaultEmailKey → "not an email"
+        ),
+        Seq(
+          defaultEmailKey → "error.email"
+        ))
     }
 
     "Have errors when no custom email is provided" in {
-      formDataHasErrors(Map(
-        confirmKey → "true",
-        usingDefaultEmailKey → "false"
-      ), Seq(
-         s"$alternativeEmailKey.email" → "error.required"
-      ))
+      formDataHasErrors(
+        Map(
+          confirmKey → "true",
+          usingDefaultEmailKey → "false"
+        ),
+        Seq(
+          s"$alternativeEmailKey.email" → "error.required"
+        ))
     }
 
     "Have errors when no custom email does not match" in {
-      formDataHasErrors(Map(
-        confirmKey → "true",
-        usingDefaultEmailKey → "false",
-        s"$alternativeEmailKey.email" → "a@test.com",
-        s"$alternativeEmailKey.emailConfirmation" → "b@test.com"
-      ), Seq(
-        s"$alternativeEmailKey.emailConfirmation" → "no_match.error"
-      ))
+      formDataHasErrors(
+        Map(
+          confirmKey → "true",
+          usingDefaultEmailKey → "false",
+          s"$alternativeEmailKey.email" → "a@test.com",
+          s"$alternativeEmailKey.emailConfirmation" → "b@test.com"
+        ),
+        Seq(
+          s"$alternativeEmailKey.emailConfirmation" → "no_match.error"
+        )
+      )
     }
-
 
     "Accept a NO answer" in {
       val data = Map(
@@ -114,7 +126,6 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
       confirmation.alternativeEmail shouldBe Some(AlternativeEmail("custom@test.com", "custom@test.com"))
       confirmation.email shouldBe Some("custom@test.com")
     }
-
 
   }
 }

@@ -31,14 +31,14 @@ object KeyStoreKeys {
 }
 
 @Singleton
-class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache)(implicit ec: ExecutionContext) extends KeyStoreService {
+class KeyStoreServiceImpl @Inject()(sessionCache: SessionCache)(implicit ec: ExecutionContext) extends KeyStoreService {
   import KeyStoreKeys._
 
-  override def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_] = sessionCache.cache(SummaryForPrintKey, o)
+  override def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_] =
+    sessionCache.cache(SummaryForPrintKey, o)
 
-  override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]= {
+  override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]] =
     sessionCache.fetchAndGetEntry[String](SummaryForPrintKey)
-  }
 
   override def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_] =
     sessionCache.cache(WithdrawalReasonKey, reason)

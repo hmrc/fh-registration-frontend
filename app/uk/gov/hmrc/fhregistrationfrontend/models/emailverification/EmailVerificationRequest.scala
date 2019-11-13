@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.models.emailverification
 
 import play.api.libs.json.Json
 
-case class EmailVerificationRequest (
+case class EmailVerificationRequest(
   email: String,
   templateId: String,
   templateParameters: Map[String, String],
@@ -29,4 +29,3 @@ case class EmailVerificationRequest (
 object EmailVerificationRequest {
   implicit val format = Json.format[EmailVerificationRequest]
 }
-

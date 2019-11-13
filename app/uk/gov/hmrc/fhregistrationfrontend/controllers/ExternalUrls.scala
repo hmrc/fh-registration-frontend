@@ -19,11 +19,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ExternalUrls @Inject() (ds: CommonPlayDependencies) {
+class ExternalUrls @Inject()(ds: CommonPlayDependencies) {
 
   val businessCustomerVerificationUrl = ds.conf
     .getString("microservice.services.business-customer-urls.business-verification")
     .getOrElse("http://localhost:9923/business-customer/FHDDS")
-
 
 }

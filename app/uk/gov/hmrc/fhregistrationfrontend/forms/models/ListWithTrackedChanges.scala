@@ -38,27 +38,29 @@ object ListWithTrackedChanges {
 
   implicit def valueWithStatusFormat[T](implicit format: Format[T]) = Json.format[(T, Status)]
 
-  implicit private def writes[T](implicit format: Format[T]): Writes[ListWithTrackedChanges[T]] = new Writes[ListWithTrackedChanges[T]] {
-    override def writes(o: ListWithTrackedChanges[T]): JsValue = Json obj (
-      "valuesWithStatus" → o.valuesWithStatus,
-      "deleted" → o.deleted,
-      "addMore" → o.addMore
+  implicit private def writes[T](implicit format: Format[T]): Writes[ListWithTrackedChanges[T]] =
+    new Writes[ListWithTrackedChanges[T]] {
+      override def writes(o: ListWithTrackedChanges[T]): JsValue = Json obj (
+        "valuesWithStatus" → o.valuesWithStatus,
+        "deleted" → o.deleted,
+        "addMore" → o.addMore
+      )
+    }
 
-    )
-  }
+  implicit private def reads[T](implicit format: Format[T]): Reads[ListWithTrackedChanges[T]] =
+    new Reads[ListWithTrackedChanges[T]] {
+      override def reads(json: JsValue): JsResult[ListWithTrackedChanges[T]] =
+        for {
+          values ← (json \ "valuesWithStatus").validate[List[(T, Status)]]
+          deleted ← (json \ "deleted").validate[List[T]]
+          addMore ← (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
+        } yield {
+          ListWithTrackedChanges(values, deleted, addMore)
+        }
+    }
 
-  implicit private def reads[T](implicit format: Format[T]): Reads[ListWithTrackedChanges[T]] = new Reads[ListWithTrackedChanges[T]] {
-    override def reads(json: JsValue): JsResult[ListWithTrackedChanges[T]] =
-      for {
-        values ← (json \ "valuesWithStatus").validate[List[(T, Status)]]
-        deleted ← (json \ "deleted").validate[List[T]]
-        addMore ← (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
-      } yield {
-        ListWithTrackedChanges(values, deleted, addMore)
-      }
-  }
-
-  implicit def listWithTrackedChangesFormat[T](implicit format: Format[T]): Format[ListWithTrackedChanges[T]] = Format(reads, writes)
+  implicit def listWithTrackedChangesFormat[T](implicit format: Format[T]): Format[ListWithTrackedChanges[T]] =
+    Format(reads, writes)
 }
 
 case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T], addMore: Boolean) {
@@ -78,7 +80,7 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
     this copy (
       valuesWithStatus = newValues,
       deleted = newDeleted
-      )
+    )
   }
 
   def apply(index: Int) = valuesWithStatus(index)._1

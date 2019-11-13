@@ -30,10 +30,8 @@ class EnrolledUserRequest[A](
   def userId: String = request.userId
 }
 
-class EnrolledUserAction (implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-    extends ActionRefiner[UserRequest, EnrolledUserRequest]
-      with FrontendAction
-{
+class EnrolledUserAction(implicit errorHandler: ErrorHandler, val executionContext: ExecutionContext)
+    extends ActionRefiner[UserRequest, EnrolledUserRequest] with FrontendAction {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EnrolledUserRequest[A]]] = {
     implicit val r = request
@@ -41,7 +39,7 @@ class EnrolledUserAction (implicit errorHandler: ErrorHandler, val executionCont
       request.registrationNumber match {
         case Some(registrationNumber) ⇒
           Right(new EnrolledUserRequest[A](registrationNumber, request))
-        case None                     ⇒
+        case None ⇒
           Logger.error(s"Not found: registration number. Is user enrolled?")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
       }

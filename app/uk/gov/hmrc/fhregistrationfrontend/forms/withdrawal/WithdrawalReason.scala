@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum.WithdrawalReasonEnum
 
-case class WithdrawalReason (
+case class WithdrawalReason(
   withdrawalReason: WithdrawalReasonEnum,
   withdrawalReasonOther: Option[String]
 )

@@ -29,22 +29,23 @@ import scala.concurrent.Future
 trait ActionFunctions {
   this: FrontendAction ⇒
 
-  def loadCacheMap(implicit save4LaterService: Save4LaterService,  errorHandler: ErrorHandler, request: UserRequest[_]): Future[Either[Result, CacheMap]] = {
+  def loadCacheMap(
+    implicit save4LaterService: Save4LaterService,
+    errorHandler: ErrorHandler,
+    request: UserRequest[_]): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
-      case None           ⇒ Right(new CacheMap(request.userId, Map.empty))
+      case None ⇒ Right(new CacheMap(request.userId, Map.empty))
 
     }
-  }
 
-  def loadJourneyType(cacheMap: CacheMap): JourneyType = {
+  def loadJourneyType(cacheMap: CacheMap): JourneyType =
     cacheMap
       .getEntry[JourneyType](Save4LaterKeys.journeyTypeKey)
       .orElse(
         cacheMap
           .getEntry[Boolean](Save4LaterKeys.isAmendmentKey)
-          .collect {case true ⇒ JourneyType.Amendment})
+          .collect { case true ⇒ JourneyType.Amendment })
       .getOrElse(JourneyType.New)
-  }
 
 }

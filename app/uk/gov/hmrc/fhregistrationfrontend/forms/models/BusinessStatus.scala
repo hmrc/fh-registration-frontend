@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import java.time.LocalDate
 import play.api.libs.json.Json
 
-case class BusinessStatus (
+case class BusinessStatus(
   isNewFulfilmentBusiness: Boolean,
   proposedStartDate: Option[LocalDate]
 )

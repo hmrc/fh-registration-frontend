@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.Future
 
 @Singleton
-class BusinessCustomerFrontendConnector @Inject() (
+class BusinessCustomerFrontendConnector @Inject()(
   val http: HttpClient,
   val runModeConfiguration: Configuration,
   val runMode: RunMode,
@@ -42,7 +42,9 @@ class BusinessCustomerFrontendConnector @Inject() (
 
   //upgrading to play 2.6.21 has caused for the encryption to be executed twice,
   //however we still need the functionality of HeaderCarrierForPartials so we the cookie can be found.
-  override def crypto: (String) => String = { v ⇒ v }
+  override def crypto: (String) => String = { v ⇒
+    v
+  }
 
   def getReviewDetails(implicit request: Request[_], ec: ExecutionContext): Future[BusinessRegistrationDetails] = {
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"

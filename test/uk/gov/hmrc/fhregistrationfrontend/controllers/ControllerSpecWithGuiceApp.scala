@@ -23,11 +23,7 @@ import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
 
-trait ControllerSpecWithGuiceApp
-  extends ControllersSpecBase
-    with GuiceOneAppPerSuite
-    with I18nSupport
-{
+trait ControllerSpecWithGuiceApp extends ControllersSpecBase with GuiceOneAppPerSuite with I18nSupport {
 
   val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
   val Messages = request2Messages(FakeRequest())

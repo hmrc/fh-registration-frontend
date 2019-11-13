@@ -36,35 +36,35 @@ trait EmailVerificationConnector {
   def requestVerification(email: String, emailHash: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean]
 }
 
-class DefaultEmailVerificationConnector @Inject() (
+class DefaultEmailVerificationConnector @Inject()(
   appConfig: AppConfig,
   val http: HttpClient,
   val runModeConfiguration: Configuration,
   val runMode: RunMode,
   environment: Environment
-)(implicit ec: ExecutionContext) extends ServicesConfig(runModeConfiguration, runMode)
-  with EmailVerificationConnector
-  with HttpErrorFunctions
-{
+)(implicit ec: ExecutionContext)
+    extends ServicesConfig(runModeConfiguration, runMode) with EmailVerificationConnector with HttpErrorFunctions {
   val emailVerificationBaseUrl = s"${baseUrl("email-verification")}/email-verification"
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
     val url = s"$emailVerificationBaseUrl/verified-email-check"
     implicit val customReads = new HttpReads[Boolean] {
-      override def read(method: String, url: String, response: HttpResponse): Boolean = {
+      override def read(method: String, url: String, response: HttpResponse): Boolean =
         response.status match {
           case status if status == 200 ⇒ true
           case status if status == 404 ⇒ false
-          case status if is4xx(status) ⇒ throw Upstream4xxResponse("email-verification/verified-email-check error", response.status, 500)
-          case status if is5xx(status) ⇒ throw Upstream5xxResponse("email-verification/verified-email-check error", response.status, 502)
+          case status if is4xx(status) ⇒
+            throw Upstream4xxResponse("email-verification/verified-email-check error", response.status, 500)
+          case status if is5xx(status) ⇒
+            throw Upstream5xxResponse("email-verification/verified-email-check error", response.status, 502)
         }
-      }
     }
 
     http.POST(url, Json.toJson(Email(email)))
   }
 
-  override def requestVerification(email: String, emailHash: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
+  override def requestVerification(email: String, emailHash: String)(
+    implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
     val templateId: String = "fhdds_email_verification"
     val linkExpiryDuration: String = "PT30M"
     val request = EmailVerificationRequest(
@@ -76,15 +76,16 @@ class DefaultEmailVerificationConnector @Inject() (
     )
 
     implicit val customReads = new HttpReads[Boolean] {
-      override def read(method: String, url: String, response: HttpResponse): Boolean = {
+      override def read(method: String, url: String, response: HttpResponse): Boolean =
         response.status match {
           case status if status == 409 ⇒ true
           case status if status == 201 ⇒ false
-          case status if is4xx(status) ⇒ throw Upstream4xxResponse("email-verification/verification-requests error", response.status, 500)
-          case status if is5xx(status) ⇒ throw Upstream5xxResponse("email-verification/verification-requests error", response.status, 502)
+          case status if is4xx(status) ⇒
+            throw Upstream4xxResponse("email-verification/verification-requests error", response.status, 500)
+          case status if is5xx(status) ⇒
+            throw Upstream5xxResponse("email-verification/verification-requests error", response.status, 502)
 
         }
-      }
     }
 
     val url = s"$emailVerificationBaseUrl/verification-requests"

@@ -24,14 +24,13 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 
 @Inject
 class SummaryController @Inject()(
-  ds                   : CommonPlayDependencies,
-  cc                   : MessagesControllerComponents,
+  ds: CommonPlayDependencies,
+  cc: MessagesControllerComponents,
   actions: Actions
 ) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
-
     val application = request.businessType match {
       case BusinessType.CorporateBody ⇒
         Journeys ltdApplication request

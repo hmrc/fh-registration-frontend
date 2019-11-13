@@ -51,10 +51,11 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
     }
 
     "Parse when using default email" in {
-      val parsed = dataFromValidForm(Map(
-        emailOptionKey → "true",
-        defaultEmailKey → "default@test.com"
-      ))
+      val parsed = dataFromValidForm(
+        Map(
+          emailOptionKey → "true",
+          defaultEmailKey → "default@test.com"
+        ))
 
       parsed.usingGgEmailAddress shouldBe true
       parsed.ggEmail shouldBe Some("default@test.com")
@@ -62,10 +63,11 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
     }
 
     "Parse when using alternate email" in {
-      val parsed = dataFromValidForm(Map(
-        emailOptionKey → "false",
-        alternativeEmailKey → "alternate@test.com"
-      ))
+      val parsed = dataFromValidForm(
+        Map(
+          emailOptionKey → "false",
+          alternativeEmailKey → "alternate@test.com"
+        ))
 
       parsed.usingGgEmailAddress shouldBe false
       parsed.alternativeEmail shouldBe Some("alternate@test.com")

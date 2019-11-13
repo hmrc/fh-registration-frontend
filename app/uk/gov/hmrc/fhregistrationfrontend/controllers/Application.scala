@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-
 import cats.data.OptionT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
@@ -46,7 +45,8 @@ class Application @Inject()(
   businessCustomerConnector: BusinessCustomerFrontendConnector,
   cc: MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService, ec : ExecutionContext) extends AppController(ds, cc) {
+)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
+    extends AppController(ds, cc) {
 
   override val configuration: Configuration = ds.conf
 
@@ -54,27 +54,25 @@ class Application @Inject()(
 
   import actions._
   def main = userAction.async { implicit request ⇒
-
-    fhddsConnector
-      .getEnrolmentProgress
+    fhddsConnector.getEnrolmentProgress
       .map {
         case EnrolmentProgress.Pending ⇒ Redirect(routes.Application.enrolmentPending)
         case EnrolmentProgress.Error ⇒ Redirect(routes.Application.enrolmentPending)
-        case _                         ⇒
-          val whenRegistered = request
-            .registrationNumber
-            .map { _ ⇒ Redirect(routes.Application.checkStatus())}
+        case _ ⇒
+          val whenRegistered = request.registrationNumber
+            .map { _ ⇒
+              Redirect(routes.Application.checkStatus())
+            }
 
           whenRegistered getOrElse Redirect(routes.Application.startOrContinueApplication())
       }
   }
 
-  def enrolmentPending = userAction.async { implicit  request ⇒
-    fhddsConnector
-      .getEnrolmentProgress
+  def enrolmentPending = userAction.async { implicit request ⇒
+    fhddsConnector.getEnrolmentProgress
       .map {
         case EnrolmentProgress.Pending ⇒ Ok(enrolment_pending())
-        case EnrolmentProgress.Error   ⇒ Ok(application_error())
+        case EnrolmentProgress.Error ⇒ Ok(application_error())
         case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
       }
   }
@@ -93,14 +91,14 @@ class Application @Inject()(
     redirectWhenSaved getOrElseF newApplication
   }
 
-  private def newApplication(implicit request: UserRequest[_]) = {
+  private def newApplication(implicit request: UserRequest[_]) =
     save4LaterService
-      .fetch(request.userId).map {
+      .fetch(request.userId)
+      .map {
         case Some(_) ⇒ save4LaterService.removeUserData(request.userId)
         case None ⇒
       }
       .map(_ ⇒ Redirect(links.businessCustomerVerificationUrl))
-  }
 
   def continueWithBpr = newApplicationAction.async { implicit request ⇒
     for {
@@ -114,49 +112,50 @@ class Application @Inject()(
   def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request ⇒
     if (isNewForm) {
       Future successful Redirect(routes.Application.businessType())
-    }
-    else {
+    } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
           Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
-        case None            ⇒ Redirect(routes.Application.businessType())
+        case None ⇒ Redirect(routes.Application.businessType())
       }
     }
   }
 
   def submitDeleteOrContinue = userAction.async { implicit request ⇒
-    deleteOrContinueForm.bindFromRequest().fold(
-      formWithErrors => Future successful errorHandler.errorResultsPages(Results.BadRequest),
-      deleteOrContinue => {
-        if (deleteOrContinue == "delete") {
-          save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-            case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
-            case None            ⇒
-              Future successful errorHandler.errorResultsPages(Results.BadRequest)
+    deleteOrContinueForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future successful errorHandler.errorResultsPages(Results.BadRequest),
+        deleteOrContinue => {
+          if (deleteOrContinue == "delete") {
+            save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+              case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+              case None ⇒
+                Future successful errorHandler.errorResultsPages(Results.BadRequest)
+            }
+          } else {
+            Future successful Redirect(routes.Application.resumeForm())
           }
-        } else {
-          Future successful Redirect(routes.Application.resumeForm())
         }
-      }
-    )
+      )
   }
 
   def confirmDelete = userAction.async { implicit request ⇒
-      save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-        case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
-        case None            ⇒ Future successful BadRequest
-      }
+    save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+      case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+      case None ⇒ Future successful BadRequest
+    }
   }
 
   def resumeForm = journeyAction { implicit request ⇒
-    if(request.journeyState.isComplete)
+    if (request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary())
     else {
-      request.journeyState.lastEditedPage.map( p ⇒ p.id → p.lastSection) match {
+      request.journeyState.lastEditedPage.map(p ⇒ p.id → p.lastSection) match {
         case None ⇒
           val firstPage = request.journeyPages.pages.head.id
           Redirect(routes.FormPageController.load(firstPage))
-        case Some((pid , Some(section))) ⇒  Redirect(routes.FormPageController.loadWithSection(pid, section))
+        case Some((pid, Some(section))) ⇒ Redirect(routes.FormPageController.loadWithSection(pid, section))
         case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
 
       }
@@ -164,8 +163,8 @@ class Application @Inject()(
   }
 
   def deleteUserData = userAction.async { implicit request ⇒
-    save4LaterService.removeUserData(request.userId) map {
-      _ ⇒ Redirect(routes.Application.main())
+    save4LaterService.removeUserData(request.userId) map { _ ⇒
+      Redirect(routes.Application.main())
     }
   }
 
@@ -174,16 +173,18 @@ class Application @Inject()(
   }
 
   def submitBusinessType = userAction.async { implicit request ⇒
-    businessTypeForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
-      businessType => {
-        for {
-          _ ← save4LaterService.saveBusinessType(request.userId, businessType)
-        } yield {
-          Redirect(routes.EmailVerificationController.contactEmail())
+    businessTypeForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
+        businessType => {
+          for {
+            _ ← save4LaterService.saveBusinessType(request.userId, businessType)
+          } yield {
+            Redirect(routes.EmailVerificationController.contactEmail())
+          }
         }
-      }
-    )
+      )
   }
 
   def startForm = userAction { implicit request ⇒
@@ -193,7 +194,7 @@ class Application @Inject()(
   def savedForLater = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
       case Some(savedDate) ⇒ Ok(saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
-      case None            ⇒ errorHandler.errorResultsPages(Results.NotFound)
+      case None ⇒ errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
@@ -208,8 +209,7 @@ class Application @Inject()(
 
 @Singleton
 abstract class AppController(val ds: CommonPlayDependencies, val cc: MessagesControllerComponents)
-  extends FrontendController(cc)
-    with I18nSupport {
+    extends FrontendController(cc) with I18nSupport {
 
   override implicit val messagesApi: MessagesApi = ds.messagesApi
 

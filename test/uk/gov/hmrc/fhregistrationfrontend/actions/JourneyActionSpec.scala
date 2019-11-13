@@ -29,7 +29,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestDa
 
 class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach {
 
-  lazy val action = new JourneyAction()(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action =
+    new JourneyAction()(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
   val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {
@@ -202,7 +203,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
     }
   }
 
-  private def addUpdatePageData(cacheMapBuilder: CacheMapBuilder) = {
+  private def addUpdatePageData(cacheMapBuilder: CacheMapBuilder) =
     cacheMapBuilder
       .withValue(Page.contactPersonPage.id, FormTestData.contactPerson)
       .withValue(Page.mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
@@ -213,19 +214,17 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       .withValue(Page.importingActivitiesPage.id, FormTestData.importingActivities)
       .withValue(Page.businessCustomersPage.id, FormTestData.businessCustomers)
       .withValue(Page.otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
-
       .withValue(Save4LaterKeys.displayKeyForPage(Page.contactPersonPage.id), FormTestData.contactPerson)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.mainBusinessAddressPage.id), FormTestData.mainBusinessAddress)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.nationalInsuranceNumberPage.id), FormTestData.nationalInsuranceNumber)
+      .withValue(
+        Save4LaterKeys.displayKeyForPage(Page.nationalInsuranceNumberPage.id),
+        FormTestData.nationalInsuranceNumber)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.tradingNamePage.id), FormTestData.tradingName)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.vatNumberPage.id), FormTestData.vatNumber)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.businessStatusPage.id), FormTestData.businessStatus)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.importingActivitiesPage.id), FormTestData.importingActivities)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.businessCustomersPage.id), FormTestData.businessCustomers)
       .withValue(Save4LaterKeys.displayKeyForPage(Page.otherStoragePremisesPage.id), FormTestData.otherStoragePremises)
-
       .withValue(Save4LaterKeys.displayKeyForPage(Save4LaterKeys.verifiedEmailKey), ggEmail)
 
-  }
 }
-

@@ -24,15 +24,15 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnect
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import scala.concurrent.ExecutionContext
 
-class Actions @Inject() (
+class Actions @Inject()(
   externalUrls: ExternalUrls,
   fhddsConnector: FhddsConnector,
   cc: ControllerComponents
-)(implicit val authConnector: AuthConnector,
+)(
+  implicit val authConnector: AuthConnector,
   save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler,
-  ec: ExecutionContext
-) {
+  ec: ExecutionContext) {
 
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
 
@@ -46,7 +46,8 @@ class Actions @Inject() (
   def journeyAction = userAction andThen new JourneyAction
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
 
-  def newApplicationAction = noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
+  def newApplicationAction =
+    noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
     journeyAction andThen new PageAction(pageId, sectionId)

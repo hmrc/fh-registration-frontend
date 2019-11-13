@@ -18,9 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json._
 
-case class Name(firstName: String,
-                middleName: Option[String],
-                lastName: String)
+case class Name(firstName: String, middleName: Option[String], lastName: String)
 
 object Name {
   implicit val format = Json.format[Name]

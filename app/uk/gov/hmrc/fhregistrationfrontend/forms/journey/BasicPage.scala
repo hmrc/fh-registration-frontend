@@ -27,15 +27,14 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 case class BasicPage[T](
-  id           : String, form: Form[T],
-  rendering    : FormRendering[T],
-  data         : Option[T] = None,
+  id: String,
+  form: Form[T],
+  rendering: FormRendering[T],
+  data: Option[T] = None,
   updatedAddresses: List[Address] = List.empty,
   addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
-
 )(implicit val format: Format[T])
-  extends Page[T]
-    with Rendering {
+    extends Page[T] with Rendering {
 
   override def withData(data: T) = this copy (data = Some(data))
 
@@ -55,14 +54,17 @@ case class BasicPage[T](
     }
   }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+  override def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     val filledForm = data map (form fill _) getOrElse form
     rendering.render(filledForm, bpr, navigation)
   }
 
-
   private def errorRenderer(form: Form[T]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+    override def render(
+      bpr: BusinessRegistrationDetails,
+      navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
       rendering.render(form, bpr, navigation)
   }
 

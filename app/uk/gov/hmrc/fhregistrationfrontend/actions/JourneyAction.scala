@@ -43,32 +43,29 @@ class JourneyRequest[A](
   val journeyType: JourneyType,
   val journeyPages: JourneyPages,
   val journeyState: JourneyState
-) extends WrappedRequest[A](request)
-{
+) extends WrappedRequest[A](request) {
   def userId: String = request.userId
 
   def registrationNumber = request.registrationNumber
 
-  def lastUpdateTimestamp = {
+  def lastUpdateTimestamp =
     cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey) getOrElse 0L
-  }
 
-  def hasUpdates: Option[Boolean] = {
+  def hasUpdates: Option[Boolean] =
     journeyType match {
       case JourneyType.Amendment | JourneyType.Variation ⇒ Some(pagesHaveAmendments || verifiedEmailHasAmendments)
       case _ ⇒ None
     }
-  }
 
-  private def pagesHaveAmendments = journeyPages.pages exists( page ⇒ pageHasAmendments(page))
+  private def pagesHaveAmendments = journeyPages.pages exists (page ⇒ pageHasAmendments(page))
   private def verifiedEmailHasAmendments = displayVerifiedEmail exists (_ != verifiedEmail)
 
-  private def pageHasAmendments[T](page: Page[T]) = {
+  private def pageHasAmendments[T](page: Page[T]) =
     cacheMap.getEntry[T](page.id)(page.format) != cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
-  }
 
   def displayPageDataLoader = new PageDataLoader {
-    override def pageDataOpt[T](page: Page[T]): Option[T] = cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
+    override def pageDataOpt[T](page: Page[T]): Option[T] =
+      cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
   }
 
   def displayDeclaration =
@@ -79,11 +76,11 @@ class JourneyRequest[A](
 
 }
 
-class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHandler: ErrorHandler, val executionContext: ExecutionContext)
-  extends ActionRefiner[UserRequest, JourneyRequest]
-    with FrontendAction
-    with ActionFunctions
-{
+class JourneyAction(
+  implicit val save4LaterService: Save4LaterService,
+  errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext)
+    extends ActionRefiner[UserRequest, JourneyRequest] with FrontendAction with ActionFunctions {
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, JourneyRequest[A]]] = {
     implicit val r: UserRequest[A] = input
@@ -97,29 +94,22 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
       journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages)
     } yield {
-      new JourneyRequest[A](
-        cacheMap,
-        r,
-        bpr,
-        bt,
-        verifiedEmail,
-        journeyType,
-        journeyPages,
-        journeyState)
+      new JourneyRequest[A](cacheMap, r, bpr, bt, verifiedEmail, journeyType, journeyPages, journeyState)
     }
 
     result.value
   }
 
-  def findVerifiedEmail(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, String] = {
-    cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey).fold(
-      Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus()))
-    )(
-      verifiedEmail ⇒ Either.right(verifiedEmail)
-    )
-  }
+  def findVerifiedEmail(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, String] =
+    cacheMap
+      .getEntry[String](Save4LaterKeys.verifiedEmailKey)
+      .fold(
+        Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus()))
+      )(
+        verifiedEmail ⇒ Either.right(verifiedEmail)
+      )
 
-  def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] = {
+  def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] =
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {
       case Some(bpr) ⇒ Right(bpr)
       case None ⇒
@@ -127,9 +117,8 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
         Left(errorHandler.errorResultsPages(Results.BadRequest))
 
     }
-  }
 
-  def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] = {
+  def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] =
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ Right(bt)
       case None ⇒
@@ -137,36 +126,35 @@ class JourneyAction (implicit val save4LaterService: Save4LaterService, errorHan
         Left(errorHandler.errorResultsPages(Results.BadRequest))
 
     }
-  }
 
   def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
     val pagesForEntityType = getBusinessType(cacheMap).right flatMap {
       _ match {
         case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
-        case BusinessType.SoleTrader    ⇒ Right(Journeys.soleTraderPages)
-        case BusinessType.Partnership   ⇒ Right(Journeys.partnershipPages)
-        case _                          ⇒
+        case BusinessType.SoleTrader ⇒ Right(Journeys.soleTraderPages)
+        case BusinessType.Partnership ⇒ Right(Journeys.partnershipPages)
+        case _ ⇒
           Logger.error(s"Not found: wrong business type")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
 
       }
     }
 
-    pagesForEntityType map {pages ⇒
-      val pagesWithData = pages map { page ⇒ pageWithData(cacheMap)(page)}
+    pagesForEntityType map { pages ⇒
+      val pagesWithData = pages map { page ⇒
+        pageWithData(cacheMap)(page)
+      }
       new JourneyPages(pagesWithData)
     }
 
   }
 
-  private def pageWithData[T](cacheMap: CacheMap)(page: Page[T]) = {
+  private def pageWithData[T](cacheMap: CacheMap)(page: Page[T]) =
     cacheMap.getEntry(page.id)(page.format) match {
       case Some(data) ⇒ page withData data
       case None ⇒ page
     }
-  }
 
-  def loadJourneyState(journeyPages: JourneyPages): JourneyState = {
+  def loadJourneyState(journeyPages: JourneyPages): JourneyState =
     Journeys.journeyState(journeyPages)
-  }
 }

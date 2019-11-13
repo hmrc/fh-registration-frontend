@@ -22,8 +22,5 @@ object BusinessType extends Enumeration {
   type BusinessType = Value
   val CorporateBody, SoleTrader, Partnership = Value
 
-  implicit val businessTypeFormat = Format(
-    Reads.enumNameReads(BusinessType),
-    Writes.enumNameWrites[this.type ])
+  implicit val businessTypeFormat = Format(Reads.enumNameReads(BusinessType), Writes.enumNameWrites[this.type])
 }
-

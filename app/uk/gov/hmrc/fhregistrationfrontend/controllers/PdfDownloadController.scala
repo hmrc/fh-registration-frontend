@@ -25,15 +25,15 @@ import scala.concurrent.ExecutionContext
 
 @Inject
 class PdfDownloadController @Inject()(
-  ds            : CommonPlayDependencies,
-  keyStoreService      : KeyStoreService,
-  cc:           MessagesControllerComponents,
+  ds: CommonPlayDependencies,
+  keyStoreService: KeyStoreService,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit ec: ExecutionContext) extends AppController(ds, cc){
+)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) {
 
   import actions._
   def downloadPrintable() = userAction.async { implicit request ⇒
-
     keyStoreService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))
@@ -45,4 +45,3 @@ class PdfDownloadController @Inject()(
 
   protected def removeScriptTags(html: String) = html.replaceAll("<script[\\s\\S]*?/script>", "")
 }
-

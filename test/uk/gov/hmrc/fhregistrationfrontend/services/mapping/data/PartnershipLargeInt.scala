@@ -38,26 +38,29 @@ object PartnershipLargeInt {
       false,
       Some(false),
       None,
-      Some(InternationalAddress(
-        "some street",
-        Some("Sofia"),
-        None,
-        "Bulgaria",
-        "BG"
-      ))
+      Some(
+        InternationalAddress(
+          "some street",
+          Some("Sofia"),
+          None,
+          "Bulgaria",
+          "BG"
+        ))
     ),
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
     ListWithTrackedChanges(
-      List(BusinessPartner(
-        BusinessPartnerType.Individual,
-        BusinessPartnerIndividual(
-          "mr partner",
-          "ship",
-          true,
-          Some("AA123123A"),
-          Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
-        )) → changeFlags,
+      List(
+        BusinessPartner(
+          BusinessPartnerType.Individual,
+          BusinessPartnerIndividual(
+            "mr partner",
+            "ship",
+            true,
+            Some("AA123123A"),
+            Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
+          )
+        ) → changeFlags,
         BusinessPartner(
           BusinessPartnerType.SoleProprietor,
           BusinessPartnerSoleProprietor(
@@ -83,7 +86,14 @@ object PartnershipLargeInt {
             true,
             Some("323456789"),
             None,
-            Address("llp line one", Some("llp line two"), Some("llp line three"), Some("llp town"), "AA14 1AA", None, None)
+            Address(
+              "llp line one",
+              Some("llp line two"),
+              Some("llp line three"),
+              Some("llp town"),
+              "AA14 1AA",
+              None,
+              None)
           )
         ) → changeFlags,
         BusinessPartner(
@@ -124,23 +134,25 @@ object PartnershipLargeInt {
             None,
             Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
           )
-        ) → changeFlags),
+        ) → changeFlags
+      ),
       List.empty,
-      false),
-    BusinessStatus(true, Some(LocalDate.of(2018,8,31))),
+      false
+    ),
+    BusinessStatus(true, Some(LocalDate.of(2018, 8, 31))),
     ImportingActivities(true, Some(EoriNumber("1234123132", true))),
     BusinessCustomers("Over 100"),
-    OtherStoragePremises(true,
+    OtherStoragePremises(
+      true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(
-            Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
-            false) → changeFlags,
-          StoragePremise(
-            Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
-            true) → changeFlags),
+          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → changeFlags,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → changeFlags
+        ),
         List.empty,
-        false))
+        false
+      )
+    )
   )
 
   val verifiedEmail = "a@w.ro"
@@ -149,9 +161,10 @@ object PartnershipLargeInt {
     "D",
     false,
     Some("cosmin@cosmin.co.uk"),
-    Some(AlternativeEmail(
-      "a@b.co",
-      "a@b.co"
-    ))
+    Some(
+      AlternativeEmail(
+        "a@b.co",
+        "a@b.co"
+      ))
   )
 }

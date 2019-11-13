@@ -20,13 +20,12 @@ import com.github.tototoshi.play.json.JsonNaming
 import play.api.libs.json.Json
 
 case class Address(
-  line1   : String,
-  line2   : String,
-  line3   : Option[String] = None,
-  line4   : Option[String] = None,
+  line1: String,
+  line2: String,
+  line3: Option[String] = None,
+  line4: Option[String] = None,
   postcode: Option[String] = None,
-  country : String) {
-
+  country: String) {
 
   override def toString = {
     val line3display = line3.map(line3 => s"$line3, ").getOrElse("")
@@ -40,4 +39,3 @@ case class Address(
 object Address {
   implicit val formats = JsonNaming snakecase Json.format[Address]
 }
-

@@ -32,37 +32,35 @@ object Diff {
       original.businessAddressForFHDDS.previousOperationalAddress != amended.businessAddressForFHDDS.previousOperationalAddress,
       original.contactDetail != amended.contactDetail,
       original.additionalBusinessInformation.partnerCorporateBody != amended.additionalBusinessInformation.partnerCorporateBody,
-      additionalBusinessInformationChanged(original.additionalBusinessInformation.allOtherInformation, amended.additionalBusinessInformation.allOtherInformation),
+      additionalBusinessInformationChanged(
+        original.additionalBusinessInformation.allOtherInformation,
+        amended.additionalBusinessInformation.allOtherInformation),
       original.additionalBusinessInformation.allOtherInformation.premises
         != amended.additionalBusinessInformation.allOtherInformation.premises,
-      original.declaration != amended.declaration)
+      original.declaration != amended.declaration
+    )
 
   import Lenses._
 
-  private def businessTypeChanged(original: Subscription, amended: Subscription) = {
+  private def businessTypeChanged(original: Subscription, amended: Subscription) =
     anyChanged(original, amended, organizationType, fhBusinessDetail)
-  }
 
-  private def businessDetailChanged(original: Subscription, amended: Subscription) = {
+  private def businessDetailChanged(original: Subscription, amended: Subscription) =
     anyChanged(original, amended, soleProprietor, nonProprietor, limitedLiabilityPartnershipCorporateBody)
-  }
 
-  private def partnersChanged(original: Subscription, amended: Subscription) = {
+  private def partnersChanged(original: Subscription, amended: Subscription) =
     anyChanged(original, amended, partnership)
-  }
 
   private def anyChanged(original: Subscription, amended: Subscription, lenses: Optional[Subscription, _]*) =
-    lenses
-      .iterator
-      .exists { lens ⇒ lens.getOption(original) != lens.getOption(amended) }
+    lenses.iterator
+      .exists { lens ⇒
+        lens.getOption(original) != lens.getOption(amended)
+      }
 
-  private def additionalBusinessInformationChanged(original: AllOtherInformation, amended: AllOtherInformation) = {
+  private def additionalBusinessInformationChanged(original: AllOtherInformation, amended: AllOtherInformation) =
     original.numberOfCustomers != amended.numberOfCustomers ||
       original.doesEORIExist != amended.doesEORIExist ||
       original.EORINumber != amended.EORINumber
-  }
-
-
 
   object Lenses {
     val organizationType = GenLens[Subscription](_.organizationType).asOptional
@@ -72,13 +70,11 @@ object Diff {
 
     val soleProprietor = GenLens[Subscription](_.businessDetail.soleProprietor) composePrism some
     val nonProprietor = GenLens[Subscription](_.businessDetail.nonProprietor) composePrism some
-    val limitedLiabilityPartnershipCorporateBody = GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
+    val limitedLiabilityPartnershipCorporateBody = GenLens[Subscription](
+      _.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
 
     val partnership = GenLens[Subscription](_.businessDetail.partnership) composePrism some
 
-
-
   }
-
 
 }

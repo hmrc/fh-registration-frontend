@@ -18,11 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json._
 
-case class FulfilmentOrdersType(onLine: Boolean,
-                                telephone: Boolean,
-                                physicalPremises: Boolean,
-                                other: Boolean,
-                                typeOfOtherOrder: Option[String])
+case class FulfilmentOrdersType(
+  onLine: Boolean,
+  telephone: Boolean,
+  physicalPremises: Boolean,
+  other: Boolean,
+  typeOfOtherOrder: Option[String])
 
 object FulfilmentOrdersType {
   implicit val format = Json.format[FulfilmentOrdersType]

@@ -28,34 +28,58 @@ class NewApplicationActionSpec extends ActionSpecBase {
 
   "New Application Action" should {
     "Be denied for some statuses" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Admin),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Processing, Received, Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new NewApplicationAction(fhddsConnector)(
+          StubbedErrorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
 
         status(result(action, userRequest)) shouldBe BAD_REQUEST
       }
     }
 
     "Be allowed when there is no registration number" in {
-      val userRequest = new UserRequest(testUserId, None, registrationNumber = None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        registrationNumber = None,
+        Some(Admin),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       val fhddsConnector = mock[FhddsConnector]
-      val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+      val action = new NewApplicationAction(fhddsConnector)(
+        StubbedErrorHandler,
+        scala.concurrent.ExecutionContext.Implicits.global)
 
       status(result(action, userRequest)) shouldBe OK
     }
 
     "Be allowed for some statuses" in {
-      val userRequest = new UserRequest(testUserId, None, Some(registrationNumber), Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val userRequest = new UserRequest(
+        testUserId,
+        None,
+        Some(registrationNumber),
+        Some(Admin),
+        Some(AffinityGroup.Individual),
+        FakeRequest())
       for {
         fhddsStatus ← List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
-        val action = new NewApplicationAction(fhddsConnector)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        val action = new NewApplicationAction(fhddsConnector)(
+          StubbedErrorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
 
         status(result(action, userRequest)) shouldBe OK
       }

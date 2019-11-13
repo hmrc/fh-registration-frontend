@@ -22,20 +22,16 @@ import java.util.Date
 import play.api.data.FormError
 
 object Helpers {
-  def getError(error: Option[FormError]) = {
+  def getError(error: Option[FormError]) =
     if (error.nonEmpty) error.head.message
     else ""
-  }
 
-  def formatTimestamp(date: Option[Date]): String = {
+  def formatTimestamp(date: Option[Date]): String =
     date.map(d ⇒ formatTimestamp(d)).getOrElse("")
-  }
 
-  def formatTimestamp(date: Date): String = {
+  def formatTimestamp(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy HH:mm").format(date)
-  }
 
-  def formatDate(date: Date): String = {
+  def formatDate(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy").format(date)
-  }
 }

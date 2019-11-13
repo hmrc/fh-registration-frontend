@@ -22,28 +22,24 @@ class LinearJourney(val journeyPages: JourneyPages) extends JourneyNavigation {
 
   val pages = journeyPages.pages
 
-  override def next[_](page: AnyPage): Option[AnyPage] = {
+  override def next[_](page: AnyPage): Option[AnyPage] =
     pages dropWhile (_.id != page.id) match {
       case _ :: next :: rest ⇒ Some(next)
-      case _                    ⇒ None
+      case _ ⇒ None
     }
-  }
 
   override def previous(page: AnyPage): Option[AnyPage] = {
     val pageWithPrevSubsection = page.previousSubsection map (subsection ⇒ page withSubsection Some(subsection))
 
     pageWithPrevSubsection orElse {
-      pages.takeWhile(_.id != page.id).lastOption map {
-        prevPage ⇒ prevPage withSubsection prevPage.lastSection
+      pages.takeWhile(_.id != page.id).lastOption map { prevPage ⇒
+        prevPage withSubsection prevPage.lastSection
       }
     }
   }
 
-  override def navigation(lastUpdateTime: Long, page: AnyPage): Navigation = {
-    Navigation(
-      lastUpdateTime,
-      back = previous(page) map {prevPage ⇒
-        FormPage(prevPage.id, prevPage.section)
+  override def navigation(lastUpdateTime: Long, page: AnyPage): Navigation =
+    Navigation(lastUpdateTime, back = previous(page) map { prevPage ⇒
+      FormPage(prevPage.id, prevPage.section)
     })
-  }
 }

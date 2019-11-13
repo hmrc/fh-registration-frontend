@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import play.api.libs.json._
 
-
 sealed trait CompanyOfficial
 
 case class IndividualAsOfficial(
@@ -39,8 +38,6 @@ object IndividualAsOfficial {
   implicit val format = Json.format[IndividualAsOfficial]
 }
 
-
-
 object CompanyAsOfficial {
   implicit val format = Json.format[CompanyAsOfficial]
 }
@@ -50,7 +47,7 @@ object CompanyOfficial {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o ⇒
       (o \ "name" \ "firstName") match {
         case JsDefined(_) ⇒ o.validate[IndividualAsOfficial]
-        case _               ⇒ o.validate[CompanyAsOfficial]
+        case _ ⇒ o.validate[CompanyAsOfficial]
       }
     }
 

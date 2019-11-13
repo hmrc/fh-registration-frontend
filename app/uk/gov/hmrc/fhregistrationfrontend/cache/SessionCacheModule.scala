@@ -31,18 +31,20 @@ class SessionCacheModule extends Module {
 }
 
 @Singleton
-class DefaultSessionCache @Inject() (
+class DefaultSessionCache @Inject()(
   override val http: HttpClient,
   val configuration: Configuration,
   val runMode: RunMode,
   environment: Environment
-) extends ServicesConfig(configuration, runMode) with client.SessionCache{
+) extends ServicesConfig(configuration, runMode) with client.SessionCache {
 
   val appNameConfiguration = configuration
   val runModeConfiguration = configuration
 
-  override lazy val defaultSource = getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
+  override lazy val defaultSource =
+    getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
   override lazy val baseUri = baseUrl("cachable.session-cache")
-  override lazy val domain = getConfString("cachable.session-cache.domain",
+  override lazy val domain = getConfString(
+    "cachable.session-cache.domain",
     throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
 }

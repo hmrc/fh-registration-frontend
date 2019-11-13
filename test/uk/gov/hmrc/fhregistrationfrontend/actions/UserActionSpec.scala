@@ -40,7 +40,9 @@ class UserActionSpec extends ActionSpecBase {
   type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup]
 
   val fakeRequest: Request[Any] = FakeRequest()
-  lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler, mockMessagesControllerComponent)(mockAuthConnector, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler, mockMessagesControllerComponent)(
+    mockAuthConnector,
+    scala.concurrent.ExecutionContext.Implicits.global)
 
   "UserAction" should {
     "Find the internal user id and email with no enrolments " in {
@@ -108,18 +110,19 @@ class UserActionSpec extends ActionSpecBase {
   }
 
   def setupAuthConnector(
-    id        : Option[String] = Some("id"),
-    email     : Option[String] = Some("email@test.com"),
+    id: Option[String] = Some("id"),
+    email: Option[String] = Some("email@test.com"),
     enrolments: Set[Enrolment] = Set.empty,
     credentialRole: Option[CredentialRole] = Some(Admin),
-    userAffinityGroup : Option[AffinityGroup] = Some(AffinityGroup.Individual)
+    userAffinityGroup: Option[AffinityGroup] = Some(AffinityGroup.Individual)
   ): OngoingStubbing[Future[RetrievalType]] = {
 
-    val authResult = Future successful (new ~ (new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole), userAffinityGroup))
+    val authResult = Future successful (new ~(
+      new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole),
+      userAffinityGroup))
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
   }
 
-  def setupAuthConnector(throwable: Throwable) = {
+  def setupAuthConnector(throwable: Throwable) =
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed throwable)
-  }
 }

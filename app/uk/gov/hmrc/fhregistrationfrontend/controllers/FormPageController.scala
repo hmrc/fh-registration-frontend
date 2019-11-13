@@ -33,43 +33,47 @@ class FormPageController @Inject()(
   addressAuditService: AddressAuditService,
   cc: MessagesControllerComponents,
   actions: Actions
-)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext) extends AppController(ds, cc) {
+)(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
+    extends AppController(ds, cc) {
 
   import actions._
   def load(pageId: String) = pageAction(pageId) { implicit request ⇒
     renderForm(request.page, false)
   }
 
-  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)){ implicit request ⇒
+  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)) { implicit request ⇒
     renderForm(request.page, false)
   }
 
   def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
-  def saveWithSection[T,V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
+  def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
 
-  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async { implicit request ⇒
-    request.page[T].parseFromRequest (
-      pageWithErrors => Future successful renderForm(pageWithErrors, true),
-      page => {
-        addressAuditService.auditAddresses(pageId, page.updatedAddresses)
-        save4LaterService
-          .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-          .map { _ ⇒
-            if (isSaveForLate)
-              Redirect(routes.Application.savedForLater)
-            else {
-              showNextPage(page)
-            }
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async {
+    implicit request ⇒
+      request
+        .page[T]
+        .parseFromRequest(
+          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          page => {
+            addressAuditService.auditAddresses(pageId, page.updatedAddresses)
+            save4LaterService
+              .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+              .map { _ ⇒
+                if (isSaveForLate)
+                  Redirect(routes.Application.savedForLater)
+                else {
+                  showNextPage(page)
+                }
+              }
           }
-      }
-    )
+        )
   }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request ⇒
       if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
         request.page[T].delete match {
-          case None          ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
+          case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
           case Some(newPage) ⇒
             save4LaterService
               .saveDraftData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
@@ -93,29 +97,30 @@ class FormPageController @Inject()(
       }
     }
 
-  private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) = {
+  private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) =
     if (newPage.nextSubsection.isDefined)
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
       request.journey next newPage match {
         case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
-        case None           ⇒ Redirect(routes.SummaryController.summary())
+        case None ⇒ Redirect(routes.SummaryController.summary())
       }
-  }
 
-  private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) = {
+  private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =
     if (hasErrors)
       BadRequest(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     else {
       Ok(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     }
-  }
 
   val submitButtonValueForm = Form("saveAction" → nonEmptyText)
 
   /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
-  private def isSaveForLate(implicit req:Request[_]): Boolean = submitButtonValueForm.bindFromRequest().fold(
-    _ ⇒ false,
-    value ⇒ value == "saveForLater"
-  )
+  private def isSaveForLate(implicit req: Request[_]): Boolean =
+    submitButtonValueForm
+      .bindFromRequest()
+      .fold(
+        _ ⇒ false,
+        value ⇒ value == "saveForLater"
+      )
 }

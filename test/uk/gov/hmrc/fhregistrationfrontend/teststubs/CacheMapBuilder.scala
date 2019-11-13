@@ -28,7 +28,8 @@ case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
       this.copy(data = data + (key → writes.writes(value)))
     }
 
-  def withValue[T](key: String, value: T)(implicit writes: Writes[T]) = this.copy(data = data + (key → writes.writes(value)))
+  def withValue[T](key: String, value: T)(implicit writes: Writes[T]) =
+    this.copy(data = data + (key → writes.writes(value)))
 
   def cacheMap = CacheMap(id, data)
 

@@ -30,10 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnector
 import scala.concurrent.Future
 
 class DeregistrationControllerSpec
-  extends ControllerSpecWithGuiceApp
-    with FhddsConnectorMocks
-    with ActionsMock
-    with BeforeAndAfterEach {
+    extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
   val desToForm = new DesToFormImpl()
   val mockKeyStoreService = mock[KeyStoreService]
@@ -173,7 +170,6 @@ class DeregistrationControllerSpec
       val request = FakeRequest().withSession(
         controller.EmailSessionKey → "some@email.com",
         controller.ProcessingTimestampSessionKey → System.currentTimeMillis.toString
-
       )
       val result = await(csrfAddToken(controller.acknowledgment)(request))
       status(result) shouldBe OK
@@ -181,11 +177,11 @@ class DeregistrationControllerSpec
     }
   }
 
-  def setupSaveDeregistrationReason() = {
+  def setupSaveDeregistrationReason() =
     when(mockKeyStoreService.saveDeregistrationReason(any())(any())) thenReturn Future.successful(())
-  }
 
-  def setupKeyStoreDeregistrationReason(reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))): Unit = {
+  def setupKeyStoreDeregistrationReason(
+    reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None)))
+    : Unit =
     when(mockKeyStoreService.fetchDeregistrationReason()(any())) thenReturn Future.successful(reason)
-  }
 }

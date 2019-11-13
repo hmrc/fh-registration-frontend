@@ -24,14 +24,14 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 
 import scala.concurrent.ExecutionContext
 
-class ReadOnlySummaryController  @Inject()(
-  ds               : CommonPlayDependencies,
-  desToForm        : DesToForm,
-  fhddsConnector   : FhddsConnector,
-  cc               : MessagesControllerComponents,
+class ReadOnlySummaryController @Inject()(
+  ds: CommonPlayDependencies,
+  desToForm: DesToForm,
+  fhddsConnector: FhddsConnector,
+  cc: MessagesControllerComponents,
   actions: Actions
-)(implicit ec: ExecutionContext) extends AppController(ds, cc) with SummaryFunctions {
-
+)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) with SummaryFunctions {
 
   def view() = actions.enrolledUserAction.async { implicit request ⇒
     for {

@@ -23,7 +23,7 @@ trait FormSpecsHelper[T] extends Matchers {
 
   def form: Form[T]
 
-  def dataFromValidForm(post: Map[String, String]):T  = {
+  def dataFromValidForm(post: Map[String, String]): T = {
     val bound = form.bind(post)
 
     bound.errors shouldBe empty
@@ -39,17 +39,12 @@ trait FormSpecsHelper[T] extends Matchers {
     errors should contain allElementsOf expected
   }
 
-  def fieldHasErrors(key: String, value: String, errors: String*) = {
+  def fieldHasErrors(key: String, value: String, errors: String*) =
+    formDataHasErrors(Map(key → value), errors map { key → _ } toList)
 
-    formDataHasErrors(
-      Map(key → value),
-      errors map { key → _} toList)
-  }
-
-  def formRequires(fields: String*) = {
+  def formRequires(fields: String*) =
     formDataHasErrors(
       Map.empty,
-      fields map { _ → "error.required"}
+      fields map { _ → "error.required" }
     )
-  }
 }
