@@ -169,14 +169,15 @@ class Application @Inject()(
   }
 
   def businessType = userAction { implicit request ⇒
-    Ok(business_type(businessTypeForm))
+    Ok(business_type(businessTypeForm, links.businessCustomerVerificationUrl))
   }
 
   def submitBusinessType = userAction.async { implicit request ⇒
     businessTypeForm
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(business_type(formWithErrors))),
+        formWithErrors =>
+          Future.successful(BadRequest(business_type(formWithErrors, links.businessCustomerVerificationUrl))),
         businessType => {
           for {
             _ ← save4LaterService.saveBusinessType(request.userId, businessType)

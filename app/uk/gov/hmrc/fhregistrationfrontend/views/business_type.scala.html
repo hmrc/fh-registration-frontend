@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-@(businessTypeForm: Form[BusinessType])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @typeNotListed = {
   <p>@Messages("fh.business_type.details1")</p>
@@ -35,12 +35,13 @@
 
 @title = @{
   Messages("fh.business_type.title")
+
 }
 
 @uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, pageScripts = Some(scripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
+  <a href="@backUrl" class="link-back">@Messages("fh.generic.back")</a>
   @error_box(businessTypeForm)
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType(), 'novalidate -> "novalidate") {
