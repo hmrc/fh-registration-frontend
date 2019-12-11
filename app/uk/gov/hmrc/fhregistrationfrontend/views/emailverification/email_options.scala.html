@@ -51,9 +51,8 @@
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
   @Back(navigation)
-    <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.businessType()" class="link-back">@Messages("fh.generic.back")</a>
 
-    @error_box(emailVerificationForm, ".emailVerification.")
+  @error_box(emailVerificationForm, ".emailVerification.")
 
   @helper.form(action = action, 'novalidate -> "novalidate") {
 

@@ -41,8 +41,8 @@
 @main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
   @Back(navigation)
-  <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail()" class="link-back">@Messages("fh.generic.back")</a>
 
   @error_box(contactPersonForm, ".contact_person.")
 
