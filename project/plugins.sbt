@@ -2,7 +2,7 @@ resolvers += Resolver.url("HMRC Sbt Plugin Releases", url("https://dl.bintray.co
 resolvers += "HMRC Releases" at "https://dl.bintray.com/hmrc/releases"
 resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
 
