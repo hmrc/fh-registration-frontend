@@ -101,7 +101,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(resolvers ++= Seq(
     Resolver.bintrayRepo("hmrc", "releases"),
     Resolver.jcenterRepo,
-    "emueller-bintray" at "http://dl.bintray.com/emueller/maven"
+    "emueller-bintray" at "https://dl.bintray.com/emueller/maven"
   ))
 
 
