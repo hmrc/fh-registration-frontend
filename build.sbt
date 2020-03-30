@@ -12,14 +12,14 @@ val monocleVersion = "1.5.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "1.3.0",
-  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.48.0-play-26",
+  "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "1.6.0",
+  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.52.0-play-26",
   "uk.gov.hmrc"                 %% "play-ui"                          % "8.8.0-play-26",
-  "uk.gov.hmrc"                 %% "play-partials"                    % "6.9.0-play-26",
+  "uk.gov.hmrc"                 %% "play-partials"                    % "6.10.0-play-26",
   "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "4.1.0-play-26",
   "uk.gov.hmrc"                 %% "http-caching-client"              % "9.0.0-play-26",
   "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.2.0-play-26",
-  "uk.gov.hmrc"                 %% "time"                             % "3.6.0",
+  "uk.gov.hmrc"                 %% "time"                             % "3.9.0",
   "com.typesafe.play"           %% "play-json"                        % "2.6.14",
   "org.typelevel"               %% "cats-core"                        % "1.6.1",
   "org.typelevel"               %% "cats-kernel"                      % "1.6.1",
