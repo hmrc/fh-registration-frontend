@@ -486,7 +486,8 @@ fh.declaration.Amendment.hasAmendments.error.linkText=View or change your applic
 fh.declaration.Variation.hasAmendments.error.linkText=View or change your registered details
 fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
 fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
-
+fh.declaration.usingDefaultEmail.error.required=Select whether this is the correct email address to use
+fh.declaration.alternativeEmail.email.error.required=Enter valid email addresses that match
 # Corporate Body Page specific messages
 #============================================================
 
