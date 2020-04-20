@@ -43,16 +43,16 @@
   if(params.hiddenLabel) {
     "hidden"
   } else {
-    "form-label-bold"
+    "form-label"
   }
 }
 
-@label = @{
-  if(params.labelAsHeading) {
-    <h1>{params.label}</h1>
-  } else {
-    params.label
-  }
+@label = {
+    @if(params.labelAsHeading) {
+            <h1><label class="heading-large" for="@{fieldName}">@params.label</label></h1>
+    } else {
+            <label class="@{labelClass}" for="@{fieldName}">@params.label</label>
+    }
 }
 
 @nestedClass = @{
@@ -61,9 +61,7 @@
 
 <div class="@{formGroupClass}@{nestedClass}" id="@{fieldName}_container">
 
-    <legend class="@{labelClass}" for="@{fieldName}">
-        @label
-    </legend>
+    @label
 
     @if(params.hintText.nonEmpty){
         <span class="form-hint">@params.hintText</span>
