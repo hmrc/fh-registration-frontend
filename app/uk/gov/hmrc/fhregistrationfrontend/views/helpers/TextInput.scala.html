@@ -43,7 +43,7 @@
   if(params.hiddenLabel) {
     "hidden"
   } else {
-    "form-label"
+    "form-label-bold"
   }
 }
 
@@ -61,9 +61,9 @@
 
 <div class="@{formGroupClass}@{nestedClass}" id="@{fieldName}_container">
 
-    <label class="@{labelClass}" for="@{fieldName}">
+    <legend class="@{labelClass}" for="@{fieldName}">
         @label
-    </label>
+    </legend>
 
     @if(params.hintText.nonEmpty){
         <span class="form-hint">@params.hintText</span>
