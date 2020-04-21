@@ -60,8 +60,7 @@
   value.toLowerCase().replace(" ", "-")
 }
 
-<div class="@{formGroupClass}">
-  <fieldset @if(params.inline){class="inline"} id="@{params.name}_fieldset">
+  <fieldset @if(params.inline){class="inline @formGroupClass"} else {class="@formGroupClass"} id="@{params.name}_fieldset">
 
     @legend
 
@@ -86,4 +85,3 @@
       </div>
     }
   </fieldset>
-</div>

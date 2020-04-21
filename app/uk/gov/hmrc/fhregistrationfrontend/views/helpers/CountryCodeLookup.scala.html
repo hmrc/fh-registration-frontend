@@ -53,7 +53,7 @@
 <div class="@{formGroupClass}">
 
   <label class="form-label js-hidden" for="countryCode">@{params.label}</label>
-  <select name="@{countryCodeName}" id="countryCode" class="form-control js-hidden" value="@{params.countryCode}">
+  <select name="@{countryCodeName}" id="countryCode" class="form-control js-hidden" @if(!params.countryCode.getOrElse("").isEmpty) {value="@{params.countryCode}"}>
     <option value="" @if(params.countryCode == None) { selected="selected"}>Please select a country</option>
     <option value="AD" @if(params.countryCode == Some("AD")) { selected="selected"}>Andorra</option>
     <option value="AE" @if(params.countryCode == Some("AE")) { selected="selected"}>United Arab Emirates (the)</option>
@@ -325,7 +325,6 @@
               aria-autocomplete="list"
               aria-haspopup="true"
               aria-controls="@{countryCodeName}-suggestions-list-container"
-              aria-activedescendant
               value="@params.value"
       />
       <i class="suggestions-clear js-suggestions-clear"></i>
