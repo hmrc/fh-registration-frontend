@@ -103,6 +103,8 @@ lazy val microservice = Project(appName, file("."))
     Resolver.jcenterRepo,
     "emueller-bintray" at "https://dl.bintray.com/emueller/maven"
   ))
+  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+
 
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]) = {
