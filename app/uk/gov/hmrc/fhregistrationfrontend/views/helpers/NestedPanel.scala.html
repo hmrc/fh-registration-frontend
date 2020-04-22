@@ -17,6 +17,6 @@
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.NestedPanelParams)(implicit message : Messages, formInstance: Option[Form[_]] = None)
 
 
-<div class="form-group panel js-hidden" id="@{params.id}">
+<fieldset class="form-group panel js-hidden" id="@{params.id}">
     @{params.content}
-</div>
+</fieldset>
