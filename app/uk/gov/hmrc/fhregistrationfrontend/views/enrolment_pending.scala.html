@@ -14,8 +14,12 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+    main_template: main_template
+)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
@@ -24,7 +28,7 @@
   Messages(s"fh.status.received.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets)) {
+@main_template(title = title, linkElement = Some(stylesheets)) {
 
   <div class="govuk-box-highlight appstatus">
     <h1 class="heading-xlarge">

@@ -19,14 +19,17 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.LimitedCompanyApplication
-@import play.api.Environment
-@import java.util.Date
-@import java.text.DateFormat
+
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+
+@this(
+main_template: main_template
+)
+
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -41,7 +44,7 @@
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+@main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
 
   @BackHistory()
 
