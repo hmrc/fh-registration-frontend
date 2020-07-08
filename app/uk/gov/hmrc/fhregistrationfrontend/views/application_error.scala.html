@@ -15,6 +15,11 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+main_template: main_template
+)
 
 @()(implicit request: Request[_], messages: Messages, config: AppConfig)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
@@ -23,7 +28,7 @@
   Messages(s"fh.application_error.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets)) {
+@main_template(title = title, linkElement = Some(stylesheets)) {
   <h1>@Messages("fh.application_error.heading")</h1>
 
   <p>@Messages("fh.application_error.message")</p>

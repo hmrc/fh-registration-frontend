@@ -14,12 +14,13 @@
  * limitations under the License.
  *@
 
-@import helper._
-@import play.api.Play.current
-@import play.api.i18n.Messages.Implicits._
-@import play.api.Configuration
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+        main_template: main_template
+)
 
 @(form: Form[EnrolmentForm])(implicit request: Request[_], config: AppConfig, messages: Messages)
 

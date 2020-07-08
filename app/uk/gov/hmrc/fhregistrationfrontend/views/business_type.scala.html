@@ -19,6 +19,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+main_template: main_template
+)
 
 @(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -38,7 +43,7 @@
 
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, pageScripts = Some(scripts)) {
+@main_template(title = titlePrefix + title, pageScripts = Some(scripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
   <a href="@backUrl" class="link-back">@Messages("fh.generic.back")</a>
