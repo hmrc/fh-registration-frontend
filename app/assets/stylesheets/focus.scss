@@ -168,15 +168,3 @@ textarea:focus {
   clip-path: none !important;
   white-space: inherit !important;
 }
-
-
-
-.button--secondary:focus {
-  outline:3px solid transparent;
-  color:#0b0c0c;
-  background-color:#fd0;
-  -webkit-box-shadow:0 -2px #fd0,0 4px #0B0C0C;
-  box-shadow:0 -2px #fd0,0 4px #0B0C0C;
-  text-decoration:none;
-}
-
