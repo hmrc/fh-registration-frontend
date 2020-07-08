@@ -18,6 +18,12 @@
 @import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.play.config.{OptimizelyConfig, GTMConfig}
 @import uk.gov.hmrc.play.config.AssetsConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+
+@this(
+        govUkTemplate: views.html.layouts.GovUkTemplate,
+        viewsHelpers: ViewHelpers
+)
 
 @(title: String,
         mainClass: Option[String] = None,
@@ -33,12 +39,6 @@
 
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
-@import layouts.GovUkTemplate
-
-@optimizelySnippet = @{
-    val config = new OptimizelyConfig(appConfig.getConfiguration)
-    new uiLayouts.OptimizelySnippet(config)
-}
 
 @gtmSnippet = @{
     val config = new GTMConfig(appConfig.getConfiguration)
@@ -62,7 +62,7 @@
 
 @head = {
 @{
-    new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
+    new uiLayouts.Head(viewsHelpers.optimizelySnippet, assetsConfig, gtmSnippet).apply(
         linkElem = Some(linksElement),
         headScripts = Some(analyticsGA)
     )
@@ -169,6 +169,4 @@
     sidebar = sidebar)
 }
 
-@{
-    new GovUkTemplate().apply(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
-}
+     @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
