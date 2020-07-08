@@ -82,8 +82,8 @@ tr > td:last-child {
 }
 
 .button--link-style:focus {
-    background-color: #ffbf47;
-    outline: 3px solid #ffbf47;
+    background-color: #ffdd00;
+    outline: 3px solid #ffdd00;
 }
 
 .pagination:after {
