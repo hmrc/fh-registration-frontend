@@ -2,7 +2,7 @@ strong {
     font-weight: 700;
 }
 .appstatus {
-    background-color: #005ea5;
+    background-color: #1d70b8;
     color: #fff;
     margin-top: 30px;
 }
@@ -22,7 +22,7 @@ strong {
 
 .govuk-related-items {
     margin-top: 30px;
-    border-top: 10px solid #005ea5;
+    border-top: 10px solid #1d70b8;
     padding-top: 5px;
 }
 .govuk-related-items h2 {
@@ -82,7 +82,7 @@ strong {
     margin: 0;
 }
 .service-info {
-    border-top: 0px solid #005ea5;
+    border-top: 0px solid #1d70b8;
 }
 
 .button {
