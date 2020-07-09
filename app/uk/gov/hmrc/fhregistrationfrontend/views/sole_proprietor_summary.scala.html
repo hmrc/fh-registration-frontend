@@ -22,7 +22,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
+@this(
+main_template: main_template
+)
 @(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
@@ -38,7 +42,7 @@
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+@main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
 
   @BackHistory()
 
