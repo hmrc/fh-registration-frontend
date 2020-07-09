@@ -20,27 +20,32 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.fhregistrationfrontend.views.html._
 @Singleton
 class Views @Inject()(
+  ////////////////////////////Deregistration///////////////////////////////////
   val deregistration_acknowledgment: deregistration.deregistration_acknowledgement,
-  val deregistration_confirm:        deregistration.deregistration_confirm,
-  val deregistration_reason:         deregistration.deregistration_reason,
-  val email_change_start:            emailverification.email_change_start,
-  val email_edit:                    emailverification.email_edit,
-  val email_options:                 emailverification.email_options,
-  val email_pending_verification:    emailverification.email_pending_verification,
-  val email_verified:                emailverification.email_verified,
-  val business_customers:            forms.business_customers,
-  val business_partners:             forms.business_partners,
-  val business_status:               forms.business_status,
-  val company_officers:              forms.company_officers,
-  val company_registration_number:   forms.company_registration_number,
-  val contact_person:                forms.contact_person,
-  val date_of_incorporation:         forms.date_of_incorporation,
-  val examples:                      forms.examples,
-  val has_other_storage_premises:    forms.has_other_storage_premises,
-  val importing_activities:          forms.importing_activities,
-  val main_business_address:         forms.main_business_address,
-  val national_insurance_number:     forms.national_insurance_number,
-  val other_storage_premises:        forms.other_storage_premises,
-  val storage_premise:               forms.trading_name,
-  val vat_registration:              forms.vat_registration
+  val deregistration_confirm: deregistration.deregistration_confirm,
+  val deregistration_reason: deregistration.deregistration_reason,
+  ////////////////////////////Email////////////////////////////////////////////
+  val email_change_start: emailverification.email_change_start,
+  val email_edit: emailverification.email_edit,
+  val email_options: emailverification.email_options,
+  val email_pending_verification: emailverification.email_pending_verification,
+  val email_verified: emailverification.email_verified,
+  ////////////////////////////Forms/////////////////////////////////////////////
+  val business_customers: forms.business_customers,
+  val business_partners: forms.business_partners,
+  val business_status: forms.business_status,
+  val company_officers: forms.company_officers,
+  val company_registration_number: forms.company_registration_number,
+  val contact_person: forms.contact_person,
+  val date_of_incorporation: forms.date_of_incorporation,
+  val examples: forms.examples,
+  val has_other_storage_premises: forms.has_other_storage_premises,
+  val importing_activities: forms.importing_activities,
+  val main_business_address: forms.main_business_address,
+  val national_insurance_number: forms.national_insurance_number,
+  val other_storage_premises: forms.other_storage_premises,
+  val storage_premise: forms.trading_name,
+  val vat_registration: forms.vat_registration,
+  val trading_name: forms.trading_name
+  ///////////////////////////////////////////////////////////////////////////////
 )

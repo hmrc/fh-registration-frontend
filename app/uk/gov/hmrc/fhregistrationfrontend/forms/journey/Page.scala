@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Format
@@ -26,6 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 
@@ -75,203 +77,204 @@ trait Page[T] extends Rendering {
 }
 
 object Page {
+  class NicholasPage @Inject()(views: Views) {
 
-  import CompanyOfficer.companyOfficerFormat
-  import CompanyRegistrationNumber.format
-  import EmailVerification.format
-  import ContactPerson.format
-  import DateOfIncorporation.format
-  import MainBusinessAddress.format
-  import BusinessPartner.businessPartnerFormat
-  import ListWithTrackedChanges.listWithTrackedChangesFormat
+    import CompanyOfficer.companyOfficerFormat
+    import CompanyRegistrationNumber.format
+    import ContactPerson.format
+    import DateOfIncorporation.format
+    import MainBusinessAddress.format
+    import BusinessPartner.businessPartnerFormat
+    import ListWithTrackedChanges.listWithTrackedChangesFormat
 
-  type AnyPage = Page[_]
+    type AnyPage = Page[_]
 
-  val mainBusinessAddressPage: Page[MainBusinessAddress] = BasicPage[MainBusinessAddress](
-    "mainBusinessAddress",
-    MainBusinessAddressForm.mainBusinessAddressForm,
-    new FormRendering[MainBusinessAddress] {
-      override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        main_business_address(form, bpr, navigation)
-    },
-    addressOnPage = _.previousAddress
-  )
+    val mainBusinessAddressPage: Page[MainBusinessAddress] = BasicPage[MainBusinessAddress](
+      "mainBusinessAddress",
+      MainBusinessAddressForm.mainBusinessAddressForm,
+      new FormRendering[MainBusinessAddress] {
+        override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.main_business_address(form, bpr, navigation)
+      },
+      addressOnPage = _.previousAddress
+    )
 
-  val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
-    "contactPerson",
-    ContactPersonForm.contactPersonForm,
-    new FormRendering[ContactPerson] {
-      override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        contact_person(form, bpr, navigation)
-    },
-    addressOnPage = _.otherUkContactAddress
-  )
+    val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](
+      "contactPerson",
+      ContactPersonForm.contactPersonForm,
+      new FormRendering[ContactPerson] {
+        override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.contact_person(form, bpr, navigation)
+      },
+      addressOnPage = _.otherUkContactAddress
+    )
 
-  val companyRegistrationNumberPage: Page[CompanyRegistrationNumber] = new BasicPage[CompanyRegistrationNumber](
-    "companyRegistrationNumber",
-    CompanyRegistrationNumberForm.companyRegistrationNumberForm,
-    new FormRendering[CompanyRegistrationNumber] {
-      override def render(
-        form: Form[CompanyRegistrationNumber],
-        bpr: BusinessRegistrationDetails,
-        navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-        company_registration_number(form, navigation)
-    }
-  )
+    val companyRegistrationNumberPage: Page[CompanyRegistrationNumber] = new BasicPage[CompanyRegistrationNumber](
+      "companyRegistrationNumber",
+      CompanyRegistrationNumberForm.companyRegistrationNumberForm,
+      new FormRendering[CompanyRegistrationNumber] {
+        override def render(
+          form: Form[CompanyRegistrationNumber],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          views.company_registration_number(form, navigation)
+      }
+    )
 
-  val nationalInsuranceNumberPage: Page[NationalInsuranceNumber] = new BasicPage[NationalInsuranceNumber](
-    "nationalInsuranceNumber",
-    NationalInsuranceNumberForm.nationalInsuranceNumberForm,
-    new FormRendering[NationalInsuranceNumber] {
-      override def render(
-        form: Form[NationalInsuranceNumber],
-        bpr: BusinessRegistrationDetails,
-        navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-        national_insurance_number(form, navigation)
-    }
-  )
+    val nationalInsuranceNumberPage: Page[NationalInsuranceNumber] = new BasicPage[NationalInsuranceNumber](
+      "nationalInsuranceNumber",
+      NationalInsuranceNumberForm.nationalInsuranceNumberForm,
+      new FormRendering[NationalInsuranceNumber] {
+        override def render(
+          form: Form[NationalInsuranceNumber],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          views.national_insurance_number(form, navigation)
+      }
+    )
 
-  val dateOfIncorporationPage = new BasicPage[DateOfIncorporation](
-    "dateOfIncorporation",
-    DateOfIncorporationForm.dateOfIncorporationForm,
-    new FormRendering[DateOfIncorporation] {
-      override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        date_of_incorporation(form, navigation)
-    }
-  )
+    val dateOfIncorporationPage = new BasicPage[DateOfIncorporation](
+      "dateOfIncorporation",
+      DateOfIncorporationForm.dateOfIncorporationForm,
+      new FormRendering[DateOfIncorporation] {
+        override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.date_of_incorporation(form, navigation)
+      }
+    )
 
-  val tradingNamePage = new BasicPage[TradingName](
-    "tradingName",
-    TradingNameForm.tradingNameForm,
-    new FormRendering[TradingName] {
-      override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        trading_name(form, navigation)
-    }
-  )
+    val tradingNamePage = new BasicPage[TradingName](
+      "tradingName",
+      TradingNameForm.tradingNameForm,
+      new FormRendering[TradingName] {
+        override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.trading_name(form, navigation)
+      }
+    )
 
-  val vatNumberPage = new BasicPage[VatNumber](
-    "vatNumber",
-    VatNumberForm.vatNumberForm,
-    new FormRendering[VatNumber] {
-      override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        vat_registration(form, navigation)
-    }
-  )
+    val vatNumberPage = new BasicPage[VatNumber](
+      "vatNumber",
+      VatNumberForm.vatNumberForm,
+      new FormRendering[VatNumber] {
+        override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.vat_registration(form, navigation)
+      }
+    )
 
-  val businessPartnersPage = new RepeatingPage[BusinessPartner](
-    "businessPartners",
-    new RepeatedFormRendering[(BusinessPartner, Boolean)] {
-      override def render(
-        form: Form[(BusinessPartner, Boolean)],
-        bpr: BusinessRegistrationDetails,
-        navigation: Navigation,
-        sectionId: String,
-        params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-        business_partners(form, navigation, sectionId, params)
-    },
-    BusinessPartnersForm.businessPartnerMapping,
-    minItems = 2,
-    addressOnPage = { bp ⇒
-      Some(bp.identification.address)
-    }
-  )
+    val businessPartnersPage = new RepeatingPage[BusinessPartner](
+      "businessPartners",
+      new RepeatedFormRendering[(BusinessPartner, Boolean)] {
+        override def render(
+          form: Form[(BusinessPartner, Boolean)],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation,
+          sectionId: String,
+          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          views.business_partners(form, navigation, sectionId, params)
+      },
+      BusinessPartnersForm.businessPartnerMapping,
+      minItems = 2,
+      addressOnPage = { bp ⇒
+        Some(bp.identification.address)
+      }
+    )
 
-  val companyOfficersPage = RepeatingPage[CompanyOfficer](
-    "companyOfficers",
-    new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
-      override def render(
-        form: Form[(CompanyOfficer, Boolean)],
-        bpr: BusinessRegistrationDetails,
-        navigation: Navigation,
-        sectionId: String,
-        params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-        company_officers(form, navigation, sectionId, params)
-    },
-    CompanyOfficersForm.companyOfficerMapping
-  )
+    val companyOfficersPage = RepeatingPage[CompanyOfficer](
+      "companyOfficers",
+      new RepeatedFormRendering[(CompanyOfficer, Boolean)] {
+        override def render(
+          form: Form[(CompanyOfficer, Boolean)],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation,
+          sectionId: String,
+          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          views.company_officers(form, navigation, sectionId, params)
+      },
+      CompanyOfficersForm.companyOfficerMapping
+    )
 
-  val businessStatusPage = new BasicPage[BusinessStatus](
-    "businessStatus",
-    BusinessStatusForm.businessStatusForm,
-    new FormRendering[BusinessStatus] {
-      override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        business_status(form, navigation)
-    }
-  )
+    val businessStatusPage = new BasicPage[BusinessStatus](
+      "businessStatus",
+      BusinessStatusForm.businessStatusForm,
+      new FormRendering[BusinessStatus] {
+        override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.business_status(form, navigation)
+      }
+    )
 
-  val importingActivitiesPage = new BasicPage[ImportingActivities](
-    "importingActivities",
-    ImportingActivitiesForm.importingActivitiesForm,
-    new FormRendering[ImportingActivities] {
-      override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        importing_activities(form, navigation)
-    }
-  )
+    val importingActivitiesPage = new BasicPage[ImportingActivities](
+      "importingActivities",
+      ImportingActivitiesForm.importingActivitiesForm,
+      new FormRendering[ImportingActivities] {
+        override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.importing_activities(form, navigation)
+      }
+    )
 
-  val businessCustomersPage = new BasicPage[BusinessCustomers](
-    "businessCustomers",
-    BusinessCustomersForm.businessCustomersForm,
-    new FormRendering[BusinessCustomers] {
-      override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        business_customers(form, navigation)
-    }
-  )
+    val businessCustomersPage = new BasicPage[BusinessCustomers](
+      "businessCustomers",
+      BusinessCustomersForm.businessCustomersForm,
+      new FormRendering[BusinessCustomers] {
+        override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.business_customers(form, navigation)
+      }
+    )
 
-  val hasOtherStoragePremisesPage = BasicPage[Boolean](
-    "hasOtherStoragePremises",
-    StoragePremisesForm.hasOtherStoragePrmisesForm,
-    new FormRendering[Boolean] {
-      override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-        implicit request: Request[_],
-        messages: Messages,
-        appConfig: AppConfig): Html =
-        has_other_storage_premises(form, navigation)
-    }
-  )
+    val hasOtherStoragePremisesPage = BasicPage[Boolean](
+      "hasOtherStoragePremises",
+      StoragePremisesForm.hasOtherStoragePrmisesForm,
+      new FormRendering[Boolean] {
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.has_other_storage_premises(form, navigation)
+      }
+    )
 
-  val storagePremisesPage = RepeatingPage[StoragePremise](
-    "storagePremises",
-    new RepeatedFormRendering[(StoragePremise, Boolean)] {
-      override def render(
-        form: Form[(StoragePremise, Boolean)],
-        bpr: BusinessRegistrationDetails,
-        navigation: Navigation,
-        sectionId: String,
-        params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-        storage_premise(form, navigation, sectionId, params)
-    },
-    StoragePremisesForm.storagePremiseMapping,
-    addressOnPage = { sp ⇒
-      Some(sp.address)
-    }
-  )
+    val storagePremisesPage = RepeatingPage[StoragePremise](
+      "storagePremises",
+      new RepeatedFormRendering[(StoragePremise, Boolean)] {
+        override def render(
+          form: Form[(StoragePremise, Boolean)],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation,
+          sectionId: String,
+          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          views.storage_premise(form, navigation, sectionId, params)
+      },
+      StoragePremisesForm.storagePremiseMapping,
+      addressOnPage = { sp ⇒
+        Some(sp.address)
+      }
+    )
 
-  val otherStoragePremisesPage = OtherStoragePremisesPage(
-    hasOtherStoragePremisesPage,
-    storagePremisesPage
-  )
+    val otherStoragePremisesPage = OtherStoragePremisesPage(
+      hasOtherStoragePremisesPage,
+      storagePremisesPage
+    )
+  }
 }
