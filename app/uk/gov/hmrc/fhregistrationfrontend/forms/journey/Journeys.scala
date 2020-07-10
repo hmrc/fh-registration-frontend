@@ -17,19 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 import javax.inject.Inject
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-
-class Journeys @Inject()(views: Views){
+class Journeys @Inject()(views: Views) {
 
   import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
 
- private val page = new NicholasPage(views)
+  private val page = new NicholasPage(views)
 
   val limitedCompanyPages =
-
-    Seq[page.AnyPage](
+    Seq[AnyPage](
       page.contactPersonPage,
       page.mainBusinessAddressPage,
       page.companyRegistrationNumberPage,
@@ -44,7 +43,7 @@ class Journeys @Inject()(views: Views){
     )
 
   val soleTraderPages =
-    Seq[Page[_]](
+    Seq[AnyPage](
       page.contactPersonPage,
       page.mainBusinessAddressPage,
       page.nationalInsuranceNumberPage,
@@ -57,7 +56,7 @@ class Journeys @Inject()(views: Views){
     )
 
   val partnershipPages =
-    Seq[Page[_]](
+    Seq[AnyPage](
       page.contactPersonPage,
       page.mainBusinessAddressPage,
       page.tradingNamePage,
@@ -78,7 +77,7 @@ class Journeys @Inject()(views: Views){
 
   def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) =
     new JourneyPages(
-      Seq[page.AnyPage](
+      Seq[AnyPage](
         page.mainBusinessAddressPage withData a.mainBusinessAddress,
         page.contactPersonPage withData a.contactPerson,
         page.companyRegistrationNumberPage withData a.companyRegistrationNumber,
@@ -95,7 +94,7 @@ class Journeys @Inject()(views: Views){
 
   def unapplySoleTraderApplication(a: SoleProprietorApplication) =
     new JourneyPages(
-      Seq[Page[_]](
+      Seq[AnyPage](
         page.mainBusinessAddressPage withData a.mainBusinessAddress,
         page.contactPersonPage withData a.contactPerson,
         page.nationalInsuranceNumberPage withData a.nationalInsuranceNumber,
@@ -110,7 +109,7 @@ class Journeys @Inject()(views: Views){
 
   def unapplyPartnershipApplication(a: PartnershipApplication) =
     new JourneyPages(
-      Seq[Page[_]](
+      Seq[AnyPage](
         page.mainBusinessAddressPage withData a.mainBusinessAddress,
         page.contactPersonPage withData a.contactPerson,
         page.tradingNamePage withData a.tradingName,

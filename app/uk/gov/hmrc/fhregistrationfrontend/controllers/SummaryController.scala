@@ -21,23 +21,25 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Inject
 class SummaryController @Inject()(
   ds: CommonPlayDependencies,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  journeys: Journeys
 ) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
     val application = request.businessType match {
       case BusinessType.CorporateBody ⇒
-        Journeys ltdApplication request
+       journeys ltdApplication request
       case BusinessType.SoleTrader ⇒
-        Journeys soleTraderApplication request
+        journeys soleTraderApplication request
       case BusinessType.Partnership ⇒
-        Journeys partnershipApplication request
+       journeys partnershipApplication request
     }
     Ok(getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest)))
   }

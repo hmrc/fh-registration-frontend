@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
+
 import javax.inject.Inject
 import org.joda.time.DateTime
 import play.api.mvc._
@@ -30,6 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.{withdrawal_acknowledgement, withdrawal_confirm, withdrawal_reason}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +43,8 @@ class WithdrawalController @Inject()(
   val desToForm: DesToForm,
   keyStoreService: KeyStoreService,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  views: Views
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) with ContactEmailFunctions {
 
@@ -54,14 +57,14 @@ class WithdrawalController @Inject()(
   }
 
   def reason = enrolledUserAction { implicit request ⇒
-    Ok(withdrawal_reason(withdrawalReasonForm))
+    Ok(views.withdrawal_reason(withdrawalReasonForm))
   }
 
   def postReason = enrolledUserAction.async { implicit request ⇒
     withdrawalReasonForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ Future successful BadRequest(withdrawal_reason(formWithError)),
+        formWithError ⇒ Future successful BadRequest(views.withdrawal_reason(formWithError)),
         withdrawalReason ⇒
           keyStoreService
             .saveWithdrawalReason(withdrawalReason)
@@ -78,14 +81,14 @@ class WithdrawalController @Inject()(
     }
 
   def confirm = withWithdrawalReason { implicit request ⇒ reason ⇒
-    contactEmail map (email ⇒ Ok(withdrawal_confirm(confirmationForm, email)))
+    contactEmail map (email ⇒ Ok(views.withdrawal_confirm(confirmationForm, email)))
   }
 
   def postConfirmation = withWithdrawalReason { implicit request ⇒ reason ⇒
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ contactEmail map (email ⇒ BadRequest(withdrawal_confirm(formWithError, email))),
+        formWithError ⇒ contactEmail map (email ⇒ BadRequest(views.withdrawal_confirm(formWithError, email))),
         handleConfirmation(_, reason)
       )
   }
@@ -130,6 +133,6 @@ class WithdrawalController @Inject()(
       timestamp ← request.session get ProcessingTimestampSessionKey
       processingDate = new DateTime(timestamp.toLong)
     } yield {
-      Ok(withdrawal_acknowledgement(processingDate, email))
+      Ok(views.withdrawal_acknowledgement(processingDate, email))
     }
 }
