@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
+import com.google.inject.Inject
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
@@ -76,7 +77,7 @@ class JourneyRequest[A](
 
 }
 
-class JourneyAction(
+class JourneyAction @Inject()(journeys: Journeys)(
   implicit val save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler,
   val executionContext: ExecutionContext)
@@ -130,9 +131,9 @@ class JourneyAction(
   def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
     val pagesForEntityType = getBusinessType(cacheMap).right flatMap {
       _ match {
-        case BusinessType.CorporateBody ⇒ Right(Journeys.limitedCompanyPages)
-        case BusinessType.SoleTrader ⇒ Right(Journeys.soleTraderPages)
-        case BusinessType.Partnership ⇒ Right(Journeys.partnershipPages)
+        case BusinessType.CorporateBody ⇒ Right(journeys.limitedCompanyPages)
+        case BusinessType.SoleTrader ⇒ Right(journeys.soleTraderPages)
+        case BusinessType.Partnership ⇒ Right(journeys.partnershipPages)
         case _ ⇒
           Logger.error(s"Not found: wrong business type")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
@@ -156,5 +157,5 @@ class JourneyAction(
     }
 
   def loadJourneyState(journeyPages: JourneyPages): JourneyState =
-    Journeys.journeyState(journeyPages)
+    journeys.journeyState(journeyPages)
 }

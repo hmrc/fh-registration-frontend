@@ -15,11 +15,13 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+
 @this(
-main_template: main_template
+ main_template: main_template
 )
+
 @()(implicit request: Request[_],config: AppConfig, messages: Messages)
 
 @main_template(title = Messages("home.admin.page.title")) {

@@ -24,7 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFor
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -33,16 +35,17 @@ class EmailVerificationController @Inject()(
   actions: Actions,
   cc: MessagesControllerComponents,
   emailVerificationConnector: EmailVerificationConnector,
-  save4LaterService: Save4LaterService)(implicit ec: ExecutionContext)
+  save4LaterService: Save4LaterService,
+  views: Views)(implicit ec: ExecutionContext)
     extends AppController(ds, cc) {
   import actions._
 
   def contactEmail = emailVerificationAction { implicit request ⇒
-    Ok(email_options(emailVerificationForm, false, request.candidateEmail, Navigation.noNavigation))
+    Ok(views.email_options(emailVerificationForm, false, request.candidateEmail, Navigation.noNavigation))
   }
 
   def forcedContactEmail = emailVerificationAction { implicit request ⇒
-    Ok(email_options(emailVerificationForm, true, request.candidateEmail, Navigation.noNavigation))
+    Ok(views.email_options(emailVerificationForm, true, request.candidateEmail, Navigation.noNavigation))
   }
 
   def submitContactEmail() = emailVerificationAction.async { implicit request ⇒
@@ -57,7 +60,7 @@ class EmailVerificationController @Inject()(
     emailVerificationForm.bindFromRequest() fold (
       formWithErrors ⇒
         Future.successful(
-          BadRequest(email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
+          BadRequest(views.email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
       emailOptions ⇒ handleContactEmail(emailOptions)
     )
 
@@ -86,14 +89,14 @@ class EmailVerificationController @Inject()(
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(pendingEmail), None) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Ok(email_pending_verification(form, Navigation.noNavigation, None))
+        Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case (Some(pendingEmail), Some(verifiedEmail)) if pendingEmail == verifiedEmail ⇒
         Redirect(routes.Application.resumeForm())
 
       case (Some(pendingEmail), Some(_)) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Ok(email_pending_verification(form, Navigation.noNavigation, None))
+        Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case (None, Some(_)) ⇒ Redirect(routes.Application.resumeForm())
       case (None, None) ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail())
@@ -105,10 +108,10 @@ class EmailVerificationController @Inject()(
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(verifiedEmail), _) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(verifiedEmail)))
-        Ok(email_edit(form, Navigation.noNavigation))
+        Ok(views.email_edit(form, Navigation.noNavigation))
       case (None, Some(pendingEmail)) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Ok(email_edit(form, Navigation.noNavigation))
+        Ok(views.email_edit(form, Navigation.noNavigation))
       case _ ⇒
         errorHandler.errorResultsPages(Results.BadRequest)
     }
@@ -118,9 +121,9 @@ class EmailVerificationController @Inject()(
   def emailChange = emailVerificationAction { implicit request ⇒
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(verifiedEmail), _) ⇒
-        Ok(email_change_start(verifiedEmail, Navigation.noNavigation))
+        Ok(views.email_change_start(verifiedEmail, Navigation.noNavigation))
       case (None, Some(pendingEmail)) ⇒
-        Ok(email_change_start(pendingEmail, Navigation.noNavigation))
+        Ok(views.email_change_start(pendingEmail, Navigation.noNavigation))
       case _ ⇒
         errorHandler.errorResultsPages(Results.BadRequest)
     }
@@ -128,7 +131,7 @@ class EmailVerificationController @Inject()(
 
   def emailVerified = emailVerificationAction { implicit request ⇒
     request.verifiedEmail match {
-      case Some(verifiedEmail) ⇒ Ok(email_verified(verifiedEmail, Navigation.noNavigation))
+      case Some(verifiedEmail) ⇒ Ok(views.email_verified(verifiedEmail, Navigation.noNavigation))
       case None ⇒ errorHandler.errorResultsPages(Results.BadRequest)
     }
   }
@@ -144,7 +147,7 @@ class EmailVerificationController @Inject()(
         }
       case Some(pendingEmail) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
-        Future successful Ok(email_pending_verification(form, Navigation.noNavigation, None))
+        Future successful Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case None ⇒
         Future successful Redirect(routes.Application.resumeForm())
