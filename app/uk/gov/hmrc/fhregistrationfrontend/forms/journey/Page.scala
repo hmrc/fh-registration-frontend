@@ -77,6 +77,9 @@ trait Page[T] extends Rendering {
 }
 
 object Page {
+
+  type AnyPage = Page[_]
+
   class NicholasPage @Inject()(views: Views) {
 
     import CompanyOfficer.companyOfficerFormat
@@ -86,8 +89,6 @@ object Page {
     import MainBusinessAddress.format
     import BusinessPartner.businessPartnerFormat
     import ListWithTrackedChanges.listWithTrackedChangesFormat
-
-    type AnyPage = Page[_]
 
     val mainBusinessAddressPage: Page[MainBusinessAddress] = BasicPage[MainBusinessAddress](
       "mainBusinessAddress",
