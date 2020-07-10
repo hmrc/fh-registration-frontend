@@ -21,13 +21,16 @@ import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+
 import scala.concurrent.ExecutionContext
 
 class Actions @Inject()(
   externalUrls: ExternalUrls,
   fhddsConnector: FhddsConnector,
-  cc: ControllerComponents
+  cc: ControllerComponents,
+  journeys: Journeys
 )(
   implicit val authConnector: AuthConnector,
   save4LaterService: Save4LaterService,
@@ -43,14 +46,14 @@ class Actions @Inject()(
   def startAmendmentAction = userAction andThen new StartAmendmentAction(fhddsConnector)
   def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
-  def journeyAction = userAction andThen new JourneyAction
-  def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None)
+  def journeyAction = userAction andThen new JourneyAction(journeys)
+  def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None, journeys)
 
   def newApplicationAction =
     noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
-    journeyAction andThen new PageAction(pageId, sectionId)
+    journeyAction andThen new PageAction(pageId, sectionId, journeys)
 
   def summaryAction =
     userAction andThen journeyAction andThen new SummaryAction

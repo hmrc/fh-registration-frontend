@@ -28,19 +28,21 @@ class SummaryController @Inject()(
   ds: CommonPlayDependencies,
   cc: MessagesControllerComponents,
   actions: Actions,
-  journeys: Journeys
+  journeys: Journeys,
+  views: Views
 ) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
   def summary() = summaryAction { implicit request ⇒
     val application = request.businessType match {
       case BusinessType.CorporateBody ⇒
-       journeys ltdApplication request
+        journeys ltdApplication request
       case BusinessType.SoleTrader ⇒
         journeys soleTraderApplication request
       case BusinessType.Partnership ⇒
-       journeys partnershipApplication request
+        journeys partnershipApplication request
     }
-    Ok(getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest)))
+    Ok(
+      getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest), views))
   }
 }

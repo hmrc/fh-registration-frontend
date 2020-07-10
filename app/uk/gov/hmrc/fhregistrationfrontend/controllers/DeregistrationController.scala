@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
+
 import javax.inject.Inject
 import org.joda.time.DateTime
 import play.api.mvc._
@@ -30,7 +31,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationRea
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.{deregistration_acknowledgement, deregistration_confirm, deregistration_reason}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -40,7 +43,8 @@ class DeregistrationController @Inject()(
   val desToForm: DesToForm,
   keyStoreService: KeyStoreService,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  views: Views
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) with ContactEmailFunctions {
 
@@ -54,14 +58,14 @@ class DeregistrationController @Inject()(
   }
 
   def reason = enrolledUserAction { implicit request ⇒
-    Ok(deregistration_reason(deregistrationReasonForm))
+    Ok(views.deregistration_reason(deregistrationReasonForm))
   }
 
   def postReason = enrolledUserAction.async { implicit request ⇒
     deregistrationReasonForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ Future successful BadRequest(deregistration_reason(formWithError)),
+        formWithError ⇒ Future successful BadRequest(views.deregistration_reason(formWithError)),
         deregistrationReason ⇒
           keyStoreService
             .saveDeregistrationReason(deregistrationReason)
@@ -70,14 +74,14 @@ class DeregistrationController @Inject()(
   }
 
   def confirm = withDeregistrationReason { implicit request ⇒ reason ⇒
-    contactEmail map (email ⇒ Ok(deregistration_confirm(confirmationForm, email)))
+    contactEmail map (email ⇒ Ok(views.deregistration_confirm(confirmationForm, email)))
   }
 
   def postConfirmation = withDeregistrationReason { implicit request ⇒ reason ⇒
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ contactEmail map (email ⇒ BadRequest(deregistration_confirm(formWithError, email))),
+        formWithError ⇒ contactEmail map (email ⇒ BadRequest(views.deregistration_confirm(formWithError, email))),
         handleConfirmation(_, reason)
       )
   }
@@ -130,6 +134,6 @@ class DeregistrationController @Inject()(
       timestamp ← request.session get ProcessingTimestampSessionKey
       processingDate = new DateTime(timestamp.toLong)
     } yield {
-      Ok(deregistration_acknowledgement(processingDate, email))
+      Ok(views.deregistration_acknowledgement(processingDate, email))
     }
 }

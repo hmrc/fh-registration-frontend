@@ -21,6 +21,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.ExecutionContext
 
@@ -29,7 +30,8 @@ class ReadOnlySummaryController @Inject()(
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  views: Views
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) with SummaryFunctions {
 
@@ -43,7 +45,7 @@ class ReadOnlySummaryController @Inject()(
       val bpr = desToForm.businessRegistrationDetails(display)
       val contactEmail = desToForm.contactEmail(display)
 
-      Ok(getSummaryHtml(application, bpr, contactEmail.get, readOnlySummaryPageParams(status)))
+      Ok(getSummaryHtml(application, bpr, contactEmail.get, readOnlySummaryPageParams(status), views))
     }
   }
 }

@@ -24,7 +24,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, 
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -32,7 +34,8 @@ class FormPageController @Inject()(
   ds: CommonPlayDependencies,
   addressAuditService: AddressAuditService,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  views: Views
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) {
 
@@ -90,7 +93,7 @@ class FormPageController @Inject()(
   def confirmDeleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request ⇒
       if (request.lastUpdateTimestamp == lastUpdateTimestamp)
-        Future successful Ok(confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
+        Future successful Ok(views.confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
       else {
         Logger.error(s"Not Found. Expired")
         Future successful errorHandler.errorResultsPages(Results.NotFound)
