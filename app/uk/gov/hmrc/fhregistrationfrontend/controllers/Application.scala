@@ -32,9 +32,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.bus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
-import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.{RegistrationStatusViews, StatusPageParams}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +47,8 @@ class Application @Inject()(
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views,
-  registrationStatusViews: RegistrationStatusViews
+  status: status,
+  statusParams: StatusPageParams.StatusParams
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) {
 
@@ -207,7 +207,8 @@ class Application @Inject()(
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
       .map(fhddsStatus ⇒ {
-        Ok(views.status(StatusPageParams(fhddsStatus).get, request.registrationNumber))
+
+        Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber))
       })
   }
 }

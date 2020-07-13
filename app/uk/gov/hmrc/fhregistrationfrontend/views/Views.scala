@@ -73,9 +73,8 @@ class Views @Inject()(
   val error_forbidden: uk.gov.hmrc.fhregistrationfrontend.views.html.error_forbidden,
   val error_template: uk.gov.hmrc.fhregistrationfrontend.views.html.error_template,
   val govuk_wrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
-  val saved: uk.gov.hmrc.fhregistrationfrontend.views.html.saved,
+  val saved: uk.gov.hmrc.fhregistrationfrontend.views.html.saved
   /////////////////////////////registrationStatus//////////////////////////////////
-  val status: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
   //  val statusMoreInfo: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusMoreInfo,
 
 //uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusNewApplication,

@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 
-@this()
+@this(statusSteps: statusSteps)
 
 @(params: StatusPageParams, id: String)(implicit message : Messages)
 
@@ -33,6 +33,6 @@
     </p>
   }
 
-  @if(params.showSteps) { @statusSteps(params.status) }
+  @if(params.showSteps) { @{statusSteps(params.status)} }
 
 </div>
