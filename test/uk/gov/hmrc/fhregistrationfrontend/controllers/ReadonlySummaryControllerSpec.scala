@@ -31,7 +31,7 @@ class ReadonlySummaryControllerSpec
     mockFhddsConnector,
     mockMcc,
     mockActions,
-    mViews
+    mockViews
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {

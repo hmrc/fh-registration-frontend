@@ -35,7 +35,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ActionsMock extends MockitoSugar with UserTestData with MockedPages {
+trait ActionsMock extends MockitoSugar with UserTestData {
   this: UnitSpec ⇒
   val mockActions = mock[Actions]
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
@@ -223,4 +223,3 @@ trait ActionsMock extends MockitoSugar with UserTestData with MockedPages {
       }
     }
 }
-
