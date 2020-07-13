@@ -26,6 +26,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, Wi
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
 import scala.concurrent.Future
 
 class WithdrawalControllerSpec
@@ -40,7 +42,8 @@ class WithdrawalControllerSpec
     desToForm,
     mockKeyStoreService,
     mockMcc,
-    mockActions
+    mockActions,
+    mockViews
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {

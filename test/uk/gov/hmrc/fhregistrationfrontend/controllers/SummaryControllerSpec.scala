@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
 class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
-  val controller = new SummaryController(commonDependencies, mockMcc, mockActions)
+  val controller = new SummaryController(commonDependencies, mockMcc, mockActions, journeysWithMockViews, mockViews)
 
   "summary" should {
     "Render the summary html for all journey types" in {
@@ -53,9 +53,9 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
     "Render the summary html for all business types" in {
       for {
         (businessType, pages) ← List(
-                                 BusinessType.Partnership → Journeys.partnershipPages,
-                                 BusinessType.SoleTrader → Journeys.soleTraderPages,
-                                 BusinessType.CorporateBody → Journeys.limitedCompanyPages
+                                 BusinessType.Partnership → journeysWithMockViews.partnershipPages,
+                                 BusinessType.SoleTrader → journeysWithMockViews.soleTraderPages,
+                                 BusinessType.CorporateBody → journeysWithMockViews.limitedCompanyPages
                                )
       } {
         setupSummaryAction(

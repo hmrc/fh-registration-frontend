@@ -35,7 +35,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load the required page" in {
       val request = journeyRequest()
 
-      val action = new PageAction(Page.contactPersonPage.id, None)(
+      val action = new PageAction(contactPersonPage.id, None,)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
 
