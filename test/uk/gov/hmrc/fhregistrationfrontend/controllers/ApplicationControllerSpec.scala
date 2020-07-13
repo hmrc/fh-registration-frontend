@@ -29,6 +29,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgre
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 
 import scala.concurrent.Future
 
@@ -48,6 +50,9 @@ class ApplicationControllerSpec
     )
   }
 
+  val mockStatus: status = mock[status]
+  val mockStatusParams: StatusPageParams.StatusParams = mock[StatusPageParams.StatusParams]
+
   val controller = new Application(
     app.injector.instanceOf(classOf[ExternalUrls]),
     commonDependencies,
@@ -55,7 +60,9 @@ class ApplicationControllerSpec
     mockBusinessCustomerConnector,
     mockMcc,
     mockActions,
-    mockViews
+    mockViews,
+    mockStatus,
+    mockStatusParams
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
