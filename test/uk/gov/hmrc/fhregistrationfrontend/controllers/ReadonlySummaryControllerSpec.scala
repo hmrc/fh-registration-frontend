@@ -30,7 +30,8 @@ class ReadonlySummaryControllerSpec
     new DesToFormImpl(),
     mockFhddsConnector,
     mockMcc,
-    mockActions
+    mockActions,
+    mockViews
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {

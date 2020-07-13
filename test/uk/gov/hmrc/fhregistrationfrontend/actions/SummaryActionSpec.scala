@@ -19,10 +19,13 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FormTestData, StubbedErrorHandler}
+import Page._
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
   val action = new SummaryAction()(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+
 
   "Summary Action" should {
     "Fail if journey is not complete" in {
@@ -32,7 +35,7 @@ class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Work when the journey is complete" in {
-      val onePage = Page.contactPersonPage withData FormTestData.contactPerson
+      val onePage = contactPersonPage withData FormTestData.contactPerson
       val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
       val refined = refinedRequest(action, request)
@@ -43,7 +46,7 @@ class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       refined.businessType shouldBe request.businessType
       refined.verifiedEmail shouldBe request.verifiedEmail
 
-      refined.pageDataOpt(Page.contactPersonPage) shouldBe Some(FormTestData.contactPerson)
+      refined.pageDataOpt(contactPersonPage) shouldBe Some(FormTestData.contactPerson)
 
     }
   }
