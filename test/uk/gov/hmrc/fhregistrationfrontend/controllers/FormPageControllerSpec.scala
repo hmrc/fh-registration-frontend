@@ -44,7 +44,7 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, mockViews)(
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, mViews)(
     mockSave4Later,
     scala.concurrent.ExecutionContext.Implicits.global)
 

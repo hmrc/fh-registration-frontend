@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
@@ -54,7 +55,7 @@ class ApplicationControllerSpec
     mockBusinessCustomerConnector,
     mockMcc,
     mockActions,
-    mockViews
+    mViews
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
