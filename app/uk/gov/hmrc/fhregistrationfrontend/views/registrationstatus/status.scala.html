@@ -19,14 +19,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 @import uk.gov.hmrc.fhregistrationfrontend.views.Views
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.RegistrationStatusViews
 
 @this(
-main_template: main_template,
- views: Views
+ main_template: main_template,
+ views: RegistrationStatusViews
 )
 
 @(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+ @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @sidebarLinks =  {@statusSidebar(params)}
 
 @main_template(title = Messages(s"fh.status.${params.status}.title"), sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {

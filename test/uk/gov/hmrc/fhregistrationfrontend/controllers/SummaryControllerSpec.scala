@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
 class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
-  val controller = new SummaryController(commonDependencies, mockMcc, mockActions, journeysWithMockViews, mViews)
+  val controller = new SummaryController(commonDependencies, mockMcc, mockActions, journeysWithMockViews, mockViews)
 
   "summary" should {
     "Render the summary html for all journey types" in {

@@ -27,7 +27,7 @@ import play.api.mvc.Result
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
-trait UnitSpec extends WordSpecLike with Matchers with OptionValues {
+trait UnitSpec extends WordSpecLike with Matchers with OptionValues with MockedPages {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}

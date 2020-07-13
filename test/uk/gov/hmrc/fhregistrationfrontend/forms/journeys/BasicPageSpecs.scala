@@ -24,20 +24,18 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressF
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import Page._
 
 class BasicPageSpecs extends UnitSpec with MockitoSugar {
 
-  val mockViews = mock[Views]
-  val page = new NicholasPage(mockViews).mainBusinessAddressPage
+//  val mockViews = mock[Views]
+//  val page = new NicholasPage(mockViews).mainBusinessAddressPage
 
   "updatedAddresses" should {
     "return the new address" in {
 
       val request = FakeRequest().withFormUrlEncodedBody(formData(): _*)
 
-      val newPage = page.parseFromRequest(
+      val newPage = mainBusinessAddressPage.parseFromRequest(
         _ ⇒ fail("Should have no errors"),
         page ⇒ page.updatedAddresses.size shouldBe 1
       )(request)
@@ -52,7 +50,7 @@ class BasicPageSpecs extends UnitSpec with MockitoSugar {
         Some(LocalDate.now())
       )
 
-      page
+      mainBusinessAddressPage
         .withData(data)
         .parseFromRequest(
           _ ⇒ fail("Should have no errors"),

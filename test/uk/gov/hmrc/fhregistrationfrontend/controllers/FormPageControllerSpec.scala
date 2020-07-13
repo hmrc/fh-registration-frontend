@@ -44,12 +44,9 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, mViews)(
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, mockViews)(
     mockSave4Later,
     scala.concurrent.ExecutionContext.Implicits.global)
-
-  private val mainBusinessAddressPage = page.mainBusinessAddressPage
-  private val tradingNamePage = page.tradingNamePage
 
   "load" should {
     "Render the page" in {
@@ -155,8 +152,6 @@ class FormPageControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/saved")
     }
   }
-
-  private val businessPartnersPage = page.businessPartnersPage
 
   "saveWithSection" should {
 

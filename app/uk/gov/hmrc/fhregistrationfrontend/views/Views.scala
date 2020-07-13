@@ -75,9 +75,8 @@ class Views @Inject()(
   val govuk_wrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
   val saved: uk.gov.hmrc.fhregistrationfrontend.views.html.saved,
   /////////////////////////////registrationStatus//////////////////////////////////
-  val status: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status,
-  val statusHeading: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusHeading
-//  val statusMoreInfo: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusMoreInfo,
+  val status: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
+  //  val statusMoreInfo: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusMoreInfo,
 
 //uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusNewApplication,
 //uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.StatusPageParams,

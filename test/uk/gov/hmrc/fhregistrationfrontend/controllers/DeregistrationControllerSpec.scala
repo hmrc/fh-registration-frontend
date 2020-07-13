@@ -42,7 +42,7 @@ class DeregistrationControllerSpec
     mockKeyStoreService,
     mockMcc,
     mockActions,
-    mViews
+    mockViews
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {

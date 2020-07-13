@@ -55,7 +55,7 @@ class ApplicationControllerSpec
     mockBusinessCustomerConnector,
     mockMcc,
     mockActions,
-    mViews
+    mockViews
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
