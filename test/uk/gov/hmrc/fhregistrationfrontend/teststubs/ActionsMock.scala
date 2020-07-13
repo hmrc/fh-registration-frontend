@@ -26,23 +26,20 @@ import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, CredentialRole}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys, Page}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, JourneyPages, JourneyType, Journeys, OtherStoragePremisesPage, Page, RepeatingPage}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers, BusinessPartner, BusinessStatus, BusinessType, CompanyOfficer, CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, ImportingActivities, MainBusinessAddress, NationalInsuranceNumber, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
+import uk.gov.hmrc.fhregistrationfrontend.util.{MockedPages, UnitSpec}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ActionsMock extends MockitoSugar with UserTestData {
+trait ActionsMock extends MockitoSugar with UserTestData with MockedPages {
   this: UnitSpec ⇒
   val mockActions = mock[Actions]
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
   implicit private val materializer = mock[Materializer]
-  val mockViews = mock[Views]
-  val page = new NicholasPage(mockViews)
-  val journeysWithMockViews = new Journeys(mockViews)
 
   def setupPageAction(
     page: AnyPage,
@@ -226,3 +223,4 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       }
     }
 }
+

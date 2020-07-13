@@ -30,7 +30,10 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestDa
 class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach {
 
   lazy val action =
-    new JourneyAction()(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+    new JourneyAction(mockJourneys)(
+      mockSave4Later,
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global)
   val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {
@@ -90,10 +93,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.bpr shouldBe FormTestData.someBpr
 
       refined.journeyState.isComplete shouldBe false
-      refined.journeyState.nextPageToComplete() shouldBe Some(Journeys.limitedCompanyPages.head.id)
+      refined.journeyState.nextPageToComplete() shouldBe Some(journeysWithMockViews.limitedCompanyPages.head.id)
       refined.journeyState.lastEditedPage shouldBe None
 
-      refined.journeyPages.pages.map(_.id) shouldBe Journeys.limitedCompanyPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.limitedCompanyPages.map(_.id)
     }
 
     "Load journey with several pages saved" in {
@@ -102,8 +105,8 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.CorporateBody)
         .withValue(Save4LaterKeys.verifiedEmailKey, ggEmail)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
-        .withValue(Page.contactPersonPage.id, FormTestData.contactPerson)
-        .withValue(Page.mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
+        .withValue(contactPersonPage.id, FormTestData.contactPerson)
+        .withValue(mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
         .cacheMap
       setupSave4LaterFrom(cacheMap)
 
@@ -112,10 +115,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.hasUpdates shouldBe None
       refined.lastUpdateTimestamp shouldBe 1529327782000L
       refined.journeyState.isComplete shouldBe false
-      refined.journeyState.nextPageToComplete() shouldBe Some(Journeys.limitedCompanyPages(2).id)
-      refined.journeyState.lastEditedPage.map(_.id) shouldBe Some(Journeys.limitedCompanyPages(1).id)
+      refined.journeyState.nextPageToComplete() shouldBe Some(journeysWithMockViews.limitedCompanyPages(2).id)
+      refined.journeyState.lastEditedPage.map(_.id) shouldBe Some(journeysWithMockViews.limitedCompanyPages(1).id)
 
-      refined.journeyPages.pages.map(_.id) shouldBe Journeys.limitedCompanyPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.limitedCompanyPages.map(_.id)
     }
 
     "Load journey with all pages saved" in {
@@ -124,15 +127,15 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.SoleTrader)
         .withValue(Save4LaterKeys.verifiedEmailKey, ggEmail)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
-        .withValue(Page.contactPersonPage.id, FormTestData.contactPerson)
-        .withValue(Page.mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
-        .withValue(Page.nationalInsuranceNumberPage.id, FormTestData.nationalInsuranceNumber)
-        .withValue(Page.tradingNamePage.id, FormTestData.tradingName)
-        .withValue(Page.vatNumberPage.id, FormTestData.vatNumber)
-        .withValue(Page.businessStatusPage.id, FormTestData.businessStatus)
-        .withValue(Page.importingActivitiesPage.id, FormTestData.importingActivities)
-        .withValue(Page.businessCustomersPage.id, FormTestData.businessCustomers)
-        .withValue(Page.otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
+        .withValue(contactPersonPage.id, FormTestData.contactPerson)
+        .withValue(mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
+        .withValue(nationalInsuranceNumberPage.id, FormTestData.nationalInsuranceNumber)
+        .withValue(tradingNamePage.id, FormTestData.tradingName)
+        .withValue(vatNumberPage.id, FormTestData.vatNumber)
+        .withValue(businessStatusPage.id, FormTestData.businessStatus)
+        .withValue(importingActivitiesPage.id, FormTestData.importingActivities)
+        .withValue(businessCustomersPage.id, FormTestData.businessCustomers)
+        .withValue(otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
         .cacheMap
       setupSave4LaterFrom(cacheMap)
 
@@ -144,7 +147,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.journeyState.nextPageToComplete() shouldBe None
       refined.journeyState.lastEditedPage.map(_.id) shouldBe None
 
-      refined.journeyPages.pages.map(_.id) shouldBe Journeys.soleTraderPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.soleTraderPages.map(_.id)
     }
 
     "Load journey for amendments with no change" in {
@@ -192,7 +195,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Variation)
 
       val cacheMap = addUpdatePageData(cacheMapBuilder)
-        .withValue(Page.contactPersonPage.id, FormTestData.otherContactPerson)
+        .withValue(contactPersonPage.id, FormTestData.otherContactPerson)
         .cacheMap
       setupSave4LaterFrom(cacheMap)
 
@@ -205,26 +208,24 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
 
   private def addUpdatePageData(cacheMapBuilder: CacheMapBuilder) =
     cacheMapBuilder
-      .withValue(Page.contactPersonPage.id, FormTestData.contactPerson)
-      .withValue(Page.mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
-      .withValue(Page.nationalInsuranceNumberPage.id, FormTestData.nationalInsuranceNumber)
-      .withValue(Page.tradingNamePage.id, FormTestData.tradingName)
-      .withValue(Page.vatNumberPage.id, FormTestData.vatNumber)
-      .withValue(Page.businessStatusPage.id, FormTestData.businessStatus)
-      .withValue(Page.importingActivitiesPage.id, FormTestData.importingActivities)
-      .withValue(Page.businessCustomersPage.id, FormTestData.businessCustomers)
-      .withValue(Page.otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.contactPersonPage.id), FormTestData.contactPerson)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.mainBusinessAddressPage.id), FormTestData.mainBusinessAddress)
-      .withValue(
-        Save4LaterKeys.displayKeyForPage(Page.nationalInsuranceNumberPage.id),
-        FormTestData.nationalInsuranceNumber)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.tradingNamePage.id), FormTestData.tradingName)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.vatNumberPage.id), FormTestData.vatNumber)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.businessStatusPage.id), FormTestData.businessStatus)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.importingActivitiesPage.id), FormTestData.importingActivities)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.businessCustomersPage.id), FormTestData.businessCustomers)
-      .withValue(Save4LaterKeys.displayKeyForPage(Page.otherStoragePremisesPage.id), FormTestData.otherStoragePremises)
+      .withValue(contactPersonPage.id, FormTestData.contactPerson)
+      .withValue(mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
+      .withValue(nationalInsuranceNumberPage.id, FormTestData.nationalInsuranceNumber)
+      .withValue(tradingNamePage.id, FormTestData.tradingName)
+      .withValue(vatNumberPage.id, FormTestData.vatNumber)
+      .withValue(businessStatusPage.id, FormTestData.businessStatus)
+      .withValue(importingActivitiesPage.id, FormTestData.importingActivities)
+      .withValue(businessCustomersPage.id, FormTestData.businessCustomers)
+      .withValue(otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
+      .withValue(Save4LaterKeys.displayKeyForPage(contactPersonPage.id), FormTestData.contactPerson)
+      .withValue(Save4LaterKeys.displayKeyForPage(mainBusinessAddressPage.id), FormTestData.mainBusinessAddress)
+      .withValue(Save4LaterKeys.displayKeyForPage(nationalInsuranceNumberPage.id), FormTestData.nationalInsuranceNumber)
+      .withValue(Save4LaterKeys.displayKeyForPage(tradingNamePage.id), FormTestData.tradingName)
+      .withValue(Save4LaterKeys.displayKeyForPage(vatNumberPage.id), FormTestData.vatNumber)
+      .withValue(Save4LaterKeys.displayKeyForPage(businessStatusPage.id), FormTestData.businessStatus)
+      .withValue(Save4LaterKeys.displayKeyForPage(importingActivitiesPage.id), FormTestData.importingActivities)
+      .withValue(Save4LaterKeys.displayKeyForPage(businessCustomersPage.id), FormTestData.businessCustomers)
+      .withValue(Save4LaterKeys.displayKeyForPage(otherStoragePremisesPage.id), FormTestData.otherStoragePremises)
       .withValue(Save4LaterKeys.displayKeyForPage(Save4LaterKeys.verifiedEmailKey), ggEmail)
 
 }
