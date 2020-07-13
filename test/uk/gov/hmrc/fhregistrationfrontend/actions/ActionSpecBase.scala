@@ -22,7 +22,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import play.api.http.Status
 import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, OtherStoragePremisesPage, Page, RepeatingPage}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers, BusinessPartner, BusinessStatus, CompanyOfficer, CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, ImportingActivities, MainBusinessAddress, NationalInsuranceNumber, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -33,10 +35,23 @@ trait ActionSpecBase
     extends UnitSpec with ScalaFutures with MockitoSugar with BeforeAndAfterEach with Matchers with Results with Status
     with UserTestData {
 
-   val mockViews = mock[Views]
-   val page = new NicholasPage(mockViews)
-   val contactPersonPage = page.contactPersonPage
-   val mainBusinessAddressPage = page.mainBusinessAddressPage
+  val mockViews: Views = mock[Views]
+  val page: NicholasPage = new NicholasPage(mockViews)
+  val contactPersonPage: Page[ContactPerson] = page.contactPersonPage
+  val mainBusinessAddressPage: Page[MainBusinessAddress] = page.mainBusinessAddressPage
+  val mockJourneys: Journeys = mock[Journeys]
+  val journeysWithMockViews: Journeys = new Journeys(mockViews)
+  val companyOfficersPage: RepeatingPage[CompanyOfficer] = page.companyOfficersPage
+  val tradingNamePage: BasicPage[TradingName] = page.tradingNamePage
+  val companyRegistrationNumberPage: Page[CompanyRegistrationNumber] = page.companyRegistrationNumberPage
+  val dateOfIncorporationPage: BasicPage[DateOfIncorporation] = page.dateOfIncorporationPage
+  val nationalInsuranceNumberPage: Page[NationalInsuranceNumber] = page.nationalInsuranceNumberPage
+  val vatNumberPage: BasicPage[VatNumber] = page.vatNumberPage
+  val businessPartnersPage: RepeatingPage[BusinessPartner] = page.businessPartnersPage
+  val businessStatusPage: BasicPage[BusinessStatus] = page.businessStatusPage
+  val businessCustomersPage: BasicPage[BusinessCustomers] = page.businessCustomersPage
+  val importingActivitiesPage: BasicPage[ImportingActivities] = page.importingActivitiesPage
+  val otherStoragePremisesPage: OtherStoragePremisesPage = page.otherStoragePremisesPage
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A])(implicit timeout: Timeout) = {
     val p = Promise[P[_]]
