@@ -27,6 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
@@ -44,7 +45,7 @@ class FormPageControllerSpec
   }
 
   val addressAuditService = mock[AddressAuditService]
-  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, mockViews)(
+  val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, views)(
     mockSave4Later,
     scala.concurrent.ExecutionContext.Implicits.global)
 

@@ -53,7 +53,7 @@ class AmendmentControllerSpec
     mockEmailVerifcationConnector,
     mockMcc,
     mockActions,
-    journeysWithMockViews
+    journeys
   )(inMemorySave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "startAmendment" should {
@@ -80,7 +80,7 @@ class AmendmentControllerSpec
       await(inMemorySave4Later.fetchBusinessType(testUserId)) shouldBe Some(BusinessType.CorporateBody.toString)
       await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe Some("a@w.ro")
 
-      for (page ← journeysWithMockViews.limitedCompanyPages) {
+      for (page ← journeys.limitedCompanyPages) {
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
       }
@@ -133,7 +133,7 @@ class AmendmentControllerSpec
       await(inMemorySave4Later.fetchBusinessType(testUserId)) shouldBe Some(BusinessType.CorporateBody.toString)
       await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe Some("a@w.ro")
 
-      for (page ← journeysWithMockViews.limitedCompanyPages) {
+      for (page ← journeys.limitedCompanyPages) {
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
         await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
       }

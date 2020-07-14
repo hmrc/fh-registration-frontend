@@ -30,7 +30,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
   this: UserTestData ⇒
 
   def partiallyCompleteJourney = {
-    val pagesWithData = journeysWithMockViews.partnershipPages map { page ⇒
+    val pagesWithData = journeys.partnershipPages map { page ⇒
       page.id match {
         case contactPersonPage.id ⇒ page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
         case mainBusinessAddressPage.id ⇒
@@ -42,7 +42,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
   }
 
   def partialJourneyWithSection = {
-    val pagesWithData = journeysWithMockViews.partnershipPages map { page ⇒
+    val pagesWithData = journeys.partnershipPages map { page ⇒
       page.id match {
         case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
         case mainBusinessAddressPage.id =>
@@ -58,7 +58,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
     new JourneyPages(pagesWithData)
   }
 
-  def fullyCompleteJourney(pages: Seq[Page[_]] = journeysWithMockViews.partnershipPages) = {
+  def fullyCompleteJourney(pages: Seq[Page[_]] = journeys.partnershipPages) = {
     val pagesWithData = pages map examplePageData
     new JourneyPages(pagesWithData)
   }
@@ -92,7 +92,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
   def journeyRequest(
     userRequest: UserRequest[_] =
       new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest()),
-    journeyPages: JourneyPages = new JourneyPages(journeysWithMockViews.partnershipPages),
+    journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment,
     cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap

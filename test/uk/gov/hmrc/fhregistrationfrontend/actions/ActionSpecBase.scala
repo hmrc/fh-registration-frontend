@@ -18,16 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import akka.util.Timeout
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.mvc._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, OtherStoragePremisesPage, Page, RepeatingPage}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers, BusinessPartner, BusinessStatus, CompanyOfficer, CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, ImportingActivities, MainBusinessAddress, NationalInsuranceNumber, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{Await, Promise}
 

@@ -26,6 +26,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationRe
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.deregistration_reason
 
 import scala.concurrent.Future
 
@@ -42,7 +44,7 @@ class DeregistrationControllerSpec
     mockKeyStoreService,
     mockMcc,
     mockActions,
-    mockViews
+    views
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
@@ -66,7 +68,7 @@ class DeregistrationControllerSpec
     }
 
     "Render reason page" in {
-
+//      when(mockViews.deregistration_reason) thenReturn uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration_reason
       val result = await(csrfAddToken(controller.reason).apply(FakeRequest()))
 
       status(result) shouldBe OK
