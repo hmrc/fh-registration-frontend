@@ -23,9 +23,9 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class Journeys @Inject()(views: Views) {
 
-  import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
+  import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
 
-  private val page = new NicholasPage(views)
+  private val page = new InjectedPage(views)
 
   val limitedCompanyPages =
     Seq[AnyPage](

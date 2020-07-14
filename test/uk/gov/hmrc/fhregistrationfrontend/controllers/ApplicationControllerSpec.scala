@@ -118,6 +118,8 @@ class ApplicationControllerSpec
     }
 
     "render the enrolment error page" in {
+      SharedMetricRegistries.clear()
+
       setupFhddsEnrolmentProgress(EnrolmentProgress.Error)
       setupUserAction()
       val request = FakeRequest()

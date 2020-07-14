@@ -16,9 +16,11 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
 @this(
-govuk_wrapper: govuk_wrapper
+    govuk_wrapper: govuk_wrapper,
+    viewHelpers: ViewHelpers
 )
 
 @(title: String="",
@@ -58,7 +60,7 @@ contentHeader: Option[Html] = None,
     bodyClasses = bodyClasses,
     sidebar = sidebar,
     contentHeader = contentHeader,
-    mainContent = layouts.article(mainContent),
+    mainContent = viewHelpers.article(mainContent),
     serviceInfoContent = serviceInfoContent,
     linkElement = linkElement,
     environmentUrl = environmentUrl,

@@ -80,7 +80,7 @@ object Page {
 
   type AnyPage = Page[_]
 
-  class NicholasPage @Inject()(views: Views) {
+  class InjectedPage @Inject()(views: Views) {
 
     import CompanyOfficer.companyOfficerFormat
     import CompanyRegistrationNumber.format

@@ -40,7 +40,7 @@ trait UnitSpec extends WordSpecLike with Matchers with OptionValues with GuiceOn
   lazy val journeys: Journeys = new Journeys(views)
   lazy val injectedJourneys = app.injector.instanceOf[Journeys]
 
-  lazy val page: Page.NicholasPage = app.injector.instanceOf[Page.NicholasPage]
+  lazy val page: Page.InjectedPage = app.injector.instanceOf[Page.InjectedPage]
   lazy val mainBusinessAddressPage: Page[MainBusinessAddress] = page.mainBusinessAddressPage
   lazy val contactPersonPage: Page[ContactPerson] = page.contactPersonPage
   lazy val tradingNamePage: BasicPage[TradingName] = page.tradingNamePage
