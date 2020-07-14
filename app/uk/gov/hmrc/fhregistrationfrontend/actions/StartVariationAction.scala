@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.ExecutionContext
 
-class StartVariationAction(fhddsConnector: FhddsConnector)( // shouldn't this be DI'ed??
+class StartVariationAction(fhddsConnector: FhddsConnector)(
   implicit save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler,
   val executionContext: ExecutionContext)

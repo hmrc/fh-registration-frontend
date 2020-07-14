@@ -206,9 +206,7 @@ class Application @Inject()(
   def checkStatus() = enrolledUserAction.async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(fhddsStatus ⇒ {
-
-        Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber))
+      .map(fhddsStatus ⇒ { Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber))
       })
   }
 }

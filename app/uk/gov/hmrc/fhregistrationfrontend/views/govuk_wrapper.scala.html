@@ -22,7 +22,7 @@
 
 @this(
         govUkTemplate: views.html.layouts.GovUkTemplate,
-        viewsHelpers: ViewHelpers
+        viewHelpers: ViewHelpers
 )
 
 @(title: String,
@@ -62,7 +62,7 @@
 
 @head = {
 @{
-    new uiLayouts.Head(viewsHelpers.optimizelySnippet, assetsConfig, gtmSnippet).apply(
+    new uiLayouts.Head(viewHelpers.optimizelySnippet, assetsConfig, gtmSnippet).apply(
         linkElem = Some(linksElement),
         headScripts = Some(analyticsGA)
     )
@@ -159,7 +159,14 @@
 }
 
 @content = {
-@viewsHelpers.mainContent
+@uiLayouts.main_content(
+    article = mainContent,
+    mainClass = mainClass,
+    mainDataAttributes = mainDataAttributes,
+    mainContentHeader = mainContentHeader,
+    serviceInfo = serviceInfo,
+    getHelpForm = getHelpForm,
+    sidebar = sidebar)
 }
 
-     @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(viewsHelpers.footerLinks()), nav = true)(content)
+     @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(viewHelpers.footerLinks()), nav = true)(content)
