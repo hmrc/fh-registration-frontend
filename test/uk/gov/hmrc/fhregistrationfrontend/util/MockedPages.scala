@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.util
 
+import org.scalatest.TestSuite
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, OtherStoragePremisesPage, Page, RepeatingPage}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers, BusinessPartner, BusinessStatus, CompanyOfficer, CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, ImportingActivities, MainBusinessAddress, NationalInsuranceNumber, TradingName, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 trait MockedPages extends MockitoSugar {
@@ -27,7 +29,6 @@ trait MockedPages extends MockitoSugar {
   val mockViews: Views = mock[Views]
   val page: NicholasPage = new NicholasPage(mockViews)
   val mockJourneys: Journeys = mock[Journeys]
-  val journeysWithMockViews: Journeys = new Journeys(mockViews)
 
   val contactPersonPage: Page[ContactPerson] = page.contactPersonPage
   val mainBusinessAddressPage: Page[MainBusinessAddress] = page.mainBusinessAddressPage

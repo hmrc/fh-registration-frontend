@@ -43,7 +43,7 @@ class WithdrawalControllerSpec
     mockKeyStoreService,
     mockMcc,
     mockActions,
-    mockViews
+    views
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {

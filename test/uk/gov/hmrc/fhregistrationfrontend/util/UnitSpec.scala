@@ -21,16 +21,22 @@ import java.nio.charset.Charset
 import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
-trait UnitSpec extends WordSpecLike with Matchers with OptionValues with MockedPages {
+trait UnitSpec extends WordSpecLike with Matchers with OptionValues with MockedPages with GuiceOneAppPerSuite {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
+
+  val views: Views = app.injector.instanceOf[Views]
+  val journeys: Journeys = new Journeys(views)
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 

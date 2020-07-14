@@ -17,8 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import akka.stream.Materializer
-import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.{any, same}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers
@@ -26,17 +26,18 @@ import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, CredentialRole}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, JourneyPages, JourneyType, Journeys, OtherStoragePremisesPage, Page, RepeatingPage}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers, BusinessPartner, BusinessStatus, BusinessType, CompanyOfficer, CompanyRegistrationNumber, ContactPerson, DateOfIncorporation, ImportingActivities, MainBusinessAddress, NationalInsuranceNumber, TradingName, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.fhregistrationfrontend.util.{MockedPages, UnitSpec}
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ActionsMock extends MockitoSugar with UserTestData {
   this: UnitSpec ⇒
+
   val mockActions = mock[Actions]
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
   implicit private val materializer = mock[Materializer]
@@ -46,7 +47,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     rNumber: Option[String] = Some(registrationNumber),
     credRole: Option[CredentialRole] = Some(adminRole),
     userAffinityGroup: AffinityGroup = AffinityGroup.Individual,
-    journeyPages: JourneyPages = new JourneyPages(journeysWithMockViews.partnershipPages),
+    journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap
   ) = {
 
@@ -61,9 +62,9 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           .asInstanceOf[JourneyRequest[A]]
         val journeyNavigation =
           if (journeyRequest.journeyState.isComplete)
-            journeysWithMockViews.summaryJourney(journeyRequest.journeyPages)
+            journeys.summaryJourney(journeyRequest.journeyPages)
           else
-            journeysWithMockViews.linearJourney(journeyRequest.journeyPages)
+            journeys.linearJourney(journeyRequest.journeyPages)
 
         val pageRequest = new PageRequest(
           journeyNavigation,
@@ -79,7 +80,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupSummaryAction(
     rNumber: Option[String] = Some(registrationNumber),
-    journeyPages: JourneyPages = new JourneyPages(journeysWithMockViews.partnershipPages),
+    journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     credRole: Option[CredentialRole] = Some(adminRole),
     userAffinityGroup: AffinityGroup = AffinityGroup.Individual,
     businessType: BusinessType = BusinessType.Partnership,
@@ -177,7 +178,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupJourneAction(
     rNumber: Option[String] = Some(registrationNumber),
-    journeyPages: JourneyPages = new JourneyPages(journeysWithMockViews.partnershipPages)) =
+    journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages)) =
     when(mockActions.journeyAction) thenReturn new ActionBuilder[JourneyRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
       override val executionContext = ec

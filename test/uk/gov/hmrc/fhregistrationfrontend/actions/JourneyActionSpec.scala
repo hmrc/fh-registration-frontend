@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
@@ -26,14 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestData, Save4LaterMocks, StubbedErrorHandler}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach {
+class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach with GuiceOneAppPerSuite {
 
   lazy val action =
-    new JourneyAction(mockJourneys)(
-      mockSave4Later,
-      StubbedErrorHandler,
-      scala.concurrent.ExecutionContext.Implicits.global)
+    new JourneyAction(journeys)(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
   val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {
@@ -93,10 +92,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.bpr shouldBe FormTestData.someBpr
 
       refined.journeyState.isComplete shouldBe false
-      refined.journeyState.nextPageToComplete() shouldBe Some(journeysWithMockViews.limitedCompanyPages.head.id)
+      refined.journeyState.nextPageToComplete() shouldBe Some(journeys.limitedCompanyPages.head.id)
       refined.journeyState.lastEditedPage shouldBe None
 
-      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.limitedCompanyPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeys.limitedCompanyPages.map(_.id)
     }
 
     "Load journey with several pages saved" in {
@@ -115,10 +114,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.hasUpdates shouldBe None
       refined.lastUpdateTimestamp shouldBe 1529327782000L
       refined.journeyState.isComplete shouldBe false
-      refined.journeyState.nextPageToComplete() shouldBe Some(journeysWithMockViews.limitedCompanyPages(2).id)
-      refined.journeyState.lastEditedPage.map(_.id) shouldBe Some(journeysWithMockViews.limitedCompanyPages(1).id)
+      refined.journeyState.nextPageToComplete() shouldBe Some(journeys.limitedCompanyPages(2).id)
+      refined.journeyState.lastEditedPage.map(_.id) shouldBe Some(journeys.limitedCompanyPages(1).id)
 
-      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.limitedCompanyPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeys.limitedCompanyPages.map(_.id)
     }
 
     "Load journey with all pages saved" in {
@@ -147,7 +146,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
       refined.journeyState.nextPageToComplete() shouldBe None
       refined.journeyState.lastEditedPage.map(_.id) shouldBe None
 
-      refined.journeyPages.pages.map(_.id) shouldBe journeysWithMockViews.soleTraderPages.map(_.id)
+      refined.journeyPages.pages.map(_.id) shouldBe journeys.soleTraderPages.map(_.id)
     }
 
     "Load journey for amendments with no change" in {
