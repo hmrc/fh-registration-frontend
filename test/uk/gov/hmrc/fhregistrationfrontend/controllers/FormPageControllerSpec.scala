@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_partners
 
 import scala.concurrent.Future
 
@@ -273,12 +274,9 @@ class FormPageControllerSpec
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
         .cacheMap
 
-      businessPartnersPage withData FormTestData.partners
+      val page = businessPartnersPage withData FormTestData.partners
 
-      setupPageAction(
-        businessPartnersPage,
-        cacheMap = cacheMap,
-        journeyPages = JourneyRequestBuilder.partialJourneyWithSection)
+      setupPageAction(page, cacheMap = cacheMap, journeyPages = JourneyRequestBuilder.partialJourneyWithSection)
       setupSave4LaterFrom(cacheMap)
 
       val request = FakeRequest()

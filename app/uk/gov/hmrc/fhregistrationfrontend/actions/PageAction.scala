@@ -39,7 +39,6 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 }
 
 //TODO all exceptional results need to be reviewed
-
 class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], journey: Journeys)(
   implicit errorHandler: ErrorHandler,
   val executionContext: ExecutionContext)

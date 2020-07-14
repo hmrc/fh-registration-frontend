@@ -31,7 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
-trait UnitSpec extends WordSpecLike with Matchers with OptionValues with MockedPages with GuiceOneAppPerSuite {
+trait UnitSpec extends WordSpecLike with Matchers with OptionValues with GuiceOneAppPerSuite {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
