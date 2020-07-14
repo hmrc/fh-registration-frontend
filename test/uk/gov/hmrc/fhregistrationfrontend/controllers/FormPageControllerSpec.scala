@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -23,16 +24,17 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.NicholasPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
 class FormPageControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock with Save4LaterMocks with BeforeAndAfterEach {
+
+  SharedMetricRegistries.clear()
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -44,7 +46,7 @@ class FormPageControllerSpec
     when(addressAuditService.auditAddresses(any(), any())(any())).thenReturn(Future successful true)
   }
 
-  val addressAuditService = mock[AddressAuditService]
+  val addressAuditService: AddressAuditService = mock[AddressAuditService]
   val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, views)(
     mockSave4Later,
     scala.concurrent.ExecutionContext.Implicits.global)
@@ -63,7 +65,6 @@ class FormPageControllerSpec
 
   "loadWithSection" should {
     "Render the page" in {
-      val companyOfficersPage = page.companyOfficersPage
       setupPageAction(companyOfficersPage)
 
       val request = FakeRequest()
@@ -101,7 +102,6 @@ class FormPageControllerSpec
     }
 
     "send an audit address event" in {
-      val contactPersonPage = page.contactPersonPage
       setupPageAction(contactPersonPage)
       setupSave4Later()
 

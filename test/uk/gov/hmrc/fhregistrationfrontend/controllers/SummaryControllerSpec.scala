@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.Mockito.reset
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
@@ -27,6 +28,10 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 
 class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+
+  SharedMetricRegistries.clear()
+
+  override lazy val views = app.injector.instanceOf[Views]
 
   val controller = new SummaryController(commonDependencies, mockMcc, mockActions, journeys, views)
 
