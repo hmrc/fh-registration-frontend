@@ -41,6 +41,7 @@ trait TestConfiguration
       "cachable.short-lived-cache",
       "cachable.session-cache"
     )))
+    .configure("metrics.enabled" -> "false")
     .build()
         app.injector.instanceOf[HealthController]
 

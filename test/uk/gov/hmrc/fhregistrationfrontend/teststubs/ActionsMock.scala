@@ -176,7 +176,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   }
 
-  def setupJourneAction(
+  def setupJourneyAction(
     rNumber: Option[String] = Some(registrationNumber),
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages)) =
     when(mockActions.journeyAction) thenReturn new ActionBuilder[JourneyRequest, AnyContent] {

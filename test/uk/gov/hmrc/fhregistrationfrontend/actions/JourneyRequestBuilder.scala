@@ -109,4 +109,4 @@ trait JourneyRequestBuilder extends ActionSpecBase {
     )
 }
 
-object JourneyRequestBuilder extends UserTestData with JourneyRequestBuilder {}
+object JourneyRequestBuilder extends UserTestData with JourneyRequestBuilder
