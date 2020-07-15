@@ -31,7 +31,6 @@
         environmentUrl: Option[String] = None,
         scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import layouts.GovUkTemplate
@@ -50,10 +49,21 @@
     new AssetsConfig(appConfig.getConfiguration)
 }
 
+@linksElement = {
+    @if(linkElement.isEmpty) {
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/palette.css")'/>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/focus.css")'/>
+    } else {
+        @linkElement.get
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/palette.css")'/>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/focus.css")'/>
+    }
+}
+
 @head = {
 @{
     new uiLayouts.Head(optimizelySnippet, assetsConfig, gtmSnippet).apply(
-        linkElem = linkElement,
+        linkElem = Some(linksElement),
         headScripts = Some(analyticsGA)
     )
 }
