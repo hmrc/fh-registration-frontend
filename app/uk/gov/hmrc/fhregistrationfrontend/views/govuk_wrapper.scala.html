@@ -16,13 +16,13 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import play.twirl.api.HtmlFormat
-@import uk.gov.hmrc.play.config.{OptimizelyConfig, GTMConfig}
 @import uk.gov.hmrc.play.config.AssetsConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
 @this(
         govUkTemplate: views.html.layouts.GovUkTemplate,
-        viewHelpers: ViewHelpers
+        viewHelpers: ViewHelpers,
+        assetsConfig: AssetsConfig
 )
 
 @(title: String,
@@ -41,12 +41,7 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
 @gtmSnippet = @{
-    val config = new GTMConfig(appConfig.getConfiguration)
-    new uiLayouts.GTMSnippet(config)
-}
-
-@assetsConfig = @{
-    new AssetsConfig(appConfig.getConfiguration)
+      viewHelpers.gtmSnippet
 }
 
 @linksElement = {
@@ -62,7 +57,7 @@
 
 @head = {
 @{
-    new uiLayouts.Head(viewHelpers.optimizelySnippet, assetsConfig, gtmSnippet).apply(
+    viewHelpers.head(
         linkElem = Some(linksElement),
         headScripts = Some(analyticsGA)
     )
@@ -78,10 +73,10 @@
 
 @insideHeader = {
 @{
-    (new uiLayouts.HeaderNav).apply(
+    viewHelpers.headerNav(
         Some(Messages("app.name")),
         None,
-        false,
+        showBetaLink = false,
         Some(signOutLink)
     )
 }
@@ -116,7 +111,7 @@
 
 @bodyEnd = {
 @{
-    new uiLayouts.Footer(assetsConfig).apply(
+    viewHelpers.footer(
         analyticsToken = Some(appConfig.analyticsToken),
         analyticsHost = appConfig.analyticsHost,
         ssoUrl = None,
@@ -131,7 +126,7 @@
 
 @serviceInfo = {
 @{
-    (new uiLayouts.ServiceInfo).apply(
+    viewHelpers.serviceInfo(
         HtmlFormat.empty,
         includeGridWrapper = false,
         Some(serviceInfoContent)
@@ -143,7 +138,7 @@
 @if(contentHeader.isDefined) {
 
     @{
-        (new uiLayouts.MainContentHeader).apply(
+        viewHelpers.mainContentHeader(
             contentHeader.get
         )
     }
@@ -152,7 +147,7 @@
 
 @getHelpForm = {
 @{
-    (new uiHelpers.ReportAProblemLink).apply(
+    viewHelpers.reportAProblemLink(
         appConfig.reportAProblemPartialUrl,
         appConfig.reportAProblemNonJSUrl)
 }

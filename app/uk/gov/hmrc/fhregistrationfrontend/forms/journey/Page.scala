@@ -29,7 +29,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
-import uk.gov.hmrc.fhregistrationfrontend.views.html.forms._
 
 trait Rendering {
   def render(
