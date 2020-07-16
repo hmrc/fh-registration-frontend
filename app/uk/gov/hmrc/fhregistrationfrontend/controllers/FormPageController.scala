@@ -75,7 +75,6 @@ class FormPageController @Inject()(
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request ⇒
       if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
-        println(request.page)
         request.page[T].delete match {
           case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
           case Some(newPage) ⇒

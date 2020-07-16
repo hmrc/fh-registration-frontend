@@ -158,15 +158,18 @@
 }
 }
 
-@content = {
-@uiLayouts.main_content(
-    article = mainContent,
-    mainClass = mainClass,
-    mainDataAttributes = mainDataAttributes,
-    mainContentHeader = mainContentHeader,
-    serviceInfo = serviceInfo,
-    getHelpForm = getHelpForm,
-    sidebar = sidebar)
-}
+    @content = {
+        @viewHelpers.mainContent(
+            article = mainContent,
+            mainClass = mainClass,
+            mainDataAttributes = mainDataAttributes,
+            mainContentHeader = mainContentHeader,
+            serviceInfo = serviceInfo,
+            getHelpForm = getHelpForm,
+            sidebar = sidebar)
+        )
+
+    }
+
 
      @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(viewHelpers.footerLinks()), nav = true)(content)
