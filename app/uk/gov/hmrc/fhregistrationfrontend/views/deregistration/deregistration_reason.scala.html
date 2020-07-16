@@ -21,7 +21,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.{reasonKey, reasonOtherKey}
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
+@this(
+main_template: main_template
+)
 @(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
@@ -34,10 +38,11 @@
 }
 
 @title = @{
+
   Messages("fh.deregistration.title")
 }
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason(), 'novalidate -> "novalidate") {
 

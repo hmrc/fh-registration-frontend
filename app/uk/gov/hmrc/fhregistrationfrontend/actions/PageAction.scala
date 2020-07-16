@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
+import com.google.inject.Inject
 import play.api.Logger
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest, _}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
@@ -38,7 +39,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 }
 
 //TODO all exceptional results need to be reviewed
-class PageAction[T, V](pageId: String, sectionId: Option[String])(
+class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], journey: Journeys)(
   implicit errorHandler: ErrorHandler,
   val executionContext: ExecutionContext)
     extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
@@ -63,7 +64,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(
   }
 
   def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
-    if (state.isPageComplete(page) || state.nextPageToComplete() == Some(page.id)) {
+    if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
       Logger.error(s"Not found")
@@ -88,7 +89,7 @@ class PageAction[T, V](pageId: String, sectionId: Option[String])(
 
   def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) =
     if (state.isComplete)
-      Journeys.summaryJourney(journeyPages)
+      journey.summaryJourney(journeyPages)
     else
-      Journeys.linearJourney(journeyPages)
+      journey.linearJourney(journeyPages)
 }

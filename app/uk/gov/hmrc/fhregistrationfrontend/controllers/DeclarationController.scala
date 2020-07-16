@@ -32,7 +32,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaratio
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -43,7 +45,9 @@ class DeclarationController @Inject()(
   fhddsConnector: FhddsConnector,
   keyStoreService: KeyStoreService,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  journeys: Journeys,
+  views: Views
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) with SummaryFunctions {
 
@@ -56,7 +60,7 @@ class DeclarationController @Inject()(
 
   def showDeclaration() = summaryAction { implicit request ⇒
     Ok(
-      declaration(
+      views.declaration(
         declarationForm,
         Some(request.verifiedEmail),
         request.bpr,
@@ -77,7 +81,8 @@ class DeclarationController @Inject()(
         processingDate = new Date(timestamp.toLong)
         printableSummary ← userSummary
       } yield {
-        Ok(acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType)))
+        Ok(views
+          .acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType)))
       }
     }
 
@@ -86,7 +91,7 @@ class DeclarationController @Inject()(
     form.fold(
       formWithErrors =>
         Future successful BadRequest(
-          declaration(
+          views.declaration(
             formWithErrors,
             Some(request.verifiedEmail),
             request.bpr,
@@ -95,7 +100,7 @@ class DeclarationController @Inject()(
         sendSubscription(usersDeclaration).fold(
           error ⇒
             Future successful BadRequest(
-              declaration(
+              views.declaration(
                 form,
                 Some(request.verifiedEmail),
                 request.bpr,
@@ -103,7 +108,7 @@ class DeclarationController @Inject()(
           _.flatMap {
             response ⇒
               keyStoreService
-                .saveSummaryForPrint(getSummaryPrintable()(request).toString())
+                .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
                 .map(_ ⇒ true)
                 .recover { case _ ⇒ false }
                 .map { pdfSaved ⇒
@@ -189,10 +194,10 @@ class DeclarationController @Inject()(
     pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) =
     request.businessType match {
       case BusinessType.CorporateBody ⇒
-        formToDes limitedCompanySubmission (request.bpr, verifiedEmail, Journeys ltdApplication pageDataLoader, d)
+        formToDes limitedCompanySubmission (request.bpr, verifiedEmail, journeys ltdApplication pageDataLoader, d)
       case BusinessType.SoleTrader ⇒
-        formToDes soleProprietorCompanySubmission (request.bpr, verifiedEmail, Journeys soleTraderApplication pageDataLoader, d)
+        formToDes soleProprietorCompanySubmission (request.bpr, verifiedEmail, journeys soleTraderApplication pageDataLoader, d)
       case BusinessType.Partnership ⇒
-        formToDes partnership (request.bpr, verifiedEmail, Journeys partnershipApplication pageDataLoader, d)
+        formToDes partnership (request.bpr, verifiedEmail, journeys partnershipApplication pageDataLoader, d)
     }
 }

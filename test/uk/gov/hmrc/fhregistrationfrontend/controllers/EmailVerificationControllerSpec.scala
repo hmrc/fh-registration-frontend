@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, InMemoryShortLivedCache}
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers._
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class EmailVerificationControllerSpec
     extends ControllerSpecWithGuiceApp with EmailVerificationConnectorMocks with ActionsMock with BeforeAndAfterEach {
@@ -36,7 +37,8 @@ class EmailVerificationControllerSpec
     mockActions,
     mockMcc,
     mockEmailVerifcationConnector,
-    inMemorySave4Later)(scala.concurrent.ExecutionContext.Implicits.global)
+    inMemorySave4Later,
+    views)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()

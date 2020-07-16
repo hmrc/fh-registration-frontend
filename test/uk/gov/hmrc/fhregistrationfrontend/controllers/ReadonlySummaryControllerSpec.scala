@@ -20,7 +20,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks, Save4LaterMocks}
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 
 class ReadonlySummaryControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks {
@@ -30,7 +30,8 @@ class ReadonlySummaryControllerSpec
     new DesToFormImpl(),
     mockFhddsConnector,
     mockMcc,
-    mockActions
+    mockActions,
+    views
   )(scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {

@@ -21,6 +21,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+main_template: main_template
+)
 
 @(submission: SubmissionTracking)(implicit request: Request[_], config: AppConfig,  messagesApi: Messages)
 

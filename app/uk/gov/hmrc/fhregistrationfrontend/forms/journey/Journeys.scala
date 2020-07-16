@@ -16,144 +16,148 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import javax.inject.Inject
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-object Journeys {
+class Journeys @Inject()(views: Views) {
 
-  import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
+  import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
+
+  private val page = new InjectedPage(views)
 
   val limitedCompanyPages =
     Seq[AnyPage](
-      Page.contactPersonPage,
-      Page.mainBusinessAddressPage,
-      Page.companyRegistrationNumberPage,
-      Page.dateOfIncorporationPage,
-      Page.tradingNamePage,
-      Page.vatNumberPage,
-      Page.companyOfficersPage,
-      Page.businessStatusPage,
-      Page.importingActivitiesPage,
-      Page.businessCustomersPage,
-      Page.otherStoragePremisesPage
+      page.contactPersonPage,
+      page.mainBusinessAddressPage,
+      page.companyRegistrationNumberPage,
+      page.dateOfIncorporationPage,
+      page.tradingNamePage,
+      page.vatNumberPage,
+      page.companyOfficersPage,
+      page.businessStatusPage,
+      page.importingActivitiesPage,
+      page.businessCustomersPage,
+      page.otherStoragePremisesPage
     )
 
   val soleTraderPages =
-    Seq[Page[_]](
-      Page.contactPersonPage,
-      Page.mainBusinessAddressPage,
-      Page.nationalInsuranceNumberPage,
-      Page.tradingNamePage,
-      Page.vatNumberPage,
-      Page.businessStatusPage,
-      Page.importingActivitiesPage,
-      Page.businessCustomersPage,
-      Page.otherStoragePremisesPage
+    Seq[AnyPage](
+      page.contactPersonPage,
+      page.mainBusinessAddressPage,
+      page.nationalInsuranceNumberPage,
+      page.tradingNamePage,
+      page.vatNumberPage,
+      page.businessStatusPage,
+      page.importingActivitiesPage,
+      page.businessCustomersPage,
+      page.otherStoragePremisesPage
     )
 
   val partnershipPages =
-    Seq[Page[_]](
-      Page.contactPersonPage,
-      Page.mainBusinessAddressPage,
-      Page.tradingNamePage,
-      Page.vatNumberPage,
-      Page.businessPartnersPage,
-      Page.businessStatusPage,
-      Page.importingActivitiesPage,
-      Page.businessCustomersPage,
-      Page.otherStoragePremisesPage
+    Seq[AnyPage](
+      page.contactPersonPage,
+      page.mainBusinessAddressPage,
+      page.tradingNamePage,
+      page.vatNumberPage,
+      page.businessPartnersPage,
+      page.businessStatusPage,
+      page.importingActivitiesPage,
+      page.businessCustomersPage,
+      page.otherStoragePremisesPage
     )
 
   def unapplyApplication(application: BusinessEntityApplication): JourneyPages =
     application match {
-      case a: LimitedCompanyApplication ⇒ Journeys unapplyLimitedCompanyApplication a
-      case a: SoleProprietorApplication ⇒ Journeys unapplySoleTraderApplication a
-      case a: PartnershipApplication ⇒ Journeys unapplyPartnershipApplication a
+      case a: LimitedCompanyApplication ⇒ this unapplyLimitedCompanyApplication a
+      case a: SoleProprietorApplication ⇒ this unapplySoleTraderApplication a
+      case a: PartnershipApplication ⇒ this unapplyPartnershipApplication a
     }
 
   def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) =
     new JourneyPages(
       Seq[AnyPage](
-        mainBusinessAddressPage withData a.mainBusinessAddress,
-        contactPersonPage withData a.contactPerson,
-        companyRegistrationNumberPage withData a.companyRegistrationNumber,
-        dateOfIncorporationPage withData a.dateOfIncorporation,
-        tradingNamePage withData a.tradingName,
-        vatNumberPage withData a.vatNumber,
-        companyOfficersPage withData a.companyOfficers,
-        businessStatusPage withData a.businessStatus,
-        importingActivitiesPage withData a.importingActivities,
-        businessCustomersPage withData a.businessCustomers,
-        otherStoragePremisesPage withData a.otherStoragePremises
+        page.mainBusinessAddressPage withData a.mainBusinessAddress,
+        page.contactPersonPage withData a.contactPerson,
+        page.companyRegistrationNumberPage withData a.companyRegistrationNumber,
+        page.dateOfIncorporationPage withData a.dateOfIncorporation,
+        page.tradingNamePage withData a.tradingName,
+        page.vatNumberPage withData a.vatNumber,
+        page.companyOfficersPage withData a.companyOfficers,
+        page.businessStatusPage withData a.businessStatus,
+        page.importingActivitiesPage withData a.importingActivities,
+        page.businessCustomersPage withData a.businessCustomers,
+        page.otherStoragePremisesPage withData a.otherStoragePremises
       )
     )
 
   def unapplySoleTraderApplication(a: SoleProprietorApplication) =
     new JourneyPages(
-      Seq[Page[_]](
-        mainBusinessAddressPage withData a.mainBusinessAddress,
-        contactPersonPage withData a.contactPerson,
-        nationalInsuranceNumberPage withData a.nationalInsuranceNumber,
-        tradingNamePage withData a.tradingName,
-        vatNumberPage withData a.vatNumber,
-        businessStatusPage withData a.businessStatus,
-        importingActivitiesPage withData a.importingActivities,
-        businessCustomersPage withData a.businessCustomers,
-        otherStoragePremisesPage withData a.otherStoragePremises
+      Seq[AnyPage](
+        page.mainBusinessAddressPage withData a.mainBusinessAddress,
+        page.contactPersonPage withData a.contactPerson,
+        page.nationalInsuranceNumberPage withData a.nationalInsuranceNumber,
+        page.tradingNamePage withData a.tradingName,
+        page.vatNumberPage withData a.vatNumber,
+        page.businessStatusPage withData a.businessStatus,
+        page.importingActivitiesPage withData a.importingActivities,
+        page.businessCustomersPage withData a.businessCustomers,
+        page.otherStoragePremisesPage withData a.otherStoragePremises
       )
     )
 
   def unapplyPartnershipApplication(a: PartnershipApplication) =
     new JourneyPages(
-      Seq[Page[_]](
-        mainBusinessAddressPage withData a.mainBusinessAddress,
-        contactPersonPage withData a.contactPerson,
-        tradingNamePage withData a.tradingName,
-        vatNumberPage withData a.vatNumber,
-        businessPartnersPage withData a.businessPartners,
-        businessStatusPage withData a.businessStatus,
-        importingActivitiesPage withData a.importingActivities,
-        businessCustomersPage withData a.businessCustomers,
-        otherStoragePremisesPage withData a.otherStoragePremises
+      Seq[AnyPage](
+        page.mainBusinessAddressPage withData a.mainBusinessAddress,
+        page.contactPersonPage withData a.contactPerson,
+        page.tradingNamePage withData a.tradingName,
+        page.vatNumberPage withData a.vatNumber,
+        page.businessPartnersPage withData a.businessPartners,
+        page.businessStatusPage withData a.businessStatus,
+        page.importingActivitiesPage withData a.importingActivities,
+        page.businessCustomersPage withData a.businessCustomers,
+        page.otherStoragePremisesPage withData a.otherStoragePremises
       )
     )
 
   def partnershipApplication(pageDataLoader: PageDataLoader) = PartnershipApplication(
-    pageDataLoader pageData mainBusinessAddressPage,
-    pageDataLoader pageData contactPersonPage,
-    pageDataLoader pageData tradingNamePage,
-    pageDataLoader pageData vatNumberPage,
-    pageDataLoader pageData businessPartnersPage,
-    pageDataLoader pageData businessStatusPage,
-    pageDataLoader pageData importingActivitiesPage,
-    pageDataLoader pageData businessCustomersPage,
-    pageDataLoader pageData otherStoragePremisesPage
+    pageDataLoader pageData page.mainBusinessAddressPage,
+    pageDataLoader pageData page.contactPersonPage,
+    pageDataLoader pageData page.tradingNamePage,
+    pageDataLoader pageData page.vatNumberPage,
+    pageDataLoader pageData page.businessPartnersPage,
+    pageDataLoader pageData page.businessStatusPage,
+    pageDataLoader pageData page.importingActivitiesPage,
+    pageDataLoader pageData page.businessCustomersPage,
+    pageDataLoader pageData page.otherStoragePremisesPage
   )
 
   def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
-    pageDataLoader pageData mainBusinessAddressPage,
-    pageDataLoader pageData contactPersonPage,
-    pageDataLoader pageData nationalInsuranceNumberPage,
-    pageDataLoader pageData tradingNamePage,
-    pageDataLoader pageData vatNumberPage,
-    pageDataLoader pageData businessStatusPage,
-    pageDataLoader pageData importingActivitiesPage,
-    pageDataLoader pageData businessCustomersPage,
-    pageDataLoader pageData otherStoragePremisesPage
+    pageDataLoader pageData page.mainBusinessAddressPage,
+    pageDataLoader pageData page.contactPersonPage,
+    pageDataLoader pageData page.nationalInsuranceNumberPage,
+    pageDataLoader pageData page.tradingNamePage,
+    pageDataLoader pageData page.vatNumberPage,
+    pageDataLoader pageData page.businessStatusPage,
+    pageDataLoader pageData page.importingActivitiesPage,
+    pageDataLoader pageData page.businessCustomersPage,
+    pageDataLoader pageData page.otherStoragePremisesPage
   )
 
   def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
-    pageDataLoader pageData mainBusinessAddressPage,
-    pageDataLoader pageData contactPersonPage,
-    pageDataLoader pageData companyRegistrationNumberPage,
-    pageDataLoader pageData dateOfIncorporationPage,
-    pageDataLoader pageData tradingNamePage,
-    pageDataLoader pageData vatNumberPage,
-    pageDataLoader pageData companyOfficersPage,
-    pageDataLoader pageData businessStatusPage,
-    pageDataLoader pageData importingActivitiesPage,
-    pageDataLoader pageData businessCustomersPage,
-    pageDataLoader pageData otherStoragePremisesPage
+    pageDataLoader pageData page.mainBusinessAddressPage,
+    pageDataLoader pageData page.contactPersonPage,
+    pageDataLoader pageData page.companyRegistrationNumberPage,
+    pageDataLoader pageData page.dateOfIncorporationPage,
+    pageDataLoader pageData page.tradingNamePage,
+    pageDataLoader pageData page.vatNumberPage,
+    pageDataLoader pageData page.companyOfficersPage,
+    pageDataLoader pageData page.businessStatusPage,
+    pageDataLoader pageData page.importingActivitiesPage,
+    pageDataLoader pageData page.businessCustomersPage,
+    pageDataLoader pageData page.otherStoragePremisesPage
   )
 
   def linearJourney(journeyPages: JourneyPages) = new LinearJourney(journeyPages)

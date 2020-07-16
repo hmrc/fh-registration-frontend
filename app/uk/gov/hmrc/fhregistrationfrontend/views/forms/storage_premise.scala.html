@@ -14,15 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.OtherStoragePremises
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+
+@this(
+  main_template: main_template
+)
 
 @(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -32,34 +34,34 @@
 }
 
 @addMore = {
-  @params.forceHasMore match {
-    case Some(force) => {
-      <input type="hidden" name="addMore" value="@force" />
-    }
-    case None => {
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"addMore"),
-          value = otherStoragePremisesForm(s"addMore").value,
-          legend = Some(Messages("fh.other_storage_premises.company.addMore")),
-          hasErrors = otherStoragePremisesForm(s"addMore").hasErrors,
-          error = Some(Messages("fh.storagePremise_address.addMore.error.required")),
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None
-            )
+@params.forceHasMore match {
+  case Some(force) => {
+    <input type="hidden" name="addMore" value="@force" />
+  }
+  case None => {
+    @RadioGroup(
+      RadioGroupParams(
+        name = Some(s"addMore"),
+        value = otherStoragePremisesForm(s"addMore").value,
+        legend = Some(Messages("fh.other_storage_premises.company.addMore")),
+        hasErrors = otherStoragePremisesForm(s"addMore").hasErrors,
+        error = Some(Messages("fh.storagePremise_address.addMore.error.required")),
+        radios = List(
+          RadioParams(
+            "true",
+            Messages("fh.generic.yes"),
+            None
+          ),
+          RadioParams(
+            "false",
+            Messages("fh.generic.no"),
+            None
           )
         )
       )
-    }
+    )
   }
+}
 }
 
 @titlePrefix = @{
@@ -85,12 +87,12 @@
 
   <p>@Messages("fh.otherStoragePremises.each.inf").</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
+    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
 
-    @helper.CSRF.formField
-    @if(params.canRemove) {
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
-    }
+      @helper.CSRF.formField
+      @if(params.canRemove) {
+        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
+      }
       @AddressUK(
         otherStoragePremisesForm,
         AddressUKParams(
@@ -104,34 +106,34 @@
 
       <br>
 
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(isThirdPartyKey),
-          legend = Some(Messages("fh.other_storage_premises.third_party.label")),
-          hasErrors = otherStoragePremisesForm(isThirdPartyKey).hasErrors,
-          error = Some(Messages("fh.storagePremise_address.isThirdParty.error.required")),
-          value = otherStoragePremisesForm(isThirdPartyKey).value,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes")
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no")
-            )
-          )
+  @RadioGroup(
+    RadioGroupParams(
+      name = Some(isThirdPartyKey),
+      legend = Some(Messages("fh.other_storage_premises.third_party.label")),
+      hasErrors = otherStoragePremisesForm(isThirdPartyKey).hasErrors,
+      error = Some(Messages("fh.storagePremise_address.isThirdParty.error.required")),
+      value = otherStoragePremisesForm(isThirdPartyKey).value,
+      radios = List(
+        RadioParams(
+          "true",
+          Messages("fh.generic.yes")
+        ),
+        RadioParams(
+          "false",
+          Messages("fh.generic.no")
         )
       )
-
-    @addMore
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
     )
-  }
+  )
+
+  @addMore
+
+  @SubmitButtons(
+    SubmitButtonsParams(
+      label = Messages("button.save.continue"),
+      summaryLink = false
+    ),
+    navigation
+  )
+}
 }

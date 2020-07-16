@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
@@ -28,12 +29,18 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams.StatusParams
 
 import scala.concurrent.Future
 
 class ApplicationControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks
     with JourneyRequestBuilder with BeforeAndAfterEach with BeforeAndAfter {
+
+  SharedMetricRegistries.clear()
 
   val mockBusinessCustomerConnector = mock[BusinessCustomerFrontendConnector]
 
@@ -47,13 +54,19 @@ class ApplicationControllerSpec
     )
   }
 
+  val status: status = app.injector.instanceOf[status]
+  val statusParams: StatusParams = app.injector.instanceOf[StatusParams]
+
   val controller = new Application(
     app.injector.instanceOf(classOf[ExternalUrls]),
     commonDependencies,
     mockFhddsConnector,
     mockBusinessCustomerConnector,
     mockMcc,
-    mockActions
+    mockActions,
+    views,
+    status,
+    statusParams
   )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
 
   "main" should {
@@ -105,6 +118,8 @@ class ApplicationControllerSpec
     }
 
     "render the enrolment error page" in {
+      SharedMetricRegistries.clear()
+
       setupFhddsEnrolmentProgress(EnrolmentProgress.Error)
       setupUserAction()
       val request = FakeRequest()
@@ -260,7 +275,7 @@ class ApplicationControllerSpec
 
   "resumeForm" should {
     "Redirect to first page" in {
-      setupJourneAction(rNumber = None)
+      setupJourneyAction(rNumber = None)
       val request = FakeRequest()
       val result = await(controller resumeForm request)
 
@@ -269,7 +284,7 @@ class ApplicationControllerSpec
     }
 
     "Redirect to last completed page" in {
-      setupJourneAction(rNumber = None, JourneyRequestBuilder.partiallyCompleteJourney)
+      setupJourneyAction(rNumber = None, JourneyRequestBuilder.partiallyCompleteJourney)
       val request = FakeRequest()
       val result = await(controller resumeForm request)
 
@@ -278,7 +293,7 @@ class ApplicationControllerSpec
     }
 
     "Redirect to summary page" in {
-      setupJourneAction(rNumber = None, JourneyRequestBuilder.fullyCompleteJourney())
+      setupJourneyAction(rNumber = None, JourneyRequestBuilder.fullyCompleteJourney())
       val request = FakeRequest()
       val result = await(controller resumeForm request)
 
@@ -287,7 +302,7 @@ class ApplicationControllerSpec
     }
 
     "Redirect to last completed page with section" in {
-      setupJourneAction(rNumber = None, JourneyRequestBuilder.partialJourneyWithSection)
+      setupJourneyAction(rNumber = None, JourneyRequestBuilder.partialJourneyWithSection)
       val request = FakeRequest()
       val result = await(controller resumeForm request)
 

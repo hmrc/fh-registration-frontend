@@ -28,14 +28,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val request = journeyRequest()
 
       val action =
-        new PageAction("some-page-id", None)(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+        new PageAction("some-page-id", None, journeys)(
+          StubbedErrorHandler,
+          scala.concurrent.ExecutionContext.Implicits.global)
       status(result(action, request)) shouldBe NOT_FOUND
     }
 
     "Load the required page" in {
       val request = journeyRequest()
 
-      val action = new PageAction(Page.contactPersonPage.id, None)(
+      val action = new PageAction(contactPersonPage.id, None, journeys)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
 
@@ -45,14 +47,14 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       refined.journeyState shouldBe request.journeyState
       refined.lastUpdateTimestamp shouldBe request.lastUpdateTimestamp
 
-      refined.page.id shouldBe Page.contactPersonPage.id
+      refined.page.id shouldBe contactPersonPage.id
       refined.page.data shouldBe None
     }
 
     "Fail if page is inaccessible" in {
       val request = journeyRequest()
 
-      val action = new PageAction(Page.mainBusinessAddressPage.id, None)(
+      val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
 
@@ -62,7 +64,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Fail if a section is requested but does not exist on the page" in {
       val request = journeyRequest()
 
-      val action = new PageAction(Page.contactPersonPage.id, Some("1"))(
+      val action = new PageAction(contactPersonPage.id, Some("1"), journeys)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
 
@@ -70,17 +72,17 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Load page data" in {
-      val seqPages = Journeys.partnershipPages map { page ⇒
+      val seqPages = journeys.partnershipPages map { page ⇒
         page.id match {
-          case Page.contactPersonPage.id ⇒ page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
-          case Page.mainBusinessAddressPage.id ⇒
+          case contactPersonPage.id ⇒ page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+          case mainBusinessAddressPage.id ⇒
             page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
           case _ ⇒ page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
-      val action = new PageAction(Page.mainBusinessAddressPage.id, None)(
+      val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
 
@@ -90,11 +92,11 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Load page section" in {
-      val onePage = Page.companyOfficersPage withData FormTestData.companyOfficers
+      val onePage = companyOfficersPage withData FormTestData.companyOfficers
 
       val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
-      val action = new PageAction(Page.companyOfficersPage.id, Some("2"))(
+      val action = new PageAction(companyOfficersPage.id, Some("2"), journeys)(
         StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global)
       val refined = refinedRequest(action, request)

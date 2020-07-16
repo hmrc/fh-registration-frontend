@@ -34,7 +34,8 @@ class AmendmentController @Inject()(
   fhddsConnector: FhddsConnector,
   emailVerificationConnector: EmailVerificationConnector,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  journeys: Journeys
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) {
   import actions._
@@ -59,7 +60,7 @@ class AmendmentController @Inject()(
       val userId = request.userId
       val entityType = desToForm entityType display
       val application = desToForm loadApplicationFromDes display
-      val journeyPages = Journeys unapplyApplication application
+      val journeyPages = journeys unapplyApplication application
       val bpr = desToForm.businessRegistrationDetails(display)
       val contactEmail = desToForm.contactEmail(display)
 

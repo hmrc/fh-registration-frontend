@@ -14,16 +14,22 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.RegistrationStatusViews
+
+@this(
+ main_template: main_template,
+ registrationStatusViews: RegistrationStatusViews
+)
 
 @(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
-@sidebarLinks =  {@statusSidebar(params)}
+ @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
+@sidebarLinks =  {@registrationStatusViews.statusSidebar(params)}
 
-@uk.gov.hmrc.fhregistrationfrontend.views.html.main_template(title = Messages(s"fh.status.${params.status}.title"), sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
-      @{statusHeading(params, id)}
-      @{if(params.category == "post") statusMoreInfo(params)}
+@main_template(title = Messages(s"fh.status.${params.status}.title"), sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
+      @{registrationStatusViews.statusHeading(params, id)}
+      @{if(params.category == "post") registrationStatusViews.statusMoreInfo(params)}
       @params.nextTemplate(params, messages, appConfig)
 }

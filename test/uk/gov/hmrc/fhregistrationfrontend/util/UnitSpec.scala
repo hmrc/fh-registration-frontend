@@ -21,16 +21,39 @@ import java.nio.charset.Charset
 import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page, RepeatingPage}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ContactPerson, MainBusinessAddress, TradingName, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
-trait UnitSpec extends WordSpecLike with Matchers with OptionValues {
+trait UnitSpec extends WordSpecLike with Matchers with OptionValues with GuiceOneAppPerSuite {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
+
+  lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val journeys: Journeys = new Journeys(views)
+  lazy val injectedJourneys = app.injector.instanceOf[Journeys]
+
+  lazy val page: Page.InjectedPage = app.injector.instanceOf[Page.InjectedPage]
+  lazy val mainBusinessAddressPage: Page[MainBusinessAddress] = page.mainBusinessAddressPage
+  lazy val contactPersonPage: Page[ContactPerson] = page.contactPersonPage
+  lazy val tradingNamePage: BasicPage[TradingName] = page.tradingNamePage
+  lazy val businessPartnersPage = page.businessPartnersPage
+  lazy val vatNumberPage: BasicPage[VatNumber] = page.vatNumberPage
+  lazy val companyRegistrationNumberPage = page.companyRegistrationNumberPage
+  lazy val dateOfIncorporationPage = page.dateOfIncorporationPage
+  lazy val nationalInsuranceNumberPage = page.nationalInsuranceNumberPage
+  lazy val companyOfficersPage = page.companyOfficersPage
+  lazy val businessStatusPage = page.businessStatusPage
+  lazy val importingActivitiesPage = page.importingActivitiesPage
+  lazy val businessCustomersPage = page.businessCustomersPage
+  lazy val otherStoragePremisesPage = page.otherStoragePremisesPage
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 
@@ -41,7 +64,6 @@ trait UnitSpec extends WordSpecLike with Matchers with OptionValues {
   implicit def liftFuture[A](v: A): Future[A] = Future.successful(v)
 
   def status(of: Result): Int = of.header.status
-
   def status(of: Future[Result])(implicit timeout: Duration): Int = status(Await.result(of, timeout))
 
   def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =

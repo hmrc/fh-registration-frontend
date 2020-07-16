@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.Mockito.reset
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
@@ -24,11 +25,15 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 
 class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
-  val controller = new SummaryController(commonDependencies, mockMcc, mockActions)
+  SharedMetricRegistries.clear()
+
+  override lazy val views = app.injector.instanceOf[Views]
+
+  val controller = new SummaryController(commonDependencies, mockMcc, mockActions, journeys, views)
 
   "summary" should {
     "Render the summary html for all journey types" in {
@@ -53,9 +58,9 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
     "Render the summary html for all business types" in {
       for {
         (businessType, pages) ← List(
-                                 BusinessType.Partnership → Journeys.partnershipPages,
-                                 BusinessType.SoleTrader → Journeys.soleTraderPages,
-                                 BusinessType.CorporateBody → Journeys.limitedCompanyPages
+                                 BusinessType.Partnership → journeys.partnershipPages,
+                                 BusinessType.SoleTrader → journeys.soleTraderPages,
+                                 BusinessType.CorporateBody → journeys.limitedCompanyPages
                                )
       } {
         setupSummaryAction(

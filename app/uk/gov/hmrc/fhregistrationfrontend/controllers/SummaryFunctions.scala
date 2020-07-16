@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.summary.SummaryPrintable
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
@@ -37,21 +37,22 @@ trait SummaryFunctions {
     application: BusinessEntityApplication,
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
-    params: SummaryPageParams)(implicit request: Request[AnyContent]): Html =
+    params: SummaryPageParams,
+    views: Views)(implicit request: Request[AnyContent]): Html =
     application match {
       case a: LimitedCompanyApplication ⇒
-        ltd_summary(a, bpr, verifiedEmail, None, params)
+        views.ltd_summary(a, bpr, verifiedEmail, None, params)
       case a: SoleProprietorApplication ⇒
-        sole_proprietor_summary(a, bpr, verifiedEmail, None, params)
+        views.sole_proprietor_summary(a, bpr, verifiedEmail, None, params)
       case a: PartnershipApplication ⇒
-        partnership_summary(a, bpr, verifiedEmail, None, params)
+        views.partnership_summary(a, bpr, verifiedEmail, None, params)
     }
 
-  protected def getSummaryPrintable()(implicit request: SummaryRequest[AnyContent]) = {
+  protected def getSummaryPrintable(journeys: Journeys)(implicit request: SummaryRequest[AnyContent]) = {
     val application = request.businessType match {
-      case BusinessType.CorporateBody ⇒ Journeys ltdApplication request
-      case BusinessType.SoleTrader ⇒ Journeys soleTraderApplication request
-      case BusinessType.Partnership ⇒ Journeys partnershipApplication request
+      case BusinessType.CorporateBody ⇒ journeys ltdApplication request
+      case BusinessType.SoleTrader ⇒ journeys soleTraderApplication request
+      case BusinessType.Partnership ⇒ journeys partnershipApplication request
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)

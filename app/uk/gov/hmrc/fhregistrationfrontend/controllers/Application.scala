@@ -31,10 +31,11 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -44,7 +45,10 @@ class Application @Inject()(
   fhddsConnector: FhddsConnector,
   businessCustomerConnector: BusinessCustomerFrontendConnector,
   cc: MessagesControllerComponents,
-  actions: Actions
+  actions: Actions,
+  views: Views,
+  status: status,
+  statusParams: StatusPageParams.StatusParams
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) {
 
@@ -71,8 +75,8 @@ class Application @Inject()(
   def enrolmentPending = userAction.async { implicit request ⇒
     fhddsConnector.getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending ⇒ Ok(enrolment_pending())
-        case EnrolmentProgress.Error ⇒ Ok(application_error())
+        case EnrolmentProgress.Pending ⇒ Ok(views.enrolment_pending())
+        case EnrolmentProgress.Error ⇒ Ok(views.application_error())
         case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
       }
   }
@@ -85,7 +89,7 @@ class Application @Inject()(
       _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
       savedDate ← OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
     } yield {
-      Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
+      Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
     }
 
     redirectWhenSaved getOrElseF newApplication
@@ -115,7 +119,7 @@ class Application @Inject()(
     } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
-          Ok(continue_delete(new DateTime(savedDate), deleteOrContinueForm))
+          Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
         case None ⇒ Redirect(routes.Application.businessType())
       }
     }
@@ -129,7 +133,7 @@ class Application @Inject()(
         deleteOrContinue => {
           if (deleteOrContinue == "delete") {
             save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-              case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+              case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
               case None ⇒
                 Future successful errorHandler.errorResultsPages(Results.BadRequest)
             }
@@ -142,7 +146,7 @@ class Application @Inject()(
 
   def confirmDelete = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-      case Some(savedDate) ⇒ Future successful Ok(confirm_delete(new DateTime(savedDate)))
+      case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
       case None ⇒ Future successful BadRequest
     }
   }
@@ -169,7 +173,7 @@ class Application @Inject()(
   }
 
   def businessType = userAction { implicit request ⇒
-    Ok(business_type(businessTypeForm, links.businessCustomerVerificationUrl))
+    Ok(views.business_type(businessTypeForm, links.businessCustomerVerificationUrl))
   }
 
   def submitBusinessType = userAction.async { implicit request ⇒
@@ -177,7 +181,7 @@ class Application @Inject()(
       .bindFromRequest()
       .fold(
         formWithErrors =>
-          Future.successful(BadRequest(business_type(formWithErrors, links.businessCustomerVerificationUrl))),
+          Future.successful(BadRequest(views.business_type(formWithErrors, links.businessCustomerVerificationUrl))),
         businessType => {
           for {
             _ ← save4LaterService.saveBusinessType(request.userId, businessType)
@@ -194,7 +198,7 @@ class Application @Inject()(
 
   def savedForLater = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
-      case Some(savedDate) ⇒ Ok(saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
+      case Some(savedDate) ⇒ Ok(views.saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
       case None ⇒ errorHandler.errorResultsPages(Results.NotFound)
     }
   }
@@ -202,9 +206,7 @@ class Application @Inject()(
   def checkStatus() = enrolledUserAction.async { implicit request ⇒
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(fhddsStatus ⇒ {
-        Ok(status(StatusPageParams(fhddsStatus).get, request.registrationNumber))
-      })
+      .map(fhddsStatus ⇒ { Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)) })
   }
 }
 
