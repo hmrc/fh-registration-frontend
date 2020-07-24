@@ -16,8 +16,8 @@
 
 @(Line1: Option[String] = None, Line2: Option[String] = None, Line3: Option[String] = None, Line4: Option[String] = None, postcode: Option[String] = None )(implicit message : Messages)
 
-@if(Line1.nonEmpty){ @Line1,<br /> }
-@if(Line2.nonEmpty){ @Line2,<br /> }
-@if(Line3.nonEmpty){ @Line3,<br /> }
-@if(Line4.nonEmpty){ @Line4,<br /> }
+@if(Line1.nonEmpty){ @Line1,<br aria-hidden="true"/> }
+@if(Line2.nonEmpty){ @Line2,<br aria-hidden="true"/> }
+@if(Line3.nonEmpty){ @Line3,<br aria-hidden="true"/> }
+@if(Line4.nonEmpty){ @Line4,<br aria-hidden="true"/> }
 @if(postcode.nonEmpty){ @postcode }
