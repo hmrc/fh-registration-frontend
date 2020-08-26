@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.{ServicesConfig}
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
@@ -39,9 +39,8 @@ trait AppConfig {
 class FrontendAppConfig @Inject()(
   configuration: play.api.Configuration,
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment)
-    extends ServicesConfig(runModeConfiguration, runMode) with AppConfig {
+    extends ServicesConfig(runModeConfiguration) with AppConfig {
 
   private def loadConfig(key: String) =
     configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))

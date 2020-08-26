@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 import javax.inject.Inject
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @ImplementedBy(classOf[DefaultExternalUrls])
 trait ExternalUrls {
@@ -44,9 +44,8 @@ trait ExternalUrls {
 
 class DefaultExternalUrls @Inject()(
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode) with ExternalUrls {
+) extends ServicesConfig(runModeConfiguration) with ExternalUrls {
 
   val companyAuthUrl: String =
     getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))

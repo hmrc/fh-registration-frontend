@@ -34,7 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 

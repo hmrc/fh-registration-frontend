@@ -19,10 +19,10 @@ package uk.gov.hmrc.fhregistrationfrontend.cache
 import javax.inject.{Inject, Singleton}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.SessionCache
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class SessionCacheModule extends Module {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
@@ -34,9 +34,8 @@ class SessionCacheModule extends Module {
 class DefaultSessionCache @Inject()(
   override val http: HttpClient,
   val configuration: Configuration,
-  val runMode: RunMode,
   environment: Environment
-) extends ServicesConfig(configuration, runMode) with client.SessionCache {
+) extends ServicesConfig(configuration) with client.SessionCache {
 
   val appNameConfiguration = configuration
   val runModeConfiguration = configuration

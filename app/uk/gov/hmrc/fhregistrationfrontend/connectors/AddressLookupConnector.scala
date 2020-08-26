@@ -22,8 +22,6 @@ import play.api.{Configuration, Environment}
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.bootstrap.config.RunMode
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,10 +35,9 @@ case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupRes
 class AddressLookupConnector @Inject()(
   val http: HttpClient,
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment
 )(implicit ec: ExecutionContext)
-    extends ServicesConfig(runModeConfiguration, runMode) with HttpErrorFunctions {
+    extends ServicesConfig(runModeConfiguration) with HttpErrorFunctions {
 
   val addressLookupUrl: String = baseUrl("address-lookup")
 

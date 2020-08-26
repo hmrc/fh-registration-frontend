@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.RecordSet
 import uk.gov.hmrc.http.BadRequestException
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 

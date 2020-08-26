@@ -8,24 +8,24 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
-val monocleVersion = "1.5.0"
+val monocleVersion = "2.1.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc"                 %% "bootstrap-play-26"                % "1.7.0",
-  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.54.0-play-26",
-  "uk.gov.hmrc"                 %% "play-ui"                          % "8.9.0-play-26",
-  "uk.gov.hmrc"                 %% "play-partials"                    % "6.10.0-play-26",
+  "uk.gov.hmrc"                 %% "bootstrap-frontend-play-26"       % "2.24.0",
+  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.56.0-play-26",
+  "uk.gov.hmrc"                 %% "play-ui"                          % "8.11.0-play-26",
+  "uk.gov.hmrc"                 %% "play-partials"                    % "6.11.0-play-26",
   "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "4.1.0-play-26",
-  "uk.gov.hmrc"                 %% "http-caching-client"              % "9.0.0-play-26",
-  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.2.0-play-26",
+  "uk.gov.hmrc"                 %% "http-caching-client"              % "9.1.0-play-26",
+  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.3.0-play-26",
   "uk.gov.hmrc"                 %% "time"                             % "3.9.0",
-  "com.typesafe.play"           %% "play-json"                        % "2.6.14",
-  "org.typelevel"               %% "cats-core"                        % "1.6.1",
-  "org.typelevel"               %% "cats-kernel"                      % "1.6.1",
+  "com.typesafe.play"           %% "play-json"                        % "2.9.0",
+  "org.typelevel"               %% "cats-core"                        % "2.1.1",
+  "org.typelevel"               %% "cats-kernel"                      % "2.1.1",
   "org.pegdown"                  % "pegdown"                          % "1.6.0",
-  "com.github.tototoshi"        %% "play-json-naming"                 % "1.2.0",
-  "org.julienrf"                %% "play-json-derived-codecs"         % "4.0.1",
+  "com.github.tototoshi"        %% "play-json-naming"                 % "1.3.0",
+  "org.julienrf"                %% "play-json-derived-codecs"         % "7.0.0",
   "com.github.julien-truffaut"  %%  "monocle-core"                    % monocleVersion,
   "com.github.julien-truffaut"  %%  "monocle-macro"                   % monocleVersion,
   "com.github.julien-truffaut"  %%  "monocle-law"                     % monocleVersion,
@@ -35,12 +35,12 @@ val compile = Seq(
 def test(scope: String = "test,it") = Seq(
   "org.scalatest"               %% "scalatest"                        % "3.0.8"   % scope,
   "org.pegdown"                  % "pegdown"                          % "1.6.0"   % scope,
-  "org.jsoup"                    % "jsoup"                            % "1.12.1"   % scope,
+  "org.jsoup"                    % "jsoup"                            % "1.13.1"   % scope,
   "org.scalatestplus.play"       %% "scalatestplus-play"              % "3.1.2"   % scope,
   "org.scalacheck"              %% "scalacheck"                       % "1.14.3"  % scope,
-  "org.mockito"                  % "mockito-core"                     % "3.2.4"  % scope,
+  "org.mockito"                  % "mockito-core"                     % "3.5.7"  % scope,
   "org.scalamock"               %% "scalamock-scalatest-support"      % "3.6.0"   % scope,
-  "com.github.tomakehurst"       %  "wiremock-jre8"                   % "2.26.0"   % scope,
+  "com.github.tomakehurst"       %  "wiremock-jre8"                   % "2.27.1"   % scope,
   "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.4"   % scope
 )
 
@@ -79,6 +79,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
+  .settings(scalaVersion := "2.12.11")
   .settings(defaultSettings(): _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
   .settings(

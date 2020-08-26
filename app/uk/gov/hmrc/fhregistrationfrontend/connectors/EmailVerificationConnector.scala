@@ -23,12 +23,10 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.bootstrap.config.RunMode
 
 @ImplementedBy(classOf[DefaultEmailVerificationConnector])
 trait EmailVerificationConnector {
@@ -40,10 +38,9 @@ class DefaultEmailVerificationConnector @Inject()(
   appConfig: AppConfig,
   val http: HttpClient,
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment
 )(implicit ec: ExecutionContext)
-    extends ServicesConfig(runModeConfiguration, runMode) with EmailVerificationConnector with HttpErrorFunctions {
+    extends ServicesConfig(runModeConfiguration) with EmailVerificationConnector with HttpErrorFunctions {
   val emailVerificationBaseUrl = s"${baseUrl("email-verification")}/email-verification"
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
