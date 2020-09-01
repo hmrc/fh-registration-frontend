@@ -26,9 +26,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, Sub
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,10 +35,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class FhddsConnector @Inject()(
   val http: HttpClient,
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment
 )(implicit ec: ExecutionContext)
-    extends ServicesConfig(runModeConfiguration, runMode) {
+    extends ServicesConfig(runModeConfiguration) {
   val FHDSSServiceUrl: String = baseUrl("fhdds")
 
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] =

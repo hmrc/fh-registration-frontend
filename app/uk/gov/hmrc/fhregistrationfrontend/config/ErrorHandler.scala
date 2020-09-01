@@ -22,10 +22,10 @@ import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{Request, Result, Results}
 import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.views.html.{application_error, error_forbidden, error_template}
 import play.api.mvc.Results.Status
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
 @ImplementedBy(classOf[DefaultErrorHandler])
 trait ErrorHandler {

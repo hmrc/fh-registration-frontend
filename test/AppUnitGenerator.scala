@@ -42,7 +42,8 @@ trait AppUnitGenerator
 
   override implicit val patienceConfig: PatienceConfig =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(50, Millis))
-  implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val executionContext: ExecutionContextExecutor =
+    scala.concurrent.ExecutionContext.Implicits.global.asInstanceOf[ExecutionContextExecutor]
 
   val appInjector: Injector = app.injector
 

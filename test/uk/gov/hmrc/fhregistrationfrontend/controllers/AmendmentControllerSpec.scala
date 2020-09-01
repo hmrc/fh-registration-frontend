@@ -28,7 +28,6 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, FhddsConnectorMocks, InMemoryShortLivedCache}
 import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendmentControllerSpec
     extends ControllerSpecWithGuiceApp with BeforeAndAfterEach with ActionsMock with FhddsConnectorMocks

@@ -19,21 +19,21 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Request
 import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
+
 import scala.concurrent.ExecutionContext
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.Future
 
 @Singleton
 class BusinessCustomerFrontendConnector @Inject()(
   val http: HttpClient,
-  val runModeConfiguration: Configuration,
-  val runMode: RunMode,
+  val configuration: Configuration,
   environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode) with HeaderCarrierForPartialsConverter {
+) extends ServicesConfig(configuration) with HeaderCarrierForPartialsConverter {
 
   def serviceUrl = baseUrl("business-customer-frontend")
   val businessCustomerUri = "business-customer"

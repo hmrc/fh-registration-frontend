@@ -20,10 +20,10 @@ import javax.inject.{Inject, Singleton}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.crypto.ApplicationCrypto
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class ShortLivedCacheModule extends Module {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
@@ -44,9 +44,8 @@ class DefaultShortLivedCache @Inject()(
 class DefaultShortLivedHttpCaching @Inject()(
   override val http: HttpClient,
   val runModeConfiguration: Configuration,
-  val runMode: RunMode,
   environment: Environment
-) extends ServicesConfig(runModeConfiguration, runMode) with client.ShortLivedHttpCaching {
+) extends ServicesConfig(runModeConfiguration) with client.ShortLivedHttpCaching {
 
   override lazy val defaultSource: String =
     getConfString("cachable.short-lived-cache.journey.cache", "fh-registration-frontend")
