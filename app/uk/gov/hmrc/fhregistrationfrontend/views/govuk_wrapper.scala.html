@@ -121,7 +121,13 @@
 }
 
 @footerTop = {}
-@footerLinks = {}
+@footerLinks = {
+    @if(appConfig.accessibilityStatementToggle) {
+        @viewHelpers.footerLinks(accessibilityFooterUrl = Some(appConfig.accessibilityStatementUrl(request.uri)))
+    } else {
+        @viewHelpers.footerLinks()
+    }
+}
 
 @serviceInfo = {
 @{
@@ -166,4 +172,4 @@
     }
 
 
-     @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(viewHelpers.footerLinks()), nav = true)(content)
+     @govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), nav = true)(content)

@@ -19,7 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.bootstrap.config.{ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
@@ -33,6 +34,8 @@ trait AppConfig {
   def emailVerificationCallback(hash: String): String
   val exciseEnquiryLink: String
   def getConfiguration: Configuration
+  val accessibilityStatementToggle: Boolean
+  def accessibilityStatementUrl(referrer: String): String
 }
 
 @Singleton
@@ -71,4 +74,13 @@ class FrontendAppConfig @Inject()(
   lazy val password = getString("credentials.password")
 
   override def getConfiguration: Configuration = configuration
+
+  lazy val accessibilityStatementToggle: Boolean = getConfBool("accessibility-statement.toggle", true)
+  lazy val frontendHost: String = getConfString("accessibility-statement.baseUrl", "")
+  lazy val accessibilityBaseUrl: String = getConfString("accessibility-statement.baseUrl", "")
+  lazy private val accessibilityRedirectUrl: String = getConfString("accessibility-statement.redirectUrl", "/fhdds")
+  def accessibilityStatementUrl(referrer: String) =
+    s"$accessibilityBaseUrl/accessibility-statement$accessibilityRedirectUrl?referrerUrl=${SafeRedirectUrl(
+      frontendHost + referrer).encodedUrl}"
+
 }
