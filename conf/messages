@@ -171,6 +171,7 @@ fh.emailVerification.alternativeEmailOption.label=I want to enter a new email ad
 fh.emailVerification.alternativeEmail.label=Enter your new email address
 fh.emailVerification.alternativeEmail.hintText=For example, sample@example.com
 fh.emailVerification.alternativeEmail.error.required=Enter your new email address
+fh.emailVerification.defaultEmail.error.required=Default email address is not defined
 fh.emailVerification.alternativeEmail.error.email=Enter a valid email address
 fh.emailVerification.alternativeEmail.error.maxLength=Email addresses cannot be longer than 100 characters
 fh.emailVerification.alternativeEmail.info=The email addresses you use for other government services will not change.
