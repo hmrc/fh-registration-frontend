@@ -86,7 +86,7 @@
       )
     )
 
-    <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail..getOrElse("")}"/>
+    <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail.getOrElse("")}"/>
 
     <div class="js-hidden panel" id="alternativeEmailContainer">
       <p>@Messages("fh.emailVerification.alternativeEmail.info")</p>
