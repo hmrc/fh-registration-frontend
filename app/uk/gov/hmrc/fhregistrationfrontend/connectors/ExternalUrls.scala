@@ -62,6 +62,6 @@ class DefaultExternalUrls @Inject()(
   val logoutContinueUrl = s"$logoutCallback"
   val ggOrigin = getString("appName")
 
-  val surveyRedirectUrl = getConfString("surveyRedirectUrl", "/feedback-survey?origin=fhdds")
+  val surveyRedirectUrl = getConfString("surveyRedirectUrl", "/feedback/fhdds")
 
 }
