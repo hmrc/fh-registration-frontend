@@ -56,9 +56,9 @@
 
 @head = {
 @{
-    viewHelpers.head(
+    viewHelpers.headWithTrackingConsent(
         linkElem = Some(linksElement),
-        headScripts = Some(analyticsGA)
+        headScripts = None
     )
 }
 @environmentUrl.map { url => <base href="@url"/> }
