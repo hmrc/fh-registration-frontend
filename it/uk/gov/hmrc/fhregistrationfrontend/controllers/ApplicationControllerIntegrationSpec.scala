@@ -28,7 +28,7 @@ class ApplicationControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false).get()) { res ⇒
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9025/gg/sign-in?continue=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
+          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9553/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
         }
       }
     }

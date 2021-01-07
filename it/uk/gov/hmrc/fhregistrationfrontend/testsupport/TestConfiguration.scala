@@ -35,7 +35,7 @@ trait TestConfiguration
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .configure(replaceWithWiremock(Seq(
       "auth",
-      "auth.company-auth",
+      "auth.bas-gateway",
       "fhdds",
       "business-customer-frontend",
       "cachable.short-lived-cache",

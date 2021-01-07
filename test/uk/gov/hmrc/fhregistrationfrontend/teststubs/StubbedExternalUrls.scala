@@ -19,14 +19,14 @@ package uk.gov.hmrc.fhregistrationfrontend.teststubs
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
 
 object StubbedExternalUrls extends ExternalUrls {
-  override val companyAuthUrl: String = "company/auth"
+  override val basGatewayUrl: String = "company/auth"
   override val loginCallback: String = "/fhdds"
   override val loginPath: String = "login/path"
   override val logoutCallback: String = "/fhdds/signed-out"
   override val logoutPath: String = "/fhdds/sign-out"
-  override val ggLoginUrl: String = s"$companyAuthUrl$loginPath"
+  override val ggLoginUrl: String = s"$basGatewayUrl$loginPath"
   override val continueUrl: String = s"$loginCallback"
-  override val ggLogoutUrl: String = s"$companyAuthUrl$logoutPath"
+  override val ggLogoutUrl: String = s"$basGatewayUrl$logoutPath"
   override val logoutContinueUrl: String = logoutCallback
   override val surveyRedirectUrl: String = "/feedback-survey?origin=fhdds"
   override val ggOrigin: String = "FHDDS"
