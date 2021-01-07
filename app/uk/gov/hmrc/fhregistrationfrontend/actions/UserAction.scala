@@ -103,7 +103,7 @@ case class UserAction @Inject()(
 
         val ggRedirectParms = Map(
           "continue_url" -> Seq(externalUrls.continueUrl),
-          "origin"   -> Seq(externalUrls.ggOrigin)
+          "origin"       -> Seq(externalUrls.ggOrigin)
         )
 
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)
