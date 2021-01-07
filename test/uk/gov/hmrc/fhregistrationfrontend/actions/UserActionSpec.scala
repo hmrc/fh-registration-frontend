@@ -93,7 +93,7 @@ class UserActionSpec extends ActionSpecBase {
 
       val r = result(action, fakeRequest)
       status(r) shouldBe SEE_OTHER
-      redirectLocation(r) shouldBe Some("company/authlogin/path?continue=%2Ffhdds&origin=FHDDS")
+      redirectLocation(r) shouldBe Some("company/authlogin/path?continue_url=%2Ffhdds&origin=FHDDS")
     }
 
     "Fail if user id is not defined" in {

@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 @ImplementedBy(classOf[DefaultExternalUrls])
 trait ExternalUrls {
 
-  val companyAuthUrl: String
+  val basGatewayUrl: String
   val loginCallback: String
   val loginPath: String
 
@@ -47,18 +47,18 @@ class DefaultExternalUrls @Inject()(
   environment: Environment
 ) extends ServicesConfig(runModeConfiguration) with ExternalUrls {
 
-  val companyAuthUrl: String =
-    getConfString("auth.company-auth.url", throw new RuntimeException("Company auth url required"))
+  val basGatewayUrl: String =
+    getConfString("auth.bas-gateway.url", throw new RuntimeException("Bas gateway url required"))
   val loginCallback: String = getConfString("auth.login-callback.url", "/fhdds")
   val loginPath: String = getConfString("auth.login_path", "")
 
   val logoutCallback: String = getConfString("auth.logout-callback.url", "/fhdds/signed-out")
   val logoutPath: String = getConfString("auth.logout_path", "")
 
-  val ggLoginUrl = s"$companyAuthUrl$loginPath"
+  val ggLoginUrl = s"$basGatewayUrl$loginPath"
   val continueUrl = s"$loginCallback"
 
-  val ggLogoutUrl = s"$companyAuthUrl$logoutPath"
+  val ggLogoutUrl = s"$basGatewayUrl$logoutPath"
   val logoutContinueUrl = s"$logoutCallback"
   val ggOrigin = getString("appName")
 

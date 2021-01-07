@@ -102,8 +102,8 @@ case class UserAction @Inject()(
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)
 
         val ggRedirectParms = Map(
-          "continue" -> Seq(externalUrls.continueUrl),
-          "origin"   -> Seq(externalUrls.ggOrigin)
+          "continue_url" -> Seq(externalUrls.continueUrl),
+          "origin"       -> Seq(externalUrls.ggOrigin)
         )
 
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)
