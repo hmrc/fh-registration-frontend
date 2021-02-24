@@ -23,9 +23,6 @@ import uk.gov.hmrc.play.bootstrap.config.{ServicesConfig}
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
-  val analyticsToken: String
-  val analyticsHost: String
-  val analyticsGovUkToken: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val exitSurveyUrl: String
@@ -54,9 +51,6 @@ class FrontendAppConfig @Inject()(
   override lazy val appName: String = loadConfig("appName")
 
   private val contactFormServiceIdentifier = appName
-  override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
-  override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
-  override lazy val analyticsGovUkToken: String = loadConfig(s"google-analytics.govuk-token")
   override lazy val reportAProblemPartialUrl =
     s"$contactFrontend/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl =
