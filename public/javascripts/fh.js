@@ -240,13 +240,7 @@ function init() {
 
   GOVUK.details.init()
 
-
-
-
-  // because we will have a race condition on submission
-  // we need to intercept the submission to post the analytics events
-
-
+  
   var $errorSummary = $('.error-summary');
 
   if ($errorSummary.length) {
