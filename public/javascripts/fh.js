@@ -240,57 +240,12 @@ function init() {
 
   GOVUK.details.init()
 
-  // Google Analytics event reporting, using template:
-  // ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject])
-  // wrapInTimeout function to ensure forms get submitted when GA fails to respond
-  function wrapInTimeout(callback, optionalTime) {
-    var called = false;
-    function fn() {
-      if (!called) {
-        called = true;
-        callback();
-      }
-    }
-    setTimeout(fn, optionalTime || 1000);
-    return fn;
-  }
 
-  $('a[target="_blank"]').click(function() {
-    ga('send', 'event', 'external link', 'click', this.innerText)
-    ga('govuk_shared.send', 'event', 'external link', 'click', this.innerText)
-  });
 
-  $('summary span.summary').click(function() {
-    var eventLabel = $(this).text();
-    ga('send', 'event', 'help', 'click', eventLabel);
-    ga('govuk_shared.send', 'event', 'help', 'click', eventLabel);
-  });
 
   // because we will have a race condition on submission
   // we need to intercept the submission to post the analytics events
-  $('form').on('submit', function (e) {
-    var $pageHeading = $('h1');
-    var $actionField = $('[name="saveAction"]');
-    // we can only report on forms with headings and actions
-    if ($pageHeading.length && $actionField.length) {
-      e.preventDefault();
-      var $form = $(this);
-      var eventLabel = $pageHeading.text();
-      var form = $form[0];
-      var $selectedRadios = $form.find('input:radio:checked');
-      $selectedRadios.each(function (i, option) {
-        ga('send', 'event', 'radio selection', option.value, option.name)
-        ga('govuk_shared.send', 'event', 'radio selection', option.value, option.name)
-      });
 
-      var eventAction = $actionField.val();
-      ga('send', 'event', 'submit', eventAction, eventLabel, {
-        hitCallback: wrapInTimeout(function() {
-          form.submit();
-        })
-      })
-    }
-  });
 
   var $errorSummary = $('.error-summary');
 
@@ -299,11 +254,6 @@ function init() {
     $errorSummary.focus();
     $('.error-summary-list li a').each(function (i, item) {
       var $link = $(item);
-      // ga reporting
-      var eventAction = $link.text();
-      var eventLabel = $('h1').text();
-      ga('send', 'event', 'error', eventAction, eventLabel);
-      ga('govuk_shared.send', 'event', 'error', eventAction, eventLabel);
       // error focusing
       $link.on('click', function () {
         // escape handling for periods in selectors
@@ -320,29 +270,6 @@ function init() {
     })
   }
 
-  $('a.address-lookup').click(function() {
-    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
-    ga('send', 'event', 'postcode lookup', 'click', eventLabel)
-    ga('govuk_shared.send', 'event', 'postcode lookup', 'click', eventLabel)
-  });
-
-  $('a.manual-address-mode').click(function() {
-    var eventLabel = $(this).parents('.address-lookup-container').siblings('legend').text();
-    ga('send', 'event', 'manual address preference', 'click', eventLabel)
-    ga('govuk_shared.send', 'event', 'manual address preference', 'click', eventLabel)
-  });
-
-  $('a.lookup-address-mode').click(function() {
-    var eventLabel = $(this).parents('.address-manual-container').siblings('legend').text();
-    ga('send', 'event', 'postcode lookup preference', 'click', eventLabel)
-    ga('govuk_shared.send', 'event', 'postcode lookup preference', 'click', eventLabel)
-  });
-
-  if ($('.transaction-banner--complete').length) {
-    var eventLabel = $('.transaction-banner--complete').find('h1').text();
-    ga('send', 'event', 'transaction complete', 'report', eventLabel)
-    ga('govuk_shared.send', 'event', 'transaction complete', 'report', eventLabel)
-  }
 
 }
 
