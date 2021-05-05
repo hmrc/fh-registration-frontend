@@ -57,7 +57,7 @@ class AddressLookupConnector @Inject()(
 
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[Option[AddressRecord]](s"$addressLookupUrl/uk/addresses/$id")(addressRecordReads, fhddsHc, ec)
+    http.GET[Option[AddressRecord]](s"$addressLookupUrl/v2/uk/addresses/$id")(addressRecordReads, fhddsHc, ec)
   }
 
   private val addressRecordReads = new HttpReads[Option[AddressRecord]] {
@@ -66,9 +66,9 @@ class AddressLookupConnector @Inject()(
         case status if status == 200 ⇒ Some(response.json.as[AddressRecord])
         case status if status == 404 ⇒ None
         case status if is4xx(status) ⇒
-          throw Upstream4xxResponse("address-lookup/uk/address error", response.status, 500)
+          throw Upstream4xxResponse("address-lookup/v2/uk/address error", response.status, 500)
         case status if is5xx(status) ⇒
-          throw Upstream5xxResponse("address-lookup/uk/address error", response.status, 502)
+          throw Upstream5xxResponse("address-lookup/v2/uk/address error", response.status, 502)
       }
   }
 }
