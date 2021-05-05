@@ -43,7 +43,7 @@ class AddressLookupConnector @Inject()(
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[JsValue](s"$addressLookupUrl/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(
+    http.GET[JsValue](s"$addressLookupUrl/v2/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(
       implicitly[HttpReads[JsValue]],
       fhddsHc,
       ec) map { addressListJson =>
