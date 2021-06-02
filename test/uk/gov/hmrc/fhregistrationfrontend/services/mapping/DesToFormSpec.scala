@@ -76,7 +76,7 @@ class DesToFormSpec extends UnitSpec {
     val validationResult = validator(Json parse resource)
     validationResult.fold(
       invalid = { errors ⇒
-        println(errors)
+        errors
       },
       valid = { v ⇒
         v

@@ -20,7 +20,6 @@ import org.scalatest.BeforeAndAfterEach
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import org.mockito.Mockito.{reset, when}
 import org.mockito.ArgumentMatchers.any
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 

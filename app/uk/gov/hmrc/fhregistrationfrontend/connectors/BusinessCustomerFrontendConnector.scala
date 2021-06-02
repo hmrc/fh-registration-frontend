@@ -25,28 +25,24 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.Future
 
 @Singleton
 class BusinessCustomerFrontendConnector @Inject()(
   val http: HttpClient,
   val configuration: Configuration,
-  environment: Environment
-) extends ServicesConfig(configuration) with HeaderCarrierForPartialsConverter {
+  environment: Environment,
+  headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter
+) extends ServicesConfig(configuration) {
 
   def serviceUrl = baseUrl("business-customer-frontend")
   val businessCustomerUri = "business-customer"
   val reviewDetailsUri = "fetch-review-details"
   val service = "FHDDS"
 
-  //upgrading to play 2.6.21 has caused for the encryption to be executed twice,
-  //however we still need the functionality of HeaderCarrierForPartials so we the cookie can be found.
-  override def crypto: (String) => String = { v ⇒
-    v
-  }
-
   def getReviewDetails(implicit request: Request[_], ec: ExecutionContext): Future[BusinessRegistrationDetails] = {
+    implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"
     http.GET[BusinessRegistrationDetails](getUrl)
   }

@@ -21,19 +21,18 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
+import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestData, Save4LaterMocks, StubbedErrorHandler}
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach with GuiceOneAppPerSuite {
 
   lazy val action =
     new JourneyAction(journeys)(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
-  val userRequest = new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+  val userRequest = new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {
     super.beforeEach()

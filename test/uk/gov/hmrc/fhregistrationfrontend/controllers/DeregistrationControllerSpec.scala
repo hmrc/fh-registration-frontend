@@ -26,8 +26,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationRe
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.deregistration_reason
 
 import scala.concurrent.Future
 
@@ -157,7 +155,7 @@ class DeregistrationControllerSpec
       val result = await(csrfAddToken(controller.postConfirmation)(request))
 
       status(result) shouldBe SEE_OTHER
-      val s = session(result)
+      session(result)
       redirectLocation(result) shouldBe Some("/fhdds/subscription/status")
     }
 

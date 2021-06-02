@@ -113,7 +113,7 @@ class UserActionSpec extends ActionSpecBase {
     id: Option[String] = Some("id"),
     email: Option[String] = Some("email@test.com"),
     enrolments: Set[Enrolment] = Set.empty,
-    credentialRole: Option[CredentialRole] = Some(Admin),
+    credentialRole: Option[CredentialRole] = Some(User),
     userAffinityGroup: Option[AffinityGroup] = Some(AffinityGroup.Individual)
   ): OngoingStubbing[Future[RetrievalType]] = {
 

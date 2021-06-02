@@ -63,17 +63,6 @@ class DefaultAddressAuditService @Inject()(
     Future sequence auditResults
   }
 
-  private def logAuditResult(auditResult: AuditResult) = auditResult match {
-    case AuditResult.Success ⇒ true
-    case AuditResult.Disabled ⇒ false
-    case AuditResult.Failure(msg, None) ⇒
-      Logger error s"Address audit failed: $msg"
-      false
-    case AuditResult.Failure(msg, Some(t)) ⇒
-      Logger error (s"Address audit failed: $msg", t)
-      false
-  }
-
   private def sendAuditEvent(page: String, addressAuditData: AddressAuditData)(
     implicit headerCarrier: HeaderCarrier) = {
     val event = DataEvent(

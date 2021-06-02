@@ -21,21 +21,17 @@ import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class BasicPageSpecs extends UnitSpec with MockitoSugar {
-
-//  val mockViews = mock[Views]
-//  val page = new NicholasPage(mockViews).mainBusinessAddressPage
 
   "updatedAddresses" should {
     "return the new address" in {
 
       val request = FakeRequest().withFormUrlEncodedBody(formData(): _*)
 
-      val newPage = mainBusinessAddressPage.parseFromRequest(
+      mainBusinessAddressPage.parseFromRequest(
         _ ⇒ fail("Should have no errors"),
         page ⇒ page.updatedAddresses.size shouldBe 1
       )(request)

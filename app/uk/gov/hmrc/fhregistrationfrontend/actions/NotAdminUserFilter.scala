@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.mvc.{ActionFilter, Result, Results}
-import uk.gov.hmrc.auth.core.{Admin, Assistant, User}
+import uk.gov.hmrc.auth.core.{Assistant, User}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ class NotAdminUserFilter()(implicit val errorHandler: ErrorHandler, val executio
     implicit val r = request
 
     request.credentialRole match {
-      case Some(credRole) if credRole == Admin || credRole == User => Future.successful(None)
+      case Some(credRole) if credRole == User || credRole == User => Future.successful(None)
       case Some(credRole) if credRole == Assistant =>
         Future.successful(Some(errorHandler.errorResultsPages(Results.Forbidden)))
       case _ ⇒ Future.successful(Some(errorHandler.errorResultsPages(Results.BadRequest)))

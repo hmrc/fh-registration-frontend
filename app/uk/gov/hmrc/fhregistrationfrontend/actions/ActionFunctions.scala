@@ -16,15 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.Logger
-import play.api.mvc.{Result, Results}
+import play.api.mvc.Result
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait ActionFunctions {
   this: FrontendAction ⇒
@@ -32,7 +31,8 @@ trait ActionFunctions {
   def loadCacheMap(
     implicit save4LaterService: Save4LaterService,
     errorHandler: ErrorHandler,
-    request: UserRequest[_]): Future[Either[Result, CacheMap]] =
+    request: UserRequest[_],
+    ec: ExecutionContext): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) ⇒ Right(cacheMap)
       case None ⇒ Right(new CacheMap(request.userId, Map.empty))

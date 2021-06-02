@@ -17,10 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.Helpers._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyPages
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FormTestData, StubbedErrorHandler}
-import Page._
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 

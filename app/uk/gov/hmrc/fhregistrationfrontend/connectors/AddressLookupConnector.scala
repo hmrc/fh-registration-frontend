@@ -23,7 +23,7 @@ import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait AddressLookupResponse
@@ -66,9 +66,9 @@ class AddressLookupConnector @Inject()(
         case status if status == 200 ⇒ Some(response.json.as[AddressRecord])
         case status if status == 404 ⇒ None
         case status if is4xx(status) ⇒
-          throw Upstream4xxResponse("address-lookup/v2/uk/address error", response.status, 500)
+          throw UpstreamErrorResponse("address-lookup/v2/uk/address error", response.status, 500)
         case status if is5xx(status) ⇒
-          throw Upstream5xxResponse("address-lookup/v2/uk/address error", response.status, 502)
+          throw UpstreamErrorResponse("address-lookup/v2/uk/address error", response.status, 502)
       }
   }
 }

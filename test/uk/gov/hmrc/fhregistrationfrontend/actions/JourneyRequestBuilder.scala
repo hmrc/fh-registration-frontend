@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
+import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
@@ -91,7 +91,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
 
   def journeyRequest(
     userRequest: UserRequest[_] =
-      new UserRequest(testUserId, None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest()),
+      new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest()),
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment,

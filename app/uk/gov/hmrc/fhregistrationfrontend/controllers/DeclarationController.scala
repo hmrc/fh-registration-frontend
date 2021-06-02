@@ -33,8 +33,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{acknowledgement_page, declaration}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -134,7 +132,7 @@ class DeclarationController @Inject()(
     }
 
     submissionResult.right map { submissionResponse ⇒
-      submissionResponse onSuccess { case _ ⇒ save4LaterService.removeUserData(request.userId) }
+      submissionResponse foreach { case _ ⇒ save4LaterService.removeUserData(request.userId) }
       submissionResponse
     }
   }

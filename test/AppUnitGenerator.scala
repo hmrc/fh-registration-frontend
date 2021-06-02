@@ -32,7 +32,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.{BusinessCustomerFrontendCo
 import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 import scala.concurrent.ExecutionContextExecutor
@@ -51,7 +51,7 @@ trait AppUnitGenerator
   implicit val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
   implicit val request: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withHeaders(HeaderNames.xSessionId -> "test")
-  implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
+  implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
 
   val mockFhddsConnector: FhddsConnector = mock[FhddsConnector]
   val mockBusinessCustomerFrontendConnector: BusinessCustomerFrontendConnector = mock[BusinessCustomerFrontendConnector]

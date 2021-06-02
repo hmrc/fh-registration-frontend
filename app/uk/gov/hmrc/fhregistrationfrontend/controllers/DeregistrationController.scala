@@ -32,8 +32,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.{deregistration_acknowledgement, deregistration_confirm, deregistration_reason}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject

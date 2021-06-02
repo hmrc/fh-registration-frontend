@@ -51,9 +51,9 @@ class DefaultEmailVerificationConnector @Inject()(
           case status if status == 200 ⇒ true
           case status if status == 404 ⇒ false
           case status if is4xx(status) ⇒
-            throw Upstream4xxResponse("email-verification/verified-email-check error", response.status, 500)
+            throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 500)
           case status if is5xx(status) ⇒
-            throw Upstream5xxResponse("email-verification/verified-email-check error", response.status, 502)
+            throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 502)
         }
     }
 
@@ -78,9 +78,9 @@ class DefaultEmailVerificationConnector @Inject()(
           case status if status == 409 ⇒ true
           case status if status == 201 ⇒ false
           case status if is4xx(status) ⇒
-            throw Upstream4xxResponse("email-verification/verification-requests error", response.status, 500)
+            throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 500)
           case status if is5xx(status) ⇒
-            throw Upstream5xxResponse("email-verification/verification-requests error", response.status, 502)
+            throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 502)
 
         }
     }

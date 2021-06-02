@@ -32,7 +32,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.{withdrawal_acknowledgement, withdrawal_confirm, withdrawal_reason}
 
 import scala.concurrent.{ExecutionContext, Future}
 

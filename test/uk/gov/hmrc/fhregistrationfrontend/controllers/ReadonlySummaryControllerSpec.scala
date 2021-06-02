@@ -20,7 +20,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks, Save4LaterMocks}
-import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 
 class ReadonlySummaryControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks {

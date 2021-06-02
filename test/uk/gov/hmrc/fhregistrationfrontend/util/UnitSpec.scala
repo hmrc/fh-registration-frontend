@@ -24,8 +24,8 @@ import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page, RepeatingPage}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ContactPerson, MainBusinessAddress, TradingName, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.ExecutionContext.Implicits.global
