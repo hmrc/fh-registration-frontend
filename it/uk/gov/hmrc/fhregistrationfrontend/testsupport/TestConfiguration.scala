@@ -11,7 +11,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.play.health.HealthController
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 trait TestConfiguration
   extends GuiceOneServerPerSuite
@@ -79,7 +79,7 @@ trait TestConfiguration
 
   override def afterEach(): Unit = {
     println("===== REQUESTS =====")
-    wireMockServer.getAllServeEvents.toList
+    wireMockServer.getAllServeEvents.asScala.toList
       .sortBy(_.getRequest.getLoggedDate)
       .map(_.getRequest).map(r => s"${r.getLoggedDate.toInstant.toEpochMilli}\t${r.getMethod}\t${r.getUrl}")
       .foreach(println)

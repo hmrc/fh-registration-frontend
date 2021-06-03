@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.mvc.Result
-import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
@@ -30,7 +29,6 @@ trait ActionFunctions {
 
   def loadCacheMap(
     implicit save4LaterService: Save4LaterService,
-    errorHandler: ErrorHandler,
     request: UserRequest[_],
     ec: ExecutionContext): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {

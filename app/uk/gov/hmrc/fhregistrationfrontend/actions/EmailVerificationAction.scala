@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -36,10 +35,7 @@ class EmailVerificationRequest[A](
   def userId = request.userId
 }
 
-class EmailVerificationAction(
-  implicit val save4LaterService: Save4LaterService,
-  errorHandler: ErrorHandler,
-  val executionContext: ExecutionContext)
+class EmailVerificationAction(implicit val save4LaterService: Save4LaterService, val executionContext: ExecutionContext)
     extends ActionRefiner[UserRequest, EmailVerificationRequest] with FrontendAction with ActionFunctions {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EmailVerificationRequest[A]]] = {

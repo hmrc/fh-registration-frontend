@@ -33,7 +33,7 @@ class DeclarationControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         val result =
           client.url(s"$baseUrl/submit").withFollowRedirects(false)
-            .withHeaders("X-Session-ID" → "some-id",
+            .withHttpHeaders("X-Session-ID" → "some-id",
               "Csrf-Token" -> "nocheck",
               "Content-Type" → "application/json")
             .post(

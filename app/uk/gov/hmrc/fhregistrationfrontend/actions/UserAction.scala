@@ -96,7 +96,7 @@ case class UserAction @Inject()(
     }
   }
 
-  def handleFailure(e: Throwable)(implicit request: Request[_]): Result =
+  def handleFailure(e: Throwable): Result =
     e match {
       case x: NoActiveSession ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)

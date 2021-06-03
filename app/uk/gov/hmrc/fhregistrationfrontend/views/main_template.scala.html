@@ -15,11 +15,10 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
 @this(
-    govuk_wrapper: govuk_wrapper,
+    govukWrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
     viewHelpers: ViewHelpers
 )
 
@@ -54,13 +53,13 @@ contentHeader: Option[Html] = None,
 }
 
 @{
-  govuk_wrapper(
+    govukWrapper(
     title = pageTitle,
     mainClass = mainClass,
     bodyClasses = bodyClasses,
     sidebar = sidebar,
     contentHeader = contentHeader,
-      mainContent = viewHelpers.article(mainContent),
+    mainContent = viewHelpers.article(mainContent),
     serviceInfoContent = serviceInfoContent,
     linkElement = linkElement,
     environmentUrl = environmentUrl,

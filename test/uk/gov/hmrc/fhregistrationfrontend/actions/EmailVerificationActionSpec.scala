@@ -21,14 +21,11 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4LaterMocks, StubbedErrorHandler}
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4LaterMocks}
 
 class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
-  lazy val action = new EmailVerificationAction()(
-    mockSave4Later,
-    StubbedErrorHandler,
-    scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new EmailVerificationAction()(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
   val verifiedEmail = "verified@test.com"
   val contactEmail = "contact@test.com"
   val pendingEmail = "pending@test.com"

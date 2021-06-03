@@ -101,7 +101,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
     result.value
   }
 
-  def findVerifiedEmail(cacheMap: CacheMap)(implicit request: UserRequest[_]): Either[Result, String] =
+  def findVerifiedEmail(cacheMap: CacheMap): Either[Result, String] =
     cacheMap
       .getEntry[String](Save4LaterKeys.verifiedEmailKey)
       .fold(
