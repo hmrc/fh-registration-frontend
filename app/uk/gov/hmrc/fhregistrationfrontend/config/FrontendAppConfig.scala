@@ -40,7 +40,7 @@ class FrontendAppConfig @Inject()(
     extends ServicesConfig(runModeConfiguration) with AppConfig {
 
   private def loadConfig(key: String) =
-    configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+    configuration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")

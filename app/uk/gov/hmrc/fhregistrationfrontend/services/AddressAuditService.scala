@@ -63,17 +63,6 @@ class DefaultAddressAuditService @Inject()(
     Future sequence auditResults
   }
 
-  private def logAuditResult(auditResult: AuditResult) = auditResult match {
-    case AuditResult.Success ⇒ true
-    case AuditResult.Disabled ⇒ false
-    case AuditResult.Failure(msg, None) ⇒
-      Logger error s"Address audit failed: $msg"
-      false
-    case AuditResult.Failure(msg, Some(t)) ⇒
-      Logger error (s"Address audit failed: $msg", t)
-      false
-  }
-
   private def sendAuditEvent(page: String, addressAuditData: AddressAuditData)(
     implicit headerCarrier: HeaderCarrier) = {
     val event = DataEvent(
@@ -109,20 +98,22 @@ class DefaultAddressAuditService @Inject()(
   private def sameUkAddresses(address: Address, otherAddress: Address) =
     address.copy(countryCode = None) == otherAddress.copy(countryCode = None)
 
-  private def manualAddressSubmitted(address: Address)(implicit headerCarrier: HeaderCarrier) =
+  private def manualAddressSubmitted(address: Address) =
     AddressAuditData(
       AddressAuditService.AuditTypeManualAddressSubmitted,
       addressDetails("submitted", address)
     )
 
-  private def postcodeAddressSubmitted(address: Address, originalUprn: String)(implicit headerCarrier: HeaderCarrier) =
+  private def postcodeAddressSubmitted(address: Address, originalUprn: String) =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressSubmitted,
       addressDetails("submitted", address) :+ ("submittedUPRN" → originalUprn)
     )
 
-  private def postcodeAddressModifiedSubmitted(address: Address, originalAddress: Address, originalUprn: String)(
-    implicit headerCarrier: HeaderCarrier): AddressAuditData =
+  private def postcodeAddressModifiedSubmitted(
+    address: Address,
+    originalAddress: Address,
+    originalUprn: String): AddressAuditData =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressModifiedSubmitted,
       addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" → originalUprn)

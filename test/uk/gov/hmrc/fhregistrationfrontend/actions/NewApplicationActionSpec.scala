@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
+import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
@@ -32,7 +32,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         testUserId,
         None,
         Some(registrationNumber),
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
@@ -53,7 +53,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         testUserId,
         None,
         registrationNumber = None,
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
       val fhddsConnector = mock[FhddsConnector]
@@ -69,7 +69,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         testUserId,
         None,
         Some(registrationNumber),
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {

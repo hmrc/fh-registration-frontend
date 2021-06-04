@@ -17,14 +17,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import java.time.LocalDate
-
-import monocle.{Optional, Prism}
-import monocle.Monocle.some
-import monocle.macros.{GenLens, GenPrism}
+import monocle.macros.{GenLens}
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, LimitedLiabilityPartnershipCorporateBody, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 

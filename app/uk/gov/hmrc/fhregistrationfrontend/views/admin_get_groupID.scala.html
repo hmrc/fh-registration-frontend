@@ -16,15 +16,14 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
 @this(
-    main_template: main_template
+    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 )
 
 @(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messagesProvider: Messages)
 
-@main_template(title = Messages("home.admin.submisson.page.title")) {
+@mainTemplate(title = Messages("home.admin.submisson.page.title")) {
 
     @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.sendAdminRequest(), 'novalidate -> "novalidate") {
         @helper.CSRF.formField

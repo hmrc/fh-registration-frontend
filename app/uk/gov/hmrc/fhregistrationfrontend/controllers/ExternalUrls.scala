@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 class ExternalUrls @Inject()(ds: CommonPlayDependencies) {
 
   val businessCustomerVerificationUrl = ds.conf
-    .getString("microservice.services.business-customer-urls.business-verification")
+    .getOptional[String]("microservice.services.business-customer-urls.business-verification")
     .getOrElse("http://localhost:9923/business-customer/FHDDS")
 
 }

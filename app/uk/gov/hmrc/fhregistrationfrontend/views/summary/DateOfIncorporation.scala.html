@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(dateOfIncorporationForm: DateOfIncorporationModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: DateOfIncorporationModel, mode: Mode)(implicit messages: Messages)
 
   @changeLink = @{
     if (Mode isEditable mode) {

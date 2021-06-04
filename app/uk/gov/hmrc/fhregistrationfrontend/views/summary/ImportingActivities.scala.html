@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages)
 
   @changeLink = @{
     if (Mode isEditable mode) {

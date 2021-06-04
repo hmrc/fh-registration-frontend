@@ -18,18 +18,16 @@
 @import play.api.Play.current
 @import play.api.i18n.Messages.Implicits._
 @import play.api.Configuration
-
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
 @this(
-main_template: main_template
+mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 )
 
 @(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: Messages)
 
 
-@main_template(title = Messages("home.admin.submisson.page.title")) {
+@mainTemplate(title = Messages("home.admin.submisson.page.title")) {
 
     <br/><br/>
 

@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import java.time.LocalDate
-
 import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec

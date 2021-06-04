@@ -15,10 +15,9 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper
 
 @this(
-govuk_wrapper: govuk_wrapper
+govukWrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
@@ -32,4 +31,4 @@ govuk_wrapper: govuk_wrapper
     <p><a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries">@messages("fh.generic.forbidden.link")</a> @messages("fh.generic.forbidden.info2")</p>
 }
 
-@govuk_wrapper(title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+@govukWrapper(title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)

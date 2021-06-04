@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup}
+import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
 
 class EnrolledUserActionSpec extends ActionSpecBase {
@@ -31,7 +31,7 @@ class EnrolledUserActionSpec extends ActionSpecBase {
         testUserId,
         None,
         registrationNumber = None,
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
 
@@ -43,7 +43,7 @@ class EnrolledUserActionSpec extends ActionSpecBase {
         testUserId,
         None,
         Some(registrationNumber),
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
 

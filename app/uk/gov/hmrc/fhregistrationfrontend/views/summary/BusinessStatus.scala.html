@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(businessStatusForm: models.BusinessStatus, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(businessStatusForm: models.BusinessStatus, mode: Mode)(implicit messages: Messages)
 
   @changeLink = @{
     if (Mode isEditable mode) {

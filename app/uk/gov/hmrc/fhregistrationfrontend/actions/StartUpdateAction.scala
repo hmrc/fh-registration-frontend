@@ -22,10 +22,10 @@ import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.{FhddsStatus, Processing, Received}
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class StartUpdateRequest[A](
   val registrationNumber: String,
@@ -38,6 +38,7 @@ class StartUpdateRequest[A](
 
 abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
   implicit val save4LaterService: Save4LaterService,
+  implicit val ec: ExecutionContext,
   errorHandler: ErrorHandler)
     extends ActionRefiner[UserRequest, StartUpdateRequest] with FrontendAction with ActionFunctions {
 

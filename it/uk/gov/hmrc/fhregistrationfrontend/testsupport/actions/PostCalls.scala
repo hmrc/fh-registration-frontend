@@ -5,12 +5,12 @@ import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.Future
 
-class PostCalls(baseUrl: String)(implicit builder: ActionsBuilder) {
+class PostCalls(baseUrl: String) {
 
   def declaration(implicit client: WSClient): Future[WSResponse] = {
     client.url(s"$baseUrl/submit")
       .withFollowRedirects(false)
-      .withHeaders("X-Session-ID" → "some-id",
+      .withHttpHeaders("X-Session-ID" → "some-id",
         "Csrf-Token" -> "nocheck",
         "Content-Type" → "application/json")
       .post(declarationData)

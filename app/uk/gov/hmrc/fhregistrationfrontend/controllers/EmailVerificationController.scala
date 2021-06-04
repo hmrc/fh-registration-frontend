@@ -25,8 +25,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification._
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject

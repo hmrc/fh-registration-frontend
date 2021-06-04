@@ -54,7 +54,7 @@ class Application @Inject()(
 
   override val configuration: Configuration = ds.conf
 
-  val formMaxExpiryDays: Int = configuration.getInt(s"formMaxExpiryDays").getOrElse(27)
+  val formMaxExpiryDays: Int = configuration.getOptional[Int](s"formMaxExpiryDays").getOrElse(27)
 
   import actions._
   def main = userAction.async { implicit request ⇒
@@ -192,7 +192,7 @@ class Application @Inject()(
       )
   }
 
-  def startForm = userAction { implicit request ⇒
+  def startForm = userAction { _ ⇒
     Redirect(routes.Application.resumeForm())
   }
 

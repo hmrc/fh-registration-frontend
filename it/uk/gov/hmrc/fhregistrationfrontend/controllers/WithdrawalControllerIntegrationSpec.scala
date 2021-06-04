@@ -39,7 +39,7 @@ class WithdrawalControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         val result =
           client.url(s"$baseUrl/withdraw/reason").withFollowRedirects(false)
-            .withHeaders("X-Session-ID" → "some-id",
+            .withHttpHeaders("X-Session-ID" → "some-id",
               "Csrf-Token" -> "nocheck",
               "Content-Type" → "application/json")
             .post("""{"reason": "Applied in Error"}""")
@@ -61,7 +61,7 @@ class WithdrawalControllerIntegrationSpec
 
       WsTestClient.withClient { client ⇒
         val result =
-          client.url(s"$baseUrl/withdraw/confirm").withHeaders("X-Session-ID" → "some-id").get()
+          client.url(s"$baseUrl/withdraw/confirm").withHttpHeaders("X-Session-ID" → "some-id").get()
 
         whenReady(result) { res ⇒
           res.status mustBe 200

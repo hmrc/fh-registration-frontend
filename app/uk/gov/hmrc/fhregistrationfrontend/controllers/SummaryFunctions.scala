@@ -27,7 +27,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.summary.SummaryPrintable
-import uk.gov.hmrc.fhregistrationfrontend.views.html.{ltd_summary, partnership_summary, sole_proprietor_summary}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 trait SummaryFunctions {

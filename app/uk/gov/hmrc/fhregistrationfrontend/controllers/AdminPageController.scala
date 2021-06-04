@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.libs.json.{Format, Json}
@@ -26,8 +25,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest.requestForm
 import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.{allocateEnrolmentForm, deleteEnrolmentForm}
+import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.html._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -40,7 +39,7 @@ class AdminPageController @Inject()(
   fhddsConnector: FhddsConnector,
   cc: MessagesControllerComponents,
   views: Views
-)(implicit ec: ExecutionContext, config: Configuration)
+)(implicit ec: ExecutionContext)
     extends FrontendController(cc) with play.api.i18n.I18nSupport {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -61,12 +60,12 @@ class AdminPageController @Inject()(
 
   def loadDeletePage(formBundleId: String) = authAction.async { implicit request =>
     fhddsConnector.getSubMission(formBundleId).map {
-      case submission => Ok(views.show_submission(submission))
-      case _          => Ok(s"No Submission found for $formBundleId")
+      case submission: SubmissionTracking => Ok(views.show_submission(submission))
+      case _                              => Ok(s"No Submission found for $formBundleId")
     }
   }
 
-  def deleteSubmission(formBundleId: String): Action[AnyContent] = authAction.async { implicit request =>
+  def deleteSubmission(formBundleId: String): Action[AnyContent] = authAction.async { _ =>
     fhddsConnector
       .deleteSubmission(formBundleId)
       .map(_ => Ok(s"Submission data for $formBundleId has been deleted "))
@@ -121,31 +120,31 @@ class AdminPageController @Inject()(
     )
   }
 
-  def checkStatus(regNo: String) = authAction.async { implicit request =>
+  def checkStatus(regNo: String) = authAction.async { _ =>
     fhddsConnector
       .getStatus(regNo)(hc)
       .map(result => Ok(result.toString))
   }
 
-  def getUserInfo(userId: String) = authAction.async { implicit request =>
+  def getUserInfo(userId: String) = authAction.async { _ =>
     fhddsConnector.getUserInfo(userId).map { response =>
       Ok(response.json)
     }
   }
 
-  def getGroupInfo(groupId: String) = authAction.async { implicit request =>
+  def getGroupInfo(groupId: String) = authAction.async { _ =>
     fhddsConnector.getGroupInfo(groupId).map { response =>
       Ok(response.json)
     }
   }
 
-  def es2(userId: String) = authAction.async { implicit request =>
+  def es2(userId: String) = authAction.async { _ =>
     fhddsConnector.es2Info(userId).map { response =>
       Ok(response.json)
     }
   }
 
-  def es3(groupId: String) = authAction.async { implicit request =>
+  def es3(groupId: String) = authAction.async { _ =>
     fhddsConnector.es3Info(groupId).map { response =>
       Ok(response.json)
     }

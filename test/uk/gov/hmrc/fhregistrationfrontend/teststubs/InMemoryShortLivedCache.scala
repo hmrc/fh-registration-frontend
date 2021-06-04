@@ -57,6 +57,6 @@ class InMemoryShortLivedCache(userId: String) extends ShortLivedCache {
     cacheId: String)(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[HttpResponse] = {
     require(userId == cacheId)
     cache.clear()
-    Future successful HttpResponse(200)
+    Future successful HttpResponse(200, "200")
   }
 }

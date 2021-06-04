@@ -29,9 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
-import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams.StatusParams
 
 import scala.concurrent.Future
@@ -246,7 +244,7 @@ class ApplicationControllerSpec
   }
 
   "confirmDelete" should {
-    def setup(userLastTimeSaved: Option[Long] = Some(System.currentTimeMillis())) = {
+    def setup(userLastTimeSaved: Option[Long]) = {
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction(rNumber = None)
       val cacheMap = CacheMapBuilder(testUserId)

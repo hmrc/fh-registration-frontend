@@ -26,8 +26,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, Wi
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-
 import scala.concurrent.Future
 
 class WithdrawalControllerSpec
@@ -156,7 +154,7 @@ class WithdrawalControllerSpec
       val result = await(csrfAddToken(controller.postConfirmation)(request))
 
       status(result) shouldBe SEE_OTHER
-      val s = session(result)
+      session(result)
       redirectLocation(result) shouldBe Some("/fhdds/subscription/status")
     }
 

@@ -22,15 +22,14 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, CredentialRole}
+import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, User}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType, Journeys}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -106,7 +105,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] ⇒ Future[Result]): Future[Result] = {
         val userRequest =
-          new UserRequest(testUserId, Some(ggEmail), None, Some(Admin), Some(userAffinityGroup), request)
+          new UserRequest(testUserId, Some(ggEmail), None, Some(User), Some(userAffinityGroup), request)
         block(userRequest)
       }
     }
@@ -122,7 +121,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           testUserId,
           Some(ggEmail),
           Some(registrationNumber),
-          Some(Admin),
+          Some(User),
           Some(userAffinityGroup),
           request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
@@ -141,7 +140,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           testUserId,
           Some(ggEmail),
           Some(registrationNumber),
-          Some(Admin),
+          Some(User),
           Some(userAffinityGroup),
           request)
         val updateRequest = new StartUpdateRequest(registrationNumber, currentJourneyType, userRequest)
@@ -161,7 +160,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           testUserId,
           Some(ggEmail),
           Some(registrationNumber),
-          Some(Admin),
+          Some(User),
           Some(userAffinityGroup),
           request)
         val emailVerificationRequest = new EmailVerificationRequest(
@@ -184,7 +183,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] ⇒ Future[Result]): Future[Result] = {
         val userRequest =
-          new UserRequest(testUserId, Some(ggEmail), rNumber, Some(Admin), Some(userAffinityGroup), request)
+          new UserRequest(testUserId, Some(ggEmail), rNumber, Some(User), Some(userAffinityGroup), request)
         val journeyRequest =
           JourneyRequestBuilder.journeyRequest(userRequest, journeyPages).asInstanceOf[JourneyRequest[A]]
         block(journeyRequest)
@@ -202,7 +201,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           testUserId,
           Some(ggEmail),
           Some(registrationNumber),
-          Some(Admin),
+          Some(User),
           Some(AffinityGroup.Individual),
           request)
         val enrolledUserRequest = new EnrolledUserRequest(registrationNumber, userRequest)
@@ -212,7 +211,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupUserAction(
     rNumber: Option[String] = Some(registrationNumber),
-    credentialRole: Option[CredentialRole] = Some(Admin),
+    credentialRole: Option[CredentialRole] = Some(User),
     userAffinityGroup: AffinityGroup = AffinityGroup.Individual) =
     when(mockActions.userAction) thenReturn new ActionBuilder[UserRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser

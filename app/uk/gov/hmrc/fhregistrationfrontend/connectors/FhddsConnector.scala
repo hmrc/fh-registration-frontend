@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.Fhdd
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -89,27 +89,27 @@ class FhddsConnector @Inject()(
     http.GET[SubmissionTracking](s"$FHDSSServiceUrl/fhdds/subscription/getSubmission/$formBundleId")
 
   def deleteSubmission(formBundleId: String)(implicit hc: HeaderCarrier) =
-    http.DELETE(s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
+    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
 
   def addEnrolment(userId: String, groupId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
 
   def allocateEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo ")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo ")
 
   def deleteEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.DELETE(s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
+    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
 
   def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET(s"$FHDSSServiceUrl/fhdds/user-info/$userId")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/user-info/$userId")
 
   def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET(s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
 
   def es2Info(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
 
   def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET(s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
+    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
   // $COVERAGE-ON$
 }

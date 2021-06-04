@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 
 class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
@@ -27,7 +27,7 @@ class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
   "Not admin user filter" should {
     "allow user to proceed if has admin role" in {
-      val request = new UserRequest("id", None, None, Some(Admin), Some(AffinityGroup.Individual), FakeRequest())
+      val request = new UserRequest("id", None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
       status(result(filter, request)) shouldBe OK
     }
 

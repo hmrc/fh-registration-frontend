@@ -22,10 +22,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
 @this(
-main_template: main_template
+mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 )
 
 @(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -43,7 +42,7 @@ main_template: main_template
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@main_template(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+@mainTemplate(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
 
   @BackHistory()
 

@@ -15,18 +15,15 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
-
 
 @this(
- main_template: main_template
+ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 )
 
-@()(implicit request: Request[_],config: AppConfig, messages: Messages)
+@()(implicit request: Request[_], config: AppConfig, messages: Messages)
 
-@main_template(title = Messages("home.admin.page.title")) {
+@mainTemplate(title = Messages("home.admin.page.title")) {
  <h1>@Messages("home.admin.page.header")</h1>
-
 
    <a class="button" type="submit" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.getSubmissions()">@Messages("home.admin.retrieve.submission.button")</a>
 }

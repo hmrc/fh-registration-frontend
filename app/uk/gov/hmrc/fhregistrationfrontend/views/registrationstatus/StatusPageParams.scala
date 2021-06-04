@@ -19,7 +19,6 @@ import javax.inject.Inject
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._

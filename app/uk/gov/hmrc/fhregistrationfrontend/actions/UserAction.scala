@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.auth.core.AffinityGroup._
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.ExternalUrls
@@ -96,7 +96,7 @@ case class UserAction @Inject()(
     }
   }
 
-  def handleFailure(e: Throwable)(implicit request: Request[_]): Result =
+  def handleFailure(e: Throwable): Result =
     e match {
       case x: NoActiveSession ⇒
         Logger.warn(s"could not authenticate user due to: No Active Session " + x)

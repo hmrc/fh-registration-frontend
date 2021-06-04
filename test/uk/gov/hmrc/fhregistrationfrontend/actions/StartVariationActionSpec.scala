@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Admin, AffinityGroup, Assistant}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
@@ -41,7 +41,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         testUserId,
         None,
         registrationNumber = None,
-        Some(Admin),
+        Some(User),
         Some(AffinityGroup.Individual),
         FakeRequest())
 
