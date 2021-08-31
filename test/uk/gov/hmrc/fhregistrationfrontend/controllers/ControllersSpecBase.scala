@@ -18,7 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.mvc.Results
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.UserTestData

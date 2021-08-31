@@ -1,6 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.verifiers
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.{JsObject, Json}
 
