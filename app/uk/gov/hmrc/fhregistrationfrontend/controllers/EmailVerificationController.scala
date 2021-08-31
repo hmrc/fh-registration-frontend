@@ -69,13 +69,13 @@ class EmailVerificationController @Inject()(
           save4LaterService
             .saveVerifiedEmail(request.userId, emailOptions.email)
             .map { _ ⇒
-              Redirect(routes.Application.resumeForm())
+              Redirect(routes.Application.resumeForm)
             }
         } else {
           save4LaterService
             .savePendingEmail(request.userId, emailOptions.email)
             .map { _ ⇒
-              Redirect(routes.EmailVerificationController.emailVerificationStatus())
+              Redirect(routes.EmailVerificationController.emailVerificationStatus)
             }
         }
     }
@@ -90,14 +90,14 @@ class EmailVerificationController @Inject()(
         Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case (Some(pendingEmail), Some(verifiedEmail)) if pendingEmail == verifiedEmail ⇒
-        Redirect(routes.Application.resumeForm())
+        Redirect(routes.Application.resumeForm)
 
       case (Some(pendingEmail), Some(_)) ⇒
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
-      case (None, Some(_)) ⇒ Redirect(routes.Application.resumeForm())
-      case (None, None) ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail())
+      case (None, Some(_)) ⇒ Redirect(routes.Application.resumeForm)
+      case (None, None) ⇒ Redirect(routes.EmailVerificationController.forcedContactEmail)
 
     }
   }
@@ -148,7 +148,7 @@ class EmailVerificationController @Inject()(
         Future successful Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case None ⇒
-        Future successful Redirect(routes.Application.resumeForm())
+        Future successful Redirect(routes.Application.resumeForm)
     }
   }
 }

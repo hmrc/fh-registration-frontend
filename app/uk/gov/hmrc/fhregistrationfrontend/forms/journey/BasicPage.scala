@@ -40,8 +40,9 @@ case class BasicPage[T](
 
   override def nextSubsection: Option[String] = None
   override def parseFromRequest[X](onError: Rendering ⇒ X, onSuccess: Page[T] ⇒ X)(implicit r: Request[_]): X = {
-    val updatedForm = form.bindFromRequest()
-    println(s"errors ${updatedForm.errors}")
+    import play.api.data.FormBinding.Implicits._
+    val updatedForm = form.bindFromRequest
+    logger.info(s"errors ${updatedForm.errors}")
     if (updatedForm.hasErrors)
       onError(errorRenderer(updatedForm))
     else {

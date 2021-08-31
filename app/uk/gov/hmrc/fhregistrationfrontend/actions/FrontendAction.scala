@@ -19,8 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import play.api.mvc.{Request, Results}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import play.api.Logging
 
-trait FrontendAction extends Results {
+trait FrontendAction extends Results with Logging {
 
   implicit def hc(implicit request: Request[_]): HeaderCarrier =
     HeaderCarrierConverter.fromRequestAndSession(request, request.session)

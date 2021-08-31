@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
@@ -83,7 +82,7 @@ class FormPageController @Inject()(
               }
         }
       } else {
-        Logger.error(s"Not Found. Expired")
+        logger.error(s"Not Found. Expired")
         Future successful errorHandler.errorResultsPages(Results.NotFound)
       }
     }
@@ -93,7 +92,7 @@ class FormPageController @Inject()(
       if (request.lastUpdateTimestamp == lastUpdateTimestamp)
         Future successful Ok(views.confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
       else {
-        Logger.error(s"Not Found. Expired")
+        logger.error(s"Not Found. Expired")
         Future successful errorHandler.errorResultsPages(Results.NotFound)
       }
     }
@@ -104,7 +103,7 @@ class FormPageController @Inject()(
     else
       request.journey next newPage match {
         case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
-        case None ⇒ Redirect(routes.SummaryController.summary())
+        case None ⇒ Redirect(routes.SummaryController.summary)
       }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =

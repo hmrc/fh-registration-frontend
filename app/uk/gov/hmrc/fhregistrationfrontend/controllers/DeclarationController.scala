@@ -110,7 +110,7 @@ class DeclarationController @Inject()(
                 .map(_ ⇒ true)
                 .recover { case _ ⇒ false }
                 .map { pdfSaved ⇒
-                  Redirect(routes.DeclarationController.showAcknowledgment())
+                  Redirect(routes.DeclarationController.showAcknowledgment)
                     .withSession(
                       request.session
                         + (journeyTypeKey → request.journeyRequest.journeyType.toString)

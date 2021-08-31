@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import javax.inject.Inject
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AffinityGroup._
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
@@ -99,7 +98,7 @@ case class UserAction @Inject()(
   def handleFailure(e: Throwable): Result =
     e match {
       case x: NoActiveSession ⇒
-        Logger.warn(s"could not authenticate user due to: No Active Session " + x)
+        logger.warn(s"could not authenticate user due to: No Active Session " + x)
 
         val ggRedirectParms = Map(
           "continue_url" -> Seq(externalUrls.continueUrl),
@@ -110,7 +109,7 @@ case class UserAction @Inject()(
       case e: AuthorisationException ⇒
         Unauthorized
       case ex ⇒
-        Logger.warn(s"could not authenticate user due to: $ex")
+        logger.warn(s"could not authenticate user due to: $ex")
         InternalServerError(s"$ex")
     }
 }

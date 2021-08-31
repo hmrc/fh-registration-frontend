@@ -21,6 +21,7 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
+import play.api.Logging
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions._
@@ -30,7 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
-trait Rendering {
+trait Rendering extends Logging {
   def render(
     bpr: BusinessRegistrationDetails,
     navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html

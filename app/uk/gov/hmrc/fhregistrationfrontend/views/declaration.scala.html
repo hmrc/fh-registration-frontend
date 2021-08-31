@@ -48,7 +48,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
+@linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary.url}
 
 @showAlert = @{
   params.hasAmendments.filter(_ == false).map { _ =>
@@ -70,7 +70,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
   @error_box(declarationForm,".declaration.")
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm(), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm, 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
 
@@ -211,7 +211,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
       <p>
         <a class="" href="@{
-          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater()
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater
         }">@Messages("link.saveForLater")</a>
       </p>
 

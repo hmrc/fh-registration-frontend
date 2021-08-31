@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import org.apache.commons.lang3.StringUtils
-import play.api.Logger
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.AddressRecord
@@ -28,9 +27,10 @@ import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.audit.AuditExtensions.auditHeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
+import play.api.Logging
 
 @ImplementedBy(classOf[DefaultAddressAuditService])
-trait AddressAuditService {
+trait AddressAuditService extends Logging {
   def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any]
 }
 
@@ -53,7 +53,7 @@ class DefaultAddressAuditService @Inject()(
   override def auditAddresses(page: String, addresses: List[Address])(
     implicit headerCarrier: HeaderCarrier): Future[Any] = {
     if (!addresses.isEmpty)
-      Logger info s"Auditing ${addresses.size} addresses for $page"
+      logger info s"Auditing ${addresses.size} addresses for $page"
     val auditResults = addresses map { address ⇒
       addressAuditData(address)
         .flatMap(sendAuditEvent(page, _))
@@ -71,7 +71,7 @@ class DefaultAddressAuditService @Inject()(
       tags = headerCarrier.toAuditTags("fh-registration", s"/fhdds/form/$page"),
       detail = headerCarrier.toAuditDetails(addressAuditData.details: _*)
     )
-    Logger info s"Submitting event with id ${event.eventId}"
+    logger.info(s"Submitting event with id ${event.eventId}")
     auditConnector sendEvent event
   }
 
@@ -91,7 +91,7 @@ class DefaultAddressAuditService @Inject()(
         else
           postcodeAddressModifiedSubmitted(address, originalAddress, originalAddressRecord.uprn.toString)
       case None ⇒
-        Logger error s"Could not find address by id $id"
+        logger error s"Could not find address by id $id"
         manualAddressSubmitted(address)
     }
 

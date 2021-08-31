@@ -68,7 +68,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
 
       val r = result(action, userRequest)
       status(r) shouldBe SEE_OTHER
-      redirectLocation(r) shouldBe Some(routes.EmailVerificationController.emailVerificationStatus().url)
+      redirectLocation(r) shouldBe Some(routes.EmailVerificationController.emailVerificationStatus.url)
 
     }
 

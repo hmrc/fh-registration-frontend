@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import com.google.inject.Inject
-import play.api.Logger
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest, _}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
@@ -67,7 +66,7 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
-      Logger.error(s"Not found")
+      logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
@@ -75,7 +74,7 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else {
-      Logger.error(s"Not found")
+      logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
@@ -83,7 +82,7 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     request.journeyState.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
       case None ⇒
-        Logger.error(s"Not found")
+        logger.error(s"Not found")
         Left(errorHandler.errorResultsPages(Results.NotFound)(request))
     }
 

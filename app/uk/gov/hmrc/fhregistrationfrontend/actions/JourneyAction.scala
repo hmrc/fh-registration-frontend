@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import cats.data.EitherT
 import cats.implicits._
 import com.google.inject.Inject
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
@@ -105,7 +104,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
     cacheMap
       .getEntry[String](Save4LaterKeys.verifiedEmailKey)
       .fold(
-        Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus()))
+        Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus))
       )(
         verifiedEmail ⇒ Either.right(verifiedEmail)
       )
@@ -114,7 +113,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {
       case Some(bpr) ⇒ Right(bpr)
       case None ⇒
-        Logger.error(s"Not found bpr")
+        logger.error(s"Not found bpr")
         Left(errorHandler.errorResultsPages(Results.BadRequest))
 
     }
@@ -123,7 +122,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) ⇒ Right(bt)
       case None ⇒
-        Logger.error(s"Not found business type")
+        logger.error(s"Not found business type")
         Left(errorHandler.errorResultsPages(Results.BadRequest))
 
     }
@@ -135,7 +134,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
         case BusinessType.SoleTrader ⇒ Right(journeys.soleTraderPages)
         case BusinessType.Partnership ⇒ Right(journeys.partnershipPages)
         case _ ⇒
-          Logger.error(s"Not found: wrong business type")
+          logger.error(s"Not found: wrong business type")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
 
       }
