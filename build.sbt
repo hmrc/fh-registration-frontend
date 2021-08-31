@@ -42,8 +42,7 @@ def test(scope: String = "test,it") = Seq(
   "org.jsoup"                    % "jsoup"                          % "1.13.1"   % scope,
   "org.scalacheck"              %% "scalacheck"                     % "1.15.4"   % scope,
   "org.scalamock"               %% "scalamock-scalatest-support"    % "3.6.0"    % scope,
-  "com.github.tomakehurst"       % "wiremock-jre8"                  % "2.28.0"   % scope,
-  "com.eclipsesource"           %% "play-json-schema-validator"     % "0.9.4"    % scope,
+  "com.eclipsesource"           %% "play-json-schema-validator"     % "0.9.4"    % scope
 )
 
 val appName = "fh-registration-frontend"
