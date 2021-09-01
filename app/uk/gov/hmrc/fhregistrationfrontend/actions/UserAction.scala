@@ -98,7 +98,7 @@ case class UserAction @Inject()(
   def handleFailure(e: Throwable): Result =
     e match {
       case x: NoActiveSession ⇒
-        logger.warn(s"could not authenticate user due to: No Active Session " + x)
+        logger.warn(s"could not authenticate user due to: No Active Session $x")
 
         val ggRedirectParms = Map(
           "continue_url" -> Seq(externalUrls.continueUrl),

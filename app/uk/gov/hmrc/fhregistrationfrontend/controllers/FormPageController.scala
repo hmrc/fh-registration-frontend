@@ -82,7 +82,6 @@ class FormPageController @Inject()(
               }
         }
       } else {
-        logger.error(s"Not Found. Expired")
         Future successful errorHandler.errorResultsPages(Results.NotFound)
       }
     }
@@ -92,7 +91,6 @@ class FormPageController @Inject()(
       if (request.lastUpdateTimestamp == lastUpdateTimestamp)
         Future successful Ok(views.confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
       else {
-        logger.error(s"Not Found. Expired")
         Future successful errorHandler.errorResultsPages(Results.NotFound)
       }
     }

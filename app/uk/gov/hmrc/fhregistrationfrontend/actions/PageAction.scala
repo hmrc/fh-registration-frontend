@@ -66,7 +66,6 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
-      logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
@@ -74,7 +73,6 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else {
-      logger.error(s"Not found")
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
@@ -82,7 +80,6 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     request.journeyState.get[T](pageId) match {
       case Some(page) ⇒ Right(page)
       case None ⇒
-        logger.error(s"Not found")
         Left(errorHandler.errorResultsPages(Results.NotFound)(request))
     }
 

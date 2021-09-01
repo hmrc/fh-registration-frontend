@@ -56,7 +56,6 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
     if (journeyState.isComplete)
       Right(true)
     else {
-      logger.error(s"Bad Request")
       Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
 }
