@@ -54,7 +54,7 @@
     <logger name="uk.gov" level="INFO"/>
     <logger name="org.eclipse.jetty" level="INFO"/>
 
-    <logger name="akka.actor" level="DEBUG"/>
+    <logger name="akka.actor" level="WARN"/>
 
     <logger name="application" level="DEBUG"/>
 

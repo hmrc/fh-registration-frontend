@@ -6,6 +6,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+
 val monocleVersion = "2.1.0"
 
 val compile = Seq(
