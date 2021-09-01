@@ -18,7 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.services
 
 import org.mockito.ArgumentCaptor
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}

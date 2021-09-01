@@ -52,7 +52,7 @@ class WithdrawalController @Inject()(
   val ProcessingTimestampSessionKey = "withdrawal_processing_timestamp"
 
   def startWithdraw = Action {
-    Redirect(routes.WithdrawalController.reason())
+    Redirect(routes.WithdrawalController.reason)
   }
 
   def reason = enrolledUserAction { implicit request ⇒
@@ -67,7 +67,7 @@ class WithdrawalController @Inject()(
         withdrawalReason ⇒
           keyStoreService
             .saveWithdrawalReason(withdrawalReason)
-            .map(_ ⇒ Redirect(routes.WithdrawalController.confirm()))
+            .map(_ ⇒ Redirect(routes.WithdrawalController.confirm))
       )
   }
 
@@ -97,7 +97,7 @@ class WithdrawalController @Inject()(
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
         .map { processingDate ⇒
-          Redirect(routes.WithdrawalController.acknowledgment())
+          Redirect(routes.WithdrawalController.acknowledgment)
             .withSession(
               request.session
                 + (EmailSessionKey → confirmed.email.get)

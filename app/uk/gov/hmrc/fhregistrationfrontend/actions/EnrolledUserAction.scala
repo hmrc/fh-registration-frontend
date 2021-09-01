@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.Logger
 import play.api.mvc.{ActionRefiner, Result, Results, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
@@ -40,7 +39,7 @@ class EnrolledUserAction(implicit errorHandler: ErrorHandler, val executionConte
         case Some(registrationNumber) ⇒
           Right(new EnrolledUserRequest[A](registrationNumber, request))
         case None ⇒
-          Logger.error(s"Not found: registration number. Is user enrolled?")
+          logger.error(s"Not found: registration number. Is user enrolled?")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
     }

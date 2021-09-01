@@ -2,7 +2,6 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport
 
 import annotation.tailrec
 import java.net.ServerSocket
-import play.api.Logger._
 
 object Port {
   val rnd = new scala.util.Random
@@ -17,11 +16,11 @@ object Port {
       case p: Int => {
         available(p) match {
           case false => {
-            debug(s"Port $p is in use, trying another")
+            logger.debug(s"Port $p is in use, trying another")
             randomAvailable
           }
           case true => {
-            debug("Taking port : " + p)
+            logger.debug("Taking port : " + p)
             usedPorts :+ p
             p
           }

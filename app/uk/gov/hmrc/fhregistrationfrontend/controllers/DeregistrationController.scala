@@ -52,7 +52,7 @@ class DeregistrationController @Inject()(
   val ProcessingTimestampSessionKey = "deregistration_processing_timestamp"
 
   def startDeregister = Action {
-    Redirect(routes.DeregistrationController.reason())
+    Redirect(routes.DeregistrationController.reason)
   }
 
   def reason = enrolledUserAction { implicit request ⇒
@@ -67,7 +67,7 @@ class DeregistrationController @Inject()(
         deregistrationReason ⇒
           keyStoreService
             .saveDeregistrationReason(deregistrationReason)
-            .map(_ ⇒ Redirect(routes.DeregistrationController.confirm()))
+            .map(_ ⇒ Redirect(routes.DeregistrationController.confirm))
       )
   }
 
@@ -97,7 +97,7 @@ class DeregistrationController @Inject()(
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
         .map { processingDate ⇒
-          Redirect(routes.DeregistrationController.acknowledgment())
+          Redirect(routes.DeregistrationController.acknowledgment)
             .withSession(
               request.session
                 + (EmailSessionKey → confirmed.email.get)

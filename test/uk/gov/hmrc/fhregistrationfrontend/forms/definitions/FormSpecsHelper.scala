@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import play.api.data.Form
 
 trait FormSpecsHelper[T] extends Matchers {

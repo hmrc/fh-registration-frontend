@@ -6,17 +6,18 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+
 val monocleVersion = "2.1.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc"                 %% "bootstrap-frontend-play-26"       % "5.3.0",
-  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.66.0-play-26",
-  "uk.gov.hmrc"                 %% "play-ui"                          % "9.4.0-play-26",
-  "uk.gov.hmrc"                 %% "play-partials"                    % "8.1.0-play-26",
-  "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "6.2.0-play-26",
-  "uk.gov.hmrc"                 %% "http-caching-client"              % "9.5.0-play-26",
-  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.9.0-play-26",
+  "uk.gov.hmrc"                 %% "bootstrap-frontend-play-28"       % "5.12.0",
+  "uk.gov.hmrc"                 %% "govuk-template"                   % "5.69.0-play-28",
+  "uk.gov.hmrc"                 %% "play-ui"                          % "9.6.0-play-28",
+  "uk.gov.hmrc"                 %% "play-partials"                    % "8.2.0-play-28",
+  "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "6.4.0-play-28",
+  "uk.gov.hmrc"                 %% "http-caching-client"              % "9.5.0-play-28",
+  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.9.0-play-28",
   "uk.gov.hmrc"                 %% "time"                             % "3.24.0",
   "com.typesafe.play"           %% "play-json"                        % "2.9.2",
   "org.typelevel"               %% "cats-core"                        % "2.6.1",
@@ -24,24 +25,25 @@ val compile = Seq(
   "org.pegdown"                  % "pegdown"                          % "1.6.0",
   "com.github.tototoshi"        %% "play-json-naming"                 % "1.5.0",
   "org.julienrf"                %% "play-json-derived-codecs"         % "10.0.2",
-  "com.github.julien-truffaut"  %%  "monocle-core"                    % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-macro"                   % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-law"                     % monocleVersion,
-  "org.mindrot"                  %  "jbcrypt"                         % "0.4",
+  "com.github.julien-truffaut"  %% "monocle-core"                     % monocleVersion,
+  "com.github.julien-truffaut"  %% "monocle-macro"                    % monocleVersion,
+  "com.github.julien-truffaut"  %% "monocle-law"                      % monocleVersion,
+  "org.mindrot"                  % "jbcrypt"                          % "0.4",
   compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib" % "1.7.5" % Provided cross CrossVersion.full
 )
 
 def test(scope: String = "test,it") = Seq(
-  "org.scalatest"               %% "scalatest"                        % "3.0.9"   % scope,
-  "org.pegdown"                  % "pegdown"                          % "1.6.0"   % scope,
-  "org.jsoup"                    % "jsoup"                            % "1.13.1"   % scope,
-  "org.scalatestplus.play"       %% "scalatestplus-play"              % "3.1.3"   % scope,
-  "org.scalacheck"              %% "scalacheck"                       % "1.15.4"  % scope,
-  "org.mockito"                  % "mockito-core"                     % "3.10.0"  % scope,
-  "org.scalamock"               %% "scalamock-scalatest-support"      % "3.6.0"   % scope,
-  "com.github.tomakehurst"       %  "wiremock-jre8"                   % "2.28.0"   % scope,
-  "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.4"   % scope
+  "org.scalatest"               %% "scalatest"                      % "3.2.9"    % scope,
+  "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"    % scope,
+  "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"  % scope,
+  "org.scalatestplus"           %% "mockito-3-4"                    % "3.2.9.0"  % scope,
+  "com.github.tomakehurst"       % "wiremock-standalone"            % "2.27.1"   % scope,
+  "org.pegdown"                  % "pegdown"                        % "1.6.0"    % scope,
+  "org.jsoup"                    % "jsoup"                          % "1.13.1"   % scope,
+  "org.scalacheck"              %% "scalacheck"                     % "1.15.4"   % scope,
+  "org.scalamock"               %% "scalamock-scalatest-support"    % "3.6.0"    % scope,
+  "com.eclipsesource"           %% "play-json-schema-validator"     % "0.9.4"    % scope
 )
 
 val appName = "fh-registration-frontend"

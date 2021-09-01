@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyState, Page, PageDataLoader}
@@ -57,7 +56,6 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
     if (journeyState.isComplete)
       Right(true)
     else {
-      Logger.error(s"Bad Request")
       Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
 }

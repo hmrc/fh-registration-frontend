@@ -36,7 +36,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
     )
   )
 
-  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue()}" method="POST">
+  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue}" method="POST">
     <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
     
     @helper.CSRF.formField

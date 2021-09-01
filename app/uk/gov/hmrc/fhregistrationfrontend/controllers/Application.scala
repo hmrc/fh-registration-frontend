@@ -24,6 +24,7 @@ import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import play.api.Logging
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
@@ -65,7 +66,7 @@ class Application @Inject()(
         case _ ⇒
           val whenRegistered = request.registrationNumber
             .map { _ ⇒
-              Redirect(routes.Application.checkStatus())
+              Redirect(routes.Application.checkStatus)
             }
 
           whenRegistered getOrElse Redirect(routes.Application.startOrContinueApplication())
@@ -109,18 +110,18 @@ class Application @Inject()(
       details ← businessCustomerConnector.getReviewDetails
       _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
     } yield {
-      Redirect(routes.Application.businessType())
+      Redirect(routes.Application.businessType)
     }
   }
 
   def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request ⇒
     if (isNewForm) {
-      Future successful Redirect(routes.Application.businessType())
+      Future successful Redirect(routes.Application.businessType)
     } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
           Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
-        case None ⇒ Redirect(routes.Application.businessType())
+        case None ⇒ Redirect(routes.Application.businessType)
       }
     }
   }
@@ -138,7 +139,7 @@ class Application @Inject()(
                 Future successful errorHandler.errorResultsPages(Results.BadRequest)
             }
           } else {
-            Future successful Redirect(routes.Application.resumeForm())
+            Future successful Redirect(routes.Application.resumeForm)
           }
         }
       )
@@ -153,7 +154,7 @@ class Application @Inject()(
 
   def resumeForm = journeyAction { implicit request ⇒
     if (request.journeyState.isComplete)
-      Redirect(routes.SummaryController.summary())
+      Redirect(routes.SummaryController.summary)
     else {
       request.journeyState.lastEditedPage.map(p ⇒ p.id → p.lastSection) match {
         case None ⇒
@@ -186,14 +187,14 @@ class Application @Inject()(
           for {
             _ ← save4LaterService.saveBusinessType(request.userId, businessType)
           } yield {
-            Redirect(routes.EmailVerificationController.contactEmail())
+            Redirect(routes.EmailVerificationController.contactEmail)
           }
         }
       )
   }
 
   def startForm = userAction { _ ⇒
-    Redirect(routes.Application.resumeForm())
+    Redirect(routes.Application.resumeForm)
   }
 
   def savedForLater = userAction.async { implicit request ⇒
@@ -212,7 +213,7 @@ class Application @Inject()(
 
 @Singleton
 abstract class AppController(val ds: CommonPlayDependencies, val cc: MessagesControllerComponents)
-    extends FrontendController(cc) with I18nSupport {
+    extends FrontendController(cc) with I18nSupport with Logging {
 
   override implicit val messagesApi: MessagesApi = ds.messagesApi
 

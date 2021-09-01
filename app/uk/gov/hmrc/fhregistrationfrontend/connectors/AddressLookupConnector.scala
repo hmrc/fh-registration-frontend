@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.Logger
-import play.api.{Configuration, Environment}
+import play.api.{Configuration, Environment, Logging}
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http._
@@ -37,7 +36,7 @@ class AddressLookupConnector @Inject()(
   val runModeConfiguration: Configuration,
   environment: Environment
 )(implicit ec: ExecutionContext)
-    extends ServicesConfig(runModeConfiguration) with HttpErrorFunctions {
+    extends ServicesConfig(runModeConfiguration) with HttpErrorFunctions with Logging {
 
   val addressLookupUrl: String = baseUrl("address-lookup")
 
@@ -50,7 +49,7 @@ class AddressLookupConnector @Inject()(
       AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
     } recover {
       case e: Exception =>
-        Logger.warn(s"Error received from address lookup service: $e")
+        logger.warn(s"Error received from address lookup service: $e")
         AddressLookupErrorResponse(e)
     }
   }
