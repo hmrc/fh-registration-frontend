@@ -1,9 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport
 
+import play.api.Logging
 import annotation.tailrec
 import java.net.ServerSocket
 
-object Port {
+object Port extends Logging {
   val rnd = new scala.util.Random
   val range = 8000 to 39999
   val usedPorts = List[Int]()
