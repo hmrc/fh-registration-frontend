@@ -365,7 +365,7 @@ fh.importing_activities.eori.confirm.label=Does the business have an EORI (Econo
 fh.hasEori.error.required=Select whether the business has an EORI number
 fh.importing_activities.eori.label=EORI number
 fh.importing_activities.eori.hint_text=For example, GB123456789000
-fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods from sellers outside the EU. Contact the
+fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods from sellers outside the UK. Contact the
 fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
 fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window or tab)
 fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
@@ -376,10 +376,10 @@ fh.eoriNumber.goodsImportedOutsideEori.error.required=Select whether the busines
 # - Business Customers
 #===========================================================
 fh.business_customers.title=Business customers
-fh.business_customers.label=How many overseas customers established outside the EU does the business store goods for, currently?
+fh.business_customers.label=How many overseas customers established outside the UK does the business store goods for, currently?
 fh.business_customers.hint_text=You only need to tell us about the part of the business that deals with fulfilment.
-fh.numberOfCustomers.error.required=Select how many sellers established outside the EU the business currently stores goods for
-fh.numberOfCustomers.error.invalid=Select how many sellers established outside the EU the business currently stores goods for
+fh.numberOfCustomers.error.required=Select how many sellers established outside the UK the business currently stores goods for
+fh.numberOfCustomers.error.invalid=Select how many sellers established outside the UK the business currently stores goods for
 fh.business_customers.none.label=None
 fh.business_customers.none.value=None
 fh.business_customers.1_10.label=1 to 10
@@ -394,14 +394,14 @@ fh.business_customers.101_plus.value=Over 100
 # - Other storage premises
 #===========================================================
 fh.other_storage_premises.title=Other storage premises
-fh.other_storage_premises.confirm.label=Does the business use any UK premises to store third-party goods imported from outside the EU?
+fh.other_storage_premises.confirm.label=Does the business use any UK premises to store third-party goods imported from outside the UK?
 fh.other_storage_premises.hintText=Only tell us about premises that are not at your registered business address.
 fh.other_storage_premises.confirm.hint_text=Include any storage premises owned by the business or third parties
-fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-EU goods
+fh.other_storage_premises.confirm.error=Select whether the business uses other premises for storing non-UK goods
 fh.other_storage_premises.enter.label=Enter the address of storage premises
 fh.other_storage_premises.each.title=Storage premises {0}
 fh.otherStoragePremises.each.title=Storage premises {0}
-fh.otherStoragePremises.each.inf=Tell us about each of the premises that you use to store third-party goods imported from outside the EU
+fh.otherStoragePremises.each.inf=Tell us about each of the premises that you use to store third-party goods imported from outside the UK
 fh.other_storage_premises.third_party.label=Are these premises operated by a third party?
 fh.other_storage_premises.company.addMore=Are there any more premises?
 fh.storagePremise_address.storagePremise_address.Line1.error.required=You must enter line 1 of the address
