@@ -11,7 +11,7 @@
   var maxCount = 50;
   var postcodeRegex = /(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$/;
   var filterRegex = /^[A-Za-z0-9 !'‘’"“”(),./—–‐-]{1,35}$/;
-  var lookUpPath = '/fhdds/address-lookup?postcode=';
+  var lookUpPath = '/fhdds/address-lookup';
   // initialise the display of js-only controls
   // the display will default to an open manual address
   // without a link to postcode lookup - if JS is enabled
@@ -182,17 +182,17 @@
     clearError(store);
 
     $.ajax({
-      type: 'GET',
+     type: "POST",
       url: url,
       dataType: "json",
       success: function (data) {
-        processResults(data, store);
-      },
-      error: function () {
-        showError('Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually', store, false);
-      },
-      headers: {"X-Hmrc-Origin": "fhdds"}
-    });
+              processResults(data, store);
+            },
+            error: function () {
+              showError('Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually', store, false);
+            },
+            headers: {"X-Hmrc-Origin": "fhdds"}
+          });
   }
 
   function handleSubmit (e) {
@@ -212,14 +212,14 @@
       return false;
     }
 
-    url = lookUpPath + postcode;
+    url = lookUpPath;
 
     if (propertyFilter !== '') {
       if(!propertyFilter.match(filterRegex)) {
         showError('A property name or number can be no longer than 35 characters long and only contain characters that are alpha-numeric, spaces and/or any of the following symbols !\'‘’"“”(),./—–‐-', store, store.$filterInput);
         return false;
       }
-      url += '&filter=' + encodeURIComponent(propertyFilter);
+      url;
     }
 
     searchAddress(url, store);

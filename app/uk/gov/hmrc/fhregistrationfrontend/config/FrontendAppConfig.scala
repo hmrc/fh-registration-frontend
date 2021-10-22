@@ -44,6 +44,7 @@ class FrontendAppConfig @Inject()(
 
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
+  val addressReputationEndpoint = baseUrl("address-lookup")
   override lazy val exciseEnquiryLink: String = getConfString(
     "exciseEnquiryLink",
     "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries")
