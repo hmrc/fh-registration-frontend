@@ -75,20 +75,6 @@ class AddressLookupConnector @Inject()(
     }
   }
 
-//  def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
-//    logger.info("Lookup function is being called")
-//    val lookupAddressByPostcode = LookupAddressByPostcode(postcode, filter)
-//    http
-//      .POST[LookupAddressByPostcode, AddressRecord](s"$endpoint/lookup", lookupAddressByPostcode)
-//      .map { addressListJson =>
-//        AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(Json.toJson(addressListJson)))
-//      } recover {
-//      case e: Exception =>
-//        logger.warn(s"Error received from address lookup service: $e")
-//        AddressLookupErrorResponse(e)
-//    }
-//  }
-
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
     val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
     http.GET[Option[AddressRecord]](s"$addressLookupUrl/v2/uk/addresses/$id")(addressRecordReads, fhddsHc, ec)
