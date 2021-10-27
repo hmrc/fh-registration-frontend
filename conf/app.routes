@@ -26,7 +26,8 @@ GET         /startForm                                             @uk.gov.hmrc.
 
 GET         /subscription/status                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
-POST        /address-lookup                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
+GET         /address-lookup                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
+
 
 GET         /form/:page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
