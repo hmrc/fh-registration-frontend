@@ -18,36 +18,51 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Environment, Logging}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Json, Writes}
+import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait AddressLookupResponse
 
 case class AddressLookupSuccessResponse(addressList: RecordSet) extends AddressLookupResponse
 case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupResponse
+case class LookupAddressByPostcode(postcode: String, filter: Option[String])
 
 @Singleton
 class AddressLookupConnector @Inject()(
   val http: HttpClient,
   val runModeConfiguration: Configuration,
-  environment: Environment
-)(implicit ec: ExecutionContext)
+  environment: Environment,
+  frontendAppConfig: FrontendAppConfig
+)(implicit val ec: ExecutionContext)
     extends ServicesConfig(runModeConfiguration) with HttpErrorFunctions with Logging {
 
-  val addressLookupUrl: String = baseUrl("address-lookup")
+  val endpoint = frontendAppConfig.addressReputationEndpoint
+  val headers: Seq[(String, String)] = Seq("X-Hmrc-Origin" -> "FHDDS")
 
   def lookup(postcode: String, filter: Option[String])(implicit hc: HeaderCarrier): Future[AddressLookupResponse] = {
-    val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[JsValue](s"$addressLookupUrl/v2/uk/addresses?postcode=$postcode&filter=${filter.getOrElse("")}")(
-      implicitly[HttpReads[JsValue]],
-      fhddsHc,
-      ec) map { addressListJson =>
-      AddressLookupSuccessResponse(RecordSet.fromJsonAddressLookupService(addressListJson))
-    } recover {
+    logger.info("Lookup function is being called")
+    val lookupAddressByPostcode = LookupAddressByPostcode(postcode, filter)
+
+    http
+      .POST[LookupAddressByPostcode, List[AddressRecord]](s"$endpoint/lookup", lookupAddressByPostcode, headers)
+      .map { found =>
+        val results = found.map { address =>
+          AddressRecord(
+            address.id,
+            address.uprn,
+            address.address,
+            address.language
+          )
+        }
+        val addressRec = RecordSet(results)
+        AddressLookupSuccessResponse(addressRec)
+      } recover {
       case e: Exception =>
         logger.warn(s"Error received from address lookup service: $e")
         AddressLookupErrorResponse(e)
@@ -55,19 +70,14 @@ class AddressLookupConnector @Inject()(
   }
 
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
-    val fhddsHc = hc.withExtraHeaders("X-Hmrc-Origin" -> "FHDDS")
-    http.GET[Option[AddressRecord]](s"$addressLookupUrl/v2/uk/addresses/$id")(addressRecordReads, fhddsHc, ec)
+    logger.info("lookupById function is being called")
+    http
+      .POST[String, Array[AddressRecord]](s"$endpoint/lookup/$id", id, headers)
+      .map { _.headOption }
   }
 
-  private val addressRecordReads = new HttpReads[Option[AddressRecord]] {
-    override def read(method: String, url: String, response: HttpResponse): Option[AddressRecord] =
-      response.status match {
-        case status if status == 200 ⇒ Some(response.json.as[AddressRecord])
-        case status if status == 404 ⇒ None
-        case status if is4xx(status) ⇒
-          throw UpstreamErrorResponse("address-lookup/v2/uk/address error", response.status, 500)
-        case status if is5xx(status) ⇒
-          throw UpstreamErrorResponse("address-lookup/v2/uk/address error", response.status, 502)
-      }
-  }
+}
+
+object LookupAddressByPostcode {
+  implicit val writes: Writes[LookupAddressByPostcode] = Json.writes[LookupAddressByPostcode]
 }

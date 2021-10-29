@@ -33,7 +33,6 @@ case class Address(
     val postcodeDisplay = postcode.map(postcode1 => s"$postcode1, ").getOrElse("")
     s"$line1, $line2, $line3display$line4display$postcodeDisplay$country"
   }
-
 }
 
 object Address {
