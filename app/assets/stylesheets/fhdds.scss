@@ -1,4 +1,10 @@
+// Ensure the confirmation panel is the correct colour
 .transaction-banner--complete {
     background-color: #00703c;
     color: #fff;
+}
+
+// Make details links display with arrow
+details > summary:first-of-type {
+    display: list-item;
 }
