@@ -93,7 +93,7 @@ main_template: main_template
 
     } else {
       <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
-      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend") @defaultEmail</legend>
+      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)</legend>
       @RadioGroup(
         RadioGroupParams(
           name = Some(usingDefaultEmailKey),

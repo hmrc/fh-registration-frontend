@@ -307,7 +307,7 @@ fh.contact_person.otherUkContactAddress_contactAddress.postcode.error.pattern=En
 fh.trading_name.title=Trading name
 fh.tradingName.title=Trading name
 fh.tradingName.confirm.label=Does the business use a trading name that is different from its registered one?
-fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one? 
+fh.tradingName.corporateBody.confirm.label=Does the business use a trading name that is different from its registered one?
 fh.trading_name.confirm.label=Does the business use a trading name that is different from its registered one?
 fh.tradingName_yesNo.error.required=Select whether the business has a different trading name
 fh.tradingName.label=Trading name
@@ -501,7 +501,7 @@ fh.companyRegistrationNumber.hint_text=For example, 01234567 or SC123456
 fh.companyRegistrationNumber.error.required=Enter the company registration number
 fh.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 fh.companyRegistrationNumber.summary=Where to find your company registration number
-fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or you can 
+fh.companyRegistrationNumber.details=You can find your company registration number on your Certificate of Incorporation, on official letters from HMRC or you can
 fh.companyRegistrationNumber.details_companies_house=search the Companies House register (opens in a new window or tab)
 
 # - Date of incorporation (Corporate Body)
@@ -519,7 +519,7 @@ fh.dateOfIncorporation.day.error.number=Enter the day of incorporation
 fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
 fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
 fh.dateOfIncorporation.summary=Where to find the date of incorporation
-fh.dateOfIncorporation.details=You can find this date on the company's Certificate of Incorporation, or
+fh.dateOfIncorporation.details=You can find this date on the company’s Certificate of Incorporation, or
 fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window or tab)
 fh.dateOfIncorporation.day.error.max=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.day.error.min=Enter a valid date for the date of incorporation
@@ -841,7 +841,7 @@ fh.withdrawalConfirm.confirm.error.required=Select yes if you want to withdraw y
 fh.withdrawalConfirm.noDefaultEmail.legend=We will send a confirmation to the email address you enter below
 fh.withdrawalConfirm.noDefaultEmail.email.label=Enter the email address
 fh.withdrawalConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
-fh.withdrawalConfirm.hasDefaultEmail.legend=We will send a confirmation email to 
+fh.withdrawalConfirm.hasDefaultEmail.legend=We will send a confirmation email to
 fh.withdrawalConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
 fh.withdrawalConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
 fh.withdrawalConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
@@ -849,7 +849,7 @@ fh.withdrawalConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid 
 fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
 
 fh.ack.withdrawal=Application withdrawn
-fh.ack.withdrawal.emailSend=We will send a confirmation email to 
+fh.ack.withdrawal.emailSend=We will send a confirmation email to
 fh.ack.withdrawal.waitNotice=You will need to wait until tomorrow before you can submit a new application
 
 # - Deregistration reason
@@ -873,7 +873,7 @@ fh.deregistrationConfirm.confirm.error.required=Select yes if you want to cancel
 fh.deregistrationConfirm.noDefaultEmail.legend=We will send a confirmation to the email address you enter below
 fh.deregistrationConfirm.noDefaultEmail.email.label=Enter the email address
 fh.deregistrationConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
-fh.deregistrationConfirm.hasDefaultEmail.legend=We will send a confirmation email to 
+fh.deregistrationConfirm.hasDefaultEmail.legend=We will send a confirmation email to
 fh.deregistrationConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
 fh.deregistrationConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
 fh.deregistrationConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
@@ -881,7 +881,7 @@ fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Enter va
 fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
 
 fh.ack.deregister=Registration cancelled
-fh.ack.deregister.emailSend=We will send a confirmation email to 
+fh.ack.deregister.emailSend=We will send a confirmation email to
 fh.ack.deregister.waitNotice=You will need to wait until tomorrow before you can submit a new application
 
 # - Confirmation email messages for use wherever we use confirmation email forms
@@ -890,7 +890,7 @@ fh.confirmationEmail.email.label=Enter an email address
 fh.confirmationEmail.email.hint_text=We will send a confirmation email to this address
 fh.confirmationEmail.email.confirmation.label=Re-enter the email address
 fh.confirmationEmail.has_default_email=We will send a confirmation email to:
-fh.confirmationEmail.hasDefaultEmail.legend=We will send a confirmation email to:
+fh.confirmationEmail.hasDefaultEmail.legend=We will send a confirmation email to {0}
 fh.confirmationEmail.use_default_email.confirm.label=Is this the email address you want to use?
 fh.confirmationEmail.use_default_email.confirm.error=Select whether this is the correct email address to use
 fh.confirmationEmail.alternativeEmail.email.error.required=Enter valid email addresses that match
@@ -926,7 +926,7 @@ fh.status_pending.finish=Finish and sign out
 # - Status Page
 #===============================================================
 fh.status.generic.what_this_means=What this means
-fh.status.generic.go_to_bta=Go to your secure messages in your 
+fh.status.generic.go_to_bta=Go to your secure messages in your
 fh.status.generic.bta_link_text=business tax account
 fh.status.generic.what_happens_next=What you can do next
 fh.status.pre.help_bullet_1=what you need to do while HMRC processes your application
@@ -937,7 +937,7 @@ fh.status.post.help_bullet_2=when you need to update your registered details
 fh.status.post.help_bullet_3=what happens if your business stops trading
 fh.status.generic.print_page=Print a copy of this page
 fh.status.generic.apply_again.title=If you want to apply again
-fh.status.generic.apply_again=If you want to apply again, you will need to 
+fh.status.generic.apply_again=If you want to apply again, you will need to
 fh.status.generic.start_new_link_text=start a new application
 fh.status.generic.help_us_improve=Help us improve this service
 fh.status.received.step=Received

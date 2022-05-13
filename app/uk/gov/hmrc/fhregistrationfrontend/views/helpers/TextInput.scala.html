@@ -64,7 +64,7 @@
     @label
 
     @if(params.hintText.nonEmpty){
-        <span class="form-hint">@params.hintText</span>
+        <span id="@{fieldName}-hint" class="form-hint">@params.hintText</span>
     }
 
   @if(params.hasErrors) {
@@ -77,6 +77,10 @@
     class="@{inputClass}"
     id="@{fieldName}"
     name="@{fieldName}"
-      @if(params.value.nonEmpty){value="@{params.value}"}>
+      @if(params.value.nonEmpty){value="@{params.value}"}
+      @if(params.hintText.nonEmpty || params.hasErrors){
+        aria-describedby="@if(params.hintText.nonEmpty){@{fieldName}-hint} @if(params.hasErrors){@{fieldName}-inline-error}"
+      }
+      >
 
 </div>

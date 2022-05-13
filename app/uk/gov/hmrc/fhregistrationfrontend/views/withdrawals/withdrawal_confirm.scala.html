@@ -94,11 +94,12 @@
 
     } else {
       <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
-      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend") @defaultEmail</legend>
+
       @RadioGroup(
         RadioGroupParams(
           name = Some(usingDefaultEmailKey),
-          legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
+          legend = Some(Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)),
+          hintText = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
           required = true,
           hasErrors = confirmationForm(usingDefaultEmailKey).hasErrors,
           error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),

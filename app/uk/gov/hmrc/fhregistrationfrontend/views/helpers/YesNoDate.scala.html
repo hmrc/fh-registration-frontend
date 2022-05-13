@@ -52,18 +52,20 @@
 }
 
 <div class="@{formGroupClass}" id="@{fieldName}_group">
-    <fieldset class="inline">
+    <fieldset class="inline" @if(params.yesNoHintText.nonEmpty || params.hasErrors){
+        aria-describedby="@if(params.yesNoHintText.nonEmpty){@{fieldName}-hint} @if(params.hasErrors){@{fieldName}-error}"
+      }>
 
         <legend class="form-label-bold">
             @params.yesNoLabel
         </legend>
 
         @if(!params.yesNoHintText.isEmpty){
-        <span class="form-hint">@params.yesNoHintText</span>
+        <span id="@{fieldName}-hint" class="form-hint">@params.yesNoHintText</span>
         }
 
         @if(params.hasErrors){
-            <span class="error-message">
+            <span id="@{fieldName}-error" class="error-message">
               @params.yesNoError
             </span>
         }
