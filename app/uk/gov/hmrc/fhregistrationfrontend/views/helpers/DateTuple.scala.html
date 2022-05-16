@@ -64,12 +64,14 @@
   </legend>
 }
 
-<fieldset class="@{formGroupClass}" id="@{fieldName}_container">
+<fieldset class="@{formGroupClass}" id="@{fieldName}_container" @if(params.hintText.nonEmpty || params.hasErrors){
+  aria-describedby="@if(params.hintText.nonEmpty){@{params.name}-hint} @if(params.hasErrors){@{params.name}-inline-error}"
+}>
 
     @legend
 
     @if(params.hintText.nonEmpty){
-      <span class="form-hint">@params.hintText</span>
+      <span id="@{params.name}-hint" class="form-hint">@params.hintText</span>
     }
 
     @if(params.hasErrors){

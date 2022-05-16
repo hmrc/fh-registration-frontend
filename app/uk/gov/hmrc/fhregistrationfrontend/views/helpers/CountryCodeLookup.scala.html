@@ -326,6 +326,7 @@
               aria-haspopup="true"
               aria-controls="@{countryCodeName}-suggestions-list-container"
               value="@params.value"
+              @if(params.hasErrors) {aria-describedby="@{fieldName}-inline-error"}
       />
       <i class="suggestions-clear js-suggestions-clear"></i>
       <span role="status" aria-live="assertive" aria-relevant="additions" class="visuallyhidden js-suggestions-status-message" id="autoCompleteSuggestionStatus"></span>

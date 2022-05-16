@@ -69,18 +69,18 @@
 
     @legend
 
-    @if(params.hasErrors) {
-        <span class="error-message" id="@{params.name}-inline-error">
-          @params.error
-        </span>
-    }
-
     @if(params.hintText.nonEmpty){
       <span id="@{params.name}-hint" class="form-hint">@params.hintText</span>
     }
 
     @if(params.hintHtml.nonEmpty){
       <span id="@{params.name}-hint" class="form-hint">@params.hintHtml</span>
+    }
+
+    @if(params.hasErrors) {
+      <span class="error-message" id="@{params.name}-inline-error">
+        @params.error
+      </span>
     }
 
     @for(radio <- params.radios){
