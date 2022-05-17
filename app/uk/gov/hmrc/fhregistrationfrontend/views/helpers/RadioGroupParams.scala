@@ -25,7 +25,6 @@ case class RadioGroupParams(
   legend: Option[String] = None,
   legendAsHeading: Boolean = false,
   legendSize: Option[String] = None,
-  required: Boolean = false,
   error: Option[String] = None,
   value: Option[String] = None,
   hintText: Option[String] = None,

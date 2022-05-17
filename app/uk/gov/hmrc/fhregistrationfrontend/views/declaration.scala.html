@@ -119,7 +119,6 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
         RadioGroupParams(
           name = Some(usingDefaultEmailKey),
           legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
-          required = true,
           hasErrors = declarationForm(usingDefaultEmailKey).hasErrors,
           error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
           value = declarationForm(usingDefaultEmailKey).value,

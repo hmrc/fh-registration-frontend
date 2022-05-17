@@ -54,7 +54,6 @@ main_template: main_template
         legend = Some(title),
         legendAsHeading = true,
         inline = true,
-        required = true,
         error = Some(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error))),
         hasErrors = confirmationForm(confirmKey).hasErrors,
         value = confirmationForm(confirmKey).value,
@@ -98,7 +97,6 @@ main_template: main_template
         RadioGroupParams(
           name = Some(usingDefaultEmailKey),
           legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
-          required = true,
           hasErrors = confirmationForm(usingDefaultEmailKey).hasErrors,
           error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
           value = confirmationForm(usingDefaultEmailKey).value,
