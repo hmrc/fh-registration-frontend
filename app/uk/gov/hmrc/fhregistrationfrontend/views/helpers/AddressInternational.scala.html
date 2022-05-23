@@ -24,7 +24,7 @@
     case _ => params.name
   }
 }
-
+<fieldset id="@{fieldName}-fieldset">
 <legend class="form-label-bold">@{params.label}</legend>
 
 @if(params.hasErrors) {
@@ -77,3 +77,4 @@
     hasErrors = formDate(s"$fieldName.countryCode").hasErrors
   )
 )
+</fieldset>

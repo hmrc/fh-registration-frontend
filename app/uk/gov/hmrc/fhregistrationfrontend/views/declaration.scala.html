@@ -72,7 +72,9 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
         label = Messages("fh.declaration.person_name.label"),
         value = declarationForm(fullNameKey).value,
         error = Messages("fh.declaration.person_name." + declarationForm(fullNameKey).error.fold("")(_.message)),
-        hasErrors = declarationForm(fullNameKey).hasErrors
+        hasErrors = declarationForm(fullNameKey).hasErrors,
+        autocomplete = Some("name"),
+        spellcheck = false
       )
     )
 

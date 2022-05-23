@@ -39,8 +39,10 @@ case class TextInputParams(
   hintText: Option[String] = None,
   error: String,
   hasErrors: Boolean = false,
-  isNumber: Boolean = false,
   isEmail: Boolean = false,
   hiddenLabel: Boolean = false,
-  labelAsHeading: Boolean = false
+  labelAsHeading: Boolean = false,
+  autocomplete: Option[String] = None,
+  spellcheck: Boolean = true,
+  inputType: Option[String] = Some("text")
 )

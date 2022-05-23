@@ -97,7 +97,7 @@
           value = emailVerificationForm(alternativeEmailKey).value,
           error = Messages(s"fh.emailVerification.$alternativeEmailKey." + emailVerificationForm(alternativeEmailKey).error.fold("")(_.message)),
           hasErrors = emailVerificationForm(alternativeEmailKey).hasErrors,
-          isEmail = true
+          inputType = Some("email")
         )
       )
     </div>
