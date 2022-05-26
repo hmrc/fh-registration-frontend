@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,9 @@
         label = Messages("fh.contact_person.first_name.label"),
         value = contactPersonForm(firstNameKey).value,
         error = Messages("fh.contact_person.firstName." + contactPersonForm(firstNameKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(firstNameKey).hasErrors
+        hasErrors = contactPersonForm(firstNameKey).hasErrors,
+        autocomplete = Some("given-name"),
+        spellcheck = false
       )
     )
 
@@ -78,7 +80,9 @@
         label = Messages("fh.contact_person.last_name.label"),
         value = contactPersonForm(lastNameKey).value,
         error = Messages("fh.contact_person.lastName." + contactPersonForm(lastNameKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(lastNameKey).hasErrors
+        hasErrors = contactPersonForm(lastNameKey).hasErrors,
+        autocomplete = Some("family-name"),
+        spellcheck = false
       )
     )
 
@@ -98,7 +102,9 @@
         label = Messages("fh.contact_person.telephone.label"),
         value = contactPersonForm(telephoneKey).value,
         error = Messages("fh.contact_person.telephone." + contactPersonForm(telephoneKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(telephoneKey).hasErrors
+        hasErrors = contactPersonForm(telephoneKey).hasErrors,
+        autocomplete = Some("tel"),
+        inputType = Some("tel")
       )
     )
 

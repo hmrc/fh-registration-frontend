@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,6 @@
         legendAsHeading = true,
         hintText = Some(Messages("fh.business_customers.hint_text")),
         inline = false,
-        required = true,
         hasErrors = businessCustomersForm(numberOfCustomersKey).hasErrors,
         error = Some(Messages("fh.numberOfCustomers.error.required")),
         value = businessCustomersForm(numberOfCustomersKey).value,

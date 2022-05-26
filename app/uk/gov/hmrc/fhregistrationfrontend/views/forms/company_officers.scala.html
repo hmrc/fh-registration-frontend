@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -243,7 +243,6 @@
           name = Some(s"$individualIdentificationKey.$roleKey"),
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
-          required = true,
           hasErrors = companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors,
           value = companyOfficersForm(s"$individualIdentificationKey.$roleKey").value,
           error = Some(Messages("fh.individualIdentification.role.error.required", section)),
@@ -343,7 +342,6 @@
           value = companyOfficersForm(s"$companyIdentificationKey.$roleKey").value,
           legend = Some(Messages("fh.company_officers.status.label")),
           inline = false,
-          required = true,
           hasErrors = companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors,
           error = Some(Messages("fh.individualIdentification.role.error.required", section)),
           radios = List(

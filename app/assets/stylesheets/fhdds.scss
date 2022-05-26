@@ -1,0 +1,56 @@
+// Ensure the confirmation panel is the correct colour
+.transaction-banner--complete {
+    background-color: #00703c;
+    color: #fff;
+}
+
+// Prevent the sign out link being hidden behind the menu option on small viewports
+#global-header .header-proposition a.menu {
+    display: none;
+}
+.js-enabled #global-header .header-proposition #proposition-links {
+    display: block;
+}
+
+
+// Make details links display with arrow
+details > summary:first-of-type {
+    display: list-item;
+}
+
+
+.form-control, 
+textarea, 
+input[type=text], 
+input[type=password] {
+    border: 2px solid #0b0c0c;
+}
+
+.form-control:focus, 
+textarea:focus, 
+input[type=text]:focus, 
+input[type=password]:focus {
+    border-width: 2px;
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+    -webkit-box-shadow: inset 0 0 0 2px;
+    box-shadow: inset 0 0 0 2px;
+}
+
+.form-control-error, 
+textarea.form-control-error, 
+input[type=text].form-control-error, 
+input[type=password].form-control-error {
+    border-width: 2px;
+    border-color: #d4351c;
+}
+
+.form-control-error.form-control-error:focus, 
+textarea.form-control-error:focus, 
+input[type=text].form-control-error:focus, 
+input[type=password].form-control-error:focus {
+    border-width: 2px;
+    border-color: #0b0c0c;
+    -webkit-box-shadow: inset 0 0 0 2px;
+    box-shadow: inset 0 0 0 2px;
+}

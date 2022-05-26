@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,14 +38,13 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
   <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue}" method="POST">
     <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-    
+
     @helper.CSRF.formField
 
     @RadioGroup(
       RadioGroupParams(
         name = Some("deleteOrContinue"),
         inline = false,
-        required = true,
         legend = Some(Messages("fh.continue_delete.to_do")),
         hasErrors = act("act").hasErrors,
         error = Some(Messages("fh.business_customers.error")),

@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,12 +39,10 @@
 
 @linksElement = {
     @if(linkElement.isEmpty) {
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/palette.css")'/>
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/focus.css")'/>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fhdds.css")'/>
     } else {
         @linkElement.get
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/palette.css")'/>
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/focus.css")'/>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fhdds.css")'/>
     }
 }
 
@@ -137,7 +135,7 @@
             mainContentHeader = mainContentHeader,
             serviceInfo = serviceInfo,
             getHelpForm = getHelpForm,
-            sidebar = sidebar)
+            sidebar = sidebar
         )
 
     }

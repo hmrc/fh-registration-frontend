@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,27 +60,32 @@
   value.toLowerCase().replace(" ", "-")
 }
 
-  <fieldset @if(params.inline){class="inline @formGroupClass"} else {class="@formGroupClass"} id="@{params.name}_fieldset">
+  <fieldset
+    @if(params.inline){class="inline @formGroupClass"} else {class="@formGroupClass"}
+    id="@{params.name}_fieldset"
+    @if(params.hintText.nonEmpty || params.hintHtml.nonEmpty || params.hasErrors){
+      aria-describedby="@if(params.hintText.nonEmpty || params.hintHtml.nonEmpty){@{params.name}-hint} @if(params.hasErrors){@{params.name}-inline-error}"
+    }>
 
     @legend
 
-    @if(params.hasErrors) {
-        <span class="error-message" id="@{params.name}-inline-error">
-          @params.error
-        </span>
-    }
-
     @if(params.hintText.nonEmpty){
-      <span class="form-hint">@params.hintText</span>
+      <span id="@{params.name}-hint" class="form-hint">@params.hintText</span>
     }
 
     @if(params.hintHtml.nonEmpty){
-      <span class="form-hint">@params.hintHtml</span>
+      <span id="@{params.name}-hint" class="form-hint">@params.hintHtml</span>
+    }
+
+    @if(params.hasErrors) {
+      <span class="error-message" id="@{params.name}-inline-error">
+        @params.error
+      </span>
     }
 
     @for(radio <- params.radios){
       <div class="multiple-choice" @if(radio.dataTarget.nonEmpty){data-target="@radio.dataTarget"}>
-        <input id="@{params.name}-@{makeSelector(radio.value)}" class="@inputClass" type="radio" name="@params.name" value="@radio.value" required="required" @checked(radio.value)>
+        <input id="@{params.name}-@{makeSelector(radio.value)}" class="@inputClass" type="radio" name="@params.name" value="@radio.value" @checked(radio.value)>
         <label for="@{params.name}-@{makeSelector(radio.value)}">@radio.label</label>
       </div>
     }

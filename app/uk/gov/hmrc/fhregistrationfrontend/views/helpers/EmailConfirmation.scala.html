@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@
     </label>
 
     @if(params.hintText.nonEmpty){
-        <span class="form-hint">@params.hintText</span>
+        <span id="@{fieldName}-hint" class="form-hint">@params.hintText</span>
     }
 
     @if(params.hasErrors) {
@@ -60,11 +60,14 @@
     }
 
     <input type="@{if(params.isEmail) "email" else if (params.isNumber) "number" else "text"}"
-
     class="@{inputClass}"
     id="@{s"$fieldName.email"}"
     name="@{s"$fieldName.email"}"
-        @if(params.value.nonEmpty){value="@{params.value}"}>
+        @if(params.value.nonEmpty){value="@{params.value}"} 
+        @if(params.hintText.nonEmpty || params.hasErrors){
+            aria-describedby="@if(params.hintText.nonEmpty){@{fieldName}-hint} @if(params.hasErrors){@{fieldName}-inline-error}"
+        }
+    >
 
     <label class="form-label confirmation-label" for="@{fieldName}-confirmation">
     @params.labelConfirmation

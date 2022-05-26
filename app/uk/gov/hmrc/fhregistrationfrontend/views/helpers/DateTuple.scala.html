@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,12 +64,14 @@
   </legend>
 }
 
-<fieldset class="@{formGroupClass}" id="@{fieldName}_container">
+<fieldset class="@{formGroupClass}" id="@{fieldName}_container" @if(params.hintText.nonEmpty || params.hasErrors){
+  aria-describedby="@if(params.hintText.nonEmpty){@{params.name}-hint} @if(params.hasErrors){@{params.name}-inline-error}"
+}>
 
     @legend
 
     @if(params.hintText.nonEmpty){
-      <span class="form-hint">@params.hintText</span>
+      <span id="@{params.name}-hint" class="form-hint">@params.hintText</span>
     }
 
     @if(params.hasErrors){
@@ -81,15 +83,15 @@
     <div class="form-date">
         <div class="form-group form-group-day">
             <label class="form-label" for="@{s"$fieldName.day"}">@Messages("fh.dateOfIncorporation.day")</label>
-            <input class="@{inputClass}" id="@{s"$fieldName.day"}" name="@{s"$fieldName.day"}" type="number" value="@{dayValue}">
+            <input class="@{inputClass}" id="@{s"$fieldName.day"}" name="@{s"$fieldName.day"}" type="text" inputmode="numeric" pattern="[0-9]*" value="@{dayValue}">
         </div>
         <div class="form-group form-group-month">
             <label class="form-label" for="@{s"$fieldName.month"}">@Messages("fh.dateOfIncorporation.month")</label>
-            <input class="@{inputClass}" id="@{s"$fieldName.month"}" name="@{s"$fieldName.month"}" type="number" value="@{monthValue}">
+            <input class="@{inputClass}" id="@{s"$fieldName.month"}" name="@{s"$fieldName.month"}" type="text" inputmode="numeric" pattern="[0-9]*" value="@{monthValue}">
         </div>
         <div class="form-group form-group-year">
             <label class="form-label" for="@{s"$fieldName.year"}">@Messages("fh.dateOfIncorporation.year")</label>
-            <input class="@{inputClass}" id="@{s"$fieldName.year"}" name="@{s"$fieldName.year"}" type="number" value="@{yearValue}">
+            <input class="@{inputClass}" id="@{s"$fieldName.year"}" name="@{s"$fieldName.year"}" type="text" inputmode="numeric" pattern="[0-9]*" value="@{yearValue}">
         </div>
     </div>
 

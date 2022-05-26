@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,6 @@
         name = Some(timeAtCurrentAddressKey),
         legend = Some(Messages("fh.main_business_address.time_at_address.label")),
         inline = false,
-        required = true,
         error = Some(Messages("fh.timeAtCurrentAddress.error.required")),
         hasErrors = mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors,
         value = mainBusinessAddressForm(timeAtCurrentAddressKey).value,

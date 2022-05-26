@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -318,7 +318,6 @@
               class="@{inputClass} form-control--block js-hmrc-auto-complete"
               autocomplete="off"
               spellcheck="false"
-              required
               data-select-elem="countryCode"
               data-target-elem="countryCode"
               data-rule-suggestion="true"
@@ -326,6 +325,7 @@
               aria-haspopup="true"
               aria-controls="@{countryCodeName}-suggestions-list-container"
               value="@params.value"
+              @if(params.hasErrors) {aria-describedby="@{fieldName}-inline-error"}
       />
       <i class="suggestions-clear js-suggestions-clear"></i>
       <span role="status" aria-live="assertive" aria-relevant="additions" class="visuallyhidden js-suggestions-status-message" id="autoCompleteSuggestionStatus"></span>

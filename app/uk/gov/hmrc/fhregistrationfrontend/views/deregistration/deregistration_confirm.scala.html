@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ main_template: main_template
         legend = Some(title),
         legendAsHeading = true,
         inline = true,
-        required = true,
         error = Some(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error))),
         hasErrors = confirmationForm(confirmKey).hasErrors,
         value = confirmationForm(confirmKey).value,
@@ -93,12 +92,11 @@ main_template: main_template
 
     } else {
       <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
-      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend") @defaultEmail</legend>
+      <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)</legend>
       @RadioGroup(
         RadioGroupParams(
           name = Some(usingDefaultEmailKey),
           legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
-          required = true,
           hasErrors = confirmationForm(usingDefaultEmailKey).hasErrors,
           error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
           value = confirmationForm(usingDefaultEmailKey).value,

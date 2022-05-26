@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
                     elem.registrationNumber
                 }</td>
                  <td>
-                     <a class="button" type="submit" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.loadDeletePage(elem.formBundleId)">@Messages("DELETE")</a>
+                     <a class="button" role="button" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.loadDeletePage(elem.formBundleId)">@Messages("DELETE")</a>
                  </td>
                 </tr>
 
