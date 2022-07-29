@@ -8,10 +8,13 @@ import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 val monocleVersion = "2.1.0"
+val bootstrapVersion = "5.24.0"
+val playVersion = "play-28"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc"                 %% "bootstrap-frontend-play-28"       % "5.12.0",
+  "uk.gov.hmrc"                 %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
+  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.4.0-$playVersion",
   "uk.gov.hmrc"                 %% "govuk-template"                   % "5.69.0-play-28",
   "uk.gov.hmrc"                 %% "play-ui"                          % "9.6.0-play-28",
   "uk.gov.hmrc"                 %% "play-partials"                    % "8.2.0-play-28",
@@ -34,6 +37,7 @@ val compile = Seq(
 )
 
 def test(scope: String = "test,it") = Seq(
+  "uk.gov.hmrc"                 %% "bootstrap-test-play-28"         % bootstrapVersion   % scope,
   "org.scalatest"               %% "scalatest"                      % "3.2.9"    % scope,
   "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"    % scope,
   "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"  % scope,

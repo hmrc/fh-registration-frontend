@@ -141,11 +141,13 @@ class FormPageControllerSpec
       setupPageAction(tradingNamePage)
       setupSave4Later()
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        TradingNameForm.hasTradingNameKey → "true",
-        TradingNameForm.tradingNameKey → "Dodgy Co",
-        "saveAction" → "saveForLater"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          TradingNameForm.hasTradingNameKey → "true",
+          TradingNameForm.tradingNameKey → "Dodgy Co",
+          "saveAction" → "saveForLater"
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
 
       status(result) shouldBe SEE_OTHER

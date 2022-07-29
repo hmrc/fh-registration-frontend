@@ -81,9 +81,11 @@ class WithdrawalControllerSpec
     }
 
     "Redirect from postReason to confirm when reason is given" in {
-      val request = FakeRequest().withFormUrlEncodedBody(
-        WithdrawalReasonForm.reasonKey → WithdrawalReasonEnum.AppliedInError.toString
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          WithdrawalReasonForm.reasonKey → WithdrawalReasonEnum.AppliedInError.toString
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.postReason)(request))
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/withdraw/confirm")
@@ -131,11 +133,13 @@ class WithdrawalControllerSpec
     "Redirect from postConfirmation if all data is give" in {
       setupKeyStoreWithdrawalReason()
       setupWithdrawal()
-      val request = FakeRequest().withFormUrlEncodedBody(
-        ConfirmationForm.confirmKey → "true",
-        ConfirmationForm.usingDefaultEmailKey → "true",
-        ConfirmationForm.defaultEmailKey → "some@email.com"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          ConfirmationForm.confirmKey → "true",
+          ConfirmationForm.usingDefaultEmailKey → "true",
+          ConfirmationForm.defaultEmailKey → "some@email.com"
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.postConfirmation)(request))
 
       status(result) shouldBe SEE_OTHER
@@ -148,9 +152,11 @@ class WithdrawalControllerSpec
     "Redirect from postConfirmation if tne answer is no" in {
       setupKeyStoreWithdrawalReason()
       setupWithdrawal()
-      val request = FakeRequest().withFormUrlEncodedBody(
-        ConfirmationForm.confirmKey → "false"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          ConfirmationForm.confirmKey → "false"
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.postConfirmation)(request))
 
       status(result) shouldBe SEE_OTHER

@@ -88,10 +88,12 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
       setupEmailVerificationConnector("c@c.co", true)
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        EmailVerificationForm.emailOptionKey → "true",
-        EmailVerificationForm.defaultEmailKey → "c@c.co"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          EmailVerificationForm.emailOptionKey → "true",
+          EmailVerificationForm.defaultEmailKey → "c@c.co"
+        )
+        .withMethod("POST")
 
       val result = await(csrfAddToken(controller.submitContactEmail())(request))
 
@@ -104,10 +106,12 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
       setupEmailVerificationConnector("c@c.co", false)
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        EmailVerificationForm.emailOptionKey → "true",
-        EmailVerificationForm.defaultEmailKey → "c@c.co"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          EmailVerificationForm.emailOptionKey → "true",
+          EmailVerificationForm.defaultEmailKey → "c@c.co"
+        )
+        .withMethod("POST")
 
       val result = await(csrfAddToken(controller.submitContactEmail())(request))
 
