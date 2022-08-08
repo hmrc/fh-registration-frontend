@@ -221,9 +221,11 @@ class ApplicationControllerSpec
     "Redirect to resumeForm when 'continue'" in {
       setupPreconditions(userLastTimeSaved = Some(System.currentTimeMillis()))
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        "deleteOrContinue" → "continue"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          "deleteOrContinue" → "continue"
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
 
       status(result) shouldBe SEE_OTHER
@@ -233,9 +235,11 @@ class ApplicationControllerSpec
     "Render confirm_delete" in {
       setupPreconditions(userLastTimeSaved = Some(System.currentTimeMillis()))
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        "deleteOrContinue" → "delete"
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          "deleteOrContinue" → "delete"
+        )
+        .withMethod("POST")
       val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
 
       status(result) shouldBe OK
@@ -429,9 +433,11 @@ class ApplicationControllerSpec
       setupUserAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
-      val request = FakeRequest().withFormUrlEncodedBody(
-        BusinessTypeForm.businessTypeKey → BusinessType.CorporateBody.toString
-      )
+      val request = FakeRequest()
+        .withFormUrlEncodedBody(
+          BusinessTypeForm.businessTypeKey → BusinessType.CorporateBody.toString
+        )
+        .withMethod("POST")
 
       val result = await(csrfAddToken(controller.submitBusinessType)(request))
 
@@ -444,7 +450,7 @@ class ApplicationControllerSpec
     "Redirect to resumeForm" in {
       setupUserAction()
 
-      val request = FakeRequest()
+      val request = FakeRequest().withMethod("POST")
       val result = await(csrfAddToken(controller.startForm)(request))
 
       status(result) shouldBe SEE_OTHER
