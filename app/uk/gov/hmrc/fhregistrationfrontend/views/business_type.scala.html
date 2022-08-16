@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 )
 
 @(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -42,7 +42,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
 
 }
 
-@mainTemplate(title = titlePrefix + title, pageScripts = Some(scripts)) {
+@mainTemplate(pageTitle = Messages("fh.business_type.title" + " - " + Messages("service.name") + " - " + Messages("gov.uk")), appConfig) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
   <a href="@backUrl" class="link-back">@Messages("fh.generic.back")</a>
