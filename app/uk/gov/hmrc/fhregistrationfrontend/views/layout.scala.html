@@ -44,6 +44,7 @@
     signOutUrl = Some(routes.SignOutController.signout.url),
     // backLinkUrl = Some(routes.ServiceController.start().url),
     displayHmrcBanner = true,
+    additionalScriptsBlock = pageScripts,
     // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl)),
     nonce = CSPNonce.get,
 )(content)
