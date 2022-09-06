@@ -16,12 +16,12 @@
 
 @import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 
 @this(
-    main_template: main_template
+    main_template_old: main_template_old
 )
 
 @(date: DateTime, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
@@ -36,7 +36,7 @@
   Messages("fh.ack.deregister")
 }
 
-    @main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+    @main_template_old(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
   <div class="transaction-banner--complete">
 
     <h1 class="transaction-banner__heading">
