@@ -14,17 +14,11 @@
  * limitations under the License.
  *@
 
-@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.PageHeadingParams)
+@(alert:String, linkText: Option[String] = None, linkVal: Option[String] = None)
 
-@headingClasses = @{
-    params.classNames match {
-        case Some(classNames) => {
-            s"""class=${classNames}"""
-        }
-        case _ => {
-            ""
-        }
+<p class="govuk-inset-text">
+    @{alert}
+    @if(linkText.nonEmpty) {
+        <a class="govuk-link" href=@{Some(linkVal)}>@{Some(linkText)}</a>
     }
-}
-
-<h1 class="govuk-heading-l" @{headingClasses}>@{params.heading}</h1>
+</p>

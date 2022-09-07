@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.data.FormError
+
 import java.time.LocalDate
 import java.util.Date
-
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{MessagesControllerComponents, Result, Results}
@@ -26,13 +27,14 @@ import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.{alternativeEmailKey, declarationForm, fullNameKey, jobTitleKey}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -87,14 +89,18 @@ class DeclarationController @Inject()(
   def submitForm() = summaryAction.async { implicit request ⇒
     val form = declarationForm.bindFromRequest()
     form.fold(
-      formWithErrors =>
+      hasErrors = formWithErrors => {
+        val errors: List[FormError] = formWithErrors.errors.groupBy(_.key).map(x => x._2.head).toList
+        println(" errors are ::" + formWithErrors)
+        val newFormErrors = formWithErrors.copy(errors = errors)
         Future successful BadRequest(
           views.declaration(
-            formWithErrors,
+            newFormErrors,
             Some(request.verifiedEmail),
             request.bpr,
-            summaryPageParams(request.journeyRequest.journeyType))),
-      usersDeclaration => {
+            summaryPageParams(request.journeyRequest.journeyType)))
+      },
+      success = usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
           error ⇒
             Future successful BadRequest(
