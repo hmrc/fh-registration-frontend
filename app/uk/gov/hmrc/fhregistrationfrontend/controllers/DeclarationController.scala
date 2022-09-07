@@ -91,7 +91,6 @@ class DeclarationController @Inject()(
     form.fold(
       hasErrors = formWithErrors => {
         val errors: List[FormError] = formWithErrors.errors.groupBy(_.key).map(x => x._2.head).toList
-        println(" errors are ::" + formWithErrors)
         val newFormErrors = formWithErrors.copy(errors = errors)
         Future successful BadRequest(
           views.declaration(
