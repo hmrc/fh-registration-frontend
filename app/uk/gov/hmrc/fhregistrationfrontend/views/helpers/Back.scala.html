@@ -16,8 +16,10 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@(navigation: Navigation)(implicit message: Messages)
+@(navigation: Navigation, viewHelpers: ViewHelpers)(implicit messages: Messages)
 
 @backLink = @{
   navigation.back.map {
@@ -28,9 +30,7 @@
 }
 
 @backLink.map { link =>
-  <p>
-    <a id="back" class="back-link print-hidden" href="@link">
-    @Messages("link.back")
-    </a>
+  <p class="govuk-body">
+      @viewHelpers.govukBackLink(BackLink(href = link.url, content = Text(messages("link.back"))))
   </p>
 }
