@@ -16,9 +16,9 @@
 
 @(alert:String, linkText: Option[String] = None, linkVal: Option[String] = None)
 
-<div class="alert alert--info margin-bottom-30" role="alert">
+<p class="govuk-inset-text">
     @{alert}
     @if(linkText.nonEmpty) {
-      <a href=@{Some(linkVal)}>@{Some(linkText)}</a>
+        <a class="govuk-link" href=@{Some(linkVal)}>@{Some(linkText)}</a>
     }
-</div>
+</p>
