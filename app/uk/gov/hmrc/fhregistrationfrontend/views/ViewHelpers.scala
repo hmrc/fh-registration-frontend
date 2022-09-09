@@ -33,5 +33,6 @@ class ViewHelpers @Inject()(
   val form: FormWithCSRF,
   val govukErrorMessage: GovukErrorMessage,
   val govukBackLink: GovukBackLink,
-  val govukSummaryList: GovukSummaryList
+  val govukSummaryList: GovukSummaryList,
+  val govukDetails: GovukDetails
 )
