@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
-import java.time.LocalDate
+import java.time.{LocalDate}
 import java.time.format.DateTimeFormatter
-
 import play.api.data.Forms._
 import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 import Constraints.oneOfConstraint
 import org.apache.commons.lang3.StringUtils
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError, ValidationResult}
 
 import scala.util.Try
 
@@ -100,6 +100,64 @@ object Mappings {
       "Line4"       -> addressLine,
       "countryCode" -> nonEmptyText
     )(InternationalAddress.apply)(InternationalAddress.unapply)
+
+  private type RawFormValues = (String, String, String)
+
+  private def invalid(error: String, params: String*) =
+    Invalid(
+      Seq(
+        ValidationError(error, params: _*)
+      )
+    )
+
+  private def localDateFromValues(d: String, m: String, y: String) = Try(LocalDate.of(y.toInt, m.toInt, d.toInt))
+
+  private val allDateValuesEntered: RawFormValues => ValidationResult = {
+    case ("", "", "") => invalid("date.empty.error")
+    case ("", "", _)  => invalid("day-and-month.missing")
+    case (_, "", "")  => invalid("month-and-year.missing")
+    case ("", _, "")  => invalid("day-and-year.missing")
+    case ("", _, _)   => invalid("day.missing")
+    case (_, "", _)   => invalid("month.missing")
+    case (_, _, "")   => invalid("year.missing")
+    case _            => Valid
+  }
+
+  private val dateIsValid: RawFormValues => ValidationResult = {
+    case (d, m, y) if Try(s"$d$m$y".toInt).isFailure         => invalid("date.error.invalid")
+    case (d, m, y) if localDateFromValues(d, m, y).isFailure => invalid("date.error.invalid")
+    case _                                                   => Valid
+  }
+
+  private val dateInAllowedRange: RawFormValues => ValidationResult = {
+    case (d, m, y) =>
+      localDateFromValues(d, m, y)
+        .map { parsedDate =>
+          val enteredYear = parsedDate.getYear
+
+          if (enteredYear >= 1800 && enteredYear <= 2999) Valid
+          else
+            invalid("date.error.invalid")
+        }
+        .getOrElse(Valid)
+    case _ => Valid
+  }
+
+  def localNew =
+    tuple(
+      "day"   -> text,
+      "month" -> text,
+      "year"  -> text
+    ).transform({ case (d, m, y) => (d.trim, m.trim, y.trim) }, { v: RawFormValues =>
+        v
+      })
+      .verifying(Constraint(allDateValuesEntered(_)))
+      .verifying(Constraint(dateIsValid(_)))
+      .verifying(Constraint(dateInAllowedRange(_)))
+      .transform(
+        { case (d, m, y) => LocalDate.of(y.toInt, m.toInt, d.toInt) },
+        (d: LocalDate) => (d.getDayOfMonth.toString, d.getMonthValue.toString, d.getYear.toString)
+      )
 
   def localDate =
     tuple(
