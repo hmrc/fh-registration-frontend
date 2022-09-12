@@ -38,7 +38,7 @@ class DateOfIncorporationSpecs extends UnitSpec {
       result shouldBe DateOfIncorporation(LocalDate.parse("31/07/2015", dtf))
     }
 
-    "validate a form with some date missing" in {
+    "validate a form with day missing" in {
       val data = Map(
         "dateOfIncorporation.month" -> "7",
         "dateOfIncorporation.year"  -> "2015"
@@ -46,6 +46,70 @@ class DateOfIncorporationSpecs extends UnitSpec {
       val result = form.bind(data)
       val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
       errors should contain("dateOfIncorporation.day" → "error.required")
+
+      result.value shouldBe None
+    }
+
+    "validate a form with month missing" in {
+      val data = Map(
+        "dateOfIncorporation.day"   -> "7",
+        "dateOfIncorporation.month" -> "",
+        "dateOfIncorporation.year"  -> "2015"
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain("dateOfIncorporation" → "month.missing")
+
+      result.value shouldBe None
+    }
+
+    "validate a form with year missing" in {
+      val data = Map(
+        "dateOfIncorporation.day"   -> "7",
+        "dateOfIncorporation.month" -> "3",
+        "dateOfIncorporation.year"  -> ""
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain("dateOfIncorporation" → "year.missing")
+
+      result.value shouldBe None
+    }
+
+    "validate a form with day and year missing" in {
+      val data = Map(
+        "dateOfIncorporation.day"   -> "",
+        "dateOfIncorporation.month" -> "3",
+        "dateOfIncorporation.year"  -> ""
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain("dateOfIncorporation" → "day-and-year.missing")
+
+      result.value shouldBe None
+    }
+
+    "validate a form with day and month missing" in {
+      val data = Map(
+        "dateOfIncorporation.day"   -> "",
+        "dateOfIncorporation.month" -> "",
+        "dateOfIncorporation.year"  -> "2016"
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain("dateOfIncorporation" → "day-and-month.missing")
+
+      result.value shouldBe None
+    }
+    "validate a form with month and year missing" in {
+      val data = Map(
+        "dateOfIncorporation.day"   -> "4",
+        "dateOfIncorporation.month" -> "",
+        "dateOfIncorporation.year"  -> ""
+      )
+      val result = form.bind(data)
+      val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+      errors should contain("dateOfIncorporation" → "month-and-year.missing")
 
       result.value shouldBe None
     }
@@ -58,7 +122,7 @@ class DateOfIncorporationSpecs extends UnitSpec {
       )
       val result = form.bind(data)
       val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
-      errors should contain("dateOfIncorporation" → "error.invalid")
+      errors should contain("dateOfIncorporation" → "date.error.invalid")
 
       result.value shouldBe None
     }
@@ -72,7 +136,7 @@ class DateOfIncorporationSpecs extends UnitSpec {
       val result = form.bind(data)
 
       val errors = result.errors.flatMap(v ⇒ v.messages)
-      errors should contain("error.max")
+      errors should contain("date.error.invalid")
       result.value shouldBe None
     }
 
