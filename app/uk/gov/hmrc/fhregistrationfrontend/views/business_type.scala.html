@@ -19,11 +19,12 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 
 @this(
-        layout: layout, viewHelpers: ViewHelpers
+        layout: layout, viewHelpers: ViewHelpers)
 )
 
 
@@ -58,7 +59,7 @@
 
 @layout(pageTitle, Some(pageScripts)) {
 
-    <a href="@backUrl" class="govuk-back-link">@Messages("fh.generic.back")</a>
+    @viewHelpers.govukBackLink(BackLink(href =backUrl, content = Text(messages("fh.generic.back"))))
 
     @if(businessTypeForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList = businessTypeForm.errors.map(e =>
@@ -108,6 +109,8 @@
             content = Text(Messages("button.save.continue"))
         ))
 
+
     }
+
 
 }
