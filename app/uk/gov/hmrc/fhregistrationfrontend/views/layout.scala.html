@@ -28,7 +28,7 @@
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
 
-@(title: String, pageScripts: Option[Html], appConfig: AppConfig)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+@(title: String, pageScripts: Option[Html] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 
 @content = {
     @contentBlock
