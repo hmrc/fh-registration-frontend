@@ -14,18 +14,16 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-  main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 @(importingActivitiesForm: Form[ImportingActivities], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
@@ -33,8 +31,9 @@
 }
 
 @helpHtml = {
-  @Messages("fh.importing_activities.eori.confirm.hint_text1")
-  <a href=@{Messages("link.eoriTeam")} target="_blank">@Messages("fh.importing_activities.eori.link_text")</a>
+  <p class="govuk-body govuk-!-margin-top-2"></p>
+  @messages("fh.importing_activities.eori.confirm.hint_text1")
+  <a class="govuk-link" href=@{messages("link.eoriTeam")} target="_blank">@messages("fh.importing_activities.eori.link_text")</a>
   @Messages("fh.importing_activities.eori.confirm.hint_text2")
 }
 
@@ -46,82 +45,115 @@
   Messages("fh.importing_activities.eori.confirm.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
-
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-  @BackOld(navigation)
-
-  @error_box(importingActivitiesForm)
-
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities"), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(hasEoriKey),
-        hintHtml = Some(helpHtml),
-        hasErrors = importingActivitiesForm(hasEoriKey).hasErrors,
-        legend = Some(title),
-        legendAsHeading = true,
-        error = Some(Messages("fh.hasEori.error.required")),
-        value = importingActivitiesForm(hasEoriKey).value,
-        radios = List(
-          RadioParams(
-            "true",
-            Messages("fh.generic.yes"),
-            Some("hasEori")
-          ),
-          RadioParams(
-            "false",
-            Messages("fh.generic.no")
-          )
-        )
-      )
-    )
-
-    <div class="form-group panel js-hidden" id="hasEori">
-
-      @TextInput(
-        TextInputParams(
-          name = s"$eoriNumberKey.$eoriNumberKey",
-          label = Messages("fh.importing_activities.eori.label"),
-          hintText = Some(Messages("fh.importing_activities.eori.hint_text")),
-          hasErrors = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").hasErrors,
-          value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value,
-          error = Messages("fh.eoriNumber.eoriNumber." + getError(importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").error))
-        )
-      )
-
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"$eoriNumberKey.$goodsImportedOutsideEoriKey"),
-          legend = Some(Messages("fh.importing_activities.eori_used_for_others.confirm.label")),
-          hasErrors = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors,
-          value = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value,
-          error = Some(Messages("fh.eoriNumber.goodsImportedOutsideEori.error.required")),
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes")
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no")
-            )
-          )
-        )
-      )
-
-    </div>
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
+@eoriQuery=  @{
+  viewHelpers.govUkRadios(Radios(
+    fieldset = Some(Fieldset(
+      legend = Some(Legend(
+        content = Text(messages("fh.importing_activities.eori_used_for_others.confirm.label")),
+        classes = "govuk-fieldset__legend--m",
+        isPageHeading = true
+      ))
+    )),
+    idPrefix = Some(s"$eoriNumberKey.$goodsImportedOutsideEoriKey"),
+    name = s"$eoriNumberKey.$goodsImportedOutsideEoriKey",
+    errorMessage = if(importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors) {
+      Some(ErrorMessage(content = Text(messages(s"fh.eoriNumber.goodsImportedOutsideEori.error.required"))))
+    } else None,
+    items = Seq(
+      RadioItem(
+        content = Text("Yes"),
+        value = Some("true"),
+        checked = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value.toList.contains("true")
       ),
-      navigation
+      RadioItem(
+        content = Text("No"),
+        value = Some("false"),
+        checked = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value.toList.contains("false")
+
+      )
     )
+  ))
+}
+
+@conditionalHtml = {
+  <div class="govuk-body">
+  @viewHelpers.govukInput(Input(
+    id = s"$eoriNumberKey.$eoriNumberKey",
+    name = s"$eoriNumberKey.$eoriNumberKey",
+    label = Label(
+      isPageHeading = true,
+      content = HtmlContent(s"<strong>${messages("fh.importing_activities.eori.label")}</strong>")
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    hint = Some(Hint(
+      content = Text(messages("fh.importing_activities.eori.hint_text"))
+    )),
+    errorMessage =
+      importingActivitiesForm.error(s"$eoriNumberKey.$eoriNumberKey").map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.$eoriNumberKey.$eoriNumberKey.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+
+      },
+    value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value
+  ))
+  @eoriQuery
+  </div>
+}
+
+
+
+@layout(title = titlePrefix + title, Some(pageScripts)) {
+
+  @Back(navigation, viewHelpers)
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")) {
+
+    @if(importingActivitiesForm.errors.nonEmpty) {
+
+      @viewHelpers.govukErrorSummary(ErrorSummary(errorList = importingActivitiesForm.errors.groupBy(_.key).map(x => x._2.head).toList.map{ error =>
+        ErrorLink(
+          href = Some(s"#${error.key}"),
+          content = Text(messages(s"fh.${error.key}.${error.message}"))
+        )
+      },
+        title = Text(messages("fh.generic.error"))))
+    }
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(Messages(title)),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      idPrefix = Some(hasEoriKey),
+      name = hasEoriKey,
+      hint = Some(Hint(
+        content = HtmlContent(helpHtml)
+      )),
+      errorMessage = if (importingActivitiesForm(hasEoriKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages(s"fh.hasEori.error.required"))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          content = Text(messages("fh.generic.yes")),
+          value = Some("true"),
+          checked = importingActivitiesForm(hasEoriKey).value.toList.contains("true"),
+          conditionalHtml = Some(conditionalHtml)
+        ),
+        RadioItem(
+          content = Text(messages("fh.generic.no")),
+          value = Some("false"),
+          checked = importingActivitiesForm(hasEoriKey).value.toList.contains("false"),
+        )
+      )
+    ))
+
+
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
+
   }
 }
