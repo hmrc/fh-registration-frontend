@@ -23,9 +23,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -92,12 +92,6 @@
         ))
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
 
-        <p class="govuk-body">
-            <a class="govuk-link" href="@{
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater
-            }">
-            @Messages("link.saveForLater")
-            </a>
-        </p>
+       @SaveForLater()
     }
 }
