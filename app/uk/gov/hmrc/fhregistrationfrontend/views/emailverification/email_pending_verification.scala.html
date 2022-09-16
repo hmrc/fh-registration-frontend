@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -36,9 +35,9 @@
   Messages("fh.emailVerification.pending.title")
 }
 
-@showAlert = @{
+@showAlert = {
   emailSentAgain.filter(_ == true).map { _ =>
-    AlertOld(Messages("fh.emailVerification.emailSentAgain"))
+    Alert(@messages("fh.emailVerification.emailSentAgain"))
   }
 }
 
