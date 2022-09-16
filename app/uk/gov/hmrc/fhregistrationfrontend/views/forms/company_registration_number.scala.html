@@ -14,18 +14,18 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm.companyRegistrationNumberKey
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(companyRegistrationNumberForm: Form[CompanyRegistrationNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -35,7 +35,7 @@
 
 @crnDetails = {
   @Messages("fh.companyRegistrationNumber.details")
-  <a href="@Messages("link.searchCompaniesHouse")" target="_blank">
+  <a class="govuk-link" href="@Messages("link.searchCompaniesHouse")" target="_blank">
     @Messages("fh.companyRegistrationNumber.details_companies_house")
   </a>.
 }
@@ -48,38 +48,50 @@
   Messages("fh.companyRegistrationNumber.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
+    @Back(navigation, viewHelpers)
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey)) {
 
-  @BackOld(navigation)
+        @if(companyRegistrationNumberForm.errors.nonEmpty) {
+            @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                Seq(ErrorLink(
+                    href = Some(s"#${companyRegistrationNumberForm.errors.head.key}"),
+                    content = Text(messages(s"fh.${companyRegistrationNumberForm.errors.head.key}.${companyRegistrationNumberForm.errors.head.message}"))
+                ))
+                ,
+                title = Text(messages("fh.generic.error"))))
+        }
+        @viewHelpers.govukInput(Input(
+            id = companyRegistrationNumberKey,
+            name = companyRegistrationNumberKey,
+            label = Label(
+                isPageHeading = true,
+                classes = "govuk-label--xl",
+                content = Text(title)
+            ),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-half",
+            hint = Some(Hint(
+                content = Text(messages("fh.companyRegistrationNumber.hint_text"))
+            )),
+            errorMessage =
+                companyRegistrationNumberForm.error(companyRegistrationNumberKey).map { e =>
+                    ErrorMessage(
+                        content = Text(messages(s"fh.${e.key}.${e.message}")),
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                    )
 
-  @error_box(companyRegistrationNumberForm)
+                },
+            value = companyRegistrationNumberForm(companyRegistrationNumberKey).value
+        ))
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey), 'novalidate -> "novalidate") {
+        @viewHelpers.govukDetails(Details(
+            summary = Text(messages("fh.companyRegistrationNumber.summary")),
+            content = HtmlContent(crnDetails)
+        ))
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
 
-    @helper.CSRF.formField
-
-    @TextInput(
-      TextInputParams(
-        name = companyRegistrationNumberKey,
-        label = title,
-        value = companyRegistrationNumberForm(companyRegistrationNumberKey).value,
-        error = Messages("fh.companyRegistrationNumber." + getError(companyRegistrationNumberForm(companyRegistrationNumberKey).error)),
-        hasErrors = companyRegistrationNumberForm(companyRegistrationNumberKey).hasErrors,
-        hintText = Some(Messages("fh.companyRegistrationNumber.hint_text")),
-        labelAsHeading = true
-      )
-    )
-
-    @Details(Messages("fh.companyRegistrationNumber.summary"), crnDetails)
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
-  }
+       @SaveForLater()
+    }
 }
