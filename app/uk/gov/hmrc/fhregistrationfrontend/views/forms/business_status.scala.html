@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -84,7 +85,7 @@
 
   @Back(navigation, viewHelpers)
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus")) {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
 
       @if(businessStatusForm.errors.nonEmpty) {
 
@@ -126,12 +127,6 @@
       ))
 
       @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
-      <p class="govuk-body">
-          <a class="govuk-link" href="@{
-              uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater
-          }">
-          @Messages("link.saveForLater")
-          </a>
-      </p>
+      @SaveForLater()
   }
 }
