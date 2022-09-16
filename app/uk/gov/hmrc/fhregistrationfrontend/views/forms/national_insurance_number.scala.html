@@ -28,7 +28,7 @@
 
 @(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@pageScripts = {
+@scripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
@@ -65,7 +65,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title) {
+@layout(title = titlePrefix + title, pageScripts = Some(scripts)) {
 
     @helpers.Back(navigation, viewHelpers)
 
