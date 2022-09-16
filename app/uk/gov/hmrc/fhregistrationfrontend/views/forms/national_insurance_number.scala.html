@@ -14,18 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.{hasNationalInsuranceNumberKey, nationalInsuranceNumberKey}
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -41,40 +40,82 @@
   Messages("fh.national_insurance_number.confirm.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@conditionalHtml = @{
+    viewHelpers.govukInput(Input(
+        id = nationalInsuranceNumberKey,
+        name = nationalInsuranceNumberKey,
+        label = Label(
+            isPageHeading = true,
+            content = HtmlContent(s"<strong>${messages("fh.national_insurance_number.label")}</strong>")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-half",
+        hint = Some(Hint(
+            content = Text(messages("fh.national_insurance_number.hintText"))
+        )),
+        errorMessage =
+            nationalInsuranceNumberForm.error(nationalInsuranceNumberKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+            },
+        value = nationalInsuranceNumberForm(nationalInsuranceNumberKey).value
+    ))
+}
 
-  @BackOld(navigation)
+@layout(title = titlePrefix + title) {
 
-  @error_box(nationalInsuranceNumberForm)
+    @helpers.Back(navigation, viewHelpers)
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("nationalInsuranceNumber"), 'novalidate -> "novalidate") {
+    @if(nationalInsuranceNumberForm.errors.nonEmpty) {
+
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${nationalInsuranceNumberForm.errors.head.key}"),
+                content = Text(messages(s"fh.${nationalInsuranceNumberForm.errors.head.key}." +
+                        s"${nationalInsuranceNumberForm.errors.head.message}"))
+            ))
+            ,
+            title = Text(messages("fh.generic.error"))))
+    }
+
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.
+          save("nationalInsuranceNumber"), 'novalidate -> "novalidate") {
 
     @helper.CSRF.formField
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages(title)),
+                  classes = "govuk-fieldset__legend--l",
+                  isPageHeading = true
+              ))
+          )),
+          idPrefix = Some(hasNationalInsuranceNumberKey),
+          name = hasNationalInsuranceNumberKey,
+          errorMessage = if (nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages(s"fh.nationalInsuranceNumber_yesNo.error.required"))))
+          } else None,
+          items = Seq(
+              RadioItem(
+                  content = Text("Yes"),
+                  value = Some("true"),
+                  checked = nationalInsuranceNumberForm.data.values.toList.contains("true"),
+                  conditionalHtml = Some(conditionalHtml)
+              ),
+              RadioItem(
+                  content = Text("No"),
+                  value = Some("false"),
+                  checked = nationalInsuranceNumberForm.data.values.toList.contains("false"),
 
-    @YesNoText(
-      YesNoTextParams(
-        name = hasNationalInsuranceNumberKey,
-        value = nationalInsuranceNumberForm(nationalInsuranceNumberKey).value,
-        yesNoValue = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).value,
-        yesNoLabel = title,
-        yesNoError = Messages("fh.nationalInsuranceNumber_yesNo.error.required"),
-        valueLabel = Messages("fh.national_insurance_number.label"),
-        valueError = Messages("fh.nationalInsuranceNumber_value." + getError(nationalInsuranceNumberForm(nationalInsuranceNumberKey).error)),
-        valueHintText = Some(Messages("fh.national_insurance_number.hintText")),
-        hasValueError = nationalInsuranceNumberForm(nationalInsuranceNumberKey).hasErrors,
-        hasErrors = nationalInsuranceNumberForm(hasNationalInsuranceNumberKey).hasErrors,
-        legendAsHeading = true
-      )
-    )
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+              )
+          )
+      ))
+
+      @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+      @SaveForLater()
   }
 }
