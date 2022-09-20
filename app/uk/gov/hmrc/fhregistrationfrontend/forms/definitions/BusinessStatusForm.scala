@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{localDate, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{localDate, localNew, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
 
@@ -28,7 +28,7 @@ object BusinessStatusForm {
   val proposedStartDateKey = "proposedStartDate"
 
   private val isNewFulfilmentHouseMapping = isNewFulfilmentBusinessKey → yesOrNo
-  private val proposedStartDateMapping = proposedStartDateKey → (localDate onlyWhen (isNewFulfilmentHouseMapping is true))
+  private val proposedStartDateMapping = proposedStartDateKey → (localNew onlyWhen (isNewFulfilmentHouseMapping is true))
 
   val businessStatusForm = Form(
     mapping(

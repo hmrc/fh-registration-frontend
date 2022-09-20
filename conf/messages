@@ -349,16 +349,14 @@ fh.business_status.new_business.label=When does the business intend to start ope
 fh.business_status.new_business.hint_text=For example, 31 07 2019
 fh.business_status.new_business.error.number=Enter the intended start date
 fh.business_status.new_business.error.pattern=Enter a valid date for the intended start date
-fh.proposedStartDate.day.error.max=Enter a valid day for the intended start date
-fh.proposedStartDate.day.error.min=Enter a valid day for the intended start date
-fh.proposedStartDate.month.error.max=Enter a valid month for the intended start date
-fh.proposedStartDate.month.error.min=Enter a valid month for the intended start date
-fh.proposedStartDate.year.error.max=Enter a valid year for the intended start date
-fh.proposedStartDate.year.error.min=Enter a valid year for the intended start date
-fh.proposedStartDate.day.error.number=Enter the day for the intended start date
-fh.proposedStartDate.month.error.number=Enter the month for the intended start date
-fh.proposedStartDate.year.error.number=Enter the year for the intended start date
-fh.proposedStartDate.error.invalid=Enter a valid date for the intended start date
+fh.proposedStartDate.date.empty.error=Enter the intended start date
+fh.proposedStartDate.date.error.invalid=Enter a valid date for the intended start date
+fh.proposedStartDate.day.missing=Enter a day for the intended start date
+fh.proposedStartDate.month.missing=Enter a month for the intended start date
+fh.proposedStartDate.year.missing=Enter a year for the intended start date
+fh.proposedStartDate.day-and-month.missing=Enter a day and month for the intended start date
+fh.proposedStartDate.day-and-year.missing=Enter a day and year for the intended start date
+fh.proposedStartDate.month-and-year.missing=Enter a month and year for the intended start date
 
 # - Importing activities
 #===========================================================

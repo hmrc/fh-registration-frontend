@@ -23,6 +23,7 @@ import play.api.data.Mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 import Constraints.oneOfConstraint
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError, ValidationResult}
 import org.apache.commons.lang3.StringUtils
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError, ValidationResult}
 
@@ -134,7 +135,6 @@ object Mappings {
       localDateFromValues(d, m, y)
         .map { parsedDate =>
           val enteredYear = parsedDate.getYear
-
           if (enteredYear >= 1800 && enteredYear <= 2999) Valid
           else
             invalid("date.error.invalid")

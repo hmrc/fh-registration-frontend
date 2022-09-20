@@ -14,17 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(businessStatusForm: Form[BusinessStatus], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -37,72 +37,96 @@
 }
 
 @title = @{
-  Messages("fh.business_status.label")
+    Messages("fh.business_status.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@inputHasErrors(input: String) = @{input match {
+    case i: String if businessStatusForm.hasErrors && businessStatusForm.errors.head.toString.contains(i) => true
+    case _: String if businessStatusForm.hasErrors && (businessStatusForm.errors.head.toString.contains("date.empty.error") || businessStatusForm.errors.head.toString.contains("error.invalid"))=> true
+    case _ => false
+}}
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+@deriveErrorKey(message: String) = @{
+    if(businessStatusForm(isNewFulfilmentBusinessKey).hasErrors) isNewFulfilmentBusinessKey
+    else {
+        message match {
+            case e: String if e.contains("day") => s"$proposedStartDateKey-$proposedStartDateKey.day"
+            case e: String if e.contains("month") => s"$proposedStartDateKey-$proposedStartDateKey.month"
+            case e: String if e.contains("year") => s"$proposedStartDateKey-$proposedStartDateKey.year"
+            case _ => s"$proposedStartDateKey-$proposedStartDateKey.day"
+        }
+    }
+ }
+@conditionalHtml= @{
+    viewHelpers.govukDateInput(DateInput(
+        id = proposedStartDateKey,
+        hint = Some(Hint(
+            content = Text(Messages("fh.business_status.new_business.hint_text"))
+        )),
+        errorMessage = businessStatusForm.errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.proposedStartDate.${e.message}", e.args:_*)))),
+        items = Seq(
+            InputItem(name = s"$proposedStartDateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = businessStatusForm.data.get(s"$proposedStartDateKey.day")),
+            InputItem(name = s"$proposedStartDateKey.month", classes = s"govuk-input--width-2${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = businessStatusForm.data.get(s"$proposedStartDateKey.month")),
+            InputItem(name = s"$proposedStartDateKey.year", classes = s"govuk-input--width-4${if(inputHasErrors("year")){" govuk-input--error"} else {""}}", label=Some("Year"), value = businessStatusForm.data.get(s"$proposedStartDateKey.year"))),
+        fieldset = Some(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("fh.business_status.new_business.label")),
+                classes = "govuk-fieldset__legend--m",
+                isPageHeading = true
+            ))
+        ))
+    ))
 
-  @BackOld(navigation)
 
-  @error_box(businessStatusForm, dateKey=s"$proposedStartDateKey")
+}
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
-    @helper.CSRF.formField
 
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(isNewFulfilmentBusinessKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        value = businessStatusForm(isNewFulfilmentBusinessKey).value,
-        hasErrors = businessStatusForm(isNewFulfilmentBusinessKey).hasErrors,
-        error = Some(Messages("fh.isNewFulfilmentBusiness.error.required")),
-        radios = List(
-          RadioParams(
-            "true",
-            Messages("fh.generic.yes"),
-            Some("newBusiness")
-          ),
-          RadioParams(
-            "false",
-            Messages("fh.generic.no")
+  @Back(navigation, viewHelpers)
+
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
+
+      @if(businessStatusForm.errors.nonEmpty) {
+
+          @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+              Seq(ErrorLink(
+                  href = Some(s"#${deriveErrorKey(businessStatusForm.errors.head.message)}") ,
+                  content = Text(messages(s"fh.${businessStatusForm.errors.head.key}.${businessStatusForm.errors.head.message}"))
+              ))
+              ,
+              title = Text(messages("fh.generic.error"))))
+      }
+
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages(title)),
+                  classes = "govuk-fieldset__legend--l",
+                  isPageHeading = true
+              ))
+          )),
+          idPrefix = Some(isNewFulfilmentBusinessKey),
+          name = isNewFulfilmentBusinessKey,
+          errorMessage = if (businessStatusForm(isNewFulfilmentBusinessKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages(s"fh.isNewFulfilmentBusiness.error.required"))))
+          } else None,
+          items = Seq(
+              RadioItem(
+                  content = Text(messages("fh.generic.yes")),
+                  value = Some("true"),
+                  checked = businessStatusForm.data.values.toList.contains("true"),
+                  conditionalHtml = Some(conditionalHtml)
+              ),
+              RadioItem(
+                  content = Text("No"),
+                  value = Some("false"),
+                  checked = businessStatusForm.data.values.toList.contains("false"),
+              )
           )
-        )
-      )
-    )
+      ))
 
-    @NestedPanel(
-      NestedPanelParams(
-        "newBusiness",
-        DateTuple(
-          DateTupleParams(
-            name=s"$proposedStartDateKey",
-            label=Messages("fh.business_status.new_business.label"),
-            hasErrors = {
-              businessStatusForm(s"$proposedStartDateKey").hasErrors ||
-              businessStatusForm(s"$proposedStartDateKey.day").hasErrors ||
-              businessStatusForm(s"$proposedStartDateKey.month").hasErrors ||
-              businessStatusForm(s"$proposedStartDateKey.year").hasErrors
-            },
-            error=Messages("fh.business_status.new_business.error.pattern"),
-            hintText=Some(Messages("fh.business_status.new_business.hint_text")),
-            day = businessStatusForm(s"$proposedStartDateKey.day").value,
-            month = businessStatusForm(s"$proposedStartDateKey.month").value,
-            year = businessStatusForm(s"$proposedStartDateKey.year").value
-          )
-        )
-      )
-    )
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+      @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+      @SaveForLater()
   }
 }
