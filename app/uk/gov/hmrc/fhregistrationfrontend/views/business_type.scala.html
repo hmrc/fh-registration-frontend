@@ -15,78 +15,99 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
 
 @this(
-        mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+        layout: layout, viewHelpers: ViewHelpers, govukErrorMessage: GovukErrorMessage
 )
 
-@(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages,
+        appConfig: AppConfig)
+
+@pageScripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @typeNotListed = {
-    <p>@Messages("fh.business_type.details1")</p>
-    <p><a href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+            @Messages("fh.business_type.summary")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <p>@Messages("fh.business_type.details1")</p>
+            <a class="govuk-link" href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a><p> @Messages("fh.business_type.details2")</p>
+        </div>
+    </details>
 }
-
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @titlePrefix = @{
     if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@title = @{
-    Messages("fh.business_type.title")
+@pageTitle = @{
+    Messages("fh.business_type.title") + " - " + Messages("service.name") + " - " +
+            Messages("gov.uk")
 
 }
 
-@mainTemplate(title = titlePrefix + title, pageScripts = Some(scripts)) {
+@layout(pageTitle, Some(pageScripts)) {
 
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-    <a href="@backUrl" class="link-back">@Messages("fh.generic.back")</a>
-    @error_box(businessTypeForm)
+    <a href="@backUrl" class="govuk-back-link">@Messages("fh.generic.back")</a>
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType, 'novalidate -> "novalidate") {
+    @if(businessTypeForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList = businessTypeForm.errors.map(e =>
+            ErrorLink(
+                href = Some(s"#${e.key}"),
+                content = Text(messages(s"fh.${e.key}.${e.message}"))
+            )
+        )))
+    }
 
-        @helper.CSRF.formField
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType,'novalidate -> "novalidate") {
 
-        @RadioGroup(
-            RadioGroupParams(
-                name = Some("businessType"),
-                inline = false,
-                legend = Some(title),
-                legendAsHeading = true,
-                error = Some(Messages("fh.businessType.error.required")),
-                hasErrors = businessTypeForm("businessType").hasErrors,
-                value = businessTypeForm("businessType").value,
-                radios = List(
-                    RadioParams(
-                        "CorporateBody",
-                        Messages("fh.business_type.limited_company")
+        @viewHelpers.govUkRadios(
+            Radios(
+                fieldset = Some(Fieldset(
+                    legend = Some(Legend(
+                        content = Text(Messages("fh.business_type.title")),
+                        classes = "govuk-fieldset__legend--l",
+                        isPageHeading = true
+                    ))
+                )),
+                idPrefix = Some("businessType"),
+                name = "businessType",
+                errorMessage = if (businessTypeForm("businessType").hasErrors) {
+                    Some(ErrorMessage(content = Text(messages(s"fh.business_type.${businessTypeForm.errors.head.message}"))))
+                } else None,
+                items = Seq(
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.limited_company")),
+                        value = Some("CorporateBody")
                     ),
-                    RadioParams(
-                        "SoleTrader",
-                        Messages("fh.business_type.sole_trader")
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.sole_trader")),
+                        value = Some("SoleTrader")
                     ),
-                    RadioParams(
-                        "Partnership",
-                        Messages("fh.business_type.business_partnership")
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.business_partnership")),
+                        value = Some("Partnership")
                     )
                 )
-            )
+            ).withFormField(businessTypeForm("businessType"))
         )
 
-        @Details(Messages("fh.business_type.summary"), typeNotListed)
+        @typeNotListed
 
-        @SubmitButtons(
-            SubmitButtonsParams(
-                label = Messages("button.save.continue"),
-                saveForLaterLink = false
-            ),
-            navigation = Navigation(0, None)
-        )
+        @viewHelpers.govukButton(Button(
+            content = Text(Messages("button.save.continue"))
+        ))
+
     }
 
 }
