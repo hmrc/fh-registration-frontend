@@ -48,15 +48,6 @@
   Messages("fh.dateOfIncorporation.label")
 }
 
-@*   TODO remove this code to use back.scala.html after rebase with main*@
-@backLink(navigation: Navigation) = @{
-    navigation.back.map {
-        case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-        case FormPage(pageId, None) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
-        case FormPage(pageId, Some(subsection)) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(pageId, subsection)
-    }
-}
-
 @inputHasErrors(input: String) = @{input match {
     case i: String if dateOfIncorporationForm.hasErrors && dateOfIncorporationForm.errors.head.toString.contains(i) => true
     case _: String if dateOfIncorporationForm.hasErrors && (dateOfIncorporationForm.errors.head.toString.contains("date.empty.error") || dateOfIncorporationForm.errors.head.toString.contains("error.invalid"))=> true
@@ -75,7 +66,7 @@
 
   @Back(navigation, viewHelpers)
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation")) {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
 
       @if(dateOfIncorporationForm.errors.nonEmpty) {
 
