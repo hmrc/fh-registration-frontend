@@ -41,14 +41,6 @@
   Messages("fh.tradingName.confirm.label")
 }
 
-@backLink(navigation: Navigation) = @{
-    navigation.back.map {
-        case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-        case FormPage(pageId, None) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
-        case FormPage(pageId, Some(subsection)) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(pageId, subsection)
-    }
-}
-
 @conditionalHtml = @{
     viewHelpers.govukInput(Input(
         id = tradingNameKey,
@@ -78,7 +70,7 @@
 @layout(title = titlePrefix + title, Some(pageScripts)) {
     @Back(navigation, viewHelpers)
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName")) {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("tradingName"), 'novalidate -> "novalidate") {
 
       @if(tradingNameForm.errors.nonEmpty) {
 
