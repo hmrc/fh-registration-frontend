@@ -30,8 +30,7 @@
 @layout(title = title1) {
 
     @viewHelpers.govukPanel(Panel(
-        title = Text(Messages("fh.status.received.title")),
-        content = HtmlContent("")
+        title = Text(Messages("fh.status.received.title"))
     ))
 
     <h2 class="govuk-heading-l">
@@ -48,7 +47,7 @@
 
       <p>
         @Messages("fh.status_pending.what_happens_next_3")
-        <a href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
+        <a class="govuk-link" href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
         @Messages("fh.status_pending.what_happens_next_5")
       </p>
     </div>
