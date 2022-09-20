@@ -36,6 +36,11 @@
     if (forced) Messages("fh.emailVerification.forced.label")
     else Messages("fh.emailVerification.label")
 }
+
+@pageScripts = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
 @htmlContent = {
     <p class="govuk-body">@messages(s"fh.emailVerification.alternativeEmail.info")</p>
     <div class="govuk-!-padding-bottom-2"></div>
@@ -72,7 +77,7 @@
     ))
 }
 
-@layout(title = titlePrefix + pageTitle) {
+@layout(title = titlePrefix + pageTitle, Some(pageScripts)) {
     @if(emailVerificationForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
@@ -83,7 +88,8 @@
             title = Text(messages("generic.errorSummary"))))
     }
 
-    @viewHelpers.form(action = action) {
+    @viewHelpers.form(action = action, 'novalidate -> "novalidate") {
+
 
         <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail.getOrElse("")}"/>
 
