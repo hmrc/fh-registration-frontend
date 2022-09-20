@@ -15,47 +15,57 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 
-@title = @{
-  Messages(s"fh.status.received.title")
+@title1 = @{
+  Messages("fh.status.received.title")
 }
 
-@mainTemplate(title = title, linkElement = Some(stylesheets)) {
+@layout(title = title1) {
 
-  <div class="govuk-box-highlight appstatus">
-    <h1 class="heading-xlarge">
-      @title
-    </h1>
-  </div>
+    @viewHelpers.govukPanel(Panel(
+        title = Text(Messages("fh.status.received.title")),
+        content = HtmlContent("")
+    ))
 
-  <h2 class="heading-large">
+    <h2 class="govuk-heading-l">
     @Messages("fh.status_pending.what_happens_next")
-  </h2>
+    </h2>
+    <div class="govuk-body">
+      <p>
+        @Messages("fh.status_pending.what_happens_next_1")
+      </p>
 
-  <p>
-    @Messages("fh.status_pending.what_happens_next_1")
-  </p>
+      <p>
+        @Messages("fh.status_pending.what_happens_next_2")
+      </p>
 
+      <p>
+        @Messages("fh.status_pending.what_happens_next_3")
+        <a href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
+        @Messages("fh.status_pending.what_happens_next_5")
+      </p>
+    </div>
   <p>
-    @Messages("fh.status_pending.what_happens_next_2")
-  </p>
-
-  <p>
-    @Messages("fh.status_pending.what_happens_next_3")
-    <a href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
-    @Messages("fh.status_pending.what_happens_next_5")
-  </p>
-
-  <p>
-    <a class="button" role="button" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout">
-    @Messages("fh.status_pending.finish")
-    </a>
+      <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" role="button"
+      draggable="false" class="govuk-button" data-module="govuk-button">
+      @Messages("fh.status_pending.finish")
+      </a>
   </p>
 }
+@*TODO: clean this code on code clean up ticket for FHDDS frontend upgrade*@
+
+@* tried to use twirl button, however, start button was the only example of
+adding a redirect through HTML and if you look at HTML content of this twirl
+component, it uses a svg class, which I believe changes the functionality
+I was unable to get the HTML to call the sign-out page - it wanted an
+Option[string] vs a call.  I attempted placing /sign-out directly within HTML
+section and this failed when testing in browser because it did not include /fhdds
+if /fhdds was added in front, i.e. /fhdds/sign-out it would load into browser as
+/fhdds/fhdds/sign-out*@
