@@ -513,23 +513,21 @@ fh.date_of_incorporation.title=Date of incorporation
 fh.dateOfIncorporation.title=Date of incorporation
 fh.dateOfIncorporation.label=What is the company''s date of incorporation?
 fh.dateOfIncorporation.hint_text=For example, 31 07 2017
-fh.dateOfIncorporation.empty.error=Enter the date of incorporation
-fh.dateOfIncorporation.error.invalid=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.date.empty.error=Enter the date of incorporation
+fh.dateOfIncorporation.date.error.invalid=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.day=Day
 fh.dateOfIncorporation.month=Month
 fh.dateOfIncorporation.year=Year
-fh.dateOfIncorporation.day.error.number=Enter the day of incorporation
-fh.dateOfIncorporation.month.error.number=Enter the month of incorporation
-fh.dateOfIncorporation.year.error.number=Enter the year of incorporation
+fh.dateOfIncorporation.day.missing=Enter the day of incorporation
+fh.dateOfIncorporation.month.missing=Enter the month of incorporation
+fh.dateOfIncorporation.year.missing=Enter the year of incorporation
+fh.dateOfIncorporation.day-and-month.missing=Enter the day and month of incorporation
+fh.dateOfIncorporation.month-and-year.missing=Enter the month and year of incorporation
+fh.dateOfIncorporation.day-and-year.missing=Enter the day and year of incorporation
 fh.dateOfIncorporation.summary=Where to find the date of incorporation
 fh.dateOfIncorporation.details=You can find this date on the company’s Certificate of Incorporation, or
 fh.dateOfIncorporation.companies_house=search the Companies House register (opens in a new window or tab)
-fh.dateOfIncorporation.day.error.max=Enter a valid date for the date of incorporation
-fh.dateOfIncorporation.day.error.min=Enter a valid date for the date of incorporation
-fh.dateOfIncorporation.month.error.max=Enter a valid date for the date of incorporation
-fh.dateOfIncorporation.month.error.min=Enter a valid date for the date of incorporation
-fh.dateOfIncorporation.year.error.max=Enter a valid date for the date of incorporation
-fh.dateOfIncorporation.year.error.min=Enter a valid date for the date of incorporation
+
 
 # - Company Officers (Corporate Body)
 #===========================================================
