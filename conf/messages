@@ -157,7 +157,7 @@ fh.business_type.title=What type of business are you applying to register?
 fh.businessType.error.required=Select which type of business you are applying to register
 fh.business_type.limited_company=Limited company
 fh.business_type.sole_trader=Sole trader
-s partnership
+fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
 fh.business_type.summary=My business type is not listed here
 fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
@@ -169,7 +169,7 @@ fh.business_type.details2=to find out how to apply for a different type of busin
 fh.emailVerification.title=Email verification
 fh.emailVerification.label=Which email address do you want us to use to contact you about the application?
 fh.emailVerification.forced.label=​Before you continue, which email address should we use to contact your business about the Fulfilment House Due Diligence Scheme?
-fh.emailVerification.usingDefaultEmailAddress.error.required=Select which email address you want us to use to contact you about your application
+fh.emailVerification.usingDefaultEmailAddress.error.required=Select which email address you want to us to use to contact you about your application
 fh.emailVerification.alternativeEmailOption.label=I want to enter a new email address
 fh.emailVerification.alternativeEmail.label=Enter your new email address
 fh.emailVerification.alternativeEmail.hintText=For example, sample@example.com
