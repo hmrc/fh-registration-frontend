@@ -32,6 +32,7 @@
     @viewHelpers.govukPanel(Panel(
         title = Text(Messages("fh.status.received.title"))
     ))
+    <hr class="govuk-section-break govuk-section-break--m" />
 
     <h2 class="govuk-heading-l">
     @Messages("fh.status_pending.what_happens_next")
@@ -52,19 +53,7 @@
       </p>
     </div>
   <p>
-      <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" role="button"
-      draggable="false" class="govuk-button" data-module="govuk-button">
-      @Messages("fh.status_pending.finish")
-      </a>
+      @viewHelpers.govukButton(Button(href = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController
+              .signout.url), content = Text(messages("fh.status_pending.finish")), inputType = Some("submit")))
   </p>
 }
-@*TODO: clean this code on code clean up ticket for FHDDS frontend upgrade*@
-
-@* tried to use twirl button, however, start button was the only example of
-adding a redirect through HTML and if you look at HTML content of this twirl
-component, it uses a svg class, which I believe changes the functionality
-I was unable to get the HTML to call the sign-out page - it wanted an
-Option[string] vs a call.  I attempted placing /sign-out directly within HTML
-section and this failed when testing in browser because it did not include /fhdds
-if /fhdds was added in front, i.e. /fhdds/sign-out it would load into browser as
-/fhdds/fhdds/sign-out*@
