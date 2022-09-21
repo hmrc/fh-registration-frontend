@@ -41,7 +41,6 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
-    <input type="hidden" name="@{emailOptionKey}" value="false">
     <h1 class="govuk-heading-l">@title</h1>
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
@@ -61,6 +60,9 @@
         @viewHelpers.govukInput(Input(
             id = alternativeEmailKey,
             name = alternativeEmailKey,
+            errorMessage = if (emailVerificationForm(alternativeEmailKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.emailVerification.$alternativeEmailKey.${emailVerificationForm.errors.head.message}"))))
+            } else None,
             inputType = "email",
             label = Label(
               isPageHeading = true,
@@ -75,7 +77,7 @@
             )),
             value = emailVerificationForm(alternativeEmailKey).value
         ))
-
+        <input type="hidden" name="@{emailOptionKey}" value="false">
     @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
 
     @viewHelpers.govukInsetText(InsetText(
