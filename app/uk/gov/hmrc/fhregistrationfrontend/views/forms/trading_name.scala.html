@@ -23,12 +23,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.SummaryPage
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 @(tradingNameForm: Form[TradingName], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.FormPage
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -113,6 +113,7 @@
       ))
 
       @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+      @SaveForLater()
 
   }
 }
