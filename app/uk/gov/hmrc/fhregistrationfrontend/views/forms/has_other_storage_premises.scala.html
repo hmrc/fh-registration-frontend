@@ -20,10 +20,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
 
 @(hasOtherStoragePremisesForm: Form[Boolean], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -40,11 +41,9 @@
   Messages("fh.other_storage_premises.confirm.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-  @BackOld(navigation)
+  @Back(navigation, viewHelpers)
 
   @if(hasOtherStoragePremisesForm.hasErrors) {
     <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
@@ -60,9 +59,7 @@
     </div>
   }
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
 
     @RadioGroup(
       RadioGroupParams(
