@@ -39,10 +39,11 @@
         title = Text(title),
         content = Text(verifiedEmail)
     ))
-
-  <h2 class="govuk-heading-l">@Messages("fh.emailVerification.verified.whatThisMeans")</h2>
+    <div class="govuk-!-padding-top-6"></div>
+  <h2 class="govuk-heading-m">@Messages("fh.emailVerification.verified.whatThisMeans")</h2>
   <p class="govuk-body">@Messages("fh.emailVerification.verified.onlyFHDDS")</p>
   <p class="govuk-body">@Messages("fh.emailVerification.verified.otherGovUnchanged")</p>
+    <p class="govuk-body">
   @viewHelpers.govukButton(Button(href = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.resumeForm.url), content = Text(messages("fh.generic.continue")), inputType = Some("submit")))
-
+    </p>
 }
