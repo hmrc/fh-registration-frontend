@@ -21,20 +21,20 @@
 
 @(status: FhddsStatus)(implicit message : Messages)
 
-<ul class="appstatus-steps" aria-hidden="true">
-  <li>
-    <span id="indication-received" class="appstatus-complete tick" aria-label="Received">
-      @Messages("fh.status.received.step")
-    </span>
-  </li>
-  <li>
-    <span id="indication-processed" class="@if(status != Received){ appstatus-complete } else { appstatus-processing }">
-      @Messages("fh.status.processing.step")
-    </span>
-  </li>
-  <li>
-    <span id="indication-approved" class="appstatus-processing">
-      @Messages("fh.status.decision.step")
-    </span>
-  </li>
+<ul class="govuk-list--bullet">
+    <li>
+        <span id="indication-received" class="govuk-body" aria-label="Received">
+            @Messages("fh.status.received.step")
+        </span>
+    </li>
+    <li>
+        <span id="indication-processed" class="govuk-body">
+        @Messages("fh.status.processing.step")
+        </span>
+    </li>
+    <li>
+        <span id="indication-approved" class="govuk-body">
+        @Messages("fh.status.decision.step")
+        </span>
+    </li>
 </ul>

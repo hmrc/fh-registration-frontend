@@ -17,39 +17,44 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLink
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SurveyLinkNew
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this()
+@this(viewHelpers: ViewHelpers)
+
 
 @(params: StatusPageParams, Messages : Messages, appConfig: AppConfig)
-<h2>
+<h2 class="govuk-heading-m">
   @Messages("fh.status.generic.apply_again.title")
 </h2>
 
 @if(params.category == "post") {
-  <p>
+  <p class="govuk-body">
   @Messages(s"fh.status.${params.status}.apply_again.info")
   </p>
 }
 
-<p>
+<p class="govuk-body">
   @Messages("fh.status.generic.apply_again")
   @Messages("fh.status.generic.start_new_link_text").
 </p>
 
-<p>
-  <a class="button" role="button" href="@{params.cta}">
-    @Messages(s"fh.status.${params.status}.cta")
-  </a>
-</p>
+<p class="govuk-!-padding-top-5"></p>
 
-<p>
-  <a href="@{params.secondary}">
+@viewHelpers.govukButton(Button(
+    href = Some(params.cta.url),
+    content = Text(Messages(s"fh.status.${params.status}.cta")),
+    inputType = Some("submit")
+))
+<p class="govuk-body">
+  <a class="govuk-link" href="@{params.secondary}">
     @Messages(s"fh.status.${params.status}.secondaryLink")
   </a>
 </p>
 
-<h2>
+<h2 class="govuk-heading-m">
   @Messages("fh.status.generic.help_us_improve")
 </h2>
 
-@SurveyLink()(Messages, appConfig)
+@SurveyLinkNew()(Messages, appConfig)

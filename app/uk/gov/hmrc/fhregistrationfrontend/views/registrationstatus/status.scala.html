@@ -16,20 +16,34 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.RegistrationStatusViews
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusSteps
 
 @this(
- main_template: main_template_old,
- registrationStatusViews: RegistrationStatusViews
+        layout: layout,
+ registrationStatusViews: RegistrationStatusViews, viewHelpers: ViewHelpers, statusSteps: statusSteps
 )
 
-@(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
- @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
-@sidebarLinks =  {@registrationStatusViews.statusSidebar(params)}
 
-@main_template(title = Messages(s"fh.status.${params.status}.title"), sidebarLinks = Some(sidebarLinks), linkElement = Some(stylesheets)) {
-      @{registrationStatusViews.statusHeading(params, id)}
+@(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@html = {
+ @if(params.showSubHeading) {
+   @Html(Messages(s"fh.status.${params.status}.subheading", id))
+ }
+ @if(params.showSteps) { @{statusSteps(params.status)} }
+}
+
+
+@layout(title = Messages(s"fh.status.${params.status}.title")) {
+ @viewHelpers.govukPanel(Panel(
+  title = Text(messages(s"fh.status.${params.status}.title")),
+  content = HtmlContent(html)
+ ))
+ <div class="govuk-!-padding-bottom-4"></div>
+
       @{if(params.category == "post") registrationStatusViews.statusMoreInfo(params)}
       @params.nextTemplate(params, messages, appConfig)
 }

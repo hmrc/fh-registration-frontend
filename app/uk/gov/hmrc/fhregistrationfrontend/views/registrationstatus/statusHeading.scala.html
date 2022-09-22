@@ -14,25 +14,25 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusSteps
 @import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 
 @this(statusSteps: statusSteps)
 
 @(params: StatusPageParams, id: String)(implicit message : Messages)
 
-<div class="govuk-box-highlight appstatus">
+<div class="govuk-body">
 
-  <h1 class="heading-xlarge">
-    @Messages(s"fh.status.${params.status}.title")
-  </h1>
+    <h1 class="govuk-heading-l">
+        @Messages(s"fh.status.${params.status}.title")
+    </h1>
 
-  @if(params.showSubHeading) {
-    <p class="lede">
-      @Html(Messages(s"fh.status.${params.status}.subheading", id))
-    </p>
-  }
+    @if(params.showSubHeading) {
+        <p class="govuk-body">
+        @Html(Messages(s"fh.status.${params.status}.subheading", id))
+        </p>
+    }
 
-  @if(params.showSteps) { @{statusSteps(params.status)} }
+    @if(params.showSteps) { @{statusSteps(params.status)} }
 
 </div>
