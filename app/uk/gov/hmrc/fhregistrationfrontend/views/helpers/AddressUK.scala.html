@@ -16,91 +16,120 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams)(implicit message: Messages)
+@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers)(implicit message: Messages)
 
 @fieldName = @{
-  params.context match {
-    case Some(context) => context + "_" + params.name
-    case _ => params.name
-  }
+    params.context match {
+        case Some(context) => context + "_" + params.name
+        case _ => params.name
+    }
 }
 
-<fieldset id="@{fieldName}-fieldset">
-  <legend class="form-label-bold" id="@{fieldName}-title">@{params.label}</legend>
+<fieldset id="@{fieldName}-fieldset" class="govuk-body">
+    <legend class="form-label-bold" id="govuk-heading-l">@{params.label}</legend>
+    @viewHelpers.govukInput(Input(
+        id = s"$fieldName-property-filter",
+        name = s"$fieldName-property-filter",
+        label = Label(
+            isPageHeading = false,
+            classes = "govuk-body",
+            content = Text("Property name or number (optional)")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-third",
+        hint = Some(Hint(
+            content = Text("For example, The Mill, Flat A or 37b")
+        ))
+    ))
 
-  <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
-    <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
-    <span id="@{fieldName}-property-hint" class="form-hint">For example, The Mill, Flat A or 37b</span>
-    <input type="text" aria-describedby="@{fieldName}-property-hint" data-context="@{fieldName}" id="@{fieldName}-property-filter" class="property-value form-control" style="width: 150px; margin-bottom: 15px;" />
-    <label for="@{fieldName}-postcode-search">Postcode</label>
-    <input type="text" class="postcode-value form-control" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
-    <button data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</button>
-    <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" aria-live="polite"></fieldset>
-    <div class="form-group" style="margin-top: 1em">
-      <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
+    @viewHelpers.govukInput(Input(
+        id = s"$fieldName-postcode-search",
+        name = s"$fieldName-postcode-search",
+        label = Label(
+            isPageHeading = false,
+            classes = "govuk-body",
+            content = Text("Postcode")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-third",
+    ))
+    @viewHelpers.govukButton(Button(content = Text("Look up address"), inputType = Some("submit")))
+
+    <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
+        <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
+        <span id="@{fieldName}-property-hint" class="form-hint">For example, The Mill, Flat A or 37b</span>
+        <input type="text" aria-describedby="@{fieldName}-property-hint" data-context="@{fieldName}" id="@{fieldName}-property-filter" class="property-value form-control" style="width: 150px; margin-bottom: 15px;" />
+        <label for="@{fieldName}-postcode-search">Postcode</label>
+        <input type="text" class="postcode-value form-control" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
+        <button data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</button>
+        <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" aria-live="polite"></fieldset>
+        <div class="form-group" style="margin-top: 1em">
+            <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
+        </div>
     </div>
-  </div>
 
-  <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
+    <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
 
-    @TextInput(
-      TextInputParams(
-        name = "Line1",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
-        label = Messages("fh.address.line1.label"),
-        error = Messages("fh.address.line1." + formDate(s"$fieldName.Line1").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.Line1").hasErrors
-      )
-    )
+        @TextInput(
+            TextInputParams(
+                name = "Line1",
+                context = Some(fieldName),
+                value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
+                label = Messages("fh.address.line1.label"),
+                error = Messages("fh.address.line1." + formDate(s"$fieldName.Line1").error.map(_.message).getOrElse("")),
+                hasErrors = formDate(s"$fieldName.Line1").hasErrors
+            )
+        )
 
-    @TextInput(
-      TextInputParams(
-        name = "Line2",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
-        label = Messages("fh.address.line2_optional.label"),
-        error = Messages("fh.address.line2." + formDate(s"$fieldName.Line2").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.Line2").hasErrors
-      )
-    )
+        @TextInput(
+            TextInputParams(
+                name = "Line2",
+                context = Some(fieldName),
+                value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
+                label = Messages("fh.address.line2_optional.label"),
+                error = Messages("fh.address.line2." + formDate(s"$fieldName.Line2").error.map(_.message).getOrElse("")),
+                hasErrors = formDate(s"$fieldName.Line2").hasErrors
+            )
+        )
 
-    @TextInput(
-      TextInputParams(
-        name = "Line3",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
-        label = Messages("fh.address.line3.label"),
-        error = Messages("fh.address.other.error"),
-        hasErrors = formDate(s"$fieldName.Line3").hasErrors
-      )
-    )
+        @TextInput(
+            TextInputParams(
+                name = "Line3",
+                context = Some(fieldName),
+                value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
+                label = Messages("fh.address.line3.label"),
+                error = Messages("fh.address.other.error"),
+                hasErrors = formDate(s"$fieldName.Line3").hasErrors
+            )
+        )
 
-    @TextInput(
-      TextInputParams(
-        name = "Line4",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
-        label = Messages("fh.address.line4.label"),
-        error = Messages("fh.address.other.error"),
-        hasErrors = formDate(s"$fieldName.Line4").hasErrors
-      )
-    )
+        @TextInput(
+            TextInputParams(
+                name = "Line4",
+                context = Some(fieldName),
+                value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
+                label = Messages("fh.address.line4.label"),
+                error = Messages("fh.address.other.error"),
+                hasErrors = formDate(s"$fieldName.Line4").hasErrors
+            )
+        )
 
-    @TextInput(
-      TextInputParams(
-        name = "postcode",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.postcode").value.getOrElse("")}"),
-        label = Messages("fh.address.postcode.label"),
-        error = Messages("fh.address.postcode." + formDate(s"$fieldName.postcode").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.postcode").hasErrors
-      )
-    )
-    <input type="hidden" name="@{fieldName}.lookupId" value="@formDate(s"$fieldName.lookupId").value">
-    <div class="form-group lookup-link-container" style="margin: 1em 0; display: none;">
-      <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
+        @TextInput(
+            TextInputParams(
+                name = "postcode",
+                context = Some(fieldName),
+                value = Some(s"${formDate(s"$fieldName.postcode").value.getOrElse("")}"),
+                label = Messages("fh.address.postcode.label"),
+                error = Messages("fh.address.postcode." + formDate(s"$fieldName.postcode").error.map(_.message).getOrElse("")),
+                hasErrors = formDate(s"$fieldName.postcode").hasErrors
+            )
+        )
+        <input type="hidden" name="@{fieldName}.lookupId" value="@formDate(s"$fieldName.lookupId").value">
+        <div class="form-group lookup-link-container" style="margin: 1em 0; display: none;">
+            <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
+        </div>
     </div>
-  </div>
 </fieldset>

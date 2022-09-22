@@ -21,10 +21,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-  main_template_old: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
 
 @(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -39,27 +41,34 @@
     <input type="hidden" name="addMore" value="@force" />
   }
   case None => {
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(s"addMore"),
-        value = otherStoragePremisesForm(s"addMore").value,
-        legend = Some(Messages("fh.other_storage_premises.company.addMore")),
-        hasErrors = otherStoragePremisesForm(s"addMore").hasErrors,
-        error = Some(Messages("fh.storagePremise_address.addMore.error.required")),
-        radios = List(
-          RadioParams(
-            "true",
-            Messages("fh.generic.yes"),
-            None
-          ),
-          RadioParams(
-            "false",
-            Messages("fh.generic.no"),
-            None
-          )
+
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("fh.other_storage_premises.company.addMore")),
+          classes = "govuk-fieldset__legend--m",
+          isPageHeading = false
+        ))
+      )),
+      idPrefix = Some("addMore"),
+      name = "addMore",
+      errorMessage = if (otherStoragePremisesForm("addMore").hasErrors) {
+        Some(ErrorMessage(content = Text(messages("fh.storagePremise_address.addMore.error.required"))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          content = Text(messages("fh.generic.yes")),
+          value = Some("true"),
+          checked = otherStoragePremisesForm("addMore").value.toList.contains("true")
+        ),
+        RadioItem(
+          content = Text(messages("fh.generic.no")),
+          value = Some("false"),
+          checked = otherStoragePremisesForm("addMore").value.toList.contains("false")
         )
-      )
-    )
+      ),
+      classes = "govuk-radios--inline"
+    ))
   }
 }
 }
@@ -72,26 +81,20 @@
   Messages("fh.other_storage_premises.title")
 }
 
-@main_template_old(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-  @BackOld(navigation)
+  @Back(navigation, viewHelpers)
 
   @error_box(otherStoragePremisesForm, s".$storagePremise_addressKey.")
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
+  <h1 class="govuk-heading-l">@title</h1>
 
-  <p>@Messages("fh.otherStoragePremises.each.inf").</p>
+  <p>@Messages("fh.otherStoragePremises.each.inf")</p>
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
 
-      @helper.CSRF.formField
       @if(params.canRemove) {
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
+        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
       }
       @AddressUK(
         otherStoragePremisesForm,
@@ -101,39 +104,45 @@
           label = Messages("fh.other_storage_premises.each.title", sectionId),
           hasErrors = otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors,
           error = Some(Messages("fh.contact_person.contact_address_new.error"))
-        )
+        ),
+        viewHelpers
       )
 
       <br>
 
-  @RadioGroup(
-    RadioGroupParams(
-      name = Some(isThirdPartyKey),
-      legend = Some(Messages("fh.other_storage_premises.third_party.label")),
-      hasErrors = otherStoragePremisesForm(isThirdPartyKey).hasErrors,
-      error = Some(Messages("fh.storagePremise_address.isThirdParty.error.required")),
-      value = otherStoragePremisesForm(isThirdPartyKey).value,
-      radios = List(
-        RadioParams(
-          "true",
-          Messages("fh.generic.yes")
+      @viewHelpers.govUkRadios(Radios(
+        fieldset = Some(Fieldset(
+          legend = Some(Legend(
+            content = Text(messages("fh.other_storage_premises.third_party.label")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+          ))
+        )),
+        idPrefix = Some(isThirdPartyKey),
+        name = isThirdPartyKey,
+        errorMessage = if (otherStoragePremisesForm(isThirdPartyKey).hasErrors) {
+          Some(ErrorMessage(content = Text(messages("fh.storagePremise_address.isThirdParty.error.required"))))
+        } else None,
+        items = Seq(
+          RadioItem(
+            content = Text(messages("fh.generic.yes")),
+            value = Some("true"),
+            checked = otherStoragePremisesForm(isThirdPartyKey).value.toList.contains("true")
+          ),
+          RadioItem(
+            content = Text(messages("fh.generic.no")),
+            value = Some("false"),
+            checked = otherStoragePremisesForm(isThirdPartyKey).value.toList.contains("false")
+          )
         ),
-        RadioParams(
-          "false",
-          Messages("fh.generic.no")
-        )
-      )
-    )
-  )
+        classes = "govuk-radios--inline"
+      ))
 
   @addMore
 
-  @SubmitButtons(
-    SubmitButtonsParams(
-      label = Messages("button.save.continue"),
-      summaryLink = false
-    ),
-    navigation
-  )
+  @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+  @SaveForLater()
+
+
 }
 }
