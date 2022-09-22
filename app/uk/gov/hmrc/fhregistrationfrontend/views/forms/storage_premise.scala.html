@@ -134,9 +134,6 @@
         }
         </div>
       </div>
-
-
-
       @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
           legend = Some(Legend(
@@ -148,7 +145,7 @@
         idPrefix = Some(isThirdPartyKey),
         name = isThirdPartyKey,
         errorMessage = if (otherStoragePremisesForm(isThirdPartyKey).hasErrors) {
-          Some(ErrorMessage(content = Text(messages("fh.isThirdParty.error.required"))))
+          Some(ErrorMessage(content = Text(messages("fh.storagePremise_address.isThirdParty.error.required"))))
         } else None,
         items = Seq(
           RadioItem(
@@ -169,7 +166,5 @@
 
   @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
   @SaveForLater()
-
-
 }
 }
