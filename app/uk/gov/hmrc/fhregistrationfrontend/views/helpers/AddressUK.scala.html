@@ -53,10 +53,13 @@
             content = Text("Postcode")
         ),
         spellcheck = Some(false),
-        classes = "govuk-!-width-one-third",
-    ))@viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary"))
-    <p class="govuk-body">
-        <a href="#@{fieldName}-title" data-context="@{fieldName}" class="govuk-link">Enter address manually</a>
+        autocomplete = Some("postal-code"),
+        classes = "govuk-input--width-10",
+
+    ))@viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary", attributes = Map(s"$fieldName-postcode-search" → "continue")))
+
+    <p class="govuk-!-margin-bottom-6 govuk-body">
+        <a class="govuk-link" href="#@{fieldName}-title">Enter address manually</a>
     </p>
 
 
