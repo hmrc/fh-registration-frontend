@@ -20,10 +20,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
 
 @(hasOtherStoragePremisesForm: Form[Boolean], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -40,59 +42,54 @@
   Messages("fh.other_storage_premises.confirm.label")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+  @Back(navigation, viewHelpers)
 
-  @BackOld(navigation)
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
+      @if(hasOtherStoragePremisesForm.errors.nonEmpty) {
 
-  @if(hasOtherStoragePremisesForm.hasErrors) {
-    <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">@Messages("fh.generic.error")</h2>
-      <ul class="error-summary-list">
-        @if(hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors) {
-          <li id="storagePremise_address-error-link"><a href="#@{otherStoragePremisesKey}-inline-error">@{
-            Messages("fh.other_storage_premises.confirm.error")
-          }
-          </a></li>
-        }
-      </ul>
-    </div>
-  }
+          @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+              Seq(ErrorLink(
+                  href = Some(s"#${hasOtherStoragePremisesForm.errors.head.key}"),
+                  content = Text(messages("fh.other_storage_premises.confirm.error"))
+              ))
+              ,
+              title = Text(messages("fh.generic.error"))))
+      }
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(otherStoragePremisesKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        hasErrors = hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors,
-        hintText = Some(Messages("fh.other_storage_premises.hintText")),
-        error = Some(Messages("fh.other_storage_premises.confirm.error")),
-        value = hasOtherStoragePremisesForm(otherStoragePremisesKey).value,
-        radios = List(
-          RadioParams(
-            "true",
-            Messages("fh.generic.yes"),
-            Some("hasOtherStoragePremises")
-          ),
-          RadioParams(
-            "false",
-            Messages("fh.generic.no")
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages(title)),
+                  classes = "govuk-fieldset__legend--l",
+                  isPageHeading = true
+              ))
+          )),
+          idPrefix = Some(otherStoragePremisesKey),
+          name = otherStoragePremisesKey,
+          hint = Some(Hint(
+              content = Text(messages("fh.other_storage_premises.hintText"))
+          )),
+          errorMessage = if (hasOtherStoragePremisesForm(otherStoragePremisesKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages("fh.other_storage_premises.confirm.error"))))
+          } else None,
+          items = Seq(
+              RadioItem(
+                  content = Text(messages("fh.generic.yes")),
+                  value = Some("true"),
+                  checked = hasOtherStoragePremisesForm.data.values.toList.contains("true")
+              ),
+              RadioItem(
+                  content = Text(messages("fh.generic.no")),
+                  value = Some("false"),
+                  checked = hasOtherStoragePremisesForm.data.values.toList.contains("false"),
+              )
           )
-        )
-      )
-    )
+      ))
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+      @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+      @SaveForLater()
+
   }
 }
