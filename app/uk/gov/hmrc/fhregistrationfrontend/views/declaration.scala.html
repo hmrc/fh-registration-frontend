@@ -186,7 +186,11 @@
     <div class="govuk-body">
       <h2 class="govuk-heading-m">@Messages("fh.declaration.title")</h2>
       <p class="govuk-body">@Messages(s"fh.declaration.declaration.${params.mode}.title")</p>
-      <p class="govuk-body">@Messages("fh.declaration.declaration.point1")<br>@Messages("fh.declaration.declaration.point2")</p>
+      <ul class="govuk-list--bullet">
+        <li>@Messages("fh.declaration.declaration.point1")</li>
+        <li>@Messages("fh.declaration.declaration.point2")</li>
+      </ul>
+
 
       @viewHelpers.govukWarningText(WarningText(
         iconFallbackText = "Warning",
