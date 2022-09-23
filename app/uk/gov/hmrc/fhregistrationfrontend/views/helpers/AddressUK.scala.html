@@ -28,7 +28,13 @@
     }
 }
 
-<fieldset class="govuk-body">
+<fieldset class="govuk-fieldset">
+    <legend id="@{fieldName}-title" class="govuk-fieldset__legend govuk-fieldset__legend--s" x>
+        <h3 class="govuk-fieldset__heading">
+        @{params.label}
+        </h3>
+    </legend>
+    <div class="govuk-width-container">
     @viewHelpers.govukInput(Input(
         id = s"$fieldName-property-filter",
         name = s"$fieldName-property-filter",
@@ -38,7 +44,7 @@
             content = Text("Property name or number (optional)")
         ),
         spellcheck = Some(false),
-        classes = "govuk-!-width-one-third",
+        classes = "govuk-!-width-one-quarter",
         hint = Some(Hint(
             content = Text("For example, The Mill, Flat A or 37b")
         ))
@@ -54,16 +60,19 @@
         ),
         spellcheck = Some(false),
         autocomplete = Some("postal-code"),
-        classes = "govuk-input--width-10",
+        classes = "govuk-!-width-one-quarter",
 
-    ))@viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary", attributes = Map(s"$fieldName-postcode-search" → "continue")))
+    ))
+    @viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary", attributes = Map(s"$fieldName-postcode-search" → "continue")))
 
     <p class="govuk-!-margin-bottom-6 govuk-body">
-        <a class="govuk-link" href="#@{fieldName}-title">Enter address manually</a>
+        <a href="#@{fieldName}-title" class= "govuk-link" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
+@*        <a class="govuk-link" href="#@{fieldName}-title" data-context="storagePremise_address">Enter address manually</a>*@
     </p>
+    </div>
 
 
-    <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
+    <div id="@{fieldName}-manual-container" class="hidden">
 
         @TextInput(
             TextInputParams(
