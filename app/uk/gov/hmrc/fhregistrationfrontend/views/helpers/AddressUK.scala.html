@@ -28,51 +28,49 @@
     }
 }
 
+
 <fieldset class="govuk-fieldset">
-    <legend id="@{fieldName}-title" class="govuk-fieldset__legend govuk-fieldset__legend--s" x>
-        <h3 class="govuk-fieldset__heading">
+    <legend id="@{fieldName}-title" class="govuk-fieldset__legend govuk-fieldset__legend--s">
         @{params.label}
-        </h3>
     </legend>
-    <div class="govuk-width-container">
-    @viewHelpers.govukInput(Input(
-        id = s"$fieldName-property-filter",
-        name = s"$fieldName-property-filter",
-        label = Label(
-            isPageHeading = false,
-            classes = "govuk-body",
-            content = Text("Property name or number (optional)")
-        ),
-        spellcheck = Some(false),
-        classes = "govuk-!-width-one-quarter",
-        hint = Some(Hint(
-            content = Text("For example, The Mill, Flat A or 37b")
+    <div id="@{fieldName}-lookup-container" class="address-lookup-container" hidden>
+        @viewHelpers.govukInput(Input(
+            id = s"$fieldName-property-filter",
+            name = s"$fieldName-property-filter",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = Text("Property name or number (optional)")
+            ),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-quarter",
+            hint = Some(Hint(
+                content = Text("For example, The Mill, Flat A or 37b")
+            ))
         ))
-    ))
 
-    @viewHelpers.govukInput(Input(
-        id = s"$fieldName-postcode-search",
-        name = s"$fieldName-postcode-search",
-        label = Label(
-            isPageHeading = false,
-            classes = "govuk-body",
-            content = Text("Postcode")
-        ),
-        spellcheck = Some(false),
-        autocomplete = Some("postal-code"),
-        classes = "govuk-!-width-one-quarter",
+        @viewHelpers.govukInput(Input(
+            id = s"$fieldName-postcode-search",
+            name = s"$fieldName-postcode-search",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = Text("Postcode")
+            ),
+            spellcheck = Some(false),
+            autocomplete = Some("postal-code"),
+            classes = "govuk-!-width-one-quarter",
 
-    ))
-    @viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary", attributes = Map(s"$fieldName-postcode-search" → "continue")))
+        ))
+        @viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary"))
 
-    <p class="govuk-!-margin-bottom-6 govuk-body">
-        <a href="#@{fieldName}-title" class= "govuk-link" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
-@*        <a class="govuk-link" href="#@{fieldName}-title" data-context="storagePremise_address">Enter address manually</a>*@
-    </p>
+        <p class="govuk-!-margin-bottom-6 govuk-body">
+            <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode govuk-link">Enter address manually</a>
+        </p>
     </div>
 
 
-    <div id="@{fieldName}-manual-container" class="hidden">
+    <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
 
         @TextInput(
             TextInputParams(
@@ -129,7 +127,8 @@
             )
         )
         <input type="hidden" name="@{fieldName}.lookupId" value="@formDate(s"$fieldName.lookupId").value">
-        <div class="form-group lookup-link-container" style="margin: 1em 0; display: none;">
+
+        <div class="form-group lookup-link-container" hidden>
             <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
         </div>
     </div>
