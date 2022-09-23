@@ -28,8 +28,7 @@
     }
 }
 
-<fieldset id="@{fieldName}-fieldset" class="govuk-body">
-    <legend class="form-label-bold" id="govuk-heading-l">@{params.label}</legend>
+<fieldset class="govuk-body">
     @viewHelpers.govukInput(Input(
         id = s"$fieldName-property-filter",
         name = s"$fieldName-property-filter",
@@ -55,21 +54,11 @@
         ),
         spellcheck = Some(false),
         classes = "govuk-!-width-one-third",
-    ))
-    @viewHelpers.govukButton(Button(content = Text("Look up address"), inputType = Some("submit")))
+    ))@viewHelpers.govukButton(Button(content = Text("Look up address"), classes = "govuk-button--secondary"))
+    <p class="govuk-body">
+        <a href="#@{fieldName}-title" data-context="@{fieldName}" class="govuk-link">Enter address manually</a>
+    </p>
 
-    <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
-        <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
-        <span id="@{fieldName}-property-hint" class="form-hint">For example, The Mill, Flat A or 37b</span>
-        <input type="text" aria-describedby="@{fieldName}-property-hint" data-context="@{fieldName}" id="@{fieldName}-property-filter" class="property-value form-control" style="width: 150px; margin-bottom: 15px;" />
-        <label for="@{fieldName}-postcode-search">Postcode</label>
-        <input type="text" class="postcode-value form-control" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
-        <button data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</button>
-        <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" aria-live="polite"></fieldset>
-        <div class="form-group" style="margin-top: 1em">
-            <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
-        </div>
-    </div>
 
     <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
 
