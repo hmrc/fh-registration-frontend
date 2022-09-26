@@ -114,6 +114,7 @@
   <p class="govuk-body">@Messages("fh.otherStoragePremises.each.inf")</p>
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
+      @if(otherStoragePremisesForm.errors.nonEmpty) {
 
 <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
@@ -135,6 +136,7 @@
         }
         </div>
       </div>
+
       @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
           legend = Some(Legend(
@@ -146,7 +148,7 @@
         idPrefix = Some(isThirdPartyKey),
         name = isThirdPartyKey,
         errorMessage = if (otherStoragePremisesForm(isThirdPartyKey).hasErrors) {
-          Some(ErrorMessage(content = Text(messages("fh.storagePremise_address.isThirdParty.error.required"))))
+          Some(ErrorMessage(content = Text(messages("fh.isThirdParty.error.required"))))
         } else None,
         items = Seq(
           RadioItem(
