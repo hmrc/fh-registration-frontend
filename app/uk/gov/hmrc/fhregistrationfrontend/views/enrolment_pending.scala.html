@@ -15,47 +15,45 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 
-@title = @{
-  Messages(s"fh.status.received.title")
+@title1 = @{
+  Messages("fh.status.received.title")
 }
 
-@mainTemplate(title = title, linkElement = Some(stylesheets)) {
+@layout(title = title1) {
 
-  <div class="govuk-box-highlight appstatus">
-    <h1 class="heading-xlarge">
-      @title
-    </h1>
-  </div>
+    @viewHelpers.govukPanel(Panel(
+        title = Text(Messages("fh.status.received.title"))
+    ))
+    <hr class="govuk-section-break govuk-section-break--m" />
 
-  <h2 class="heading-large">
+    <h2 class="govuk-heading-l">
     @Messages("fh.status_pending.what_happens_next")
-  </h2>
+    </h2>
+    <div class="govuk-body">
+      <p>
+        @Messages("fh.status_pending.what_happens_next_1")
+      </p>
 
-  <p>
-    @Messages("fh.status_pending.what_happens_next_1")
-  </p>
+      <p>
+        @Messages("fh.status_pending.what_happens_next_2")
+      </p>
 
+      <p>
+        @Messages("fh.status_pending.what_happens_next_3")
+        <a class="govuk-link" href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
+        @Messages("fh.status_pending.what_happens_next_5")
+      </p>
+    </div>
   <p>
-    @Messages("fh.status_pending.what_happens_next_2")
-  </p>
-
-  <p>
-    @Messages("fh.status_pending.what_happens_next_3")
-    <a href=@{Messages("link.vat")} target="_blank">@Messages("fh.status_pending.what_happens_next_4")</a>
-    @Messages("fh.status_pending.what_happens_next_5")
-  </p>
-
-  <p>
-    <a class="button" role="button" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout">
-    @Messages("fh.status_pending.finish")
-    </a>
+      @viewHelpers.govukButton(Button(href = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController
+              .signout.url), content = Text(messages("fh.status_pending.finish")), inputType = Some("submit")))
   </p>
 }
