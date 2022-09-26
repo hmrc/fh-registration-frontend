@@ -96,25 +96,24 @@
 @layout(title = titlePrefix + title, Some(pageScripts), Some(pageHeadBlock)) {
 
   @Back(navigation, viewHelpers)
+  @if(otherStoragePremisesForm.errors.nonEmpty) {
 
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+      otherStoragePremisesForm.errors.groupBy(_.key).map(x => x._2.head).toList.map { error =>
+        ErrorLink(
+          href = Some(s"#${error.key}"),
+          content = Text(Messages(s"fh.${error.key}.${error.message}"))
+        )
+      }
+      ,
+      title = Text(messages("fh.generic.error"))))
+  }
 
   <h1 class="govuk-heading-l">@title</h1>
-
   <p class="govuk-body">@Messages("fh.otherStoragePremises.each.inf")</p>
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
-      @if(otherStoragePremisesForm.errors.nonEmpty) {
 
-        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-          otherStoragePremisesForm.errors.map { error =>
-            ErrorLink(
-              href = Some(s"#${error.key}"),
-              content = Text(Messages(s"fh.${error.key}.${error.message}"))
-            )
-          }
-          ,
-          title = Text(messages("fh.generic.error"))))
-      }
       @if(params.canRemove) {
         <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
       }
