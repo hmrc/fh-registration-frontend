@@ -20,7 +20,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import play.api.i18n.Messages
+@import play.api.data.Form
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -96,14 +97,24 @@
 
   @Back(navigation, viewHelpers)
 
-  @error_box(otherStoragePremisesForm, s".$storagePremise_addressKey.")
 
   <h1 class="govuk-heading-l">@title</h1>
 
   <p class="govuk-body">@Messages("fh.otherStoragePremises.each.inf")</p>
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
+      @if(otherStoragePremisesForm.errors.nonEmpty) {
 
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+          otherStoragePremisesForm.errors.map { error =>
+            ErrorLink(
+              href = Some(s"#${error.key}"),
+              content = Text(Messages(s"fh.${error.key}.${error.message}"))
+            )
+          }
+          ,
+          title = Text(messages("fh.generic.error"))))
+      }
       @if(params.canRemove) {
         <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
       }
@@ -132,7 +143,7 @@
         idPrefix = Some(isThirdPartyKey),
         name = isThirdPartyKey,
         errorMessage = if (otherStoragePremisesForm(isThirdPartyKey).hasErrors) {
-          Some(ErrorMessage(content = Text(messages("fh.storagePremise_address.isThirdParty.error.required"))))
+          Some(ErrorMessage(content = Text(messages("fh.isThirdParty.error.required"))))
         } else None,
         items = Seq(
           RadioItem(
