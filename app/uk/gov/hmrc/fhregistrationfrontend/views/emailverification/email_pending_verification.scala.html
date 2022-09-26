@@ -25,7 +25,6 @@
 @this(
         main_template: main_template_old
 )
-
 @(emailVerificationForm: Form[EmailVerification], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @stylesheets = {
@@ -42,7 +41,7 @@
 
 @showAlert = @{
   emailSentAgain.filter(_ == true).map { _ =>
-    Alert(Messages("fh.emailVerification.emailSentAgain"))
+    AlertOld(Messages("fh.emailVerification.emailSentAgain"))
   }
 }
 

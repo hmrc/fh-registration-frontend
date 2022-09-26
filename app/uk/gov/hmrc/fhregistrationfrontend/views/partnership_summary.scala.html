@@ -34,7 +34,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 
 @showAlert = @{
   params.hasAmendments.filter(_ == true).map { _ =>
-    Alert(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
+      AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
   }
 }
 

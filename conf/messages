@@ -468,6 +468,7 @@ fh.declaration.person_status.label=Job title
 fh.declaration.jobTitle.error.required=Enter the job title of who is submitting this application
 fh.declaration.person_status.error.required=Enter the job title of who is submitting this application
 fh.declaration.person_status.error.pattern=Enter only valid characters for a job title
+fh.declaration.jobTitle.error.pattern=Enter only valid characters for a job title
 fh.declaration.declaration.title=By sending this application you confirm that:
 fh.declaration.declaration.New.title=By sending this application you confirm that:
 fh.declaration.declaration.Amendment.title=By resending this application you confirm that:
@@ -486,10 +487,11 @@ fh.declaration.Variation.button=Accept and send update
 fh.declaration.New.hasAmendments.error.linkText=View or change your application
 fh.declaration.Amendment.hasAmendments.error.linkText=View or change your application
 fh.declaration.Variation.hasAmendments.error.linkText=View or change your registered details
-fh.declaration.alternativeEmail.email.error.email=Enter valid email addresses that match
-fh.declaration.alternativeEmail.emailConfirmation.no_match.error=Enter valid email address that match
+fh.declaration.alternativeEmail.email.error.email=Enter a valid email addresses
+fh.declaration.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
 fh.declaration.usingDefaultEmail.error.required=Select whether this is the correct email address to use
-fh.declaration.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.declaration.alternativeEmail.email.error.required=Enter email addresses you want to use
+fh.declaration.alternativeEmail.emailConfirmation.empty.error= Re-enter the email address you want to use
 # Corporate Body Page specific messages
 #============================================================
 
