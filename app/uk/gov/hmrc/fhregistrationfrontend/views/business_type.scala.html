@@ -43,6 +43,7 @@
     </details>
 }
 
+
 @titlePrefix = @{
     if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -58,12 +59,13 @@
     @viewHelpers.govukBackLink(BackLink(href =backUrl, content = Text(messages("fh.generic.back"))))
 
     @if(businessTypeForm.errors.nonEmpty) {
-        @viewHelpers.govukErrorSummary(ErrorSummary(errorList = businessTypeForm.errors.map(e =>
-            ErrorLink(
-                href = Some(s"#${e.key}"),
-                content = Text(messages(s"fh.${e.key}.${e.message}"))
-            )
-        )))
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${businessTypeForm.errors.head.key}"),
+                content = Text(messages(s"fh.${businessTypeForm.errors.head.key}.${businessTypeForm.errors.head.message}"))
+            ))
+            ,
+            title = Text(messages("fh.generic.error"))))
     }
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType,'novalidate -> "novalidate") {
@@ -80,7 +82,7 @@
                 idPrefix = Some("businessType"),
                 name = "businessType",
                 errorMessage = if(businessTypeForm("businessType").hasErrors) {
-                    Some(ErrorMessage(content = Text(messages(s"fh.business_type.${businessTypeForm.errors.head.message}"))))
+                    Some(ErrorMessage(content = Text(messages("fh.businessType.error.required"))))
                 } else None,
                 items = Seq(
                     RadioItem(
