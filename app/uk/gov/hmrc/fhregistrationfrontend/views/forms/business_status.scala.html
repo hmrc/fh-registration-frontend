@@ -63,7 +63,7 @@
         hint = Some(Hint(
             content = Text(Messages("fh.business_status.new_business.hint_text"))
         )),
-        errorMessage = businessStatusForm.errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.proposedStartDate.${e.message}", e.args:_*)))),
+        errorMessage = businessStatusForm(proposedStartDateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.proposedStartDate.${e.message}", e.args:_*)))),
         items = Seq(
             InputItem(name = s"$proposedStartDateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = businessStatusForm.data.get(s"$proposedStartDateKey.day")),
             InputItem(name = s"$proposedStartDateKey.month", classes = s"govuk-input--width-2${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = businessStatusForm.data.get(s"$proposedStartDateKey.month")),
