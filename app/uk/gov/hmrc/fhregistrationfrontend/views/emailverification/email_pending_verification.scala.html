@@ -14,22 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Alert
+@this(layout: layout, viewHelpers: ViewHelpers)
 
-@this(
-        main_template: main_template_old
-)
+
 @(emailVerificationForm: Form[EmailVerification], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-}
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -41,31 +38,33 @@
 
 @showAlert = @{
   emailSentAgain.filter(_ == true).map { _ =>
-    AlertOld(Messages("fh.emailVerification.emailSentAgain"))
+    Alert(messages("fh.emailVerification.emailSentAgain"))
   }
 }
 
-@main_template(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@layout(title = title, Some(pageScripts)) {
 
   @showAlert
 
-  <h1>@title</h1>
-  <p class="lede">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
-  <h2>@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
-  <p>@Messages("fh.emailVerification.pendingText.goToEmail")</p>
-  <p>@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
+    <h1 class ="govuk-heading-l">@title</h1>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
+    <h2 class ="govuk-heading-m">@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.goToEmail")</p>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
 
-  <h2>@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
-  <p>@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
-  <p>@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
-    @helper.CSRF.formField
-    <input type="hidden" name="@{emailOptionKey}" value="false">
-    <input type="hidden" name="@{alternativeEmailKey}" value="@{emailVerificationForm(alternativeEmailKey).value}">
-    <div class="form-group">
-      <button type="submit" class="button">@Messages("fh.emailVerification.resendEmail")</button>
-    </div>
-  }
-  <p><a href="email-edit">@Messages("fh.emailVerification.changeEmail")</a></p>
+    <h2 class ="govuk-heading-m">@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail) {
+        <input type="hidden" name="@{emailOptionKey}" value="false">
+        <input type="hidden" name="@{alternativeEmailKey}" value="@{emailVerificationForm(alternativeEmailKey).value}">
+
+        @viewHelpers.govukButton(Button(
+            content = Text(Messages("fh.emailVerification.resendEmail")),
+            inputType = Some("submit")
+        ))
+
+    }
+    <p class="govuk-body"><a href="email-edit" class="govuk-link">@Messages("fh.emailVerification.changeEmail")</a></p>
 
 }
