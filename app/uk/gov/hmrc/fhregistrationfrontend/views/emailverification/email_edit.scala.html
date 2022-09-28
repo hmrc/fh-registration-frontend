@@ -78,11 +78,12 @@
             value = emailVerificationForm(alternativeEmailKey).value
         ))
         <input type="hidden" name="@{emailOptionKey}" value="false">
-    @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
 
     @viewHelpers.govukInsetText(InsetText(
         content = Text(Messages("fh.emailVerification.alternativeEmail.info"))
     ))
+
+    @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
 
     }
 }
