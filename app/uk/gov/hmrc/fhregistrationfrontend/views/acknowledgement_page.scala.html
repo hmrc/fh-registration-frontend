@@ -22,34 +22,38 @@
 @import play.twirl.api.{Html⇒tHtml}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Variation
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@title = @{
+@title1 = @{
   Messages(s"fh.ack.$mode.title")
 }
 
-@mainTemplate(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts)) {
+@layout(title = title1, pageScripts = Some(scripts)) {
 
-  <div class="transaction-banner--complete">
+    <div class="transaction-banner--complete">
 
-    <h1 class="transaction-banner__heading">
-      @title
-    </h1>
+        <h1 class="transaction-banner__heading">
+        @title1
+        </h1>
 
-    <span id="subref" class="h1-heading">
-      @Messages("fh.generic.on")
-      @formatDate(date)
-    </span>
+        <span id="subref" class="h1-heading">
+            @Messages("fh.generic.on")
+            @formatDate(date)
+        </span>
 
-  </div>
+    </div>
+
+
+
+    ))
+    <hr class="govuk-section-break govuk-section-break--m" />
 
   <div class="hidden-print">
 
@@ -62,52 +66,51 @@
             <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
           </p>
         </div>
+          <hr class="govuk-section-break govuk-section-break--m" />
 
-        <h2 class="heading-medium">
-        @Messages("fh.ack.what_happens_next")
+        <h2 class="govuk-heading-l">
+            @Messages("fh.ack.what_happens_next")
+        </h2>
+        <div class="govuk-body">
+            <p>
+            @Messages("fh.ack.what_happens_next_1")
+            </p>
+
+            <p>
+            @Messages("fh.ack.what_happens_next_2")
+            </p>
+        </div>
+
+        <h2 class="govuk-heading-l">
+            @Messages("fh.ack.help_using_service")
         </h2>
 
-        <p>
-        @Messages("fh.ack.what_happens_next_1")
-        </p>
+        <div class="govuk-body">
+            <p>
+              <a class="govuk-link" href="@Messages("link.guidance_page")">
+              @Messages("fh.ack.guidance_link_text")
+              </a>
+              @Messages("fh.ack.to_find_out")
+            </p>
 
-        <p>
-        @Messages("fh.ack.what_happens_next_2")
-        </p>
-
-
-        <h2 class="heading-medium">
-        @Messages("fh.ack.help_using_service")
-        </h2>
-
-        <p>
-          <a href="@Messages("link.guidance_page")">
-          @Messages("fh.ack.guidance_link_text")
-          </a>
-          @Messages("fh.ack.to_find_out")
-        </p>
-
-        <ul class="bullets">
-          <li>
-          @Messages("fh.ack.help_bullet_1")
-          </li>
-          <li>
-          @Messages("fh.ack.help_bullet_2")
-          </li>
-          <li>
-          @Messages("fh.ack.help_bullet_3")
-          </li>
-        </ul>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>@Messages("fh.ack.help_bullet_1")</li>
+              <li>@Messages("fh.ack.help_bullet_2")</li>
+              <li>@Messages("fh.ack.help_bullet_3")</li>
+            </ul>
+        </div>
       } else {
-        <p>
-          @Messages("fh.ack.Variation.info")
-        </p>
-        <p>
-          <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" class="button" role="button">Finish and sign out</a>
-        </p>
-        <p>
-          <a href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
-        </p>
+          <div class="govuk-body">
+              <p>
+              @Messages("fh.ack.Variation.info")
+              </p>
+              <p>
+              <a class="govuk-link" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" class="button" role="button">Finish and sign out</a>
+              </p>
+              <p>
+              <a href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
+              </p>
+          </div>
       }
 
       @SurveyLink()(messages, config)
