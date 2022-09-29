@@ -29,6 +29,10 @@
 
 @(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
+@pageHeadBlock = {
+  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+}
+
 @scripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -42,7 +46,7 @@
   formatDate(date)
 }
 
-@layout(title = title1, pageScripts = Some(scripts)) {
+@layout(title = title1, pageScripts = Some(scripts), pageHeadBlock = Some(pageHeadBlock)) {
 
 
 
@@ -113,7 +117,7 @@
         <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
       </p>
 
-      <div class="show-print">
+      <div class="fhdds-print-only govuk-body">
         @printableSummary
       </div>
 
