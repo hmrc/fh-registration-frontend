@@ -113,15 +113,11 @@
           </div>
       }
 
-      @SurveyLink()(messages, config)
-@*      TODO: work on this*@
-@*      <a class="govuk-link" href=s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier">Messages("fh.survey_link_text")*@
-@*          Messages("fh.survey_hint")</a>*@
-@*      {config.exitSurveyUrl}*@
-@*    </div>*@
+     <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
+     </div>
 
     <div class="show-print">
       @printableSummary
     </div>
-  </div>
+
 }
