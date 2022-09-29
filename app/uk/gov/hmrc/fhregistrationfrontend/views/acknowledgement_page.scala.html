@@ -49,19 +49,18 @@
 
     </div>
 
-
-
     <hr class="govuk-section-break govuk-section-break--m" />
 
-  <div class="hidden-print">
 
+    <div class="govuk-body">
       <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
 
       @if(mode != Variation) {
         <div class="js-show notice with-icon">
           <i class="icon icon-file-download"></i>
-          <p>
-            <a href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
+
+          <p class="govuk-body">
+            <a class="govuk-link" href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
           </p>
         </div>
           <hr class="govuk-section-break govuk-section-break--m" />
@@ -110,12 +109,17 @@
               </p>
           </div>
       }
+    </div>
+      <p class="govuk-body">
+        <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
+      </p>
 
-     <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
-     </div>
+    <div class="govuk-visually-hidden">
+
 
     <div class="show-print">
       @printableSummary
+    </div>
     </div>
 
 }
