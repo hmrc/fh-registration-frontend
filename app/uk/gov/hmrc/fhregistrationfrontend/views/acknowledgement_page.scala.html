@@ -108,16 +108,20 @@
               <a class="govuk-link" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" class="button" role="button">Finish and sign out</a>
               </p>
               <p>
-              <a href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
+              <a class="govuk-link" href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
               </p>
           </div>
       }
 
       @SurveyLink()(messages, config)
-
-    </div>
+@*      TODO: work on this*@
+@*      <a class="govuk-link" href=s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier">Messages("fh.survey_link_text")*@
+@*          Messages("fh.survey_hint")</a>*@
+@*      {config.exitSurveyUrl}*@
+@*    </div>*@
 
     <div class="show-print">
       @printableSummary
     </div>
+  </div>
 }
