@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Variation
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -33,30 +34,19 @@
 @title1 = @{
   Messages(s"fh.ack.$mode.title")
 }
+@subtitle = @{
+  Messages("fh.generic.on")
+  formatDate(date)
+}
 
 @layout(title = title1, pageScripts = Some(scripts)) {
 
-@*    TODO: get gov panel working*@
 
-@*//    @viewHelpers.govukPanel(Panel(*@
-@*//        title = Text(Messages(@title1))*@
-@*//    ))*@
 
-    <div class="transaction-banner--complete">
-
-        <h1 class="transaction-banner__heading">
-        @title1
-        </h1>
-
-        <span id="subref" class="h1-heading">
-            @Messages("fh.generic.on")
-            @formatDate(date)
-        </span>
-
-    </div>
-
-    <hr class="govuk-section-break govuk-section-break--m" />
-
+    @viewHelpers.govukPanel(Panel(
+        title = Text(title1),
+        content = Text(subtitle)
+    ))
 
     <div class="govuk-body">
       <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
