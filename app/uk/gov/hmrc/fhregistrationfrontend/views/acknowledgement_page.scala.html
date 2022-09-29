@@ -29,7 +29,10 @@
 
 @(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@scripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  }
 
 @title1 = @{
   Messages(s"fh.ack.$mode.title")
@@ -110,12 +113,8 @@
         <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
       </p>
 
-    <div class="govuk-visually-hidden">
-
-
-    <div class="show-print">
-      @printableSummary
-    </div>
-    </div>
+      <div class="show-print">
+        @printableSummary
+      </div>
 
 }

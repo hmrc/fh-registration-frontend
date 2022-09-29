@@ -228,19 +228,29 @@ function init() {
 
   });
 
-  // Use GOV.UK shim-links-with-button-role.js to trigger a link styled to look like a button,
-  // with role="button" when the space key is pressed.
-  GOVUK.shimLinksWithButtonRole.init()
+  //guard against old lib code from running with new lib
+  //this block can be removed when the upgrade has completed
+  if(GOVUK != undefined){
+     // Use GOV.UK shim-links-with-button-role.js to trigger a link styled to look like a button,
+    // with role="button" when the space key is pressed.
+    if(GOVUK.shimLinksWithButtonRole != undefined){
+    GOVUK.shimLinksWithButtonRole.init()
+    }
 
-  // Show and hide toggled content
-  // Where .multiple-choice uses the data-target attribute
-  // to toggle hidden content
-  var showHideContent = new GOVUK.ShowHideContent()
-  showHideContent.init()
+    // Show and hide toggled content
+    // Where .multiple-choice uses the data-target attribute
+    // to toggle hidden content
+    if(GOVUK.showHideContent != undefined){
+    var showHideContent = new GOVUK.ShowHideContent()
+    showHideContent.init()
+    }
 
-  GOVUK.details.init()
+    if(GOVUK.details != undefined){
+    GOVUK.details.init()
+    }
+  }
 
-  
+
   var $errorSummary = $('.error-summary');
 
   if ($errorSummary.length) {
