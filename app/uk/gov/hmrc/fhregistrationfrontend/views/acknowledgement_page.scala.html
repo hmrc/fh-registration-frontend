@@ -42,7 +42,7 @@
   Messages(s"fh.ack.$mode.title")
 }
 @subtitle = @{
-  Messages("fh.generic.on")
+  Messages("fh.generic.on") + " " +
   formatDate(date)
 }
 
@@ -55,9 +55,11 @@
         content = Text(subtitle)
     ))
 
-    <div class="govuk-body">
+    <div class="govuk-body govuk-body-s">
+        <div class="js-show notice with-icon">
+            <i class="icon icon-file-download"></i>
       <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
-
+        </div>
       @if(mode != Variation) {
         <div class="js-show notice with-icon">
           <i class="icon icon-file-download"></i>
@@ -68,7 +70,7 @@
         </div>
           <hr class="govuk-section-break govuk-section-break--m" />
 
-        <h2 class="govuk-heading-l">
+        <h2 class="govuk-heading-m">
             @Messages("fh.ack.what_happens_next")
         </h2>
         <div class="govuk-body">
@@ -81,7 +83,7 @@
             </p>
         </div>
 
-        <h2 class="govuk-heading-l">
+        <h2 class="govuk-heading-m">
             @Messages("fh.ack.help_using_service")
         </h2>
 
