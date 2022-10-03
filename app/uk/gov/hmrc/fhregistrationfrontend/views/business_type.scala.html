@@ -15,78 +15,98 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-        mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
+@pageScripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+
 @typeNotListed = {
-    <p>@Messages("fh.business_type.details1")</p>
-    <p><a href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+            @Messages("fh.business_type.summary")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <p>@Messages("fh.business_type.details1")</p>
+            <a class="govuk-link" href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a><p> @Messages("fh.business_type.details2")</p>
+        </div>
+    </details>
 }
 
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @titlePrefix = @{
     if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@title = @{
-    Messages("fh.business_type.title")
+@pageTitle = @{
+    Messages("fh.business_type.title") + " - " + Messages("service.name") + " - " +
+            Messages("gov.uk")
 
 }
 
-@mainTemplate(title = titlePrefix + title, pageScripts = Some(scripts)) {
+@layout(pageTitle, Some(pageScripts)) {
 
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-    <a href="@backUrl" class="link-back">@Messages("fh.generic.back")</a>
-    @error_box(businessTypeForm)
+    @viewHelpers.govukBackLink(BackLink(href =backUrl, content = Text(messages("fh.generic.back"))))
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType, 'novalidate -> "novalidate") {
-
-        @helper.CSRF.formField
-
-        @RadioGroup(
-            RadioGroupParams(
-                name = Some("businessType"),
-                inline = false,
-                legend = Some(title),
-                legendAsHeading = true,
-                error = Some(Messages("fh.businessType.error.required")),
-                hasErrors = businessTypeForm("businessType").hasErrors,
-                value = businessTypeForm("businessType").value,
-                radios = List(
-                    RadioParams(
-                        "CorporateBody",
-                        Messages("fh.business_type.limited_company")
-                    ),
-                    RadioParams(
-                        "SoleTrader",
-                        Messages("fh.business_type.sole_trader")
-                    ),
-                    RadioParams(
-                        "Partnership",
-                        Messages("fh.business_type.business_partnership")
-                    )
-                )
-            )
-        )
-
-        @Details(Messages("fh.business_type.summary"), typeNotListed)
-
-        @SubmitButtons(
-            SubmitButtonsParams(
-                label = Messages("button.save.continue"),
-                saveForLaterLink = false
-            ),
-            navigation = Navigation(0, None)
-        )
+    @if(businessTypeForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${businessTypeForm.errors.head.key}"),
+                content = Text(messages(s"fh.${businessTypeForm.errors.head.key}.${businessTypeForm.errors.head.message}"))
+            ))
+            ,
+            title = Text(messages("fh.generic.error"))))
     }
 
-}
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType,'novalidate -> "novalidate") {
+
+        @viewHelpers.govUkRadios(
+            Radios(
+                fieldset = Some(Fieldset(
+                    legend = Some(Legend(
+                        content = Text(Messages("fh.business_type.title")),
+                        classes = "govuk-fieldset__legend--l",
+                        isPageHeading = true
+                    ))
+                )),
+                idPrefix = Some("businessType"),
+                name = "businessType",
+                errorMessage = if(businessTypeForm("businessType").hasErrors) {
+                    Some(ErrorMessage(content = Text(messages("fh.businessType.error.required"))))
+                } else None,
+                items = Seq(
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.limited_company")),
+                        value = Some("CorporateBody")
+                    ),
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.sole_trader")),
+                        value = Some("SoleTrader")
+                    ),
+                    RadioItem(
+                        content = Text(Messages("fh.business_type.business_partnership")),
+                        value = Some("Partnership")
+                    )
+                )
+            ).withFormField(businessTypeForm("businessType"))
+        )
+
+        @typeNotListed
+
+        @viewHelpers.govukButton(Button(
+            content = Text(Messages("button.save.continue"))
+        ))
+    }
+
+    }
+
