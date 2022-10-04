@@ -99,7 +99,7 @@
   @if(otherStoragePremisesForm.errors.nonEmpty) {
 
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-      otherStoragePremisesForm.errors.groupBy(_.key).map(x => x._2.head).toList.map { error =>
+      otherStoragePremisesForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
         ErrorLink(
           href = Some(s"#${error.key}"),
           content = Text(Messages(s"fh.${error.key}.${error.message}"))
@@ -114,22 +114,28 @@
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("otherStoragePremises", sectionId), 'novalidate -> "novalidate") {
 
-      @if(params.canRemove) {
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
-      }
-      @AddressUK(
-        otherStoragePremisesForm,
-        AddressUKParams(
-          context = Some("storagePremise"),
-          name = "address",
-          label = Messages("fh.other_storage_premises.each.title", sectionId),
-          hasErrors = otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors,
-          error = Some(Messages("fh.contact_person.contact_address_new.error"))
-        ),
-        viewHelpers
-      )
+<div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+        @AddressUK(
+          otherStoragePremisesForm,
+          AddressUKParams(
+            context = Some("storagePremise"),
+            name = "address",
+            label = Messages("fh.other_storage_premises.each.title", sectionId),
+            hasErrors = otherStoragePremisesForm(s"$storagePremise_addressKey").hasErrors,
+            error = Some(Messages("fh.contact_person.contact_address_new.error"))
+          ),
+          viewHelpers
+        )
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+        @if(params.canRemove) {
+          <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
+        }
+        </div>
+      </div>
 
-      <br>
+
 
       @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
