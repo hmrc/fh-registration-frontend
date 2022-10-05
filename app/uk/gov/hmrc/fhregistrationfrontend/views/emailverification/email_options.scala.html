@@ -56,14 +56,14 @@
         name = "alternativeEmail",
         inputType = "email",
         label = Label(
-            isPageHeading = true,
-            content = HtmlContent(htmlContent)
+            content = Text(messages(s"fh.emailVerification.$alternativeEmailKey.label")),
+            classes = "govuk-!-font-weight-bold"
         ),
         autocomplete = Some("email"),
         spellcheck = Some(false),
         classes = "govuk-!-width-one-half",
         hint = Some(Hint(
-            content = Text(messages("fh.emailVerification.alternativeEmail.hintText"))
+            content = Text(messages(s"fh.emailVerification.alternativeEmail.info"))
         )),
         errorMessage =
             emailVerificationForm.error(alternativeEmailKey).map{ e =>
