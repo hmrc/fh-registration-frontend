@@ -14,18 +14,18 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessCustomers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -40,60 +40,65 @@
 @title = @{
     Messages("fh.business_customers.label")
 }
-
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @BackOld(navigation)
+  @Back(navigation, viewHelpers)
 
-  @error_box(businessCustomersForm)
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
+    @if(businessCustomersForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${businessCustomersForm.errors.head.key}"),
+                content = Text(messages(s"fh.${businessCustomersForm.errors.head.key}.${businessCustomersForm.errors.head.message}"))
+            ))
+            ,
+            title = Text(messages("fh.generic.error"))))
+    }
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(numberOfCustomersKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        hintText = Some(Messages("fh.business_customers.hint_text")),
-        inline = false,
-        hasErrors = businessCustomersForm(numberOfCustomersKey).hasErrors,
-        error = Some(Messages("fh.numberOfCustomers.error.required")),
-        value = businessCustomersForm(numberOfCustomersKey).value,
-        radios = List(
-          RadioParams(
-            Messages("fh.business_customers.none.value"),
-            Messages("fh.business_customers.none.label")
-          ),
-          RadioParams(
-            Messages("fh.business_customers.1_10.value"),
-            Messages("fh.business_customers.1_10.label")
-          ),
-          RadioParams(
-            Messages("fh.business_customers.11_50.value"),
-            Messages("fh.business_customers.11_50.label")
-          ),
-          RadioParams(
-            Messages("fh.business_customers.51_100.value"),
-            Messages("fh.business_customers.51_100.label")
-          ),
-          RadioParams(
-            Messages("fh.business_customers.101_plus.value"),
-            Messages("fh.business_customers.101_plus.label")
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages(title)),
+                  classes = "govuk-fieldset__legend--l",
+                  isPageHeading = true
+              ))
+          )),
+          idPrefix = Some(numberOfCustomersKey),
+          name = numberOfCustomersKey,
+          errorMessage = if (businessCustomersForm(numberOfCustomersKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages(s"fh.numberOfCustomers.error.required"))))
+          } else None,
+          hint = Some(Hint(
+           content = Text(Messages("fh.business_customers.hint_text"))
+          )),
+          items = Seq(
+              RadioItem(
+                  content = Text(Messages("fh.business_customers.none.label")),
+                  value = Some(Messages("fh.business_customers.none.value")),
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.business_customers.1_10.label")),
+                  value = Some(Messages("fh.business_customers.1_10.value")),
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.business_customers.11_50.label")),
+                  value = Some(Messages("fh.business_customers.11_50.value")),
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.business_customers.51_100.label")),
+                  value = Some(Messages("fh.business_customers.51_100.value")),
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.business_customers.101_plus.label")),
+                  value = Some(Messages("fh.business_customers.101_plus.value")),
+              )
           )
-        )
-      )
-    )
+      ))
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
   }
+
 }
