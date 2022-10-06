@@ -16,59 +16,60 @@
 
 @import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
 
 @(expiryTime: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @title = @{
-  Messages("fh.has_saved")
+  messages("fh.has_saved")
 }
 
-@mainTemplate(title = title, pageScripts = Some(scripts)) {
+@html = {
+<p class="govuk-body">
+      @Messages("fh.held_until") <br>
+      <strong>@{expiryTime.toLocalDate.toString("d MMMM yyyy")}</strong>
+</p>
+    }
 
-  <div class="govuk-box-highlight">
-    <h1 class="heading-xlarge">
-      @title
-    </h1>
-    <p class="font-large">
-      @Messages("fh.held_until")
-      <br>
-      <strong class="bold">
-        @{expiryTime.toLocalDate.toString("d MMMM yyyy")}
-      </strong>
-    </p>
-  </div>
+@layout(title = title, Some(scripts)) {
 
-  <p>
+    @viewHelpers.govukPanel(Panel(
+        title = Text(title),
+        content = HtmlContent(s"${messages("fh.held_until")}<br><strong>${expiryTime.toLocalDate.toString("d MMMM yyyy")}</strong>")
+    ))
+
+  <p class="govuk-body">
     @Messages("fh.held_until.hint")
   </p>
 
-  <div class="panel-indent panel-indent--gutter">
-    <h2 class="heading-small">
+  <div class="govuk-inset-text">
+    <h2 class="govuk-heading-s">
       @Messages("fh.held_until.notice")
     </h2>
   </div>
 
-  <p>@Messages("fh.held_until.you_can")</p>
+  <p class="govuk-body">@Messages("fh.held_until.you_can")</p>
 
-  <ul class="bullets">
+  <ul class="govuk-list govuk-list--bullet font-xsmall">
     <li>
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.resumeForm}">@Messages("fh.held_until.continue")</a>
+      <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.resumeForm}">@Messages("fh.held_until.continue")</a>
       @Messages("fh.held_until.continue.notice")
     </li>
     <li>@Messages("fh.held_until.delete")
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDelete}">
+      <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.confirmDelete}">
         @Messages("fh.held_until.delete.notice")
       </a>
     </li>
   </ul>
 
-  <p class="js-show back-to-previous">
-    <br><a href="javascript:history.go(-1)">@Messages("fh.held_until.back")</a>
+  <p class="govuk-body">
+    <br><a class="govuk-link" href="javascript:history.go(-1)">@Messages("fh.held_until.back")</a>
   </p>
 }
