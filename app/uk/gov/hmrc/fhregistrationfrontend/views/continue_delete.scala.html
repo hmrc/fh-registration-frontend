@@ -15,57 +15,55 @@
  *@
 
 @import org.joda.time.DateTime
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
+
 @(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @title = @{
   Messages("fh.continue_delete.header")
 }
 
-@mainTemplate(title = title) {
+@layout(title = title) {
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue) {
 
-  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitDeleteOrContinue}" method="POST">
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+        <h1 class="govuk-heading-l">@messages(title)</h1>
+        @viewHelpers.govUkRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(Messages("fh.continue_delete.to_do")),
+                    classes = "govuk-fieldset__legend--m",
+                    isPageHeading = true
+                ))
+            )),
+            idPrefix = Some("deleteOrContinue"),
+            name = "deleteOrContinue",
+            hint = Some(Hint(
+                content = Text(s"${messages("fh.continue_delete.continue.hint")} ${expiryTime.plusDays(27).toLocalDate.toString("d MMMM yyyy")} ${messages("fh.continue_delete.continue.hint_continue")}")
+            )),
+            errorMessage = if (act("act").hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.business_customers.error"))))
+            } else None,
+            items = Seq(
+                RadioItem(
+                    content = Text(messages("fh.continue_delete.continue")),
+                    value = Some("continue"),
+                    checked = true
+                ),
+                RadioItem(
+                    content = Text(messages("fh.continue_delete.delete")),
+                    value = Some("delete"),
+                    checked = act.data.values.toList.contains("delete")
+                )
+            )
+        ))
+    @viewHelpers.govukButton(Button(content = Text(messages("fh.generic.continue")), inputType = Some("submit")))
+    }
 
-    @helper.CSRF.formField
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some("deleteOrContinue"),
-        inline = false,
-        legend = Some(Messages("fh.continue_delete.to_do")),
-        hasErrors = act("act").hasErrors,
-        error = Some(Messages("fh.business_customers.error")),
-        value = Some("continue"),
-        hintText = Some(Messages("fh.continue_delete.continue.hint") + s" ${expiryTime.plusDays(27).toLocalDate.toString("d MMMM yyyy")
-        } " + Messages("fh.continue_delete.continue.hint_continue")),
-        radios = List(
-          RadioParams(
-            "continue",
-            Messages("fh.continue_delete.continue")
-          ),
-          RadioParams(
-            "delete",
-            Messages("fh.continue_delete.delete")
-          )
-        )
-      )
-    )
-
-    <div class="form-group">
-      <button class="button">@Messages("fh.generic.continue")</button>
-    </div>
-  </form>
 }
