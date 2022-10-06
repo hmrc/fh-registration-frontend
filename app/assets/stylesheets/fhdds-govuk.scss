@@ -1,0 +1,9 @@
+.fhdds-print-only {
+    display: none;
+}
+
+@media print {
+    .fhdds-print-only {
+        display: block;
+    }
+}
