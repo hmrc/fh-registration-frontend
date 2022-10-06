@@ -65,7 +65,7 @@
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
                 href = Some(s"#${reasonForm.errors.head.key}"),
-                content = Text(messages(s"fh.reason.error.required"))
+                content = Text(messages(s"fh.${reasonForm.errors.head.key}.${reasonForm.errors.head.message}"))
             )),
             title = Text(messages("generic.errorSummary"))))
     }
