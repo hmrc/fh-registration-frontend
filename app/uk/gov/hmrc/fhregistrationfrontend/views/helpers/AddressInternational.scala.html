@@ -1,22 +1,22 @@
 @*
-* Copyright 2022 HM Revenue & Customs
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*@
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
-
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 @(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers)(implicit message: Messages)
 
 @fieldName = @{
@@ -47,48 +47,72 @@
                 )
             }
     ))
-    @TextInput(
-        TextInputParams(
-            name = "Line1",
-            context = Some(fieldName),
-            value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
-            label = Messages("fh.address.line1.label"),
-            error = Messages("fh.address.line1." + formDate(s"$fieldName.Line1").error.map(_.message).getOrElse("")),
-            hasErrors = formDate(s"$fieldName.Line1").hasErrors
-        )
-    )
 
-    @TextInput(
-        TextInputParams(
-            name = "Line2",
-            context = Some(fieldName),
-            value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
-            label = Messages("fh.address.line2_optional.label"),
-            error = Messages("fh.address.other.error"),
-            hasErrors = formDate(s"$fieldName.Line2").hasErrors
-        )
-    )
+    @viewHelpers.govukInput(Input(
+        id = s"$fieldName.Line2",
+        name = s"$fieldName.Line2",
+        label = Label(
+            isPageHeading = false,
+            classes = "govuk-body",
+            content = HtmlContent(s"<strong>${message("fh.address.line2_optional.label")}</strong>")
+        ),
+        spellcheck = Some(false),
+        autocomplete = Some("address-line2"),
+        classes = "govuk-!-width-two-thirds",
+        value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
+        errorMessage =
+            formDate(s"$fieldName.Line2").error.map{ e =>
+                ErrorMessage(
+                    content = Text(message(s"fh.$fieldName.Line2.${e.message}")),
+                    visuallyHiddenText = Some(message("generic.errorPrefix"))
+                )
+            }
+    ))
 
-    @TextInput(
-        TextInputParams(
-            name = "Line3",
-            context = Some(fieldName),
-            value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
-            label = Messages("fh.address.line3.label"),
-            error = Messages("fh.address.other.error"),
-            hasErrors = formDate(s"$fieldName.Line3").hasErrors
-        )
-    )
+    @viewHelpers.govukInput(Input(
+        id = s"$fieldName.Line3",
+        name = s"$fieldName.Line3",
+        label = Label(
+            isPageHeading = false,
+            classes = "govuk-body",
+            content = HtmlContent(s"<strong>${message("fh.address.line3.label")}</strong>")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-two-thirds",
+        value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
+        errorMessage =
+            formDate(s"$fieldName.Line3").error.map{ e =>
+                ErrorMessage(
+                    content = Text(message(s"fh.$fieldName.Line3.${e.message}")),
+                    visuallyHiddenText = Some(message("generic.errorPrefix"))
+                )
+            }
+    ))
 
-    @CountryCodeLookup(
-        CountryCodeParams(
-            name = "Line4",
-            context = Some(fieldName),
-            value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
-            countryCode = Some(s"${formDate(s"$fieldName.countryCode").value.getOrElse("")}"),
-            label = Messages("fh.address.country.label"),
-            error = Messages("fh.address.country.error"),
-            hasErrors = formDate(s"$fieldName.countryCode").hasErrors
+    @viewHelpers.govukSelect(Select(
+        id = "sort",
+        name = "sort",
+        items = Seq(
+            SelectItem(
+                value = Some(""),
+                text = ""
+            ),
+            SelectItem(
+                value = Some("updated"),
+                text = "Recently updated",
+                selected = true
+            ),
+            SelectItem(
+                value = Some("views"),
+                text = "Most views"
+            ),
+            SelectItem(
+                value = Some("comments"),
+                text = "Most comments"
+            )
+        ),
+        label = Label(
+            content = HtmlContent(s"<strong>${message("fh.address.country.label")}</strong>")
         )
-    )
+    ))
 </fieldset>

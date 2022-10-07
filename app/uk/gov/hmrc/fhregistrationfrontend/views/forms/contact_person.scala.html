@@ -41,7 +41,7 @@
 @title = @{
   Messages("fh.contactPerson.title")
 }
-  @UkAddressConditional = {
+@UkAddressConditional = {
     @AddressUK(
     formDate = contactPersonForm,
     params = AddressUKParams(
@@ -53,6 +53,19 @@
     ),
       viewHelpers = viewHelpers
     )
+  }
+
+@NonUkAddressConditional= {
+  @AddressInternational(
+  contactPersonForm,
+  AddressUKParams(
+  context = Some("otherInternationalContactAddress"),
+  name = "contactAddress",
+  label = "International Contact address",
+  hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
+  error = Some(Messages("fh.contact_person.contact_address_new.error"))
+  ), viewHelpers
+  )
   }
 
 
@@ -82,7 +95,7 @@
         content = Text(messages("fh.generic.no")),
         value = Some("false"),
         checked = contactPersonForm(isUkAddressKey).value.toList.contains("false"),
-
+        conditionalHtml = Some(NonUkAddressConditional)
       )
     )
   ))
@@ -217,24 +230,6 @@
         )
       )
     ))
-
-
-      @NestedPanel(
-        NestedPanelParams(
-          "contactAddressInternational",
-          AddressInternationalOld(
-            contactPersonForm,
-            AddressUKParams(
-              context = Some("otherInternationalContactAddress"),
-              name = "contactAddress",
-              label = "International Contact address",
-              hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
-              error = Some(Messages("fh.contact_person.contact_address_new.error"))
-            )
-          )
-        )
-      )
-
 
 
     @SubmitButtons(

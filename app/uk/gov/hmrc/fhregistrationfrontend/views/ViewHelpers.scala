@@ -35,5 +35,6 @@ class ViewHelpers @Inject()(
   val govukBackLink: GovukBackLink,
   val govukSummaryList: GovukSummaryList,
   val govukDetails: GovukDetails,
-  val govukInsetText: GovukInsetText
+  val govukInsetText: GovukInsetText,
+  val govukSelect: GovukSelect
 )
