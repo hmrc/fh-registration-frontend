@@ -17,6 +17,8 @@
   // without a link to postcode lookup - if JS is enabled
   // then either open the lookup widget or default to the
   // manual entry with existing values populated
+  $('.address-lookup-container, .lookup-link-container').removeAttr('hidden');
+
 
   // because we can have multiple instances on the same page,
   // grab all postcode fields - if any have a value
@@ -239,15 +241,18 @@
   var manualMode = function (context) {
     $('#' + context + '-manual-container').removeClass('js-hidden');
     $('#' + context + '-lookup-container').addClass('js-hidden');
-    $('.lookup-address-mode').parent().show();
+    $('.lookup-address-mode').parent().show(); // legacy - can be removed when all pages upgraded
+    $('#' + context + '-manual-container').find('input').first().trigger('focus');
   };
 
   var lookupMode = function (context) {
     $('#' + context + '-manual-container').addClass('js-hidden');
     $('#' + context + '-lookup-container').removeClass('js-hidden');
+    $('#' + context + '-lookup-container').find('input').first().trigger('focus');
   };
 
-  $('.manual-address-mode').on('click', function () {
+  $('.manual-address-mode').on('click', function (e) {
+    e.preventDefault();
     manualMode(CSS.escape($(this).data('context')));
   });
 

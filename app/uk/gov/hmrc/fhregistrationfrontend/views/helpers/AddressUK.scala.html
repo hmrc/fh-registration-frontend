@@ -14,93 +14,125 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import play.api.i18n.Messages
+@import play.api.data.Form
 
-@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams)(implicit message: Messages)
+@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers)(implicit message: Messages)
 
 @fieldName = @{
-  params.context match {
-    case Some(context) => context + "_" + params.name
-    case _ => params.name
-  }
+    params.context match {
+        case Some(context) => context + "_" + params.name
+        case _ => params.name
+    }
 }
 
-<fieldset id="@{fieldName}-fieldset">
-  <legend class="form-label-bold" id="@{fieldName}-title">@{params.label}</legend>
+<fieldset class="govuk-fieldset">
+    <legend id="@{fieldName}-title" class="govuk-fieldset__legend govuk-fieldset__legend--s">
+    @{params.label}
+    </legend>
+@viewHelpers.govukInput(Input(
+            id = s"$fieldName.Line1",
+            name = s"$fieldName.Line1",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = HtmlContent(s"<strong>${message("fh.address.line1.label")}</strong>")
+            ),
+            spellcheck = Some(false),
+            autocomplete = Some("address-line1"),
+            classes = "govuk-!-width-two-thirds",
+            value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
+            errorMessage =
+                    formDate(s"$fieldName.Line1").error.map{ e =>
+                    ErrorMessage(
+                        content = Text(message(s"fh.$fieldName.Line1.${e.message}")),
+                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                    )
+                }
+        ))
 
-  <div id="@{fieldName}-lookup-container" class="address-lookup-container" style="display: none">
-    <label for="@{fieldName}-property-filter">Property name or number (optional)</label>
-    <span id="@{fieldName}-property-hint" class="form-hint">For example, The Mill, Flat A or 37b</span>
-    <input type="text" aria-describedby="@{fieldName}-property-hint" data-context="@{fieldName}" id="@{fieldName}-property-filter" class="property-value form-control" style="width: 150px; margin-bottom: 15px;" />
-    <label for="@{fieldName}-postcode-search">Postcode</label>
-    <input type="text" class="postcode-value form-control" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
-    <button data-context="@{fieldName}" class="button--secondary address-lookup" role="button" tabindex="0">Look up address</button>
-    <fieldset id="@{fieldName}-results" class="lookup-results-fieldset" aria-live="polite"></fieldset>
-    <div class="form-group" style="margin-top: 1em">
-      <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode">Enter address manually</a>
-    </div>
-  </div>
+ @viewHelpers.govukInput(Input(
+            id = s"$fieldName.Line2",
+            name = s"$fieldName.Line2",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = HtmlContent(s"<strong>${message("fh.address.line2_optional.label")}</strong>")
+            ),
+            spellcheck = Some(false),
+            autocomplete = Some("address-line2"),
+            classes = "govuk-!-width-two-thirds",
+            value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
+            errorMessage =
+                formDate(s"$fieldName.Line2").error.map{ e =>
+                    ErrorMessage(
+                        content = Text(message(s"fh.$fieldName.Line2.${e.message}")),
+                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                    )
+                }
+        ))
 
-  <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
+@viewHelpers.govukInput(Input(
+            id = s"$fieldName.Line3",
+            name = s"$fieldName.Line3",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = HtmlContent(s"<strong>${message("fh.address.line3.label")}</strong>")
+            ),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-two-thirds",
+            value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
+            errorMessage =
+                formDate(s"$fieldName.Line3").error.map{ e =>
+                    ErrorMessage(
+                        content = Text(message(s"fh.$fieldName.Line3.${e.message}")),
+                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                    )
+                }
+        ))
 
-    @TextInput(
-      TextInputParams(
-        name = "Line1",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line1").value.getOrElse("")}"),
-        label = Messages("fh.address.line1.label"),
-        error = Messages("fh.address.line1." + formDate(s"$fieldName.Line1").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.Line1").hasErrors
-      )
-    )
+@viewHelpers.govukInput(Input(
+            id = s"$fieldName.Line4",
+            name = s"$fieldName.Line4",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = HtmlContent(s"<strong>${message("fh.address.line4.label")}</strong>")
+            ),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-two-thirds",
+            value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
+            errorMessage =
+                formDate(s"$fieldName.Line4").error.map{ e =>
+                    ErrorMessage(
+                        content = Text(message(s"fh.$fieldName.Line4.${e.message}")),
+                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                    )
+                }
+        ))
 
-    @TextInput(
-      TextInputParams(
-        name = "Line2",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line2").value.getOrElse("")}"),
-        label = Messages("fh.address.line2_optional.label"),
-        error = Messages("fh.address.line2." + formDate(s"$fieldName.Line2").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.Line2").hasErrors
-      )
-    )
-
-    @TextInput(
-      TextInputParams(
-        name = "Line3",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
-        label = Messages("fh.address.line3.label"),
-        error = Messages("fh.address.other.error"),
-        hasErrors = formDate(s"$fieldName.Line3").hasErrors
-      )
-    )
-
-    @TextInput(
-      TextInputParams(
-        name = "Line4",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
-        label = Messages("fh.address.line4.label"),
-        error = Messages("fh.address.other.error"),
-        hasErrors = formDate(s"$fieldName.Line4").hasErrors
-      )
-    )
-
-    @TextInput(
-      TextInputParams(
-        name = "postcode",
-        context = Some(fieldName),
-        value = Some(s"${formDate(s"$fieldName.postcode").value.getOrElse("")}"),
-        label = Messages("fh.address.postcode.label"),
-        error = Messages("fh.address.postcode." + formDate(s"$fieldName.postcode").error.map(_.message).getOrElse("")),
-        hasErrors = formDate(s"$fieldName.postcode").hasErrors
-      )
-    )
-    <input type="hidden" name="@{fieldName}.lookupId" value="@formDate(s"$fieldName.lookupId").value">
-    <div class="form-group lookup-link-container" style="margin: 1em 0; display: none;">
-      <a href="#" data-context="@{fieldName}" class="lookup-address-mode">Look up address with postcode</a>
-    </div>
-  </div>
+@viewHelpers.govukInput(Input(
+            id = s"$fieldName.postcode",
+            name = s"$fieldName.postcode",
+            label = Label(
+                isPageHeading = false,
+                classes = "govuk-body",
+                content = HtmlContent(s"<strong>${message("fh.address.postcode.label")}</strong>")
+            ),
+            spellcheck = Some(false),
+            autocomplete = Some("postal-code"),
+            classes = "govuk-!-width-two-thirds",
+            value = Some(s"${formDate(s"$fieldName.postcode").value.getOrElse("")}"),
+            errorMessage =
+                formDate(s"$fieldName.postcode").error.map{ e =>
+                    ErrorMessage(
+                        content = Text(message(s"fh.$fieldName.postcode.${e.message}")),
+                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                    )
+                }
+        ))
 </fieldset>
+
