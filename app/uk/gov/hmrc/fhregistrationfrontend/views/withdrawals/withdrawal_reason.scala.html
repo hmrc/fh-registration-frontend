@@ -14,9 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
@@ -52,10 +49,26 @@
     spellcheck = Some(false),
     classes = "govuk-!-width-one-half",
     value = reasonForm(reasonOtherKey).value
+    ,
+    errorMessage =
+      reasonForm(reasonOtherKey).errors.headOption.map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+      }
   ))
 }
 
 @layout(title = titlePrefix + title, Some(pageScripts)) {
+  @if(reasonForm.errors.nonEmpty) {
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+      Seq(ErrorLink(
+        href = Some(s"#${reasonForm.errors.head.key}"),
+        content = Text(messages(s"fh.reason.error.required"))
+      )),
+      title = Text(messages("generic.errorSummary"))))
+  }
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
 
@@ -69,6 +82,9 @@
       )),
       idPrefix = Some(reasonKey),
       name = reasonKey,
+      errorMessage = if (reasonForm(reasonKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages(s"fh.reason.error.required"))))
+      } else None,
       items = Seq(
         RadioItem(
           content = Text(Messages("fh.withdrawalReason.appliedInError.label")),
@@ -85,6 +101,7 @@
         RadioItem(
           content = Text(Messages("fh.withdrawalReason.otherReason.label")),
           value = Option(Other.toString),
+          checked = reasonForm.data.values.toList.contains("Other"),
           conditionalHtml = Some(conditionalHtml)
         )
       )
