@@ -21,15 +21,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-  main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -42,7 +40,7 @@
   Messages("fh.withdrawalReason.title")
 }
 
-@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
 
