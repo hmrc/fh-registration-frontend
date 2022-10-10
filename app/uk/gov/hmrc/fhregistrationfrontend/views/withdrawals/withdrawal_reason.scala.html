@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -98,7 +99,7 @@
     <div class="form-group form-actions">
 
       <p>
-        <button type="submit" class="button" value="continue">@Messages("button.continue")</button>
+        @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
       </p>
 
       <p>
