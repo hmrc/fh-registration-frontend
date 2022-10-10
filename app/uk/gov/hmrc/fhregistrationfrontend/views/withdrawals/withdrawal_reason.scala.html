@@ -14,22 +14,18 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-  main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -42,69 +38,85 @@
   Messages("fh.withdrawalReason.title")
 }
 
-@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@conditionalHtml = @{
+  viewHelpers.govukInput(Input(
+    id = reasonOtherKey,
+    name = reasonOtherKey,
+    inputType = "text",
+    label = Label(
+      content = Text(messages(s"fh.withdrawalReason.$reasonOtherKey.label"))
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    value = reasonForm(reasonOtherKey).value
+    ,
+    errorMessage =
+      reasonForm(reasonOtherKey).errors.headOption.map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+      }
+  ))
+}
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
+@layout(title = titlePrefix + title, Some(pageScripts)) {
+  @if(reasonForm.errors.nonEmpty) {
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+      Seq(ErrorLink(
+        href = Some(s"#${reasonForm.errors.head.key}"),
+        content = Text(messages(s"fh.${reasonForm.errors.head.key}.${reasonForm.errors.head.message}"))
+      )),
+      title = Text(messages("generic.errorSummary"))))
+  }
 
-    @helper.CSRF.formField
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
 
-    @error_box(reasonForm)
-
-    @RadioGroup(
-      RadioGroupParams(
-
-        name = Some(reasonKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        inline = false,
-        error = Some(Messages("fh.reason.error.required")),
-        value = reasonForm(reasonKey).value,
-        hasErrors = reasonForm(reasonKey).hasErrors,
-        radios = List(
-          RadioParams(
-            AppliedInError.toString,
-            Messages("fh.withdrawalReason.appliedInError.label")
-          ),
-          RadioParams(
-            DuplicateApplication.toString,
-            Messages("fh.withdrawalReason.duplicateApplication.label")
-          ),
-          RadioParams(
-            NoLongerApplicable.toString,
-            Messages("fh.withdrawalReason.noLongerApplicable.label")
-          ),
-          RadioParams(
-            Other.toString,
-            Messages("fh.withdrawalReason.otherReason.label"),
-            dataTarget = Some("otherReasonContainer")
-          )
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(Messages(title)),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      idPrefix = Some(reasonKey),
+      name = reasonKey,
+      errorMessage = if (reasonForm(reasonKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages(s"fh.reason.error.required"))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.appliedInError.label")),
+          value = Option(AppliedInError.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.duplicateApplication.label")),
+          value = Option(DuplicateApplication.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.noLongerApplicable.label")),
+          value = Option(NoLongerApplicable.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.otherReason.label")),
+          value = Option(Other.toString),
+          checked = reasonForm.data.values.toList.contains("Other"),
+          conditionalHtml = Some(conditionalHtml)
         )
       )
-    )
-
-    @NestedPanel(
-      NestedPanelParams(
-        "otherReasonContainer",
-        TextInput(
-          TextInputParams(
-            name = reasonOtherKey,
-            label = Messages(s"fh.withdrawalReason.$reasonOtherKey.label"),
-            hasErrors = reasonForm(reasonOtherKey).hasErrors,
-            error = Messages("fh." + reasonOtherKey + "." + getError(reasonForm(reasonOtherKey).error)),
-            value = reasonForm(reasonOtherKey).value
-          )
-        )
-      )
-    )
+    ))
 
     <div class="form-group form-actions">
 
       <p>
-        <button type="submit" class="button" value="continue">@Messages("button.continue")</button>
+      @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
       </p>
 
       <p>
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
+        <a href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus
+        }" class="govuk-link">@Messages("link.cancel")</a>
       </p>
 
     </div>
