@@ -43,43 +43,37 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
 
-    @helper.CSRF.formField
-
-    @error_box(reasonForm)
-
-    @RadioGroup(
-      RadioGroupParams(
-
-        name = Some(reasonKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        inline = false,
-        error = Some(Messages("fh.reason.error.required")),
-        value = reasonForm(reasonKey).value,
-        hasErrors = reasonForm(reasonKey).hasErrors,
-        radios = List(
-          RadioParams(
-            AppliedInError.toString,
-            Messages("fh.withdrawalReason.appliedInError.label")
-          ),
-          RadioParams(
-            DuplicateApplication.toString,
-            Messages("fh.withdrawalReason.duplicateApplication.label")
-          ),
-          RadioParams(
-            NoLongerApplicable.toString,
-            Messages("fh.withdrawalReason.noLongerApplicable.label")
-          ),
-          RadioParams(
-            Other.toString,
-            Messages("fh.withdrawalReason.otherReason.label"),
-            dataTarget = Some("otherReasonContainer")
-          )
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(Messages(title)),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      idPrefix = Some(reasonKey),
+      name = reasonKey,
+      items = Seq(
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.appliedInError.label")),
+          value = Option(AppliedInError.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.duplicateApplication.label")),
+          value = Option(DuplicateApplication.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.noLongerApplicable.label")),
+          value = Option(NoLongerApplicable.toString)
+        ),
+        RadioItem(
+          content = Text(Messages("fh.withdrawalReason.otherReason.label")),
+          value = Option(Other.toString)
         )
       )
-    )
+    ))
 
     @NestedPanel(
       NestedPanelParams(
@@ -99,11 +93,13 @@
     <div class="form-group form-actions">
 
       <p>
-        @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
+      @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
       </p>
 
       <p>
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
+        <a href="@{
+          uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus
+        }" class="govuk-link">@Messages("link.cancel")</a>
       </p>
 
     </div>
