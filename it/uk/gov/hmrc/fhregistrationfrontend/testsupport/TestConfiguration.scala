@@ -9,6 +9,9 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
+import uk.gov.hmrc.crypto.PlainText
+import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
 
 import scala.collection.JavaConverters._
@@ -27,6 +30,29 @@ trait TestConfiguration
 
   val baseUrl = s"http://localhost:$port/fhdds"
 
+  val sessionId = "sessionId-eb3158c2-0aff-4ce8-8d1b-f2208ace52fe"
+  val xSessionId: (String, String) = "X-Session-ID" -> sessionId
+  val xRequestId: (String, String) = "X-Request-ID" -> sessionId
+  val AUTHORIZE_HEADER_VALUE =
+    "Bearer BXQ3/Treo4kQCZvVcCqKPhhpBYpRtQQKWTypn1WBfRHWUopu5V/IFWF5phY/fymAP1FMqQR27MmCJxb50Hi5GD6G3VMjMtSLu7TAAIuqDia6jByIpXJpqOgLQuadi7j0XkyDVkl0Zp/zbKtHiNrxpa0nVHm3+GUC4H2h4Ki8OjP9KwIkeIPK/mMlBESjue4V"
+
+  val sessionBaker: SessionCookieBaker = app.injector.instanceOf[SessionCookieBaker]
+  val cookieHeaderEncoding: CookieHeaderEncoding = app.injector.instanceOf[CookieHeaderEncoding]
+  val sessionCookieCrypto: SessionCookieCrypto = app.injector.instanceOf[SessionCookieCrypto]
+
+  def createSessionCookieAsString(sessionData: Map[String, String]): String = {
+    val sessionCookie = sessionBaker.encodeAsCookie(Session(sessionData))
+    val encryptedSessionCookieValue =
+      sessionCookieCrypto.crypto.encrypt(PlainText(sessionCookie.value)).value
+    val encryptedSessionCookie =
+      sessionCookie.copy(value = encryptedSessionCookieValue)
+    cookieHeaderEncoding.encodeCookieHeader(Seq(encryptedSessionCookie))
+  }
+  val authData = Map("authToken" -> AUTHORIZE_HEADER_VALUE)
+  val sessionAndAuth  = Map("authToken" -> AUTHORIZE_HEADER_VALUE, "sessionId" -> sessionId)
+
+  val authCookie: String = createSessionCookieAsString(authData).substring(5)
+  val authAndSessionCookie: String = createSessionCookieAsString(sessionAndAuth).substring(5)
   abstract override implicit val patienceConfig: PatienceConfig =
     PatienceConfig(
       timeout = Span(4, Seconds),

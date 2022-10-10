@@ -1,5 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.http.HeaderNames
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
@@ -14,7 +16,10 @@ class SummaryControllerIntegrationSpec
         .summaryPrecondition
 
       WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/summary").get()
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .addHttpHeaders(xSessionId)
+          .get()
 
         whenReady(result) { res ⇒
           res.status mustBe 200
