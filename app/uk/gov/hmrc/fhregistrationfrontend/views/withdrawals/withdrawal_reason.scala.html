@@ -41,6 +41,20 @@
   Messages("fh.withdrawalReason.title")
 }
 
+@conditionalHtml = @{
+  viewHelpers.govukInput(Input(
+    id = reasonOtherKey,
+    name = reasonOtherKey,
+    inputType = "text",
+    label = Label(
+      content = Text(messages(s"fh.withdrawalReason.$reasonOtherKey.label"))
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    value = reasonForm(reasonOtherKey).value
+  ))
+}
+
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postReason, 'novalidate -> "novalidate") {
@@ -70,25 +84,11 @@
         ),
         RadioItem(
           content = Text(Messages("fh.withdrawalReason.otherReason.label")),
-          value = Option(Other.toString)
+          value = Option(Other.toString),
+          conditionalHtml = Some(conditionalHtml)
         )
       )
     ))
-
-    @NestedPanel(
-      NestedPanelParams(
-        "otherReasonContainer",
-        TextInput(
-          TextInputParams(
-            name = reasonOtherKey,
-            label = Messages(s"fh.withdrawalReason.$reasonOtherKey.label"),
-            hasErrors = reasonForm(reasonOtherKey).hasErrors,
-            error = Messages("fh." + reasonOtherKey + "." + getError(reasonForm(reasonOtherKey).error)),
-            value = reasonForm(reasonOtherKey).value
-          )
-        )
-      )
-    )
 
     <div class="form-group form-actions">
 
