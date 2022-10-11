@@ -29,15 +29,25 @@
 @import views.html.helper.CSPNonce
 
 @this(layout: layout, viewHelpers: ViewHelpers,
-        autcompleteCss: HmrcAccessibleAutocompleteCss,
-        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
+    autcompleteCss: HmrcAccessibleAutocompleteCss,
+    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
+
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
+  @autocompleteJavascript(CSPNonce.get)
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/autocomplete-polyfill.js")'></script>
 }
+
+@pageHeadBlock = {
+  @autcompleteCss(CSPNonce.get)
+  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+}
+
 
 @titlePrefix = @{
   if (contactPersonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -107,7 +117,7 @@
   </div>
   }
 
-@layout(title = titlePrefix + title, pageScripts = Some(autocompleteJavascript(CSPNonce.get)), pageHeadBlock = Some(autcompleteCss(CSPNonce.get))) {
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
   @Back(navigation, viewHelpers)
   <h1 class="govuk-heading-l">@title</h1>
