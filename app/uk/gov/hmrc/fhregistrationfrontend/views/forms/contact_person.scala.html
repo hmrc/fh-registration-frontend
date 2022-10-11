@@ -24,8 +24,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import views.html.helper.CSPNonce
 
-@this(layout: layout, viewHelpers: ViewHelpers)
+@this(layout: layout, viewHelpers: ViewHelpers,
+        autcompleteCss: HmrcAccessibleAutocompleteCss,
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -102,7 +107,7 @@
   </div>
   }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title, pageScripts = Some(autocompleteJavascript(CSPNonce.get)), pageHeadBlock = Some(autcompleteCss(CSPNonce.get))) {
 
   @Back(navigation, viewHelpers)
   <h1 class="govuk-heading-l">@title</h1>
@@ -125,7 +130,7 @@
       errorMessage =
         contactPersonForm(firstNameKey).error.map{ e =>
           ErrorMessage(
-            content = Text(messages(s"fh.$firstNameKey.${e.message}")),
+            content = Text(messages(s"fh.contact_person.$firstNameKey.${e.message}")),
             visuallyHiddenText = Some(messages("generic.errorPrefix"))
           )
         }
@@ -146,7 +151,7 @@
       errorMessage =
         contactPersonForm(lastNameKey).error.map{ e =>
           ErrorMessage(
-            content = Text(messages(s"fh.$lastNameKey.${e.message}")),
+            content = Text(messages(s"fh.contact_person.$lastNameKey.${e.message}")),
             visuallyHiddenText = Some(messages("generic.errorPrefix"))
           )
         }
@@ -165,7 +170,7 @@
       errorMessage =
         contactPersonForm(jobTitleKey).error.map{ e =>
           ErrorMessage(
-            content = Text(messages(s"fh.$jobTitleKey.${e.message}")),
+            content = Text(messages(s"fh.contact_person.$jobTitleKey.${e.message}")),
             visuallyHiddenText = Some(messages("generic.errorPrefix"))
           )
         }
@@ -186,7 +191,7 @@
       errorMessage =
         contactPersonForm(telephoneKey).error.map{ e =>
           ErrorMessage(
-            content = Text(messages(s"fh.$telephoneKey.${e.message}")),
+            content = Text(messages(s"fh.contact_person.$telephoneKey.${e.message}")),
             visuallyHiddenText = Some(messages("generic.errorPrefix"))
           )
         }
@@ -232,13 +237,8 @@
     ))
 
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
 
   }
 }

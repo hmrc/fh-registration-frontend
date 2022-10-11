@@ -1,0 +1,165 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.Implicits._
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.CountryCodeParams, viewHelpers: ViewHelpers)(implicit message: Messages)
+
+@fieldName = @{
+    params.context match {
+        case Some(context) => {
+            context + "." + params.name
+        }
+        case _ => {
+            params.name
+        }
+    }
+}
+
+@countryCodeName = @{
+    params.context match {
+        case Some(context) => {
+            context + ".countryCode"
+        }
+        case _ => {
+            "countryCode"
+        }
+    }
+}
+
+@formGroupClass = @{
+    if(params.hasErrors) "form-group form-group-error"
+    else "form-group"
+}
+
+@inputClass = @{
+    if(params.hasErrors) "form-control form-control-error"
+    else "form-control"
+}
+
+@viewHelpers.govukSelect(Select(
+    id = "countryCode",
+    name = countryCodeName,
+    errorMessage = if(params.hasErrors) Some(ErrorMessage(
+        content = Text(params.error),
+        visuallyHiddenText = Some(message("generic.errorPrefix"))
+    )) else None,
+    classes = "govuk-!-width-three-quarters",
+    items = Seq(
+        SelectItem(
+            value = Some(""),
+            text = "Please select a country",
+            selected = params.countryCode == None
+        ),
+        SelectItem(
+            value = Some("AD"),
+            text = "Andorra (+AD)",
+            selected = params.countryCode == Some("AD")
+        ),
+        SelectItem(
+            value = Some("AE"),
+            text = "United Arab Emirates (the) (+AE)",
+            selected = params.countryCode == Some("AE")
+        ),
+        SelectItem(
+            value = Some("AF"),
+            text = "Afghanistan (+AF)",
+            selected = params.countryCode == Some("AF")
+        ),
+        SelectItem(
+            value = Some("AG"),
+            text = "Antigua and Barbuda (+AG)",
+            selected = params.countryCode == Some("AG")
+        ),
+        SelectItem(
+            value = Some("AI"),
+            text = "Anguilla (+AI)",
+            selected = params.countryCode == Some("AI")
+        ),
+        SelectItem(
+            value = Some("AL"),
+            text = "Albania (+AL)",
+            selected = params.countryCode == Some("AL")
+        ),
+        SelectItem(
+            value = Some("AM"),
+            text = "Armenia (+AM)",
+            selected = params.countryCode == Some("AM")
+        ),
+        SelectItem(
+            value = Some("AO"),
+            text = "Angola (+AO)",
+            selected = params.countryCode == Some("AO")
+        ),
+        SelectItem(
+            value = Some("AQ"),
+            text = "Antarctica (+AQ)",
+            selected = params.countryCode == Some("AQ")
+        ),
+        SelectItem(
+            value = Some("AR"),
+            text = "Argentina (+AR)",
+            selected = params.countryCode == Some("AR")
+        ),
+        SelectItem(
+            value = Some("AS"),
+            text = "American Samoa (+AS)",
+            selected = params.countryCode == Some("AS")
+        ),
+        SelectItem(
+            value = Some("AT"),
+            text = "Austria (+AT)",
+            selected = params.countryCode == Some("AT")
+        ),
+        SelectItem(
+            value = Some("AU"),
+            text = "Australia (+AU)",
+            selected = params.countryCode == Some("AU")
+        ),
+        SelectItem(
+            value = Some("AW"),
+            text = "Aruba (+AW)",
+            selected = params.countryCode == Some("AW")
+        ),
+        SelectItem(
+            value = Some("AX"),
+            text = "Aland Islands (+AX)",
+            selected = params.countryCode == Some("AX")
+        ),
+        SelectItem(
+            value = Some("AZ"),
+            text = "Azerbaijan (+AZ)",
+            selected = params.countryCode == Some("AZ")
+        ),
+        SelectItem(
+            value = Some("DZ"),
+            text = "Algeria (+DZ)",
+            selected = params.countryCode == Some("DZ")
+        )
+    ),
+    label = Label(
+        content = HtmlContent(s"<strong>${message("fh.address.country.label")}</strong>")
+    )
+).asAccessibleAutocomplete(Some(
+    AccessibleAutocomplete(
+        defaultValue = Some(""),
+        showAllValues = true,
+        autoSelect = false)
+)))
+

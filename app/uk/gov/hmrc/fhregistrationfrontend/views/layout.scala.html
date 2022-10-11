@@ -20,6 +20,8 @@
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 
 @this(
         hmrcLayout: HmrcLayout,
@@ -27,6 +29,7 @@
         appConfig: AppConfig,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
+
 
 @(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 

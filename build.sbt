@@ -14,7 +14,7 @@ val playVersion = "play-28"
 val compile = Seq(
   ws,
   "uk.gov.hmrc"                 %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.22.0-$playVersion",
+  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.32.0-$playVersion",
   "uk.gov.hmrc"                 %% "govuk-template"                   % "5.78.0-play-28",
   "uk.gov.hmrc"                 %% "play-ui"                          % "9.10.0-play-28",
   "uk.gov.hmrc"                 %% "play-partials"                    % "8.3.0-play-28",
@@ -24,7 +24,7 @@ val compile = Seq(
   "uk.gov.hmrc"                 %% "time"                             % "3.25.0",
   "com.typesafe.play"           %% "play-json"                        % "2.9.2",
   "org.typelevel"               %% "cats-core"                        % "2.6.1",
-  "org.typelevel"               %% "cats-kernel"                      % "2.6.1",
+  "org.typelevel"               %% "cats-kernel"                      % "2.8.0",
   "org.pegdown"                  % "pegdown"                          % "1.6.0",
   "com.github.tototoshi"        %% "play-json-naming"                 % "1.5.0",
   "org.julienrf"                %% "play-json-derived-codecs"         % "10.0.2",
