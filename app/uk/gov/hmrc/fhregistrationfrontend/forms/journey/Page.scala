@@ -110,8 +110,10 @@ object Page {
         override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(
           implicit request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig): Html = {
+          println(" form is ::" + form)
           views.contact_person(form, bpr, navigation)
+        }
       },
       addressOnPage = _.otherUkContactAddress
     )

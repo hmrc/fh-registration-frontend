@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
-
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm.otherInternationalContactAddressKey
 @(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers)(implicit message: Messages)
 
 @fieldName = @{
@@ -99,9 +99,10 @@
             value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
             countryCode = Some(s"${formDate(s"$fieldName.countryCode").value.getOrElse("")}"),
             label = Messages("fh.address.country.label"),
-            error = message(s"fh.contact_person.$fieldName.Line4.error.required"),
+            error = message(s"fh.contact_person.$fieldName.countryCode.error.required"),
             hasErrors = formDate(s"$fieldName.countryCode").hasErrors
         ),
         viewHelpers
     )
+    <input type="hidden" name="otherInternationalContactAddress_contactAddress.Line4" value="line4"/>
 </fieldset>

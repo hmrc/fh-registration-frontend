@@ -66,7 +66,8 @@
       hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
       error = Some(Messages("fh.contact_person.contact_address_new.error"))
     ),
-      viewHelpers = viewHelpers
+      viewHelpers = viewHelpers,
+      Some("contact_person")
     )
   }
 
@@ -119,7 +120,27 @@
 
 @layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
-  @Back(navigation, viewHelpers)
+  @if(contactPersonForm.errors.nonEmpty) {
+
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            if(contactPersonForm(isUkAddressKey).value.contains("true")) {
+              contactPersonForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+                ErrorLink(
+                  href = Some(s"#${error._1.key}"),
+                  content = Text(messages(s"fh.contact_person.${error._1.key}.${error._1.message}"))
+                )
+              }
+            } else {
+              contactPersonForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
+                ErrorLink(
+                  href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
+                  content = Text(messages(s"fh.contact_person.${error._1.key}.${error._1.message}"))
+                )
+              }
+            }
+      ,
+      title = Text(messages("fh.generic.error"))))
+  }
   <h1 class="govuk-heading-l">@title</h1>
   <p class="govuk-body">@Messages("fh.contact_person.intro")</p>
 
