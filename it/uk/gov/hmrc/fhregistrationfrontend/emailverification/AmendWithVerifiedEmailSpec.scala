@@ -1,10 +1,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
 import org.scalatest.Ignore
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-@Ignore
+
 class AmendWithVerifiedEmailSpec
   extends Specifications with TestConfiguration {
 
@@ -18,19 +19,31 @@ class AmendWithVerifiedEmailSpec
           .fhddsBackend.acceptsAmendments()
           .save4later.hasAmendmentDataWithNewVerifiedEmail("a@test.com")
 
+        // TODO: finish reworking so that alternative email is present - in above - previous submission has been done, now amending
         WsTestClient.withClient { implicit client ⇒
-          val result = user.posts.declaration.futureValue
-          result.status mustBe 303
-          result.header("Location") mustBe Some("/fhdds/acknowledgement")
+          val result = client.url(s"$baseUrl/declaration")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withFollowRedirects(false)
+            .post(Map("fullName" -> Seq("Tester"),
+              "jobTitle" -> Seq("Dev"),
+              "usingDefaultEmail" -> Seq("true"),
+              "v" -> Seq("user@test.com")
+            ))
 
-          expect
-            .fhddsBackend.amendWasCalled
-            .fhddsBackend.contactEmailMatches("a@test.com")
-            .fhddsBackend.contactDetailChangedFlag(true)
+          whenReady(result) { res ⇒
+            res.status mustBe 303
+            res.header("Location") mustBe Some("/fhdds/acknowledgement")
+
+
+            expect
+              .fhddsBackend.amendWasCalled
+              .fhddsBackend.contactEmailMatches("a@test.com")
+              .fhddsBackend.contactDetailChangedFlag(true)
+          }
         }
       }
+
     }
 
   }
-
 }
