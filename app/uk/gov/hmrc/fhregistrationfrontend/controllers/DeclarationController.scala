@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
+import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
 
 import java.time.LocalDate
 import java.util.Date
@@ -92,12 +93,15 @@ class DeclarationController @Inject()(
       hasErrors = formWithErrors => {
         val errors: List[FormError] = formWithErrors.errors.groupBy(_.key).map(x => x._2.head).toList
         val newFormErrors = formWithErrors.copy(errors = errors)
+        println("_____________________-----------------------------------_________\n")
+        println(errors)
         Future successful BadRequest(
           views.declaration(
             newFormErrors,
             Some(request.verifiedEmail),
             request.bpr,
             summaryPageParams(request.journeyRequest.journeyType)))
+
       },
       success = usersDeclaration => {
         sendSubscription(usersDeclaration).fold(

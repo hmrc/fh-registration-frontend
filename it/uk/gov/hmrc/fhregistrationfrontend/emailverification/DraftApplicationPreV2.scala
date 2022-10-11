@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
@@ -16,10 +17,15 @@ class DraftApplicationPreV2
           .audit.writesAuditOrMerged()
 
         WsTestClient withClient { implicit client ⇒
-          val result = user.gets.summaryPage.futureValue
-          result.status mustBe 303
-          result.header("Location") mustBe Some("/fhdds/email-verification-status")
+          val result = client.url(s"$baseUrl/summary")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withFollowRedirects(false)
+            .get()
 
+          whenReady(result) { res ⇒
+            res.status mustBe 303
+            res.header("Location") mustBe Some("/fhdds/email-verification-status")
+          }
         }
       }
 
@@ -30,28 +36,36 @@ class DraftApplicationPreV2
           .audit.writesAuditOrMerged()
 
         WsTestClient withClient { implicit client ⇒
-          val result = user.gets.mainBusinessAddressPage.futureValue
-          result.status mustBe 303
-          result.header("Location") mustBe Some("/fhdds/email-verification-status")
+          val result = client.url(s"$baseUrl/form/mainBusinessAddressPage")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withFollowRedirects(false)
+            .get()
+
+          whenReady(result) { res ⇒
+            res.status mustBe 303
+            res.header("Location") mustBe Some("/fhdds/email-verification-status")
+          }
         }
       }
 
-      "the user loads the declaration page" in {
-        given
-          .user.isAuthorised
-          .save4later.hasFullPreEmailVerificationData()
-          .audit.writesAuditOrMerged()
+        "the user loads the declaration page" in {
+          given
+            .user.isAuthorised
+            .save4later.hasFullPreEmailVerificationData()
+            .audit.writesAuditOrMerged()
 
-        WsTestClient withClient { implicit client ⇒
-          val result = user.gets.declarationPage.futureValue
-          result.status mustBe 303
-          result.header("Location") mustBe Some("/fhdds/email-verification-status")
+          WsTestClient withClient { implicit client ⇒
+            val result = client.url(s"$baseUrl/declaration")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withFollowRedirects(false)
+              .get()
+
+            whenReady(result) { res ⇒
+              res.status mustBe 303
+              res.header("Location") mustBe Some("/fhdds/email-verification-status")
+            }
+          }
         }
       }
-
     }
   }
-
-
-
-}

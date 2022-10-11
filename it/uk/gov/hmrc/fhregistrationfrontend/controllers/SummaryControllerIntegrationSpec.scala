@@ -18,7 +18,6 @@ class SummaryControllerIntegrationSpec
       WsTestClient.withClient { client ⇒
         val result = client.url(s"$baseUrl/summary")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .addHttpHeaders(xSessionId)
           .get()
 
         whenReady(result) { res ⇒
@@ -33,7 +32,9 @@ class SummaryControllerIntegrationSpec
         .commonPrecondition
 
       WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/summary").get()
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result) { res ⇒
           res.status mustBe 400
