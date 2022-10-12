@@ -1,10 +1,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
-import org.scalatest.Ignore
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-
 
 class AmendWithVerifiedEmailSpec
   extends Specifications with TestConfiguration {
@@ -19,15 +17,16 @@ class AmendWithVerifiedEmailSpec
           .fhddsBackend.acceptsAmendments()
           .save4later.hasAmendmentDataWithNewVerifiedEmail("a@test.com")
 
-        // TODO: finish reworking so that alternative email is present - in above - previous submission has been done, now amending
         WsTestClient.withClient { implicit client ⇒
-          val result = client.url(s"$baseUrl/declaration")
+          val result = client.url(s"$baseUrl/submit")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders("X-Session-ID" → "some-id",
+              "Csrf-Token" -> "nocheck")
             .withFollowRedirects(false)
             .post(Map("fullName" -> Seq("Tester"),
               "jobTitle" -> Seq("Dev"),
               "usingDefaultEmail" -> Seq("true"),
-              "v" -> Seq("user@test.com")
+              "defaultEmail" -> Seq("a@test.com")
             ))
 
           whenReady(result) { res ⇒
@@ -39,11 +38,19 @@ class AmendWithVerifiedEmailSpec
               .fhddsBackend.amendWasCalled
               .fhddsBackend.contactEmailMatches("a@test.com")
               .fhddsBackend.contactDetailChangedFlag(true)
+
+            // TODO: Ask Christine if the above change from client -> declaration to client > submit is okay
+              //          val result = user.posts.declaration.futureValue
+              //          result.status mustBe 303
+              //          result.header("Location") mustBe Some("/fhdds/acknowledgement")
+              //
+              //          expect
+              //            .fhddsBackend.amendWasCalled
+              //            .fhddsBackend.contactEmailMatches("a@test.com")
+              //            .fhddsBackend.contactDetailChangedFlag(true)
           }
         }
       }
-
     }
-
   }
 }
