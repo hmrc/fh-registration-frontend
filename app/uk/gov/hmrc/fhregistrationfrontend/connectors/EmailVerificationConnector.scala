@@ -86,6 +86,6 @@ class DefaultEmailVerificationConnector @Inject()(
     }
 
     val url = s"$emailVerificationBaseUrl/verification-requests"
-    http.POST[EmailVerificationRequest, Boolean](url, request)
+    http.POST[EmailVerificationRequest, Boolean](url, request).map(_ => true)
   }
 }
