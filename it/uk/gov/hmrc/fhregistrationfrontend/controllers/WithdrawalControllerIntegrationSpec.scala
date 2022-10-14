@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.scalatest.Ignore
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
@@ -38,11 +39,13 @@ class WithdrawalControllerIntegrationSpec
 
       WsTestClient.withClient { client ⇒
         val result =
-          client.url(s"$baseUrl/withdraw/reason").withFollowRedirects(false)
+          client.url(s"$baseUrl/withdraw/reason")
+            .withFollowRedirects(false)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders("X-Session-ID" → "some-id",
               "Csrf-Token" -> "nocheck",
               "Content-Type" → "application/json")
-            .post("""{"reason": "Applied in Error"}""")
+            .post(Map{"reason" -> Seq("Applied in Error")})
 
 
         whenReady(result) { res ⇒
