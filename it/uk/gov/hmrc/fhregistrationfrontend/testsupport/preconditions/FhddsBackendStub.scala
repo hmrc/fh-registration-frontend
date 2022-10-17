@@ -3,12 +3,9 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 import java.util.Date
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{BusinessDetail, CommonDetails, ContactDetail, SubscriptionDisplay}
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.Save4LaterStub
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress}
 
 
 case class FhddsBackendStub()
