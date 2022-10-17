@@ -14,9 +14,9 @@ case class KeyStoreStub
     builder
   }
 
-  def saveWithdrawalReason() = {
+  def saveWithdrawalReason(sessionId : String = "some-id") = {
     stubFor(
-      keyStorePut("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""")
+      keyStorePut("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""", sessionId)
     )
     builder
   }
@@ -28,8 +28,8 @@ case class KeyStoreStub
     builder
   }
 
-  def keyStorePut(key: String, data: String = "data"): MappingBuilder =
-    put(urlPathMatching(s"/keystore/fh-registration-frontend/some-id/data/$key"))
+  def keyStorePut(key: String, data: String = "data", sessionId : String = "some-id"): MappingBuilder =
+    put(urlPathMatching(s"/keystore/fh-registration-frontend/$sessionId/data/$key"))
       .willReturn(ok(s"""
                         |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
                         |    "data": { "$key": $data },

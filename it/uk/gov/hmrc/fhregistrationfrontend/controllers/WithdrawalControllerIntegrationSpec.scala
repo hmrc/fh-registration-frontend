@@ -39,17 +39,17 @@ class WithdrawalControllerIntegrationSpec
 
       given
         .withdrawalPrecondition
-        .keyStore.saveWithdrawalReason()
+        .keyStore.saveWithdrawalReason(sessionId)
 
+      
       WsTestClient.withClient { client ⇒
         val result =
           client.url(s"$baseUrl/withdraw/reason")
             .withFollowRedirects(false)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders("X-Session-ID" → "sessionID",
-              "Csrf-Token" -> "nocheck",
-              "Content-Type" → "application/json")
-            .post(Map{"reason" -> Seq("Applied in Error")})
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("reason" -> Seq("Applied in Error")))
 
 
         whenReady(result) { res ⇒
