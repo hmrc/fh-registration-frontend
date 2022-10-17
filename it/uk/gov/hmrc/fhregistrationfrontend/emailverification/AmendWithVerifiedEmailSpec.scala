@@ -39,15 +39,6 @@ class AmendWithVerifiedEmailSpec
               .fhddsBackend.contactEmailMatches("a@test.com")
               .fhddsBackend.contactDetailChangedFlag(true)
 
-            // TODO: Ask Christine if the above change from client -> declaration to client > submit is okay
-              //          val result = user.posts.declaration.futureValue
-              //          result.status mustBe 303
-              //          result.header("Location") mustBe Some("/fhdds/acknowledgement")
-              //
-              //          expect
-              //            .fhddsBackend.amendWasCalled
-              //            .fhddsBackend.contactEmailMatches("a@test.com")
-              //            .fhddsBackend.contactDetailChangedFlag(true)
           }
         }
       }
