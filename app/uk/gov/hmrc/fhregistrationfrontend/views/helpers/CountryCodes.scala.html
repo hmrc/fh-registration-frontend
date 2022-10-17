@@ -1304,7 +1304,8 @@
         )
     ),
     label = Label(
-        content = HtmlContent(s"<strong>${message("fh.address.country.label")}</strong>")
+        classes = "govuk-!-font-weight-bold",
+        content = HtmlContent(s"${message("fh.address.country.label")}")
     )
 ).asAccessibleAutocomplete(Some(
     AccessibleAutocomplete(
