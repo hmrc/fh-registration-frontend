@@ -1,11 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.scalatest.Ignore
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-@Ignore
 class WithdrawalControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 
@@ -17,8 +16,14 @@ class WithdrawalControllerIntegrationSpec
         .withdrawalPrecondition
 
       WsTestClient.withClient { client ⇒
-        val result1 = client.url(s"$baseUrl/withdraw").withFollowRedirects(false).get()
-        val result2 = client.url(s"$baseUrl/withdraw/reason").withFollowRedirects(false).get()
+        val result1 = client.url(s"$baseUrl/withdraw")
+          .withFollowRedirects(false)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+        val result2 = client.url(s"$baseUrl/withdraw/reason")
+          .withFollowRedirects(false)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result1) { res ⇒
           res.status mustBe 303
@@ -34,15 +39,17 @@ class WithdrawalControllerIntegrationSpec
 
       given
         .withdrawalPrecondition
-        .keyStore.saveWithdrawalReason()
+        .keyStore.saveWithdrawalReason(sessionId)
 
+      
       WsTestClient.withClient { client ⇒
         val result =
-          client.url(s"$baseUrl/withdraw/reason").withFollowRedirects(false)
-            .withHttpHeaders("X-Session-ID" → "some-id",
-              "Csrf-Token" -> "nocheck",
-              "Content-Type" → "application/json")
-            .post("""{"reason": "Applied in Error"}""")
+          client.url(s"$baseUrl/withdraw/reason")
+            .withFollowRedirects(false)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("reason" -> Seq("Applied in Error")))
 
 
         whenReady(result) { res ⇒
@@ -57,11 +64,15 @@ class WithdrawalControllerIntegrationSpec
 
       given
         .withdrawalPrecondition
-        .keyStore.fetchWithdrawalReason()
+        .keyStore.fetchWithdrawalReason(sessionId)
+        .fhddsBackend.getSubscription()
 
       WsTestClient.withClient { client ⇒
         val result =
-          client.url(s"$baseUrl/withdraw/confirm").withHttpHeaders("X-Session-ID" → "some-id").get()
+          client.url(s"$baseUrl/withdraw/confirm")
+            .withHttpHeaders(xSessionId)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
         whenReady(result) { res ⇒
           res.status mustBe 200
@@ -75,8 +86,14 @@ class WithdrawalControllerIntegrationSpec
         .commonPrecondition
 
       WsTestClient.withClient { client ⇒
-        val result1 = client.url(s"$baseUrl/withdraw").withFollowRedirects(false).get()
-        val result2 = client.url(s"$baseUrl/withdraw/reason").withFollowRedirects(false).get()
+        val result1 = client.url(s"$baseUrl/withdraw")
+          .withFollowRedirects(false)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+        val result2 = client.url(s"$baseUrl/withdraw/reason")
+          .withFollowRedirects(false)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result1) { res ⇒
           res.status mustBe 303

@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.KeyStoreStub
@@ -16,7 +17,9 @@ class DeclarationControllerIntegrationSpec
         .summaryPrecondition
 
       WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/declaration").get()
+        val result = client.url(s"$baseUrl/declaration")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result) { res ⇒
           res.status mustBe 200
@@ -32,16 +35,17 @@ class DeclarationControllerIntegrationSpec
 
       WsTestClient.withClient { client ⇒
         val result =
-          client.url(s"$baseUrl/submit").withFollowRedirects(false)
-            .withHttpHeaders("X-Session-ID" → "some-id",
-              "Csrf-Token" -> "nocheck",
-              "Content-Type" → "application/json")
-            .post(
-              """{"fullName": "Tester",
-                |"jobTitle": "Dev",
-                |"usingDefaultEmail": "true",
-                |"defaultEmail": "user@test.com"}""".stripMargin)
+          client.url(s"$baseUrl/submit")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
 
+            .withHttpHeaders("X-Session-ID" → "some-id",
+              "Csrf-Token" -> "nocheck")
+            .withFollowRedirects(false)
+            .post(Map("fullName" -> Seq("Tester"),
+              "jobTitle" -> Seq("Dev"),
+              "usingDefaultEmail" -> Seq("true"),
+              "defaultEmail" -> Seq("user@test.com")
+            ))
 
         whenReady(result) { res ⇒
           res.status mustBe 303

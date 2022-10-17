@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.http.HeaderNames
+import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
@@ -16,10 +17,12 @@ class FormPageControllerIntegrationSpec
 
       WsTestClient.withClient { client ⇒
         val result1 = client.url(s"$baseUrl/resume")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
           .get()
 
         val result2 = client.url(s"$baseUrl/startForm")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
           .get()
 
@@ -42,7 +45,9 @@ class FormPageControllerIntegrationSpec
         .save4later.savePageData("mainBusinessAddress","""{"timeAtCurrentAddress": "3-5 years"}""")
 
       WsTestClient.withClient { client ⇒
-        val result = client.url(s"$baseUrl/form/contactPerson").get()
+        val result = client.url(s"$baseUrl/form/contactPerson")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result) { res ⇒
           res.status mustBe 200
@@ -58,6 +63,8 @@ class FormPageControllerIntegrationSpec
 
       WsTestClient.withClient { client ⇒
         val result1 = client.url(s"$baseUrl/form/mainBusinessAddress")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+
           .withFollowRedirects(false)
           .get()
         whenReady(result1) { res ⇒
@@ -65,6 +72,7 @@ class FormPageControllerIntegrationSpec
         }
 
         val result2 = client.url(s"$baseUrl/form/companyRegistrationNumber")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
           .get()
         whenReady(result2) { res ⇒

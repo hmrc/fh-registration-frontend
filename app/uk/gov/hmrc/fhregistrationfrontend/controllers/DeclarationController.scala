@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
+import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
 
 import java.time.LocalDate
 import java.util.Date
@@ -98,6 +99,7 @@ class DeclarationController @Inject()(
             Some(request.verifiedEmail),
             request.bpr,
             summaryPageParams(request.journeyRequest.journeyType)))
+
       },
       success = usersDeclaration => {
         sendSubscription(usersDeclaration).fold(

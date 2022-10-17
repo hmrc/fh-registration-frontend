@@ -1,12 +1,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
 import java.util.Date
-
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.libs.json.Json
-import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
+import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress}
+
 
 case class FhddsBackendStub()
   (implicit builder: PreconditionBuilder)
@@ -70,6 +70,23 @@ case class FhddsBackendStub()
           ok(Json.toJson(SubmissionResponse("XEFH01234567890.", new Date)).toString())))
 
     builder
+  }
+
+  val limitedCompanyJsonString = getSubmissionJson("fhdds-limited-company-minimum").toString()
+
+  def getSubscription() = {
+    stubFor(
+      get(
+        urlPathMatching("/fhdds/subscription/XEFH01234567890/get"))
+        .willReturn(
+          ok(limitedCompanyJsonString)))
+
+    builder
+  }
+
+  private def getSubmissionJson(jsonFile: String):JsValue = {
+    val resource = getClass.getResourceAsStream(s"/json/valid/display/limited-company/$jsonFile.json")
+    Json.parse(resource).as[JsValue]
   }
 
 }
