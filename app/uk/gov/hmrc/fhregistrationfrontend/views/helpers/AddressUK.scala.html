@@ -48,7 +48,7 @@
                     formDate(s"$fieldName.Line1").error.map{ e =>
                     ErrorMessage(
                         content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line1.${e.message}")) else Text(message(s"fh.$fieldName.Line1.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -69,7 +69,7 @@
                 formDate(s"$fieldName.Line2").error.map{ e =>
                     ErrorMessage(
                         content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line2.${e.message}")) else Text(message(s"fh.$fieldName.Line2.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -89,7 +89,7 @@
                 formDate(s"$fieldName.Line3").error.map{ e =>
                     ErrorMessage(
                         content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line3.${e.message}")) else Text(message(s"fh.$fieldName.Line3.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -109,7 +109,7 @@
                 formDate(s"$fieldName.Line4").error.map{ e =>
                     ErrorMessage(
                         content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line4.${e.message}")) else Text(message(s"fh.$fieldName.Line4.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -130,7 +130,7 @@
                 formDate(s"$fieldName.postcode").error.map{ e =>
                     ErrorMessage(
                         content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.postcode.${e.message}")) else Text(message(s"fh.$fieldName.postcode.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))

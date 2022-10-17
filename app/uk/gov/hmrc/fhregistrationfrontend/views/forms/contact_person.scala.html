@@ -162,7 +162,7 @@
         contactPersonForm(firstNameKey).error.map{ e =>
           ErrorMessage(
             content = Text(messages(s"fh.contact_person.$firstNameKey.${e.message}")),
-            visuallyHiddenText = Some(messages("generic.errorPrefix"))
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
           )
         }
     ))
@@ -183,7 +183,7 @@
         contactPersonForm(lastNameKey).error.map{ e =>
           ErrorMessage(
             content = Text(messages(s"fh.contact_person.$lastNameKey.${e.message}")),
-            visuallyHiddenText = Some(messages("generic.errorPrefix"))
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
           )
         }
     ))
@@ -202,7 +202,7 @@
         contactPersonForm(jobTitleKey).error.map{ e =>
           ErrorMessage(
             content = Text(messages(s"fh.contact_person.$jobTitleKey.${e.message}")),
-            visuallyHiddenText = Some(messages("generic.errorPrefix"))
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
           )
         }
     ))
@@ -223,7 +223,7 @@
         contactPersonForm(telephoneKey).error.map{ e =>
           ErrorMessage(
             content = Text(messages(s"fh.contact_person.$telephoneKey.${e.message}")),
-            visuallyHiddenText = Some(messages("generic.errorPrefix"))
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
           )
         }
     ))
