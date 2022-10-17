@@ -64,12 +64,13 @@ class WithdrawalControllerIntegrationSpec
 
       given
         .withdrawalPrecondition
-        .keyStore.fetchWithdrawalReason()
+        .keyStore.fetchWithdrawalReason(sessionId)
+        .fhddsBackend.getSubscription()
 
       WsTestClient.withClient { client ⇒
         val result =
           client.url(s"$baseUrl/withdraw/confirm")
-            .withHttpHeaders("X-Session-ID" → "some-id")
+            .withHttpHeaders(xSessionId)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .get()
 

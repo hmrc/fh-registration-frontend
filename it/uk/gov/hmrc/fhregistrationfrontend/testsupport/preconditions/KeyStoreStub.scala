@@ -7,9 +7,9 @@ case class KeyStoreStub
 ()
   (implicit builder: PreconditionBuilder) {
 
-  def fetchWithdrawalReason() = {
+  def fetchWithdrawalReason(sessionId : String = "some-id") = {
     stubFor(
-      keyStoreGet("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""")
+      keyStoreGet("withdrawalReason", """{"withdrawalReason": "Applied in Error"}""", sessionId)
     )
     builder
   }
@@ -40,8 +40,8 @@ case class KeyStoreStub
           """.stripMargin
       ))
 
-  def keyStoreGet(key: String = "", data: String = ""): MappingBuilder =
-    get(urlPathMatching("/keystore/fh-registration-frontend/some-id"))
+  def keyStoreGet(key: String = "", data: String = "", sessionId : String = "some-id"): MappingBuilder =
+    get(urlPathMatching(s"/keystore/fh-registration-frontend/$sessionId"))
       .willReturn(ok(
         s"""
            |{

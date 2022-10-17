@@ -2,9 +2,10 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
 import java.util.Date
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{BusinessDetail, CommonDetails, ContactDetail, SubscriptionDisplay}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.Save4LaterStub
@@ -33,13 +34,6 @@ case class FhddsBackendStub()
       utr = Some("1111111111")
      )
   }
-
-  private val FhddsStatus =
-    """
-      |{
-      |  FhddsStatus : "Processing",
-      |}
-  """.stripMargin
 
   def hasBusinessDetails(formType: String, businessType: String) = {
     stubFor(
@@ -81,14 +75,21 @@ case class FhddsBackendStub()
     builder
   }
 
-  def getProcessingSubscription() = {
-  stubFor(
-    get(urlEqualTo("/fhdds/subscription/XEFH01234567890/get"))
-      .willReturn(
-        ok(Json.toJson(FhddsStatus, "XE0001234567890").toString())
-    ))
+  val limitedCompanyJsonString = getSubmissionJson("fhdds-limited-company-minimum").toString()
+
+  def getSubscription() = {
+    stubFor(
+      get(
+        urlPathMatching("/fhdds/subscription/XEFH01234567890/get"))
+        .willReturn(
+          ok(limitedCompanyJsonString)))
+
     builder
   }
 
+  private def getSubmissionJson(jsonFile: String):JsValue = {
+    val resource = getClass.getResourceAsStream(s"/json/valid/display/limited-company/$jsonFile.json")
+    Json.parse(resource).as[JsValue]
+  }
 
 }
