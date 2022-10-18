@@ -16,23 +16,38 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import views.html.helper.CSPNonce
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers,
+    autcompleteCss: HmrcAccessibleAutocompleteCss,
+    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
+
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
+  @autocompleteJavascript(CSPNonce.get)
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/autocomplete-polyfill.js")'></script>
 }
+
+@pageHeadBlock = {
+  @autcompleteCss(CSPNonce.get)
+  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+}
+
 
 @titlePrefix = @{
   if (contactPersonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -41,76 +56,181 @@
 @title = @{
   Messages("fh.contactPerson.title")
 }
-
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
-
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-  @BackOld(navigation)
-
-  @error_box(contactPersonForm, ".contact_person.")
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
+@UkAddressConditional = {
+    @AddressUK(
+    formDate = contactPersonForm,
+    params = AddressUKParams(
+      context = Some("otherUkContactAddress"),
+      name = "contactAddress",
+      label = Messages("fh.contact_person.contact_address_new.label"),
+      hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
+      error = Some(Messages("fh.contact_person.contact_address_new.error"))
+    ),
+      viewHelpers = viewHelpers,
+      Some("contact_person")
     )
+  }
+
+@NonUkAddressConditional= {
+  @AddressInternational(
+  contactPersonForm,
+  AddressUKParams(
+  context = Some("otherInternationalContactAddress"),
+  name = "contactAddress",
+  label = "International Contact address",
+  hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
+  error = Some(Messages("fh.contact_person.contact_address_new.error"))
+  ), viewHelpers
   )
+  }
 
-  <p>@Messages("fh.contact_person.intro")</p>
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @TextInput(
-      TextInputParams(
-        name = firstNameKey,
-        label = Messages("fh.contact_person.first_name.label"),
-        value = contactPersonForm(firstNameKey).value,
-        error = Messages("fh.contact_person.firstName." + contactPersonForm(firstNameKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(firstNameKey).hasErrors,
-        autocomplete = Some("given-name"),
-        spellcheck = false
+@conditionalHtml =   {
+  <div class="govuk-body">
+  @viewHelpers.govUkRadios(Radios(
+    fieldset = Some(Fieldset(
+      legend = Some(Legend(
+        content = Text(messages("fh.contact_person.contact_address_in_uk.label")),
+        classes = "govuk-fieldset__legend--m",
+        isPageHeading = false
+      ))
+    )),
+    idPrefix = Some(isUkAddressKey),
+    name = isUkAddressKey,
+    errorMessage = if (contactPersonForm(isUkAddressKey).hasErrors) {
+      Some(ErrorMessage(content = Text(messages("fh.contact_person.isUkAddress.error.required"))))
+    } else None,
+    items = Seq(
+      RadioItem(
+        content = Text(messages("fh.generic.yes")),
+        value = Some("true"),
+        checked = contactPersonForm(isUkAddressKey).value.toList.contains("true"),
+        conditionalHtml = Some(UkAddressConditional)
+      ),
+      RadioItem(
+        content = Text(messages("fh.generic.no")),
+        value = Some("false"),
+        checked = contactPersonForm(isUkAddressKey).value.toList.contains("false"),
+        conditionalHtml = Some(NonUkAddressConditional)
       )
     )
+  ))
+  </div>
+  }
 
-    @TextInput(
-      TextInputParams(
-        name = lastNameKey,
-        label = Messages("fh.contact_person.last_name.label"),
-        value = contactPersonForm(lastNameKey).value,
-        error = Messages("fh.contact_person.lastName." + contactPersonForm(lastNameKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(lastNameKey).hasErrors,
-        autocomplete = Some("family-name"),
-        spellcheck = false
-      )
-    )
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
-    @TextInput(
-      TextInputParams(
-        name = jobTitleKey,
-        label = Messages("fh.contact_person.job_title.label"),
-        value = contactPersonForm(jobTitleKey).value,
-        error = Messages("fh.contact_person.jobTitle." + contactPersonForm(jobTitleKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(jobTitleKey).hasErrors
-      )
-    )
+  @if(contactPersonForm.errors.nonEmpty) {
 
-    @TextInput(
-      TextInputParams(
-        name = telephoneKey,
-        label = Messages("fh.contact_person.telephone.label"),
-        value = contactPersonForm(telephoneKey).value,
-        error = Messages("fh.contact_person.telephone." + contactPersonForm(telephoneKey).error.fold("")(_.message)),
-        hasErrors = contactPersonForm(telephoneKey).hasErrors,
-        autocomplete = Some("tel"),
-        inputType = Some("tel")
-      )
-    )
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            if(contactPersonForm(isUkAddressKey).value.contains("true")) {
+              contactPersonForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+                ErrorLink(
+                  href = Some(s"#${error._1.key}"),
+                  content = Text(messages(s"fh.contact_person.${error._1.key}.${error._1.message}"))
+                )
+              }
+            } else {
+              contactPersonForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
+                ErrorLink(
+                  href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
+                  content = Text(messages(s"fh.contact_person.${error._1.key}.${error._1.message}"))
+                )
+              }
+            }
+      ,
+      title = Text(messages("fh.generic.error"))))
+  }
+  <h1 class="govuk-heading-l">@title</h1>
+  <p class="govuk-body">@Messages("fh.contact_person.intro")</p>
 
-    <h2>@Messages("fh.contact_person.contact_address.title")</h2>
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), 'novalidate -> "novalidate") {
 
-    <div id="review-details" class="form-group">
+    @viewHelpers.govukInput(Input(
+      id = firstNameKey,
+      name = firstNameKey,
+      label = Label(
+        isPageHeading = false,
+        classes = "govuk-body",
+        content = HtmlContent(s"<strong>${messages("fh.contact_person.first_name.label")}</strong>")
+      ),
+      spellcheck = Some(false),
+      autocomplete = Some("given-name"),
+      classes = "govuk-!-width-one-half",
+      value = contactPersonForm(firstNameKey).value,
+      errorMessage =
+        contactPersonForm(firstNameKey).error.map{ e =>
+          ErrorMessage(
+            content = Text(messages(s"fh.contact_person.$firstNameKey.${e.message}")),
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+          )
+        }
+    ))
+
+    @viewHelpers.govukInput(Input(
+      id = lastNameKey,
+      name = lastNameKey,
+      label = Label(
+        isPageHeading = false,
+        classes = "govuk-body",
+        content = HtmlContent(s"<strong>${messages("fh.contact_person.last_name.label")}</strong>")
+      ),
+      spellcheck = Some(false),
+      autocomplete = Some("family-name"),
+      classes = "govuk-!-width-one-half",
+      value = contactPersonForm(lastNameKey).value,
+      errorMessage =
+        contactPersonForm(lastNameKey).error.map{ e =>
+          ErrorMessage(
+            content = Text(messages(s"fh.contact_person.$lastNameKey.${e.message}")),
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+          )
+        }
+    ))
+
+    @viewHelpers.govukInput(Input(
+      id = jobTitleKey,
+      name = jobTitleKey,
+      label = Label(
+        isPageHeading = false,
+        classes = "govuk-body",
+        content = HtmlContent(s"<strong>${messages("fh.contact_person.job_title.label")}</strong>")
+      ),
+      classes = "govuk-!-width-one-half",
+      value = contactPersonForm(jobTitleKey).value,
+      errorMessage =
+        contactPersonForm(jobTitleKey).error.map{ e =>
+          ErrorMessage(
+            content = Text(messages(s"fh.contact_person.$jobTitleKey.${e.message}")),
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+          )
+        }
+    ))
+
+    @viewHelpers.govukInput(Input(
+      id = telephoneKey,
+      name = telephoneKey,
+      label = Label(
+        isPageHeading = false,
+        classes = "govuk-body",
+        content = HtmlContent(s"<strong>${messages("fh.contact_person.telephone.label")}</strong>")
+      ),
+      autocomplete = Some("tel"),
+      inputType = "tel",
+      classes = "govuk-!-width-one-half",
+      value = contactPersonForm(telephoneKey).value,
+      errorMessage =
+        contactPersonForm(telephoneKey).error.map{ e =>
+          ErrorMessage(
+            content = Text(messages(s"fh.contact_person.$telephoneKey.${e.message}")),
+            visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+          )
+        }
+    ))
+
+    <h2 class="govuk-heading-m">@Messages("fh.contact_person.contact_address.title")</h2>
+
+    <div class="govuk-body">
       @bpr.businessAddress.line1 <br>
       @bpr.businessAddress.line2 <br>
       @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
@@ -118,96 +238,38 @@
       @bpr.businessAddress.postcode <br>
     </div>
 
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(usingSameContactAddressKey),
-        legend = Some(Messages("fh.contact_person.contact_address_correct.label")),
-        hasErrors = contactPersonForm(usingSameContactAddressKey).hasErrors,
-        error = Some(Messages("fh.contact_person.usingSameContactAddress.error.required")),
-        value = contactPersonForm(usingSameContactAddressKey).value,
-        radios = List(
-          RadioParams(
-            "true",
-            "Yes"
-          ),
-          RadioParams(
-            "false",
-            "No",
-            Some(usingSameContactAddressKey)
-          )
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("fh.contact_person.contact_address_correct.label")),
+          classes = "govuk-fieldset__legend--m",
+          isPageHeading = false
+        ))
+      )),
+      idPrefix = Some(usingSameContactAddressKey),
+      name = usingSameContactAddressKey,
+      errorMessage = if (contactPersonForm(usingSameContactAddressKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages("fh.contact_person.usingSameContactAddress.error.required"))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          content = Text(messages("fh.generic.yes")),
+          value = Some("true"),
+          checked = contactPersonForm(usingSameContactAddressKey).value.toList.contains("true")
+
+        ),
+        RadioItem(
+          content = Text(messages("fh.generic.no")),
+          value = Some("false"),
+          checked = contactPersonForm(usingSameContactAddressKey).value.toList.contains("false"),
+          conditionalHtml = Some(conditionalHtml)
         )
       )
-    )
+    ))
 
-    <div id="@usingSameContactAddressKey" class="js-hidden panel">
 
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(isUkAddressKey),
-          legend = Some(Messages("fh.contact_person.contact_address_in_uk.label")),
-          hasErrors = contactPersonForm(isUkAddressKey).hasErrors,
-          error = Some(Messages("fh.contact_person.isUkAddress.error.required")),
-          value = contactPersonForm(isUkAddressKey).value,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              Some("contactAddressUK")
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              Some("contactAddressInternational")
-            )
-          )
-        )
-      )
-
-      <p class="js-hidden form-label-bold">If the contact address is in the UK:</p>
-
-      @NestedPanel(
-        NestedPanelParams(
-          "contactAddressUK",
-          AddressUKOld(
-            contactPersonForm,
-            AddressUKParams(
-              context = Some("otherUkContactAddress"),
-              name = "contactAddress",
-              label = Messages("fh.contact_person.contact_address_new.label"),
-              hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
-              error = Some(Messages("fh.contact_person.contact_address_new.error"))
-            )
-          )
-        )
-      )
-
-      <p class="js-hidden form-label-bold">OR if the contact address is international:</p>
-
-      @NestedPanel(
-        NestedPanelParams(
-          "contactAddressInternational",
-          AddressInternational(
-            contactPersonForm,
-            AddressUKParams(
-              context = Some("otherInternationalContactAddress"),
-              name = "contactAddress",
-              label = "International Contact address",
-              hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
-              error = Some(Messages("fh.contact_person.contact_address_new.error"))
-            )
-          )
-        )
-      )
-
-    </div>
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
 
   }
 }

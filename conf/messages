@@ -76,6 +76,14 @@ fh.address.postcode.error.pattern = Enter a valid postcode
 fh.storagePremise_address.Line1.error.required = You must enter line 1 of the address
 fh.address.line1.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 fh.address.line2.error.required = You must enter line 2 of the address
+
+fh.address.line2.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+fh.address.postcode.error.required = Enter the postcode of the address
+fh.address.postcode.error.pattern = Enter a valid postcode
+fh.storagePremise_address.Line1.error.required = You must enter line 1 of the address
+fh.address.line1.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+fh.address.line2.error.required = You must enter line 2 of the address
+
 fh.storagePremise_address.Line2.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 fh.storagePremise_address.postcode.error.required = Enter the postcode of the address
 fh.storagePremise_address.postcode.error.pattern = Enter a valid postcode

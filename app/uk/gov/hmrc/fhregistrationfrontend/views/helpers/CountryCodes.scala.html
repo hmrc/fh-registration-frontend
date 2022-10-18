@@ -1,0 +1,1316 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.Implicits._
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+
+@(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.CountryCodeParams, viewHelpers: ViewHelpers)(implicit message: Messages)
+
+@fieldName = @{
+    params.context match {
+        case Some(context) => {
+            context + "." + params.name
+        }
+        case _ => {
+            params.name
+        }
+    }
+}
+
+@countryCodeName = @{
+    params.context match {
+        case Some(context) => {
+            context + ".countryCode"
+        }
+        case _ => {
+            "countryCode"
+        }
+    }
+}
+
+@formGroupClass = @{
+    if(params.hasErrors) "form-group form-group-error"
+    else "form-group"
+}
+
+@inputClass = @{
+    if(params.hasErrors) "form-control form-control-error"
+    else "form-control"
+}
+
+@viewHelpers.govukSelect(Select(
+    id = "countryCode",
+    name = countryCodeName,
+    errorMessage = if(params.hasErrors) Some(ErrorMessage(
+        content = Text(params.error),
+        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
+    )) else None,
+    classes = "govuk-!-width-three-quarters",
+    items = Seq(
+        SelectItem(
+            value = Some(""),
+            text = "Please select a country",
+            selected = params.countryCode == None
+        ),
+        SelectItem(
+            value = Some("AD"),
+            text = "Andorra (+AD)",
+            selected = params.countryCode == Some("AD")
+        ),
+        SelectItem(
+            value = Some("AE"),
+            text = "United Arab Emirates (the) (+AE)",
+            selected = params.countryCode == Some("AE")
+        ),
+        SelectItem(
+            value = Some("AF"),
+            text = "Afghanistan (+AF)",
+            selected = params.countryCode == Some("AF")
+        ),
+        SelectItem(
+            value = Some("AG"),
+            text = "Antigua and Barbuda (+AG)",
+            selected = params.countryCode == Some("AG")
+        ),
+        SelectItem(
+            value = Some("AI"),
+            text = "Anguilla (+AI)",
+            selected = params.countryCode == Some("AI")
+        ),
+        SelectItem(
+            value = Some("AL"),
+            text = "Albania (+AL)",
+            selected = params.countryCode == Some("AL")
+        ),
+        SelectItem(
+            value = Some("AM"),
+            text = "Armenia (+AM)",
+            selected = params.countryCode == Some("AM")
+        ),
+        SelectItem(
+            value = Some("AO"),
+            text = "Angola (+AO)",
+            selected = params.countryCode == Some("AO")
+        ),
+        SelectItem(
+            value = Some("AQ"),
+            text = "Antarctica (+AQ)",
+            selected = params.countryCode == Some("AQ")
+        ),
+        SelectItem(
+            value = Some("AR"),
+            text = "Argentina (+AR)",
+            selected = params.countryCode == Some("AR")
+        ),
+        SelectItem(
+            value = Some("AS"),
+            text = "American Samoa (+AS)",
+            selected = params.countryCode == Some("AS")
+        ),
+        SelectItem(
+            value = Some("AT"),
+            text = "Austria (+AT)",
+            selected = params.countryCode == Some("AT")
+        ),
+        SelectItem(
+            value = Some("AU"),
+            text = "Australia (+AU)",
+            selected = params.countryCode == Some("AU")
+        ),
+        SelectItem(
+            value = Some("AW"),
+            text = "Aruba (+AW)",
+            selected = params.countryCode == Some("AW")
+        ),
+        SelectItem(
+            value = Some("AX"),
+            text = "Aland Islands (+AX)",
+            selected = params.countryCode == Some("AX")
+        ),
+        SelectItem(
+            value = Some("AZ"),
+            text = "Azerbaijan (+AZ)",
+            selected = params.countryCode == Some("AZ")
+        ),
+        SelectItem(
+            value = Some("BA"),
+            text = "Bosnia and Herzegovina (+BA)",
+            selected = params.countryCode == Some("BA")
+        ),
+        SelectItem(
+            value = Some("BB"),
+            text = "Barbados (+BB)",
+            selected = params.countryCode == Some("BB")
+        ),
+        SelectItem(
+            value = Some("BD"),
+            text = "Bangladesh (+BD)",
+            selected = params.countryCode == Some("BD")
+        ),
+        SelectItem(
+            value = Some("BE"),
+            text = "Belgium (+BE)",
+            selected = params.countryCode == Some("BE")
+        ),
+        SelectItem(
+            value = Some("BF"),
+            text = "Burkina Faso (+BF)",
+            selected = params.countryCode == Some("BF")
+        ),
+        SelectItem(
+            value = Some("BG"),
+            text = "Bulgaria (+BG)",
+            selected = params.countryCode == Some("BG")
+        ),
+        SelectItem(
+            value = Some("BH"),
+            text = "Bahrain (+BH)",
+            selected = params.countryCode == Some("BH")
+        ),
+        SelectItem(
+            value = Some("BI"),
+            text = "Burundi (+BI)",
+            selected = params.countryCode == Some("BI")
+        ),
+        SelectItem(
+            value = Some("BJ"),
+            text = "Benin (+BJ)",
+            selected = params.countryCode == Some("BJ")
+        ),
+        SelectItem(
+            value = Some("BM"),
+            text = "Bermuda (+BM)",
+            selected = params.countryCode == Some("BM")
+        ),
+        SelectItem(
+            value = Some("BN"),
+            text = "Brunei Darussalam (+BN)",
+            selected = params.countryCode == Some("BN")
+        ),
+        SelectItem(
+            value = Some("BO"),
+            text = "Bolivia (+BO)",
+            selected = params.countryCode == Some("BO")
+        ),
+        SelectItem(
+            value = Some("BQ"),
+            text = "Bonaire, Sint Eustatius and Saba (+BQ)",
+            selected = params.countryCode == Some("BQ")
+        ),
+        SelectItem(
+            value = Some("BR"),
+            text = "Brazil (+BR)",
+            selected = params.countryCode == Some("BR")
+        ),
+        SelectItem(
+            value = Some("BS"),
+            text = "Bahamas (the) (+BS)",
+            selected = params.countryCode == Some("BS")
+        ),
+        SelectItem(
+            value = Some("BT"),
+            text = "Bhutan (+BT)",
+            selected = params.countryCode == Some("BT")
+        ),
+        SelectItem(
+            value = Some("BV"),
+            text = "Bouvet Island (+BV)",
+            selected = params.countryCode == Some("BV")
+        ),
+        SelectItem(
+            value = Some("BW"),
+            text = "Botswana (+BD)",
+            selected = params.countryCode == Some("BW")
+        ),
+        SelectItem(
+            value = Some("BY"),
+            text = "Belarus (+BY)",
+            selected = params.countryCode == Some("BY")
+        ),
+        SelectItem(
+            value = Some("BZ"),
+            text = "Belize (+BZ)",
+            selected = params.countryCode == Some("BZ")
+        ),
+        SelectItem(
+            value = Some("CA"),
+            text = "Canada (+CA)",
+            selected = params.countryCode == Some("CA")
+        ),
+        SelectItem(
+            value = Some("CC"),
+            text = "Cocos (Keeling) Islands (the) (+CC)",
+            selected = params.countryCode == Some("CC")
+        ),
+        SelectItem(
+            value = Some("CD"),
+            text = "Congo (+CD)",
+            selected = params.countryCode == Some("CD")
+        ),
+        SelectItem(
+            value = Some("CF"),
+            text = "Central African Republic (the) (+CF)",
+            selected = params.countryCode == Some("CF")
+        ),
+        SelectItem(
+            value = Some("CG"),
+            text = "Congo (the) (+CG)",
+            selected = params.countryCode == Some("CG")
+        ),
+        SelectItem(
+            value = Some("CH"),
+            text = "Switzerland (+CH)",
+            selected = params.countryCode == Some("CH")
+        ),
+        SelectItem(
+            value = Some("CI"),
+            text = "Cote d'Ivoire (the) (+CI)",
+            selected = params.countryCode == Some("CI")
+        ),
+        SelectItem(
+            value = Some("CK"),
+            text = "Cook Islands (the) (+CK)",
+            selected = params.countryCode == Some("CK")
+        ),
+        SelectItem(
+            value = Some("CL"),
+            text = "Chile (+CL)",
+            selected = params.countryCode == Some("CL")
+        ),
+        SelectItem(
+            value = Some("CM"),
+            text = "Cameroon (+CM)",
+            selected = params.countryCode == Some("CM")
+        ),
+        SelectItem(
+            value = Some("CN"),
+            text = "China (+CN)",
+            selected = params.countryCode == Some("CN")
+        ),
+        SelectItem(
+            value = Some("CO"),
+            text = "Colombia (+CO)",
+            selected = params.countryCode == Some("CO")
+        ),
+        SelectItem(
+            value = Some("CR"),
+            text = "Costa Rica (+CR)",
+            selected = params.countryCode == Some("CR")
+        ),
+        SelectItem(
+            value = Some("CU"),
+            text = "Cuba (+CU)",
+            selected = params.countryCode == Some("CU")
+        ),
+        SelectItem(
+            value = Some("CV"),
+            text = "Cabo Verde (+CV)",
+            selected = params.countryCode == Some("CV")
+        ),
+        SelectItem(
+            value = Some("CW"),
+            text = "Curacao (+CW)",
+            selected = params.countryCode == Some("CW")
+        ),
+        SelectItem(
+            value = Some("CX"),
+            text = "Christmas Island (+CX)",
+            selected = params.countryCode == Some("CX")
+        ),
+        SelectItem(
+            value = Some("CY"),
+            text = "Cyprus (+CY)",
+            selected = params.countryCode == Some("CY")
+        ),
+        SelectItem(
+            value = Some("CZ"),
+            text = "Czechia (+CZ)",
+            selected = params.countryCode == Some("CZ")
+        ),
+        SelectItem(
+            value = Some("DE"),
+            text = "Germany (+DE)",
+            selected = params.countryCode == Some("DE")
+        ),
+        SelectItem(
+            value = Some("DJ"),
+            text = "Djibouti (+DJ)",
+            selected = params.countryCode == Some("DJ")
+        ),
+        SelectItem(
+            value = Some("DK"),
+            text = "Denmark (+DK)",
+            selected = params.countryCode == Some("DK")
+        ),
+        SelectItem(
+            value = Some("DM"),
+            text = "Dominica (+DM)",
+            selected = params.countryCode == Some("DM")
+        ),
+        SelectItem(
+            value = Some("DO"),
+            text = "Dominican Republic (the) (+DO)",
+            selected = params.countryCode == Some("DO")
+        ),
+        SelectItem(
+            value = Some("DZ"),
+            text = "Algeria (+DZ)",
+            selected = params.countryCode == Some("DZ")
+        ),
+        SelectItem(
+            value = Some("EC"),
+            text = "Ecuador (+EC)",
+            selected = params.countryCode == Some("EC")
+        ),
+        SelectItem(
+            value = Some("EE"),
+            text = "Estonia (+EE)",
+            selected = params.countryCode == Some("EE")
+        ),
+        SelectItem(
+            value = Some("EG"),
+            text = "Egypt (+EG)",
+            selected = params.countryCode == Some("EG")
+        ),
+        SelectItem(
+            value = Some("EH"),
+            text = "Western Sahara (+EH)",
+            selected = params.countryCode == Some("EH")
+        ),
+        SelectItem(
+            value = Some("ER"),
+            text = "Eritrea (+ER)",
+            selected = params.countryCode == Some("ER")
+        ),
+        SelectItem(
+            value = Some("ES"),
+            text = "Spain (+ES)",
+            selected = params.countryCode == Some("ES")
+        ),
+        SelectItem(
+            value = Some("ET"),
+            text = "Ethiopia (+ET)",
+            selected = params.countryCode == Some("ET")
+        ),
+        SelectItem(
+            value = Some("FI"),
+            text = "Finland (+FI)",
+            selected = params.countryCode == Some("FI")
+        ),
+        SelectItem(
+            value = Some("FJ"),
+            text = "Fiji (+FJ)",
+            selected = params.countryCode == Some("FJ")
+        ),
+        SelectItem(
+            value = Some("FK"),
+            text = "Falkland Islands [Malvinas] (+FK)",
+            selected = params.countryCode == Some("FK")
+        ),
+        SelectItem(
+            value = Some("FM"),
+            text = "Micronesia (Federated States of) (+FM)",
+            selected = params.countryCode == Some("FM")
+        ),
+        SelectItem(
+            value = Some("FO"),
+            text = "Faroe Islands (the) (+FO)",
+            selected = params.countryCode == Some("FO")
+        ),
+        SelectItem(
+            value = Some("FR"),
+            text = "France (+FR)",
+            selected = params.countryCode == Some("FR")
+        ),
+        SelectItem(
+            value = Some("GA"),
+            text = "Gabon (+GA)",
+            selected = params.countryCode == Some("GA")
+        ),
+        SelectItem(
+            value = Some("GD"),
+            text = "Grenada (+GD)",
+            selected = params.countryCode == Some("GD")
+        ),
+        SelectItem(
+            value = Some("GE"),
+            text = "Georgia (+GE)",
+            selected = params.countryCode == Some("GE")
+        ),
+        SelectItem(
+            value = Some("GF"),
+            text = "French Guiana (+GF)",
+            selected = params.countryCode == Some("GF")
+        ),
+        SelectItem(
+            value = Some("GG"),
+            text = "Guernsey (+GG)",
+            selected = params.countryCode == Some("GG")
+        ),
+        SelectItem(
+            value = Some("GH"),
+            text = "Ghana (+GH)",
+            selected = params.countryCode == Some("GH")
+        ),
+        SelectItem(
+            value = Some("GI"),
+            text = "Gibraltar (+GI)",
+            selected = params.countryCode == Some("GI")
+        ),
+        SelectItem(
+            value = Some("GL"),
+            text = "Greenland (+GL)",
+            selected = params.countryCode == Some("GL")
+        ),
+        SelectItem(
+            value = Some("GM"),
+            text = "Gambia (the) (+GM)",
+            selected = params.countryCode == Some("GM")
+        ),
+        SelectItem(
+            value = Some("GN"),
+            text = "Guinea (+GN)",
+            selected = params.countryCode == Some("GN")
+        ),
+        SelectItem(
+            value = Some("GP"),
+            text = "Guadeloupe (+GP)",
+            selected = params.countryCode == Some("GP")
+        ),
+        SelectItem(
+            value = Some("GQ"),
+            text = "Equatorial Guinea (+GQ)",
+            selected = params.countryCode == Some("GQ")
+        ),
+        SelectItem(
+            value = Some("GR"),
+            text = "Greece (+GR)",
+            selected = params.countryCode == Some("GR")
+        ),
+        SelectItem(
+            value = Some("GS"),
+            text = "South Georgia (+GS)",
+            selected = params.countryCode == Some("GS")
+        ),
+        SelectItem(
+            value = Some("GT"),
+            text = "Guatemala (+GT)",
+            selected = params.countryCode == Some("GT")
+        ),
+        SelectItem(
+            value = Some("GU"),
+            text = "Guam (+GU)",
+            selected = params.countryCode == Some("GU")
+        ),
+        SelectItem(
+            value = Some("GW"),
+            text = "Guinea-Bissau (+GW)",
+            selected = params.countryCode == Some("GW")
+        ),
+        SelectItem(
+            value = Some("GY"),
+            text = "Guyana (+GY)",
+            selected = params.countryCode == Some("GY")
+        ),
+        SelectItem(
+            value = Some("HK"),
+            text = "Hong Kong (+HK)",
+            selected = params.countryCode == Some("HK")
+        ),
+        SelectItem(
+            value = Some("HM"),
+            text = "Heard Island and McDonald Islands (+HM)",
+            selected = params.countryCode == Some("HM")
+        ),
+        SelectItem(
+            value = Some("HN"),
+            text = "Honduras (+HN)",
+            selected = params.countryCode == Some("HN")
+        ),
+        SelectItem(
+            value = Some("HR"),
+            text = "Croatia (+HR)",
+            selected = params.countryCode == Some("HR")
+        ),
+        SelectItem(
+            value = Some("HT"),
+            text = "Haiti (+HT)",
+            selected = params.countryCode == Some("HT")
+        ),
+        SelectItem(
+            value = Some("HU"),
+            text = "Hungary (+HU)",
+            selected = params.countryCode == Some("HU")
+        ),
+        SelectItem(
+            value = Some("ID"),
+            text = "Indonesia (+ID)",
+            selected = params.countryCode == Some("ID")
+        ),
+        SelectItem(
+            value = Some("IE"),
+            text = "Ireland (+IE)",
+            selected = params.countryCode == Some("IE")
+        ),
+        SelectItem(
+            value = Some("IL"),
+            text = "Israel (+IL)",
+            selected = params.countryCode == Some("IL")
+        ),
+        SelectItem(
+            value = Some("IM"),
+            text = "Isle of Man (+IM)",
+            selected = params.countryCode == Some("IM")
+        ),
+        SelectItem(
+            value = Some("IN"),
+            text = "India (+IN)",
+            selected = params.countryCode == Some("IN")
+        ),
+        SelectItem(
+            value = Some("IO"),
+            text = "British Indian Ocean Territory (+IO)",
+            selected = params.countryCode == Some("IO")
+        ),
+        SelectItem(
+            value = Some("IQ"),
+            text = "Iraq (+IQ)",
+            selected = params.countryCode == Some("IQ")
+        ),
+        SelectItem(
+            value = Some("IR"),
+            text = "Iran (Islamic Republic of) (+IR)",
+            selected = params.countryCode == Some("IR")
+        ),
+        SelectItem(
+            value = Some("IS"),
+            text = "Iceland (+IS)",
+            selected = params.countryCode == Some("IS")
+        ),
+        SelectItem(
+            value = Some("IT"),
+            text = "Italy (+IT)",
+            selected = params.countryCode == Some("IT")
+        ),
+        SelectItem(
+            value = Some("JE"),
+            text = "Jersey (+JE)",
+            selected = params.countryCode == Some("JE")
+        ),
+        SelectItem(
+            value = Some("JM"),
+            text = "Jamaica (+JM)",
+            selected = params.countryCode == Some("JM")
+        ),
+        SelectItem(
+            value = Some("JO"),
+            text = "Jordan (+JO)",
+            selected = params.countryCode == Some("JO")
+        ),
+        SelectItem(
+            value = Some("JP"),
+            text = "Japan (+JP)",
+            selected = params.countryCode == Some("JP")
+        ),
+        SelectItem(
+            value = Some("KE"),
+            text = "Kenya (+KE)",
+            selected = params.countryCode == Some("KE")
+        ),
+        SelectItem(
+            value = Some("KG"),
+            text = "Kyrgyzstan (+KG)",
+            selected = params.countryCode == Some("KG")
+        ),
+        SelectItem(
+            value = Some("KH"),
+            text = "Cambodia (+KH)",
+            selected = params.countryCode == Some("KH")
+        ),
+        SelectItem(
+            value = Some("KI"),
+            text = "Kiribati (+KI)",
+            selected = params.countryCode == Some("KI")
+        ),
+        SelectItem(
+            value = Some("KM"),
+            text = "Comoros (the) (+KM)",
+            selected = params.countryCode == Some("KM")
+        ),
+        SelectItem(
+            value = Some("KN"),
+            text = "Saint Kitts and Nevis (+KN)",
+            selected = params.countryCode == Some("KN")
+        ),
+        SelectItem(
+            value = Some("KP"),
+            text = "Korea (Democratic People's Rep) (+KP)",
+            selected = params.countryCode == Some("KP")
+        ),
+        SelectItem(
+            value = Some("KR"),
+            text = "Korea (the Republic of) (+KR)",
+            selected = params.countryCode == Some("KR")
+        ),
+        SelectItem(
+            value = Some("KW"),
+            text = "Kuwait (+KW)",
+            selected = params.countryCode == Some("KW")
+        ),
+        SelectItem(
+            value = Some("KY"),
+            text = "Cayman Islands (the) (+KY)",
+            selected = params.countryCode == Some("KY")
+        ),
+        SelectItem(
+            value = Some("KZ"),
+            text = "Kazakhstan (+KZ)",
+            selected = params.countryCode == Some("KZ")
+        ),
+        SelectItem(
+            value = Some("LA"),
+            text = "Lao People's Democratic Republic (+LA)",
+            selected = params.countryCode == Some("LA")
+        ),
+        SelectItem(
+            value = Some("LB"),
+            text = "Lebanon (+LB)",
+            selected = params.countryCode == Some("LB")
+        ),
+        SelectItem(
+            value = Some("LC"),
+            text = "Saint Lucia (+LC)",
+            selected = params.countryCode == Some("LC")
+        ),
+        SelectItem(
+            value = Some("LI"),
+            text = "Liechtenstein (+LI)",
+            selected = params.countryCode == Some("LI")
+        ),
+        SelectItem(
+            value = Some("LK"),
+            text = "Sri Lanka (+LK)",
+            selected = params.countryCode == Some("LK")
+        ),
+        SelectItem(
+            value = Some("LR"),
+            text = "Liberia (+LR)",
+            selected = params.countryCode == Some("LR")
+        ),
+        SelectItem(
+            value = Some("LS"),
+            text = "Lesotho (+LS)",
+            selected = params.countryCode == Some("LS")
+        ),
+        SelectItem(
+            value = Some("LT"),
+            text = "Lithuania (+LT)",
+            selected = params.countryCode == Some("LT")
+        ),
+        SelectItem(
+            value = Some("LU"),
+            text = "Luxembourg (+LU)",
+            selected = params.countryCode == Some("LU")
+        ),
+        SelectItem(
+            value = Some("LV"),
+            text = "Latvia (+LV)",
+            selected = params.countryCode == Some("LV")
+        ),
+        SelectItem(
+            value = Some("LY"),
+            text = "Libya (+LY)",
+            selected = params.countryCode == Some("LY")
+        ),
+        SelectItem(
+            value = Some("MA"),
+            text = "Morocco (+MA)",
+            selected = params.countryCode == Some("MA")
+        ),
+        SelectItem(
+            value = Some("MC"),
+            text = "Monaco (+MC)",
+            selected = params.countryCode == Some("MC")
+        ),
+        SelectItem(
+            value = Some("MD"),
+            text = "Moldova (the Republic of (+MD)",
+            selected = params.countryCode == Some("MD")
+        ),
+        SelectItem(
+            value = Some("ME"),
+            text = "Montenegro (+ME)",
+            selected = params.countryCode == Some("ME")
+        ),
+        SelectItem(
+            value = Some("MF"),
+            text = "Saint Martin (French part) (+MF)",
+            selected = params.countryCode == Some("MF")
+        ),
+        SelectItem(
+            value = Some("MG"),
+            text = "Madagascar (+MG)",
+            selected = params.countryCode == Some("MG")
+        ),
+        SelectItem(
+            value = Some("MH"),
+            text = "Marshall Islands (the) (+MH)",
+            selected = params.countryCode == Some("MH")
+        ),
+        SelectItem(
+            value = Some("MK"),
+            text = "Macedonia (+MK)",
+            selected = params.countryCode == Some("MK")
+        ),
+        SelectItem(
+            value = Some("ML"),
+            text = "Mali (+ML)",
+            selected = params.countryCode == Some("ML")
+        ),
+        SelectItem(
+            value = Some("MM"),
+            text = "Myanmar (+MM)",
+            selected = params.countryCode == Some("MM")
+        ),
+        SelectItem(
+            value = Some("MN"),
+            text = "Mongolia (+MN)",
+            selected = params.countryCode == Some("MN")
+        ),
+        SelectItem(
+            value = Some("MO"),
+            text = "Macao (+MO)",
+            selected = params.countryCode == Some("MO")
+        ),
+        SelectItem(
+            value = Some("MP"),
+            text = "Northern Mariana Islands (the) (+MP)",
+            selected = params.countryCode == Some("MP")
+        ),
+        SelectItem(
+            value = Some("MQ"),
+            text = "Martinique (+MQ)",
+            selected = params.countryCode == Some("MQ")
+        ),
+        SelectItem(
+            value = Some("MR"),
+            text = "Mauritania (+MR)",
+            selected = params.countryCode == Some("MR")
+        ),
+        SelectItem(
+            value = Some("MS"),
+            text = "Montserrat (+MS)",
+            selected = params.countryCode == Some("MS")
+        ),
+        SelectItem(
+            value = Some("MT"),
+            text = "Malta (+MT)",
+            selected = params.countryCode == Some("MT")
+        ),
+        SelectItem(
+            value = Some("MU"),
+            text = "Mauritius (+MU)",
+            selected = params.countryCode == Some("MU")
+        ),
+        SelectItem(
+            value = Some("MV"),
+            text = "Maldives (+MV)",
+            selected = params.countryCode == Some("MV")
+        ),
+        SelectItem(
+            value = Some("MW"),
+            text = "Malawi (+MW)",
+            selected = params.countryCode == Some("MW")
+        ),
+        SelectItem(
+            value = Some("MX"),
+            text = "Mexico (+MX)",
+            selected = params.countryCode == Some("MX")
+        ),
+        SelectItem(
+            value = Some("MY"),
+            text = "Malaysia (+MY)",
+            selected = params.countryCode == Some("MY")
+        ),
+        SelectItem(
+            value = Some("MZ"),
+            text = "Mozambique (+MZ)",
+            selected = params.countryCode == Some("MZ")
+        ),
+        SelectItem(
+            value = Some("NA"),
+            text = "Namibia (+NA)",
+            selected = params.countryCode == Some("NA")
+        ),
+        SelectItem(
+            value = Some("NC"),
+            text = "New Caledonia (+NC)",
+            selected = params.countryCode == Some("NC")
+        ),
+        SelectItem(
+            value = Some("NE"),
+            text = "Niger (the) (+NE)",
+            selected = params.countryCode == Some("NE")
+        ),
+        SelectItem(
+            value = Some("NF"),
+            text = "Norfolk Island (+NF)",
+            selected = params.countryCode == Some("NF")
+        ),
+        SelectItem(
+            value = Some("NG"),
+            text = "Nigeria (+NG)",
+            selected = params.countryCode == Some("NG")
+        ),
+        SelectItem(
+            value = Some("NI"),
+            text = "Nicaragua (+NI)",
+            selected = params.countryCode == Some("NI")
+        ),
+        SelectItem(
+            value = Some("NL"),
+            text = "Netherlands (the) (+NL)",
+            selected = params.countryCode == Some("NL")
+        ),
+        SelectItem(
+            value = Some("NO"),
+            text = "Norway (+NO)",
+            selected = params.countryCode == Some("NO")
+        ),
+        SelectItem(
+            value = Some("NP"),
+            text = "Nepal (+NP)",
+            selected = params.countryCode == Some("NP")
+        ),
+        SelectItem(
+            value = Some("NR"),
+            text = "Nauru (+NR)",
+            selected = params.countryCode == Some("NR")
+        ),
+        SelectItem(
+            value = Some("NU"),
+            text = "Niue (+NU)",
+            selected = params.countryCode == Some("NU")
+        ),
+        SelectItem(
+            value = Some("NZ"),
+            text = "New Zealand (+NZ)",
+            selected = params.countryCode == Some("NZ")
+        ),
+        SelectItem(
+            value = Some("OM"),
+            text = "Oman (+OM)",
+            selected = params.countryCode == Some("OM")
+        ),
+        SelectItem(
+            value = Some("PA"),
+            text = "Panama (+PA)",
+            selected = params.countryCode == Some("PA")
+        ),
+        SelectItem(
+            value = Some("PE"),
+            text = "Peru (+PE)",
+            selected = params.countryCode == Some("PE")
+        ),
+        SelectItem(
+            value = Some("PF"),
+            text = "French Polynesia (+PF)",
+            selected = params.countryCode == Some("PF")
+        ),
+        SelectItem(
+            value = Some("PG"),
+            text = "Papua New Guinea (+PG)",
+            selected = params.countryCode == Some("PG")
+        ),
+        SelectItem(
+            value = Some("PH"),
+            text = "Philippines (the) (+PH)",
+            selected = params.countryCode == Some("PH")
+        ),
+        SelectItem(
+            value = Some("PK"),
+            text = "Pakistan (+PK)",
+            selected = params.countryCode == Some("PK")
+        ),
+        SelectItem(
+            value = Some("PL"),
+            text = "Poland (+PL)",
+            selected = params.countryCode == Some("PL")
+        ),
+        SelectItem(
+            value = Some("PM"),
+            text = "Saint Pierre and Miquelon (+PM)",
+            selected = params.countryCode == Some("PM")
+        ),
+        SelectItem(
+            value = Some("PN"),
+            text = "Pitcairn (+PN)",
+            selected = params.countryCode == Some("PN")
+        ),
+        SelectItem(
+            value = Some("PR"),
+            text = "Puerto Rico (+PR)",
+            selected = params.countryCode == Some("PR")
+        ),
+        SelectItem(
+            value = Some("PS"),
+            text = "Palestine, State of (+PS)",
+            selected = params.countryCode == Some("PS")
+        ),
+        SelectItem(
+            value = Some("PT"),
+            text = "Portugal (+PT)",
+            selected = params.countryCode == Some("PT")
+        ),
+        SelectItem(
+            value = Some("PW"),
+            text = "Palau (+PW)",
+            selected = params.countryCode == Some("PW")
+        ),
+        SelectItem(
+            value = Some("PY"),
+            text = "Paraguay (+PY)",
+            selected = params.countryCode == Some("PY")
+        ),
+        SelectItem(
+            value = Some("QA"),
+            text = "Qatar (+QA)",
+            selected = params.countryCode == Some("QA")
+        ),
+        SelectItem(
+            value = Some("RE"),
+            text = "Reunion (+RE)",
+            selected = params.countryCode == Some("RE")
+        ),
+        SelectItem(
+            value = Some("RO"),
+            text = "Romania (+RO)",
+            selected = params.countryCode == Some("RO")
+        ),
+        SelectItem(
+            value = Some("RS"),
+            text = "Serbia (+RS)",
+            selected = params.countryCode == Some("RS")
+        ),
+        SelectItem(
+            value = Some("RU"),
+            text = "Russian Federation (the) (+RU)",
+            selected = params.countryCode == Some("RU")
+        ),
+        SelectItem(
+            value = Some("RW"),
+            text = "Rwanda (+RW)",
+            selected = params.countryCode == Some("RW")
+        ),
+        SelectItem(
+            value = Some("SA"),
+            text = "Saudi Arabia (+SA)",
+            selected = params.countryCode == Some("SA")
+        ),
+        SelectItem(
+            value = Some("SB"),
+            text = "Solomon Islands (+SB)",
+            selected = params.countryCode == Some("SB")
+        ),
+        SelectItem(
+            value = Some("SC"),
+            text = "Seychelles (+SC)",
+            selected = params.countryCode == Some("SC")
+        ),
+        SelectItem(
+            value = Some("SD"),
+            text = "Sudan (the) (+SD)",
+            selected = params.countryCode == Some("SD")
+        ),
+        SelectItem(
+            value = Some("SE"),
+            text = "Sweden (+SE)",
+            selected = params.countryCode == Some("SE")
+        ),
+        SelectItem(
+            value = Some("SG"),
+            text = "Singapore (+SG)",
+            selected = params.countryCode == Some("SG")
+        ),
+        SelectItem(
+            value = Some("SH"),
+            text = "Saint Helena (+SH)",
+            selected = params.countryCode == Some("SH")
+        ),
+        SelectItem(
+            value = Some("SI"),
+            text = "Slovenia (+SI)",
+            selected = params.countryCode == Some("SI")
+        ),
+        SelectItem(
+            value = Some("SJ"),
+            text = "Svalbard and Jan Mayen (+SJ)",
+            selected = params.countryCode == Some("SJ")
+        ),
+        SelectItem(
+            value = Some("SK"),
+            text = "Slovakia (+SK)",
+            selected = params.countryCode == Some("SK")
+        ),
+        SelectItem(
+            value = Some("SL"),
+            text = "Sierra Leone (+SL)",
+            selected = params.countryCode == Some("SL")
+        ),
+        SelectItem(
+            value = Some("SM"),
+            text = "San Marino (+SM)",
+            selected = params.countryCode == Some("SM")
+        ),
+        SelectItem(
+            value = Some("SN"),
+            text = "Senegal (+SN)",
+            selected = params.countryCode == Some("SN")
+        ),
+        SelectItem(
+            value = Some("SO"),
+            text = "Somalia (+SO)",
+            selected = params.countryCode == Some("SO")
+        ),
+        SelectItem(
+            value = Some("SR"),
+            text = "Suriname (+SR)",
+            selected = params.countryCode == Some("SR")
+        ),
+        SelectItem(
+            value = Some("SS"),
+            text = "South Sudan (+SS)",
+            selected = params.countryCode == Some("SS")
+        ),
+        SelectItem(
+            value = Some("ST"),
+            text = "Sao Tome and Principe (+ST)",
+            selected = params.countryCode == Some("ST")
+        ),
+        SelectItem(
+            value = Some("SV"),
+            text = "El Salvador (+SV)",
+            selected = params.countryCode == Some("SV")
+        ),
+        SelectItem(
+            value = Some("SX"),
+            text = "Sint Maarten (Dutch part) (+SX)",
+            selected = params.countryCode == Some("SX")
+        ),
+        SelectItem(
+            value = Some("SY"),
+            text = "Syrian Arab Republic (+SY)",
+            selected = params.countryCode == Some("SY")
+        ),
+        SelectItem(
+            value = Some("SZ"),
+            text = "Swaziland (+SZ)",
+            selected = params.countryCode == Some("SZ")
+        ),
+        SelectItem(
+            value = Some("TC"),
+            text = "Turks and Caicos Islands (the) (+TC)",
+            selected = params.countryCode == Some("TC")
+        ),
+        SelectItem(
+            value = Some("TD"),
+            text = "Chad (+TD)",
+            selected = params.countryCode == Some("TD")
+        ),
+        SelectItem(
+            value = Some("TF"),
+            text = "French Southern Territories (the) (+TF)",
+            selected = params.countryCode == Some("TF")
+        ),
+        SelectItem(
+            value = Some("TG"),
+            text = "Togo (+TG)",
+            selected = params.countryCode == Some("TG")
+        ),
+        SelectItem(
+            value = Some("TH"),
+            text = "Thailand (+TH)",
+            selected = params.countryCode == Some("TH")
+        ),
+        SelectItem(
+            value = Some("TJ"),
+            text = "Tajikistan (+TJ)",
+            selected = params.countryCode == Some("TJ")
+        ),
+        SelectItem(
+            value = Some("TK"),
+            text = "Tokelau (+TK)",
+            selected = params.countryCode == Some("TK")
+        ),
+        SelectItem(
+            value = Some("TL"),
+            text = "Timor-Leste (+TL)",
+            selected = params.countryCode == Some("TL")
+        ),
+        SelectItem(
+            value = Some("TM"),
+            text = "Turkmenistan (+TM)",
+            selected = params.countryCode == Some("TM")
+        ),
+        SelectItem(
+            value = Some("TN"),
+            text = "Tunisia (+TN)",
+            selected = params.countryCode == Some("TN")
+        ),
+        SelectItem(
+            value = Some("TO"),
+            text = "Tonga (+TO)",
+            selected = params.countryCode == Some("TO")
+        ),
+        SelectItem(
+            value = Some("TR"),
+            text = "Turkey (+TR)",
+            selected = params.countryCode == Some("TR")
+        ),
+        SelectItem(
+            value = Some("TT"),
+            text = "Trinidad and Tobago (+TT)",
+            selected = params.countryCode == Some("TT")
+        ),
+        SelectItem(
+            value = Some("TV"),
+            text = "Tuvalu (+TV)",
+            selected = params.countryCode == Some("TV")
+        ),
+        SelectItem(
+            value = Some("TW"),
+            text = "Taiwan (Province of China) (+TW)",
+            selected = params.countryCode == Some("TW")
+        ),
+        SelectItem(
+            value = Some("TZ"),
+            text = "Tanzania, United Republic of (+TZ)",
+            selected = params.countryCode == Some("TZ")
+        ),
+        SelectItem(
+            value = Some("UA"),
+            text = "Ukraine (+UA)",
+            selected = params.countryCode == Some("UA")
+        ),
+        SelectItem(
+            value = Some("UG"),
+            text = "Uganda (+UG)",
+            selected = params.countryCode == Some("UG")
+        ),
+        SelectItem(
+            value = Some("UM"),
+            text = "United States Minor Outlying Isles (+UM)",
+            selected = params.countryCode == Some("UM")
+        ),
+        SelectItem(
+            value = Some("US"),
+            text = "United States of America (the) (+US)",
+            selected = params.countryCode == Some("US")
+        ),
+        SelectItem(
+            value = Some("UY"),
+            text = "Uruguay",
+            selected = params.countryCode == Some("UY")
+        ),
+        SelectItem(
+            value = Some("UZ"),
+            text = "Uzbekistan (+UZ)",
+            selected = params.countryCode == Some("UZ")
+        ),
+        SelectItem(
+            value = Some("VA"),
+            text = "Holy See (the) (+VA)",
+            selected = params.countryCode == Some("VA")
+        ),
+        SelectItem(
+            value = Some("VC"),
+            text = "Saint Vincent and the Grenadines (+VC)",
+            selected = params.countryCode == Some("VC")
+        ),
+        SelectItem(
+            value = Some("VE"),
+            text = "Venezuela (Bolivarian Republic of) (+VE)",
+            selected = params.countryCode == Some("VE")
+        ),
+        SelectItem(
+            value = Some("VG"),
+            text = "Virgin Islands (British) (+VG)",
+            selected = params.countryCode == Some("VG")
+        ),
+        SelectItem(
+            value = Some("VI"),
+            text = "Virgin Islands (U.S.) (+VI)",
+            selected = params.countryCode == Some("VI")
+        ),
+        SelectItem(
+            value = Some("VN"),
+            text = "Viet Nam (+VN)",
+            selected = params.countryCode == Some("VN")
+        ),
+        SelectItem(
+            value = Some("VU"),
+            text = "Vanuatu (+VU)",
+            selected = params.countryCode == Some("VU")
+        ),
+        SelectItem(
+            value = Some("WF"),
+            text = "Wallis and Futuna (+WF)",
+            selected = params.countryCode == Some("WF")
+        ),
+        SelectItem(
+            value = Some("WS"),
+            text = "Samoa (+WS)",
+            selected = params.countryCode == Some("WS")
+        ),
+        SelectItem(
+            value = Some("YE"),
+            text = "Yemen (+YE)",
+            selected = params.countryCode == Some("YE")
+        ),
+        SelectItem(
+            value = Some("YT"),
+            text = "Mayotte (+YT)",
+            selected = params.countryCode == Some("YT")
+        ),
+        SelectItem(
+            value = Some("ZA"),
+            text = "South Africa (+ZA)",
+            selected = params.countryCode == Some("ZA")
+        ),
+        SelectItem(
+            value = Some("ZM"),
+            text = "Zambia (+ZM)",
+            selected = params.countryCode == Some("ZM")
+        ),
+        SelectItem(
+            value = Some("ZW"),
+            text = "Zimbabwe (+ZW)",
+            selected = params.countryCode == Some("ZW")
+        )
+    ),
+    label = Label(
+        classes = "govuk-!-font-weight-bold",
+        content = HtmlContent(s"${message("fh.address.country.label")}")
+    )
+).asAccessibleAutocomplete(Some(
+    AccessibleAutocomplete(
+        defaultValue = Some(""),
+        showAllValues = true,
+        autoSelect = false)
+)))
+

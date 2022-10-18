@@ -19,7 +19,7 @@
 @import play.api.i18n.Messages
 @import play.api.data.Form
 
-@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers)(implicit message: Messages)
+@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers, formName: Option[String] = None)(implicit message: Messages)
 
 @fieldName = @{
     params.context match {
@@ -37,8 +37,8 @@
             name = s"$fieldName.Line1",
             label = Label(
                 isPageHeading = false,
-                classes = "govuk-body",
-                content = HtmlContent(s"<strong>${message("fh.address.line1.label")}</strong>")
+                classes = "govuk-!-font-weight-bold",
+                content = HtmlContent(s"${message("fh.address.line1.label")}")
             ),
             spellcheck = Some(false),
             autocomplete = Some("address-line1"),
@@ -47,8 +47,8 @@
             errorMessage =
                     formDate(s"$fieldName.Line1").error.map{ e =>
                     ErrorMessage(
-                        content = Text(message(s"fh.$fieldName.Line1.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line1.${e.message}")) else Text(message(s"fh.$fieldName.Line1.${e.message}")),
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -58,8 +58,8 @@
             name = s"$fieldName.Line2",
             label = Label(
                 isPageHeading = false,
-                classes = "govuk-body",
-                content = HtmlContent(s"<strong>${message("fh.address.line2_optional.label")}</strong>")
+                classes = "govuk-!-font-weight-bold",
+                content = HtmlContent(s"${message("fh.address.line2_optional.label")}")
             ),
             spellcheck = Some(false),
             autocomplete = Some("address-line2"),
@@ -68,8 +68,8 @@
             errorMessage =
                 formDate(s"$fieldName.Line2").error.map{ e =>
                     ErrorMessage(
-                        content = Text(message(s"fh.$fieldName.Line2.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line2.${e.message}")) else Text(message(s"fh.$fieldName.Line2.${e.message}")),
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -79,8 +79,8 @@
             name = s"$fieldName.Line3",
             label = Label(
                 isPageHeading = false,
-                classes = "govuk-body",
-                content = HtmlContent(s"<strong>${message("fh.address.line3.label")}</strong>")
+                classes = "govuk-!-font-weight-bold",
+                content = HtmlContent(s"${message("fh.address.line3.label")}")
             ),
             spellcheck = Some(false),
             classes = "govuk-!-width-two-thirds",
@@ -88,8 +88,8 @@
             errorMessage =
                 formDate(s"$fieldName.Line3").error.map{ e =>
                     ErrorMessage(
-                        content = Text(message(s"fh.$fieldName.Line3.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line3.${e.message}")) else Text(message(s"fh.$fieldName.Line3.${e.message}")),
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -99,8 +99,8 @@
             name = s"$fieldName.Line4",
             label = Label(
                 isPageHeading = false,
-                classes = "govuk-body",
-                content = HtmlContent(s"<strong>${message("fh.address.line4.label")}</strong>")
+                classes = "govuk-!-font-weight-bold",
+                content = HtmlContent(s"${message("fh.address.line4.label")}")
             ),
             spellcheck = Some(false),
             classes = "govuk-!-width-two-thirds",
@@ -108,8 +108,8 @@
             errorMessage =
                 formDate(s"$fieldName.Line4").error.map{ e =>
                     ErrorMessage(
-                        content = Text(message(s"fh.$fieldName.Line4.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.Line4.${e.message}")) else Text(message(s"fh.$fieldName.Line4.${e.message}")),
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
@@ -119,8 +119,8 @@
             name = s"$fieldName.postcode",
             label = Label(
                 isPageHeading = false,
-                classes = "govuk-body",
-                content = HtmlContent(s"<strong>${message("fh.address.postcode.label")}</strong>")
+                classes = "govuk-!-font-weight-bold",
+                content = HtmlContent(s"${message("fh.address.postcode.label")}")
             ),
             spellcheck = Some(false),
             autocomplete = Some("postal-code"),
@@ -129,8 +129,8 @@
             errorMessage =
                 formDate(s"$fieldName.postcode").error.map{ e =>
                     ErrorMessage(
-                        content = Text(message(s"fh.$fieldName.postcode.${e.message}")),
-                        visuallyHiddenText = Some(message("generic.errorPrefix"))
+                        content = if(formName.isDefined) Text(message(s"fh.${formName.get}.$fieldName.postcode.${e.message}")) else Text(message(s"fh.$fieldName.postcode.${e.message}")),
+                        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
                     )
                 }
         ))
