@@ -15,17 +15,20 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -33,6 +36,12 @@
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
+
+@inputHasErrors(input: String) = @{input match {
+    case i: String if mainBusinessAddressForm.hasErrors && mainBusinessAddressForm.errors.filter(_.key.contains(input)).nonEmpty => true
+    case _: String if mainBusinessAddressForm.hasErrors && (mainBusinessAddressForm.errors.head.toString.contains("date.empty.error") || mainBusinessAddressForm.errors.head.toString.contains("error.invalid"))=> true
+    case _ => false
+}}
 
 @titlePrefix = @{
   if (mainBusinessAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -42,126 +51,177 @@
   Messages("fh.mainBusinessAddress.title")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+
+@manualAddress = {
+    @AddressUK(
+    formDate = mainBusinessAddressForm,
+        params = AddressUKParams(
+          context = Some("mainPreviousAddressUK"),
+          name = "previousAddress",
+          label = Messages("fh.main_business_address.enter_previous.label"),
+          hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
+          error = Some(Messages("fh.main_business_address.enter_previous.error"))
+        ),
+      viewHelpers = viewHelpers
+    )
+
+    <hr class="govuk-section-break govuk-section-break--m" />
+
+    @viewHelpers.govukDateInput(DateInput(
+        id = previousAddressStartdateKey,
+        hint = Some(Hint(
+            content = Text(Messages("fh.previousAddressStartdate.hint_text"))
+        )),
+        errorMessage = mainBusinessAddressForm(previousAddressStartdateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.previousAddressStartdate.${e.message}", e.args:_*)))),
+        items = Seq(
+            InputItem(name = s"$previousAddressStartdateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.day")),
+            InputItem(name = s"$previousAddressStartdateKey.month", classes = s"govuk-input--width-2 ${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.month")),
+            InputItem(name = s"$previousAddressStartdateKey.year", classes = s"govuk-input--width-4 ${if(inputHasErrors("year")){" govuk-input--error"} else {""}}", label=Some("Year"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.year"))),
+        fieldset = Some(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("fh.previousAddressStartdate.label")),
+                classes = "govuk-fieldset__legend--m",
+                isPageHeading = false
+            ))
+        ))
+    ))
+
+}
+
+@lessThan3Year = {
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages("fh.main_business_address.previous.label")),
+                  classes = "govuk-fieldset__legend--m",
+                  isPageHeading = false
+              ))
+          )),
+          idPrefix = Some(previousAddressKey),
+          name = previousAddressKey,
+          errorMessage = if (mainBusinessAddressForm(previousAddressKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages("fh.previousAddress.error.required"))))
+          } else None,
+          hint = Some(Hint(
+           content = Text(Messages("fh.main_business_address.previous.hintText"))
+          )),
+          items = Seq(
+              RadioItem(
+                  content = Text(Messages("fh.generic.yes")),
+                  value = Some("true"),
+                  id = Some("previousAddresstrue"),
+                  checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("true"),
+                  conditionalHtml = Some(manualAddress)
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.generic.no")),
+                  id = Some("previousAddressfalse"),
+                  checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("false"),
+                  value = Some("false")
+              )
+          )
+      ))
+}
+
+@layout(title = titlePrefix + title, Some(pageScripts)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @BackOld(navigation)
+  @Back(navigation, viewHelpers)
 
-  @error_box(mainBusinessAddressForm, dateKey=s"$previousAddressStartdateKey")
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
 
-  <p>@Messages("fh.mainBusinessAddress.intro")</p>
 
-  <p>
-    @bpr.businessAddress.line1 <br>
-    @bpr.businessAddress.line2 <br>
-    @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br>}
-    @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br>}
-    @bpr.businessAddress.postcode <br>
-  </p>
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"), 'novalidate -> "novalidate") {
+      @if(mainBusinessAddressForm.errors.nonEmpty) {
 
-    @helper.CSRF.formField
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                if(mainBusinessAddressForm(previousAddressKey).value.contains("true")) {
+                  mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+                    ErrorLink(
+                      href = Some(s"#${error._1.key}"),
+                      content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
+                    )
+                  }
+                } else {
+                  mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
+                    ErrorLink(
+                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
+                      content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
+                    )
+                  }
+                }
+          ,
+          title = Text(messages("fh.generic.error"))))
+      }
 
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(timeAtCurrentAddressKey),
-        legend = Some(Messages("fh.main_business_address.time_at_address.label")),
-        inline = false,
-        error = Some(Messages("fh.timeAtCurrentAddress.error.required")),
-        hasErrors = mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors,
-        value = mainBusinessAddressForm(timeAtCurrentAddressKey).value,
-        hintText = Some(Messages("fh.main_business_address.time_at_address.hintText")),
-        radios = List(
-          RadioParams(
-            Messages("fh.main_business_address.0to3years.value"),
-            Messages("fh.main_business_address.0to3years.label"),
-            dataTarget = Some("lessThan3Years")
-          ),
-          RadioParams(
-            Messages("fh.main_business_address.3to5years.value"),
-            Messages("fh.main_business_address.3to5years.label")
-          ),
-          RadioParams(
-            Messages("fh.main_business_address.5to10years.value"),
-            Messages("fh.main_business_address.5to10years.label")
-          ),
-          RadioParams(
-            Messages("fh.main_business_address.10plusYears.value"),
-            Messages("fh.main_business_address.10plusYears.label")
-          )
-        )
+    @PageHeading(
+      PageHeadingParams(
+        heading = title
       )
     )
 
-    <div class="panel panel-border-narrow js-hidden" id="lessThan3Years">
 
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(previousAddressKey),
-          legend = Some(Messages("fh.main_business_address.previous.label")),
-          hasErrors = mainBusinessAddressForm(previousAddressKey).hasErrors,
-          error = Some(Messages("fh.previousAddress.error.required")),
-          value = mainBusinessAddressForm(previousAddressKey).value,
-          hintText = Some(Messages("fh.main_business_address.previous.hintText")),
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              Some("hasPreviousAddress")
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no")
-            )
+
+    <p class="govuk-body">@Messages("fh.mainBusinessAddress.intro")</p>
+
+    <p class="govuk-body">@bpr.businessAddress.line1
+      @bpr.businessAddress.line2 <br/>
+      @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br/>}
+      @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br/>}
+      @bpr.businessAddress.postcode <br/>
+    </p>
+
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(Messages("fh.main_business_address.time_at_address.label")),
+                  classes = "govuk-fieldset__legend--m",
+                  isPageHeading = false
+              ))
+          )),
+          idPrefix = Some(timeAtCurrentAddressKey),
+          name = timeAtCurrentAddressKey,
+          errorMessage = if (mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages("fh.timeAtCurrentAddress.error.required"))))
+          } else None,
+          hint = Some(Hint(
+           content = Text(Messages("fh.main_business_address.time_at_address.hintText"))
+          )),
+          items = Seq(
+              RadioItem(
+                  content = Text(Messages("fh.main_business_address.0to3years.label")),
+                  value = Some(Messages("fh.main_business_address.0to3years.value")),
+                  id = Some("timeAtCurrentAddress-less-than-3-years"),
+                  checked = mainBusinessAddressForm(timeAtCurrentAddressKey).value.toList.contains(Messages("fh.main_business_address.0to3years.value")),
+                  conditionalHtml = Some(lessThan3Year)
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.main_business_address.3to5years.label")),
+                  value = Some(Messages("fh.main_business_address.3to5years.value")),
+                  id = Some("timeAtCurrentAddress-3-5-years"),
+                  checked = mainBusinessAddressForm(timeAtCurrentAddressKey).value.toList.contains(Messages("fh.main_business_address.3to5years.value")),
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.main_business_address.5to10years.label")),
+                  value = Some(Messages("fh.main_business_address.5to10years.value")),
+                  id = Some("timeAtCurrentAddress-5-10-years"),
+                  checked = mainBusinessAddressForm(timeAtCurrentAddressKey).value.toList.contains(Messages("fh.main_business_address.5to10years.value")),
+
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.main_business_address.10plusYears.label")),
+                  value = Some(Messages("fh.main_business_address.10plusYears.value")),
+                  id = Some("timeAtCurrentAddress-10-or-more-years"),
+                  checked = mainBusinessAddressForm(timeAtCurrentAddressKey).value.toList.contains(Messages("fh.main_business_address.10plusYears.value")),
+
+              )
           )
-        )
-      )
+      ))
 
-      <div class="panel panel-border-narrow js-hidden" id="hasPreviousAddress">
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
 
-        @AddressUKOld(
-          mainBusinessAddressForm,
-          AddressUKParams(
-            context = Some("mainPreviousAddressUK"),
-            name = previousAddressKey,
-            label = Messages("fh.main_business_address.enter_previous.label"),
-            hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
-            error = Some(Messages("fh.main_business_address.enter_previous.error"))
-          )
-        )
-
-        @DateTuple(
-          DateTupleParams(
-            name = previousAddressStartdateKey,
-            label = Messages("fh.previousAddressStartdate.label"),
-            error = Messages("fh.previousAddressStartdate.error.invalid"),
-            hasErrors = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").hasErrors ||
-                mainBusinessAddressForm(s"$previousAddressStartdateKey.month").hasErrors ||
-                mainBusinessAddressForm(s"$previousAddressStartdateKey.year").hasErrors,
-            hintText = Some(Messages("fh.previousAddressStartdate.hint_text")),
-            day = mainBusinessAddressForm(s"$previousAddressStartdateKey.day").value,
-            month = mainBusinessAddressForm(s"$previousAddressStartdateKey.month").value,
-            year = mainBusinessAddressForm(s"$previousAddressStartdateKey.year").value
-          )
-        )
-
-      </div>
-    </div>
-
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
   }
 }
