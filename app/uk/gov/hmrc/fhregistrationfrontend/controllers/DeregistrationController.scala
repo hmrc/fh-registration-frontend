@@ -130,7 +130,7 @@ class DeregistrationController @Inject()(
     for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
-      processingDate = new DateTime(timestamp.toLong)
+      processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.deregistration_acknowledgement(processingDate, email))
     }
