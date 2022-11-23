@@ -30,14 +30,15 @@
 
 @layout(pageTitle) {
 
-  <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData}" method="POST">
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData, 'novalidate -> "novalidate") {
     @helper.CSRF.formField
-    <h1>@pageTitle</h1>
+    <h1 class="govuk-heading-l">@pageTitle</h1>
 
-    <p>
+    <p class="govuk-body">
       <img src="./assets/images/File.png" align="left" style="margin: 0px 20px">
     </p>
-    <p>
+
+    <p class="govuk-body">
       @Messages("fh.delete_confirmation_page.saved_on")
       @timeSaved.toLocalDate.toString("d MMMM yyyy")
       <br>
@@ -46,11 +47,9 @@
 
       <br><br>
       @viewHelpers.govukButton(Button(content = Text(Messages("fh.delete_confirmation_page.button"))))
-      <br><br>
 
-      // replace with back link
-    <p class="back-to-previous print-hidden">
+    <p class="govuk-body">
       <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
     </p>
-  </form>
+    }
 }
