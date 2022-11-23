@@ -20,7 +20,6 @@ import java.time.LocalDate
 import java.util.Date
 
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
