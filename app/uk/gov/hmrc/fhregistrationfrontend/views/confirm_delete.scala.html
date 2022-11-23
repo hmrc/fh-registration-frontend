@@ -16,22 +16,23 @@
 
 @import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(timeSaved: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@title = @{
+@pageTitle = @{
   Messages("fh.delete_confirmation_page.header")
 }
 
-@mainTemplate(title = title) {
+@layout(pageTitle) {
 
   <form action="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData}" method="POST">
     @helper.CSRF.formField
-    <h1>@title</h1>
+    <h1>@pageTitle</h1>
 
     <p>
       <img src="./assets/images/File.png" align="left" style="margin: 0px 20px">
