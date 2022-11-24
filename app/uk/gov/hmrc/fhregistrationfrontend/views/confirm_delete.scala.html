@@ -29,21 +29,24 @@
 }
 
 @layout(pageTitle) {
-
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.deleteUserData) {
-    <h1 class="govuk-heading-l">@pageTitle</h1>
+        <h1 class="govuk-heading-l">@pageTitle</h1>
 
-    <p class="govuk-body">
-      @Messages("fh.delete_confirmation_page.saved_on")
-      @timeSaved.toLocalDate.toString("d MMMM yyyy")
+        <p class="govuk-body">
+            @Messages("fh.delete_confirmation_page.saved_on")
+            @timeSaved.toLocalDate.toString("d MMMM yyyy")
+        </p>
+
+        <p class="govuk-body">
+        @Messages("fh.delete_confirmation_page.partially_completed")
+        </p>
+
         <div class="govuk-!-padding-bottom-4"></div>
-      @Messages("fh.delete_confirmation_page.partially_completed")
-    </p>
-        <div class="govuk-!-padding-bottom-4"></div>
+
         @viewHelpers.govukButton(Button(content = Text(Messages("fh.delete_confirmation_page.button"))))
 
-    <p class="govuk-body">
-      <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
-    </p>
+        <p class="govuk-body">
+            <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
+        </p>
     }
 }
