@@ -63,7 +63,10 @@ class DeregistrationController @Inject()(
     deregistrationReasonForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ Future successful BadRequest(views.deregistration_reason(formWithError)),
+        formWithError ⇒ {
+          println(" form with error:;" + formWithError)
+          Future successful BadRequest(views.deregistration_reason(formWithError))
+        },
         deregistrationReason ⇒
           keyStoreService
             .saveDeregistrationReason(deregistrationReason)

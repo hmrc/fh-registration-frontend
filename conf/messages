@@ -875,10 +875,10 @@ fh.deregistration.stoppedTrading.label=Stopped trading as a fulfilment business
 fh.deregistration.changedLegalEntity.label=Business has changed its legal entity type
 fh.deregistration.otherReason.label=Other reason
 fh.deregistration.reason.error.required=Select a reason for cancelling your registration
-fh.deregistration.reasonOtherText.label=Enter your reason
-fh.deregistration.reasonOtherText.error.required=Enter your reason for cancelling your registration
-fh.deregistration.reasonOtherText.error.maxLength=Reason for cancelling your registration must be 40 characters or less
-fh.deregistration.reasonOtherText.error.pattern=Reason for cancelling your registration must be 40 characters or less and only include letters a to z, numbers and spaces
+fh.deregistration.otherReasonContainer.label=Enter your reason
+fh.deregistration.otherReasonContainer.error.required=Enter your reason for cancelling your registration
+fh.deregistration.otherReasonContainer.error.maxLength=Reason for cancelling your registration must be 40 characters or less
+fh.deregistration.otherReasonContainer.error.pattern=Reason for cancelling your registration must be 40 characters or less and only include letters a to z, numbers and spaces
 
 # - Deregistration confirm
 #============================================================
