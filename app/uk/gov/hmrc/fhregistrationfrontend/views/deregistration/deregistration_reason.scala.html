@@ -21,14 +21,14 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.{reasonKey, reasonOtherKey}
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@this(
-main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
+
 @(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -37,12 +37,9 @@ main_template: main_template_old
   if (reasonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@title = @{
+@title = @{messages("fh.deregistration.title")}
 
-  Messages("fh.deregistration.title")
-}
-
-@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason, 'novalidate -> "novalidate") {
 
