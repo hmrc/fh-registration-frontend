@@ -20,7 +20,6 @@ import java.time.LocalDate
 import java.util.Date
 
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
@@ -130,7 +129,7 @@ class DeregistrationController @Inject()(
     for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
-      processingDate = new DateTime(timestamp.toLong)
+      processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.deregistration_acknowledgement(processingDate, email))
     }
