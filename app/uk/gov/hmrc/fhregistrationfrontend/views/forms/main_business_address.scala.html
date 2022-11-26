@@ -144,14 +144,14 @@
                 if(mainBusinessAddressForm(previousAddressKey).value.contains("true")) {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
                     ErrorLink(
-                      href = Some(s"#${error._1.key}"),
+                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}")  else  Some(s"#${error._1.key}-error"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
                 } else {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
                     ErrorLink(
-                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
+                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}-error"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
@@ -170,7 +170,7 @@
 
     <p class="govuk-body">@Messages("fh.mainBusinessAddress.intro")</p>
 
-    <p class="govuk-body">@bpr.businessAddress.line1
+    <p class="govuk-body">@bpr.businessAddress.line1 <br/>
       @bpr.businessAddress.line2 <br/>
       @if(bpr.businessAddress.line3.nonEmpty) {@bpr.businessAddress.line3<br/>}
       @if(bpr.businessAddress.line4.nonEmpty) {@bpr.businessAddress.line4<br/>}
