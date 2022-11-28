@@ -43,7 +43,21 @@ layout: layout, viewHelpers: ViewHelpers
   Messages("fh.deregistrationConfirm.title")
 }
 
+@errorHeading = {
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+        Seq(ErrorLink(
+            href = Some(s"#${confirmationForm.errors.head.key}"),
+            // TODO: Add actual error message
+            content = Text(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error)))
+        )),
+        title = Text(messages("generic.errorSummary"))))
+}
+
 @layout(title = titlePrefix + title, Some(pageScripts)) {
+
+    @if(confirmationForm.errors.nonEmpty) {
+        @errorHeading
+    }
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, 'novalidate -> "novalidate") {
 
@@ -59,6 +73,10 @@ layout: layout, viewHelpers: ViewHelpers
       )),
       idPrefix = Some("where-do-you-live"),
       name = "where-do-you-live",
+        errorMessage = if (confirmationForm.errors.nonEmpty) {
+            Some(ErrorMessage(content = Text(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error)))))
+        }
+        else None,
       items = Seq(
         RadioItem(
           content = Text(Messages("fh.generic.yes")),
