@@ -14,16 +14,17 @@
  * limitations under the License.
  *@
 
-@import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import java.util.Date
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.formatDate
 
-@this(
-main_template_old: main_template_old
-)
-@(date: DateTime, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@(date: Date, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -31,37 +32,35 @@ main_template_old: main_template_old
   Messages("fh.ack.withdrawal")
 }
 
-@main_template_old(title = title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
-  <div class="transaction-banner--complete">
+@subtitle = @{
+    Messages("fh.generic.on") + " " +
+            formatDate(date)
+}
 
-    <h1 class="transaction-banner__heading">
-    @title
-    </h1>
+@layout(title = title, pageScripts = Some(pageScripts)) {
 
-    <span id="subref" class="h1-heading" style="color : #ffffff ;">
-      @Messages("fh.generic.on")
-      @{date.toLocalDate().toString("d MMMM yyyy")}
-    </span>
+    @viewHelpers.govukPanel(Panel(
+        title = Text(title),
+        content = Text(subtitle)
+    ))
 
-  </div>
+    <h2 class="govuk-heading-m">
+    @Messages("fh.ack.what_happens_next")
+    </h2>
 
-  <h2 class="heading-medium">
-      @Messages("fh.ack.what_happens_next")
-  </h2>
+    <p class="govuk-body">@Messages("fh.ack.withdrawal.emailSend") <strong>@{email}</strong></p>
+    <p class="govuk-body">@Messages("fh.ack.withdrawal.waitNotice")</p>
 
-  <p>@Messages("fh.ack.withdrawal.emailSend") <strong>@{email}</strong></p>
-  <p>@Messages("fh.ack.withdrawal.waitNotice")</p>
+    <div class="govuk-form-group">
 
-  <div class="form-group form-actions">
+        <p class="govuk-body">
+            <a href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout class="govuk-button"
+            role="button">@Messages("button.finishAndSignOut")</a>
+        </p>
 
-    <p>
-      <a href=@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout class="button" role="button">@Messages("button.finishAndSignOut")</a>
-    </p>
+        <p class="govuk-body">
+            <a class="govuk-link" href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
+        </p>
 
-    <p>
-      <a href="@{config.exitSurveyUrl}">@Messages("fh.survey_link_text")</a> @Messages("fh.survey_hint")
-    </p>
-
-  </div>
-
+    </div>
 }
