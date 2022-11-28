@@ -20,92 +20,178 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-layout: layout, viewHelpers: ViewHelpers
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(confirmationForm: Form[Confirmation], defaultEmail: Option[String] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
+@pageScripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @titlePrefix = @{
-  if (confirmationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+    if (confirmationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-  Messages("fh.deregistrationConfirm.title")
+    Messages("fh.deregistrationConfirm.title")
 }
 
-@errorHeading = {
-    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-        Seq(ErrorLink(
-            href = Some(s"#${confirmationForm.errors.head.key}"),
-            // TODO: Add actual error message
-            content = Text(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error)))
-        )),
-        title = Text(messages("generic.errorSummary"))))
+@conditionalHtml =   {
+    <div class="govuk-body">
+        @viewHelpers.govukInput(Input(
+            id = s"$alternativeEmailKey.email",
+            name = s"$alternativeEmailKey.email",
+            inputType = "email",
+            label = Label(
+                isPageHeading = true,
+                content = Text(messages("fh.confirmationEmail.email.label"))
+            ),
+            autocomplete = Some("email"),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-half",
+            errorMessage = if(confirmationForm.error(s"$alternativeEmailKey.email") || confirmationForm.error(s"$alternativeEmailKey.emailConfirmation")) {
+            confirmationForm.error(s"$alternativeEmailKey.email").map{ e =>
+                    ErrorMessage(
+                        content = Text(messages(s"fh.declaration.${e.key}.${e.message}"))
+                    )
+
+                }
+            } else None,
+            value = confirmationForm(s"$alternativeEmailKey.email").value,
+        ))
+
+        @viewHelpers.govukInput(Input(
+            id = s"$alternativeEmailKey.emailConfirmation",
+            name = s"$alternativeEmailKey.emailConfirmation",
+            inputType = "email",
+            label = Label(
+                isPageHeading = true,
+                content = Text(messages("fh.confirmationEmail.email.confirmation.label"))
+            ),
+            autocomplete = Some("email"),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-half",
+            errorMessage =
+                confirmationForm.error(s"$alternativeEmailKey.emailConfirmation").map{ e =>
+                    ErrorMessage(
+                        content  = Text(messages(s"fh.declaration.${e.key}.${e.message}"))
+                    )
+
+                },
+            value = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,
+        ))
+    </div>
 }
 
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
-    @if(confirmationForm.errors.nonEmpty) {
-        @errorHeading
-    }
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, 'novalidate -> "novalidate") {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @viewHelpers.govUkRadios(Radios(
-      fieldset = Some(Fieldset(
-        legend = Some(Legend(
-          content = Text(title),
-          classes = "govuk-fieldset__legend--l",
-          isPageHeading = true
+        @viewHelpers.govUkRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(title),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                ))
+            )),
+            idPrefix = Some(confirmKey),
+            name = confirmKey,
+            errorMessage = if (confirmationForm(confirmKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(Messages("fh.withdrawalConfirm.error")))))
+            } else None,
+            items = Seq(
+                RadioItem(
+                    content = Text(messages("fh.generic.yes")),
+                    value = Some("true"),
+                    checked = confirmationForm.data.values.toList.contains("true"),
+                    conditionalHtml = Some(conditionalHtml)
+                ),
+                RadioItem(
+                    content =Text(messages("fh.generic.no")),
+                    value = Some("false"),
+                    checked = confirmationForm.data.values.toList.contains("false")
+                )
+            )
         ))
-      )),
-      idPrefix = Some("where-do-you-live"),
-      name = "where-do-you-live",
-        errorMessage = if (confirmationForm.errors.nonEmpty) {
-            Some(ErrorMessage(content = Text(Messages("fh.deregistrationConfirm.confirm." + getError(confirmationForm(confirmKey).error)))))
+
+        <div class="js-hidden panel" id="emailContainer">
+
+        @if(defaultEmail.filterNot(_.isEmpty) == None) {
+
+            <input type="hidden" name="@usingDefaultEmailKey" value="false"/>
+            <legend class="form-label-bold">@Messages("fh.confirmationEmail.noDefaultEmail.legend")</legend>
+            @EmailConfirmation(
+                EmailConfirmationParams(
+                    name = alternativeEmailKey,
+                    label = Messages("fh.confirmationEmail.noDefaultEmail.email.label"),
+                    labelConfirmation = Messages("fh.confirmationEmail.noDefaultEmail.emailConfirm.label"),
+                    error = Messages("fh.confirmationEmail.alternativeEmail.email.error.required"),
+                    isEmail = true,
+                    hasErrors =  confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors,
+                    value = confirmationForm(s"$alternativeEmailKey.email").value,
+                    valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value
+                )
+            )
+
+        } else {
+            <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
+            <legend class="form-label-bold">@Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)</legend>
+            @RadioGroup(
+                RadioGroupParams(
+                    name = Some(usingDefaultEmailKey),
+                    legend = Some(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
+                    hasErrors = confirmationForm(usingDefaultEmailKey).hasErrors,
+                    error = Some(Messages("fh.confirmationEmail.use_default_email.confirm.error")),
+                    value = confirmationForm(usingDefaultEmailKey).value,
+                    radios = List(
+                        RadioParams(
+                            "true",
+                            Messages("fh.generic.yes")
+                        ),
+                        RadioParams(
+                            "false",
+                            Messages("fh.generic.no"),
+                            Some("alternativeEmailContainer")
+                        )
+                    )
+                ),legendClass = Some("plain")
+            )
+            @NestedPanel(
+                NestedPanelParams(
+                    "alternativeEmailContainer",
+                    EmailConfirmation(
+                        EmailConfirmationParams(
+                            name = alternativeEmailKey,
+                            label = Messages("fh.confirmationEmail.alternative_email.label"),
+                            labelConfirmation = Messages("fh.confirmationEmail.alternative_email_confirmation.label"),
+                            error = Messages("fh.confirmationEmail.alternativeEmail.email.error.required"),
+                            isEmail = true,
+                            value = confirmationForm(s"$alternativeEmailKey.email").value,
+                            valueConfirmation = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,
+                            hasErrors = confirmationForm(s"$alternativeEmailKey.email").hasErrors || confirmationForm(s"$alternativeEmailKey.emailConfirmation").hasErrors
+                        )
+                    )
+                )
+            )
+
         }
-        else None,
-      items = Seq(
-        RadioItem(
-          content = Text(Messages("fh.generic.yes")),
-          value = Some("england")
-        ),
-        RadioItem(
-          content = Text(Messages("fh.generic.no")),
-          value = Some("scotland")
-        )
-      )
-    ))
+        </div>
 
 
+        <div class="form-group form-actions">
 
-    <div class="form-group form-actions">
+            <p>
+                <button type="submit" class="button" value="continue">@Messages("button.confirm")</button>
+            </p>
 
-      <p>
-        @viewHelpers.govukButton(Button(
-          content = Text(Messages("button.confirm")),
-          inputType = Some("submit"))
-        )
-      </p>
-        <p>
-            <a href="@{
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}"
-                class="govuk-link">@Messages("link.cancel")
-            </a>
-        </p>
+            <p>
+                <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
+            </p>
 
-    </div>
-  }
+        </div>
+    }
 }
