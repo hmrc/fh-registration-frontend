@@ -51,7 +51,7 @@
             errorMessage = if(confirmationForm.error(s"$alternativeEmailKey.email") || confirmationForm.error(s"$alternativeEmailKey.emailConfirmation")) {
             confirmationForm.error(s"$alternativeEmailKey.email").map{ e =>
                     ErrorMessage(
-                        content = Text(messages(s"fh.confirmationEmail.${e.key}.${e.message}"))
+                        content = Text(messages(s"fh.deregistrationConfirm.${e.key}.${e.message}"))
                     )
                 }
             } else None,
@@ -72,7 +72,7 @@
             errorMessage =
                 confirmationForm.error(s"$alternativeEmailKey.emailConfirmation").map{ e =>
                     ErrorMessage(
-                        content  = Text(messages(s"fh.declaration.${e.key}.${e.message}"))
+                        content  = Text(messages(s"fh.deregistrationConfirm.${e.key}.${e.message}"))
                     )
 
                 },
@@ -152,12 +152,13 @@
                 RadioItem(
                     content = Text(messages("fh.generic.yes")),
                     value = Some("true"),
-                    checked = confirmationForm.data.values.toList.contains("true"),
+                    checked = confirmationForm(confirmKey).value.toList.contains("true"),
                     conditionalHtml = Some(conditionalHtml)
                 ),
                 RadioItem(
                     content =Text(messages("fh.generic.no")),
                     value = Some("false"),
+                    checked = confirmationForm(confirmKey).value.toList.contains("false")
                 )
             )
         ))
