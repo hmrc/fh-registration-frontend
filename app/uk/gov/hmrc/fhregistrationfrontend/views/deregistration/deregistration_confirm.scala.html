@@ -14,13 +14,9 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -87,7 +83,6 @@
 
 @conditionalHtml =   {
     <div class="govuk-body">
-
     @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
             legend = Some(Legend(
@@ -121,18 +116,21 @@
     </div>
 }
 
+ @errorHeading = {
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+     confirmationForm.errors.map { error =>
+         ErrorLink(
+             href = Some(s"#${error.key}"),
+             content = Text(messages(s"fh.deregistrationConfirm.${error.key}.${error.message}"))
+         )
+     },
+     title = Text(messages("fh.generic.error"))))
+ }
+
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
     @if(confirmationForm.errors.nonEmpty) {
-
-        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-            confirmationForm.errors.map { error =>
-                ErrorLink(
-                    href = Some(s"#${error.key}"),
-                    content = Text(messages(s"fh.deregistrationConfirm.${error.key}.${error.message}"))
-                )
-            },
-            title = Text(messages("fh.generic.error"))))
+        @errorHeading
     }
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, 'novalidate -> "novalidate") {
@@ -160,7 +158,6 @@
                 RadioItem(
                     content =Text(messages("fh.generic.no")),
                     value = Some("false"),
-                   //  checked = confirmationForm.data.values.toList.contains("false")
                 )
             )
         ))
@@ -170,7 +167,10 @@
                 @viewHelpers.govukButton(Button(content = Text(messages("button.confirm")), inputType = Some("submit")))
             </p>
             <p>
-                <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
+                <a class="govuk-link"
+                    href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">
+                    @Messages("link.cancel")
+                </a>
             </p>
         </div>
     }
