@@ -43,7 +43,7 @@
             inputType = "email",
             label = Label(
                 isPageHeading = true,
-                content = Text(messages("fh.confirmationEmail.email.label"))
+                content = HtmlContent(s"<strong>${messages("fh.confirmationEmail.alternative_email.error.required")}</strong>")
             ),
             autocomplete = Some("email"),
             spellcheck = Some(false),
@@ -64,7 +64,7 @@
             inputType = "email",
             label = Label(
                 isPageHeading = true,
-                content = Text(messages("fh.confirmationEmail.email.confirmation.label"))
+                content = HtmlContent(s"<strong>${messages("fh.confirmationEmail.alternative_email_confirmation.label")}</strong>")
             ),
             autocomplete = Some("email"),
             spellcheck = Some(false),
@@ -146,7 +146,7 @@
             idPrefix = Some(confirmKey),
             name = confirmKey,
             errorMessage = if (confirmationForm(confirmKey).hasErrors) {
-                Some(ErrorMessage(content = Text(messages(Messages("fh.withdrawalConfirm.error")))))
+                Some(ErrorMessage(content = Text(messages(Messages("fh.deregistrationConfirm.error")))))
             } else None,
             items = Seq(
                 RadioItem(
