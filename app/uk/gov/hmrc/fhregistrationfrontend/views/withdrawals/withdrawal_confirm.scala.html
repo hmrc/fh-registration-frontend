@@ -42,12 +42,13 @@
 @EmailAddressConditional = {
   <div class="govuk-body">
     @viewHelpers.govukInput(Input(
-      id = alternativeEmailKey,
-      name = alternativeEmailKey,
+      id = s"$alternativeEmailKey.email",
+      name = s"$alternativeEmailKey.email",
       inputType = "email",
       label = Label(
         isPageHeading = true,
-        content = Text(messages("fh.confirmationEmail.alternative_email.label"))
+        content = Text(messages("fh.confirmationEmail.alternative_email.label")),
+        classes = "govuk-label--s",
       ),
       autocomplete = Some("email"),
       spellcheck = Some(false),
@@ -55,7 +56,7 @@
       errorMessage = if(confirmationForm.error(s"$alternativeEmailKey.email") || confirmationForm.error(s"$alternativeEmailKey-confirmation")) {
         confirmationForm.error(s"$alternativeEmailKey.email").map{ e =>
           ErrorMessage(
-            content = Text(messages(s"fh.confirmationEmail.${e.key}.${e.message}"))
+            content = Text(messages(s"fh.withdrawalConfirm.${e.key}.${e.message}"))
           )
 
         }
@@ -69,7 +70,8 @@
       inputType = "email",
       label = Label(
         isPageHeading = true,
-        content = Text(messages("fh.confirmationEmail.alternative_email_confirmation.label"))
+        content = Text(messages("fh.confirmationEmail.alternative_email_confirmation.label")),
+        classes = "govuk-label--s"
       ),
       autocomplete = Some("email"),
       spellcheck = Some(false),
@@ -77,7 +79,7 @@
       errorMessage =
         confirmationForm.error(s"$alternativeEmailKey.emailConfirmation").map{ e =>
           ErrorMessage(
-            content  = Text(messages(s"fh.confirmationEmail.${e.key}.${e.message}"))
+            content  = Text(messages(s"fh.withdrawalConfirm.${e.key}.${e.message}"))
           )
 
         },
@@ -99,19 +101,21 @@
     idPrefix = Some(usingDefaultEmailKey),
     name = usingDefaultEmailKey,
     errorMessage = if (confirmationForm(usingDefaultEmailKey).hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.confirmationEmail.use_default_email.confirm.error"))))
+      Some(ErrorMessage(content = Text(messages("fh.withdrawalConfirm.usingDefaultEmail.error.required"))))
     } else None,
     items = Seq(
       RadioItem(
         content = Text(messages("fh.generic.yes")),
         value = Some("true"),
-        checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("true"),
+        checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("true")
+
       ),
       RadioItem(
         content = Text(messages("fh.generic.no")),
         value = Some("false"),
         checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("false"),
         conditionalHtml = Some(EmailAddressConditional)
+
       )
     )
   ))
@@ -121,6 +125,18 @@
 @layout(title = title,  pageScripts = Some(pageScripts)) {
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, 'novalidate -> "novalidate") {
+    @if(confirmationForm.errors.nonEmpty) {
+
+      @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+        confirmationForm.errors.map { error =>
+          ErrorLink(
+            href = Some(s"#${error.key}"),
+            content = Text(messages(s"fh.withdrawalConfirm.${error.key}.${error.message}"))
+          )
+        }
+        ,
+        title = Text(messages("fh.generic.error"))))
+    }
     @viewHelpers.govUkRadios(Radios(
       fieldset = Some(Fieldset(
         legend = Some(Legend(
@@ -138,14 +154,14 @@
         RadioItem(
           content = Text(messages("fh.generic.yes")),
           value = Some("true"),
-          checked = confirmationForm(confirmKey).value.toList.contains("true")
+          checked = confirmationForm(confirmKey).value.toList.contains("true"),
+          conditionalHtml = Some(ConditionalHtmlRadio)
 
         ),
         RadioItem(
           content = Text(messages("fh.generic.no")),
           value = Some("false"),
-          checked = confirmationForm(confirmKey).value.toList.contains("false"),
-          conditionalHtml = Some(ConditionalHtmlRadio)
+          checked = confirmationForm(confirmKey).value.toList.contains("false")
         )
       )
     ))
