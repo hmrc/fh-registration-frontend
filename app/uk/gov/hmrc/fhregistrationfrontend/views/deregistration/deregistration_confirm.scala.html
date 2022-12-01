@@ -43,7 +43,8 @@
             inputType = "email",
             label = Label(
                 isPageHeading = true,
-                content = HtmlContent(s"<strong>${messages("fh.confirmationEmail.alternative_email.error.required")}</strong>")
+                content = Text(messages("fh.confirmationEmail.alternative_email.error.required")),
+                classes = "govuk-label--s"
             ),
             autocomplete = Some("email"),
             spellcheck = Some(false),
@@ -64,7 +65,8 @@
             inputType = "email",
             label = Label(
                 isPageHeading = true,
-                content = HtmlContent(s"<strong>${messages("fh.confirmationEmail.alternative_email_confirmation.label")}</strong>")
+                content = Text(messages("fh.confirmationEmail.alternative_email_confirmation.label")),
+                classes = "govuk-label--s"
             ),
             autocomplete = Some("email"),
             spellcheck = Some(false),
@@ -74,7 +76,6 @@
                     ErrorMessage(
                         content  = Text(messages(s"fh.deregistrationConfirm.${e.key}.${e.message}"))
                     )
-
                 },
             value = confirmationForm(s"$alternativeEmailKey.emailConfirmation").value,
         ))
@@ -162,10 +163,10 @@
         ))
 
         <div class="govuk-form-group">
-            <p>
-                @viewHelpers.govukButton(Button(content = Text(messages("button.confirm")), inputType = Some("submit")))
+            <p class="govuk-body">
+                @viewHelpers.govukButton(Button( content = Text(messages("button.confirm")), inputType = Some("submit")))
             </p>
-            <p>
+            <p class="govuk-body">
                 <a class="govuk-link"
                     href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">
                     @Messages("link.cancel")
