@@ -42,8 +42,8 @@
 }
 
 @inputHasErrors(input: String) = @{input match {
-    case i: String if mainBusinessAddressForm.hasErrors && mainBusinessAddressForm.errors.filter(_.key.contains(input)).nonEmpty => true
-    case _: String if mainBusinessAddressForm.hasErrors && (mainBusinessAddressForm.errors.head.toString.contains("date.empty.error") || mainBusinessAddressForm.errors.head.toString.contains("error.invalid"))=> true
+    case i: String if mainBusinessAddressForm.hasErrors && mainBusinessAddressForm.errors.filter(_.messages.head.contains(input)).nonEmpty => true
+    case _: String if mainBusinessAddressForm.hasErrors && (mainBusinessAddressForm.errors.filter(_.messages.head.contains("date.empty.error")).nonEmpty || mainBusinessAddressForm.errors.filter(_.key.contains("error.invalid")).nonEmpty)=> true
     case _ => false
 }}
 
@@ -113,13 +113,13 @@
               RadioItem(
                   content = Text(Messages("fh.generic.yes")),
                   value = Some("true"),
-                  id = Some("previousAddresstrue"),
+                  id = Some("previousAddress"),
                   checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("true"),
                   conditionalHtml = Some(manualAddress)
               ),
               RadioItem(
                   content = Text(Messages("fh.generic.no")),
-                  id = Some("previousAddressfalse"),
+                  id = Some("previousAddress-2"),
                   checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("false"),
                   value = Some("false")
               )
@@ -144,14 +144,14 @@
                 if(mainBusinessAddressForm(previousAddressKey).value.contains("true")) {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
                     ErrorLink(
-                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}")  else  Some(s"#${error._1.key}-error"),
+                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}")  else  Some(s"#${error._1.key}"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
                 } else {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
                     ErrorLink(
-                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}-error"),
+                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
