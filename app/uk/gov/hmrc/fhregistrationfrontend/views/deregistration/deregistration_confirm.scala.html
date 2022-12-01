@@ -84,34 +84,39 @@
 
 @conditionalHtml =   {
     <div class="govuk-body">
-      <p><strong>@Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)</strong></p>
-        @viewHelpers.govUkRadios(Radios(
-          fieldset = Some(Fieldset(
-              legend = Some(Legend(
-                  content = Text(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
-                  classes = "govuk-fieldset__legend--s",
-                  isPageHeading = false
-              )),
-          )),
-          idPrefix = Some(usingDefaultEmailKey),
-          name = usingDefaultEmailKey,
-          errorMessage = if (confirmationForm(usingDefaultEmailKey).hasErrors) {
-              Some(ErrorMessage(content = Text(messages("fh.confirmationEmail.use_default_email.confirm.error"))))
-          } else None,
-          items = Seq(
-              RadioItem(
-                  content = Text(messages("fh.generic.yes")),
-                  value = Some("true"),
-                  checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("true")
-              ),
-              RadioItem(
-                  content = Text(messages("fh.generic.no")),
-                  value = Some("false"),
-                  checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("false"),
-                  conditionalHtml = Some(emailConditionalHtml)
-              )
-          )
-      ))
+        @if(defaultEmail.forall(_.isEmpty)) {
+            <input type="hidden" name="@usingDefaultEmailKey" value="false"/>
+        } else {
+            <input type="hidden" name="@defaultEmailKey" value="@{defaultEmail.get}"/>
+            <p><strong>@Messages("fh.confirmationEmail.hasDefaultEmail.legend", defaultEmail.get)</strong></p>
+            @viewHelpers.govUkRadios(Radios(
+                fieldset = Some(Fieldset(
+                    legend = Some(Legend(
+                        content = Text(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
+                        classes = "govuk-fieldset__legend--s",
+                        isPageHeading = false
+                    )),
+                )),
+                idPrefix = Some(usingDefaultEmailKey),
+                name = usingDefaultEmailKey,
+                errorMessage = if (confirmationForm(usingDefaultEmailKey).hasErrors) {
+                    Some(ErrorMessage(content = Text(messages("fh.confirmationEmail.use_default_email.confirm.error"))))
+                } else None,
+                items = Seq(
+                    RadioItem(
+                        content = Text(messages("fh.generic.yes")),
+                        value = Some("true"),
+                        checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("true")
+                    ),
+                    RadioItem(
+                        content = Text(messages("fh.generic.no")),
+                        value = Some("false"),
+                        checked = confirmationForm(usingDefaultEmailKey).value.toList.contains("false"),
+                        conditionalHtml = Some(emailConditionalHtml)
+                    )
+                )
+            ))
+        }
     </div>
 }
 
