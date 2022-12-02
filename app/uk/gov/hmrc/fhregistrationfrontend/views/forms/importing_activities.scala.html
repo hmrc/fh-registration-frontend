@@ -51,7 +51,7 @@
       legend = Some(Legend(
         content = Text(messages("fh.importing_activities.eori_used_for_others.confirm.label")),
         classes = "govuk-fieldset__legend--m",
-        isPageHeading = true
+        isPageHeading = false
       ))
     )),
     idPrefix = Some(s"$eoriNumberKey.$goodsImportedOutsideEoriKey"),
@@ -81,7 +81,7 @@
     id = s"$eoriNumberKey.$eoriNumberKey",
     name = s"$eoriNumberKey.$eoriNumberKey",
     label = Label(
-      isPageHeading = true,
+      isPageHeading = false,
       content = HtmlContent(s"<strong>${messages("fh.importing_activities.eori.label")}</strong>")
     ),
     spellcheck = Some(false),
