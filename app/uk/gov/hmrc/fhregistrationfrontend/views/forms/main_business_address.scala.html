@@ -51,7 +51,7 @@
 
 @inputHasErrors(input: String) = @{input match {
     case i: String if mainBusinessAddressForm.hasErrors && mainBusinessAddressForm.errors.filter(_.messages.head.contains(input)).nonEmpty => true
-    case _: String if mainBusinessAddressForm.hasErrors && (mainBusinessAddressForm.errors.filter(_.messages.head.contains("date.empty.error")).nonEmpty || mainBusinessAddressForm.errors.filter(_.key.contains("error.invalid")).nonEmpty)=> true
+    case _: String if mainBusinessAddressForm.hasErrors && (mainBusinessAddressForm.errors.filter(_.messages.head.contains("date.empty.error")).nonEmpty || mainBusinessAddressForm.errors.filter(_.messages.head.contains("date.error.invalid")).nonEmpty)=> true
     case _ => false
 }}
 
