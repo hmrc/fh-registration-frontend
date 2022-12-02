@@ -890,9 +890,9 @@ fh.deregistrationConfirm.noDefaultEmail.email.label=Enter the email address
 fh.deregistrationConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
 fh.deregistrationConfirm.hasDefaultEmail.legend=We will send a confirmation email to
 fh.deregistrationConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
-fh.deregistrationConfirm.alternativeEmail.email.error.required= Enter an email address
+fh.deregistrationConfirm.alternativeEmail.email.error.required= Enter an alternative email address
 fh.deregistrationConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
-fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Re-enter the email address
+fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Re-enter the alternative email address
 fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter a valid email address
 
 fh.ack.deregister=Registration cancelled
