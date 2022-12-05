@@ -159,7 +159,7 @@
                 } else {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
                     ErrorLink(
-                      href = if(error._1.key.contains("countryCode")) Some(s"#countryCode") else Some(s"#${error._1.key}"),
+                      href = if(error._1.key.contains("timeAtCurrentAddress")) Some(s"#timeAtCurrentAddress-less-than-3-years") else Some(s"#${error._1.key}"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
