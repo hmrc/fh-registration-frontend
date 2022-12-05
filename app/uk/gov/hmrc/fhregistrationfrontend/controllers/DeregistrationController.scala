@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.data.FormError
+
 import java.time.LocalDate
 import java.util.Date
-
 import javax.inject.Inject
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
@@ -31,6 +32,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -78,7 +80,12 @@ class DeregistrationController @Inject()(
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ contactEmail map (email ⇒ BadRequest(views.deregistration_confirm(formWithError, email))),
+        formWithError ⇒ {
+          val errors: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
+          val newFormErrors = formWithError.copy(errors = errors)
+          println(" form with error::" + newFormErrors)
+          contactEmail map (email ⇒ BadRequest(views.deregistration_confirm(newFormErrors, email)))
+        },
         handleConfirmation(_, reason)
       )
   }
