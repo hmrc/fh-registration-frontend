@@ -858,10 +858,10 @@ fh.withdrawalConfirm.noDefaultEmail.email.label=Enter the email address
 fh.withdrawalConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
 fh.withdrawalConfirm.hasDefaultEmail.legend=We will send a confirmation email to
 fh.withdrawalConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
-fh.withdrawalConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.withdrawalConfirm.alternativeEmail.email.error.required=Enter an alternative email address
 fh.withdrawalConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
-fh.withdrawalConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid email addresses that match
-fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
+fh.withdrawalConfirm.alternativeEmail.emailConfirmation.empty.error=Re-enter the alternative email address
+fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter a valid email address
 
 fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to
@@ -875,10 +875,10 @@ fh.deregistration.stoppedTrading.label=Stopped trading as a fulfilment business
 fh.deregistration.changedLegalEntity.label=Business has changed its legal entity type
 fh.deregistration.otherReason.label=Other reason
 fh.deregistration.reason.error.required=Select a reason for cancelling your registration
-fh.deregistration.reasonOtherText.label=Enter your reason
-fh.deregistration.reasonOtherText.error.required=Enter your reason for cancelling your registration
-fh.deregistration.reasonOtherText.error.maxLength=Reason for cancelling your registration must be 40 characters or less
-fh.deregistration.reasonOtherText.error.pattern=Reason for cancelling your registration must be 40 characters or less and only include letters a to z, numbers and spaces
+fh.deregistration.otherReasonContainer.label=Enter your reason
+fh.deregistration.otherReasonContainer.error.required=Enter your reason for cancelling your registration
+fh.deregistration.otherReasonContainer.error.maxLength=Reason for cancelling your registration must be 40 characters or less
+fh.deregistration.otherReasonContainer.error.pattern=Reason for cancelling your registration must be 40 characters or less and only include letters a to z, numbers and spaces
 
 # - Deregistration confirm
 #============================================================
@@ -890,10 +890,10 @@ fh.deregistrationConfirm.noDefaultEmail.email.label=Enter the email address
 fh.deregistrationConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
 fh.deregistrationConfirm.hasDefaultEmail.legend=We will send a confirmation email to
 fh.deregistrationConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
-fh.deregistrationConfirm.alternativeEmail.email.error.required=Enter valid email addresses that match
+fh.deregistrationConfirm.alternativeEmail.email.error.required= Enter an alternative email address
 fh.deregistrationConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
-fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Enter valid email addresses that match
-fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter valid email addresses that match
+fh.deregistrationConfirm.alternativeEmail.emailConfirmation.empty.error=Re-enter the alternative email address
+fh.deregistrationConfirm.alternativeEmail.email.error.email=Enter a valid email address
 
 fh.ack.deregister=Registration cancelled
 fh.ack.deregister.emailSend=We will send a confirmation email to

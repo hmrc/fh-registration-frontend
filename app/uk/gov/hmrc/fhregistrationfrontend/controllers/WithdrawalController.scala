@@ -18,9 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.time.LocalDate
 import java.util.Date
-
 import javax.inject.Inject
 import org.joda.time.DateTime
+import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
@@ -87,7 +87,13 @@ class WithdrawalController @Inject()(
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ contactEmail map (email ⇒ BadRequest(views.withdrawal_confirm(formWithError, email))),
+        formWithError ⇒ {
+          println(" form with error ::" + formWithError)
+          val errorsNew: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
+          val newFormErrors = formWithError.copy(errors = errorsNew)
+          println(" newFormErrors ::" + newFormErrors)
+          contactEmail map (email ⇒ BadRequest(views.withdrawal_confirm(newFormErrors, email)))
+        },
         handleConfirmation(_, reason)
       )
   }
@@ -130,7 +136,7 @@ class WithdrawalController @Inject()(
     for {
       email ← request.session get EmailSessionKey
       timestamp ← request.session get ProcessingTimestampSessionKey
-      processingDate = new DateTime(timestamp.toLong)
+      processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.withdrawal_acknowledgement(processingDate, email))
     }

@@ -14,21 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.getError
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.{reasonKey, reasonOtherKey}
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
+
+
 @(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/status.css")'/>}
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
@@ -37,75 +35,87 @@ main_template: main_template_old
   if (reasonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@title = @{
+@title = @{messages("fh.deregistration.title")}
 
-  Messages("fh.deregistration.title")
+@conditionalHtml = @{
+    viewHelpers.govukInput(Input(
+        id = "otherReasonContainer",
+        name = "otherReasonContainer",
+        label = Label(
+            content = Text(messages(s"fh.deregistration.$reasonOtherKey.label"))
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-half",
+        errorMessage =
+            reasonForm.error(reasonOtherKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.deregistration.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
+
+            },
+        value = reasonForm(reasonOtherKey).value
+    ))
 }
 
-@main_template(title = titlePrefix + title, linkElement = Some(stylesheets), scriptElem = Some(pageScripts)) {
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason, 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @error_box(reasonForm, ".deregistration.")
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(reasonKey),
-        legend = Some(title),
-        legendAsHeading = true,
-        inline = false,
-        error = Some(Messages("fh.deregistration.reason.error.required")),
-        value = reasonForm(reasonKey).value,
-        hasErrors = reasonForm(reasonKey).hasErrors,
-        radios = List(
-          RadioParams(
-            NoLongerNeeded.toString,
-            Messages("fh.deregistration.noLongerNeeded.label")
-          ),
-          RadioParams(
-            StoppedTrading.toString,
-            Messages("fh.deregistration.stoppedTrading.label")
-          ),
-          RadioParams(
-            ChangedLegalEntity.toString,
-            Messages("fh.deregistration.changedLegalEntity.label")
-          ),
-          RadioParams(
-            Other.toString,
-            Messages("fh.deregistration.otherReason.label"),
-            dataTarget = Some("otherReasonContainer")
+@layout(title = title, pageScripts = Some(pageScripts)) {
+    @if(reasonForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${reasonForm.errors.head.key}"),
+                content = Text(messages(s"fh.deregistration.${reasonForm.errors.head.key}.${reasonForm.errors.head.message}"))
+            ))
+            ,
+            title = Text(messages("generic.errorSummary"))))
+    }
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason, 'novalidate -> "novalidate") {
+      @viewHelpers.govUkRadios(Radios(
+          fieldset = Some(Fieldset(
+              legend = Some(Legend(
+                  content = Text(messages(title)),
+                  classes = "govuk-fieldset__legend--l",
+                  isPageHeading = true
+              ))
+          )),
+          idPrefix = Some(reasonKey),
+          name = reasonKey,
+          errorMessage = if (reasonForm(reasonKey).hasErrors) {
+              Some(ErrorMessage(content = Text(messages(s"fh.deregistration.reason.error.required"))))
+          } else None,
+          items = Seq(
+              RadioItem(
+                  content = Text(Messages("fh.deregistration.noLongerNeeded.label")),
+                  value = Some(NoLongerNeeded.toString),
+                  checked = reasonForm.data.values.toList.contains(NoLongerNeeded.toString)
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.deregistration.stoppedTrading.label")),
+                  value = Some(StoppedTrading.toString),
+                  checked = reasonForm.data.values.toList.contains(StoppedTrading.toString)
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.deregistration.changedLegalEntity.label")),
+                  value = Some(ChangedLegalEntity.toString),
+                  checked = reasonForm.data.values.toList.contains(ChangedLegalEntity.toString)
+              ),
+              RadioItem(
+                  content = Text(Messages("fh.deregistration.otherReason.label")),
+                  value = Some(Other.toString),
+                  checked = reasonForm.data.values.toList.contains(Other.toString),
+                  conditionalHtml = Some(conditionalHtml)
+              )
           )
-        )
-      )
-    )
+      ))
 
-    @NestedPanel(
-      NestedPanelParams(
-        "otherReasonContainer",
-        TextInput(
-          TextInputParams(
-            name = reasonOtherKey,
-            label = Messages(s"fh.deregistration.$reasonOtherKey.label"),
-            hasErrors = reasonForm(reasonOtherKey).hasErrors,
-            error = Messages("fh.deregistration." + reasonOtherKey + "." + getError(reasonForm(reasonOtherKey).error)),
-            value = reasonForm(reasonOtherKey).value
-          )
-        )
-      )
-    )
 
-    <div class="form-group form-actions">
 
-      <p>
-        <button type="submit" class="button" value="continue">@Messages("button.continue")</button>
+      @viewHelpers.govukButton(Button(content = Text(messages("button.continue"))))
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
       </p>
 
-      <p>
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">@Messages("link.cancel")</a>
-      </p>
 
-    </div>
   }
 }
