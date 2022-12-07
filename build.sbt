@@ -8,19 +8,19 @@ import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 val monocleVersion = "2.1.0"
-val bootstrapVersion = "6.4.0"
+val bootstrapVersion = "7.12.0"
 val playVersion = "play-28"
 
 val compile = Seq(
   ws,
   "uk.gov.hmrc"                 %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.32.0-$playVersion",
+  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.34.0-$playVersion",
   "uk.gov.hmrc"                 %% "govuk-template"                   % "5.78.0-play-28",
-  "uk.gov.hmrc"                 %% "play-ui"                          % "9.10.0-play-28",
+  "uk.gov.hmrc"                 %% "play-ui"                          % "9.11.0-play-28",
   "uk.gov.hmrc"                 %% "play-partials"                    % "8.3.0-play-28",
-  "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "7.0.0-play-28",
-  "uk.gov.hmrc"                 %% "http-caching-client"              % "9.6.0-play-28",
-  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.11.0-play-28",
+  "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "7.1.0-play-28",
+  "uk.gov.hmrc"                 %% "http-caching-client"              % "10.0.0-play-28",
+  "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.12.0-play-28",
   "uk.gov.hmrc"                 %% "time"                             % "3.25.0",
   "com.typesafe.play"           %% "play-json"                        % "2.9.2",
   "org.typelevel"               %% "cats-core"                        % "2.6.1",
@@ -32,6 +32,7 @@ val compile = Seq(
   "com.github.julien-truffaut"  %% "monocle-macro"                    % monocleVersion,
   "com.github.julien-truffaut"  %% "monocle-law"                      % monocleVersion,
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
+
   compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib" % "1.7.5" % Provided cross CrossVersion.full
 )
