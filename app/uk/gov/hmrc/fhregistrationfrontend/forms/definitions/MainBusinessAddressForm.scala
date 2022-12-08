@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, oneOf, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, localNew, oneOf, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 
@@ -32,7 +32,7 @@ object MainBusinessAddressForm {
   val timeAtCurrentAddressMapping = timeAtCurrentAddressKey → oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)
   val previousAddressMapping = previousAddressKey → (yesOrNo onlyWhen (timeAtCurrentAddressMapping is "Less than 3 years"))
   val mainPreviousAddressMapping = mainPreviousAddressKey → (address onlyWhen (previousAddressMapping is Some(true)))
-  val previousAddressStartdateMapping = previousAddressStartdateKey → (localDate onlyWhen (previousAddressMapping is Some(
+  val previousAddressStartdateMapping = previousAddressStartdateKey → (localNew onlyWhen (previousAddressMapping is Some(
     true)))
 
   val mainBusinessAddressForm = Form(
