@@ -21,7 +21,6 @@ val compile = Seq(
   "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "7.1.0-play-28",
   "uk.gov.hmrc"                 %% "http-caching-client"              % "10.0.0-play-28",
   "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.12.0-play-28",
-  "uk.gov.hmrc"                 %% "time"                             % "3.25.0",
   "com.typesafe.play"           %% "play-json"                        % "2.9.2",
   "org.typelevel"               %% "cats-core"                        % "2.6.1",
   "org.typelevel"               %% "cats-kernel"                      % "2.8.0",
@@ -33,22 +32,20 @@ val compile = Seq(
   "com.github.julien-truffaut"  %% "monocle-law"                      % monocleVersion,
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
 
-  compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full),
-  "com.github.ghik" % "silencer-lib" % "1.7.5" % Provided cross CrossVersion.full
+  compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
+  "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full
 )
 
 def test(scope: String = "test,it") = Seq(
   "uk.gov.hmrc"                 %% "bootstrap-test-play-28"         % bootstrapVersion   % scope,
   "org.scalatest"               %% "scalatest"                      % "3.2.9"    % scope,
   "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"    % scope,
-  "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"  % scope,
+  "com.vladsch.flexmark"         % "flexmark-all"                     % "0.35.10"  % scope,
   "org.scalatestplus"           %% "mockito-3-4"                    % "3.2.9.0"  % scope,
   "com.github.tomakehurst"       % "wiremock-standalone"            % "2.27.1"   % scope,
   "org.pegdown"                  % "pegdown"                        % "1.6.0"    % scope,
   "org.jsoup"                    % "jsoup"                          % "1.13.1"   % scope,
-  "org.scalacheck"              %% "scalacheck"                     % "1.15.4"   % scope,
-  "org.scalamock"               %% "scalamock-scalatest-support"    % "3.6.0"    % scope,
-  "com.eclipsesource"           %% "play-json-schema-validator"      % "0.9.4"  % scope
+  "org.scalacheck"              %% "scalacheck"                     % "1.15.4"   % scope
 )
 
 val appName = "fh-registration-frontend"
