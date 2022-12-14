@@ -213,8 +213,10 @@ class Application @Inject()(
 
   def savedForLater = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
-      // TODO Update DateTime
-      case Some(savedDate) ⇒ Ok(views.saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
+      case Some(savedDate) ⇒ {
+        val date = dateTimeHelper.generateDate(formMaxExpiryDays, savedDate)
+        Ok(views.confirm_delete(dateTimeHelper.convertDateToString(date)))
+      }
       case None ⇒ errorHandler.errorResultsPages(Results.NotFound)
     }
   }

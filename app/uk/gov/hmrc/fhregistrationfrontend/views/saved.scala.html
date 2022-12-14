@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -23,7 +22,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(expiryTime: DateTime)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(expiryTime: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
@@ -34,7 +33,7 @@
 @html = {
 <p class="govuk-body">
       @Messages("fh.held_until") <br>
-      <strong>@{expiryTime.toLocalDate.toString("d MMMM yyyy")}</strong>
+      <strong>@{expiryTime}</strong>
 </p>
     }
 
@@ -42,7 +41,7 @@
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title),
-        content = HtmlContent(s"${messages("fh.held_until")}<br><strong>${expiryTime.toLocalDate.toString("d MMMM yyyy")}</strong>")
+        content = HtmlContent(s"${messages("fh.held_until")}<br><strong>${expiryTime}</strong>")
     ))
 
   <p class="govuk-body">

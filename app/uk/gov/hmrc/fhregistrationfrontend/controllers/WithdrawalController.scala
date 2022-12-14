@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._

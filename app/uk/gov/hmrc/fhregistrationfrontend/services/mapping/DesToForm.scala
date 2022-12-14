@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import javax.inject.Inject
 
+import scala.language.postfixOps
 import com.google.inject.ImplementedBy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
