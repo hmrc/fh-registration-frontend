@@ -18,8 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import cats.data.OptionT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
-import org.joda.time.DateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,11 +34,13 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors._
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.utils.dateTimeHelper
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -90,8 +94,14 @@ class Application @Inject()(
       _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
       savedDate ← OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
     } yield {
-      Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
+      // create util object file
+      // contain dateTime formatter and
+      val expiryDate = dateTimeHelper.generateExpiryDate(27, savedDate)
+      // format and convert to string
+      // e.g. 6 October 2022
+      Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
     }
+
 
     redirectWhenSaved getOrElseF newApplication
   }
@@ -120,7 +130,8 @@ class Application @Inject()(
     } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
-          Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
+          val expiryDate = dateTimeHelper.generateExpiryDate(27, savedDate)
+          Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
         case None ⇒ Redirect(routes.Application.businessType)
       }
     }
@@ -134,6 +145,7 @@ class Application @Inject()(
         deleteOrContinue => {
           if (deleteOrContinue == "delete") {
             save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+              // TODO Update DateTime
               case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
               case None ⇒
                 Future successful errorHandler.errorResultsPages(Results.BadRequest)
@@ -147,6 +159,7 @@ class Application @Inject()(
 
   def confirmDelete = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
+      // TODO Update DateTime
       case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
       case None ⇒ Future successful BadRequest
     }
@@ -199,6 +212,7 @@ class Application @Inject()(
 
   def savedForLater = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId).map {
+      // TODO Update DateTime
       case Some(savedDate) ⇒ Ok(views.saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
       case None ⇒ errorHandler.errorResultsPages(Results.NotFound)
     }
