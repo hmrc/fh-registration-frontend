@@ -94,14 +94,9 @@ class Application @Inject()(
       _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
       savedDate ← OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
     } yield {
-      // create util object file
-      // contain dateTime formatter and
-      val expiryDate = dateTimeHelper.generateExpiryDate(27, savedDate)
-      // format and convert to string
-      // e.g. 6 October 2022
+      val expiryDate = dateTimeHelper.generateDate(27, savedDate)
       Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
     }
-
 
     redirectWhenSaved getOrElseF newApplication
   }
@@ -130,7 +125,7 @@ class Application @Inject()(
     } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
         case Some(savedDate) ⇒
-          val expiryDate = dateTimeHelper.generateExpiryDate(27, savedDate)
+          val expiryDate = dateTimeHelper.generateDate(27, savedDate)
           Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
         case None ⇒ Redirect(routes.Application.businessType)
       }
@@ -145,8 +140,11 @@ class Application @Inject()(
         deleteOrContinue => {
           if (deleteOrContinue == "delete") {
             save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-              // TODO Update DateTime
-              case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
+              case Some(savedDate) ⇒
+                Future successful {
+                  val date = dateTimeHelper.generateDate(0, savedDate)
+                  Ok(views.confirm_delete(dateTimeHelper.convertDateToString(date)))
+                }
               case None ⇒
                 Future successful errorHandler.errorResultsPages(Results.BadRequest)
             }
@@ -159,8 +157,11 @@ class Application @Inject()(
 
   def confirmDelete = userAction.async { implicit request ⇒
     save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-      // TODO Update DateTime
-      case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
+      case Some(savedDate) ⇒
+        Future successful {
+          val date = dateTimeHelper.generateDate(0, savedDate)
+          Ok(views.confirm_delete(dateTimeHelper.convertDateToString(date)))
+        }
       case None ⇒ Future successful BadRequest
     }
   }
