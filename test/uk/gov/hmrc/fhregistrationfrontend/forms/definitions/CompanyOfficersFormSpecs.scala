@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerCompany, CompanyOfficerIndividual}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
+import scala.language.postfixOps
 
 class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOfficer] {
 
