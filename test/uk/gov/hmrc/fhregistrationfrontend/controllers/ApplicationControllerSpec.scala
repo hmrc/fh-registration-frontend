@@ -212,7 +212,7 @@ class ApplicationControllerSpec
     "Fail when last update time is not present" in {
       setupPreconditions()
       val request = FakeRequest().withFormUrlEncodedBody(
-        "deleteOrContinue" → "delete"
+        "deleteOrContinue" -> "delete"
       )
       val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
       status(result) shouldBe BAD_REQUEST
@@ -223,7 +223,7 @@ class ApplicationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          "deleteOrContinue" → "continue"
+          "deleteOrContinue" -> "continue"
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
@@ -237,7 +237,7 @@ class ApplicationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          "deleteOrContinue" → "delete"
+          "deleteOrContinue" -> "delete"
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
@@ -435,7 +435,7 @@ class ApplicationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          BusinessTypeForm.businessTypeKey → BusinessType.CorporateBody.toString
+          BusinessTypeForm.businessTypeKey -> BusinessType.CorporateBody.toString
         )
         .withMethod("POST")
 

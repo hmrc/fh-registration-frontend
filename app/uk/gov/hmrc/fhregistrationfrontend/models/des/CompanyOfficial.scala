@@ -47,7 +47,7 @@ object CompanyOfficial {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o =>
       (o \ "name" \ "firstName") match {
         case JsDefined(_) => o.validate[IndividualAsOfficial]
-        case _ => o.validate[CompanyAsOfficial]
+        case _            => o.validate[CompanyAsOfficial]
       }
     }
 
@@ -56,7 +56,7 @@ object CompanyOfficial {
   val writes: Writes[CompanyOfficial] = new Writes[CompanyOfficial] {
     override def writes(o: CompanyOfficial) = o match {
       case individual: IndividualAsOfficial => IndividualAsOfficial.format.writes(individual)
-      case company: CompanyAsOfficial => CompanyAsOfficial.format.writes(company)
+      case company: CompanyAsOfficial       => CompanyAsOfficial.format.writes(company)
     }
   }
 

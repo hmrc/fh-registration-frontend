@@ -31,27 +31,27 @@ class DeregistrationReasonFormSpec extends UnitSpec with FormSpecsHelper[Deregis
       formDataHasErrors(
         Map.empty,
         Seq(
-          reasonKey → "error.required"
+          reasonKey -> "error.required"
         ))
     }
 
     "Fail if reason is not recognized" in {
-      formDataHasErrors(Map(reasonKey → "some strange reason"), Seq(reasonKey → "error.invalid"))
+      formDataHasErrors(Map(reasonKey -> "some strange reason"), Seq(reasonKey -> "error.invalid"))
     }
 
     "Fail if reason is not 'other' and description is not provided" in {
-      formDataHasErrors(Map(reasonKey → "Others"), Seq(reasonOtherKey → "error.required"))
+      formDataHasErrors(Map(reasonKey -> "Others"), Seq(reasonOtherKey -> "error.required"))
     }
 
     "Parse the reason" in {
-      dataFromValidForm(Map(reasonKey → "CEASES_REGISTERABLE_SCHEME")).deregistrationReason shouldBe DeregistrationReasonEnum.NoLongerNeeded
+      dataFromValidForm(Map(reasonKey -> "CEASES_REGISTERABLE_SCHEME")).deregistrationReason shouldBe DeregistrationReasonEnum.NoLongerNeeded
     }
 
     "Parse reason other and the description" in {
       val parsed = dataFromValidForm(
         Map(
-          reasonKey → "Others",
-          reasonOtherKey → "Some private reason"
+          reasonKey      -> "Others",
+          reasonOtherKey -> "Some private reason"
         ))
       parsed.deregistrationReason shouldBe DeregistrationReasonEnum.Other
       parsed.deregistrationReasonOther shouldBe Some("Some private reason")

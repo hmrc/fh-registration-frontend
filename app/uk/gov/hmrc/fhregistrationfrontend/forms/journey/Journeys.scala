@@ -72,7 +72,7 @@ class Journeys @Inject()(views: Views) {
     application match {
       case a: LimitedCompanyApplication => this unapplyLimitedCompanyApplication a
       case a: SoleProprietorApplication => this unapplySoleTraderApplication a
-      case a: PartnershipApplication => this unapplyPartnershipApplication a
+      case a: PartnershipApplication    => this unapplyPartnershipApplication a
     }
 
   def unapplyLimitedCompanyApplication(a: LimitedCompanyApplication) =

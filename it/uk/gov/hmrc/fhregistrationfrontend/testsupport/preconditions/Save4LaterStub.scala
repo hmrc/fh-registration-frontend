@@ -73,7 +73,7 @@ case class Save4LaterStub
   }
 
   def savePageData(key: String, data: String = "") = {
-      stubS4LGet(businessInformationData + (key → data))
+      stubS4LGet(businessInformationData + (key -> data))
     builder
   }
 
@@ -109,7 +109,7 @@ case class Save4LaterStub
 
 
   private val displayDesDeclaration = Map(
-    "display_des_declaration" →
+    "display_des_declaration" ->
       """
         |{
         |"personName": "John",
@@ -121,10 +121,10 @@ case class Save4LaterStub
   )
 
   private val displayVerifiedEmail = Map(
-    "display_verifiedEmail" → "\"user@test.com\""
+    "display_verifiedEmail" -> "\"user@test.com\""
   )
   private val amendmentData =
-    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) => s"display_$k" → v} + ("isAmendment" → "true")
+    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) => s"display_$k" -> v} + ("isAmendment" -> "true")
 
   private val fullJourneyData: Map[String, String] =
     businessInformationData ++ formData
@@ -146,7 +146,7 @@ case class Save4LaterStub
   }
 
   def hasAmendmentDataWithNewVerifiedEmail(verifiedEmail: String) = {
-    stubS4LGet(amendmentData + ("verifiedEmail" → ("\"" + verifiedEmail + "\"")))
+    stubS4LGet(amendmentData + ("verifiedEmail" -> ("\"" + verifiedEmail + "\"")))
     builder
   }
 
@@ -215,7 +215,7 @@ case class Save4LaterStub
   private def asS4LData(data: Map[String, String]) = {
     Json.toJson(
       data.map {
-        case (k, v) => k → Json.toJson(encrypt(v))
+        case (k, v) => k -> Json.toJson(encrypt(v))
       }
     ).toString()
 

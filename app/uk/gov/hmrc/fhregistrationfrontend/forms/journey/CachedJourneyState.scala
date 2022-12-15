@@ -26,7 +26,7 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
   override def isComplete: Boolean = pages forall isPageComplete
 
   override def isAccessible(pageId: String): Boolean = pages indexWhere (_.id == pageId) match {
-    case -1 => false
+    case -1    => false
     case index => pages take index forall isPageComplete
   }
 

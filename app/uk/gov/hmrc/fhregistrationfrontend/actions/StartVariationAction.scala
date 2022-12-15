@@ -31,6 +31,6 @@ class StartVariationAction(fhddsConnector: FhddsConnector)(
 
   def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
     case Approved | ApprovedWithConditions => true
-    case _ => false
+    case _                                 => false
   }
 }

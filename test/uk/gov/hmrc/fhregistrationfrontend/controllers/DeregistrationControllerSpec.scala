@@ -84,7 +84,7 @@ class DeregistrationControllerSpec
     "Redirect from postReason to confirm when reason is given" in {
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          DeregistrationReasonForm.reasonKey → DeregistrationReasonEnum.NoLongerNeeded.toString
+          DeregistrationReasonForm.reasonKey -> DeregistrationReasonEnum.NoLongerNeeded.toString
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.postReason)(request))
@@ -122,9 +122,9 @@ class DeregistrationControllerSpec
     "Fail on postConfirmation if reason was not saved" in {
       setupKeyStoreDeregistrationReason(None)
       val request = FakeRequest().withFormUrlEncodedBody(
-        ConfirmationForm.confirmKey → "true",
-        ConfirmationForm.usingDefaultEmailKey → "true",
-        ConfirmationForm.defaultEmailKey → "some@email.com"
+        ConfirmationForm.confirmKey           -> "true",
+        ConfirmationForm.usingDefaultEmailKey -> "true",
+        ConfirmationForm.defaultEmailKey      -> "some@email.com"
       )
       val result = await(csrfAddToken(controller.postConfirmation)(request))
 
@@ -136,9 +136,9 @@ class DeregistrationControllerSpec
       setupDeregister()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          ConfirmationForm.confirmKey → "true",
-          ConfirmationForm.usingDefaultEmailKey → "true",
-          ConfirmationForm.defaultEmailKey → "some@email.com"
+          ConfirmationForm.confirmKey           -> "true",
+          ConfirmationForm.usingDefaultEmailKey -> "true",
+          ConfirmationForm.defaultEmailKey      -> "some@email.com"
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.postConfirmation)(request))
@@ -155,7 +155,7 @@ class DeregistrationControllerSpec
       setupDeregister()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          ConfirmationForm.confirmKey → "false"
+          ConfirmationForm.confirmKey -> "false"
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.postConfirmation)(request))
@@ -175,8 +175,8 @@ class DeregistrationControllerSpec
     "Render the ack page is session does not have the required keys" in {
       setupUserAction()
       val request = FakeRequest().withSession(
-        controller.EmailSessionKey → "some@email.com",
-        controller.ProcessingTimestampSessionKey → System.currentTimeMillis.toString
+        controller.EmailSessionKey               -> "some@email.com",
+        controller.ProcessingTimestampSessionKey -> System.currentTimeMillis.toString
       )
       val result = await(csrfAddToken(controller.acknowledgment)(request))
       status(result) shouldBe OK

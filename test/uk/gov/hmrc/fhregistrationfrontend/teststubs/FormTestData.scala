@@ -64,7 +64,7 @@ object FormTestData {
           None,
           None,
           "Company Secretary"
-        )) → Added,
+        )) -> Added,
       CompanyOfficer(
         CompanyOfficerType.Individual,
         CompanyOfficerIndividual(
@@ -77,7 +77,7 @@ object FormTestData {
           None,
           "Director"
         )
-      ) → Added,
+      ) -> Added,
       CompanyOfficer(
         CompanyOfficerType.Company,
         CompanyOfficerCompany(
@@ -87,7 +87,7 @@ object FormTestData {
           None,
           "Company Secretary"
         )
-      ) → Added
+      ) -> Added
     ),
     List.empty,
     false
@@ -99,8 +99,8 @@ object FormTestData {
     true,
     ListWithTrackedChanges(
       List(
-        StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → Added,
-        StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → Added
+        StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> Added,
+        StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> Added
       ),
       List.empty,
       false
@@ -118,7 +118,7 @@ object FormTestData {
           Some("AA123123A"),
           Address("individual line one", None, None, Some("Othertown"), "Z9 3WW", None, None)
         )
-      ) → Added,
+      ) -> Added,
       BusinessPartner(
         BusinessPartnerType.SoleProprietor,
         BusinessPartnerSoleProprietor(
@@ -133,7 +133,7 @@ object FormTestData {
           None,
           Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
         )
-      ) → Added,
+      ) -> Added,
       BusinessPartner(
         BusinessPartnerType.LimitedLiabilityPartnership,
         BusinessPartnerLimitedLiabilityPartnership(
@@ -153,7 +153,7 @@ object FormTestData {
             None,
             None)
         )
-      ) → Added,
+      ) -> Added,
       BusinessPartner(
         BusinessPartnerType.Partnership,
         BusinessPartnerPartnership(
@@ -166,7 +166,7 @@ object FormTestData {
           Some("2234567890"),
           Address("partner line one", Some("partner line two"), None, Some("partner town"), "AA15 1AA", None, None)
         )
-      ) → Added,
+      ) -> Added,
       BusinessPartner(
         BusinessPartnerType.CorporateBody,
         BusinessPartnerCorporateBody(
@@ -179,7 +179,7 @@ object FormTestData {
           Some("1234567890"),
           Address("ltd line one", None, None, Some("ltd town"), "AA16 1AA", None, None)
         )
-      ) → Added,
+      ) -> Added,
       BusinessPartner(
         BusinessPartnerType.UnincorporatedBody,
         BusinessPartnerUnincorporatedBody(
@@ -192,7 +192,7 @@ object FormTestData {
           None,
           Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
         )
-      ) → Added
+      ) -> Added
     ),
     List.empty,
     false

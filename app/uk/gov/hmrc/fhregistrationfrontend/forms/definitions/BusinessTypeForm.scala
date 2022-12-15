@@ -25,6 +25,6 @@ object BusinessTypeForm {
   val businessTypeKey = "businessType"
 
   def businessTypeForm = Form(
-    businessTypeKey → enum(BusinessType)
+    businessTypeKey -> enum(BusinessType)
   )
 }

@@ -65,13 +65,13 @@ class AmendmentController @Inject()(
       val contactEmail = desToForm.contactEmail(display)
 
       for {
-        _ ← save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
-        _ ← save4LaterService.saveBusinessType(userId, entityType)
-        _ ← saveContactEmail(contactEmail)
-        _ ← saveDisplayPageData(userId, journeyPages)
-        _ ← savePageData(userId, journeyPages)
-        _ ← save4LaterService.saveDisplayDeclaration(userId, display.declaration)
-        _ ← save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
+        _ <- save4LaterService.saveBusinessRegistrationDetails(userId, bpr)
+        _ <- save4LaterService.saveBusinessType(userId, entityType)
+        _ <- saveContactEmail(contactEmail)
+        _ <- saveDisplayPageData(userId, journeyPages)
+        _ <- savePageData(userId, journeyPages)
+        _ <- save4LaterService.saveDisplayDeclaration(userId, display.declaration)
+        _ <- save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
       } yield Redirect(routes.SummaryController.summary)
     }
 
@@ -85,9 +85,9 @@ class AmendmentController @Inject()(
         else save4LaterService.saveV1ContactEmail(request.userId, contactEmail)
 
       for {
-        _ ← save4LaterService.saveDisplayData4Later(request.userId, Save4LaterKeys.verifiedEmailKey, contactEmail)
-        verified ← emailVerificationConnector.isVerified(contactEmail)
-        result ← saveIfVerified(verified)
+        _        <- save4LaterService.saveDisplayData4Later(request.userId, Save4LaterKeys.verifiedEmailKey, contactEmail)
+        verified <- emailVerificationConnector.isVerified(contactEmail)
+        result   <- saveIfVerified(verified)
       } yield {
         result
       }

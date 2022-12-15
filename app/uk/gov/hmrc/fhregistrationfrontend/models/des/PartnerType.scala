@@ -61,9 +61,9 @@ object PartnerType {
 //    }
   val writes = new Writes[PartnerType] {
     override def writes(o: PartnerType) = o match {
-      case obj: IndividualPartnerType => Json toJson obj
-      case obj: SoleProprietorPartnerType => Json toJson obj
-      case obj: LimitedLiabilityPartnershipType => Json toJson obj
+      case obj: IndividualPartnerType                      => Json toJson obj
+      case obj: SoleProprietorPartnerType                  => Json toJson obj
+      case obj: LimitedLiabilityPartnershipType            => Json toJson obj
       case obj: PartnershipOrUnIncorporatedBodyPartnerType => Json toJson obj
     }
   }

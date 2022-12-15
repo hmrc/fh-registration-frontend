@@ -49,15 +49,15 @@ case class RepeatingPage[T](
 
   val form: Form[(T, Boolean)] = Form(
     tuple(
-      ElementKey → skippingOnePrefix(mapping),
-      AddMoreKey → yesOrNo
+      ElementKey -> skippingOnePrefix(mapping),
+      AddMoreKey -> yesOrNo
     )
   )
 
   override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
-    case None => this copy (index = 0)
+    case None                       => this copy (index = 0)
     case Some(v) if validSection(v) => this copy (index = v.toInt - 1)
   }
 

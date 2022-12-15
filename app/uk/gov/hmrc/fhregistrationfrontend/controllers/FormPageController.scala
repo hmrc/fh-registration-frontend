@@ -103,7 +103,7 @@ class FormPageController @Inject()(
     else
       request.journey next newPage match {
         case Some(nextPage) => Redirect(routes.FormPageController.load(nextPage.id))
-        case None => Redirect(routes.SummaryController.summary)
+        case None           => Redirect(routes.SummaryController.summary)
       }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =
@@ -113,7 +113,7 @@ class FormPageController @Inject()(
       Ok(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     }
 
-  val submitButtonValueForm = Form("saveAction" → nonEmptyText)
+  val submitButtonValueForm = Form("saveAction" -> nonEmptyText)
 
   /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
   private def isSaveForLate(implicit req: Request[_]): Boolean =

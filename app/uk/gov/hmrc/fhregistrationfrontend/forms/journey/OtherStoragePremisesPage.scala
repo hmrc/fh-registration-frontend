@@ -66,7 +66,7 @@ case class OtherStoragePremisesPage(
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[OtherStoragePremises]] = {
-    case None => this copy (section = mainSection)
+    case None          => this copy (section = mainSection)
     case `mainSection` => this copy (section = mainSection)
     case newSection if hasOtherPremises && storagePremisePage.withSubsection.isDefinedAt(newSection) =>
       this copy (section = newSection,

@@ -27,8 +27,8 @@ object NationalInsuranceNumberForm {
   val hasNationalInsuranceNumberKey = "nationalInsuranceNumber_yesNo"
   val nationalInsuranceNumberKey = "nationalInsuranceNumber_value"
 
-  private val hasNationalInsuranceNumberMapping = hasNationalInsuranceNumberKey → yesOrNo
-  private val nationalInsuranceNumberMapping = nationalInsuranceNumberKey →
+  private val hasNationalInsuranceNumberMapping = hasNationalInsuranceNumberKey -> yesOrNo
+  private val nationalInsuranceNumberMapping = nationalInsuranceNumberKey ->
     (nino onlyWhen (hasNationalInsuranceNumberMapping is true))
 
   val nationalInsuranceNumberForm = Form(

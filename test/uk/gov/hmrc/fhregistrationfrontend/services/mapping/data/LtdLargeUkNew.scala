@@ -58,7 +58,7 @@ object LtdLargeUkNew {
               None,
               None,
               "Company Secretary"
-            )) → changeFlags,
+            )) -> changeFlags,
           CompanyOfficer(
             CompanyOfficerType.Individual,
             CompanyOfficerIndividual(
@@ -71,7 +71,7 @@ object LtdLargeUkNew {
               None,
               "Director"
             )
-          ) → changeFlags
+          ) -> changeFlags
         ),
         List.empty,
         false
@@ -83,9 +83,9 @@ object LtdLargeUkNew {
         true,
         ListWithTrackedChanges(
           List(
-            StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → ListWithTrackedChanges.Added,
-            StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.Updated,
-            StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.NoChange
+            StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> ListWithTrackedChanges.Added,
+            StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.Updated,
+            StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.NoChange
           ),
           List(StoragePremise(Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)),
           false

@@ -27,8 +27,8 @@ object WithdrawalReasonForm {
   val reasonKey = "reason"
   val reasonOtherKey = "reasonOtherText"
 
-  val reasonMapping = reasonKey → enum(WithdrawalReasonEnum)
-  val reasonOtherMapping = reasonOtherKey → (withdrwalReason onlyWhen (reasonMapping is WithdrawalReasonEnum.Other))
+  val reasonMapping = reasonKey           -> enum(WithdrawalReasonEnum)
+  val reasonOtherMapping = reasonOtherKey -> (withdrwalReason onlyWhen (reasonMapping is WithdrawalReasonEnum.Other))
 
   val withdrawalReasonForm = Form(
     mapping(

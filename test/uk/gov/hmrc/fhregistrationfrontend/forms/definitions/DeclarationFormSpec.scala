@@ -26,8 +26,8 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
   import DeclarationForm._
 
   val personsData = Map(
-    fullNameKey → "Full Name",
-    jobTitleKey → "Director"
+    fullNameKey -> "Full Name",
+    jobTitleKey -> "Director"
   )
 
   "Declaration form" should {
@@ -37,40 +37,40 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
 
     "Fail if using default email but no default email present" in {
       formDataHasErrors(
-        personsData ++ Map(usingDefaultEmailKey → "true"),
-        Seq(defaultEmailKey → "error.required")
+        personsData ++ Map(usingDefaultEmailKey -> "true"),
+        Seq(defaultEmailKey                     -> "error.required")
       )
     }
 
     "Fail if alternative email but no email present" in {
       formDataHasErrors(
-        personsData ++ Map(usingDefaultEmailKey → "false"),
-        Seq(s"$alternativeEmailKey.email" → "error.required")
+        personsData ++ Map(usingDefaultEmailKey -> "false"),
+        Seq(s"$alternativeEmailKey.email"       -> "error.required")
       )
     }
 
     "Fail if alternative email but email is malformed" in {
       formDataHasErrors(
-        personsData ++ Map(usingDefaultEmailKey → "false", s"$alternativeEmailKey.email" → "malformed"),
-        Seq(s"$alternativeEmailKey.email" → "error.email")
+        personsData ++ Map(usingDefaultEmailKey -> "false", s"$alternativeEmailKey.email" -> "malformed"),
+        Seq(s"$alternativeEmailKey.email"       -> "error.email")
       )
     }
 
     "Fail if alternative email but email does not match" in {
       formDataHasErrors(
         personsData ++ Map(
-          usingDefaultEmailKey → "false",
-          s"$alternativeEmailKey.email" → "alternative@test.com",
-          s"$alternativeEmailKey.emailConfirmation" → "another@test.com"),
-        Seq(s"$alternativeEmailKey.emailConfirmation" → "no_match.error")
+          usingDefaultEmailKey                        -> "false",
+          s"$alternativeEmailKey.email"               -> "alternative@test.com",
+          s"$alternativeEmailKey.emailConfirmation"   -> "another@test.com"),
+        Seq(s"$alternativeEmailKey.emailConfirmation" -> "no_match.error")
       )
     }
 
     "Accept data using default email" in {
       val parsed = dataFromValidForm(
         personsData ++ Map(
-          usingDefaultEmailKey → "true",
-          defaultEmailKey → "default@test.com"
+          usingDefaultEmailKey -> "true",
+          defaultEmailKey      -> "default@test.com"
         )
       )
 
@@ -83,9 +83,9 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
     "Accept data using alternative email" in {
       val parsed = dataFromValidForm(
         personsData ++ Map(
-          usingDefaultEmailKey → "false",
-          s"$alternativeEmailKey.email" → "alternative@test.com",
-          s"$alternativeEmailKey.emailConfirmation" → "alternative@test.com")
+          usingDefaultEmailKey                      -> "false",
+          s"$alternativeEmailKey.email"             -> "alternative@test.com",
+          s"$alternativeEmailKey.emailConfirmation" -> "alternative@test.com")
       )
 
       parsed.fullName shouldBe "Full Name"

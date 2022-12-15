@@ -25,7 +25,7 @@ class LinearJourney(val journeyPages: JourneyPages) extends JourneyNavigation {
   override def next[_](page: AnyPage): Option[AnyPage] =
     pages dropWhile (_.id != page.id) match {
       case _ :: next :: rest => Some(next)
-      case _ => None
+      case _                 => None
     }
 
   override def previous(page: AnyPage): Option[AnyPage] = {

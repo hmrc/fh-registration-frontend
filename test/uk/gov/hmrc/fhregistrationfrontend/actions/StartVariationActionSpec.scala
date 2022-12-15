@@ -78,7 +78,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
+        fhddsStatus <- List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
@@ -102,7 +102,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Approved, ApprovedWithConditions)
+        fhddsStatus <- List(Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus

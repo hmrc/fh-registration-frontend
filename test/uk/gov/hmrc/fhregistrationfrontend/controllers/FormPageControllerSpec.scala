@@ -91,8 +91,8 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        TradingNameForm.hasTradingNameKey → "true",
-        TradingNameForm.tradingNameKey → "Dodgy Co"
+        TradingNameForm.hasTradingNameKey -> "true",
+        TradingNameForm.tradingNameKey    -> "Dodgy Co"
       )
       val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
 
@@ -105,16 +105,16 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val form = Seq(
-        ContactPersonForm.lastNameKey → "last",
-        ContactPersonForm.firstNameKey → "first",
-        ContactPersonForm.telephoneKey → "0771231231",
-        ContactPersonForm.jobTitleKey → "job",
-        ContactPersonForm.usingSameContactAddressKey → "false",
-        ContactPersonForm.isUkAddressKey → "true"
+        ContactPersonForm.lastNameKey                -> "last",
+        ContactPersonForm.firstNameKey               -> "first",
+        ContactPersonForm.telephoneKey               -> "0771231231",
+        ContactPersonForm.jobTitleKey                -> "job",
+        ContactPersonForm.usingSameContactAddressKey -> "false",
+        ContactPersonForm.isUkAddressKey             -> "true"
       )
       val addressForm = Seq(
-        "Line1" → "Some",
-        "postcode" → "AA11 1AA"
+        "Line1"    -> "Some",
+        "postcode" -> "AA11 1AA"
       ).map { case (k, v) => s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
 
       val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
@@ -128,8 +128,8 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        TradingNameForm.hasTradingNameKey → "true",
-        TradingNameForm.tradingNameKey → "Dodgy Co"
+        TradingNameForm.hasTradingNameKey -> "true",
+        TradingNameForm.tradingNameKey    -> "Dodgy Co"
       )
       val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
 
@@ -143,9 +143,9 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          TradingNameForm.hasTradingNameKey → "true",
-          TradingNameForm.tradingNameKey → "Dodgy Co",
-          "saveAction" → "saveForLater"
+          TradingNameForm.hasTradingNameKey -> "true",
+          TradingNameForm.tradingNameKey    -> "Dodgy Co",
+          "saveAction"                      -> "saveForLater"
         )
         .withMethod("POST")
       val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
@@ -291,20 +291,20 @@ class FormPageControllerSpec
 
   def businessPartnerFormData(addMore: Boolean) = {
     val addressForm = Map(
-      s"${BusinessPartnersForm.addressKey}.Line1" → "Some Line 1",
-      s"${BusinessPartnersForm.addressKey}.postcode" → "AA1 1AA"
+      s"${BusinessPartnersForm.addressKey}.Line1"    -> "Some Line 1",
+      s"${BusinessPartnersForm.addressKey}.postcode" -> "AA1 1AA"
     )
 
     val individualPartner = Map(
-      BusinessPartnersForm.firstNameKey → "George",
-      BusinessPartnersForm.lastNameKey → "Costanza",
-      BusinessPartnersForm.hasNationalInsuranceNumberKey → "false"
+      BusinessPartnersForm.firstNameKey                  -> "George",
+      BusinessPartnersForm.lastNameKey                   -> "Costanza",
+      BusinessPartnersForm.hasNationalInsuranceNumberKey -> "false"
     ) ++ addressForm
 
     individualPartner.map {
       case (k, v) => s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
     } +
-      (BusinessPartnersForm.businessPartnersTypeKey → BusinessPartnerType.Individual.toString) +
-      ("addMore" → addMore.toString)
+      (BusinessPartnersForm.businessPartnersTypeKey -> BusinessPartnerType.Individual.toString) +
+      ("addMore"                                    -> addMore.toString)
   }
 }

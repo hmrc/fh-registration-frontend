@@ -32,11 +32,11 @@ class BusinessTypeFormSpec extends UnitSpec with FormSpecsHelper[BusinessType] {
     }
 
     "Fail if field value is malformed" in {
-      formDataHasErrors(Map(businessTypeKey → "some unknown business type"), Seq(businessTypeKey → "error.invalid"))
+      formDataHasErrors(Map(businessTypeKey -> "some unknown business type"), Seq(businessTypeKey -> "error.invalid"))
     }
 
     "Work for known field value" in {
-      dataFromValidForm(Map(businessTypeKey → "CorporateBody")) shouldBe BusinessType.CorporateBody
+      dataFromValidForm(Map(businessTypeKey -> "CorporateBody")) shouldBe BusinessType.CorporateBody
     }
   }
 

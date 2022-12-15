@@ -33,7 +33,7 @@ trait MappingSpecsHelper[T] extends Matchers {
   def formDataHasErrors(post: Map[String, String], expected: List[(String, String)]): Unit = {
     val result = mapping bind post
     result.isLeft shouldBe true
-    val errors = result.left.toOption.get.flatMap(v => v.messages.map(m => v.key → m))
+    val errors = result.left.toOption.get.flatMap(v => v.messages.map(m => v.key -> m))
     errors should not be empty
     errors should contain allElementsOf expected
   }

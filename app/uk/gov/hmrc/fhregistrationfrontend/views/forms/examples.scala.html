@@ -27,7 +27,7 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @form = @{
-    Form("businessType" → Forms.nonEmptyText)
+    Form("businessType" -> Forms.nonEmptyText)
 }
 
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}

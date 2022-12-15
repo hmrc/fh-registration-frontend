@@ -36,7 +36,7 @@ class NewApplicationAction(val fhddsConnector: FhddsConnector)(
     val whenRegistered = request.registrationNumber.map { registrationNumber =>
       fhddsConnector.getStatus(registrationNumber).map {
         case Withdrawn | Rejected | Revoked | Deregistered => Right(request)
-        case _ => Left(errorHandler.errorResultsPages(Results.BadRequest))
+        case _                                             => Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
     }
 

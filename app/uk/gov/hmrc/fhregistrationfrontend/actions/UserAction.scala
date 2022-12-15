@@ -57,10 +57,10 @@ case class UserAction @Inject()(
       .retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
         case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup =>
           val retrieveEnrolments: Set[String] = for {
-            enrolment ← enrolments.enrolments
+            enrolment <- enrolments.enrolments
             if enrolment.key equalsIgnoreCase Enrolments.serviceName
 
-            identifier ← enrolment.identifiers
+            identifier <- enrolment.identifiers
             if identifier.key equalsIgnoreCase Enrolments.identifierName
             if identifier.value.slice(2, 4) == "FH"
 

@@ -54,7 +54,7 @@ object CompanyOfficer {
     override def writes(o: CompanyOfficerIdentification): JsValue =
       o match {
         case i: CompanyOfficerIndividual => Json toJson i
-        case c: CompanyOfficerCompany => Json toJson c
+        case c: CompanyOfficerCompany    => Json toJson c
       }
   }
 
@@ -68,7 +68,7 @@ object CompanyOfficer {
           case JsDefined(JsString(t)) if t == Company.toString =>
             (json \ "identification").validate[CompanyOfficerCompany].map(CompanyOfficer(Company, _))
           case e: JsError => e
-          case _ => JsError("unknown official type")
+          case _          => JsError("unknown official type")
         }
       }
 

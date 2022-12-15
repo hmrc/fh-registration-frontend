@@ -97,7 +97,7 @@ class EmailVerificationController @Inject()(
         Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 
       case (None, Some(_)) => Redirect(routes.Application.resumeForm)
-      case (None, None) => Redirect(routes.EmailVerificationController.forcedContactEmail)
+      case (None, None)    => Redirect(routes.EmailVerificationController.forcedContactEmail)
 
     }
   }
@@ -130,7 +130,7 @@ class EmailVerificationController @Inject()(
   def emailVerified = emailVerificationAction { implicit request =>
     request.verifiedEmail match {
       case Some(verifiedEmail) => Ok(views.email_verified(verifiedEmail, Navigation.noNavigation))
-      case None => errorHandler.errorResultsPages(Results.BadRequest)
+      case None                => errorHandler.errorResultsPages(Results.BadRequest)
     }
   }
 
@@ -138,8 +138,8 @@ class EmailVerificationController @Inject()(
     request.pendingEmail match {
       case Some(pendingEmail) if hashMatches(pendingEmail, token) =>
         for {
-          _ ← save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
-          _ ← save4LaterService deletePendingEmail request.userId
+          _ <- save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
+          _ <- save4LaterService deletePendingEmail request.userId
         } yield {
           Redirect(routes.EmailVerificationController.emailVerified)
         }

@@ -77,7 +77,7 @@ class DefaultAddressAuditService @Inject()(
 
   private def addressAuditData(address: Address)(implicit headerCarrier: HeaderCarrier) =
     address.lookupId match {
-      case None => Future successful manualAddressSubmitted(address)
+      case None     => Future successful manualAddressSubmitted(address)
       case Some(id) => postcodeAddress(id, address)
     }
 
@@ -107,7 +107,7 @@ class DefaultAddressAuditService @Inject()(
   private def postcodeAddressSubmitted(address: Address, originalUprn: String) =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressSubmitted,
-      addressDetails("submitted", address) :+ ("submittedUPRN" → originalUprn)
+      addressDetails("submitted", address) :+ ("submittedUPRN" -> originalUprn)
     )
 
   private def postcodeAddressModifiedSubmitted(
@@ -116,17 +116,17 @@ class DefaultAddressAuditService @Inject()(
     originalUprn: String): AddressAuditData =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressModifiedSubmitted,
-      addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" → originalUprn)
+      addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" -> originalUprn)
     )
 
   private def addressDetails(prefix: String, address: Address) =
     Seq(
-      "Line1" → address.addressLine1,
-      "Line2" → address.addressLine2.getOrElse(""),
-      "Line3" → address.addressLine3.getOrElse(""),
-      "Line4" → address.addressLine4.getOrElse(""),
-      "Postcode" → address.postcode,
-      "Country" → address.countryCode.getOrElse("")
+      "Line1"    -> address.addressLine1,
+      "Line2"    -> address.addressLine2.getOrElse(""),
+      "Line3"    -> address.addressLine3.getOrElse(""),
+      "Line4"    -> address.addressLine4.getOrElse(""),
+      "Postcode" -> address.postcode,
+      "Country"  -> address.countryCode.getOrElse("")
     ).map { case (k, v) => s"$prefix$k" -> v }
 
   private def addressRecordToAddress(addressRecord: AddressRecord) =

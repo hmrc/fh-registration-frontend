@@ -75,12 +75,12 @@ class DeclarationController @Inject()(
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Future[Option[Result]] =
     keyStoreService.fetchSummaryForPrint() map { userSummary =>
       for {
-        email ← request.session get emailSessionKey
-        timestamp ← request.session get processingTimestampSessionKey
-        journeyTypeString ← request.session get journeyTypeKey
+        email             <- request.session get emailSessionKey
+        timestamp         <- request.session get processingTimestampSessionKey
+        journeyTypeString <- request.session get journeyTypeKey
         journeyType = JourneyType withName journeyTypeString
         processingDate = new Date(timestamp.toLong)
-        printableSummary ← userSummary
+        printableSummary <- userSummary
       } yield {
         Ok(views
           .acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType)))
@@ -120,9 +120,9 @@ class DeclarationController @Inject()(
                   Redirect(routes.DeclarationController.showAcknowledgment)
                     .withSession(
                       request.session
-                        + (journeyTypeKey → request.journeyRequest.journeyType.toString)
-                        + (emailSessionKey → usersDeclaration.email)
-                        + (processingTimestampSessionKey → response.processingDate.getTime.toString))
+                        + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)
+                        + (emailSessionKey               -> usersDeclaration.email)
+                        + (processingTimestampSessionKey -> response.processingDate.getTime.toString))
                 }
           }
         )
@@ -135,7 +135,7 @@ class DeclarationController @Inject()(
     val submissionResult = request.journeyRequest.journeyType match {
       case JourneyType.Amendment => amendedSubmission(declaration)
       case JourneyType.Variation => amendedSubmission(declaration)
-      case JourneyType.New => createSubmission(declaration)
+      case JourneyType.New       => createSubmission(declaration)
     }
 
     submissionResult.right map { submissionResponse =>

@@ -41,7 +41,7 @@ class EmailVerificationAction(implicit val save4LaterService: Save4LaterService,
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EmailVerificationRequest[A]]] = {
     implicit val r = request
     val result = for {
-      cacheMap ← EitherT(loadCacheMap)
+      cacheMap <- EitherT(loadCacheMap)
       verifiedEmail = cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey)
       pendingEmail = getPendingEmail(cacheMap)
       contactPersonEmail = getContactPersonEmail(cacheMap)

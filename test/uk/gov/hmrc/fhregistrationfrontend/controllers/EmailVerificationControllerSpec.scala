@@ -90,8 +90,8 @@ class EmailVerificationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          EmailVerificationForm.emailOptionKey → "true",
-          EmailVerificationForm.defaultEmailKey → "c@c.co"
+          EmailVerificationForm.emailOptionKey  -> "true",
+          EmailVerificationForm.defaultEmailKey -> "c@c.co"
         )
         .withMethod("POST")
 
@@ -108,8 +108,8 @@ class EmailVerificationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          EmailVerificationForm.emailOptionKey → "true",
-          EmailVerificationForm.defaultEmailKey → "c@c.co"
+          EmailVerificationForm.emailOptionKey  -> "true",
+          EmailVerificationForm.defaultEmailKey -> "c@c.co"
         )
         .withMethod("POST")
 

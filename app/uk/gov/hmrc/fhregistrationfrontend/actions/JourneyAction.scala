@@ -54,7 +54,7 @@ class JourneyRequest[A](
   def hasUpdates: Option[Boolean] =
     journeyType match {
       case JourneyType.Amendment | JourneyType.Variation => Some(pagesHaveAmendments || verifiedEmailHasAmendments)
-      case _ => None
+      case _                                             => None
     }
 
   private def pagesHaveAmendments = journeyPages.pages exists (page => pageHasAmendments(page))
@@ -86,12 +86,12 @@ class JourneyAction @Inject()(journeys: Journeys)(
     implicit val r: UserRequest[A] = input
 
     val result: EitherT[Future, Result, JourneyRequest[A]] = for {
-      cacheMap ← EitherT(loadCacheMap)
-      bpr ← findBpr(cacheMap).toEitherT[Future]
-      bt ← getBusinessType(cacheMap).toEitherT[Future]
-      verifiedEmail ← findVerifiedEmail(cacheMap).toEitherT[Future]
+      cacheMap      <- EitherT(loadCacheMap)
+      bpr           <- findBpr(cacheMap).toEitherT[Future]
+      bt            <- getBusinessType(cacheMap).toEitherT[Future]
+      verifiedEmail <- findVerifiedEmail(cacheMap).toEitherT[Future]
       journeyType = loadJourneyType(cacheMap)
-      journeyPages ← getJourneyPages(cacheMap).toEitherT[Future]
+      journeyPages <- getJourneyPages(cacheMap).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages)
     } yield {
       new JourneyRequest[A](cacheMap, r, bpr, bt, verifiedEmail, journeyType, journeyPages, journeyState)
@@ -131,8 +131,8 @@ class JourneyAction @Inject()(journeys: Journeys)(
     val pagesForEntityType = getBusinessType(cacheMap).right flatMap {
       _ match {
         case BusinessType.CorporateBody => Right(journeys.limitedCompanyPages)
-        case BusinessType.SoleTrader => Right(journeys.soleTraderPages)
-        case BusinessType.Partnership => Right(journeys.partnershipPages)
+        case BusinessType.SoleTrader    => Right(journeys.soleTraderPages)
+        case BusinessType.Partnership   => Right(journeys.partnershipPages)
         case _ =>
           logger.error(s"Not found: wrong business type")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
@@ -152,7 +152,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
   private def pageWithData[T](cacheMap: CacheMap)(page: Page[T]) =
     cacheMap.getEntry(page.id)(page.format) match {
       case Some(data) => page withData data
-      case None => page
+      case None       => page
     }
 
   def loadJourneyState(journeyPages: JourneyPages): JourneyState =

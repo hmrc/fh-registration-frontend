@@ -36,7 +36,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Processing, Received, Approved, ApprovedWithConditions)
+        fhddsStatus <- List(Processing, Received, Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
@@ -73,7 +73,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Rejected, Revoked, Withdrawn, Deregistered)
+        fhddsStatus <- List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus

@@ -58,7 +58,7 @@ object LtdMinimumLessThanThreeYears {
             None,
             "Director"
           )
-        ) → changeFlags),
+        ) -> changeFlags),
       List.empty,
       false
     ),

@@ -41,9 +41,9 @@ object ListWithTrackedChanges {
   implicit private def writes[T](implicit format: Format[T]): Writes[ListWithTrackedChanges[T]] =
     new Writes[ListWithTrackedChanges[T]] {
       override def writes(o: ListWithTrackedChanges[T]): JsValue = Json obj (
-        "valuesWithStatus" → o.valuesWithStatus,
-        "deleted" → o.deleted,
-        "addMore" → o.addMore
+        "valuesWithStatus" -> o.valuesWithStatus,
+        "deleted"          -> o.deleted,
+        "addMore"          -> o.addMore
       )
     }
 
@@ -51,9 +51,9 @@ object ListWithTrackedChanges {
     new Reads[ListWithTrackedChanges[T]] {
       override def reads(json: JsValue): JsResult[ListWithTrackedChanges[T]] =
         for {
-          values ← (json \ "valuesWithStatus").validate[List[(T, Status)]]
-          deleted ← (json \ "deleted").validate[List[T]]
-          addMore ← (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
+          values  <- (json \ "valuesWithStatus").validate[List[(T, Status)]]
+          deleted <- (json \ "deleted").validate[List[T]]
+          addMore <- (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
         } yield {
           ListWithTrackedChanges(values, deleted, addMore)
         }
@@ -65,7 +65,7 @@ object ListWithTrackedChanges {
 
 case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T], addMore: Boolean) {
 
-  def append(value: T) = this copy (valuesWithStatus = valuesWithStatus :+ (value → Added))
+  def append(value: T) = this copy (valuesWithStatus = valuesWithStatus :+ (value -> Added))
 
   def values = valuesWithStatus.iterator map (_._1)
 
@@ -88,7 +88,7 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
   def updated(index: Int, value: T) = {
     val prevValue = valuesWithStatus(index)._1
     if (prevValue != value)
-      this copy (valuesWithStatus = valuesWithStatus updated (index, value → Updated))
+      this copy (valuesWithStatus = valuesWithStatus updated (index, value -> Updated))
     else
       this
   }

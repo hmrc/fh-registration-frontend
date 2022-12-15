@@ -29,32 +29,32 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
     "Fail if usingDefaultEmail is not answered" in {
       formDataHasErrors(
         Map.empty,
-        Seq(emailOptionKey → "error.required")
+        Seq(emailOptionKey -> "error.required")
       )
     }
 
     "Fail if usingDefaultEmail is no and no alternate email is provided" in {
       formDataHasErrors(
-        Map(emailOptionKey → "false"),
-        Seq(alternativeEmailKey → "error.required")
+        Map(emailOptionKey      -> "false"),
+        Seq(alternativeEmailKey -> "error.required")
       )
     }
 
     "Fail if usingDefaultEmail is no and alternate email is malformed" in {
       formDataHasErrors(
         Map(
-          emailOptionKey → "false",
-          alternativeEmailKey → "some email"
+          emailOptionKey      -> "false",
+          alternativeEmailKey -> "some email"
         ),
-        Seq(alternativeEmailKey → "error.email")
+        Seq(alternativeEmailKey -> "error.email")
       )
     }
 
     "Parse when using default email" in {
       val parsed = dataFromValidForm(
         Map(
-          emailOptionKey → "true",
-          defaultEmailKey → "default@test.com"
+          emailOptionKey  -> "true",
+          defaultEmailKey -> "default@test.com"
         ))
 
       parsed.usingGgEmailAddress shouldBe true
@@ -65,8 +65,8 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
     "Parse when using alternate email" in {
       val parsed = dataFromValidForm(
         Map(
-          emailOptionKey → "false",
-          alternativeEmailKey → "alternate@test.com"
+          emailOptionKey      -> "false",
+          alternativeEmailKey -> "alternate@test.com"
         ))
 
       parsed.usingGgEmailAddress shouldBe false

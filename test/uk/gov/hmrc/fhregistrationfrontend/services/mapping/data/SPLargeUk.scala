@@ -50,8 +50,8 @@ object SPLargeUk {
       true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(Address("two flat", Some("two street"), None, Some("two town"), "Z99 2YY", None, None), true) → changeFlags,
-          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "AA01 0AA", None, None), false) → changeFlags
+          StoragePremise(Address("two flat", Some("two street"), None, Some("two town"), "Z99 2YY", None, None), true) -> changeFlags,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "AA01 0AA", None, None), false)    -> changeFlags
         ),
         List.empty,
         false

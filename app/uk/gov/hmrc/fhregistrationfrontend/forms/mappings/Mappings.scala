@@ -47,7 +47,7 @@ object Mappings {
       "Line4"       -> optional(addressLine),
       "postcode"    -> postcode,
       "countryCode" -> optional(nonEmptyText),
-      "lookupId" → optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
+      "lookupId"    -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
     )(Address.apply)(Address.unapply)
 
   def postcode: Mapping[String] =
@@ -89,8 +89,8 @@ object Mappings {
 
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
-      "email" → email,
-      "emailConfirmation" → of(emailConfirmationFormat)
+      "email"             -> email,
+      "emailConfirmation" -> of(emailConfirmationFormat)
     )(AlternativeEmail.apply)(AlternativeEmail.unapply)
 
   def internationalAddress: Mapping[InternationalAddress] =
@@ -182,14 +182,14 @@ object Mappings {
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
 
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
-    "yesNo" → of(yesOrNoFormatter),
-    "value" → optional(wrapped)
+    "yesNo" -> of(yesOrNoFormatter),
+    "value" -> optional(wrapped)
   )
 
   private def y[T]: ((Boolean, Option[T])) => Boolean = {
     case (true, Some(_)) => true
-    case (false, None) => true
-    case _ => false
+    case (false, None)   => true
+    case _               => false
   }
 
   private def z[T]: ((Boolean, Option[T])) => Option[T] = {

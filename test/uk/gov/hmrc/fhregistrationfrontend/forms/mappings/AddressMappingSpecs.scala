@@ -24,40 +24,40 @@ class AddressMappingSpecs extends UnitSpec with MappingSpecsHelper[Address] {
   override val mapping = Mappings.address
 
   val validAddressShort = Map(
-    "Line1" → "line one",
-    "Line2" → "line two",
-    "postcode" → "AA11 1AA"
+    "Line1"    -> "line one",
+    "Line2"    -> "line two",
+    "postcode" -> "AA11 1AA"
   )
 
   val validAddressLong = Map(
-    "Line1" → "line one",
-    "Line2" → "line two",
-    "Line3" → "line three",
-    "Line4" → "line four",
-    "postcode" → "AA11 1AA"
+    "Line1"    -> "line one",
+    "Line2"    -> "line two",
+    "Line3"    -> "line three",
+    "Line4"    -> "line four",
+    "postcode" -> "AA11 1AA"
   )
 
   "Address mapping " should {
     "reject missing mandatory" in {
       formDataHasErrors(
         Map.empty,
-        List("Line1" → "error.required", "postcode" → "error.required")
+        List("Line1" -> "error.required", "postcode" -> "error.required")
       )
     }
 
     "reject invalid address lines" in {
       formDataHasErrors(
         Map(
-          "Line1" → "", //too short
-          "Line2" → Array.fill(36)('a').mkString, //too long
-          "Line3" → "street 1 #", //invalid char
-          "postcode" → "123123"
+          "Line1"    -> "", //too short
+          "Line2"    -> Array.fill(36)('a').mkString, //too long
+          "Line3"    -> "street 1 #", //invalid char
+          "postcode" -> "123123"
         ),
         List(
-          "Line1" → "error.pattern",
-          "Line2" → "error.pattern",
-          "Line3" → "error.pattern",
-          "postcode" → "error.pattern")
+          "Line1"    -> "error.pattern",
+          "Line2"    -> "error.pattern",
+          "Line3"    -> "error.pattern",
+          "postcode" -> "error.pattern")
       )
     }
 

@@ -27,8 +27,8 @@ object DeregistrationReasonForm {
   val reasonKey = "reason"
   val reasonOtherKey = "otherReasonContainer"
 
-  val reasonMapping = reasonKey → enum(DeregistrationReasonEnum)
-  val reasonOtherMapping = reasonOtherKey → (deregistrationReason onlyWhen (reasonMapping is DeregistrationReasonEnum.Other))
+  val reasonMapping = reasonKey           -> enum(DeregistrationReasonEnum)
+  val reasonOtherMapping = reasonOtherKey -> (deregistrationReason onlyWhen (reasonMapping is DeregistrationReasonEnum.Other))
 
   val deregistrationReasonForm = Form(
     mapping(

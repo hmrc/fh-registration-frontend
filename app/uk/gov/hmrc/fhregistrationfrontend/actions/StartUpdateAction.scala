@@ -48,8 +48,8 @@ abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
 
     val whenRegistered = request.registrationNumber.map { registrationNumber =>
       val result = for {
-        _ ← EitherT(checkIsProcessing(registrationNumber))
-        cacheMap ← EitherT(loadCacheMap)
+        _        <- EitherT(checkIsProcessing(registrationNumber))
+        cacheMap <- EitherT(loadCacheMap)
         journeyType = loadJourneyType(cacheMap)
       } yield {
         new StartUpdateRequest[A](registrationNumber, Some(journeyType), request)
@@ -63,7 +63,7 @@ abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
   private def checkIsProcessing(registrationNumber: String)(
     implicit request: UserRequest[_]): Future[Either[Result, Boolean]] =
     fhddsConnector.getStatus(registrationNumber) map isAllowed map {
-      case true => Right(true)
+      case true  => Right(true)
       case false => Left(errorHandler.errorResultsPages(Results.BadRequest))
     }
 

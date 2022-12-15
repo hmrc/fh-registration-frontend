@@ -105,12 +105,12 @@ object BusinessPartner {
   implicit val businessPartnerIdentificationWrites = new Writes[BusinessPartnerIdentification] {
     override def writes(o: BusinessPartnerIdentification): JsValue =
       o match {
-        case i: BusinessPartnerIndividual => Json toJson i
-        case s: BusinessPartnerSoleProprietor => Json toJson s
-        case p: BusinessPartnerPartnership => Json toJson p
+        case i: BusinessPartnerIndividual                  => Json toJson i
+        case s: BusinessPartnerSoleProprietor              => Json toJson s
+        case p: BusinessPartnerPartnership                 => Json toJson p
         case l: BusinessPartnerLimitedLiabilityPartnership => Json toJson l
-        case c: BusinessPartnerCorporateBody => Json toJson c
-        case u: BusinessPartnerUnincorporatedBody => Json toJson u
+        case c: BusinessPartnerCorporateBody               => Json toJson c
+        case u: BusinessPartnerUnincorporatedBody          => Json toJson u
       }
   }
 
@@ -136,7 +136,7 @@ object BusinessPartner {
               .validate[BusinessPartnerUnincorporatedBody]
               .map(BusinessPartner(UnincorporatedBody, _))
           case e: JsError => e
-          case _ => JsError("unknown Business Partner type")
+          case _          => JsError("unknown Business Partner type")
         }
       }
 

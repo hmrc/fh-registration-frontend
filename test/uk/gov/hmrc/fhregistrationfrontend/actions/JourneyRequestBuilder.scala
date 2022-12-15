@@ -75,7 +75,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
       case nationalInsuranceNumberPage.id =>
         page.asInstanceOf[Page[NationalInsuranceNumber]] withData FormTestData.nationalInsuranceNumber
       case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] withData FormTestData.tradingName
-      case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+      case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
       case companyOfficersPage.id =>
         page.asInstanceOf[Page[ListWithTrackedChanges[CompanyOfficer]]] withData FormTestData.companyOfficers
       case businessPartnersPage.id =>

@@ -34,7 +34,8 @@ class SummaryRequest[A](
   val businessType = journeyRequest.businessType
   val verifiedEmail = journeyRequest.verifiedEmail
 
-  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
+  def pageDataOpt[T](page: Page[T]): Option[T] =
+    journeyRequest.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
 
 }
 
@@ -44,7 +45,7 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
   override protected def refine[A](input: JourneyRequest[A]): Future[Either[Result, SummaryRequest[A]]] = {
     implicit val r: JourneyRequest[A] = input
     val result: EitherT[Future, Result, SummaryRequest[A]] = for {
-      _ ← journeyIsComplete(input.journeyState).toEitherT[Future]
+      _ <- journeyIsComplete(input.journeyState).toEitherT[Future]
     } yield {
       new SummaryRequest[A](input)
     }

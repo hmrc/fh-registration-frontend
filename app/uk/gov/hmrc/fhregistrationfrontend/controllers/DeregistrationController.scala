@@ -94,7 +94,7 @@ class DeregistrationController @Inject()(
     enrolledUserAction.async { implicit request =>
       keyStoreService.fetchDeregistrationReason() flatMap {
         case Some(reason) => f(request)(reason)
-        case None => Future successful errorHandler.errorResultsPages(Results.BadRequest)
+        case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
@@ -106,8 +106,8 @@ class DeregistrationController @Inject()(
           Redirect(routes.DeregistrationController.acknowledgment)
             .withSession(
               request.session
-                + (EmailSessionKey → confirmed.email.get)
-                + (ProcessingTimestampSessionKey → processingDate.getTime.toString))
+                + (EmailSessionKey               -> confirmed.email.get)
+                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString))
 
         }
     } else {
@@ -134,8 +134,8 @@ class DeregistrationController @Inject()(
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
+      email     <- request.session get EmailSessionKey
+      timestamp <- request.session get ProcessingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.deregistration_acknowledgement(processingDate, email))

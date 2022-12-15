@@ -33,7 +33,7 @@ trait ActionFunctions {
     ec: ExecutionContext): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {
       case Some(cacheMap) => Right(cacheMap)
-      case None => Right(new CacheMap(request.userId, Map.empty))
+      case None           => Right(new CacheMap(request.userId, Map.empty))
 
     }
 

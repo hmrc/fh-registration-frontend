@@ -37,7 +37,7 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
   "summary" should {
     "Render the summary html for all journey types" in {
       for {
-        journeyType ← JourneyType.values
+        journeyType <- JourneyType.values
       } {
         setupSummaryAction(
           journeyPages = JourneyRequestBuilder.fullyCompleteJourney(),
@@ -56,11 +56,11 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
 
     "Render the summary html for all business types" in {
       for {
-        (businessType, pages) ← List(
-                                 BusinessType.Partnership → journeys.partnershipPages,
-                                 BusinessType.SoleTrader → journeys.soleTraderPages,
-                                 BusinessType.CorporateBody → journeys.limitedCompanyPages
-                               )
+        (businessType, pages) <- List(
+                                  BusinessType.Partnership   -> journeys.partnershipPages,
+                                  BusinessType.SoleTrader    -> journeys.soleTraderPages,
+                                  BusinessType.CorporateBody -> journeys.limitedCompanyPages
+                                )
       } {
         setupSummaryAction(
           journeyPages = JourneyRequestBuilder.fullyCompleteJourney(pages),
@@ -80,7 +80,7 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
 
   def expectedMode(journeyType: JourneyType) = journeyType match {
     case JourneyType.Amendment => Mode.Amendment
-    case JourneyType.New => Mode.New
+    case JourneyType.New       => Mode.New
     case JourneyType.Variation => Mode.Variation
   }
 }

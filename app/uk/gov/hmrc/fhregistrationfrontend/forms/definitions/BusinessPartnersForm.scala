@@ -62,71 +62,71 @@ object BusinessPartnersForm {
 
   val businessPartnersKey = "businessPartners"
 
-  val companyRegistrationNumberMapping = companyRegistrationNumberKey → companyRegistrationNumber
+  val companyRegistrationNumberMapping = companyRegistrationNumberKey -> companyRegistrationNumber
 
-  val hasNinoMapping = hasNationalInsuranceNumberKey → yesOrNo
-  val ninoMapping = nationalInsuranceNumberKey → (nino onlyWhen (hasNinoMapping is true withPrefix businessPartnerIndividualKey))
+  val hasNinoMapping = hasNationalInsuranceNumberKey -> yesOrNo
+  val ninoMapping = nationalInsuranceNumberKey       -> (nino onlyWhen (hasNinoMapping is true withPrefix businessPartnerIndividualKey))
 
-  val hasNinoSoleProprietorMapping = hasNationalInsuranceNumberKey → yesOrNo
-  val ninoSoleProprietorMapping = nationalInsuranceNumberKey → (nino onlyWhen (hasNinoSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
+  val hasNinoSoleProprietorMapping = hasNationalInsuranceNumberKey -> yesOrNo
+  val ninoSoleProprietorMapping = nationalInsuranceNumberKey       -> (nino onlyWhen (hasNinoSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasTradeNameMapping = hasTradeNameKey → yesOrNo
-  val tradeNameMapping = tradeNameKey → (tradingName onlyWhen (hasTradeNameMapping is true withPrefix businessPartnerSoleProprietorKey))
+  val hasTradeNameMapping = hasTradeNameKey -> yesOrNo
+  val tradeNameMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasTradeNamePartnershipMapping = hasTradeNameKey → yesOrNo
-  val tradeNamePartnershipMapping = tradeNameKey → (tradingName onlyWhen (hasTradeNamePartnershipMapping is true withPrefix businessPartnerPartnershipKey))
+  val hasTradeNamePartnershipMapping = hasTradeNameKey -> yesOrNo
+  val tradeNamePartnershipMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNamePartnershipMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasTradeNameLimitedLiabilityMapping = hasTradeNameKey → yesOrNo
-  val tradeNameLimitedLiabilityMapping = tradeNameKey → (tradingName onlyWhen (hasTradeNameLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
+  val hasTradeNameLimitedLiabilityMapping = hasTradeNameKey -> yesOrNo
+  val tradeNameLimitedLiabilityMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
 
-  val hasTradeNameCorporateBodyMapping = hasTradeNameKey → yesOrNo
-  val tradeNameCorporateBodyMapping = tradeNameKey → (tradingName onlyWhen (hasTradeNameCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
+  val hasTradeNameCorporateBodyMapping = hasTradeNameKey -> yesOrNo
+  val tradeNameCorporateBodyMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
 
-  val hasTradeNameUnincorporatedBodyMapping = hasTradeNameKey → yesOrNo
-  val tradeNameUnincorporatedBodyMapping = tradeNameKey → (tradingName onlyWhen (hasTradeNameUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
+  val hasTradeNameUnincorporatedBodyMapping = hasTradeNameKey -> yesOrNo
+  val tradeNameUnincorporatedBodyMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
-  val hasVatMapping = hasVatKey → yesOrNo
-  val vatMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix businessPartnerSoleProprietorKey))
+  val hasVatMapping = hasVatKey       -> yesOrNo
+  val vatMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasVatPartnershipMapping = hasVatKey → yesOrNo
-  val vatPartnershipMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatPartnershipMapping is true withPrefix businessPartnerPartnershipKey))
+  val hasVatPartnershipMapping = hasVatKey       -> yesOrNo
+  val vatPartnershipMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatPartnershipMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasVatUnincorporatedBodyMapping = hasVatKey → yesOrNo
-  val vatUnincorporatedBodyMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
+  val hasVatUnincorporatedBodyMapping = hasVatKey       -> yesOrNo
+  val vatUnincorporatedBodyMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
-  val hasVatSoleProprietorMapping = hasVatKey → yesOrNo
-  val vatSoleProprietorMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
-  val uniqueTaxpayerReferenceSoleProprietorMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasVatSoleProprietorMapping is false withPrefix businessPartnerSoleProprietorKey))
+  val hasVatSoleProprietorMapping = hasVatKey                                   -> yesOrNo
+  val vatSoleProprietorMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
+  val uniqueTaxpayerReferenceSoleProprietorMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatSoleProprietorMapping is false withPrefix businessPartnerSoleProprietorKey))
 
-  val hasVatLimitedLiabilityMapping = hasVatKey → yesOrNo
-  val vatLimitedLiabilityMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
-  val uniqueTaxpayerReferenceLimitedLiabilityMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasVatLimitedLiabilityMapping is false withPrefix businessPartnerLimitedLiabilityPartnershipKey))
+  val hasVatLimitedLiabilityMapping = hasVatKey                                   -> yesOrNo
+  val vatLimitedLiabilityMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
+  val uniqueTaxpayerReferenceLimitedLiabilityMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatLimitedLiabilityMapping is false withPrefix businessPartnerLimitedLiabilityPartnershipKey))
 
-  val hasVatCorporateBodyMapping = hasVatKey → yesOrNo
-  val vatCorporateBodyMapping = vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
-  val uniqueTaxpayerReferenceCorporateBodyMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasVatCorporateBodyMapping is false withPrefix businessPartnerCorporateBodyKey))
+  val hasVatCorporateBodyMapping = hasVatKey                                   -> yesOrNo
+  val vatCorporateBodyMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
+  val uniqueTaxpayerReferenceCorporateBodyMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatCorporateBodyMapping is false withPrefix businessPartnerCorporateBodyKey))
 
-  val hasUniqueTaxpayerReferenceMapping = hasUniqueTaxpayerReferenceKey → yesOrNo
-  val uniqueTaxpayerReferenceMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceMapping is true withPrefix businessPartnerPartnershipKey))
+  val hasUniqueTaxpayerReferenceMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo
+  val uniqueTaxpayerReferenceMapping = uniqueTaxpayerReferenceKey       -> (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasUniqueTaxpayerReferenceUnincorporatedBodyMapping = hasUniqueTaxpayerReferenceKey → yesOrNo
-  val uniqueTaxpayerReferenceUnincorporatedBodyMapping = uniqueTaxpayerReferenceKey → (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
+  val hasUniqueTaxpayerReferenceUnincorporatedBodyMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo
+  val uniqueTaxpayerReferenceUnincorporatedBodyMapping = uniqueTaxpayerReferenceKey       -> (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
-  val addressMapping = addressKey → address
+  val addressMapping = addressKey -> address
 
-  val businessPartnersTypeMapping = businessPartnersTypeKey → enum(BusinessPartnerType)
+  val businessPartnersTypeMapping = businessPartnersTypeKey -> enum(BusinessPartnerType)
 
   val businessPartnerIndividualMapping = mapping(
-    firstNameKey → personName,
-    lastNameKey → personName,
+    firstNameKey -> personName,
+    lastNameKey  -> personName,
     hasNinoMapping,
     ninoMapping,
     addressMapping
   )(BusinessPartnerIndividual.apply)(BusinessPartnerIndividual.unapply)
 
   val businessPartnerSoleProprietorMapping = mapping(
-    firstNameKey → personName,
-    lastNameKey → personName,
+    firstNameKey -> personName,
+    lastNameKey  -> personName,
     hasTradeNameMapping,
     tradeNameMapping,
     hasNinoSoleProprietorMapping,
@@ -138,7 +138,7 @@ object BusinessPartnersForm {
   )(BusinessPartnerSoleProprietor.apply)(BusinessPartnerSoleProprietor.unapply)
 
   val businessPartnerPartnershipMapping = mapping(
-    partnershipNameKey → tradingName,
+    partnershipNameKey -> tradingName,
     hasTradeNamePartnershipMapping,
     tradeNamePartnershipMapping,
     hasVatPartnershipMapping,
@@ -149,7 +149,7 @@ object BusinessPartnersForm {
   )(BusinessPartnerPartnership.apply)(BusinessPartnerPartnership.unapply)
 
   val businessPartnerLimitedLiabilityPartnershipMapping = mapping(
-    limitedLiabilityPartnershipNameKey → tradingName,
+    limitedLiabilityPartnershipNameKey -> tradingName,
     hasTradeNameLimitedLiabilityMapping,
     tradeNameLimitedLiabilityMapping,
     companyRegistrationNumberMapping,
@@ -160,7 +160,7 @@ object BusinessPartnersForm {
   )(BusinessPartnerLimitedLiabilityPartnership.apply)(BusinessPartnerLimitedLiabilityPartnership.unapply)
 
   val businessPartnerCorporateBodyMapping = mapping(
-    companyNameKey → tradingName,
+    companyNameKey -> tradingName,
     hasTradeNameCorporateBodyMapping,
     tradeNameCorporateBodyMapping,
     companyRegistrationNumberMapping,
@@ -171,7 +171,7 @@ object BusinessPartnersForm {
   )(BusinessPartnerCorporateBody.apply)(BusinessPartnerCorporateBody.unapply)
 
   val businessPartnerUnincorporatedBodyMapping = mapping(
-    unincorporatedBodyNameKey → tradingName,
+    unincorporatedBodyNameKey -> tradingName,
     hasTradeNameUnincorporatedBodyMapping,
     tradeNameUnincorporatedBodyMapping,
     hasVatUnincorporatedBodyMapping,
@@ -183,12 +183,12 @@ object BusinessPartnersForm {
 
   val businessPartnerMapping: Mapping[BusinessPartner] = mapping(
     businessPartnersTypeMapping,
-    businessPartnerIndividualKey → (businessPartnerIndividualMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Individual)),
-    businessPartnerSoleProprietorKey → (businessPartnerSoleProprietorMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.SoleProprietor)),
-    businessPartnerPartnershipKey → (businessPartnerPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Partnership)),
-    businessPartnerLimitedLiabilityPartnershipKey → (businessPartnerLimitedLiabilityPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.LimitedLiabilityPartnership)),
-    businessPartnerCorporateBodyKey → (businessPartnerCorporateBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.CorporateBody)),
-    businessPartnerUnincorporatedBodyKey → (businessPartnerUnincorporatedBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.UnincorporatedBody))
+    businessPartnerIndividualKey                  -> (businessPartnerIndividualMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Individual)),
+    businessPartnerSoleProprietorKey              -> (businessPartnerSoleProprietorMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.SoleProprietor)),
+    businessPartnerPartnershipKey                 -> (businessPartnerPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.Partnership)),
+    businessPartnerLimitedLiabilityPartnershipKey -> (businessPartnerLimitedLiabilityPartnershipMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.LimitedLiabilityPartnership)),
+    businessPartnerCorporateBodyKey               -> (businessPartnerCorporateBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.CorporateBody)),
+    businessPartnerUnincorporatedBodyKey          -> (businessPartnerUnincorporatedBodyMapping onlyWhen (businessPartnersTypeMapping is BusinessPartnerType.UnincorporatedBody))
   ) {
     case (
         businessPartnersType,
@@ -207,12 +207,12 @@ object BusinessPartnersForm {
   } {
     case BusinessPartner(businessPartnerType, identification) =>
       identification match {
-        case i: BusinessPartnerIndividual => Some((businessPartnerType, Some(i), None, None, None, None, None))
+        case i: BusinessPartnerIndividual     => Some((businessPartnerType, Some(i), None, None, None, None, None))
         case s: BusinessPartnerSoleProprietor => Some((businessPartnerType, None, Some(s), None, None, None, None))
-        case p: BusinessPartnerPartnership => Some((businessPartnerType, None, None, Some(p), None, None, None))
+        case p: BusinessPartnerPartnership    => Some((businessPartnerType, None, None, Some(p), None, None, None))
         case l: BusinessPartnerLimitedLiabilityPartnership =>
           Some((businessPartnerType, None, None, None, Some(l), None, None))
-        case c: BusinessPartnerCorporateBody => Some((businessPartnerType, None, None, None, None, Some(c), None))
+        case c: BusinessPartnerCorporateBody      => Some((businessPartnerType, None, None, None, None, Some(c), None))
         case u: BusinessPartnerUnincorporatedBody => Some((businessPartnerType, None, None, None, None, None, Some(u)))
       }
   }
@@ -221,7 +221,7 @@ object BusinessPartnersForm {
 
   val businessPartnersForm = Form(
     mapping(
-      businessPartnersKey → list(businessPartnerMapping)
+      businessPartnersKey -> list(businessPartnerMapping)
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
 }

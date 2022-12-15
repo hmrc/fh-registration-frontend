@@ -74,7 +74,7 @@ class WithdrawalController @Inject()(
     enrolledUserAction.async { implicit request =>
       keyStoreService.fetchWithdrawalReason() flatMap {
         case Some(reason) => f(request)(reason)
-        case None => Future successful errorHandler.errorResultsPages(Results.BadRequest)
+        case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
@@ -105,8 +105,8 @@ class WithdrawalController @Inject()(
           Redirect(routes.WithdrawalController.acknowledgment)
             .withSession(
               request.session
-                + (EmailSessionKey → confirmed.email.get)
-                + (ProcessingTimestampSessionKey → processingDate.getTime.toString))
+                + (EmailSessionKey               -> confirmed.email.get)
+                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString))
 
         }
     } else {
@@ -133,8 +133,8 @@ class WithdrawalController @Inject()(
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
+      email     <- request.session get EmailSessionKey
+      timestamp <- request.session get ProcessingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.withdrawal_acknowledgement(processingDate, email))

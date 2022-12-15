@@ -38,7 +38,7 @@ class DeclarationControllerIntegrationSpec
           client.url(s"$baseUrl/submit")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
 
-            .withHttpHeaders("X-Session-ID" → "some-id",
+            .withHttpHeaders("X-Session-ID" -> "some-id",
               "Csrf-Token" -> "nocheck")
             .withFollowRedirects(false)
             .post(Map("fullName" -> Seq("Tester"),

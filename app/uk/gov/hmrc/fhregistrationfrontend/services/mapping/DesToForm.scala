@@ -161,9 +161,9 @@ class DesToFormImpl extends DesToForm {
   def eoriNumber(allOtherInformation: des.AllOtherInformation): Option[EoriNumber] =
     if (allOtherInformation.doesEORIExist)
       for {
-        eori ← allOtherInformation.EORINumber
-        importedOutsideEori ← eori.goodsImportedOutEORI
-        number ← eori.EORINonVat orElse eori.EORIVat
+        eori                <- allOtherInformation.EORINumber
+        importedOutsideEori <- eori.goodsImportedOutEORI
+        number              <- eori.EORINonVat orElse eori.EORIVat
       } yield {
         EoriNumber(number, importedOutsideEori)
       } else
@@ -422,16 +422,16 @@ class DesToFormImpl extends DesToForm {
 
   def previousAddressStartDate(pa: des.PreviousOperationalAddress) =
     for {
-      prevAddressesDetail ← pa.previousOperationalAddressDetail
-      prevAddressDetail ← prevAddressesDetail.headOption
+      prevAddressesDetail <- pa.previousOperationalAddressDetail
+      prevAddressDetail   <- prevAddressesDetail.headOption
     } yield {
       prevAddressDetail.previousAddressStartdate
     }
 
   def previousAddress(pa: des.PreviousOperationalAddress) =
     for {
-      prevAddressesDetail ← pa.previousOperationalAddressDetail
-      prevAddressDetail ← prevAddressesDetail.headOption
+      prevAddressesDetail <- pa.previousOperationalAddressDetail
+      prevAddressDetail   <- prevAddressesDetail.headOption
     } yield {
       address(prevAddressDetail.previousAddress)
     }

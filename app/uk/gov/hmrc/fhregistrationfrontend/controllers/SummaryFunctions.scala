@@ -50,8 +50,8 @@ trait SummaryFunctions {
   protected def getSummaryPrintable(journeys: Journeys)(implicit request: SummaryRequest[AnyContent]) = {
     val application = request.businessType match {
       case BusinessType.CorporateBody => journeys ltdApplication request
-      case BusinessType.SoleTrader => journeys soleTraderApplication request
-      case BusinessType.Partnership => journeys partnershipApplication request
+      case BusinessType.SoleTrader    => journeys soleTraderApplication request
+      case BusinessType.Partnership   => journeys partnershipApplication request
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)
@@ -60,7 +60,7 @@ trait SummaryFunctions {
   protected def readOnlySummaryPageParams(status: FhddsStatus) = {
     val mode = status match {
       case FhddsStatus.Deregistered | FhddsStatus.Revoked => Mode.ReadOnlyRegister
-      case _ => Mode.ReadOnlyApplication
+      case _                                              => Mode.ReadOnlyApplication
 
     }
     SummaryPageParams(mode, None)
@@ -73,7 +73,7 @@ trait SummaryFunctions {
     SummaryPageParams(modeForJourneyType(journeyType), hasUpdates)
 
   protected def modeForJourneyType(journeyType: JourneyType) = journeyType match {
-    case JourneyType.New => Mode.New
+    case JourneyType.New       => Mode.New
     case JourneyType.Variation => Mode.Variation
     case JourneyType.Amendment => Mode.Amendment
   }

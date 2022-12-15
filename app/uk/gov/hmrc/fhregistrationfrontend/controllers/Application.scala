@@ -64,7 +64,7 @@ class Application @Inject()(
     fhddsConnector.getEnrolmentProgress
       .map {
         case EnrolmentProgress.Pending => Redirect(routes.Application.enrolmentPending)
-        case EnrolmentProgress.Error => Redirect(routes.Application.enrolmentPending)
+        case EnrolmentProgress.Error   => Redirect(routes.Application.enrolmentPending)
         case _ =>
           val whenRegistered = request.registrationNumber
             .map { _ =>
@@ -79,18 +79,18 @@ class Application @Inject()(
     fhddsConnector.getEnrolmentProgress
       .map {
         case EnrolmentProgress.Pending => Ok(views.enrolment_pending())
-        case EnrolmentProgress.Error => Ok(views.application_error())
+        case EnrolmentProgress.Error   => Ok(views.application_error())
         case EnrolmentProgress.Unknown => Redirect(routes.Application.main())
       }
   }
 
-  private val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
+  private val deleteOrContinueForm = Form("deleteOrContinue" -> nonEmptyText)
 
   def startOrContinueApplication = userAction.async { implicit request =>
     val redirectWhenSaved = for {
-      _ ← OptionT(save4LaterService.fetchBusinessRegistrationDetails(request.userId))
-      _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
-      savedDate ← OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
+      _         <- OptionT(save4LaterService.fetchBusinessRegistrationDetails(request.userId))
+      _         <- OptionT(save4LaterService.fetchBusinessType(request.userId))
+      savedDate <- OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
     } yield {
       val expiryDate = dateTimeHelper.generateDate(27, savedDate)
       Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
@@ -104,14 +104,14 @@ class Application @Inject()(
       .fetch(request.userId)
       .map {
         case Some(_) => save4LaterService.removeUserData(request.userId)
-        case None =>
+        case None    =>
       }
       .map(_ => Redirect(links.businessCustomerVerificationUrl))
 
   def continueWithBpr = newApplicationAction.async { implicit request =>
     for {
-      details ← businessCustomerConnector.getReviewDetails
-      _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
+      details <- businessCustomerConnector.getReviewDetails
+      _       <- save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
     } yield {
       Redirect(routes.Application.businessType)
     }
@@ -168,12 +168,12 @@ class Application @Inject()(
     if (request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary)
     else {
-      request.journeyState.lastEditedPage.map(p => p.id → p.lastSection) match {
+      request.journeyState.lastEditedPage.map(p => p.id -> p.lastSection) match {
         case None =>
           val firstPage = request.journeyPages.pages.head.id
           Redirect(routes.FormPageController.load(firstPage))
         case Some((pid, Some(section))) => Redirect(routes.FormPageController.loadWithSection(pid, section))
-        case Some((pid, None)) => Redirect(routes.FormPageController.load(pid))
+        case Some((pid, None))          => Redirect(routes.FormPageController.load(pid))
 
       }
     }
@@ -197,7 +197,7 @@ class Application @Inject()(
           Future.successful(BadRequest(views.business_type(formWithErrors, links.businessCustomerVerificationUrl))),
         businessType => {
           for {
-            _ ← save4LaterService.saveBusinessType(request.userId, businessType)
+            _ <- save4LaterService.saveBusinessType(request.userId, businessType)
           } yield {
             Redirect(routes.EmailVerificationController.contactEmail)
           }

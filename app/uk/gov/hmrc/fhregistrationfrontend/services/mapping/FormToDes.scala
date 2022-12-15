@@ -155,8 +155,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def previousOperationalAddress(mainBusinessAddress: MainBusinessAddress) = {
     val previousAddressDetail = for {
-      address ← mainBusinessAddress.previousAddress
-      start ← mainBusinessAddress.previousAddressStartdate
+      address <- mainBusinessAddress.previousAddress
+      start   <- mainBusinessAddress.previousAddressStartdate
     } yield {
       List(previousOperationalAddressDetail(start, address))
     }
@@ -339,8 +339,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     if (withModificationFlags)
       changeStatus match {
         case ListWithTrackedChanges.NoChange => None
-        case ListWithTrackedChanges.Added => Some(Modification("Added", changeDate))
-        case ListWithTrackedChanges.Updated => Some(Modification("Updated", changeDate))
+        case ListWithTrackedChanges.Added    => Some(Modification("Added", changeDate))
+        case ListWithTrackedChanges.Updated  => Some(Modification("Updated", changeDate))
       } else
       None
 
@@ -430,7 +430,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   val companyOfficial: (CompanyOfficer, Option[Modification]) => des.CompanyOfficial = { (officer, modification) =>
     officer.identification match {
       case i: CompanyOfficerIndividual => individualAsOfficial(i, modification)
-      case c: CompanyOfficerCompany => companyAsOfficial(c, modification)
+      case c: CompanyOfficerCompany    => companyAsOfficial(c, modification)
     }
   }
 
