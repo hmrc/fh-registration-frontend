@@ -53,7 +53,7 @@ object Diff {
 
   private def anyChanged(original: Subscription, amended: Subscription, lenses: Optional[Subscription, _]*) =
     lenses.iterator
-      .exists { lens ⇒
+      .exists { lens =>
         lens.getOption(original) != lens.getOption(amended)
       }
 

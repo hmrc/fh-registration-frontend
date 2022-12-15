@@ -51,42 +51,42 @@ class DefaultErrorHandler @Inject()(val messagesApi: MessagesApi, val configurat
     implicit request: Request[_]): Result = {
     val messages = implicitly[Messages]
     errorResults match {
-      case NotFound ⇒
+      case NotFound =>
         NotFound(
           views.error_template(
             messages("fh.generic.not_found"),
             messages("fh.generic.not_found.label"),
             errorMsg.getOrElse(messages("fh.generic.not_found.inf"))
           ))
-      case Forbidden ⇒
+      case Forbidden =>
         Forbidden(
           views.error_forbidden(
             messages("fh.generic.forbidden"),
             messages("fh.generic.forbidden.label"),
             errorMsg.getOrElse(messages("fh.generic.forbidden.inf"))
           ))
-      case BadRequest ⇒
+      case BadRequest =>
         BadRequest(
           views.error_template(
             messages("fh.generic.bad_request"),
             messages("fh.generic.bad_request.label"),
             errorMsg.getOrElse(messages("fh.generic.bad_request.inf"))
           ))
-      case Unauthorized ⇒
+      case Unauthorized =>
         Unauthorized(
           views.error_template(
             messages("fh.generic.unauthorized"),
             messages("fh.generic.unauthorized.label"),
             errorMsg.getOrElse(messages("fh.generic.unauthorized.inf"))
           ))
-      case BadGateway ⇒
+      case BadGateway =>
         BadGateway(
           views.error_template(
             messages("fh.generic.bad_gateway"),
             messages("fh.generic.bad_gateway.label"),
             errorMsg.getOrElse(messages("fh.generic.bad_gateway.inf"))
           ))
-      case _ ⇒
+      case _ =>
         InternalServerError(
           views.error_template(
             messages("fh.generic.internal_server_error"),

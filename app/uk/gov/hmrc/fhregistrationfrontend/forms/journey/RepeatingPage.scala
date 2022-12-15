@@ -40,7 +40,7 @@ case class RepeatingPage[T](
   index: Int = 0,
   minItems: Int = 1,
   maxItems: Int = 100,
-  addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
+  addressOnPage: T => Option[Address] = (_: T) => None
 )(implicit val format: Format[ListWithTrackedChanges[T]])
     extends Page[ListWithTrackedChanges[T]] {
 
@@ -57,13 +57,13 @@ case class RepeatingPage[T](
   override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
-    case None ⇒ this copy (index = 0)
-    case Some(v) if validSection(v) ⇒ this copy (index = v.toInt - 1)
+    case None => this copy (index = 0)
+    case Some(v) if validSection(v) => this copy (index = v.toInt - 1)
   }
 
   private def validSection(sectionId: String): Boolean =
     Try(sectionId.toInt)
-      .map(s ⇒ s >= 1 && s <= value.size + 1 && s <= maxItems)
+      .map(s => s >= 1 && s <= value.size + 1 && s <= maxItems)
       .getOrElse(false)
 
   override def nextSubsection: Option[String] =
@@ -80,7 +80,7 @@ case class RepeatingPage[T](
 
   def section(index: Int) = (index + 1).toString
 
-  override def parseFromRequest[X](onErrors: Rendering ⇒ X, onSuccess: Page[ListWithTrackedChanges[T]] ⇒ X)(
+  override def parseFromRequest[X](onErrors: Rendering => X, onSuccess: Page[ListWithTrackedChanges[T]] => X)(
     implicit r: Request[_]): X = {
     import play.api.data.FormBinding.Implicits._
     val updatedForm = form.bindFromRequest

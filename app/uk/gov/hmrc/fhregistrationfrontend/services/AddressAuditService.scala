@@ -54,10 +54,10 @@ class DefaultAddressAuditService @Inject()(
     implicit headerCarrier: HeaderCarrier): Future[Any] = {
     if (!addresses.isEmpty)
       logger info s"Auditing ${addresses.size} addresses for $page"
-    val auditResults = addresses map { address ⇒
+    val auditResults = addresses map { address =>
       addressAuditData(address)
         .flatMap(sendAuditEvent(page, _))
-        .recover({ case t ⇒ AuditResult.Failure("failed to generate the event", Some(t)) })
+        .recover({ case t => AuditResult.Failure("failed to generate the event", Some(t)) })
     }
 
     Future sequence auditResults
@@ -77,20 +77,20 @@ class DefaultAddressAuditService @Inject()(
 
   private def addressAuditData(address: Address)(implicit headerCarrier: HeaderCarrier) =
     address.lookupId match {
-      case None ⇒ Future successful manualAddressSubmitted(address)
-      case Some(id) ⇒ postcodeAddress(id, address)
+      case None => Future successful manualAddressSubmitted(address)
+      case Some(id) => postcodeAddress(id, address)
     }
 
   private def postcodeAddress(id: String, address: Address)(
     implicit headerCarrier: HeaderCarrier): Future[AddressAuditData] =
     addressLookupConnector lookupById id map {
-      case Some(originalAddressRecord) ⇒
+      case Some(originalAddressRecord) =>
         val originalAddress = addressRecordToAddress(originalAddressRecord)
         if (sameUkAddresses(address, originalAddress))
           postcodeAddressSubmitted(address, originalAddressRecord.uprn.toString)
         else
           postcodeAddressModifiedSubmitted(address, originalAddress, originalAddressRecord.uprn.toString)
-      case None ⇒
+      case None =>
         logger error s"Could not find address by id $id"
         manualAddressSubmitted(address)
     }
@@ -127,7 +127,7 @@ class DefaultAddressAuditService @Inject()(
       "Line4" → address.addressLine4.getOrElse(""),
       "Postcode" → address.postcode,
       "Country" → address.countryCode.getOrElse("")
-    ).map { case (k, v) ⇒ s"$prefix$k" -> v }
+    ).map { case (k, v) => s"$prefix$k" -> v }
 
   private def addressRecordToAddress(addressRecord: AddressRecord) =
     Address(

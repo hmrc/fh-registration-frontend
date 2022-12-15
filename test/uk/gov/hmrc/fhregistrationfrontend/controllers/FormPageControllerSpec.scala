@@ -115,7 +115,7 @@ class FormPageControllerSpec
       val addressForm = Seq(
         "Line1" → "Some",
         "postcode" → "AA11 1AA"
-      ).map { case (k, v) ⇒ s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
+      ).map { case (k, v) => s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
 
       val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
       val result = await(csrfAddToken(controller.save(contactPersonPage.id))(request))
@@ -302,7 +302,7 @@ class FormPageControllerSpec
     ) ++ addressForm
 
     individualPartner.map {
-      case (k, v) ⇒ s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
+      case (k, v) => s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
     } +
       (BusinessPartnersForm.businessPartnersTypeKey → BusinessPartnerType.Individual.toString) +
       ("addMore" → addMore.toString)

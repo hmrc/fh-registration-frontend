@@ -34,7 +34,7 @@ class SummaryRequest[A](
   val businessType = journeyRequest.businessType
   val verifiedEmail = journeyRequest.verifiedEmail
 
-  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.journeyPages.get(page.id).flatMap((p: Page[T]) ⇒ p.data)
+  def pageDataOpt[T](page: Page[T]): Option[T] = journeyRequest.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
 
 }
 

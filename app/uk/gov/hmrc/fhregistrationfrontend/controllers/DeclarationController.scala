@@ -59,7 +59,7 @@ class DeclarationController @Inject()(
 
   import actions._
 
-  def showDeclaration() = summaryAction { implicit request ⇒
+  def showDeclaration() = summaryAction { implicit request =>
     Ok(
       views.declaration(
         declarationForm,
@@ -68,12 +68,12 @@ class DeclarationController @Inject()(
         summaryPageParams(request.journeyRequest.journeyType)))
   }
 
-  def showAcknowledgment() = userAction.async { implicit request ⇒
+  def showAcknowledgment() = userAction.async { implicit request =>
     renderAcknowledgmentPage map { _ getOrElse errorHandler.errorResultsPages(Results.NotFound) }
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Future[Option[Result]] =
-    keyStoreService.fetchSummaryForPrint() map { userSummary ⇒
+    keyStoreService.fetchSummaryForPrint() map { userSummary =>
       for {
         email ← request.session get emailSessionKey
         timestamp ← request.session get processingTimestampSessionKey
@@ -87,7 +87,7 @@ class DeclarationController @Inject()(
       }
     }
 
-  def submitForm() = summaryAction.async { implicit request ⇒
+  def submitForm() = summaryAction.async { implicit request =>
     val form = declarationForm.bindFromRequest()
     form.fold(
       hasErrors = formWithErrors => {
@@ -103,7 +103,7 @@ class DeclarationController @Inject()(
       },
       success = usersDeclaration => {
         sendSubscription(usersDeclaration).fold(
-          error ⇒
+          error =>
             Future successful BadRequest(
               views.declaration(
                 form,
@@ -111,12 +111,12 @@ class DeclarationController @Inject()(
                 request.bpr,
                 summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
           _.flatMap {
-            response ⇒
+            response =>
               keyStoreService
                 .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
-                .map(_ ⇒ true)
-                .recover { case _ ⇒ false }
-                .map { pdfSaved ⇒
+                .map(_ => true)
+                .recover { case _ => false }
+                .map { pdfSaved =>
                   Redirect(routes.DeclarationController.showAcknowledgment)
                     .withSession(
                       request.session
@@ -133,13 +133,13 @@ class DeclarationController @Inject()(
   private def sendSubscription(declaration: Declaration)(
     implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val submissionResult = request.journeyRequest.journeyType match {
-      case JourneyType.Amendment ⇒ amendedSubmission(declaration)
-      case JourneyType.Variation ⇒ amendedSubmission(declaration)
-      case JourneyType.New ⇒ createSubmission(declaration)
+      case JourneyType.Amendment => amendedSubmission(declaration)
+      case JourneyType.Variation => amendedSubmission(declaration)
+      case JourneyType.New => createSubmission(declaration)
     }
 
-    submissionResult.right map { submissionResponse ⇒
-      submissionResponse foreach { case _ ⇒ save4LaterService.removeUserData(request.userId) }
+    submissionResult.right map { submissionResponse =>
+      submissionResponse foreach { case _ => save4LaterService.removeUserData(request.userId) }
       submissionResponse
     }
   }
@@ -198,11 +198,11 @@ class DeclarationController @Inject()(
     verifiedEmail: String,
     pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) =
     request.businessType match {
-      case BusinessType.CorporateBody ⇒
+      case BusinessType.CorporateBody =>
         formToDes limitedCompanySubmission (request.bpr, verifiedEmail, journeys ltdApplication pageDataLoader, d)
-      case BusinessType.SoleTrader ⇒
+      case BusinessType.SoleTrader =>
         formToDes soleProprietorCompanySubmission (request.bpr, verifiedEmail, journeys soleTraderApplication pageDataLoader, d)
-      case BusinessType.Partnership ⇒
+      case BusinessType.Partnership =>
         formToDes partnership (request.bpr, verifiedEmail, journeys partnershipApplication pageDataLoader, d)
     }
 }

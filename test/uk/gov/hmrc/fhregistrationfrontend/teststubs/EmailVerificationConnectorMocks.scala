@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 trait EmailVerificationConnectorMocks extends MockitoSugar {
-  this: UnitSpec ⇒
+  this: UnitSpec =>
 
   val mockEmailVerifcationConnector = mock[EmailVerificationConnector]
 

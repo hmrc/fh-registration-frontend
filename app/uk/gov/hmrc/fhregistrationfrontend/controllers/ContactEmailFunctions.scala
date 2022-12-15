@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ContactEmailFunctions {
-  this: AppController ⇒
+  this: AppController =>
 
   val fhddsConnector: FhddsConnector
   val desToForm: DesToForm

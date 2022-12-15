@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.Ad
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, _}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration ⇒ _, _}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration => _, _}
 
 trait FormToDes {
   def limitedCompanySubmission(
@@ -175,7 +175,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def businessDetail(application: BusinessEntityApplication, bpr: BusinessRegistrationDetails) =
     application match {
-      case llt: LimitedCompanyApplication ⇒ {
+      case llt: LimitedCompanyApplication => {
         des.BusinessDetail(
           None,
           Some(nonProprietor(llt.tradingName, llt.vatNumber, bpr)),
@@ -183,7 +183,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           None
         )
       }
-      case st: SoleProprietorApplication ⇒ {
+      case st: SoleProprietorApplication => {
         des.BusinessDetail(
           Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st, bpr))),
           None,
@@ -191,7 +191,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
           None
         )
       }
-      case ps: PartnershipApplication ⇒ {
+      case ps: PartnershipApplication => {
         des.BusinessDetail(
           None,
           Some(nonProprietor(ps.tradingName, ps.vatNumber, bpr)),
@@ -239,19 +239,19 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def additionalBusinessInformation(application: BusinessEntityApplication) =
     application match {
-      case llt: LimitedCompanyApplication ⇒ {
+      case llt: LimitedCompanyApplication => {
         des.AdditionalBusinessInformationwithType(
           Some(partnerCorporateBody(llt.companyOfficers)),
           allOtherInformation(llt)
         )
       }
-      case st: SoleProprietorApplication ⇒ {
+      case st: SoleProprietorApplication => {
         des.AdditionalBusinessInformationwithType(
           None,
           allOtherInformation(st)
         )
       }
-      case ps: PartnershipApplication ⇒ {
+      case ps: PartnershipApplication => {
         des.AdditionalBusinessInformationwithType(
           None,
           allOtherInformation(ps)
@@ -276,9 +276,9 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     )
   }
 
-  def allRemoved[T, D](t: (T, Option[Modification]) ⇒ D, list: ListWithTrackedChanges[T]): List[D] = {
+  def allRemoved[T, D](t: (T, Option[Modification]) => D, list: ListWithTrackedChanges[T]): List[D] = {
     val markedRemoved = list.valuesWithStatus.collect {
-      case (premise, status) if status != Added ⇒ premise
+      case (premise, status) if status != Added => premise
     }
 
     val flag = Some(des.Modification("Removed", changeDate))
@@ -286,7 +286,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     all map (t(_, flag))
   }
 
-  val premise: (StoragePremise, Option[des.Modification]) ⇒ des.Premises = { (p, modification) ⇒
+  val premise: (StoragePremise, Option[des.Modification]) => des.Premises = { (p, modification) =>
     des.Premises(
       address(p.address),
       p.isThirdParty,
@@ -324,13 +324,13 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     )
   }
 
-  def repeatedValue[T, D](t: (T, Option[Modification]) ⇒ D, list: ListWithTrackedChanges[T]): List[D] = {
+  def repeatedValue[T, D](t: (T, Option[Modification]) => D, list: ListWithTrackedChanges[T]): List[D] = {
     val values = list.valuesWithStatus map {
-      case (v, changeStatus) ⇒ t(v, modification(changeStatus))
+      case (v, changeStatus) => t(v, modification(changeStatus))
     }
 
     if (withModificationFlags)
-      values ++ (list.deleted.map(v ⇒ t(v, Some(des.Modification("Removed", changeDate)))))
+      values ++ (list.deleted.map(v => t(v, Some(des.Modification("Removed", changeDate)))))
     else
       values
   }
@@ -338,16 +338,16 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   def modification(changeStatus: ListWithTrackedChanges.Status) =
     if (withModificationFlags)
       changeStatus match {
-        case ListWithTrackedChanges.NoChange ⇒ None
-        case ListWithTrackedChanges.Added ⇒ Some(Modification("Added", changeDate))
-        case ListWithTrackedChanges.Updated ⇒ Some(Modification("Updated", changeDate))
+        case ListWithTrackedChanges.NoChange => None
+        case ListWithTrackedChanges.Added => Some(Modification("Added", changeDate))
+        case ListWithTrackedChanges.Updated => Some(Modification("Updated", changeDate))
       } else
       None
 
-  val partnerDetail: (BusinessPartner, Option[Modification]) ⇒ des.PartnerDetail = {
-    (businessPartner: BusinessPartner, modification) ⇒
+  val partnerDetail: (BusinessPartner, Option[Modification]) => des.PartnerDetail = {
+    (businessPartner: BusinessPartner, modification) =>
       businessPartner.identification match {
-        case i: BusinessPartnerIndividual ⇒
+        case i: BusinessPartnerIndividual =>
           PartnerDetail(
             entityType = "Individual",
             partnerAddress = address(i.address),
@@ -355,7 +355,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               IndividualPartnerType(Name(firstName = i.firstName, None, lastName = i.lastName), nino = i.nino),
             modification
           )
-        case s: BusinessPartnerSoleProprietor ⇒
+        case s: BusinessPartnerSoleProprietor =>
           PartnerDetail(
             entityType = "Sole Proprietor",
             partnerAddress = address(s.address),
@@ -369,7 +369,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             ),
             modification
           )
-        case p: BusinessPartnerPartnership ⇒
+        case p: BusinessPartnerPartnership =>
           PartnerDetail(
             entityType = "Partnership",
             partnerAddress = address(p.address),
@@ -381,7 +381,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             ),
             modification
           )
-        case l: BusinessPartnerLimitedLiabilityPartnership ⇒
+        case l: BusinessPartnerLimitedLiabilityPartnership =>
           PartnerDetail(
             entityType = "Limited Liability Partnership",
             partnerAddress = address(l.address),
@@ -396,7 +396,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             ),
             modification
           )
-        case c: BusinessPartnerCorporateBody ⇒
+        case c: BusinessPartnerCorporateBody =>
           PartnerDetail(
             entityType = "Corporate Body",
             partnerAddress = address(c.address),
@@ -411,7 +411,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             ),
             modification
           )
-        case u: BusinessPartnerUnincorporatedBody ⇒
+        case u: BusinessPartnerUnincorporatedBody =>
           PartnerDetail(
             entityType = "Unincorporated Body",
             partnerAddress = address(u.address),
@@ -427,10 +427,10 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   }
 
-  val companyOfficial: (CompanyOfficer, Option[Modification]) ⇒ des.CompanyOfficial = { (officer, modification) ⇒
+  val companyOfficial: (CompanyOfficer, Option[Modification]) => des.CompanyOfficial = { (officer, modification) =>
     officer.identification match {
-      case i: CompanyOfficerIndividual ⇒ individualAsOfficial(i, modification)
-      case c: CompanyOfficerCompany ⇒ companyAsOfficial(c, modification)
+      case i: CompanyOfficerIndividual => individualAsOfficial(i, modification)
+      case c: CompanyOfficerCompany => companyAsOfficial(c, modification)
     }
   }
 

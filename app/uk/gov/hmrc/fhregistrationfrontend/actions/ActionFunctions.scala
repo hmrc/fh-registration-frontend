@@ -25,15 +25,15 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ActionFunctions {
-  this: FrontendAction ⇒
+  this: FrontendAction =>
 
   def loadCacheMap(
     implicit save4LaterService: Save4LaterService,
     request: UserRequest[_],
     ec: ExecutionContext): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {
-      case Some(cacheMap) ⇒ Right(cacheMap)
-      case None ⇒ Right(new CacheMap(request.userId, Map.empty))
+      case Some(cacheMap) => Right(cacheMap)
+      case None => Right(new CacheMap(request.userId, Map.empty))
 
     }
 
@@ -43,7 +43,7 @@ trait ActionFunctions {
       .orElse(
         cacheMap
           .getEntry[Boolean](Save4LaterKeys.isAmendmentKey)
-          .collect { case true ⇒ JourneyType.Amendment })
+          .collect { case true => JourneyType.Amendment })
       .getOrElse(JourneyType.New)
 
 }

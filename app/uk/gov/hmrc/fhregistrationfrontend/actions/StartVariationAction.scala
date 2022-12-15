@@ -30,7 +30,7 @@ class StartVariationAction(fhddsConnector: FhddsConnector)(
     extends StartUpdateAction(fhddsConnector) {
 
   def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
-    case Approved | ApprovedWithConditions ⇒ true
-    case _ ⇒ false
+    case Approved | ApprovedWithConditions => true
+    case _ => false
   }
 }

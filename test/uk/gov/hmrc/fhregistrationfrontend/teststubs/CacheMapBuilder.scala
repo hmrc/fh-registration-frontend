@@ -24,7 +24,7 @@ case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
   def withOptValue[T](key: String, valueOpt: Option[T])(implicit writes: Writes[T]) =
     valueOpt.fold(
       this
-    ) { value ⇒
+    ) { value =>
       this.copy(data = data + (key → writes.writes(value)))
     }
 

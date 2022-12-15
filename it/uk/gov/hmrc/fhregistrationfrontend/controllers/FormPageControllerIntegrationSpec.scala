@@ -15,7 +15,7 @@ class FormPageControllerIntegrationSpec
         .commonPrecondition
         .save4later.businessTypeWasSaved()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result1 = client.url(s"$baseUrl/resume")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
@@ -26,11 +26,11 @@ class FormPageControllerIntegrationSpec
           .withFollowRedirects(false)
           .get()
 
-        whenReady(result1) { res ⇒
+        whenReady(result1) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/contactPerson")
         }
-        whenReady(result2) { res ⇒
+        whenReady(result2) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/resume")
         }
@@ -44,12 +44,12 @@ class FormPageControllerIntegrationSpec
         .save4later.businessTypeWasSaved()
         .save4later.savePageData("mainBusinessAddress","""{"timeAtCurrentAddress": "3-5 years"}""")
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/form/contactPerson")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 200
         }
       }
@@ -61,13 +61,13 @@ class FormPageControllerIntegrationSpec
         .commonPrecondition
         .save4later.businessTypeWasSaved()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result1 = client.url(s"$baseUrl/form/mainBusinessAddress")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
 
           .withFollowRedirects(false)
           .get()
-        whenReady(result1) { res ⇒
+        whenReady(result1) { res =>
           res.status mustBe 404
         }
 
@@ -75,7 +75,7 @@ class FormPageControllerIntegrationSpec
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
           .get()
-        whenReady(result2) { res ⇒
+        whenReady(result2) { res =>
           res.status mustBe 404
         }
       }

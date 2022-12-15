@@ -30,7 +30,7 @@ class StartAmendmentAction(fhddsConnector: FhddsConnector)(
     extends StartUpdateAction(fhddsConnector) {
 
   override def isAllowed(fhddsStatus: FhddsStatus): Boolean = fhddsStatus match {
-    case Received | Processing ⇒ true
-    case _ ⇒ false
+    case Received | Processing => true
+    case _ => false
   }
 }

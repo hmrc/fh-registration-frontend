@@ -45,12 +45,12 @@ case class OtherStoragePremisesPage(
     )
   }
 
-  override def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[OtherStoragePremises] ⇒ X)(
+  override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[OtherStoragePremises] => X)(
     implicit r: Request[_]): X =
     if (isMainSection) {
       mainPage.parseFromRequest(
         withErrors,
-        mp ⇒ {
+        mp => {
           val newValue = this copy (mainPage = mp)
           withData(newValue)
         }
@@ -58,7 +58,7 @@ case class OtherStoragePremisesPage(
     } else {
       storagePremisePage.parseFromRequest(
         withErrors,
-        spp ⇒ {
+        spp => {
           val newValue = this copy (storagePremisePage = spp)
           withData(newValue)
         }
@@ -66,9 +66,9 @@ case class OtherStoragePremisesPage(
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[OtherStoragePremises]] = {
-    case None ⇒ this copy (section = mainSection)
-    case `mainSection` ⇒ this copy (section = mainSection)
-    case newSection if hasOtherPremises && storagePremisePage.withSubsection.isDefinedAt(newSection) ⇒
+    case None => this copy (section = mainSection)
+    case `mainSection` => this copy (section = mainSection)
+    case newSection if hasOtherPremises && storagePremisePage.withSubsection.isDefinedAt(newSection) =>
       this copy (section = newSection,
       storagePremisePage = storagePremisePage withSubsection newSection)
   }
@@ -97,7 +97,7 @@ case class OtherStoragePremisesPage(
       storagePremisePage.render(bpr, navigation)
 
   override val data: Option[OtherStoragePremises] = {
-    mainPage.data map { hasOthers ⇒
+    mainPage.data map { hasOthers =>
       OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse ListWithTrackedChanges.empty[StoragePremise])
     }
   }
@@ -106,7 +106,7 @@ case class OtherStoragePremisesPage(
     if (isMainSection)
       None
     else
-      storagePremisePage.delete map { updatedStoragePremisePage ⇒
+      storagePremisePage.delete map { updatedStoragePremisePage =>
         this copy (
           storagePremisePage = updatedStoragePremisePage
         )

@@ -81,7 +81,7 @@ class DiffSpecs extends UnitSpec {
 
     "flag coOfficialsChanged but not additionalBusinessInfoChanged" in {
       testChangeIndicators(
-        companyOfficerLens modify { companyOfficers ⇒
+        companyOfficerLens modify { companyOfficers =>
           ListWithTrackedChanges(
             companyOfficers.valuesWithStatus.tail,
             List(companyOfficers.valuesWithStatus.head._1),
@@ -93,7 +93,7 @@ class DiffSpecs extends UnitSpec {
 
     "flag premisesChanged but not additionalBusinessInfoChanged" in {
       testChangeIndicators(
-        otherStoragePremisesLens modify { otherStoragePremises ⇒
+        otherStoragePremisesLens modify { otherStoragePremises =>
           val entries = otherStoragePremises.value.valuesWithStatus
           OtherStoragePremises(true, ListWithTrackedChanges(entries.tail, List(entries.head._1), addMore = false))
         },
@@ -138,7 +138,7 @@ class DiffSpecs extends UnitSpec {
   }
 
   private def testChangeIndicators(
-    update: LimitedCompanyApplication ⇒ LimitedCompanyApplication,
+    update: LimitedCompanyApplication => LimitedCompanyApplication,
     expectedChangeIndicators: ChangeIndicators) = {
     val subscription: Subscription = mkSubscription()
     val amendedApplication = update(LtdLargeUk.application(ListWithTrackedChanges.NoChange))

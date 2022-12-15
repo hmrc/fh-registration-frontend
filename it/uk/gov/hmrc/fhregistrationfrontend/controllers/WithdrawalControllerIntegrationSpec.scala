@@ -15,7 +15,7 @@ class WithdrawalControllerIntegrationSpec
       given
         .withdrawalPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result1 = client.url(s"$baseUrl/withdraw")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -25,11 +25,11 @@ class WithdrawalControllerIntegrationSpec
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result1) { res ⇒
+        whenReady(result1) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/withdraw/reason")
         }
-        whenReady(result2) { res ⇒
+        whenReady(result2) { res =>
           res.status mustBe 200
         }
       }
@@ -42,7 +42,7 @@ class WithdrawalControllerIntegrationSpec
         .keyStore.saveWithdrawalReason(sessionId)
 
       
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result =
           client.url(s"$baseUrl/withdraw/reason")
             .withFollowRedirects(false)
@@ -52,7 +52,7 @@ class WithdrawalControllerIntegrationSpec
             .post(Map("reason" -> Seq("Applied in Error")))
 
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/withdraw/confirm")
         }
@@ -67,14 +67,14 @@ class WithdrawalControllerIntegrationSpec
         .keyStore.fetchWithdrawalReason(sessionId)
         .fhddsBackend.getSubscription()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result =
           client.url(s"$baseUrl/withdraw/confirm")
             .withHttpHeaders(xSessionId)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 200
         }
       }
@@ -85,7 +85,7 @@ class WithdrawalControllerIntegrationSpec
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result1 = client.url(s"$baseUrl/withdraw")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -95,11 +95,11 @@ class WithdrawalControllerIntegrationSpec
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result1) { res ⇒
+        whenReady(result1) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/withdraw/reason")
         }
-        whenReady(result2) { res ⇒
+        whenReady(result2) { res =>
           res.status mustBe 400
         }
       }

@@ -27,7 +27,7 @@ object Helpers {
     else ""
 
   def formatTimestamp(date: Option[Date]): String =
-    date.map(d ⇒ formatTimestamp(d)).getOrElse("")
+    date.map(d => formatTimestamp(d)).getOrElse("")
 
   def formatTimestamp(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy HH:mm").format(date)

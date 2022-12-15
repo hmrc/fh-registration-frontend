@@ -39,11 +39,11 @@ class FormPageController @Inject()(
     extends AppController(ds, cc) {
 
   import actions._
-  def load(pageId: String) = pageAction(pageId) { implicit request ⇒
+  def load(pageId: String) = pageAction(pageId) { implicit request =>
     renderForm(request.page, false)
   }
 
-  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)) { implicit request ⇒
+  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)) { implicit request =>
     renderForm(request.page, false)
   }
 
@@ -51,7 +51,7 @@ class FormPageController @Inject()(
   def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
 
   def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async {
-    implicit request ⇒
+    implicit request =>
       request
         .page[T]
         .parseFromRequest(
@@ -60,7 +60,7 @@ class FormPageController @Inject()(
             addressAuditService.auditAddresses(pageId, page.updatedAddresses)
             save4LaterService
               .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-              .map { _ ⇒
+              .map { _ =>
                 if (isSaveForLate)
                   Redirect(routes.Application.savedForLater)
                 else {
@@ -72,14 +72,14 @@ class FormPageController @Inject()(
   }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
-    pageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    pageAction(pageId, Some(sectionId)).async { implicit request =>
       if (request.lastUpdateTimestamp == lastUpdateTimestamp) {
         request.page[T].delete match {
-          case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
-          case Some(newPage) ⇒
+          case None => Future successful errorHandler.errorResultsPages(Results.BadRequest)
+          case Some(newPage) =>
             save4LaterService
               .saveDraftData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
-              .map { _ ⇒
+              .map { _ =>
                 showNextPage(newPage)
               }
         }
@@ -89,7 +89,7 @@ class FormPageController @Inject()(
     }
 
   def confirmDeleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
-    pageAction(pageId, Some(sectionId)).async { implicit request ⇒
+    pageAction(pageId, Some(sectionId)).async { implicit request =>
       if (request.lastUpdateTimestamp == lastUpdateTimestamp)
         Future successful Ok(views.confirm_delete_section(pageId, sectionId, lastUpdateTimestamp))
       else {
@@ -102,8 +102,8 @@ class FormPageController @Inject()(
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
       request.journey next newPage match {
-        case Some(nextPage) ⇒ Redirect(routes.FormPageController.load(nextPage.id))
-        case None ⇒ Redirect(routes.SummaryController.summary)
+        case Some(nextPage) => Redirect(routes.FormPageController.load(nextPage.id))
+        case None => Redirect(routes.SummaryController.summary)
       }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =
@@ -120,7 +120,7 @@ class FormPageController @Inject()(
     submitButtonValueForm
       .bindFromRequest()
       .fold(
-        _ ⇒ false,
-        value ⇒ value == "saveForLater"
+        _ => false,
+        value => value == "saveForLater"
       )
 }

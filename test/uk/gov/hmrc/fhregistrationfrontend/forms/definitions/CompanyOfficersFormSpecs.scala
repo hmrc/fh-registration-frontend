@@ -92,12 +92,12 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
     "accept valid" in {
       val data = dataFromValidForm(individual(validIndividual.toSeq: _*))
       data.identification match {
-        case v: CompanyOfficerIndividual ⇒
+        case v: CompanyOfficerIndividual =>
           v.firstName shouldBe "George"
           v.lastName shouldBe "Costanza"
           v.hasNino shouldBe true
           v.nino shouldBe Some("AA123123A")
-        case _ ⇒ false shouldBe true
+        case _ => false shouldBe true
       }
 
     }
@@ -141,8 +141,8 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
         )
       )
       data.identification match {
-        case _: CompanyOfficerIndividual ⇒ false shouldBe true
-        case v: CompanyOfficerCompany ⇒
+        case _: CompanyOfficerIndividual => false shouldBe true
+        case v: CompanyOfficerCompany =>
           v.companyName shouldBe "Co co"
           v.hasVat shouldBe true
           v.vat shouldBe Some("123123123")
@@ -154,15 +154,15 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
   }
 
   def individualErrors(errors: (String, String)*) =
-    errors map { case (k, v) ⇒ s"individualIdentification.$k" -> v } toList
+    errors map { case (k, v) => s"individualIdentification.$k" -> v } toList
 
   def individual(data: (String, String)*) =
-    (data map { case (k, v) ⇒ s"individualIdentification.$k" -> v }).toMap + ("identificationType" → "Individual")
+    (data map { case (k, v) => s"individualIdentification.$k" -> v }).toMap + ("identificationType" → "Individual")
 
   def companyErrors(errors: (String, String)*) =
-    errors map { case (k, v) ⇒ s"companyIdentification.$k" -> v } toList
+    errors map { case (k, v) => s"companyIdentification.$k" -> v } toList
 
   def company(data: (String, String)*) =
-    (data map { case (k, v) ⇒ s"companyIdentification.$k" -> v }).toMap + ("identificationType" → "Company")
+    (data map { case (k, v) => s"companyIdentification.$k" -> v }).toMap + ("identificationType" → "Company")
 
 }

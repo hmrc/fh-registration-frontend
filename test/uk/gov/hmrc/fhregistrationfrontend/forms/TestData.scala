@@ -28,7 +28,7 @@ object TestData {
 
   def addressDataUk(prefix: String) =
     addressData map {
-      case (k, v) ⇒
+      case (k, v) =>
         s"$prefix.$k" -> v
     }
 

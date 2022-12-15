@@ -35,7 +35,7 @@ class ReadOnlySummaryController @Inject()(
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) with SummaryFunctions {
 
-  def view() = actions.enrolledUserAction.async { implicit request ⇒
+  def view() = actions.enrolledUserAction.async { implicit request =>
     for {
       status ← fhddsConnector getStatus request.registrationNumber
       displayWrapper ← fhddsConnector getSubmission request.registrationNumber

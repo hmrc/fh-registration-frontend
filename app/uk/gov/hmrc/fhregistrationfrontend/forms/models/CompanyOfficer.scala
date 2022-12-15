@@ -53,22 +53,22 @@ object CompanyOfficer {
   implicit val companyOfficerIdentificationWrites = new Writes[CompanyOfficerIdentification] {
     override def writes(o: CompanyOfficerIdentification): JsValue =
       o match {
-        case i: CompanyOfficerIndividual ⇒ Json toJson i
-        case c: CompanyOfficerCompany ⇒ Json toJson c
+        case i: CompanyOfficerIndividual => Json toJson i
+        case c: CompanyOfficerCompany => Json toJson c
       }
   }
 
   implicit val writes = Json.writes[CompanyOfficer]
   implicit val reads = new Reads[CompanyOfficer] {
     override def reads(value: JsValue): JsResult[CompanyOfficer] =
-      value.validate[JsObject].flatMap { json ⇒
+      value.validate[JsObject].flatMap { json =>
         (json \ "officialType") match {
-          case JsDefined(JsString(t)) if t == Individual.toString ⇒
+          case JsDefined(JsString(t)) if t == Individual.toString =>
             (json \ "identification").validate[CompanyOfficerIndividual].map(CompanyOfficer(Individual, _))
-          case JsDefined(JsString(t)) if t == Company.toString ⇒
+          case JsDefined(JsString(t)) if t == Company.toString =>
             (json \ "identification").validate[CompanyOfficerCompany].map(CompanyOfficer(Company, _))
           case e: JsError => e
-          case _ ⇒ JsError("unknown official type")
+          case _ => JsError("unknown official type")
         }
       }
 

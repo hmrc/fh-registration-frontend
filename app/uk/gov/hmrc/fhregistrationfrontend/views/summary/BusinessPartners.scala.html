@@ -44,27 +44,27 @@
 
     @{businessPartner.identification match {
 
-        case partner: BusinessPartnerIndividualModel ⇒
+        case partner: BusinessPartnerIndividualModel =>
 
             BusinessPartnerIndividual(partner)
 
-        case partner: BusinessPartnerSoleProprietorModel ⇒
+        case partner: BusinessPartnerSoleProprietorModel =>
 
             BusinessPartnerSoleProprietor(partner)
 
-        case partner: BusinessPartnerCorporateBody ⇒
+        case partner: BusinessPartnerCorporateBody =>
 
             BusinessPartnerCompany(partner)
 
-        case partner: BusinessPartnerLimitedLiabilityPartnership ⇒
+        case partner: BusinessPartnerLimitedLiabilityPartnership =>
 
             BusinessPartnerLLP(partner)
 
-        case partner: BusinessPartnerPartnershipModel ⇒
+        case partner: BusinessPartnerPartnershipModel =>
 
             BusinessPartnerPartnership(partner)
 
-        case partner: BusinessPartnerUnincorporatedBodyModel ⇒
+        case partner: BusinessPartnerUnincorporatedBodyModel =>
 
             BusinessPartnerUnincorporatedBody(partner)
 

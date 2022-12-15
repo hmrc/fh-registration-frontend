@@ -124,7 +124,7 @@ case class Save4LaterStub
     "display_verifiedEmail" → "\"user@test.com\""
   )
   private val amendmentData =
-    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) ⇒ s"display_$k" → v} + ("isAmendment" → "true")
+    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) => s"display_$k" → v} + ("isAmendment" → "true")
 
   private val fullJourneyData: Map[String, String] =
     businessInformationData ++ formData
@@ -215,7 +215,7 @@ case class Save4LaterStub
   private def asS4LData(data: Map[String, String]) = {
     Json.toJson(
       data.map {
-        case (k, v) ⇒ k → Json.toJson(encrypt(v))
+        case (k, v) => k → Json.toJson(encrypt(v))
       }
     ).toString()
 

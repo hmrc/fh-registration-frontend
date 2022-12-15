@@ -55,7 +55,7 @@ case class UserAction @Inject()(
 
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
-        case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup ⇒
+        case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup =>
           val retrieveEnrolments: Set[String] = for {
             enrolment ← enrolments.enrolments
             if enrolment.key equalsIgnoreCase Enrolments.serviceName
@@ -86,18 +86,18 @@ case class UserAction @Inject()(
                 credentialRole,
                 retrieveAffinityGroup,
                 request))
-        case _ ⇒
+        case _ =>
           throw AuthorisationException.fromString("Can not find user id")
 
       } recover {
-      case e ⇒
+      case e =>
         Left(handleFailure(e))
     }
   }
 
   def handleFailure(e: Throwable): Result =
     e match {
-      case x: NoActiveSession ⇒
+      case x: NoActiveSession =>
         logger.warn(s"could not authenticate user due to: No Active Session $x")
 
         val ggRedirectParms = Map(
@@ -106,9 +106,9 @@ case class UserAction @Inject()(
         )
 
         Redirect(externalUrls.ggLoginUrl, ggRedirectParms)
-      case e: AuthorisationException ⇒
+      case e: AuthorisationException =>
         Unauthorized
-      case ex ⇒
+      case ex =>
         logger.warn(s"could not authenticate user due to: $ex")
         InternalServerError(s"$ex")
     }

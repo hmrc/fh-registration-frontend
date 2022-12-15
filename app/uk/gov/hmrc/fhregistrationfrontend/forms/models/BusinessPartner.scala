@@ -105,38 +105,38 @@ object BusinessPartner {
   implicit val businessPartnerIdentificationWrites = new Writes[BusinessPartnerIdentification] {
     override def writes(o: BusinessPartnerIdentification): JsValue =
       o match {
-        case i: BusinessPartnerIndividual ⇒ Json toJson i
-        case s: BusinessPartnerSoleProprietor ⇒ Json toJson s
-        case p: BusinessPartnerPartnership ⇒ Json toJson p
-        case l: BusinessPartnerLimitedLiabilityPartnership ⇒ Json toJson l
-        case c: BusinessPartnerCorporateBody ⇒ Json toJson c
-        case u: BusinessPartnerUnincorporatedBody ⇒ Json toJson u
+        case i: BusinessPartnerIndividual => Json toJson i
+        case s: BusinessPartnerSoleProprietor => Json toJson s
+        case p: BusinessPartnerPartnership => Json toJson p
+        case l: BusinessPartnerLimitedLiabilityPartnership => Json toJson l
+        case c: BusinessPartnerCorporateBody => Json toJson c
+        case u: BusinessPartnerUnincorporatedBody => Json toJson u
       }
   }
 
   implicit val writes = Json.writes[BusinessPartner]
   implicit val reads = new Reads[BusinessPartner] {
     override def reads(value: JsValue): JsResult[BusinessPartner] =
-      value.validate[JsObject].flatMap { json ⇒
+      value.validate[JsObject].flatMap { json =>
         (json \ "businessPartnerType") match {
-          case JsDefined(JsString(t)) if t == Individual.toString ⇒
+          case JsDefined(JsString(t)) if t == Individual.toString =>
             (json \ "identification").validate[BusinessPartnerIndividual].map(BusinessPartner(Individual, _))
-          case JsDefined(JsString(t)) if t == SoleProprietor.toString ⇒
+          case JsDefined(JsString(t)) if t == SoleProprietor.toString =>
             (json \ "identification").validate[BusinessPartnerSoleProprietor].map(BusinessPartner(SoleProprietor, _))
-          case JsDefined(JsString(t)) if t == Partnership.toString ⇒
+          case JsDefined(JsString(t)) if t == Partnership.toString =>
             (json \ "identification").validate[BusinessPartnerPartnership].map(BusinessPartner(Partnership, _))
-          case JsDefined(JsString(t)) if t == LimitedLiabilityPartnership.toString ⇒
+          case JsDefined(JsString(t)) if t == LimitedLiabilityPartnership.toString =>
             (json \ "identification")
               .validate[BusinessPartnerLimitedLiabilityPartnership]
               .map(BusinessPartner(LimitedLiabilityPartnership, _))
-          case JsDefined(JsString(t)) if t == CorporateBody.toString ⇒
+          case JsDefined(JsString(t)) if t == CorporateBody.toString =>
             (json \ "identification").validate[BusinessPartnerCorporateBody].map(BusinessPartner(CorporateBody, _))
-          case JsDefined(JsString(t)) if t == UnincorporatedBody.toString ⇒
+          case JsDefined(JsString(t)) if t == UnincorporatedBody.toString =>
             (json \ "identification")
               .validate[BusinessPartnerUnincorporatedBody]
               .map(BusinessPartner(UnincorporatedBody, _))
           case e: JsError => e
-          case _ ⇒ JsError("unknown Business Partner type")
+          case _ => JsError("unknown Business Partner type")
         }
       }
 

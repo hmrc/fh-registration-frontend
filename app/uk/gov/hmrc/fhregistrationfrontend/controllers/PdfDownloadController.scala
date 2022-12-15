@@ -33,7 +33,7 @@ class PdfDownloadController @Inject()(
     extends AppController(ds, cc) {
 
   import actions._
-  def downloadPrintable() = userAction.async { implicit request ⇒
+  def downloadPrintable() = userAction.async { implicit request =>
     keyStoreService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))

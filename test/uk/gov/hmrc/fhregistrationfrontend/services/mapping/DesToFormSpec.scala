@@ -64,9 +64,9 @@ class DesToFormSpec extends UnitSpec {
   def validatesFor(file: String, application: BusinessEntityApplication) = {
     val display = loadDesDataFile(file)
     val loadedApplication = display.organizationType match {
-      case "Corporate Body" ⇒ service limitedCompanyApplication display
-      case "Sole Proprietor" ⇒ service soleProprietorApplication display
-      case "Partnership" ⇒ service partnershipApplication display
+      case "Corporate Body" => service limitedCompanyApplication display
+      case "Sole Proprietor" => service soleProprietorApplication display
+      case "Partnership" => service partnershipApplication display
     }
     loadedApplication shouldEqual application
   }
@@ -75,10 +75,10 @@ class DesToFormSpec extends UnitSpec {
     val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
     val validationResult = validator(Json parse resource)
     validationResult.fold(
-      invalid = { errors ⇒
+      invalid = { errors =>
         errors
       },
-      valid = { v ⇒
+      valid = { v =>
         v
       }
     )

@@ -78,8 +78,8 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
 
   def loadPage[A](request: JourneyRequest[A]): Either[Result, Page[T]] =
     request.journeyState.get[T](pageId) match {
-      case Some(page) ⇒ Right(page)
-      case None ⇒
+      case Some(page) => Right(page)
+      case None =>
         Left(errorHandler.errorResultsPages(Results.NotFound)(request))
     }
 

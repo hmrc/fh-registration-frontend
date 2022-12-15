@@ -15,12 +15,12 @@ class SummaryControllerIntegrationSpec
       given
         .summaryPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/summary")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 200
         }
 
@@ -31,12 +31,12 @@ class SummaryControllerIntegrationSpec
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/summary")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 400
         }
 

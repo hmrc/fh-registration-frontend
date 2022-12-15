@@ -40,14 +40,14 @@ class AmendmentController @Inject()(
     extends AppController(ds, cc) {
   import actions._
 
-  def startAmendment() = startAmendmentAction.async { implicit request ⇒
+  def startAmendment() = startAmendmentAction.async { implicit request =>
     if (request.currentJourneyType contains JourneyType.Amendment)
       Future successful Redirect(routes.SummaryController.summary)
     else
       setupJourney(JourneyType.Amendment)
   }
 
-  def startVariation() = startVariationAction.async { implicit request ⇒
+  def startVariation() = startVariationAction.async { implicit request =>
     if (request.currentJourneyType contains JourneyType.Variation)
       Future successful Redirect(routes.SummaryController.summary)
     else
@@ -55,7 +55,7 @@ class AmendmentController @Inject()(
   }
 
   private def setupJourney(journeyType: JourneyType)(implicit request: StartUpdateRequest[_]) =
-    fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper ⇒
+    fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper =>
       val display = displayWrapper.subScriptionDisplay
       val userId = request.userId
       val entityType = desToForm entityType display
@@ -79,7 +79,7 @@ class AmendmentController @Inject()(
     val ignored: Any = 1
     contactEmail.fold(
       Future successful ignored
-    ) { contactEmail ⇒
+    ) { contactEmail =>
       def saveIfVerified(verified: Boolean) =
         if (verified) save4LaterService.saveVerifiedEmail(request.userId, contactEmail)
         else save4LaterService.saveV1ContactEmail(request.userId, contactEmail)
@@ -98,8 +98,8 @@ class AmendmentController @Inject()(
   private def saveDisplayPageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) {
-      case (acc, page) ⇒
-        acc flatMap { _ ⇒
+      case (acc, page) =>
+        acc flatMap { _ =>
           save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(hc, page.format)
         }
     }
@@ -108,8 +108,8 @@ class AmendmentController @Inject()(
   private def savePageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) {
-      case (acc, page) ⇒
-        acc flatMap { _ ⇒
+      case (acc, page) =>
+        acc flatMap { _ =>
           save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)
         }
     }

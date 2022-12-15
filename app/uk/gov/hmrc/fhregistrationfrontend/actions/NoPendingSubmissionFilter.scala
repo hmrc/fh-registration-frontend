@@ -33,9 +33,9 @@ class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(
 
     fhddsConnector.getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending ⇒ Some(errorHandler.errorResultsPages(Results.BadRequest))
-        case EnrolmentProgress.Error ⇒ Some(errorHandler.errorResultsPages(Results.BadRequest))
-        case _ ⇒ None
+        case EnrolmentProgress.Pending => Some(errorHandler.errorResultsPages(Results.BadRequest))
+        case EnrolmentProgress.Error => Some(errorHandler.errorResultsPages(Results.BadRequest))
+        case _ => None
       }
   }
 }

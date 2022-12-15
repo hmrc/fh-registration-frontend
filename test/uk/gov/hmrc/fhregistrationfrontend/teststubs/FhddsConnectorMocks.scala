@@ -32,7 +32,7 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.concurrent.Future
 
 trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
-  this: UnitSpec ⇒
+  this: UnitSpec =>
 
   val mockFhddsConnector = mock[FhddsConnector]
 

@@ -79,16 +79,16 @@ object CompanyOfficersForm {
     companyIdentificationKey → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
     individualIdentificationKey → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
   ) {
-    case (identificationType, company, individual) ⇒
+    case (identificationType, company, individual) =>
       CompanyOfficer(
         identificationType,
         company getOrElse individual.get
       )
   } {
-    case CompanyOfficer(identificationType, identification) ⇒
+    case CompanyOfficer(identificationType, identification) =>
       identification match {
-        case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
-        case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
+        case i: CompanyOfficerIndividual => Some((identificationType, None, Some(i)))
+        case c: CompanyOfficerCompany => Some((identificationType, Some(c), None))
       }
   }
 

@@ -74,7 +74,7 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
     val newDeleted = if (status != Added) value :: deleted else deleted
 
     val newValues = valuesWithStatus.zipWithIndex collect {
-      case (v, i) if index != i ⇒ v
+      case (v, i) if index != i => v
     }
 
     this copy (

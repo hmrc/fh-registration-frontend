@@ -61,7 +61,7 @@ trait Page[T] extends Rendering {
 
   def withData(data: T): Page[T]
 
-  def parseFromRequest[X](withErrors: Rendering ⇒ X, withData: Page[T] ⇒ X)(implicit r: Request[_]): X
+  def parseFromRequest[X](withErrors: Rendering => X, withData: Page[T] => X)(implicit r: Request[_]): X
 
   def nextSubsection: Option[String]
   def previousSubsection: Option[String]
@@ -191,7 +191,7 @@ object Page {
       },
       BusinessPartnersForm.businessPartnerMapping,
       minItems = 2,
-      addressOnPage = { bp ⇒
+      addressOnPage = { bp =>
         Some(bp.identification.address)
       }
     )
@@ -270,7 +270,7 @@ object Page {
           views.storage_premise(form, navigation, sectionId, params)
       },
       StoragePremisesForm.storagePremiseMapping,
-      addressOnPage = { sp ⇒
+      addressOnPage = { sp =>
         Some(sp.address)
       }
     )

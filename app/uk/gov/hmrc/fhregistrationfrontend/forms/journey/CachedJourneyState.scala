@@ -26,12 +26,12 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
   override def isComplete: Boolean = pages forall isPageComplete
 
   override def isAccessible(pageId: String): Boolean = pages indexWhere (_.id == pageId) match {
-    case -1 ⇒ false
-    case index ⇒ pages take index forall isPageComplete
+    case -1 => false
+    case index => pages take index forall isPageComplete
   }
 
   override def nextPageToComplete(): Option[String] =
-    pages find { p ⇒
+    pages find { p =>
       !isPageComplete(p)
     } map (_.id)
 
@@ -47,13 +47,13 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
       None
     else
       pages(firstNotCompletedIndex).pageStatus match {
-        case InProgress ⇒ Some(pages(firstNotCompletedIndex))
-        case NotStarted ⇒
+        case InProgress => Some(pages(firstNotCompletedIndex))
+        case NotStarted =>
           if (firstNotCompletedIndex == 0)
             None
           else
             Some(pages(firstNotCompletedIndex - 1))
-        case Completed ⇒ throw new IllegalArgumentException("must be != Completed")
+        case Completed => throw new IllegalArgumentException("must be != Completed")
       }
 
   }

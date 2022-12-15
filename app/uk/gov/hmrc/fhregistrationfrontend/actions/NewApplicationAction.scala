@@ -33,10 +33,10 @@ class NewApplicationAction(val fhddsConnector: FhddsConnector)(
 
     import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
-    val whenRegistered = request.registrationNumber.map { registrationNumber ⇒
+    val whenRegistered = request.registrationNumber.map { registrationNumber =>
       fhddsConnector.getStatus(registrationNumber).map {
-        case Withdrawn | Rejected | Revoked | Deregistered ⇒ Right(request)
-        case _ ⇒ Left(errorHandler.errorResultsPages(Results.BadRequest))
+        case Withdrawn | Rejected | Revoked | Deregistered => Right(request)
+        case _ => Left(errorHandler.errorResultsPages(Results.BadRequest))
       }
     }
 

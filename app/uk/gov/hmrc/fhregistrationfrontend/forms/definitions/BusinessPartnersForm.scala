@@ -197,7 +197,7 @@ object BusinessPartnersForm {
         partnership,
         limitedLiabilityPartnership,
         corporateBody,
-        unincorporatedBody) ⇒
+        unincorporatedBody) =>
       BusinessPartner(
         businessPartnersType,
         individual.getOrElse(
@@ -205,15 +205,15 @@ object BusinessPartnersForm {
             limitedLiabilityPartnership.getOrElse(corporateBody.getOrElse(unincorporatedBody.get)))))
       )
   } {
-    case BusinessPartner(businessPartnerType, identification) ⇒
+    case BusinessPartner(businessPartnerType, identification) =>
       identification match {
-        case i: BusinessPartnerIndividual ⇒ Some((businessPartnerType, Some(i), None, None, None, None, None))
-        case s: BusinessPartnerSoleProprietor ⇒ Some((businessPartnerType, None, Some(s), None, None, None, None))
-        case p: BusinessPartnerPartnership ⇒ Some((businessPartnerType, None, None, Some(p), None, None, None))
-        case l: BusinessPartnerLimitedLiabilityPartnership ⇒
+        case i: BusinessPartnerIndividual => Some((businessPartnerType, Some(i), None, None, None, None, None))
+        case s: BusinessPartnerSoleProprietor => Some((businessPartnerType, None, Some(s), None, None, None, None))
+        case p: BusinessPartnerPartnership => Some((businessPartnerType, None, None, Some(p), None, None, None))
+        case l: BusinessPartnerLimitedLiabilityPartnership =>
           Some((businessPartnerType, None, None, None, Some(l), None, None))
-        case c: BusinessPartnerCorporateBody ⇒ Some((businessPartnerType, None, None, None, None, Some(c), None))
-        case u: BusinessPartnerUnincorporatedBody ⇒ Some((businessPartnerType, None, None, None, None, None, Some(u)))
+        case c: BusinessPartnerCorporateBody => Some((businessPartnerType, None, None, None, None, Some(c), None))
+        case u: BusinessPartnerUnincorporatedBody => Some((businessPartnerType, None, None, None, None, None, Some(u)))
       }
   }
 
