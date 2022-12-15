@@ -20,8 +20,6 @@ import cats.data.OptionT
 import cats.implicits._
 
 import javax.inject.{Inject, Singleton}
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,6 +29,7 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
+import uk.gov.hmrc.fhregistrationfrontend.controllers.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -40,7 +39,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
