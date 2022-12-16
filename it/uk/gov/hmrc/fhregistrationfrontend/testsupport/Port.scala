@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport
 import play.api.Logging
 import annotation.tailrec
 import java.net.ServerSocket
+import scala.language.postfixOps
 
 object Port extends Logging {
   val rnd = new scala.util.Random

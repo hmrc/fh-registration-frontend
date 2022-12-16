@@ -17,14 +17,16 @@
 package uk.gov.hmrc.fhregistrationfrontend.utils
 
 import java.time.Instant
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.time.temporal.ChronoUnit
 
 object dateTimeHelper {
 
-  def convertDateToString(date: Instant): String = {
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
-    dateTimeFormatter.format(date)
+  def convertDateToString(instant: Instant): String = {
+    val dateFormat = new SimpleDateFormat("dd MMMM yyyy")
+    val date = Date.from(instant)
+    dateFormat.format(date)
   }
 
   def generateDate(expiryDays: Int, date: Long) =
