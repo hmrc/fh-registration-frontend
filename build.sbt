@@ -31,6 +31,7 @@ val compile = Seq(
   "com.github.julien-truffaut"  %% "monocle-macro"                    % monocleVersion,
   "com.github.julien-truffaut"  %% "monocle-law"                      % monocleVersion,
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
+  "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.5",
 
   compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full

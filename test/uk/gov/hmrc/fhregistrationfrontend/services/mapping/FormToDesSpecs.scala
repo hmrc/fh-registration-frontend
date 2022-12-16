@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 import java.time.LocalDate
 
 import com.eclipsesource.schema._
+import com.eclipsesource.schema.drafts.Version7.schemaTypeReads
 import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -30,7 +31,7 @@ class FormToDesSpecs extends UnitSpec {
 
   val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-create.schema.json")
   val schema = Json.fromJson[SchemaType](schemaAsJson).get
-  val validator = new SchemaValidator().validate(schema) _
+  val validator = SchemaValidator().validate(schema) _
   val service = new FormToDesImpl()
 
   def brd(fileName: String): BusinessRegistrationDetails =
