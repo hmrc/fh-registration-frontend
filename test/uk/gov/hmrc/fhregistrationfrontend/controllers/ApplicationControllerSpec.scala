@@ -349,6 +349,9 @@ class ApplicationControllerSpec
 
       status(result) shouldBe OK
       // failing here
+      println("================================================")
+      println(result.body)
+      println("================================================")
       bodyOf(result) should include(Messages("fh.has_saved"))
     }
 
