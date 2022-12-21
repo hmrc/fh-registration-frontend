@@ -14,7 +14,7 @@ sm --start FHDDS_ALL -f
 
 To run the application execute
 ```
-sbt run
+sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes
 ```
 
 License
