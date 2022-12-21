@@ -87,10 +87,8 @@ class WithdrawalController @Inject()(
       .bindFromRequest()
       .fold(
         formWithError => {
-          println(" form with error ::" + formWithError)
           val errorsNew: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
           val newFormErrors = formWithError.copy(errors = errorsNew)
-          println(" newFormErrors ::" + newFormErrors)
           contactEmail map (email => BadRequest(views.withdrawal_confirm(newFormErrors, email)))
         },
         handleConfirmation(_, reason)
