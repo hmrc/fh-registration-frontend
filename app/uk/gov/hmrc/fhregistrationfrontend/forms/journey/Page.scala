@@ -111,7 +111,6 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html = {
-          println(" form is ::" + form)
           views.contact_person(form, bpr, navigation)
         }
       },

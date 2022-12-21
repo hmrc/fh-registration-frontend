@@ -83,7 +83,6 @@ class DeregistrationController @Inject()(
         formWithError => {
           val errors: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
           val newFormErrors = formWithError.copy(errors = errors)
-          println(" form with error::" + newFormErrors)
           contactEmail map (email => BadRequest(views.deregistration_confirm(newFormErrors, email)))
         },
         handleConfirmation(_, reason)
