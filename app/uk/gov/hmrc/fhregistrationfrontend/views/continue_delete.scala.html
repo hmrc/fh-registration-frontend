@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import org.joda.time.DateTime
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -23,7 +22,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(expiryTime: DateTime, act: Form[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(expiryTime: String, act: Form[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @title = @{
   Messages("fh.continue_delete.header")
@@ -45,7 +44,9 @@
             idPrefix = Some("deleteOrContinue"),
             name = "deleteOrContinue",
             hint = Some(Hint(
-                content = Text(s"${messages("fh.continue_delete.continue.hint")} ${expiryTime.plusDays(27).toLocalDate.toString("d MMMM yyyy")} ${messages("fh.continue_delete.continue.hint_continue")}")
+                // expiry time passed in as a string
+                // use controller to format and
+              content = Text(s"${messages("fh.continue_delete.continue.hint")} ${expiryTime} ${messages("fh.continue_delete.continue.hint_continue")}")
             )),
             errorMessage = if (act("act").hasErrors) {
                 Some(ErrorMessage(content = Text(messages(s"fh.business_customers.error"))))

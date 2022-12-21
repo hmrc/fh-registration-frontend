@@ -31,7 +31,7 @@ import scala.util.Try
 
 object Mappings {
 
-  type Condition = Map[String, String] ⇒ Boolean
+  type Condition = Map[String, String] => Boolean
 
   val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
@@ -47,7 +47,7 @@ object Mappings {
       "Line4"       -> optional(addressLine),
       "postcode"    -> postcode,
       "countryCode" -> optional(nonEmptyText),
-      "lookupId" → optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) ⇒ v)
+      "lookupId"    -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
     )(Address.apply)(Address.unapply)
 
   def postcode: Mapping[String] =
@@ -89,8 +89,8 @@ object Mappings {
 
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
-      "email" → email,
-      "emailConfirmation" → of(emailConfirmationFormat)
+      "email"             -> email,
+      "emailConfirmation" -> of(emailConfirmationFormat)
     )(AlternativeEmail.apply)(AlternativeEmail.unapply)
 
   def internationalAddress: Mapping[InternationalAddress] =
@@ -164,9 +164,9 @@ object Mappings {
       "day"   -> number(min = 1, max = 31),
       "month" -> number(min = 1, max = 12),
       "year"  -> number(min = 1800, max = 2999)
-    ) verifying ("error.invalid", x ⇒ localDateTimeConstraint(x)) transform (
-      x ⇒ localDateTime(x),
-      (d: LocalDate) ⇒ (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
+    ) verifying ("error.invalid", x => localDateTimeConstraint(x)) transform (
+      x => localDateTime(x),
+      (d: LocalDate) => (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
     )
 
   def localDateTime(d: (Int, Int, Int)) =
@@ -182,21 +182,21 @@ object Mappings {
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
 
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
-    "yesNo" → of(yesOrNoFormatter),
-    "value" → optional(wrapped)
+    "yesNo" -> of(yesOrNoFormatter),
+    "value" -> optional(wrapped)
   )
 
-  private def y[T]: ((Boolean, Option[T])) ⇒ Boolean = {
-    case (true, Some(_)) ⇒ true
-    case (false, None) ⇒ true
-    case _ ⇒ false
+  private def y[T]: ((Boolean, Option[T])) => Boolean = {
+    case (true, Some(_)) => true
+    case (false, None)   => true
+    case _               => false
   }
 
-  private def z[T]: ((Boolean, Option[T])) ⇒ Option[T] = {
-    case (_, value) ⇒ value
+  private def z[T]: ((Boolean, Option[T])) => Option[T] = {
+    case (_, value) => value
   }
 
-  private def t[T]: Option[T] ⇒ (Boolean, Option[T]) = { value ⇒
+  private def t[T]: Option[T] => (Boolean, Option[T]) = { value =>
     (value.isDefined, value)
   }
 

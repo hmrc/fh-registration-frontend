@@ -43,52 +43,52 @@ object CompanyOfficersForm {
 
   val companyOfficersKey = "companyOfficers"
 
-  val hasNinoMapping = hasNationalInsuranceNumberKey → yesOrNo
-  val ninoMapping = nationalInsuranceNumberKey → (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
-  val hasPassportNumberMapping = hasPassportNumberKey → (yesOrNo onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
-  val passportNumberMapping = passportNumberKey → (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
-  val nationalIdMapping = nationalIDKey → (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey))
+  val hasNinoMapping = hasNationalInsuranceNumberKey  -> yesOrNo
+  val ninoMapping = nationalInsuranceNumberKey        -> (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
+  val hasPassportNumberMapping = hasPassportNumberKey -> (yesOrNo onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
+  val passportNumberMapping = passportNumberKey       -> (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
+  val nationalIdMapping = nationalIDKey               -> (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey))
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
-  val companyOfficerTypeMapping = identificationTypeKey → enum(CompanyOfficerType)
+  val companyOfficerTypeMapping = identificationTypeKey -> enum(CompanyOfficerType)
 
   val companyOfficerIndividualMapping = mapping(
-    firstNameKey → personName,
-    lastNameKey → personName,
+    firstNameKey -> personName,
+    lastNameKey  -> personName,
     hasNinoMapping,
     ninoMapping,
     hasPassportNumberMapping,
     passportNumberMapping,
     nationalIdMapping,
-    roleKey → oneOf(roles)
+    roleKey -> oneOf(roles)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
-  val hasVatMapping = hasVatKey → yesOrNo
+  val hasVatMapping = hasVatKey -> yesOrNo
 
   val companyOfficerCompanyMapping = mapping(
-    companyNameKey → companyName,
+    companyNameKey -> companyName,
     hasVatMapping,
-    vatRegistrationKey → (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
-    companyRegistrationKey → (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
-    roleKey → oneOf(roles)
+    vatRegistrationKey     -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
+    companyRegistrationKey -> (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
+    roleKey                -> oneOf(roles)
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
     companyOfficerTypeMapping,
-    companyIdentificationKey → (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
-    individualIdentificationKey → (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
+    companyIdentificationKey    -> (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
+    individualIdentificationKey -> (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
   ) {
-    case (identificationType, company, individual) ⇒
+    case (identificationType, company, individual) =>
       CompanyOfficer(
         identificationType,
         company getOrElse individual.get
       )
   } {
-    case CompanyOfficer(identificationType, identification) ⇒
+    case CompanyOfficer(identificationType, identification) =>
       identification match {
-        case i: CompanyOfficerIndividual ⇒ Some((identificationType, None, Some(i)))
-        case c: CompanyOfficerCompany ⇒ Some((identificationType, Some(c), None))
+        case i: CompanyOfficerIndividual => Some((identificationType, None, Some(i)))
+        case c: CompanyOfficerCompany    => Some((identificationType, Some(c), None))
       }
   }
 

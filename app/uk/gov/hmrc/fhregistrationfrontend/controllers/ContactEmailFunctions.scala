@@ -22,14 +22,14 @@ import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ContactEmailFunctions {
-  this: AppController ⇒
+  this: AppController =>
 
   val fhddsConnector: FhddsConnector
   val desToForm: DesToForm
 
   def contactEmail(implicit request: EnrolledUserRequest[_], ec: ExecutionContext): Future[Option[String]] =
     for {
-      displayWrapper ← fhddsConnector getSubmission request.registrationNumber
+      displayWrapper <- fhddsConnector getSubmission request.registrationNumber
       display = displayWrapper.subScriptionDisplay
     } yield {
       desToForm.contactEmail(display)

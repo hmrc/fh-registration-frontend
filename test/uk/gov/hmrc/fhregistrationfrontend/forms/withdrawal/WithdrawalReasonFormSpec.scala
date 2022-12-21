@@ -30,27 +30,27 @@ class WithdrawalReasonFormSpec extends UnitSpec with FormSpecsHelper[WithdrawalR
       formDataHasErrors(
         Map.empty,
         Seq(
-          reasonKey → "error.required"
+          reasonKey -> "error.required"
         ))
     }
 
     "Fail if reason is not recognized" in {
-      formDataHasErrors(Map(reasonKey → "some strange reason"), Seq(reasonKey → "error.invalid"))
+      formDataHasErrors(Map(reasonKey -> "some strange reason"), Seq(reasonKey -> "error.invalid"))
     }
 
     "Fail if reason is not 'other' and description is not provided" in {
-      formDataHasErrors(Map(reasonKey → "Other"), Seq(reasonOtherKey → "error.required"))
+      formDataHasErrors(Map(reasonKey -> "Other"), Seq(reasonOtherKey -> "error.required"))
     }
 
     "Parse the reason" in {
-      dataFromValidForm(Map(reasonKey → "Applied in Error")).withdrawalReason shouldBe WithdrawalReasonEnum.AppliedInError
+      dataFromValidForm(Map(reasonKey -> "Applied in Error")).withdrawalReason shouldBe WithdrawalReasonEnum.AppliedInError
     }
 
     "Parse reason other and the description" in {
       val parsed = dataFromValidForm(
         Map(
-          reasonKey → "Other",
-          reasonOtherKey → "Some private reason"
+          reasonKey      -> "Other",
+          reasonOtherKey -> "Some private reason"
         ))
       parsed.withdrawalReason shouldBe WithdrawalReasonEnum.Other
       parsed.withdrawalReasonOther shouldBe Some("Some private reason")

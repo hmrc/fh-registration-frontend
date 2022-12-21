@@ -21,8 +21,8 @@ object Mode extends Enumeration {
   val ReadOnlyRegister, ReadOnlyApplication, New, Amendment, Variation = Value
 
   def isReadOnly(mode: Mode) = mode match {
-    case ReadOnlyApplication | ReadOnlyRegister ⇒ true
-    case _ ⇒ false
+    case ReadOnlyApplication | ReadOnlyRegister => true
+    case _                                      => false
   }
 
   def isEditable(mode: Mode) = !isReadOnly(mode)

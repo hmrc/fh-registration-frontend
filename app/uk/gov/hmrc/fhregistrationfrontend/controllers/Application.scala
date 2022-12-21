@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import cats.data.OptionT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
-import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,9 +29,11 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors._
+import uk.gov.hmrc.fhregistrationfrontend.controllers.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.utils.dateTimeHelper
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
@@ -58,14 +60,14 @@ class Application @Inject()(
   val formMaxExpiryDays: Int = configuration.getOptional[Int](s"formMaxExpiryDays").getOrElse(27)
 
   import actions._
-  def main = userAction.async { implicit request ⇒
+  def main = userAction.async { implicit request =>
     fhddsConnector.getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending ⇒ Redirect(routes.Application.enrolmentPending)
-        case EnrolmentProgress.Error ⇒ Redirect(routes.Application.enrolmentPending)
-        case _ ⇒
+        case EnrolmentProgress.Pending => Redirect(routes.Application.enrolmentPending)
+        case EnrolmentProgress.Error   => Redirect(routes.Application.enrolmentPending)
+        case _ =>
           val whenRegistered = request.registrationNumber
-            .map { _ ⇒
+            .map { _ =>
               Redirect(routes.Application.checkStatus)
             }
 
@@ -73,24 +75,25 @@ class Application @Inject()(
       }
   }
 
-  def enrolmentPending = userAction.async { implicit request ⇒
+  def enrolmentPending = userAction.async { implicit request =>
     fhddsConnector.getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending ⇒ Ok(views.enrolment_pending())
-        case EnrolmentProgress.Error ⇒ Ok(views.application_error())
-        case EnrolmentProgress.Unknown ⇒ Redirect(routes.Application.main())
+        case EnrolmentProgress.Pending => Ok(views.enrolment_pending())
+        case EnrolmentProgress.Error   => Ok(views.application_error())
+        case EnrolmentProgress.Unknown => Redirect(routes.Application.main())
       }
   }
 
-  private val deleteOrContinueForm = Form("deleteOrContinue" → nonEmptyText)
+  private val deleteOrContinueForm = Form("deleteOrContinue" -> nonEmptyText)
 
-  def startOrContinueApplication = userAction.async { implicit request ⇒
+  def startOrContinueApplication = userAction.async { implicit request =>
     val redirectWhenSaved = for {
-      _ ← OptionT(save4LaterService.fetchBusinessRegistrationDetails(request.userId))
-      _ ← OptionT(save4LaterService.fetchBusinessType(request.userId))
-      savedDate ← OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
+      _         <- OptionT(save4LaterService.fetchBusinessRegistrationDetails(request.userId))
+      _         <- OptionT(save4LaterService.fetchBusinessType(request.userId))
+      savedDate <- OptionT(save4LaterService.fetchLastUpdateTime(request.userId))
     } yield {
-      Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
+      val expiryDate = dateTimeHelper.generateDate(27, savedDate)
+      Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
     }
 
     redirectWhenSaved getOrElseF newApplication
@@ -100,33 +103,34 @@ class Application @Inject()(
     save4LaterService
       .fetch(request.userId)
       .map {
-        case Some(_) ⇒ save4LaterService.removeUserData(request.userId)
-        case None ⇒
+        case Some(_) => save4LaterService.removeUserData(request.userId)
+        case None    =>
       }
-      .map(_ ⇒ Redirect(links.businessCustomerVerificationUrl))
+      .map(_ => Redirect(links.businessCustomerVerificationUrl))
 
-  def continueWithBpr = newApplicationAction.async { implicit request ⇒
+  def continueWithBpr = newApplicationAction.async { implicit request =>
     for {
-      details ← businessCustomerConnector.getReviewDetails
-      _ ← save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
+      details <- businessCustomerConnector.getReviewDetails
+      _       <- save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
     } yield {
       Redirect(routes.Application.businessType)
     }
   }
 
-  def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request ⇒
+  def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request =>
     if (isNewForm) {
       Future successful Redirect(routes.Application.businessType)
     } else {
       save4LaterService.fetchLastUpdateTime(request.userId) map {
-        case Some(savedDate) ⇒
-          Ok(views.continue_delete(new DateTime(savedDate), deleteOrContinueForm))
-        case None ⇒ Redirect(routes.Application.businessType)
+        case Some(savedDate) =>
+          val expiryDate = dateTimeHelper.generateDate(27, savedDate)
+          Ok(views.continue_delete(dateTimeHelper.convertDateToString(expiryDate), deleteOrContinueForm))
+        case None => Redirect(routes.Application.businessType)
       }
     }
   }
 
-  def submitDeleteOrContinue = userAction.async { implicit request ⇒
+  def submitDeleteOrContinue = userAction.async { implicit request =>
     deleteOrContinueForm
       .bindFromRequest()
       .fold(
@@ -134,8 +138,12 @@ class Application @Inject()(
         deleteOrContinue => {
           if (deleteOrContinue == "delete") {
             save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-              case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
-              case None ⇒
+              case Some(savedDate) =>
+                Future successful {
+                  val date = dateTimeHelper.generateDate(0, savedDate)
+                  Ok(views.confirm_delete(dateTimeHelper.convertDateToString(date)))
+                }
+              case None =>
                 Future successful errorHandler.errorResultsPages(Results.BadRequest)
             }
           } else {
@@ -145,39 +153,43 @@ class Application @Inject()(
       )
   }
 
-  def confirmDelete = userAction.async { implicit request ⇒
+  def confirmDelete = userAction.async { implicit request =>
     save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
-      case Some(savedDate) ⇒ Future successful Ok(views.confirm_delete(new DateTime(savedDate)))
-      case None ⇒ Future successful BadRequest
+      case Some(savedDate) =>
+        Future successful {
+          val date = dateTimeHelper.generateDate(0, savedDate)
+          Ok(views.confirm_delete(dateTimeHelper.convertDateToString(date)))
+        }
+      case None => Future successful BadRequest
     }
   }
 
-  def resumeForm = journeyAction { implicit request ⇒
+  def resumeForm = journeyAction { implicit request =>
     if (request.journeyState.isComplete)
       Redirect(routes.SummaryController.summary)
     else {
-      request.journeyState.lastEditedPage.map(p ⇒ p.id → p.lastSection) match {
-        case None ⇒
+      request.journeyState.lastEditedPage.map(p => p.id -> p.lastSection) match {
+        case None =>
           val firstPage = request.journeyPages.pages.head.id
           Redirect(routes.FormPageController.load(firstPage))
-        case Some((pid, Some(section))) ⇒ Redirect(routes.FormPageController.loadWithSection(pid, section))
-        case Some((pid, None)) ⇒ Redirect(routes.FormPageController.load(pid))
+        case Some((pid, Some(section))) => Redirect(routes.FormPageController.loadWithSection(pid, section))
+        case Some((pid, None))          => Redirect(routes.FormPageController.load(pid))
 
       }
     }
   }
 
-  def deleteUserData = userAction.async { implicit request ⇒
-    save4LaterService.removeUserData(request.userId) map { _ ⇒
+  def deleteUserData = userAction.async { implicit request =>
+    save4LaterService.removeUserData(request.userId) map { _ =>
       Redirect(routes.Application.main())
     }
   }
 
-  def businessType = userAction { implicit request ⇒
+  def businessType = userAction { implicit request =>
     Ok(views.business_type(businessTypeForm, links.businessCustomerVerificationUrl))
   }
 
-  def submitBusinessType = userAction.async { implicit request ⇒
+  def submitBusinessType = userAction.async { implicit request =>
     businessTypeForm
       .bindFromRequest()
       .fold(
@@ -185,7 +197,7 @@ class Application @Inject()(
           Future.successful(BadRequest(views.business_type(formWithErrors, links.businessCustomerVerificationUrl))),
         businessType => {
           for {
-            _ ← save4LaterService.saveBusinessType(request.userId, businessType)
+            _ <- save4LaterService.saveBusinessType(request.userId, businessType)
           } yield {
             Redirect(routes.EmailVerificationController.contactEmail)
           }
@@ -193,21 +205,24 @@ class Application @Inject()(
       )
   }
 
-  def startForm = userAction { _ ⇒
+  def startForm = userAction { _ =>
     Redirect(routes.Application.resumeForm)
   }
 
-  def savedForLater = userAction.async { implicit request ⇒
+  def savedForLater = userAction.async { implicit request =>
     save4LaterService.fetchLastUpdateTime(request.userId).map {
-      case Some(savedDate) ⇒ Ok(views.saved(new DateTime(savedDate).plusDays(formMaxExpiryDays)))
-      case None ⇒ errorHandler.errorResultsPages(Results.NotFound)
+      case Some(savedDate) => {
+        val date = dateTimeHelper.generateDate(formMaxExpiryDays, savedDate)
+        Ok(views.saved(dateTimeHelper.convertDateToString(date)))
+      }
+      case None => errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def checkStatus() = enrolledUserAction.async { implicit request ⇒
+  def checkStatus() = enrolledUserAction.async { implicit request =>
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(fhddsStatus ⇒ { Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)) })
+      .map(fhddsStatus => { Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)) })
   }
 }
 

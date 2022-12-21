@@ -27,7 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.concurrent.Future
 
 trait Save4LaterMocks extends MockitoSugar with UserTestData {
-  this: UnitSpec ⇒
+  this: UnitSpec =>
 
   val mockSave4Later = mock[Save4LaterService]
   private val ok = Future successful None

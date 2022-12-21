@@ -51,7 +51,7 @@ class FhddsConnector @Inject()(
     implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
     val url = currentRegNumber.fold(
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId"
-    ) { currentRegNumber ⇒
+    ) { currentRegNumber =>
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId?currentRegNumber=$currentRegNumber"
     }
 

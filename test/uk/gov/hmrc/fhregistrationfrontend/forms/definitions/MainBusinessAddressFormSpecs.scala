@@ -27,17 +27,17 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
   val form = MainBusinessAddressForm.mainBusinessAddressForm
 
   val valid = Map(
-    timeAtCurrentAddressKey → "3-5 years"
+    timeAtCurrentAddressKey -> "3-5 years"
   )
 
   val validWithNoPreviousAddress = Map(
-    timeAtCurrentAddressKey → "Less than 3 years",
-    previousAddressKey → "false"
+    timeAtCurrentAddressKey -> "Less than 3 years",
+    previousAddressKey      -> "false"
   )
 
   val validWithPreviousAddress = Map(
-    timeAtCurrentAddressKey → "Less than 3 years",
-    previousAddressKey → "true",
+    timeAtCurrentAddressKey               -> "Less than 3 years",
+    previousAddressKey                    -> "true",
     s"$previousAddressStartdateKey.day"   -> "31",
     s"$previousAddressStartdateKey.month" -> "7",
     s"$previousAddressStartdateKey.year"  -> "2015"
@@ -48,21 +48,21 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
     "reject missing mandatory" in {
       formDataHasErrors(
         Map.empty,
-        List(timeAtCurrentAddressKey → "error.required")
+        List(timeAtCurrentAddressKey -> "error.required")
       )
     }
 
     "reject Less than 3 years w/o prevAddress answer" in {
       formDataHasErrors(
-        Map(timeAtCurrentAddressKey → "Less than 3 years"),
-        List(previousAddressKey → "error.required")
+        Map(timeAtCurrentAddressKey -> "Less than 3 years"),
+        List(previousAddressKey     -> "error.required")
       )
     }
 
     "reject has previous address with no address" in {
       formDataHasErrors(
-        validWithNoPreviousAddress + (previousAddressKey → "true"),
-        List(s"$mainPreviousAddressKey.Line1" → "error.required")
+        validWithNoPreviousAddress + (previousAddressKey -> "true"),
+        List(s"$mainPreviousAddressKey.Line1" -> "error.required")
       )
     }
 

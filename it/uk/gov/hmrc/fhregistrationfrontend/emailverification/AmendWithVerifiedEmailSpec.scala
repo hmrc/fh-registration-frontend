@@ -17,10 +17,10 @@ class AmendWithVerifiedEmailSpec
           .fhddsBackend.acceptsAmendments()
           .save4later.hasAmendmentDataWithNewVerifiedEmail("a@test.com")
 
-        WsTestClient.withClient { implicit client ⇒
+        WsTestClient.withClient { implicit client =>
           val result = client.url(s"$baseUrl/submit")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders("X-Session-ID" → "some-id",
+            .withHttpHeaders("X-Session-ID" -> "some-id",
               "Csrf-Token" -> "nocheck")
             .withFollowRedirects(false)
             .post(Map("fullName" -> Seq("Tester"),
@@ -29,7 +29,7 @@ class AmendWithVerifiedEmailSpec
               "defaultEmail" -> Seq("a@test.com")
             ))
 
-          whenReady(result) { res ⇒
+          whenReady(result) { res =>
             res.status mustBe 303
             res.header("Location") mustBe Some("/fhdds/acknowledgement")
 

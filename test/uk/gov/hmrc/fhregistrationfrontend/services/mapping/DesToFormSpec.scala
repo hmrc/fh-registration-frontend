@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import com.eclipsesource.schema._
+import com.eclipsesource.schema.drafts.Version7.schemaTypeReads
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.NoChange
@@ -28,7 +29,7 @@ class DesToFormSpec extends UnitSpec {
 
   val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-display.schema.json")
   val schema = Json.fromJson[SchemaType](schemaAsJson).get
-  val validator = new SchemaValidator().validate(schema) _
+  val validator = SchemaValidator().validate(schema) _
   val service = new DesToFormImpl()
 
   "Des to form" should {
@@ -64,9 +65,9 @@ class DesToFormSpec extends UnitSpec {
   def validatesFor(file: String, application: BusinessEntityApplication) = {
     val display = loadDesDataFile(file)
     val loadedApplication = display.organizationType match {
-      case "Corporate Body" ⇒ service limitedCompanyApplication display
-      case "Sole Proprietor" ⇒ service soleProprietorApplication display
-      case "Partnership" ⇒ service partnershipApplication display
+      case "Corporate Body"  => service limitedCompanyApplication display
+      case "Sole Proprietor" => service soleProprietorApplication display
+      case "Partnership"     => service partnershipApplication display
     }
     loadedApplication shouldEqual application
   }
@@ -75,10 +76,10 @@ class DesToFormSpec extends UnitSpec {
     val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
     val validationResult = validator(Json parse resource)
     validationResult.fold(
-      invalid = { errors ⇒
+      invalid = { errors =>
         errors
       },
-      valid = { v ⇒
+      valid = { v =>
         v
       }
     )

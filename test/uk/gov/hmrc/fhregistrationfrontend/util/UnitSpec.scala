@@ -31,6 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import org.scalatest.wordspec.AnyWordSpecLike
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
+import scala.language.postfixOps
 
 trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues with GuiceOneAppPerSuite {
 

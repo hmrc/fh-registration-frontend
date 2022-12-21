@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import javax.inject.Inject
 
+import scala.language.postfixOps
 import com.google.inject.ImplementedBy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
@@ -59,11 +60,11 @@ class DesToFormImpl extends DesToForm {
 
   override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication =
     entityType(display) match {
-      case BusinessType.CorporateBody ⇒
+      case BusinessType.CorporateBody =>
         limitedCompanyApplication(display)
-      case BusinessType.SoleTrader ⇒
+      case BusinessType.SoleTrader =>
         soleProprietorApplication(display)
-      case BusinessType.Partnership ⇒
+      case BusinessType.Partnership =>
         partnershipApplication(display)
     }
 
@@ -111,11 +112,11 @@ class DesToFormImpl extends DesToForm {
   override def businessRegistrationDetails(
     subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails = {
     val utr: Option[String] = entityType(subscriptionDisplay) match {
-      case BusinessType.CorporateBody ⇒
+      case BusinessType.CorporateBody =>
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
-      case BusinessType.Partnership ⇒
+      case BusinessType.Partnership =>
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
-      case BusinessType.SoleTrader ⇒
+      case BusinessType.SoleTrader =>
         subscriptionDisplay.businessDetail.soleProprietor.flatMap(_.identification.uniqueTaxpayerReference)
     }
 
@@ -160,9 +161,9 @@ class DesToFormImpl extends DesToForm {
   def eoriNumber(allOtherInformation: des.AllOtherInformation): Option[EoriNumber] =
     if (allOtherInformation.doesEORIExist)
       for {
-        eori ← allOtherInformation.EORINumber
-        importedOutsideEori ← eori.goodsImportedOutEORI
-        number ← eori.EORINonVat orElse eori.EORIVat
+        eori                <- allOtherInformation.EORINumber
+        importedOutsideEori <- eori.goodsImportedOutEORI
+        number              <- eori.EORINonVat orElse eori.EORIVat
       } yield {
         EoriNumber(number, importedOutsideEori)
       } else
@@ -177,7 +178,7 @@ class DesToFormImpl extends DesToForm {
 
   def businessPartner(partner: des.PartnerDetail): BusinessPartner =
     partner.partnerTypeDetail match {
-      case i: des.IndividualPartnerType ⇒
+      case i: des.IndividualPartnerType =>
         BusinessPartner(
           BusinessPartnerType.Individual,
           BusinessPartnerIndividual(
@@ -188,7 +189,7 @@ class DesToFormImpl extends DesToForm {
             address(partner.partnerAddress)
           )
         )
-      case s: des.SoleProprietorPartnerType ⇒
+      case s: des.SoleProprietorPartnerType =>
         BusinessPartner(
           BusinessPartnerType.SoleProprietor,
           BusinessPartnerSoleProprietor(
@@ -204,7 +205,7 @@ class DesToFormImpl extends DesToForm {
             address(partner.partnerAddress)
           )
         )
-      case l: des.LimitedLiabilityPartnershipType ⇒
+      case l: des.LimitedLiabilityPartnershipType =>
         if (partner.entityType == "Limited Liability Partnership") {
           BusinessPartner(
             BusinessPartnerType.LimitedLiabilityPartnership,
@@ -234,7 +235,7 @@ class DesToFormImpl extends DesToForm {
             )
           )
         }
-      case p: des.PartnershipOrUnIncorporatedBodyPartnerType ⇒
+      case p: des.PartnershipOrUnIncorporatedBodyPartnerType =>
         if (partner.entityType == "Partnership") {
           BusinessPartner(
             BusinessPartnerType.Partnership,
@@ -281,7 +282,7 @@ class DesToFormImpl extends DesToForm {
 
   def companyOfficial(official: des.CompanyOfficial): CompanyOfficer =
     official match {
-      case i: des.IndividualAsOfficial ⇒
+      case i: des.IndividualAsOfficial =>
         val hasNino = i.identification.nino.isDefined
         val hasPassportNumber = if (hasNino) None else Some(i.identification.passportNumber.isDefined)
         CompanyOfficer(
@@ -297,7 +298,7 @@ class DesToFormImpl extends DesToForm {
             i.role
           )
         )
-      case c: des.CompanyAsOfficial ⇒
+      case c: des.CompanyAsOfficial =>
         CompanyOfficer(
           CompanyOfficerType.Company,
           CompanyOfficerCompany(
@@ -314,35 +315,35 @@ class DesToFormImpl extends DesToForm {
   def vatNumber(detail: des.BusinessDetail) =
     detail.nonProprietor
       .flatMap(_.identification.vatRegistrationNumber)
-      .fold(VatNumber(false, None)) { name ⇒
+      .fold(VatNumber(false, None)) { name =>
         VatNumber(true, Some(name))
       }
 
   def vatNumberForSoleProprietor(detail: des.BusinessDetail) =
     detail.soleProprietor
       .flatMap(_.identification.vatRegistrationNumber)
-      .fold(VatNumber(false, None)) { name ⇒
+      .fold(VatNumber(false, None)) { name =>
         VatNumber(true, Some(name))
       }
 
   def tradingName(detail: des.BusinessDetail) =
     detail.nonProprietor
       .flatMap(_.tradingName)
-      .fold(TradingName(false, None)) { name ⇒
+      .fold(TradingName(false, None)) { name =>
         TradingName(true, Some(name))
       }
 
   def tradingNameForSoleProprietor(detail: des.BusinessDetail) =
     detail.soleProprietor
       .flatMap(_.tradingName)
-      .fold(TradingName(false, None)) { name ⇒
+      .fold(TradingName(false, None)) { name =>
         TradingName(true, Some(name))
       }
 
   def nationalInsuranceNumber(businessDetails: des.BusinessDetail): NationalInsuranceNumber =
     businessDetails.soleProprietor
       .map(
-        id ⇒ {
+        id => {
           NationalInsuranceNumber(
             id.identification.nino.nonEmpty,
             id.identification.nino
@@ -421,16 +422,16 @@ class DesToFormImpl extends DesToForm {
 
   def previousAddressStartDate(pa: des.PreviousOperationalAddress) =
     for {
-      prevAddressesDetail ← pa.previousOperationalAddressDetail
-      prevAddressDetail ← prevAddressesDetail.headOption
+      prevAddressesDetail <- pa.previousOperationalAddressDetail
+      prevAddressDetail   <- prevAddressesDetail.headOption
     } yield {
       prevAddressDetail.previousAddressStartdate
     }
 
   def previousAddress(pa: des.PreviousOperationalAddress) =
     for {
-      prevAddressesDetail ← pa.previousOperationalAddressDetail
-      prevAddressDetail ← prevAddressesDetail.headOption
+      prevAddressesDetail <- pa.previousOperationalAddressDetail
+      prevAddressDetail   <- prevAddressesDetail.headOption
     } yield {
       address(prevAddressDetail.previousAddress)
     }

@@ -23,18 +23,18 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class OnlyWhenSpecs extends UnitSpec with MappingSpecsHelper[Option[String]] {
 
-  val conditionMapping = "yesNo" → nonEmptyText(1, 10)
+  val conditionMapping = "yesNo" -> nonEmptyText(1, 10)
 
   val field = nonEmptyText onlyWhen (conditionMapping is "yes")
   val mapping = field withPrefix "value"
 
   val validPresent = Map(
-    "yesNo" → "yes",
-    "value" → "123"
+    "yesNo" -> "yes",
+    "value" -> "123"
   )
 
   val validAbsent = Map(
-    "yesNo" → "no"
+    "yesNo" -> "no"
   )
 
   "OnlyWhen " should {
@@ -50,11 +50,11 @@ class OnlyWhenSpecs extends UnitSpec with MappingSpecsHelper[Option[String]] {
     }
 
     "reject with yes but no value" in {
-      formDataHasErrors(Map("yesNo" → "yes"), List("value" → "error.required"))
+      formDataHasErrors(Map("yesNo" -> "yes"), List("value" -> "error.required"))
     }
 
     "accept with no but value as None" in {
-      val data = dataFromValidForm(Map("yesNo" → "no", "value" → "123"))
+      val data = dataFromValidForm(Map("yesNo" -> "no", "value" -> "123"))
       data shouldBe None
     }
 

@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.teststubs
+package uk.gov.hmrc.fhregistrationfrontend.utils
 
-import play.api.libs.json.{JsValue, Writes}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import java.time.Instant
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.time.temporal.ChronoUnit
 
-case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
+object dateTimeHelper {
 
-  def withOptValue[T](key: String, valueOpt: Option[T])(implicit writes: Writes[T]) =
-    valueOpt.fold(
-      this
-    ) { value =>
-      this.copy(data = data + (key -> writes.writes(value)))
-    }
+  def convertDateToString(instant: Instant): String = {
+    val dateFormat = new SimpleDateFormat("dd MMMM yyyy")
+    val date = Date.from(instant)
+    dateFormat.format(date)
+  }
 
-  def withValue[T](key: String, value: T)(implicit writes: Writes[T]) =
-    this.copy(data = data + (key -> writes.writes(value)))
-
-  def cacheMap = CacheMap(id, data)
+  def generateDate(expiryDays: Int, date: Long) =
+    Instant.ofEpochMilli(date).plus(expiryDays, ChronoUnit.DAYS)
 
 }

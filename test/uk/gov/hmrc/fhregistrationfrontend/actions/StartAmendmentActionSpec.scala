@@ -73,7 +73,7 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
+        fhddsStatus <- List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
@@ -97,7 +97,7 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(AffinityGroup.Individual),
         FakeRequest())
       for {
-        fhddsStatus ← List(Received, Processing)
+        fhddsStatus <- List(Received, Processing)
       } {
         val fhddsConnector = mock[FhddsConnector]
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus

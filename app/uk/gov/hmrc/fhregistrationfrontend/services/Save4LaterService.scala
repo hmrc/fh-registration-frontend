@@ -92,15 +92,15 @@ class Save4LaterService @Inject()(
     implicit hc: HeaderCarrier,
     formats: json.Format[T]): Future[Option[T]] = {
     val lastTimeUserSaved = System.currentTimeMillis()
-    shortLivedCache.cache(userId, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ ⇒
-      shortLivedCache.cache(userId, formId, data) map { data ⇒
+    shortLivedCache.cache(userId, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ =>
+      shortLivedCache.cache(userId, formId, data) map { data =>
         data.getEntry[T](formId)
       }
     }
   }
 
   def saveJourneyType(userId: String, journeyType: JourneyType)(implicit hc: HeaderCarrier) =
-    shortLivedCache.cache(userId, journeyTypeKey, journeyType) map { data ⇒
+    shortLivedCache.cache(userId, journeyTypeKey, journeyType) map { data =>
       data.getEntry[JourneyType](journeyTypeKey)
     }
 
@@ -108,13 +108,13 @@ class Save4LaterService @Inject()(
     implicit hc: HeaderCarrier,
     formats: json.Format[T]): Future[Option[T]] = {
     val key = displayKeyForPage(formId)
-    shortLivedCache.cache(userId, key, data) map { data ⇒
+    shortLivedCache.cache(userId, key, data) map { data =>
       data.getEntry[T](key)
     }
   }
 
   def saveDisplayDeclaration(userId: String, declaration: des.Declaration)(implicit hc: HeaderCarrier) =
-    shortLivedCache.cache(userId, displayDesDeclarationKey, declaration) map { data ⇒
+    shortLivedCache.cache(userId, displayDesDeclarationKey, declaration) map { data =>
       data.getEntry[des.Declaration](displayDesDeclarationKey)
     }
 

@@ -56,7 +56,7 @@ object LtdLargeUkWithModifications {
             None,
             None,
             "Company Secretary"
-          )) → ListWithTrackedChanges.Added,
+          )) -> ListWithTrackedChanges.Added,
         CompanyOfficer(
           CompanyOfficerType.Individual,
           CompanyOfficerIndividual(
@@ -68,7 +68,7 @@ object LtdLargeUkWithModifications {
             None,
             None,
             "Director"
-          )) → ListWithTrackedChanges.NoChange,
+          )) -> ListWithTrackedChanges.NoChange,
         CompanyOfficer(
           CompanyOfficerType.Company,
           CompanyOfficerCompany(
@@ -78,7 +78,7 @@ object LtdLargeUkWithModifications {
             None,
             "Company Secretary"
           )
-        ) → ListWithTrackedChanges.Updated
+        ) -> ListWithTrackedChanges.Updated
       ),
       List(
         CompanyOfficer(
@@ -101,9 +101,9 @@ object LtdLargeUkWithModifications {
       true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) → ListWithTrackedChanges.Added,
-          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.Updated,
-          StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) → ListWithTrackedChanges.NoChange
+          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> ListWithTrackedChanges.Added,
+          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.Updated,
+          StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.NoChange
         ),
         List(StoragePremise(Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)),
         false

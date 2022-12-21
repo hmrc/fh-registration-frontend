@@ -66,7 +66,7 @@ object LtdMinimumInternational {
             None,
             "Company Secretary"
           )
-        ) → changeFlags),
+        ) -> changeFlags),
       List.empty,
       false
     ),

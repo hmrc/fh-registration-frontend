@@ -13,8 +13,7 @@ import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
-
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait TestConfiguration
   extends GuiceOneServerPerSuite
@@ -23,7 +22,7 @@ trait TestConfiguration
     with BeforeAndAfterEach
     with BeforeAndAfterAll {
 
-  me: Suite with TestSuite ⇒
+  me: Suite with TestSuite =>
 
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
@@ -71,9 +70,10 @@ trait TestConfiguration
         app.injector.instanceOf[HealthController]
 
 
-  private def replaceWithWiremock(services: Seq[String]) =
+  private def replaceWithWiremock(services: Seq[String]) = {
+
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
-      configMap + (
+      configMap ++ Map(
         s"microservice.services.$service.host" -> wiremockHost,
         s"microservice.services.$service.port" -> wiremockPort,
         s"microservice.services.cachable.short-lived-cache.domain" -> "save4later",
@@ -83,8 +83,9 @@ trait TestConfiguration
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty
       )
-    } +
-      (s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
+    } ++
+      Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
+  }
 
   val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 

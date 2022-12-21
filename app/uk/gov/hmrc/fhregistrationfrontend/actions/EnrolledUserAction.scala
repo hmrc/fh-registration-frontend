@@ -36,9 +36,9 @@ class EnrolledUserAction(implicit errorHandler: ErrorHandler, val executionConte
     implicit val r = request
     Future successful {
       request.registrationNumber match {
-        case Some(registrationNumber) ⇒
+        case Some(registrationNumber) =>
           Right(new EnrolledUserRequest[A](registrationNumber, request))
-        case None ⇒
+        case None =>
           logger.error(s"Not found: registration number. Is user enrolled?")
           Left(errorHandler.errorResultsPages(Results.BadRequest))
       }

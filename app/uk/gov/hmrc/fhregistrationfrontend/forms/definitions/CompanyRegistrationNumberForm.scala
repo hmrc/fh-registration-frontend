@@ -27,7 +27,7 @@ object CompanyRegistrationNumberForm {
 
   val companyRegistrationNumberForm = Form(
     mapping(
-      companyRegistrationNumberKey → companyRegistrationNumber
+      companyRegistrationNumberKey -> companyRegistrationNumber
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 

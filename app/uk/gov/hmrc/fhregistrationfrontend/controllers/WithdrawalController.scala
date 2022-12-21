@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
@@ -55,44 +54,44 @@ class WithdrawalController @Inject()(
     Redirect(routes.WithdrawalController.reason)
   }
 
-  def reason = enrolledUserAction { implicit request ⇒
+  def reason = enrolledUserAction { implicit request =>
     Ok(views.withdrawal_reason(withdrawalReasonForm))
   }
 
-  def postReason = enrolledUserAction.async { implicit request ⇒
+  def postReason = enrolledUserAction.async { implicit request =>
     withdrawalReasonForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ Future successful BadRequest(views.withdrawal_reason(formWithError)),
-        withdrawalReason ⇒
+        formWithError => Future successful BadRequest(views.withdrawal_reason(formWithError)),
+        withdrawalReason =>
           keyStoreService
             .saveWithdrawalReason(withdrawalReason)
-            .map(_ ⇒ Redirect(routes.WithdrawalController.confirm))
+            .map(_ => Redirect(routes.WithdrawalController.confirm))
       )
   }
 
-  def withWithdrawalReason(f: EnrolledUserRequest[_] ⇒ WithdrawalReason ⇒ Future[Result]) =
-    enrolledUserAction.async { implicit request ⇒
+  def withWithdrawalReason(f: EnrolledUserRequest[_] => WithdrawalReason => Future[Result]) =
+    enrolledUserAction.async { implicit request =>
       keyStoreService.fetchWithdrawalReason() flatMap {
-        case Some(reason) ⇒ f(request)(reason)
-        case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
+        case Some(reason) => f(request)(reason)
+        case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
-  def confirm = withWithdrawalReason { implicit request ⇒ reason ⇒
-    contactEmail map (email ⇒ Ok(views.withdrawal_confirm(confirmationForm, email)))
+  def confirm = withWithdrawalReason { implicit request => reason =>
+    contactEmail map (email => Ok(views.withdrawal_confirm(confirmationForm, email)))
   }
 
-  def postConfirmation = withWithdrawalReason { implicit request ⇒ reason ⇒
+  def postConfirmation = withWithdrawalReason { implicit request => reason =>
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ {
+        formWithError => {
           println(" form with error ::" + formWithError)
           val errorsNew: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
           val newFormErrors = formWithError.copy(errors = errorsNew)
           println(" newFormErrors ::" + newFormErrors)
-          contactEmail map (email ⇒ BadRequest(views.withdrawal_confirm(newFormErrors, email)))
+          contactEmail map (email => BadRequest(views.withdrawal_confirm(newFormErrors, email)))
         },
         handleConfirmation(_, reason)
       )
@@ -102,12 +101,12 @@ class WithdrawalController @Inject()(
     implicit request: EnrolledUserRequest[_]) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
-        .map { processingDate ⇒
+        .map { processingDate =>
           Redirect(routes.WithdrawalController.acknowledgment)
             .withSession(
               request.session
-                + (EmailSessionKey → confirmed.email.get)
-                + (ProcessingTimestampSessionKey → processingDate.getTime.toString))
+                + (EmailSessionKey               -> confirmed.email.get)
+                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString))
 
         }
     } else {
@@ -128,14 +127,14 @@ class WithdrawalController @Inject()(
       .withdraw(request.registrationNumber, withdrawRequest)
   }
 
-  def acknowledgment = userAction { implicit request ⇒
+  def acknowledgment = userAction { implicit request =>
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
+      email     <- request.session get EmailSessionKey
+      timestamp <- request.session get ProcessingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.withdrawal_acknowledgement(processingDate, email))

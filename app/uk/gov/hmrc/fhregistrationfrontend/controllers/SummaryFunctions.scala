@@ -30,7 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.summary.SummaryPrintable
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 
 trait SummaryFunctions {
-  this: AppController ⇒
+  this: AppController =>
 
   protected def getSummaryHtml(
     application: BusinessEntityApplication,
@@ -39,19 +39,19 @@ trait SummaryFunctions {
     params: SummaryPageParams,
     views: Views)(implicit request: Request[AnyContent]): Html =
     application match {
-      case a: LimitedCompanyApplication ⇒
+      case a: LimitedCompanyApplication =>
         views.ltd_summary(a, bpr, verifiedEmail, None, params)
-      case a: SoleProprietorApplication ⇒
+      case a: SoleProprietorApplication =>
         views.sole_proprietor_summary(a, bpr, verifiedEmail, None, params)
-      case a: PartnershipApplication ⇒
+      case a: PartnershipApplication =>
         views.partnership_summary(a, bpr, verifiedEmail, None, params)
     }
 
   protected def getSummaryPrintable(journeys: Journeys)(implicit request: SummaryRequest[AnyContent]) = {
     val application = request.businessType match {
-      case BusinessType.CorporateBody ⇒ journeys ltdApplication request
-      case BusinessType.SoleTrader ⇒ journeys soleTraderApplication request
-      case BusinessType.Partnership ⇒ journeys partnershipApplication request
+      case BusinessType.CorporateBody => journeys ltdApplication request
+      case BusinessType.SoleTrader    => journeys soleTraderApplication request
+      case BusinessType.Partnership   => journeys partnershipApplication request
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)
@@ -59,8 +59,8 @@ trait SummaryFunctions {
 
   protected def readOnlySummaryPageParams(status: FhddsStatus) = {
     val mode = status match {
-      case FhddsStatus.Deregistered | FhddsStatus.Revoked ⇒ Mode.ReadOnlyRegister
-      case _ ⇒ Mode.ReadOnlyApplication
+      case FhddsStatus.Deregistered | FhddsStatus.Revoked => Mode.ReadOnlyRegister
+      case _                                              => Mode.ReadOnlyApplication
 
     }
     SummaryPageParams(mode, None)
@@ -73,9 +73,9 @@ trait SummaryFunctions {
     SummaryPageParams(modeForJourneyType(journeyType), hasUpdates)
 
   protected def modeForJourneyType(journeyType: JourneyType) = journeyType match {
-    case JourneyType.New ⇒ Mode.New
-    case JourneyType.Variation ⇒ Mode.Variation
-    case JourneyType.Amendment ⇒ Mode.Amendment
+    case JourneyType.New       => Mode.New
+    case JourneyType.Variation => Mode.Variation
+    case JourneyType.Amendment => Mode.Amendment
   }
 
 }

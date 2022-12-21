@@ -14,10 +14,10 @@ class ApplicationControllerIntegrationSpec
       given
         .audit.writesAuditOrMerged()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         whenReady(client.url(s"http://localhost:$port/ping/ping")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) {result ⇒
+          .get()) {result =>
           result.status mustBe 200
         }
       }
@@ -28,9 +28,9 @@ class ApplicationControllerIntegrationSpec
         .audit.writesAuditOrMerged()
         .user.isNotAuthorised()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()) { res ⇒
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9553/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
         }
@@ -43,19 +43,19 @@ class ApplicationControllerIntegrationSpec
         .user.isAuthorised()
         .fhddsBackend.hasNoEnrolmentProgress()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         whenReady(client.url(s"$baseUrl").withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) { res ⇒
+          .get()) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "/fhdds/start"
         }
       }
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         whenReady(client.url(s"$baseUrl/start").withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) { res ⇒
+          .get()) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9923/business-customer/FHDDS"
         }
@@ -67,11 +67,11 @@ class ApplicationControllerIntegrationSpec
       given
           .commonPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/businessType")
         }
@@ -83,12 +83,12 @@ class ApplicationControllerIntegrationSpec
       given
         .commonPreconditionAssist
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 403
           res.body.toString.contains("You cannot access this page") mustBe true
         }
@@ -100,12 +100,12 @@ class ApplicationControllerIntegrationSpec
       given
         .commonPreconditionNoRole
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 400
           res.body.toString.contains("Bad Request") mustBe true
         }

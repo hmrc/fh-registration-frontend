@@ -48,11 +48,11 @@ class DefaultEmailVerificationConnector @Inject()(
     implicit val customReads = new HttpReads[Boolean] {
       override def read(method: String, url: String, response: HttpResponse): Boolean =
         response.status match {
-          case status if status == 200 ⇒ true
-          case status if status == 404 ⇒ false
-          case status if is4xx(status) ⇒
+          case status if status == 200 => true
+          case status if status == 404 => false
+          case status if is4xx(status) =>
             throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 500)
-          case status if is5xx(status) ⇒
+          case status if is5xx(status) =>
             throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 502)
         }
     }
@@ -75,11 +75,11 @@ class DefaultEmailVerificationConnector @Inject()(
     implicit val customReads = new HttpReads[Boolean] {
       override def read(method: String, url: String, response: HttpResponse): Boolean =
         response.status match {
-          case status if status == 409 ⇒ true
-          case status if status == 201 ⇒ false
-          case status if is4xx(status) ⇒
+          case status if status == 409 => true
+          case status if status == 201 => false
+          case status if is4xx(status) =>
             throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 500)
-          case status if is5xx(status) ⇒
+          case status if is5xx(status) =>
             throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 502)
 
         }

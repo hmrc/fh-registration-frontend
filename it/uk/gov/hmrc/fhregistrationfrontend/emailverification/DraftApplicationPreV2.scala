@@ -16,13 +16,13 @@ class DraftApplicationPreV2
           .save4later.hasFullPreEmailVerificationData()
           .audit.writesAuditOrMerged()
 
-        WsTestClient withClient { implicit client ⇒
+        WsTestClient withClient { implicit client =>
           val result = client.url(s"$baseUrl/summary")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withFollowRedirects(false)
             .get()
 
-          whenReady(result) { res ⇒
+          whenReady(result) { res =>
             res.status mustBe 303
             res.header("Location") mustBe Some("/fhdds/email-verification-status")
           }
@@ -35,13 +35,13 @@ class DraftApplicationPreV2
           .save4later.hasFullPreEmailVerificationData()
           .audit.writesAuditOrMerged()
 
-        WsTestClient withClient { implicit client ⇒
+        WsTestClient withClient { implicit client =>
           val result = client.url(s"$baseUrl/form/mainBusinessAddressPage")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withFollowRedirects(false)
             .get()
 
-          whenReady(result) { res ⇒
+          whenReady(result) { res =>
             res.status mustBe 303
             res.header("Location") mustBe Some("/fhdds/email-verification-status")
           }
@@ -54,13 +54,13 @@ class DraftApplicationPreV2
             .save4later.hasFullPreEmailVerificationData()
             .audit.writesAuditOrMerged()
 
-          WsTestClient withClient { implicit client ⇒
+          WsTestClient withClient { implicit client =>
             val result = client.url(s"$baseUrl/declaration")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withFollowRedirects(false)
               .get()
 
-            whenReady(result) { res ⇒
+            whenReady(result) { res =>
               res.status mustBe 303
               res.header("Location") mustBe Some("/fhdds/email-verification-status")
             }

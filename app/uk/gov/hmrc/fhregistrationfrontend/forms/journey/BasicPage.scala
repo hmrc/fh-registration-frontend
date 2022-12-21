@@ -32,14 +32,14 @@ case class BasicPage[T](
   rendering: FormRendering[T],
   data: Option[T] = None,
   updatedAddresses: List[Address] = List.empty,
-  addressOnPage: T ⇒ Option[Address] = (_: T) ⇒ None
+  addressOnPage: T => Option[Address] = (_: T) => None
 )(implicit val format: Format[T])
     extends Page[T] with Rendering {
 
   override def withData(data: T) = this copy (data = Some(data))
 
   override def nextSubsection: Option[String] = None
-  override def parseFromRequest[X](onError: Rendering ⇒ X, onSuccess: Page[T] ⇒ X)(implicit r: Request[_]): X = {
+  override def parseFromRequest[X](onError: Rendering => X, onSuccess: Page[T] => X)(implicit r: Request[_]): X = {
     import play.api.data.FormBinding.Implicits._
     val updatedForm = form.bindFromRequest
     logger.info(s"errors ${updatedForm.errors}")
@@ -70,7 +70,7 @@ case class BasicPage[T](
   }
 
   override val withSubsection: PartialFunction[Option[String], Page[T]] = {
-    case None ⇒ this
+    case None => this
   }
 
   override def delete: Option[Page[T]] = None

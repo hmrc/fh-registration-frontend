@@ -39,11 +39,11 @@
         @SummaryRepeatingHead(heading = Messages("fh.company_officers.each.title",{index+1}), changeLink = changeLink, section = {index+1}.toString())
 
         @{companyOfficer.identification match {
-            case individual: CompanyOfficerIndividualModel ⇒
+            case individual: CompanyOfficerIndividualModel =>
 
                 CompanyOfficerIndividual(individual)
 
-            case company: CompanyOfficerCompanyModel ⇒
+            case company: CompanyOfficerCompanyModel =>
 
                 CompanyOfficerCompany(company)
 

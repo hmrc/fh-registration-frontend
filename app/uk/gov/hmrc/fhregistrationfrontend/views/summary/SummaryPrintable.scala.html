@@ -24,7 +24,7 @@
 
 @{
   applicationData match {
-    case limitedCompanyApplication: LimitedCompanyApplication ⇒
+    case limitedCompanyApplication: LimitedCompanyApplication =>
       Html(EmailAddress(verifiedEmail, ReadOnlyApplication).toString() +
           ContactPerson(limitedCompanyApplication.contactPerson, bpr, ReadOnlyApplication).toString() +
           MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, ReadOnlyApplication).toString() +
@@ -45,7 +45,7 @@
           "</dl>"
       )
 
-    case soleProprietorApplication: SoleProprietorApplication ⇒
+    case soleProprietorApplication: SoleProprietorApplication =>
       Html(
             EmailAddress(verifiedEmail, ReadOnlyApplication).toString() +
             ContactPerson(soleProprietorApplication.contactPerson, bpr, ReadOnlyApplication).toString() +
@@ -65,7 +65,7 @@
             "</dl>"
       )
 
-    case partnershipApplication: PartnershipApplication ⇒
+    case partnershipApplication: PartnershipApplication =>
       Html(
             EmailAddress(verifiedEmail, ReadOnlyApplication).toString() +
             ContactPerson(partnershipApplication.contactPerson, bpr, ReadOnlyApplication).toString() +

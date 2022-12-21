@@ -26,7 +26,7 @@ case class IsNewFulfilmentBusiness(isNewFulfilmentBusiness: Boolean, proposedSta
 object IsNewFulfilmentBusiness {
   val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   implicit val localDateReads = Reads.localDateReads("yyyy-MM-dd")
-  implicit val localDateWrites = Writes { date: LocalDate ⇒
+  implicit val localDateWrites = Writes { date: LocalDate =>
     JsString(date.format(dateTimeFormatter))
   }
   implicit val format = Json.format[IsNewFulfilmentBusiness]

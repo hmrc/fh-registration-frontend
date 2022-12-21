@@ -32,8 +32,8 @@ class BasicPageSpecs extends UnitSpec with MockitoSugar {
       val request = FakeRequest().withFormUrlEncodedBody(formData(): _*)
 
       mainBusinessAddressPage.parseFromRequest(
-        _ ⇒ fail("Should have no errors"),
-        page ⇒ page.updatedAddresses.size shouldBe 1
+        _ => fail("Should have no errors"),
+        page => page.updatedAddresses.size shouldBe 1
       )(request)
     }
 
@@ -49,27 +49,27 @@ class BasicPageSpecs extends UnitSpec with MockitoSugar {
       mainBusinessAddressPage
         .withData(data)
         .parseFromRequest(
-          _ ⇒ fail("Should have no errors"),
-          page ⇒ page.updatedAddresses.size shouldBe 1
+          _ => fail("Should have no errors"),
+          page => page.updatedAddresses.size shouldBe 1
         )(request)
     }
   }
 
   private def formData() = {
     val addressForm = Seq(
-      "Line1" → "Some",
-      "postcode" → "AA11 1AA"
-    ).map { case (k, v) ⇒ s"mainPreviousAddressUK_previousAddress.$k" -> v }
+      "Line1"    -> "Some",
+      "postcode" -> "AA11 1AA"
+    ).map { case (k, v) => s"mainPreviousAddressUK_previousAddress.$k" -> v }
 
     val dateForm = Seq(
-      "day" → "01",
-      "month" → "01",
-      "year" → "2017"
-    ).map { case (k, v) ⇒ s"${MainBusinessAddressForm.previousAddressStartdateKey}.$k" -> v }
+      "day"   -> "01",
+      "month" -> "01",
+      "year"  -> "2017"
+    ).map { case (k, v) => s"${MainBusinessAddressForm.previousAddressStartdateKey}.$k" -> v }
 
     val form = Seq(
-      MainBusinessAddressForm.timeAtCurrentAddressKey → "Less than 3 years",
-      MainBusinessAddressForm.previousAddressKey → "true"
+      MainBusinessAddressForm.timeAtCurrentAddressKey -> "Less than 3 years",
+      MainBusinessAddressForm.previousAddressKey      -> "true"
     )
     form ++ dateForm ++ addressForm
   }

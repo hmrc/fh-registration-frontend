@@ -26,19 +26,19 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
   import ContactPersonForm._
 
   val validShort = Map(
-    firstNameKey → "George",
-    lastNameKey → "Costanza",
-    jobTitleKey → "Parking Attendant",
-    telephoneKey → "07012311234",
-    emailAddressKey → "george.costanza@seinfeld.org",
-    usingSameContactAddressKey → "true"
+    firstNameKey               -> "George",
+    lastNameKey                -> "Costanza",
+    jobTitleKey                -> "Parking Attendant",
+    telephoneKey               -> "07012311234",
+    emailAddressKey            -> "george.costanza@seinfeld.org",
+    usingSameContactAddressKey -> "true"
   )
 
   val dataWithOtherAddress = validShort +
-    (usingSameContactAddressKey → "false")
+    (usingSameContactAddressKey -> "false")
 
   val validWithUkAddress = dataWithOtherAddress +
-    (isUkAddressKey → "true") ++
+    (isUkAddressKey -> "true") ++
     TestData.addressDataUk(otherUkContactAddressKey)
 
   "Contact person form" should {
@@ -46,21 +46,21 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     "reject data with other address true but no address" in {
       formDataHasErrors(
         dataWithOtherAddress,
-        List(isUkAddressKey → "error.required")
+        List(isUkAddressKey -> "error.required")
       )
     }
 
     "reject data with other uk address but no address" in {
       formDataHasErrors(
-        dataWithOtherAddress + (isUkAddressKey → "true"),
-        List(s"$otherUkContactAddressKey.Line1" → "error.required")
+        dataWithOtherAddress + (isUkAddressKey -> "true"),
+        List(s"$otherUkContactAddressKey.Line1" -> "error.required")
       )
     }
 
     "reject data with other international address but no address" in {
       formDataHasErrors(
-        dataWithOtherAddress + (isUkAddressKey → "false"),
-        List(s"$otherInternationalContactAddressKey.Line1" → "error.required")
+        dataWithOtherAddress + (isUkAddressKey -> "false"),
+        List(s"$otherInternationalContactAddressKey.Line1" -> "error.required")
       )
     }
 
@@ -68,11 +68,11 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       formDataHasErrors(
         Map(),
         List(
-          firstNameKey → "error.required",
-          lastNameKey → "error.required",
-          jobTitleKey → "error.required",
-          telephoneKey → "error.required",
-          usingSameContactAddressKey → "error.required"
+          firstNameKey               -> "error.required",
+          lastNameKey                -> "error.required",
+          jobTitleKey                -> "error.required",
+          telephoneKey               -> "error.required",
+          usingSameContactAddressKey -> "error.required"
         )
       )
     }
@@ -84,7 +84,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       fieldHasErrors(firstNameKey, Array.fill(36)('a').mkString, "error.pattern")
       fieldHasErrors(lastNameKey, Array.fill(36)('a').mkString, "error.pattern")
 
-      for (w ← Seq("@", "#")) {
+      for (w <- Seq("@", "#")) {
         fieldHasErrors(firstNameKey, w, "error.pattern")
         fieldHasErrors(lastNameKey, w, "error.pattern")
       }

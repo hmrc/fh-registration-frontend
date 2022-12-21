@@ -15,13 +15,13 @@ class DraftApplication
         .save4later.hasBusinessInformationWOVerifiedEmail
         .audit.writesAuditOrMerged()
 
-      WsTestClient withClient { implicit client ⇒
+      WsTestClient withClient { implicit client =>
         val result = client.url(s"$baseUrl/form/contactPerson")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withFollowRedirects(false)
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 303
           res.header("Location") mustBe Some("/fhdds/email-verification-status")
         }

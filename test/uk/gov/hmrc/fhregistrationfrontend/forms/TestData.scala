@@ -21,14 +21,14 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 object TestData {
 
   private val addressData = Map(
-    "Line1" → "line one",
-    "Line2" → "line two",
-    "postcode" → "AA11 1AA"
+    "Line1"    -> "line one",
+    "Line2"    -> "line two",
+    "postcode" -> "AA11 1AA"
   )
 
   def addressDataUk(prefix: String) =
     addressData map {
-      case (k, v) ⇒
+      case (k, v) =>
         s"$prefix.$k" -> v
     }
 

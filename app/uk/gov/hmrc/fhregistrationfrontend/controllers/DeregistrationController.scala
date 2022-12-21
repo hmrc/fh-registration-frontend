@@ -56,45 +56,45 @@ class DeregistrationController @Inject()(
     Redirect(routes.DeregistrationController.reason)
   }
 
-  def reason = enrolledUserAction { implicit request ⇒
+  def reason = enrolledUserAction { implicit request =>
     Ok(views.deregistration_reason(deregistrationReasonForm))
   }
 
-  def postReason = enrolledUserAction.async { implicit request ⇒
+  def postReason = enrolledUserAction.async { implicit request =>
     deregistrationReasonForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ Future successful BadRequest(views.deregistration_reason(formWithError)),
-        deregistrationReason ⇒
+        formWithError => Future successful BadRequest(views.deregistration_reason(formWithError)),
+        deregistrationReason =>
           keyStoreService
             .saveDeregistrationReason(deregistrationReason)
-            .map(_ ⇒ Redirect(routes.DeregistrationController.confirm))
+            .map(_ => Redirect(routes.DeregistrationController.confirm))
       )
   }
 
-  def confirm = withDeregistrationReason { implicit request ⇒ reason ⇒
-    contactEmail map (email ⇒ Ok(views.deregistration_confirm(confirmationForm, email)))
+  def confirm = withDeregistrationReason { implicit request => reason =>
+    contactEmail map (email => Ok(views.deregistration_confirm(confirmationForm, email)))
   }
 
-  def postConfirmation = withDeregistrationReason { implicit request ⇒ reason ⇒
+  def postConfirmation = withDeregistrationReason { implicit request => reason =>
     confirmationForm
       .bindFromRequest()
       .fold(
-        formWithError ⇒ {
+        formWithError => {
           val errors: List[FormError] = formWithError.errors.groupBy(_.key).map(x => x._2.head).toList
           val newFormErrors = formWithError.copy(errors = errors)
           println(" form with error::" + newFormErrors)
-          contactEmail map (email ⇒ BadRequest(views.deregistration_confirm(newFormErrors, email)))
+          contactEmail map (email => BadRequest(views.deregistration_confirm(newFormErrors, email)))
         },
         handleConfirmation(_, reason)
       )
   }
 
-  def withDeregistrationReason(f: EnrolledUserRequest[_] ⇒ DeregistrationReason ⇒ Future[Result]) =
-    enrolledUserAction.async { implicit request ⇒
+  def withDeregistrationReason(f: EnrolledUserRequest[_] => DeregistrationReason => Future[Result]) =
+    enrolledUserAction.async { implicit request =>
       keyStoreService.fetchDeregistrationReason() flatMap {
-        case Some(reason) ⇒ f(request)(reason)
-        case None ⇒ Future successful errorHandler.errorResultsPages(Results.BadRequest)
+        case Some(reason) => f(request)(reason)
+        case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
     }
 
@@ -102,12 +102,12 @@ class DeregistrationController @Inject()(
     implicit request: EnrolledUserRequest[_]) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
-        .map { processingDate ⇒
+        .map { processingDate =>
           Redirect(routes.DeregistrationController.acknowledgment)
             .withSession(
               request.session
-                + (EmailSessionKey → confirmed.email.get)
-                + (ProcessingTimestampSessionKey → processingDate.getTime.toString))
+                + (EmailSessionKey               -> confirmed.email.get)
+                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString))
 
         }
     } else {
@@ -128,14 +128,14 @@ class DeregistrationController @Inject()(
       .deregister(request.registrationNumber, deregistrationRequest)
   }
 
-  def acknowledgment = userAction { implicit request ⇒
+  def acknowledgment = userAction { implicit request =>
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =
     for {
-      email ← request.session get EmailSessionKey
-      timestamp ← request.session get ProcessingTimestampSessionKey
+      email     <- request.session get EmailSessionKey
+      timestamp <- request.session get ProcessingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
     } yield {
       Ok(views.deregistration_acknowledgement(processingDate, email))

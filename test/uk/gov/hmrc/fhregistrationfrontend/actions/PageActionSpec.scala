@@ -72,12 +72,12 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Load page data" in {
-      val seqPages = journeys.partnershipPages map { page ⇒
+      val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case contactPersonPage.id ⇒ page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
-          case mainBusinessAddressPage.id ⇒
+          case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+          case mainBusinessAddressPage.id =>
             page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
-          case _ ⇒ page
+          case _ => page
         }
       }
 

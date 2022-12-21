@@ -28,10 +28,10 @@ object ConfirmationForm {
   val defaultEmailKey = "defaultEmail"
   val alternativeEmailKey = "alternativeEmail"
 
-  private val confirmMapping = confirmKey → yesOrNo
-  private val usingDefaultEmailMapping = usingDefaultEmailKey → (yesOrNo onlyWhen (confirmMapping is true))
-  private val defaultEmailMapping = defaultEmailKey → (email onlyWhen (usingDefaultEmailMapping is Some(true)))
-  private val alternativeEmailMapping = alternativeEmailKey → (alternativeEmail onlyWhen (usingDefaultEmailMapping is Some(
+  private val confirmMapping = confirmKey                     -> yesOrNo
+  private val usingDefaultEmailMapping = usingDefaultEmailKey -> (yesOrNo onlyWhen (confirmMapping is true))
+  private val defaultEmailMapping = defaultEmailKey           -> (email onlyWhen (usingDefaultEmailMapping is Some(true)))
+  private val alternativeEmailMapping = alternativeEmailKey -> (alternativeEmail onlyWhen (usingDefaultEmailMapping is Some(
     false)))
 
   val confirmationForm = Form(

@@ -29,7 +29,7 @@ class ConditionIs[T](mapping: Mapping[T], value: T) extends Condition {
     mapping
       .bind(data)
       .fold(
-        _ ⇒ false,
+        _ => false,
         _ == value
       )
 

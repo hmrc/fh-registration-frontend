@@ -34,7 +34,7 @@ trait ActionSpecBase
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A])(implicit timeout: Timeout) = {
     val p = Promise[P[_]]
-    val result = action.invokeBlock(request, { r: P[A] ⇒
+    val result = action.invokeBlock(request, { r: P[A] =>
       p success r
       Ok
     })
@@ -44,7 +44,7 @@ trait ActionSpecBase
   }
 
   def result[P[_], R[_], A](action: ActionFunction[R, P], request: R[A]) =
-    action.invokeBlock(request, { r: P[A] ⇒
+    action.invokeBlock(request, { r: P[A] =>
       Ok
     })
 

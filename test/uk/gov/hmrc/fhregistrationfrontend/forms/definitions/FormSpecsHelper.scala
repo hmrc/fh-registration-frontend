@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import org.scalatest.matchers.should.Matchers
 import play.api.data.Form
+import scala.language.postfixOps
 
 trait FormSpecsHelper[T] extends Matchers {
 
@@ -34,17 +35,17 @@ trait FormSpecsHelper[T] extends Matchers {
   def formDataHasErrors(post: Map[String, String], expected: Seq[(String, String)]): Unit = {
     val result = form bind post
     result.value.isDefined shouldBe false
-    val errors = result.errors.flatMap(v ⇒ v.messages.map(m ⇒ v.key → m))
+    val errors = result.errors.flatMap(v => v.messages.map(m => v.key -> m))
     errors should not be empty
     errors should contain allElementsOf expected
   }
 
   def fieldHasErrors(key: String, value: String, errors: String*) =
-    formDataHasErrors(Map(key → value), errors map { key → _ } toList)
+    formDataHasErrors(Map(key -> value), errors map { key -> _ } toList)
 
   def formRequires(fields: String*) =
     formDataHasErrors(
       Map.empty,
-      fields map { _ → "error.required" }
+      fields map { _ -> "error.required" }
     )
 }

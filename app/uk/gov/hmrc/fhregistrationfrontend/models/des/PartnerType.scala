@@ -57,19 +57,19 @@ object PartnerType {
 //
 //  ) {
 //    override def writes(o: PartnerType) = o match {
-//      case p: SoleProprietorPartnerType ⇒
+//      case p: SoleProprietorPartnerType =>
 //    }
   val writes = new Writes[PartnerType] {
     override def writes(o: PartnerType) = o match {
-      case obj: IndividualPartnerType ⇒ Json toJson obj
-      case obj: SoleProprietorPartnerType ⇒ Json toJson obj
-      case obj: LimitedLiabilityPartnershipType ⇒ Json toJson obj
-      case obj: PartnershipOrUnIncorporatedBodyPartnerType ⇒ Json toJson obj
+      case obj: IndividualPartnerType                      => Json toJson obj
+      case obj: SoleProprietorPartnerType                  => Json toJson obj
+      case obj: LimitedLiabilityPartnershipType            => Json toJson obj
+      case obj: PartnershipOrUnIncorporatedBodyPartnerType => Json toJson obj
     }
   }
 
   val reads: Reads[PartnerType] = new Reads[PartnerType] {
-    override def reads(json: JsValue) = json.validate[JsObject].flatMap { o ⇒
+    override def reads(json: JsValue) = json.validate[JsObject].flatMap { o =>
       if ((o \ "name").toOption.isDefined
           && (o \ "identification").toOption.isDefined) {
         soleProprietorPartnerTypeFormat reads json

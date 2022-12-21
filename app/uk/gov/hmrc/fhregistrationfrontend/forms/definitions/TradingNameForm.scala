@@ -27,8 +27,8 @@ object TradingNameForm {
   val hasTradingNameKey = "tradingName_yesNo"
   val tradingNameKey = "tradingName_value"
 
-  private val hasTradingNameMapping = hasTradingNameKey → yesOrNo
-  private val tradingNameMapping = tradingNameKey → (tradingName onlyWhen (hasTradingNameMapping is true))
+  private val hasTradingNameMapping = hasTradingNameKey -> yesOrNo
+  private val tradingNameMapping = tradingNameKey       -> (tradingName onlyWhen (hasTradingNameMapping is true))
 
   val tradingNameForm = Form(
     mapping(

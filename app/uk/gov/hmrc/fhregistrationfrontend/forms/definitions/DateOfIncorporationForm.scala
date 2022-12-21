@@ -26,7 +26,7 @@ object DateOfIncorporationForm {
   val dateOfIncorporationKey = "dateOfIncorporation"
   val dateOfIncorporationForm = Form(
     mapping(
-      dateOfIncorporationKey → localNew
+      dateOfIncorporationKey -> localNew
     )(DateOfIncorporation.apply)(DateOfIncorporation.unapply)
   )
 

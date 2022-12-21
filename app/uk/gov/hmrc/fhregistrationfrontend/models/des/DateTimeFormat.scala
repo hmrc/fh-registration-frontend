@@ -28,7 +28,7 @@ trait DateTimeFormat {
 object DateTimeFormat {
   val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   val localDateReads = Reads.localDateReads("yyyy-MM-dd")
-  val localDateWrites = Writes { date: LocalDate ⇒
+  val localDateWrites = Writes { date: LocalDate =>
     JsString(date.format(dateTimeFormatter))
   }
 

@@ -33,13 +33,13 @@ class SummaryController @Inject()(
 ) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
-  def summary() = summaryAction { implicit request ⇒
+  def summary() = summaryAction { implicit request =>
     val application = request.businessType match {
-      case BusinessType.CorporateBody ⇒
+      case BusinessType.CorporateBody =>
         journeys ltdApplication request
-      case BusinessType.SoleTrader ⇒
+      case BusinessType.SoleTrader =>
         journeys soleTraderApplication request
-      case BusinessType.Partnership ⇒
+      case BusinessType.Partnership =>
         journeys partnershipApplication request
     }
     Ok(

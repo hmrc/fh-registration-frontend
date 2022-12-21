@@ -18,17 +18,18 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerCompany, CompanyOfficerIndividual}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
+import scala.language.postfixOps
 
 class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOfficer] {
 
   override val form = CompanyOfficersForm.companyOfficerForm
 
   val validIndividual = Map(
-    "firstName" → "George",
-    "lastName" → "Costanza",
-    "hasNationalInsuranceNumber" → "true",
-    "nationalInsuranceNumber" → "AA123123A",
-    "role" → "Director"
+    "firstName"                  -> "George",
+    "lastName"                   -> "Costanza",
+    "hasNationalInsuranceNumber" -> "true",
+    "nationalInsuranceNumber"    -> "AA123123A",
+    "role"                       -> "Director"
   )
 
   "Company Officer as Individual" should {
@@ -38,7 +39,7 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
         "lastName",
         "hasNationalInsuranceNumber",
         "role"
-      ) map { _ → "error.required" }
+      ) map { _ -> "error.required" }
 
       formDataHasErrors(
         individual(),
@@ -48,56 +49,56 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
     "reject when no nino" in {
       formDataHasErrors(
-        individual("hasNationalInsuranceNumber" → "true"),
-        individualErrors("nationalInsuranceNumber" → "error.required")
+        individual("hasNationalInsuranceNumber"    -> "true"),
+        individualErrors("nationalInsuranceNumber" -> "error.required")
       )
     }
 
     "reject when no hasPassportNumber" in {
       formDataHasErrors(
-        individual("hasNationalInsuranceNumber" → "false"),
-        individualErrors("hasPassportNumber" → "error.required")
+        individual("hasNationalInsuranceNumber" -> "false"),
+        individualErrors("hasPassportNumber"    -> "error.required")
       )
     }
 
     "reject when no passportNumber" in {
       formDataHasErrors(
         individual(
-          "hasNationalInsuranceNumber" → "false",
-          "hasPassportNumber" → "true"
+          "hasNationalInsuranceNumber" -> "false",
+          "hasPassportNumber"          -> "true"
         ),
-        individualErrors("passportNumber" → "error.required")
+        individualErrors("passportNumber" -> "error.required")
       )
     }
 
     "reject when no nationalId" in {
       formDataHasErrors(
         individual(
-          "hasNationalInsuranceNumber" → "false",
-          "hasPassportNumber" → "false"
+          "hasNationalInsuranceNumber" -> "false",
+          "hasPassportNumber"          -> "false"
         ),
-        individualErrors("nationalID" → "error.required")
+        individualErrors("nationalID" -> "error.required")
       )
     }
 
     "reject when wrong role" in {
       formDataHasErrors(
         individual(
-          "role" → "not valid"
+          "role" -> "not valid"
         ),
-        individualErrors("role" → "error.invalid")
+        individualErrors("role" -> "error.invalid")
       )
     }
 
     "accept valid" in {
       val data = dataFromValidForm(individual(validIndividual.toSeq: _*))
       data.identification match {
-        case v: CompanyOfficerIndividual ⇒
+        case v: CompanyOfficerIndividual =>
           v.firstName shouldBe "George"
           v.lastName shouldBe "Costanza"
           v.hasNino shouldBe true
           v.nino shouldBe Some("AA123123A")
-        case _ ⇒ false shouldBe true
+        case _ => false shouldBe true
       }
 
     }
@@ -109,7 +110,7 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
         "companyName",
         "hasVat",
         "role"
-      ) map { _ → "error.required" }
+      ) map { _ -> "error.required" }
 
       formDataHasErrors(
         company(),
@@ -119,30 +120,30 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
     "reject when no vat" in {
       formDataHasErrors(
-        company("hasVat" → "true"),
-        companyErrors("vatRegistration" → "error.required")
+        company("hasVat"                -> "true"),
+        companyErrors("vatRegistration" -> "error.required")
       )
     }
 
     "reject when no company registration" in {
       formDataHasErrors(
-        company("hasVat" → "false"),
-        companyErrors("companyRegistration" → "error.required")
+        company("hasVat"                    -> "false"),
+        companyErrors("companyRegistration" -> "error.required")
       )
     }
 
     "accept valid data" in {
       val data = dataFromValidForm(
         company(
-          "companyName" → "Co co",
-          "hasVat" → "true",
-          "vatRegistration" → "123123123",
-          "role" → "Director"
+          "companyName"     -> "Co co",
+          "hasVat"          -> "true",
+          "vatRegistration" -> "123123123",
+          "role"            -> "Director"
         )
       )
       data.identification match {
-        case _: CompanyOfficerIndividual ⇒ false shouldBe true
-        case v: CompanyOfficerCompany ⇒
+        case _: CompanyOfficerIndividual => false shouldBe true
+        case v: CompanyOfficerCompany =>
           v.companyName shouldBe "Co co"
           v.hasVat shouldBe true
           v.vat shouldBe Some("123123123")
@@ -154,15 +155,15 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
   }
 
   def individualErrors(errors: (String, String)*) =
-    errors map { case (k, v) ⇒ s"individualIdentification.$k" -> v } toList
+    errors map { case (k, v) => s"individualIdentification.$k" -> v } toList
 
   def individual(data: (String, String)*) =
-    (data map { case (k, v) ⇒ s"individualIdentification.$k" -> v }).toMap + ("identificationType" → "Individual")
+    (data map { case (k, v) => s"individualIdentification.$k" -> v }).toMap + ("identificationType" -> "Individual")
 
   def companyErrors(errors: (String, String)*) =
-    errors map { case (k, v) ⇒ s"companyIdentification.$k" -> v } toList
+    errors map { case (k, v) => s"companyIdentification.$k" -> v } toList
 
   def company(data: (String, String)*) =
-    (data map { case (k, v) ⇒ s"companyIdentification.$k" -> v }).toMap + ("identificationType" → "Company")
+    (data map { case (k, v) => s"companyIdentification.$k" -> v }).toMap + ("identificationType" -> "Company")
 
 }

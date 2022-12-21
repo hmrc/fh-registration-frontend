@@ -16,12 +16,12 @@ class DeclarationControllerIntegrationSpec
       given
         .summaryPrecondition
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result = client.url(s"$baseUrl/declaration")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 200
         }
 
@@ -33,12 +33,12 @@ class DeclarationControllerIntegrationSpec
         .summaryPrecondition
         .fhddsBackend.createSubscription()
 
-      WsTestClient.withClient { client ⇒
+      WsTestClient.withClient { client =>
         val result =
           client.url(s"$baseUrl/submit")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
 
-            .withHttpHeaders("X-Session-ID" → "some-id",
+            .withHttpHeaders("X-Session-ID" -> "some-id",
               "Csrf-Token" -> "nocheck")
             .withFollowRedirects(false)
             .post(Map("fullName" -> Seq("Tester"),
@@ -47,7 +47,7 @@ class DeclarationControllerIntegrationSpec
               "defaultEmail" -> Seq("user@test.com")
             ))
 
-        whenReady(result) { res ⇒
+        whenReady(result) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/acknowledgement")
         }
