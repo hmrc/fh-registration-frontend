@@ -14,53 +14,121 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-        main_template: main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
 @(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
+@* @pageScripts = {*@
+@*  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>*@
+@*}*@
 
 @addMore = {
   @params.forceHasMore match {
     case Some(force) => {
-      <input type="hidden" name="addMore" value="@force" />
+      <input type="hidden" name="addMore" value="@force"/>
     }
     case None => {
-      @RadioGroup(
-        RadioGroupParams(
-          name = Some(s"addMore"),
-          value = companyOfficersForm(s"addMore").value,
-          legend = Some(Messages("fh.company_officers.company.addMore")),
-          error = Some(Messages("fh.addMore.error.required")),
-          hasErrors = companyOfficersForm(s"addMore").hasErrors,
-          radios = List(
-            RadioParams(
-              "true",
-              Messages("fh.generic.yes"),
-              None
-            ),
-            RadioParams(
-              "false",
-              Messages("fh.generic.no"),
-              None
-            )
+      @viewHelpers.govUkRadios(Radios(
+        fieldset = Some(Fieldset(
+          legend = Some(Legend(
+            content = Text(messages("fh.company_officers.company.addMore")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+          ))
+        )),
+        idPrefix = Some("addMore"),
+        name = "addMore",
+        errorMessage = if (companyOfficersForm("addMore").hasErrors) {
+          Some(ErrorMessage(content = Text(messages("fh.addMore.error.required"))))
+        } else None,
+        items = Seq(
+          RadioItem(
+            content = Text(messages("fh.generic.yes")),
+            value = Some("true"),
+            checked = companyOfficersForm("addMore").value.toList.contains("true")
+          ),
+          RadioItem(
+            content = Text(messages("fh.generic.no")),
+            value = Some("false"),
+            checked = companyOfficersForm("addMore").value.toList.contains("false")
           )
-        )
-      )
+        ),
+        classes = "govuk-radios--inline"
+      ))
     }
   }
+}
+
+@officerIsCompany = @{
+  <div>
+  viewHelpers.govUkRadios(Radios(
+    fieldset = Some(Fieldset(
+      legend = Some(Legend(
+        content = Text(Messages(title)),
+        classes = "govuk-fieldset__legend--m",
+        isPageHeading = false
+      ))
+  )),
+  idPrefix = Some(s"$companyIdentificationKey.$vatRegistrationKey"),
+  name = s"$companyIdentificationKey.$vatRegistrationKey",
+  errorMessage = if (vatNumberForm(hasVatNumberKey).hasErrors) {
+  Some(ErrorMessage(content = Text(messages(s"fh.vatNumber_yesNo.error.required"))))
+  } else None,
+  items = Seq(
+  RadioItem(
+  content = Text("Yes"),
+  value = Some("true"),
+  checked = vatNumberForm.data.values.toList.contains("true"),
+  conditionalHtml = Some(conditionalVATHtml)
+  ),
+  RadioItem(
+  content = Text("No"),
+  value = Some("false"),
+  checked = vatNumberForm.data.values.toList.contains("false"),
+
+
+  )
+  )
+  ))
+  </div>
+}
+@conditionalVATHtml = @{
+  viewHelpers.govukInput(Input(
+    id = s"$companyIdentificationKey.$vatRegistrationKey",
+    name = s"$companyIdentificationKey.$vatRegistrationKey",
+    label = Label(
+      isPageHeading = false,
+      content = HtmlContent(s"<strong>${messages("fh.vatNumber.label")}</strong>")
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    hint = Some(Hint(
+      content = Text(messages("fh.vatNumber.hintText"))
+    )),
+    errorMessage =
+      companyOfficersForm.error(vatRegistrationKey).map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+
+      },
+    value = companyOfficersForm(vatRegistrationKey).value
+  ))
+}
+
+@officerIsIndividual = {
+
 }
 
 @titlePrefix = @{
@@ -71,53 +139,58 @@
   Messages("fh.company_officers.title")
 }
 
-@main_template(title = titlePrefix + title, scriptElem = Some(pageScripts)) {
+@layout(title = titlePrefix + title) {
 
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+  @Back(navigation, viewHelpers)
+  @if(companyOfficersForm.errors.nonEmpty) {
 
-  @BackOld(navigation)
-
-  @error_box(companyOfficersForm, sectionP=section)
-
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
-
-  <p>@Messages("fh.company_officers.intro")</p>
-
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
-
-    @helper.CSRF.formField
-
-    @if(params.canRemove) {
-      <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}" style="float:right;">Remove</a>
-    }
-    <h2>@Messages("fh.company_officers.each.title", section)</h2>
-
-    @RadioGroup(
-      RadioGroupParams(
-        name = Some(identificationTypeKey),
-        legend = Some(Messages("fh.company_officers.entity_type.label")),
-        hasErrors = companyOfficersForm(identificationTypeKey).hasErrors,
-        error = Some(Messages("fh.identificationType.error.required", section)),
-        value = companyOfficersForm(identificationTypeKey).value,
-        inline = false,
-        radios = List(
-          RadioParams(
-            "Individual",
-            Messages("fh.company_officers.individual.label"),
-            Some("individualOfficers")
-          ),
-          RadioParams(
-            "Company",
-            Messages("fh.company_officers.company.label"),
-            Some("companyOfficers")
-          )
+    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+      companyOfficersForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
+        ErrorLink(
+          href = Some(s"#${error.key}"),
+          content = Text(Messages(s"fh.${error.key}.${error.message}"))
         )
+      }
+      ,
+      title = Text(messages("fh.generic.error"))))
+  }
+  <p class="govuk-body">@Messages("fh.company_officers.intro")</p>
+
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
+    @if(params.canRemove) {
+      <a class="govuk-link" style="float:right" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+              .confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}">
+      Remove
+      </a>
+    }
+    <h2 class="govuk-heading-m">@Messages("fh.company_officers.each.title", section)</h2>
+
+    @viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("fh.company_officers.entity_type.label")),
+          classes = "govuk-fieldset__legend--m",
+          isPageHeading = false
+        ))
+      )),
+      idPrefix = Some(identificationTypeKey),
+      name = identificationTypeKey,
+      errorMessage = if (companyOfficersForm(identificationTypeKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages("fh.identificationType.error.required", section))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          content = Text(messages("fh.company_officers.individual.label")),
+          value = Some("individualOfficers"),
+          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("individualOfficers")
+        ),
+        RadioItem(
+          content = Text(messages("fh.company_officers.company.label")),
+          value = Some("individualOfficers"),
+          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("companyOfficers")
+        ),
       )
-    )
+      ))
 
     <div class="form-group panel js-hidden" id="individualOfficers">
 
@@ -368,12 +441,7 @@
 
     @addMore
 
-    @SubmitButtons(
-      SubmitButtonsParams(
-        label = Messages("button.save.continue"),
-        summaryLink = false
-      ),
-      navigation
-    )
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
   }
 }
