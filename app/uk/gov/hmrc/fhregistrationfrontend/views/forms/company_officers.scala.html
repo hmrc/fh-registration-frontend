@@ -149,13 +149,10 @@
     name = s"$individualIdentificationKey.$passportNumberKey",
     label = Label(
       isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.passport.confirm")}</strong>")
+      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.passport.label")}</strong>")
     ),
     spellcheck = Some(false),
     classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.vatNumber.hintText"))
-    )),
     errorMessage =
       companyOfficersForm.error(s"$individualIdentificationKey.$passportNumberKey").map{ e =>
         ErrorMessage(
@@ -173,12 +170,12 @@
     name = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
     label = Label(
       isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.nino.confirm.label")}</strong>")
+      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.nino.label")}</strong>")
     ),
     spellcheck = Some(false),
     classes = "govuk-!-width-one-half",
     hint = Some(Hint(
-      content = Text(messages("fh.company_officers.individual.nino.confirm.hint_text"))
+      content = Text(messages("fh.company_officers.individual.nino.hint_text"))
     )),
     errorMessage =
       companyOfficersForm.error(s"$individualIdentificationKey.$nationalInsuranceNumberKey").map{ e =>
