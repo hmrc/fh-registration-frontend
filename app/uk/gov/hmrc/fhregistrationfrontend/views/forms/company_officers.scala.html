@@ -424,15 +424,25 @@
   @if(companyOfficersForm.errors.nonEmpty) {
 
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-      companyOfficersForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
+      companyOfficersForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
         ErrorLink(
-          href = Some(s"#${error.key}"),
-          content = Text(Messages(s"fh.${error.key}.${error.message}"))
+          href = Some(s"#${error._1.key}"),
+          content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
         )
+        //      companyOfficersForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
+//        ErrorLink(
+//          href = Some(s"#${error.key}"),
+//          content = Text(Messages(s"fh.${error.key}.${error.message}"))
+//        )
       }
       ,
       title = Text(messages("fh.generic.error"))))
   }
+  <p>
+  @if(companyOfficersForm.errors.nonEmpty) {
+    @companyOfficersForm.errors
+  }
+  </p>
   <p class="govuk-body">@Messages("fh.company_officers.intro")</p>
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
@@ -460,14 +470,14 @@
       items = Seq(
         RadioItem(
           content = Text(messages("fh.company_officers.individual.label")),
-          value = Some("individualOfficers"),
-          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("individualOfficers"),
+          value = Some("Individual"),
+          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Individual"),
           conditionalHtml = Some(officerIsIndividual)
         ),
         RadioItem(
           content = Text(messages("fh.company_officers.company.label")),
-          value = Some("companyOfficers"),
-          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("companyOfficers"),
+          value = Some("Company"),
+          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Company"),
           conditionalHtml = Some(officerIsCompany)
         ),
       )
