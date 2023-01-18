@@ -137,7 +137,7 @@
         content = Text("No"),
         value = Some("false"),
         checked = companyOfficersForm.data.values.toList.contains("false"),
-        conditionalHtml = Some(indNatIdInput)
+         conditionalHtml = Some(indNatIdInput)
       )
     )
   ))
@@ -156,7 +156,8 @@
     errorMessage =
       companyOfficersForm.error(s"$individualIdentificationKey.$passportNumberKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          content = Text(messages(s"fh.${e.key}.${e.message}", section)
+          ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
       },
@@ -180,7 +181,8 @@
     errorMessage =
       companyOfficersForm.error(s"$individualIdentificationKey.$nationalInsuranceNumberKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          content = Text(messages(s"fh.${e.key}.${e.message}", section)
+          ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
       },
@@ -204,11 +206,51 @@
     errorMessage =
       companyOfficersForm.error(s"$individualIdentificationKey.$nationalIDKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          content = Text(messages(s"fh.${e.key}.${e.message}", section)
+          ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
       },
-    value = companyOfficersForm(s"$companyIdentificationKey.$nationalIDKey").value
+    value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value
+  ))
+}
+
+@indRoleQuestion = @{
+  viewHelpers.govUkRadios(Radios(
+    fieldset = Some(Fieldset(
+      legend = Some(Legend(
+        content = Text(Messages("fh.company_officers.status.label")),
+        classes = "govuk-fieldset__legend--m",
+        isPageHeading = false
+      ))
+    )),
+    idPrefix = Some(s"$individualIdentificationKey.$roleKey"),
+    name = s"$individualIdentificationKey.$roleKey",
+    errorMessage = if (companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors) {
+      Some(ErrorMessage(content = Text(messages("fh.individualIdentification.role.error.required", section))))
+    } else None,
+    items = Seq(
+      RadioItem(
+        content = Text(Messages("fh.company_officers.status.director")),
+        value = Some("fh.company_officers.status.director.value"),
+        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.director.value"),
+      ),
+      RadioItem(
+        content = Text(Messages("fh.company_officers.status.company_secretary")),
+        value = Some("fh.company_officers.status.company_secretary.value"),
+        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.company_secretary.value"),
+      ),
+      RadioItem(
+        content = Text(Messages("fh.company_officers.status.both")),
+        value = Some("fh.company_officers.status.both.value"),
+        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.both.value"),
+      ),
+      RadioItem(
+        content = Text(Messages("fh.company_officers.status.member")),
+        value = Some("fh.company_officers.status.member.value"),
+        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.member.value"),
+      )
+    )
   ))
 }
 
@@ -226,12 +268,15 @@
       content = Text(messages("fh.companyRegistrationNumber.hint_text"))
     )),
     errorMessage =
-      companyOfficersForm.error(s"$companyIdentificationKey.$companyNameKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages("fh.companyIdentification.companyName.error.required", section)),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
+      if (companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors) {
+        Some(ErrorMessage(content = Text(messages("fh.companyIdentification.companyName.error.required", section))))
+      } else None,
+//  companyOfficersForm.error(s"$companyIdentificationKey.$companyNameKey").map{ e =>
+//        ErrorMessage(
+//          content = Text(messages("fh.companyIdentification.companyName.error.required", section)),
+//          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+//        )
+//      },
     value = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").value
   ))
 }
@@ -283,7 +328,8 @@
     errorMessage =
       companyOfficersForm.error(s"$companyIdentificationKey.$vatRegistrationKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          content = Text(messages(s"fh.${e.key}.${e.message}"+ companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").error.fold("")(_.message), section)
+          ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
       },
@@ -307,7 +353,8 @@
     errorMessage =
       companyOfficersForm.error(s"$companyIdentificationKey.$companyRegistrationKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          content = Text(messages(s"fh.${e.key}.${e.message}"+ companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").error.fold("")(_.message), section)
+          ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
         //    errorMessage = if (companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors) {
@@ -400,7 +447,7 @@
   @indNameInput
   @indSurnameInput
   @condNinoQuestion
-  @compRoleQuestion
+  @indRoleQuestion
 }
 
 @officerIsCompany = {
@@ -427,7 +474,7 @@
       companyOfficersForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
         ErrorLink(
           href = Some(s"#${error._1.key}"),
-          content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
+          content = Text(messages(s"fh.${error._1.key}.${error._1.message}",section))
         )
         //      companyOfficersForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
 //        ErrorLink(
@@ -438,6 +485,8 @@
       ,
       title = Text(messages("fh.generic.error"))))
   }
+  @error_box(companyOfficersForm, sectionP=section)
+
   <p>
   @if(companyOfficersForm.errors.nonEmpty) {
     @companyOfficersForm.errors
