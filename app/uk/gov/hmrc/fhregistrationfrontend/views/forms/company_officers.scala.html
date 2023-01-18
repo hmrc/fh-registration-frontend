@@ -104,8 +104,8 @@
       ),
       RadioItem(
         content = Text("No"),
-        value = Some("other"),
-        checked = companyOfficersForm.data.values.toList.contains("other"),
+        value = Some("false"),
+        checked = companyOfficersForm.data.values.toList.contains("false"),
         conditionalHtml = Some(condPassportQuestion)
       )
     )
@@ -137,7 +137,7 @@
         content = Text("No"),
         value = Some("false"),
         checked = companyOfficersForm.data.values.toList.contains("false"),
-         conditionalHtml = Some(indNatIdInput)
+        conditionalHtml = Some(indNatIdInput)
       )
     )
   ))
@@ -357,9 +357,6 @@
           ),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
-        //    errorMessage = if (companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").hasErrors) {
-//        Some(ErrorMessage(content = Text(messages("fh.companyIdentification.companyRegistration.error.required", section))))
-//      } else None,
       },
     value = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").value
   ))
@@ -476,22 +473,11 @@
           href = Some(s"#${error._1.key}"),
           content = Text(messages(s"fh.${error._1.key}.${error._1.message}",section))
         )
-        //      companyOfficersForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>
-//        ErrorLink(
-//          href = Some(s"#${error.key}"),
-//          content = Text(Messages(s"fh.${error.key}.${error.message}"))
-//        )
       }
       ,
       title = Text(messages("fh.generic.error"))))
   }
-  @error_box(companyOfficersForm, sectionP=section)
 
-  <p>
-  @if(companyOfficersForm.errors.nonEmpty) {
-    @companyOfficersForm.errors
-  }
-  </p>
   <p class="govuk-body">@Messages("fh.company_officers.intro")</p>
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
