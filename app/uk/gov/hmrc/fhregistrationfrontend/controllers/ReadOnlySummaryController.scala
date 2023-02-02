@@ -21,7 +21,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 
 import scala.concurrent.ExecutionContext
 

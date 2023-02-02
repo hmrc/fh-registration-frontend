@@ -23,12 +23,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 
-@this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout)
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
 @stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
@@ -42,7 +42,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@mainTemplate(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+@layout(title, Some(scripts)) {
 
   @BackHistory()
 
@@ -58,23 +58,23 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
   @ContactPerson(applicationData.contactPerson, bpr, params.mode)
   @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
   @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
-  <dl class="govuk-check-your-answers cya-questions-long">
+
     @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.mode)
     @DateOfIncorporation(applicationData.dateOfIncorporation, params.mode)
     @TradingName(applicationData.tradingName, params.mode)
     @VATRegistrationNumber(applicationData.vatNumber, params.mode)
     @CompanyOfficers(applicationData.companyOfficers, params.mode)
-  </dl>
+
   @if(Mode isEditable params.mode) {
     @SummaryAddMoreLink("companyOfficers", (applicationData.companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
   }
   @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
-  <dl class="govuk-check-your-answers cya-questions-long">
+
     @BusinessStatus(applicationData.businessStatus, params.mode)
     @ImportingActivities(applicationData.importingActivities, params.mode)
     @BusinessCustomers(applicationData.businessCustomers, params.mode)
     @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
-  </dl>
+
   @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
     @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
   }

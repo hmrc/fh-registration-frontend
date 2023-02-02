@@ -19,8 +19,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{LimitedCompanyApplication,SoleProprietorApplication,PartnershipApplication,BusinessEntityApplication}
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.ReadOnlyApplication
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
-@(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit messages: Messages)
+@(applicationData: BusinessEntityApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String)(implicit messages: Messages, viewHelpers: ViewHelpers)
 
 @{
   applicationData match {

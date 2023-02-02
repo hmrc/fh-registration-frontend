@@ -34,7 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.bus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.utils.dateTimeHelper
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -234,6 +234,7 @@ abstract class AppController(val ds: CommonPlayDependencies, val cc: MessagesCon
 
   implicit val appConfig: AppConfig = ds.appConfig
   implicit val errorHandler: ErrorHandler = ds.errorHandler
+  implicit val viewHelpers: ViewHelpers = ds.viewHelpers
 
   val configuration: Configuration = ds.conf
   val messages: MessagesApi = messagesApi
@@ -245,4 +246,5 @@ class CommonPlayDependencies @Inject()(
   val appConfig: AppConfig,
   val env: Environment,
   val messagesApi: MessagesApi,
-  val errorHandler: ErrorHandler)
+  val errorHandler: ErrorHandler,
+  val viewHelpers: ViewHelpers)
