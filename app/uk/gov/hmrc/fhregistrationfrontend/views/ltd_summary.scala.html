@@ -25,6 +25,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers._
 
 @this(layout: layout)
 
@@ -57,13 +59,15 @@
   @EmailAddress(verifiedEmail, params.mode)
   @ContactPerson(applicationData.contactPerson, bpr, params.mode)
   @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
-  @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
-
-    @CompanyRegistrationNumber(applicationData.companyRegistrationNumber, params.mode)
-    @DateOfIncorporation(applicationData.dateOfIncorporation, params.mode)
-    @TradingName(applicationData.tradingName, params.mode)
-    @VATRegistrationNumber(applicationData.vatNumber, params.mode)
-    @CompanyOfficers(applicationData.companyOfficers, params.mode)
+    @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
+    @viewHelpers.govukSummaryList(SummaryList(
+        CompanyRegistrationNumberHelper(applicationData.companyRegistrationNumber, params.mode) ++
+                DateOfIncorporationHelper(applicationData.dateOfIncorporation, params.mode) ++
+                TradingNameHelper(applicationData.tradingName, params.mode) ++
+                VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
+                CompanyOfficersHelper(applicationData.companyOfficers, params.mode)
+    )
+    )
 
   @if(Mode isEditable params.mode) {
     @SummaryAddMoreLink("companyOfficers", (applicationData.companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
