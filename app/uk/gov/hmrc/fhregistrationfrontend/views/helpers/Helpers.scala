@@ -18,11 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 import java.text.SimpleDateFormat
 import java.util.Date
-
 import play.api.data.FormError
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.govukfrontend.views.html.components._
 
 object Helpers {
-  def getError(error: Option[FormError]) =
+  def getError(error: Option[FormError]): String =
     if (error.nonEmpty) error.head.message
     else ""
 
@@ -34,4 +35,60 @@ object Helpers {
 
   def formatDate(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy").format(date)
+
+  def findContactPersonAddressLabel(usingSameContactAddress: Boolean, ukOtherAddress: Boolean): String =
+    if (!usingSameContactAddress) {
+      if (ukOtherAddress) {
+        "fh.contact_person.contact_address_new.label"
+      } else {
+        "fh.contact_person.contact_address_international.label"
+      }
+    } else {
+      "fh.contact_person.contact_address.title"
+    }
+
+  def findAddress(optAddress: Option[Address]): String = {
+    def getAddressString(opt: Option[String]): String =
+      opt match {
+        case Some(string) => s"<br> $string"
+        case None         => ""
+      }
+
+    if (optAddress.isDefined) {
+      val add = optAddress.get
+      s"""${add.addressLine1}${getAddressString(add.addressLine2)}${getAddressString(add.addressLine3)}${getAddressString(
+        add.addressLine4)}<br>${add.postcode}"""
+    } else {
+      "" // TODO: Change implementation later (not ideal?)
+    }
+  }
+
+  def createSummaryRow(params: SummaryRowParams, summaryActions: Option[Actions]): SummaryListRow =
+    SummaryListRow(
+      key = Key(
+        content = if (params.label.isDefined) {
+          HtmlContent(params.label.get)
+        } else {
+          Empty // TODO: Change implementation later (not ideal?)
+        }
+      ),
+      value = Value(
+        content = if (params.value.isDefined) {
+          HtmlContent(params.value.get)
+        } else {
+          Empty // TODO: Change implementation later (not ideal?)
+        }
+      ),
+      actions = summaryActions
+    )
+
+  def createMainBusinessAddress(
+    summaryList: Seq[SummaryListRow],
+    lessThan3Years: Boolean,
+    conditionalSummaryRow: SummaryListRow): Seq[SummaryListRow] =
+    if (lessThan3Years) {
+      Seq(summaryList.head, conditionalSummaryRow, summaryList.last)
+    } else {
+      summaryList
+    }
 }
