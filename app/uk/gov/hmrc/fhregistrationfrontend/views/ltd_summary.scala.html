@@ -46,7 +46,9 @@
 
 @layout(title, Some(scripts)) {
 
-  @BackHistory()
+    <p class="govuk-body">
+        <a class="govuk-link" href="@{"subscription/status"}">@{"< " + Messages("link.back")}</a>
+    </p>
 
   @showAlert
 
@@ -68,19 +70,23 @@
                 CompanyOfficersHelper(applicationData.companyOfficers, params.mode)
     ))
   @if(Mode isEditable params.mode) {
-    @SummaryAddMoreLink("companyOfficers", (applicationData.companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
+      <p class="govuk-body">
+          <a class="govuk-link" href="@{s"form/companyOfficers/${(applicationData.companyOfficers.size+1).toString}"}">@{Messages("fh.summary.addMoreCompanyOfficers")}</a>
+      </p>
   }
 
   @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
     @viewHelpers.govukSummaryList(SummaryList(
         BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
                 ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
-                BusinessCustomersHelper(applicationData.businessCustomers, params.mode)
+                BusinessCustomersHelper(applicationData.businessCustomers, params.mode) ++
+                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode)
     ))
 
-    @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
   @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
-    @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+      <p class="govuk-body">
+          <a class="govuk-link" href="@{s"form/otherStoragePremises/${(applicationData.otherStoragePremises.value.size+1).toString}"}">@{Messages("fh.summary.addMoreStoragePremises")}</a>
+      </p>
   }
 
   @if(Mode isEditable params.mode) {
