@@ -41,7 +41,7 @@ def test(scope: String = "test,it") = Seq(
   "uk.gov.hmrc"                 %% "bootstrap-test-play-28"         % bootstrapVersion   % scope,
   "org.scalatest"               %% "scalatest"                      % "3.2.9"    % scope,
   "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"    % scope,
-  "com.vladsch.flexmark"         % "flexmark-all"                     % "0.35.10"  % scope,
+  "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"  % scope,
   "org.scalatestplus"           %% "mockito-3-4"                    % "3.2.9.0"  % scope,
   "com.github.tomakehurst"       % "wiremock-standalone"            % "2.27.2"   % scope,
   "org.pegdown"                  % "pegdown"                        % "1.6.0"    % scope,
