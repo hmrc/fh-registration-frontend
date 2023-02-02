@@ -66,19 +66,19 @@
                 TradingNameHelper(applicationData.tradingName, params.mode) ++
                 VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
                 CompanyOfficersHelper(applicationData.companyOfficers, params.mode)
-    )
-    )
-
+    ))
   @if(Mode isEditable params.mode) {
     @SummaryAddMoreLink("companyOfficers", (applicationData.companyOfficers.size+1).toString, Messages("fh.summary.addMoreCompanyOfficers"))
   }
+
   @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
+    @viewHelpers.govukSummaryList(SummaryList(
+        BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
+                ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
+                BusinessCustomersHelper(applicationData.businessCustomers, params.mode)
+    ))
 
-    @BusinessStatus(applicationData.businessStatus, params.mode)
-    @ImportingActivities(applicationData.importingActivities, params.mode)
-    @BusinessCustomers(applicationData.businessCustomers, params.mode)
     @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
-
   @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
     @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
   }
@@ -86,5 +86,4 @@
   @if(Mode isEditable params.mode) {
     @SummaryButtons()
   }
-
 }
