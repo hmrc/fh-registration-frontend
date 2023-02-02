@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
 
 @this(
         hmrcLayout: HmrcLayout,
@@ -29,7 +30,8 @@
         appConfig: AppConfig,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         autcompleteCss: HmrcAccessibleAutocompleteCss,
-        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper
 )
 
 
@@ -49,7 +51,7 @@
     signOutUrl = Some(routes.SignOutController.signout.url),
     // backLinkUrl = Some(routes.ServiceController.start().url),
     displayHmrcBanner = true,
-    additionalHeadBlock = pageHeadBlock,
+    additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)),
     additionalScriptsBlock = pageScripts,
     // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl)),
     nonce = CSPNonce.get,
