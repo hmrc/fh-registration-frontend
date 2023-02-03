@@ -62,7 +62,9 @@
         ContactPersonAddress, None,  GroupRow.Bottom), None)
 }
 
-@SummarySectionHead(heading = Messages("fh.contactPerson.title"))
+<div class="govuk-body govuk-body-s">
+    <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
+</div>
 
 @viewHelpers.govukSummaryList(
     SummaryList(

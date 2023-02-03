@@ -85,7 +85,9 @@
     )
 }
 
-@SummarySectionHead(heading = Messages("fh.main_business_address.title"))
+<div class="govuk-body govuk-body-s">
+    <h2><strong>@{Messages("fh.main_business_address.title")}</strong></h2>
+</div>
 
 @viewHelpers.govukSummaryList(
     SummaryList(

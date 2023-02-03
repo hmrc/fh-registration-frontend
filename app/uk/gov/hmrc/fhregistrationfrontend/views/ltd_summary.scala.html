@@ -31,7 +31,6 @@
 @this(layout: layout)
 
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
@@ -50,18 +49,23 @@
         <a class="govuk-link" href="@{"subscription/status"}">@{"< " + Messages("link.back")}</a>
     </p>
 
-  @showAlert
+    <div class="govuk-body govuk-body-s">
+           <h2><strong>@{showAlert}</strong></h2>
+    </div>
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
+
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
+    </div>
+
+
 
   @EmailAddress(verifiedEmail, params.mode)
   @ContactPerson(applicationData.contactPerson, bpr, params.mode)
   @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
-    @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{Messages("fh.summary.businessDetails")}</strong></h2>
+    </div>
     @viewHelpers.govukSummaryList(SummaryList(
         CompanyRegistrationNumberHelper(applicationData.companyRegistrationNumber, params.mode) ++
                 DateOfIncorporationHelper(applicationData.dateOfIncorporation, params.mode) ++
@@ -75,7 +79,9 @@
       </p>
   }
 
-  @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{Messages("fh.summary.businessActivities")}</strong></h2>
+    </div>
     @viewHelpers.govukSummaryList(SummaryList(
         BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
                 ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++

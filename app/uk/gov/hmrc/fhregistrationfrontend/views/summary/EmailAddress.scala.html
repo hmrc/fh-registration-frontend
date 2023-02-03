@@ -40,7 +40,9 @@
 
 @(verifiedEmail: String, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
 
-@SummarySectionHead(heading = Messages("fh.summary.email.title"))
+<div class="govuk-body govuk-body-s">
+    <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
+</div>
 
 @viewHelpers.govukSummaryList(
     SummaryList(
