@@ -74,9 +74,11 @@
                 CompanyOfficersHelper(applicationData.companyOfficers, params.mode)
     ))
   @if(Mode isEditable params.mode) {
-      <p class="govuk-body">
-          <a class="govuk-link" href="@{s"form/companyOfficers/${(applicationData.companyOfficers.size+1).toString}"}">@{Messages("fh.summary.addMoreCompanyOfficers")}</a>
-      </p>
+      <div style="display: flex; justify-content: flex-end">
+          <p class="govuk-body">
+            <a class="govuk-link" href="@{s"form/companyOfficers/${(applicationData.companyOfficers.size+1).toString}"}">@{Messages("fh.summary.addMoreCompanyOfficers")}</a>
+          </p>
+      </div>
   }
 
     <div class="govuk-body govuk-body-s">
@@ -90,12 +92,16 @@
     ))
 
   @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
+      <div style="display: flex; justify-content: flex-end">
       <p class="govuk-body">
           <a class="govuk-link" href="@{s"form/otherStoragePremises/${(applicationData.otherStoragePremises.value.size+1).toString}"}">@{Messages("fh.summary.addMoreStoragePremises")}</a>
       </p>
+      </div>
   }
 
   @if(Mode isEditable params.mode) {
-    @SummaryButtons()
+      <div class="govuk-body govuk-body-m">
+      @SummaryButtons()
+      </div>
   }
 }
