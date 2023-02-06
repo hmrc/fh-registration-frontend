@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -23,7 +24,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessCustomersForm.numberOfCustomersKey
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -40,11 +41,9 @@
 @title = @{
     Messages("fh.business_customers.label")
 }
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-  @Back(navigation, viewHelpers)
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
     @if(businessCustomersForm.errors.nonEmpty) {

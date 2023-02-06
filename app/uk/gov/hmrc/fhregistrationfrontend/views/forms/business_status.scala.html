@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout, viewHelpers: ViewHelpers)
@@ -80,10 +80,8 @@
 
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
-
-  @Back(navigation, viewHelpers)
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), 'novalidate -> "novalidate") {
 

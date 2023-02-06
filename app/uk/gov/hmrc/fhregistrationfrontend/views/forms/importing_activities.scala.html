@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
@@ -105,9 +106,8 @@
 
 
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title, Some(pageScripts),  backUrl = BackHelper.getUrl(navigation) ) {
 
-  @Back(navigation, viewHelpers)
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")) {
 
     @if(importingActivitiesForm.errors.nonEmpty) {

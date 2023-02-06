@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout, viewHelpers: ViewHelpers)
@@ -47,8 +47,7 @@
   Messages("fh.companyRegistrationNumber.label")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
-    @Back(navigation, viewHelpers)
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save(companyRegistrationNumberKey)) {
 

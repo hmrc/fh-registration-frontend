@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -65,9 +66,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, pageScripts = Some(scripts)) {
-
-    @helpers.Back(navigation, viewHelpers)
+@layout(title = titlePrefix + title, pageScripts = Some(scripts), backUrl = BackHelper.getUrl(navigation)) {
 
     @if(nationalInsuranceNumberForm.errors.nonEmpty) {
 
