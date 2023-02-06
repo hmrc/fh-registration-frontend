@@ -31,6 +31,7 @@
 *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -40,6 +41,13 @@
 
 @(verifiedEmail: String, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
 
+@changeLink = @{Helpers.createChangeLink(
+    Mode isEditable mode,
+    "email-edit",
+    Text("Change"),
+    Some(Messages("fh.summary.email.label"))
+)}
+
 <div class="govuk-body govuk-body-s">
     <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
 </div>
@@ -48,14 +56,8 @@
     SummaryList(
         rows = Seq(
             Helpers.createSummaryRow(
-                SummaryRowParams.ofString(Option(Messages("fh.summary.email.label")), verifiedEmail, None, GroupRow.Single),
-                Option(Actions(items = Seq(
-                    ActionItem(
-                        href = "email-edit",
-                        content = Text("Change"),
-                        visuallyHiddenText = Some(Messages("fh.summary.email.label"))
-                    )))
-                )
+                SummaryRowParams.ofString(Some(Messages("fh.summary.email.label")), verifiedEmail, None, GroupRow.Single),
+                changeLink
             )
         )
     )

@@ -28,55 +28,38 @@ object VatRegistrationNumberHelper {
 
   def apply(vatNumberForm: VatNumber, mode: Mode)(implicit messages: Messages) = {
 
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/vatNumber")
-      } else {
-        None
-      }
-    }
-
-    val VatRegNumber = {
+    val VatRegNumber =
       if (vatNumberForm.hasValue) {
         Helpers.createSummaryRow(
           SummaryRowParams(
             Some(Messages("fh.vatNumber.label")),
             vatNumberForm.value,
-            changeLink,
+            None,
             GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = changeLink.get,
-                  content = Text("Change"),
-                  visuallyHiddenText = Some(Messages("fh.vatNumber.label")))
-              )
-            ))
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/vatNumber",
+            Text("Change"),
+            Some(Messages("fh.vatNumber.label")))
         )
-
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
             Some(Messages("fh.summary.HasVat")),
             vatNumberForm.hasValue,
-            changeLink,
+            None,
             GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = changeLink.get,
-                  content = Text("Change"),
-                  visuallyHiddenText = Some(Messages("fh.summary.HasVat"))
-                )
-              )
-            ))
+          Helpers
+            .createChangeLink(
+              Mode isEditable mode,
+              "form/vatNumber",
+              Text("Change"),
+              Some(Messages("fh.summary.HasVat")))
         )
       }
-    }
+
     Seq(VatRegNumber)
   }
 }

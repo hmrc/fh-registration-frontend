@@ -91,4 +91,22 @@ object Helpers {
     } else {
       summaryList
     }
+
+  def createChangeLink(isEditable: Boolean, href: String, content: Content, hiddenText: Some[String]) =
+    if (isEditable) {
+      Some(
+        Actions(
+          items = Seq(
+            ActionItem(
+              href = href,
+              content = content,
+              visuallyHiddenText = hiddenText
+            )
+          )))
+    } else None
+
+  def checkForNone(value: Option[String]) =
+    if (value.isDefined) {
+      value.get
+    } else None
 }

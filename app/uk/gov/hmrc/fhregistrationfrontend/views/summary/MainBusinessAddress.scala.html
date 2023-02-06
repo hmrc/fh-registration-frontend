@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
@@ -25,14 +24,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 
 @(mainBusinessAddressForm: models.MainBusinessAddress, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
-
-@changeLink = @{
-    if (Mode isEditable mode) {
-        Some("form/mainBusinessAddress")
-    } else {
-        None
-    }
-}
 
 @isGroupHead = @{
     if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") GroupRow.Top else GroupRow.Single
@@ -62,17 +53,13 @@
     Helpers.createMainBusinessAddress(Seq(
         Helpers.createSummaryRow(
             SummaryRowParams(Option(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
-                Option(mainBusinessAddressForm.timeAtCurrentAddress), changeLink, isGroupHead
+                Option(mainBusinessAddressForm.timeAtCurrentAddress), None, isGroupHead
             ),
-            Some(Actions(
-                items = Seq(
-                    ActionItem(
-                        href = changeLink.get,
-                        content = Text("Change"),
-                        visuallyHiddenText = Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")))
-                )
-            )
-            )
+            Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")))
         ),
         Helpers.createSummaryRow(
             SummaryRowParams.ofDate(Option(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")), mainBusinessAddressForm.previousAddressStartdate,

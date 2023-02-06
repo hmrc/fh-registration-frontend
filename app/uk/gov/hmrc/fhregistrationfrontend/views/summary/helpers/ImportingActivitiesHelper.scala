@@ -27,34 +27,21 @@ import play.api.i18n.Messages
 
 object ImportingActivitiesHelper {
 
-  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) = {
-
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/importingActivities")
-      } else {
-        None
-      }
-    }
-
+  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) =
     Seq(if (importingActivitiesForm.hasEori) {
 
       Helpers.createSummaryRow(
         SummaryRowParams(
           Some(Messages("fh.importing_activities.eori.label")),
           importingActivitiesForm.eoriNumber.map(_.eoriNumber),
-          changeLink,
+          None,
           GroupRow.Top
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.importing_activities.eori.label"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/importingActivities",
+          Text("Change"),
+          Some(Messages("fh.importing_activities.eori.label")))
       )
 
       Helpers.createSummaryRow(
@@ -64,15 +51,12 @@ object ImportingActivitiesHelper {
           None,
           GroupRow.Bottom
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.summary.usesEORI"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/importingActivities",
+          Text("Change"),
+          Some(Messages("fh.summary.usesEORI"))
+        )
       )
 
     } else {
@@ -80,20 +64,16 @@ object ImportingActivitiesHelper {
         SummaryRowParams.ofBoolean(
           Some(Messages("fh.summary.hasEORI")),
           importingActivitiesForm.hasEori,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.summary.hasEORI"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/importingActivities",
+          Text("Change"),
+          Some(Messages("fh.summary.hasEORI"))
+        )
       )
     })
-  }
 
 }

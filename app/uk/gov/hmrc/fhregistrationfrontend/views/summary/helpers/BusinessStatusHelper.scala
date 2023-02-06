@@ -27,13 +27,6 @@ import play.api.i18n.Messages
 object BusinessStatusHelper {
 
   def apply(businessStatusForm: models.BusinessStatus, mode: Mode)(implicit messages: Messages) = {
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/businessStatus")
-      } else {
-        None
-      }
-    }
 
     val BusinessStatus = if (businessStatusForm.isNewFulfilmentBusiness) {
 
@@ -41,18 +34,14 @@ object BusinessStatusHelper {
         SummaryRowParams.ofDate(
           Some(Messages("fh.summary.startNewFulfilmentDate")),
           businessStatusForm.proposedStartDate,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.summary.startNewFulfilmentDate"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/businessStatus",
+          Text("Change"),
+          Some(Messages("fh.summary.startNewFulfilmentDate")))
       )
 
     } else {
@@ -61,18 +50,14 @@ object BusinessStatusHelper {
         SummaryRowParams.ofBoolean(
           Some(Messages("fh.summary.newFulfilmentBusiness")),
           Some(businessStatusForm.isNewFulfilmentBusiness),
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.summary.newFulfilmentBusiness"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/businessStatus",
+          Text("Change"),
+          Some(Messages("fh.summary.newFulfilmentBusiness")))
       )
     }
     Seq(BusinessStatus)

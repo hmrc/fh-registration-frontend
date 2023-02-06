@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -34,14 +35,11 @@
         contactPersonForm.firstName + " " + contactPersonForm.lastName,
         None,  GroupRow.Top
     ),
-    Some(Actions(
-        items = Seq(
-            ActionItem(
-                href = "form/contactPerson",
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.generic.name")))
-        )
-    )
+    Helpers.createChangeLink(
+        Mode isEditable mode,
+        "form/contactPerson",
+        Text("Change"),
+        Some(Messages("fh.generic.name"))
     )
 )
 }

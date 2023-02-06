@@ -28,49 +28,34 @@ object TradingNameHelper {
 
   def apply(tradingNameForm: TradingName, mode: Mode)(implicit messages: Messages) = {
 
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/tradingName")
-      } else {
-        None
-      }
-    }
-
     val TradingName = {
       if (tradingNameForm.hasValue) {
         Helpers.createSummaryRow(
           SummaryRowParams(
             Some(Messages("fh.tradingName.title")),
             tradingNameForm.value,
-            changeLink,
+            None,
+            GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = changeLink.get,
-                  content = Text("Change"),
-                  visuallyHiddenText = Some("visuallyHiddenText"))
-              )
-            ))
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/tradingName",
+            Text("Change"),
+            Some(Messages("fh.tradingName.title")))
         )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
             Some(Messages("fh.summary.hasTradingName")),
             tradingNameForm.hasValue,
-            changeLink,
+            None,
             GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = changeLink.get,
-                  content = Text(s"Change"),
-                  visuallyHiddenText = Some(Messages("fh.summary.hasTradingName"))
-                )
-              )))
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/tradingName",
+            Text("Change"),
+            Some(Messages("fh.summary.hasTradingName")))
         )
       }
     }

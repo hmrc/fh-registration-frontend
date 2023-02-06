@@ -29,31 +29,21 @@ object CompanyRegistrationNumberHelper {
 
   def apply(companyRegistrationNumberForm: CompanyRegistrationNumber, mode: Mode)(
     implicit messages: Messages): Seq[SummaryListRow] = {
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/companyRegistrationNumber")
-      } else {
-        None
-      }
-    }
 
     val CompanyRegistrationNumber = {
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.company_registration_number.title")),
           companyRegistrationNumberForm.crn,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.company_registration_number.title")))
-            )
-          ))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/companyRegistrationNumber",
+          Text("Change"),
+          Some(Messages("fh.company_registration_number.title"))
+        )
       )
     }
     Seq(CompanyRegistrationNumber)

@@ -27,15 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany, C
 
 object CompanyOfficersHelper {
 
-  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit messages: Messages) = {
-
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/companyOfficers")
-      } else {
-        None
-      }
-    }
+  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit messages: Messages) =
     companyOfficers.values.zipWithIndex.flatMap {
       case (companyOfficer, index) =>
         val individualOrCompanyDetails = companyOfficer.identification match {
@@ -52,14 +44,14 @@ object CompanyOfficersHelper {
               index + 1
             })),
             None,
-            changeLink,
+            None,
             GroupRow.Single
           ),
           Some(
             Actions(
               items = Seq(
                 ActionItem(
-                  href = changeLink.get,
+                  href = "form/companyOfficers",
                   content = Text("Change"),
                   visuallyHiddenText = Some(Messages("fh.company_officers.each.title", {
                     index + 1
@@ -70,5 +62,4 @@ object CompanyOfficersHelper {
         )
         officerLabel +: individualOrCompanyDetails
     }.toSeq
-  }
 }

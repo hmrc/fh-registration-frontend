@@ -60,7 +60,7 @@ object OtherStoragePremisesHelper {
                 Actions(
                   items = Seq(
                     ActionItem(
-                      href = changeLink.get + s"/${index + 1}",
+                      href = Helpers.checkForNone(changeLink) + s"/${index + 1}",
                       content = Text("Change"),
                       visuallyHiddenText = Some(Messages("fh.other_storage_premises.each.title", {
                         index + 1

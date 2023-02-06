@@ -28,31 +28,19 @@ import play.api.i18n.Messages
 
 object BusinessCustomersHelper {
 
-  def apply(businessCustomersForm: BusinessCustomersModel, mode: Mode)(implicit messages: Messages) = {
-
-    val changeLink = if (Mode isEditable mode) {
-      Some("form/businessCustomers")
-    } else {
-      None
-    }
-
+  def apply(businessCustomersForm: BusinessCustomersModel, mode: Mode)(implicit messages: Messages) =
     Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.overseasCustomers")),
           businessCustomersForm.numberOfCustomers,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.summary.overseasCustomers"))
-              )
-            )))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/businessCustomers",
+          Text("Change"),
+          Some(Messages("fh.summary.overseasCustomers")))
       ))
-  }
 }

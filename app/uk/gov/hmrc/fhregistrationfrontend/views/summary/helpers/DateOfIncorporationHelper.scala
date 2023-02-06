@@ -28,31 +28,20 @@ object DateOfIncorporationHelper {
 
   def apply(dateOfIncorporationForm: DateOfIncorporation, mode: Mode)(implicit messages: Messages) = {
 
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/dateOfIncorporation")
-      } else {
-        None
-      }
-    }
-
     val DateOfIncorporation = {
       Helpers.createSummaryRow(
         SummaryRowParams.ofDate(
           Some(Messages("fh.date_of_incorporation.title")),
           dateOfIncorporationForm.dateOfIncorporation,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href = changeLink.get,
-                content = Text("Change"),
-                visuallyHiddenText = Some(Messages("fh.date_of_incorporation.title")))
-            )
-          ))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/dateOfIncorporation",
+          Text("Change"),
+          Some(Messages("fh.date_of_incorporation.title"))
+        )
       )
     }
     Seq(DateOfIncorporation)
