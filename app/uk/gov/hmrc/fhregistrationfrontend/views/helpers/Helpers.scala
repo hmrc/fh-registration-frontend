@@ -47,21 +47,9 @@ object Helpers {
       "fh.contact_person.contact_address.title"
     }
 
-  def findAddress(optAddress: Option[Address]): String = {
-    def getAddressString(opt: Option[String]): String =
-      opt match {
-        case Some(string) => s"<br> $string"
-        case None         => ""
-      }
-
-    if (optAddress.isDefined) {
-      val add = optAddress.get
-      s"""${add.addressLine1}${getAddressString(add.addressLine2)}${getAddressString(add.addressLine3)}${getAddressString(
-        add.addressLine4)}<br>${add.postcode}"""
-    } else {
-      "" // TODO: Change implementation later (not ideal?)
+  def formatAddress(address: Address): String = {
+      s"""${address.addressLine1}${address.addressLine2}${address.addressLine3}${address.addressLine4}<br>${address.postcode}"""
     }
-  }
 
   def createSummaryRow(params: SummaryRowParams, summaryActions: Option[Actions]): SummaryListRow =
     SummaryListRow(
@@ -81,16 +69,6 @@ object Helpers {
       ),
       actions = summaryActions
     )
-
-  def createMainBusinessAddress(
-    summaryList: Seq[SummaryListRow],
-    lessThan3Years: Boolean,
-    conditionalSummaryRow: SummaryListRow): Seq[SummaryListRow] =
-    if (lessThan3Years) {
-      Seq(summaryList.head, conditionalSummaryRow, summaryList.last)
-    } else {
-      summaryList
-    }
 
   def createChangeLink(isEditable: Boolean, href: String, content: Content, hiddenText: Some[String]) =
     if (isEditable) {

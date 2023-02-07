@@ -1,0 +1,81 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
+
+@(mainBusinessAddressForm: models.MainBusinessAddress, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
+
+@isGroupHead = @{
+    if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") GroupRow.Top else GroupRow.Single
+}
+
+@conditionalSummaryRow = @{
+    val address = mainBusinessAddressForm.previousAddress
+
+    if(mainBusinessAddressForm.hasPreviousAddress.contains(false)) {
+        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
+            Some(Messages("fh.mainBusinessAddress.summary.hasPreviousAddress")),
+            mainBusinessAddressForm.hasPreviousAddress,
+            None,
+            GroupRow.Bottom
+        ), None)
+    }
+    else if(address.isDefined) {
+            Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
+                Helpers.formatAddress(address.get),
+                None,
+                GroupRow.Bottom
+            ), None)
+    }
+    else None
+}
+
+@conditionalHtml = @{
+   Seq(
+        Helpers.createSummaryRow(
+            SummaryRowParams(Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
+                Some(mainBusinessAddressForm.timeAtCurrentAddress), None, isGroupHead
+            ),
+            Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")))
+        ),
+        Helpers.createSummaryRow(
+            SummaryRowParams.ofDate(Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")), mainBusinessAddressForm.previousAddressStartdate,
+                None, GroupRow.Bottom
+            ), None
+        )
+    )
+}
+
+<div class="govuk-body govuk-body-s">
+    <h2><strong>@{Messages("fh.main_business_address.title")}</strong></h2>
+</div>
+
+@viewHelpers.govukSummaryList(
+    SummaryList(
+        rows = conditionalHtml
+    )
+)
