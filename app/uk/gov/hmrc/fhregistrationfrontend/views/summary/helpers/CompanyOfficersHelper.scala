@@ -51,7 +51,7 @@ object CompanyOfficersHelper {
             Actions(
               items = Seq(
                 ActionItem(
-                  href = "form/companyOfficers",
+                  href = s"form/companyOfficers/${index + 1}",
                   content = Text("Change"),
                   visuallyHiddenText = Some(Messages("fh.company_officers.each.title", {
                     index + 1
