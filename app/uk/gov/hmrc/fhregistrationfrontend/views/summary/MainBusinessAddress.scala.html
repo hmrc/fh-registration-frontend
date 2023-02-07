@@ -30,6 +30,8 @@
 }
 
 @conditionalSummaryRow = @{
+    val address = mainBusinessAddressForm.previousAddress
+
     if(mainBusinessAddressForm.hasPreviousAddress.contains(false)) {
         Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
             Some(Messages("fh.mainBusinessAddress.summary.hasPreviousAddress")),
@@ -38,22 +40,21 @@
             GroupRow.Bottom
         ), None)
     }
-    else {
-        val address = mainBusinessAddressForm.previousAddress.map { address =>
-            Helpers.findAddress(Option(address))}
-        Helpers.createSummaryRow(SummaryRowParams.ofString(Option(Messages("fh.mainBusinessAddress.summary.previousAddress")),
-            address.get,
-            None,
-            GroupRow.Bottom
-        ), None)
+    else if(address.isDefined) {
+            Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
+                Helpers.findAddress(address),
+                None,
+                GroupRow.Bottom
+            ), None)
     }
+    else Seq.empty[SummaryListRow]
 }
 
 @conditionalHtml = @{
     Helpers.createMainBusinessAddress(Seq(
         Helpers.createSummaryRow(
-            SummaryRowParams(Option(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
-                Option(mainBusinessAddressForm.timeAtCurrentAddress), None, isGroupHead
+            SummaryRowParams(Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
+                Some(mainBusinessAddressForm.timeAtCurrentAddress), None, isGroupHead
             ),
             Helpers.createChangeLink(
                 Mode isEditable mode,
@@ -62,7 +63,7 @@
                 Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")))
         ),
         Helpers.createSummaryRow(
-            SummaryRowParams.ofDate(Option(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")), mainBusinessAddressForm.previousAddressStartdate,
+            SummaryRowParams.ofDate(Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")), mainBusinessAddressForm.previousAddressStartdate,
                 None, GroupRow.Bottom
             ), None
         )
