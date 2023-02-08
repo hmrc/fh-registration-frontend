@@ -50,8 +50,8 @@
         val hasPreviousAddress = mainBusinessAddressForm.hasPreviousAddress
         val optPreviousAddress = mainBusinessAddressForm.previousAddress
 
-        (mainBusinessAddressForm.previousAddress.isDefined, optPreviousAddress) match {
-          case (false, _) => Seq(
+        (mainBusinessAddressForm.previousAddress, optPreviousAddress) match {
+          case (Some(false), _) => Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
                 Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
@@ -62,7 +62,7 @@
               None
             )
           )
-          case (true, Some(previousAddress)) => Seq(
+          case (Some(true), Some(previousAddress)) => Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
                 Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
@@ -82,7 +82,7 @@
             None
             )
           )
-          case (true, _) => Seq(
+          case (Some(true), _) => Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofDate(
                 Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
