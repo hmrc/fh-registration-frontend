@@ -43,7 +43,7 @@
 @ContactPersonAddress = @{if (contactPersonForm.otherUkContactAddress.isDefined) {Helpers.formatAddress(contactPersonForm.otherUkContactAddress.get)} else {""}}
 
 @PageLabel = @{Helpers.createSummaryRow(
-    SummaryRowParams.ofString(Option(Messages("fh.generic.name")),
+    SummaryRowParams.ofString(Some(Messages("fh.generic.name")),
         contactPersonForm.firstName + " " + contactPersonForm.lastName,
         None,  GroupRow.Top
     ),
@@ -58,7 +58,7 @@
 
 @JobTitle = @{
     Helpers.createSummaryRow(
-        SummaryRowParams.ofString(Option(Messages("fh.contact_person.job_title.label")),
+        SummaryRowParams.ofString(Some(Messages("fh.contact_person.job_title.label")),
             contactPersonForm.jobTitle, None, GroupRow.Top), None)
 }
 
@@ -69,23 +69,31 @@
 
 @Address = @{
     if (contactPersonForm.otherUkContactAddress.isDefined) {
-        Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None,  GroupRow.Bottom), None)
-    }
+        Seq(Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None,  GroupRow.Bottom), None))
+    } else Seq.empty
 }
 
 <div class="govuk-body govuk-body-s">
     <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
 </div>
 
-@*
 @viewHelpers.govukSummaryList(
-SummaryList(
-rows = Seq(
-PageLabel,
-JobTitle,
-telephoneNumber,
-Address
+    if (Address.nonEmpty) {
+        SummaryList(
+            rows = Seq(
+                PageLabel,
+                JobTitle,
+                telephoneNumber
+            ) ++ Address
+        )
+    } else {
+        SummaryList(
+            rows = Seq(
+                PageLabel,
+                JobTitle,
+                telephoneNumber
+            )
+        )
+    }
+
 )
-)
-)
-*@
