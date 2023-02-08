@@ -40,7 +40,7 @@
     }
 }
 
-@ContactPersonAddress = @{if (contactPersonForm.otherUkContactAddress.isDefined) {Helpers.findAddress(contactPersonForm.otherUkContactAddress.get)} else {""}}
+@ContactPersonAddress = @{if (contactPersonForm.otherUkContactAddress.isDefined) {Helpers.formatAddress(contactPersonForm.otherUkContactAddress.get)} else {""}}
 
 @PageLabel = @{Helpers.createSummaryRow(
     SummaryRowParams.ofString(Option(Messages("fh.generic.name")),

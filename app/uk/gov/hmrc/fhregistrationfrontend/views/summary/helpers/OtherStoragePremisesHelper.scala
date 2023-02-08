@@ -37,10 +37,16 @@ object OtherStoragePremisesHelper {
       }
     }
 
+    val href = {
+      if (changeLink.isDefined) {
+        changeLink.get
+      } else None
+    }
+
     val storageAddress = {
       data.value.values.zipWithIndex.flatMap {
         case (storagePremise: StoragePremise, index) =>
-          val address = Helpers.findAddress(storagePremise.address)
+          val address = Helpers.formatAddress(storagePremise.address)
 
           Seq(
             Helpers.createSummaryRow(
@@ -60,7 +66,7 @@ object OtherStoragePremisesHelper {
                 Actions(
                   items = Seq(
                     ActionItem(
-                      href = Helpers.checkForNone(changeLink) + s"/${index + 1}",
+                      href = href.toString + s"/${index + 1}",
                       content = Text("Change"),
                       visuallyHiddenText = Some(Messages("fh.other_storage_premises.each.title", {
                         index + 1

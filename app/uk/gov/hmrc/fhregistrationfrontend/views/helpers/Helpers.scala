@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import play.api.data.FormError
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SummaryAddressBlock
 import uk.gov.hmrc.govukfrontend.views.html.components._
 
 object Helpers {
@@ -36,23 +37,12 @@ object Helpers {
   def formatDate(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy").format(date)
 
-  def findAddress(address: Address): String =
-    s"""${address.addressLine1}${address.addressLine2}${address.addressLine3}${address.addressLine4}<br>${address.postcode}"""
+  def formatAddress(address: Address): String = {
+    val line2 = if (address.addressLine2.nonEmpty) { "<br>" + address.addressLine2.get } else ""
+    val line3 = if (address.addressLine3.nonEmpty) { "<br>" + address.addressLine3.get } else ""
+    val line4 = if (address.addressLine4.nonEmpty) { "<br>" + address.addressLine4.get } else ""
 
-  def findAddressOld(optAddress: Option[Address]): String = {
-    def getAddressString(opt: Option[String]): String =
-      opt match {
-        case Some(string) => s"<br> $string"
-        case None         => ""
-      }
-
-    if (optAddress.isDefined) {
-      val add = optAddress.get
-      s"""${add.addressLine1}${getAddressString(add.addressLine2)}${getAddressString(add.addressLine3)}${getAddressString(
-        add.addressLine4)}<br>${add.postcode}"""
-    } else {
-      "" // TODO: Change implementation later (not ideal?)
-    }
+    s"""${address.addressLine1}""" + s"""$line2""" + s"""$line3""" + s"""$line4""" + s"""<br>${address.postcode}"""
   }
 
   def createSummaryRow(params: SummaryRowParams, summaryActions: Option[Actions]): SummaryListRow =
@@ -85,10 +75,5 @@ object Helpers {
               visuallyHiddenText = hiddenText
             )
           )))
-    } else None
-
-  def checkForNone(value: Option[String]) =
-    if (value.isDefined) {
-      value.get
     } else None
 }

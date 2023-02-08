@@ -50,7 +50,7 @@
         val hasPreviousAddress = mainBusinessAddressForm.hasPreviousAddress
         val optPreviousAddress = mainBusinessAddressForm.previousAddress
 
-        (mainBusinessAddressForm.previousAddress, optPreviousAddress) match {
+        (hasPreviousAddress, optPreviousAddress) match {
           case (Some(false), _) => Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
@@ -66,7 +66,7 @@
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
                 Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
-                Helpers.findAddress(previousAddress),
+                Helpers.formatAddress(previousAddress),
                 None,
                 GroupRow.Member
               ),
