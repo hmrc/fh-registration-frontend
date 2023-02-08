@@ -24,11 +24,23 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryAddressParams
 
 @(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
 
-@ContactPersonAddressLabel = @{Helpers.findContactPersonAddressLabel(!contactPersonForm.usingSameContactAddress, contactPersonForm.ukOtherAddress.contains(true))}
-@ContactPersonAddress = @{Helpers.findAddress(contactPersonForm.otherUkContactAddress)}
+@ContactPersonAddressLabel = @{
+    if (!contactPersonForm.usingSameContactAddress) {
+        if (contactPersonForm.ukOtherAddress.contains(true)) {
+            "fh.contact_person.contact_address_new.label"
+        } else {
+            "fh.contact_person.contact_address_international.label"
+        }
+    } else {
+        "fh.contact_person.contact_address.title"
+    }
+}
+
+@ContactPersonAddress = @{if (contactPersonForm.otherUkContactAddress.isDefined) {Helpers.findAddress(contactPersonForm.otherUkContactAddress.get)} else {""}}
 
 @PageLabel = @{Helpers.createSummaryRow(
     SummaryRowParams.ofString(Option(Messages("fh.generic.name")),
@@ -51,26 +63,29 @@
 }
 
 @telephoneNumber = @{
-    Helpers.createSummaryRow(SummaryRowParams.ofString(Option(Messages("fh.contact_person.telephone.label")),
+    Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages("fh.contact_person.telephone.label")),
         contactPersonForm.telephone, None, GroupRow.Top), None)
 }
 
 @Address = @{
-    Helpers.createSummaryRow(SummaryRowParams.ofString(Option(Messages(ContactPersonAddressLabel)),
-        ContactPersonAddress, None,  GroupRow.Bottom), None)
+    if (contactPersonForm.otherUkContactAddress.isDefined) {
+        Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None,  GroupRow.Bottom), None)
+    }
 }
 
 <div class="govuk-body govuk-body-s">
     <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
 </div>
 
+@*
 @viewHelpers.govukSummaryList(
-    SummaryList(
-        rows = Seq(
-            PageLabel,
-            JobTitle,
-            telephoneNumber,
-            Address
-        )
-    )
+SummaryList(
+rows = Seq(
+PageLabel,
+JobTitle,
+telephoneNumber,
+Address
 )
+)
+)
+*@

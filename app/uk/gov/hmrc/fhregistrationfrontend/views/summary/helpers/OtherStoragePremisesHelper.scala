@@ -40,7 +40,7 @@ object OtherStoragePremisesHelper {
     val storageAddress = {
       data.value.values.zipWithIndex.flatMap {
         case (storagePremise: StoragePremise, index) =>
-          val address = Helpers.findAddress(Some(storagePremise.address))
+          val address = Helpers.findAddress(storagePremise.address)
 
           Seq(
             Helpers.createSummaryRow(

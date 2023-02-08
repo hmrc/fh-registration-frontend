@@ -36,21 +36,10 @@ object Helpers {
   def formatDate(date: Date): String =
     new SimpleDateFormat("dd MMMM yyyy").format(date)
 
-  def findContactPersonAddressLabel(usingSameContactAddress: Boolean, ukOtherAddress: Boolean): String =
-    if (!usingSameContactAddress) {
-      if (ukOtherAddress) {
-        "fh.contact_person.contact_address_new.label"
-      } else {
-        "fh.contact_person.contact_address_international.label"
-      }
-    } else {
-      "fh.contact_person.contact_address.title"
-    }
-
-  def formatAddress(address: Address): String =
+  def findAddress(address: Address): String =
     s"""${address.addressLine1}${address.addressLine2}${address.addressLine3}${address.addressLine4}<br>${address.postcode}"""
 
-  def findAddress(optAddress: Option[Address]): String = {
+  def findAddressOld(optAddress: Option[Address]): String = {
     def getAddressString(opt: Option[String]): String =
       opt match {
         case Some(string) => s"<br> $string"
