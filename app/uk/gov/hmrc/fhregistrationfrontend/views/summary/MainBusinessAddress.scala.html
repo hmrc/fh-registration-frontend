@@ -46,43 +46,97 @@
     Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
 )))}
 
-    @conditionalRows = @{
-        if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
+    @addressLessThanThreeYears = @{
+        val hasPreviousAddress = mainBusinessAddressForm.hasPreviousAddress
+        val optPreviousAddress = mainBusinessAddressForm.previousAddress
 
-            val noPreviousAddress = if(mainBusinessAddressForm.hasPreviousAddress.contains(false)) {
-                Some(Helpers.createSummaryRow(SummaryRowParams.ofString(
-                    Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
-                    mainBusinessAddressForm.timeAtCurrentAddress,
-                    None,
-                    isGroupHead
-                ), None))
-            } else None
-
-            val fullPreviousAddress: Seq[Option[SummaryListRow]] = if(mainBusinessAddressForm.hasPreviousAddress.contains(true)) {
-                Seq(
-                    mainBusinessAddressForm.previousAddress.map(add => Helpers.createSummaryRow(
-                    SummaryRowParams.ofString(
-                        Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
-                        Helpers.findAddress(mainBusinessAddressForm.previousAddress),
-                        None,
-                        GroupRow.Member
-                    ), None
-                )),
-                    Some(Helpers.createSummaryRow(SummaryRowParams.ofDate(
-                        Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
-                        mainBusinessAddressForm.previousAddressStartdate,
-                        None,
-                        GroupRow.Bottom
-                    ), None))
-                )
-            } else Seq.empty
-
-            Some(( noPreviousAddress +: fullPreviousAddress ).filter(_.isDefined).flatten)
-        } else None
+        (mainBusinessAddressForm.previousAddress, optPreviousAddress) match {
+          case (Some(false), _) => Seq(
+            Helpers.createSummaryRow(
+              SummaryRowParams.ofString(
+                Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
+                mainBusinessAddressForm.timeAtCurrentAddress,
+                None,
+                isGroupHead
+                ),
+              None
+            )
+          )
+          case (Some(true), Some(previousAddress)) => Seq(
+            Helpers.createSummaryRow(
+              SummaryRowParams.ofString(
+                Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
+                Helpers.findAddress(previousAddress),
+                None,
+                GroupRow.Member
+              ),
+              None
+            ),
+            Helpers.createSummaryRow(
+              SummaryRowParams.ofDate(
+                Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
+                mainBusinessAddressForm.previousAddressStartdate,
+                None,
+                GroupRow.Bottom
+              ),
+            None
+            )
+          )
+          case _ => Seq(
+            Helpers.createSummaryRow(
+              SummaryRowParams.ofDate(
+                Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
+                mainBusinessAddressForm.previousAddressStartdate,
+                None,
+                GroupRow.Bottom
+              ),
+              None
+            )
+          )
+        }
     }
+
+<!--    @conditionalRows = @{-->
+<!--        if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {-->
+
+<!--            val noPreviousAddress = if(mainBusinessAddressForm.hasPreviousAddress.contains(false)) {-->
+<!--                Some(Helpers.createSummaryRow(SummaryRowParams.ofString(-->
+<!--                    Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),-->
+<!--                    mainBusinessAddressForm.timeAtCurrentAddress,-->
+<!--                    None,-->
+<!--                    isGroupHead-->
+<!--                ), None))-->
+<!--            } else None-->
+
+<!--            val fullPreviousAddress: Seq[Option[SummaryListRow]] = if(mainBusinessAddressForm.hasPreviousAddress.contains(true)) {-->
+<!--                Seq(-->
+<!--                    mainBusinessAddressForm.previousAddress.map(add => Helpers.createSummaryRow(-->
+<!--                    SummaryRowParams.ofString(-->
+<!--                        Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),-->
+<!--                        Helpers.findAddress(mainBusinessAddressForm.previousAddress),-->
+<!--                        None,-->
+<!--                        GroupRow.Member-->
+<!--                    ), None-->
+<!--                )),-->
+<!--                    Some(Helpers.createSummaryRow(SummaryRowParams.ofDate(-->
+<!--                        Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),-->
+<!--                        mainBusinessAddressForm.previousAddressStartdate,-->
+<!--                        None,-->
+<!--                        GroupRow.Bottom-->
+<!--                    ), None))-->
+<!--                )-->
+<!--            } else Seq.empty-->
+
+<!--            Some(( noPreviousAddress +: fullPreviousAddress ).filter(_.isDefined).flatten)-->
+<!--        } else None-->
+<!--    }-->
 
 @viewHelpers.govukSummaryList(
     SummaryList(
-        rows = if (conditionalRows.isEmpty) { mainBusinessAddress } else { mainBusinessAddress ++ conditionalRows.get }
+        rows = if(mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
+          mainBusinessAddress
+        } else {
+          mainBusinessAddress ++ addressLessThanThreeYears
+        }
     )
 )
