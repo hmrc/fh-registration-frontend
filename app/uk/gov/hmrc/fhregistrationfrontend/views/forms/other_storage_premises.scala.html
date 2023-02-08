@@ -42,9 +42,7 @@
   Messages("fh.other_storage_premises.title")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
-
-  @Back(navigation, viewHelpers)
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
   <h1 class="govuk-heading-l">title</h1>
 

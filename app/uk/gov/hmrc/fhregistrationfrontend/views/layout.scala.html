@@ -35,7 +35,7 @@
 )
 
 
-@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
+@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None )(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 
 @content = {
     @contentBlock
@@ -49,7 +49,7 @@
     isWelshTranslationAvailable = false, /* or false if your service has not been translated */
     // serviceUrl = Some(routes.IndexController.index().url),
     signOutUrl = Some(routes.SignOutController.signout.url),
-    // backLinkUrl = Some(routes.ServiceController.start().url),
+    backLinkUrl = backUrl,
     displayHmrcBanner = true,
     additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)),
     additionalScriptsBlock = pageScripts,
