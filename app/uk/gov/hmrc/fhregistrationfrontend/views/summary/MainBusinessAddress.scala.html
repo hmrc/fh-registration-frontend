@@ -82,7 +82,7 @@
             None
             )
           )
-          case _ => Seq(
+          case (Some(true), _) => Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofDate(
                 Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
@@ -93,6 +93,7 @@
               None
             )
           )
+          case _ => Seq.empty
         }
     }
 
