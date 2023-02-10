@@ -58,11 +58,27 @@
         <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
     </div>
 
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
+    </div>
+    @viewHelpers.govukSummaryList(SummaryList(
+        EmailAddressHelper(verifiedEmail, params.mode)
+    ))
 
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
+    </div>
+    @viewHelpers.govukSummaryList(SummaryList(
+        ContactPersonHelper(applicationData.contactPerson, bpr, params.mode)
+    ))
 
-  @EmailAddress(verifiedEmail, params.mode)
-  @ContactPerson(applicationData.contactPerson, bpr, params.mode)
-  @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
+    <div class="govuk-body govuk-body-s">
+        <h2><strong>@{Messages("fh.main_business_address.title")}</strong></h2>
+    </div>
+    @viewHelpers.govukSummaryList(SummaryList(
+        MainBusinessAddressHelper(applicationData.mainBusinessAddress, params.mode)
+    ))
+
     <div class="govuk-body govuk-body-s">
         <h2><strong>@{Messages("fh.summary.businessDetails")}</strong></h2>
     </div>
