@@ -42,7 +42,7 @@ object MainBusinessAddressHelper {
           ),
           Helpers.createChangeLink(
             Mode isEditable mode,
-            "mainBusinessAddress",
+            "form/mainBusinessAddress",
             Text("Change"),
             Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
           )
@@ -102,9 +102,9 @@ object MainBusinessAddressHelper {
       }
     }
     if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
-      mainBusinessAddress
-    } else {
       mainBusinessAddress ++ addressLessThanThreeYears
+    } else {
+      mainBusinessAddress
     }
   }
 }

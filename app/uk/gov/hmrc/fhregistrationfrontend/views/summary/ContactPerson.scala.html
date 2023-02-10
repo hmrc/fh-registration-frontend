@@ -16,83 +16,105 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
-@import uk.gov.hmrc.fhregistrationfrontend.views.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 
-@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit messages: Messages, viewHelpers: ViewHelpers)
+@(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit messages: Messages)
 
-@ContactPersonAddressLabel = @{
-    if (!contactPersonForm.usingSameContactAddress) {
-        if (contactPersonForm.ukOtherAddress.contains(true)) {
-            "fh.contact_person.contact_address_new.label"
-        } else {
-            "fh.contact_person.contact_address_international.label"
-        }
+@changeLink = @{
+    if (Mode isEditable mode) {
+        Some("contactPerson")
     } else {
-        "fh.contact_person.contact_address.title"
+        None
     }
 }
 
-@ContactPersonAddress = @{if (contactPersonForm.otherUkContactAddress.isDefined) {Helpers.formatAddress(contactPersonForm.otherUkContactAddress.get)} else {""}}
-
-@PageLabel = @{Helpers.createSummaryRow(
-    SummaryRowParams.ofString(Some(Messages("fh.generic.name")),
-        contactPersonForm.firstName + " " + contactPersonForm.lastName,
-        None,  GroupRow.Top
-    ),
-    Helpers.createChangeLink(
-        Mode isEditable mode,
-        "form/contactPerson",
-        Text("Change"),
-        Some(Messages("fh.generic.name"))
-    )
-)
-}
-
-@JobTitle = @{
-    Helpers.createSummaryRow(
-        SummaryRowParams.ofString(Some(Messages("fh.contact_person.job_title.label")),
-            contactPersonForm.jobTitle, None, GroupRow.Top), None)
-}
-
-@telephoneNumber = @{
-    Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages("fh.contact_person.telephone.label")),
-        contactPersonForm.telephone, None, GroupRow.Top), None)
-}
-
-@Address = @{
-    if (contactPersonForm.otherUkContactAddress.isDefined) {
-        Seq(Helpers.createSummaryRow(SummaryRowParams.ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None,  GroupRow.Bottom), None))
-    } else Seq.empty
-}
-
-<div class="govuk-body govuk-body-s">
-    <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
-</div>
-
-@viewHelpers.govukSummaryList(
-    if (Address.nonEmpty) {
-        SummaryList(
-            rows = Seq(
-                PageLabel,
-                JobTitle,
-                telephoneNumber
-            ) ++ Address
+@SummarySectionHead(heading = Messages("fh.contactPerson.title"))
+<dl class="govuk-check-your-answers cya-questions-long">
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.generic.name")),
+            contactPersonForm.firstName + " " + contactPersonForm.lastName,
+            changeLink,
+            GroupRow.Top
         )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.contact_person.job_title.label")),
+            contactPersonForm.jobTitle,
+            None,
+            GroupRow.Top
+        )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.contact_person.telephone.label")),
+            contactPersonForm.telephone,
+            None,
+            GroupRow.Top
+        )
+    )
+
+    @if(!contactPersonForm.usingSameContactAddress) {
+
+        @if(contactPersonForm.ukOtherAddress.contains(true)){
+            @contactPersonForm.otherUkContactAddress.map { address =>
+                @SummaryAddress(
+                    SummaryAddressParams(
+                        Some(Messages("fh.contact_person.contact_address_new.label")),
+                        SummaryAddressBlock(
+                            Line1 = Some(address.addressLine1),
+                            Line2 = address.addressLine2,
+                            Line3 = address.addressLine3,
+                            Line4 = address.addressLine4,
+                            postcode = Some(address.postcode)
+                        ),
+                        None,
+                        GroupRow.Bottom
+                    )
+                )
+            }
+
+        } else {
+
+            @contactPersonForm.otherInternationalContactAddress.map { address =>
+                @SummaryAddress(
+                    SummaryAddressParams(
+                        Some("International Contact address"),
+                        SummaryAddressBlock(
+                            Line1 = Some(address.addressLine1),
+                            Line2 = address.addressLine2,
+                            Line3 = address.addressLine3,
+                            Line4 = Some(address.addressLine4)
+                        ),
+                        None,
+                        GroupRow.Bottom
+                    )
+                )
+            }
+        }
+
     } else {
-        SummaryList(
-            rows = Seq(
-                PageLabel,
-                JobTitle,
-                telephoneNumber
+
+        @SummaryAddress(
+            SummaryAddressParams(
+                Some(Messages("fh.contact_person.contact_address.title")),
+                SummaryAddressBlock(
+                    Line1 = Some(bpr.businessAddress.line1),
+                    Line2 = Some(bpr.businessAddress.line2),
+                    Line3 = bpr.businessAddress.line3,
+                    Line4 = bpr.businessAddress.line4,
+                    postcode = bpr.businessAddress.postcode
+                ),
+                None,
+                GroupRow.Bottom
             )
         )
     }
-
-)
+</dl>
