@@ -34,8 +34,12 @@
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @showAlert = @{
-    AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
+    params.hasAmendments.filter(_ == true).map { _ =>
+        AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
+    }
 }
+
+@tempAlert = @{AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))}
 
 @title = @{
   Messages(s"fh.summary.${params.mode}.title")
@@ -45,13 +49,11 @@
 
     @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
 
-    @govukNotificationBanner(NotificationBanner(
-        content = HtmlContent(showAlert)
-    ))
-
     <div class="govuk-body govuk-body-s">
         <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
     </div>
+
+    <p class="govuk-body-s">@tempAlert</p>
 
     <div class="govuk-body govuk-body-s">
         <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
