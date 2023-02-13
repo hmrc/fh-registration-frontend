@@ -39,8 +39,6 @@
     }
 }
 
-@tempAlert = @{AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))}
-
 @title = @{
   Messages(s"fh.summary.${params.mode}.title")
 }
@@ -53,7 +51,7 @@
         <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
     </div>
 
-    <p class="govuk-body-s">@tempAlert</p>
+    <p class="govuk-body-s">@showAlert</p>
 
     <div class="govuk-body govuk-body-s">
         <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
