@@ -33,9 +33,9 @@
 @(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@showAlert = @{
+@conditionalText = @{
     params.hasAmendments.filter(_ == true).map { _ =>
-        AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
+        Messages(s"fh.summary.${params.mode}.unsubmittedAlert")
     }
 }
 
@@ -51,7 +51,7 @@
         <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
     </div>
 
-    <p class="govuk-body-s">@showAlert</p>
+    <p class="govuk-body-s">@conditionalText</p>
 
     <div class="govuk-body govuk-body-s">
         <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
