@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
+
 import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
