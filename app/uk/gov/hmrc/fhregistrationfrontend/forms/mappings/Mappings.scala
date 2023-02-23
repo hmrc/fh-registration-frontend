@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
-import java.time.{LocalDate}
-import java.time.format.DateTimeFormatter
+import org.apache.commons.lang3.StringUtils
 import play.api.data.Forms._
 import play.api.data.Mapping
+import play.api.data.validation._
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOfConstraint
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
-import Constraints.oneOfConstraint
-import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError, ValidationResult}
-import org.apache.commons.lang3.StringUtils
-import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError, ValidationResult}
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object Mappings {
@@ -77,10 +76,7 @@ object Mappings {
 
   def withdrwalReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
   def deregistrationReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
-  def nino =
-    nonEmptyText verifying Constraints
-      .pattern(
-        "^[ \t]*[A-Za-z]{1}[ \t]*[ \t]*[A-Za-z]{1}[ \t]*[0-9]{1}[ \t]*[ \t]*[0-9]{1}[ \t]*[ \t]*[0-9]{1}[ \t]*[ \t]*[0-9]{1}[ \t]*[ \t]*[0-9]{1}[ \t]*[ \t]*[0-9]{1}[ \t]*[A-Da-d]{1}[ \t]*$".r)
+  def nino = of(ninoFormatter)
   def nationalIdNumber =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
