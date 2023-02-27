@@ -86,10 +86,10 @@
     </p>
     @viewHelpers.govukSummaryList(SummaryList(
        TradingNameHelper(applicationData.tradingName, params.mode) ++
-               VatRegistrationNumberHelper(applicationData.vatNumber, params.mode)
-
-        // BusinessPartnersHelper scala file needs to be used here returning Seq[SummaryListRows]
+               VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
+               BusinessPartnersHelper(applicationData.businessPartners, params.mode)
     ))
+
     @BusinessPartners(applicationData.businessPartners, params.mode)
 
   @if(Mode isEditable params.mode) {

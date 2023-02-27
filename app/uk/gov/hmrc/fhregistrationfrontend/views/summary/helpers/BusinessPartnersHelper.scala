@@ -34,35 +34,32 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorpo
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
-import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, Text, SummaryListRow}
+import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, SummaryListRow, Text}
 
-object BusinessPartnerHelper {
+object BusinessPartnersHelper {
 
-  def apply(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: Mode)(implicit messages: Messages):Seq[SummaryListRow] = {
+  def apply(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: Mode)(implicit messages: Messages): Seq[SummaryListRow] = {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    Seq(Helpers.createSummaryRow(
-      SummaryRowParams(
-        Some(Messages("fh.vatNumber.label")),
-        Some("value"),
-        None,
-        GroupRow.Single
-      ),
+  val changeLink = {
+    if (Mode isEditable mode) {
+      Some("businessPartners")
+    } else {
       None
-    ))
+    }
+  }
+
+
+// dummy row need to be changed to use Helpers instead.......
+    Seq(
+      Helpers.createSummaryRow(
+        SummaryRowParams(
+          Some(Messages("fh.vatNumber.label")),
+          Some("value"),
+          None,
+          GroupRow.Single
+        ),
+        None
+      ))
   }
 
 }

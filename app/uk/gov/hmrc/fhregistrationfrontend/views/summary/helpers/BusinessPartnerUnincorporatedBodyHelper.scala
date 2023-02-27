@@ -17,26 +17,81 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.SummaryListRow
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
 
 object BusinessPartnerUnincorporatedBodyHelper {
-
-  def apply(mode: Mode)(implicit messages: Messages):Seq[SummaryListRow] = {
-
-
-
-    Seq(Helpers.createSummaryRow(
-      SummaryRowParams(
-        Some(Messages("fh.vatNumber.label")),
-        Some("value"),
+  def apply(partner: BusinessPartnerUnincorporatedBodyModel)(implicit messages: Messages): Seq[SummaryListRow] =
+    Seq(
+      Helpers.createSummaryRow(SummaryRowParams.ofString(
+        Some(Messages("fh.summary.partnerLegalEntity")),
+        Messages("fh.business_partners.entity_type.unincorporated_body.label"),
         None,
-        GroupRow.Single
-      ),
-      None
-    ))
-  }
+        GroupRow.Member
+      ), None),
 
+      Helpers.createSummaryRow(SummaryRowParams.ofString(
+        Some(Messages("fh.business_partners.unincorporate_body.name.label")),
+        partner.unincorporatedBodyName,
+        None,
+        GroupRow.Member
+      ), None),
+
+      if(partner.hasTradeName) {
+        Helpers.createSummaryRow(SummaryRowParams(
+          Some(Messages("fh.tradingName.title")),
+          partner.tradeName,
+          None
+        ), None)
+      } else {
+        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
+          Some(Messages("fh.summary.partnerTradingName")),
+          partner.hasTradeName,
+          None,
+          GroupRow.Member
+        ), None)
+      },
+
+      if(partner.hasVat) {
+        Helpers.createSummaryRow(SummaryRowParams(
+          Some(Messages("fh.vatNumber.label")),
+          partner.vat,
+          None
+        ), None)
+      } else {
+        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
+          Some(Messages("fh.summary.partnerVat")),
+          partner.hasVat,
+          None,
+          GroupRow.Member
+        ), None)
+      },
+
+      if(partner.hasUniqueTaxpayerReference) {
+        Helpers.createSummaryRow(SummaryRowParams(
+          Some(Messages("fh.business_partners.utr.label")),
+          partner.uniqueTaxpayerReference,
+          None
+        ), None)
+
+      } else {
+        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
+          Some(Messages("fh.summary.partnerHasSAUTR")),
+          partner.hasUniqueTaxpayerReference,
+          None,
+          GroupRow.Member
+        ), None)
+      },
+
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
+          Some(Messages("fh.summary.partnerAddress")),
+          Helpers.formatAddress(partner.address),
+          None,
+          GroupRow.Member),
+        None)
+    )
 }
+

@@ -21,48 +21,52 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.SummaryListRow
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models. {BusinessPartnerIndividual => BusinessPartnerIndividualModel}
-import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
 
 object BusinessPartnerIndividualHelper {
-
-  def apply(individual: BusinessPartnerIndividualModel, mode: Mode)(implicit messages: Messages):Seq[SummaryListRow] = {
-
+  def apply(individual: BusinessPartnerIndividualModel, mode: Mode)(implicit messages: Messages): Seq[SummaryListRow] =
     Seq(
-      Helpers.createSummaryRow(SummaryRowParams.ofString(
-        Some(Messages("fh.summary.partnerLegalEntity")),
-        Messages("fh.business_partners.entity_type.individual.label"),
-        None,
-        GroupRow.Member
-      ), None),
-      Helpers.createSummaryRow(SummaryRowParams.ofString(
-        Some(Messages("fh.generic.name")),
-        individual.firstName + " " + individual.lastName,
-        None,
-        GroupRow.Member
-      ), None)
-      ,
-      if(individual.hasNino) {
-        Helpers.createSummaryRow(SummaryRowParams(
-          Some(Messages("fh.business_partners.individual.nino.label")),
-          individual.nino,
-          None
-        ), None)
-      } else {
-        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.partnerHasNino")),
-          individual.hasNino,
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
+          Some(Messages("fh.summary.partnerLegalEntity")),
+          Messages("fh.business_partners.entity_type.individual.label"),
           None,
           GroupRow.Member
-        ), None)
+        ),
+        None
+      ),
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
+          Some(Messages("fh.generic.name")),
+          individual.firstName + " " + individual.lastName,
+          None,
+          GroupRow.Member
+        ),
+        None),
+      if (individual.hasNino) {
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.business_partners.individual.nino.label")),
+            individual.nino,
+            None
+          ),
+          None)
+      } else {
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.partnerHasNino")),
+            individual.hasNino,
+            None,
+            GroupRow.Member
+          ),
+          None)
       },
-        Helpers.createSummaryRow(SummaryRowParams.ofString(
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
           Helpers.formatAddress(individual.address),
           None,
-          GroupRow.Member), None)
+          GroupRow.Member),
+        None)
     )
-  }
 }
