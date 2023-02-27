@@ -28,499 +28,146 @@
 
 @(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@* @pageScripts = {*@
-@*  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>*@
-@*}*@
-
 @indNameInput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$individualIdentificationKey.$firstNameKey",
-    name = s"$individualIdentificationKey.$firstNameKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.contact_person.first_name.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    autocomplete = Some("given-name"),
-    classes = "govuk-!-width-one-half",
-    errorMessage =
-      companyOfficersForm.error(s"$individualIdentificationKey.$firstNameKey").map{ e =>
-        ErrorMessage(
-          content = Text(Messages("fh.individualIdentification.firstName." + companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").error.fold("")(_.message), section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$individualIdentificationKey.$firstNameKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))
 }
 
 @indSurnameInput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$individualIdentificationKey.$lastNameKey",
-    name = s"$individualIdentificationKey.$lastNameKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.contact_person.last_name.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    autocomplete = Some("given-name"),
-    classes = "govuk-!-width-one-half",
-    errorMessage =
-      companyOfficersForm.error(s"$individualIdentificationKey.$lastNameKey").map{ e =>
-        ErrorMessage(
-          content = Text(Messages("fh.individualIdentification.lastName." + companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").error.fold("")(_.message), section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$individualIdentificationKey.$lastNameKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$lastNameKey", "fh.contact_person.last_name.label", section, viewHelpers, None, Some("given-name"))
 }
 
-@condNinoQuestion = @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(Messages("fh.company_officers.individual.nino.confirm.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    hint = Some(Hint(
-      content = Text(messages("fh.company_officers.individual.nino.confirm.hint_text"))
-    )),
-    idPrefix = Some(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey"),
-    name = s"$individualIdentificationKey.$hasNationalInsuranceNumberKey",
-    errorMessage = if (companyOfficersForm(s"$individualIdentificationKey.$hasNationalInsuranceNumberKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.individualIdentification.hasNationalInsuranceNumber.error.required", section))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text("Yes"),
-        value = Some("true"),
-        checked = companyOfficersForm.data.values.toList.contains("true"),
-        conditionalHtml = Some(indNatInsNoInput)
-      ),
-      RadioItem(
-        content = Text("No"),
-        value = Some("false"),
-        checked = companyOfficersForm.data.values.toList.contains("false"),
-        conditionalHtml = Some(condPassportQuestion)
-      )
-    )
-  ))
+@condPassportQuestion =@{
+company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasPassportNumberKey", section, Some(indPassportNoinput), Some(indNatIdInput), false, viewHelpers)
 }
-
-@condPassportQuestion = @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(Messages("fh.company_officers.individual.passport.confirm")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$individualIdentificationKey.$hasPassportNumberKey"),
-    name = s"$individualIdentificationKey.$hasPassportNumberKey",
-    errorMessage = if (companyOfficersForm(s"$individualIdentificationKey.$hasPassportNumberKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.individualIdentification.hasPassportNumber.error.required", section))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text("Yes"),
-        value = Some("true"),
-        checked = companyOfficersForm.data.values.toList.contains("true"),
-        conditionalHtml = Some(indPassportNoinput)
-      ),
-      RadioItem(
-        content = Text("No"),
-        value = Some("false"),
-        checked = companyOfficersForm.data.values.toList.contains("false"),
-        conditionalHtml = Some(indNatIdInput)
-      )
-    )
-  ))
-}
-
 @indPassportNoinput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$individualIdentificationKey.$passportNumberKey",
-    name = s"$individualIdentificationKey.$passportNumberKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.passport.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    errorMessage =
-      companyOfficersForm.error(s"$individualIdentificationKey.$passportNumberKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}", section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$individualIdentificationKey.$passportNumberKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$passportNumberKey", s"fh.$individualIdentificationKey.$passportNumberKey.label", section, viewHelpers)
 }
 
 @indNatInsNoInput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
-    name = s"$individualIdentificationKey.$nationalInsuranceNumberKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.nino.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.company_officers.individual.nino.hint_text"))
-    )),
-    errorMessage =
-      companyOfficersForm.error(s"$individualIdentificationKey.$nationalInsuranceNumberKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}", section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$companyIdentificationKey.$nationalInsuranceNumberKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some(s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label.hint_text"))
 }
 
 @indNatIdInput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$individualIdentificationKey.$nationalIDKey",
-    name = s"$individualIdentificationKey.$nationalIDKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.individual.nationalID.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.company_officers.individual.nationalID.hint_text"))
-    )),
-    errorMessage =
-      companyOfficersForm.error(s"$individualIdentificationKey.$nationalIDKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}", section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$individualIdentificationKey.$nationalIDKey").value
-  ))
-}
-
-@indRoleQuestion = @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(Messages("fh.company_officers.status.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$individualIdentificationKey.$roleKey"),
-    name = s"$individualIdentificationKey.$roleKey",
-    errorMessage = if (companyOfficersForm(s"$individualIdentificationKey.$roleKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.individualIdentification.role.error.required", section))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.director")),
-        value = Some("fh.company_officers.status.director.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.director.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.company_secretary")),
-        value = Some("fh.company_officers.status.company_secretary.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.company_secretary.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.both")),
-        value = Some("fh.company_officers.status.both.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.both.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.member")),
-        value = Some("fh.company_officers.status.member.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.member.value"),
-      )
-    )
-  ))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalIDKey", "fh.company_officers.individual.nationalID.label", section, viewHelpers, Some("fh.company_officers.individual.nationalID.hint_text"))
 }
 
 @compNameinput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$companyIdentificationKey.$companyNameKey",
-    name = s"$companyIdentificationKey.$companyNameKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.company_officers.company.company_name.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.companyRegistrationNumber.hint_text"))
-    )),
-    errorMessage =
-      if (companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").hasErrors) {
-        Some(ErrorMessage(content = Text(messages("fh.companyIdentification.companyName.error.required", section))))
-      } else None,
-//  companyOfficersForm.error(s"$companyIdentificationKey.$companyNameKey").map{ e =>
-//        ErrorMessage(
-//          content = Text(messages("fh.companyIdentification.companyName.error.required", section)),
-//          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-//        )
-//      },
-    value = companyOfficersForm(s"$companyIdentificationKey.$companyNameKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyNameKey", "fh.company_officers.company.company_name.label", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
-@condVATQuestion = @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(Messages("fh.company_officers.company.vat_registration.confirm.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$companyIdentificationKey.$hasVatKey"),
-    name = s"$companyIdentificationKey.$hasVatKey",
-    errorMessage = if (companyOfficersForm(s"$companyIdentificationKey.$hasVatKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.companyIdentification.hasVat.error.required", section))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text("Yes"),
-        value = Some("true"),
-        checked = companyOfficersForm.data.values.toList.contains("true"),
-        conditionalHtml = Some(VATinput)
-      ),
-      RadioItem(
-        content = Text("No"),
-        value = Some("false"),
-        checked = companyOfficersForm.data.values.toList.contains("false"),
-        conditionalHtml = Some(compRegNoInput)
-      )
-    )
-  ))
+@condVATQuestion =@{
+company_officers.yes_no_conditional(companyOfficersForm, s"$companyIdentificationKey.$hasVatKey", section, Some(VATinput), Some(compRegNoInput), false, viewHelpers)
 }
 
 @VATinput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$companyIdentificationKey.$vatRegistrationKey",
-    name = s"$companyIdentificationKey.$vatRegistrationKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.vatNumber.label")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.vatNumber.hintText"))
-    )),
-    errorMessage =
-      companyOfficersForm.error(s"$companyIdentificationKey.$vatRegistrationKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}"+ companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").error.fold("")(_.message), section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$companyIdentificationKey.$vatRegistrationKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.hintText"))
 }
 
 @compRegNoInput = @{
-  viewHelpers.govukInput(Input(
-    id = s"$companyIdentificationKey.$companyRegistrationKey",
-    name = s"$companyIdentificationKey.$companyRegistrationKey",
-    label = Label(
-      isPageHeading = false,
-      content = HtmlContent(s"<strong>${messages("fh.companyRegistrationNumber.title")}</strong>")
-    ),
-    spellcheck = Some(false),
-    classes = "govuk-!-width-one-half",
-    hint = Some(Hint(
-      content = Text(messages("fh.companyRegistrationNumber.hint_text"))
-    )),
-    errorMessage =
-      companyOfficersForm.error(s"$companyIdentificationKey.$companyRegistrationKey").map{ e =>
-        ErrorMessage(
-          content = Text(messages(s"fh.${e.key}.${e.message}"+ companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").error.fold("")(_.message), section)
-          ),
-          visuallyHiddenText = Some(messages("generic.errorPrefix"))
-        )
-      },
-    value = companyOfficersForm(s"$companyIdentificationKey.$companyRegistrationKey").value
-  ))
+company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyRegistrationKey", "fh.companyRegistrationNumber.title", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
-@compRoleQuestion = @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(Messages("fh.company_officers.status.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$companyIdentificationKey.$roleKey"),
-    name = s"$companyIdentificationKey.$roleKey",
-    errorMessage = if (companyOfficersForm(s"$companyIdentificationKey.$roleKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages("fh.individualIdentification.role.error.required", section))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.director")),
-        value = Some("fh.company_officers.status.director.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.director.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.company_secretary")),
-        value = Some("fh.company_officers.status.company_secretary.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.company_secretary.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.both")),
-        value = Some("fh.company_officers.status.both.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.both.value"),
-      ),
-      RadioItem(
-        content = Text(Messages("fh.company_officers.status.member")),
-        value = Some("fh.company_officers.status.member.value"),
-        checked = companyOfficersForm.data.values.toList.contains("fh.company_officers.status.member.value"),
-      )
-    )
-  ))
-}
-
-@addMore = {
-  @params.forceHasMore match {
-    case Some(force) => {
-      <input type="hidden" name="addMore" value="@force"/>
-    }
-    case None => {
-      @viewHelpers.govUkRadios(Radios(
-        fieldset = Some(Fieldset(
-          legend = Some(Legend(
-            content = Text(messages("fh.company_officers.company.addMore")),
-            classes = "govuk-fieldset__legend--m",
-            isPageHeading = false
-          ))
-        )),
-        idPrefix = Some("addMore"),
-        name = "addMore",
-        errorMessage = if (companyOfficersForm("addMore").hasErrors) {
-          Some(ErrorMessage(content = Text(messages("fh.addMore.error.required"))))
-        } else None,
-        items = Seq(
-          RadioItem(
-            content = Text(messages("fh.generic.yes")),
-            value = Some("true"),
-            checked = companyOfficersForm("addMore").value.toList.contains("true")
-          ),
-          RadioItem(
-            content = Text(messages("fh.generic.no")),
-            value = Some("false"),
-            checked = companyOfficersForm("addMore").value.toList.contains("false")
-          )
-        ),
-        classes = "govuk-radios--inline"
-      ))
-    }
+@addMore = @{
+ params.forceHasMore match {
+  case Some(force) => {
+   <input type="hidden" name="addMore" value="@force"/>
   }
+  case None => {
+   company_officers.add_more(companyOfficersForm, viewHelpers)
+  }
+ }
 }
 
 
 @officerIsIndividual = {
-  <h2 class="govuk-heading-m">@Messages("fh.company_officers.individual.title")</h2>
-  @indNameInput
-  @indSurnameInput
-  @condNinoQuestion
-  @indRoleQuestion
+<h2 class="govuk-heading-m">@messages("fh.company_officers.individual.title")</h2>
+@indNameInput
+@indSurnameInput
+@company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasNationalInsuranceNumberKey", section, Some(indNatInsNoInput), Some(condPassportQuestion), true, viewHelpers)
+@company_officers.roles(companyOfficersForm, individualIdentificationKey, section, viewHelpers)
 }
 
 @officerIsCompany = {
-  <h2 class="govuk-heading-m">@Messages("fh.company_officers.company.title")</h2>
-  @compNameinput
-  @condVATQuestion
-  @compRoleQuestion
+<h2 class="govuk-heading-m">@messages("fh.company_officers.company.title")</h2>
+@compNameinput
+@condVATQuestion
+@company_officers.roles(companyOfficersForm, companyIdentificationKey, section, viewHelpers)
+}
+
+@pageScripts = {
+<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
 @titlePrefix = @{
-  if (companyOfficersForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+if (companyOfficersForm.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-  Messages("fh.company_officers.title")
+messages("fh.company_officers.title")
 }
 
-@layout(title = titlePrefix + title) {
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
-  @Back(navigation, viewHelpers)
-  @if(companyOfficersForm.errors.nonEmpty) {
+<h1 class="govuk-heading-l">@title</h1>
 
-    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-      companyOfficersForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
-        ErrorLink(
-          href = Some(s"#${error._1.key}"),
-          content = Text(messages(s"fh.${error._1.key}.${error._1.message}",section))
-        )
-      }
-      ,
-      title = Text(messages("fh.generic.error"))))
-  }
+@if(companyOfficersForm.errors.nonEmpty) {
 
-  <p class="govuk-body">@Messages("fh.company_officers.intro")</p>
+@viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+companyOfficersForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+ErrorLink(
+href = Some(s"#${error._1.key}"),
+content = Text(messages(s"fh.${error._1.key}.${error._1.message}",section))
+)
+}
+,
+title = Text(messages("fh.generic.error"))))
+}
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
-    @if(params.canRemove) {
-      <a class="govuk-link" style="float:right" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+<p class="govuk-body">@messages("fh.company_officers.intro")</p>
+
+@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
+@if(params.canRemove) {
+<a class="govuk-link" style="float:right" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
               .confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}">
-      Remove
-      </a>
-    }
-    <h2 class="govuk-heading-m">@Messages("fh.company_officers.each.title", section)</h2>
+Remove
+</a>
+}
+<h2 class="govuk-heading-m">@messages("fh.company_officers.each.title", section)</h2>
 
-    @viewHelpers.govUkRadios(Radios(
-      fieldset = Some(Fieldset(
-        legend = Some(Legend(
-          content = Text(messages("fh.company_officers.entity_type.label")),
-          classes = "govuk-fieldset__legend--m",
-          isPageHeading = false
-        ))
-      )),
-      idPrefix = Some(identificationTypeKey),
-      name = identificationTypeKey,
-      errorMessage = if (companyOfficersForm(identificationTypeKey).hasErrors) {
-        Some(ErrorMessage(content = Text(messages("fh.identificationType.error.required", section))))
-      } else None,
-      items = Seq(
-        RadioItem(
-          content = Text(messages("fh.company_officers.individual.label")),
-          value = Some("Individual"),
-          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Individual"),
-          conditionalHtml = Some(officerIsIndividual)
-        ),
-        RadioItem(
-          content = Text(messages("fh.company_officers.company.label")),
-          value = Some("Company"),
-          checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Company"),
-          conditionalHtml = Some(officerIsCompany)
-        ),
-      )
-      ))
+@viewHelpers.govUkRadios(Radios(
+fieldset = Some(Fieldset(
+legend = Some(Legend(
+content = Text(messages("fh.company_officers.entity_type.label")),
+classes = "govuk-fieldset__legend--m",
+isPageHeading = false
+))
+)),
+idPrefix = Some(identificationTypeKey),
+name = identificationTypeKey,
+errorMessage = if (companyOfficersForm(identificationTypeKey).hasErrors) {
+Some(ErrorMessage(content = Text(messages("fh.identificationType.error.required", section))))
+} else None,
+items = Seq(
+RadioItem(
+id = Some(s"$identificationTypeKey-individual"),
+content = Text(messages("fh.company_officers.individual.label")),
+value = Some("Individual"),
+checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Individual"),
+conditionalHtml = Some(officerIsIndividual)
+),
+RadioItem(
+id = Some(s"$identificationTypeKey-company"),
+content = Text(messages("fh.company_officers.company.label")),
+value = Some("Company"),
+checked = companyOfficersForm(identificationTypeKey).value.toList.contains("Company"),
+conditionalHtml = Some(officerIsCompany)
+),
+)
+))
 
-    @addMore
+@addMore
 
-    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
-    @SaveForLater()
-  }
+@viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+@SaveForLater()
+}
 }

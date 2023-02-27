@@ -38,7 +38,7 @@ class Views @Inject()(
   val company_registration_number: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.company_registration_number,
   val contact_person: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.contact_person,
   val date_of_incorporation: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.date_of_incorporation,
-  val examples: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.examples,
+//  val examples: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.examples,
   val has_other_storage_premises: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.has_other_storage_premises,
   val importing_activities: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.importing_activities,
   val main_business_address: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address,
