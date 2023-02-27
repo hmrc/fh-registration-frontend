@@ -27,7 +27,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers._
 
-@this(layout: layout)
+@this(layout: layout, govukFieldset : GovukFieldset)
 
 @(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
@@ -46,50 +46,68 @@
 
     @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{PageHeading(PageHeadingParams(heading = title))}</strong></h2>
+    @{PageHeading(PageHeadingParams(heading = title))}
+    @*Could this be inset text ?*@
     <p class="govuk-body-s">@conditionalText</p>
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.summary.email.title")}</strong></h2>
-    </p>
-    @viewHelpers.govukSummaryList(SummaryList(
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.email.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html =  viewHelpers.govukSummaryList(SummaryList(
         EmailAddressHelper(verifiedEmail, params.mode)
     ))
+    ))
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.contactPerson.title")}</strong></h2>
-    </p>
-    @viewHelpers.govukSummaryList(SummaryList(
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.contactPerson.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html =  viewHelpers.govukSummaryList(SummaryList(
         ContactPersonHelper(applicationData.contactPerson, bpr, params.mode)
     ))
-
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.main_business_address.title")}</strong></h2>
-    </p>
-    @viewHelpers.govukSummaryList(SummaryList(
-        MainBusinessAddressHelper(applicationData.mainBusinessAddress, params.mode)
     ))
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.summary.businessDetails")}</strong></h2>
-    </p>
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.main_business_address.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+        MainBusinessAddressHelper(applicationData.mainBusinessAddress, params.mode)
+        ))
+    ))
 
-    @viewHelpers.govukSummaryList(SummaryList(
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.businessDetails")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html =  viewHelpers.govukSummaryList(SummaryList(
         NationalInsuranceHelper(applicationData.nationalInsuranceNumber, params.mode) ++
                 TradingNameHelper(applicationData.tradingName, params.mode) ++
                 VatRegistrationNumberHelper(applicationData.vatNumber, params.mode)
+        ))
     ))
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.summary.businessActivities")}</strong></h2>
-    </p>
-
-    @viewHelpers.govukSummaryList(SummaryList(
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.businessActivities")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html =  viewHelpers.govukSummaryList(SummaryList(
         BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
                 ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
                 BusinessCustomersHelper(applicationData.businessCustomers, params.mode) ++
                 OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode)
+        ))
     ))
 
     @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
@@ -101,9 +119,7 @@
     }
 
     @if(Mode isEditable params.mode) {
-        <div class="govuk-body govuk-body-m">
         @SummaryButtons()
-        </div>
     }
 
 }
