@@ -20,7 +20,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{OtherStoragePremises => 
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.StoragePremise
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode.{Mode, New}
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, Text}
 import play.api.i18n.Messages

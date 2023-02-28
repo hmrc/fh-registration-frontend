@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, ListWithTrackedChanges}
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.{Helpers, SummaryRowParams}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow

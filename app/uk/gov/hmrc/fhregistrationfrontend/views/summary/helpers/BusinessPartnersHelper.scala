@@ -17,13 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessCustomers => BusinessCustomersModel}
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerCorporateBody
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
@@ -31,8 +27,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerLimitedLia
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, SummaryListRow, Text}
 

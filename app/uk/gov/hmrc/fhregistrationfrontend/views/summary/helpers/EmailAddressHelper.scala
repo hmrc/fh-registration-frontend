@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.govukfrontend.views.html.components._
-import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 import uk.gov.hmrc.fhregistrationfrontend.views.summary._
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams

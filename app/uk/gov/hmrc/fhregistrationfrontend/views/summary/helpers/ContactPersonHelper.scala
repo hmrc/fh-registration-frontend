@@ -19,10 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 import uk.gov.hmrc.fhregistrationfrontend.views.summary._

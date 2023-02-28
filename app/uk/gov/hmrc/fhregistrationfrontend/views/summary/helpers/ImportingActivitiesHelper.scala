@@ -18,11 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ImportingActivities => ImportingActivitiesModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
-import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, Text}
+import uk.gov.hmrc.govukfrontend.views.html.components.Text
 import play.api.i18n.Messages
 
 object ImportingActivitiesHelper {

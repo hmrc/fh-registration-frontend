@@ -21,7 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.{Helpers, SummaryRowParams}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
-import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, Text}
+import uk.gov.hmrc.govukfrontend.views.html.components.Text
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
 
 object DateOfIncorporationHelper {

@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
