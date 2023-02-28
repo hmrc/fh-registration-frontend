@@ -24,61 +24,77 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnersh
 
 object BusinessPartnerPartnershipHelper {
 
-  def apply(partner: BusinessPartnerPartnershipModel)(implicit messages: Messages): Seq[SummaryListRow] =
-    Seq(
+  def apply(partner: BusinessPartnerPartnershipModel)(implicit messages: Messages): Seq[SummaryListRow] = {
 
-      Helpers.createSummaryRow(SummaryRowParams.ofString(
-        Some(Messages("fh.summary.partnerLegalEntity")),
-        Messages("fh.business_partners.entity_type.partnership.label"),
-        None,
-        GroupRow.Member
-      ), None),
-
-      Helpers.createSummaryRow(SummaryRowParams.ofString(
-        Some(Messages("fh.business_partners.partnership.name.label")),
-        partner.partnershipName,
-        None,
-        GroupRow.Member
-      ), None),
-
-      if(partner.hasTradeName) {
-        Helpers.createSummaryRow(SummaryRowParams(
-          Some(Messages("fh.tradingName.title")),
-          partner.tradeName,
-          None,
-          GroupRow.Member
-        ), None)
+    val partnerHasVat = {
+      if (partner.hasVat) {
+        Seq(
+          Helpers.createSummaryRow(
+            SummaryRowParams(
+              Some(Messages("fh.vatNumber.label")),
+              partner.vat,
+              None
+            ),
+            None)
+        )
       } else {
-        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.partnerTradingName")),
-          partner.hasTradeName,
+        Seq.empty
+      }
+    }
+
+    val hasUniqueTaxpayerReference = {
+      if (partner.hasUniqueTaxpayerReference) {
+        Seq(
+          Helpers.createSummaryRow(
+            SummaryRowParams(
+              Some(Messages("fh.ct_utr.label")),
+              partner.uniqueTaxpayerReference,
+              None
+            ),
+            None)
+        )
+      } else {
+        Seq.empty
+      }
+    }
+
+    val businessPartnerPartnership = Seq(
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
+          Some(Messages("fh.summary.partnerLegalEntity")),
+          Messages("fh.business_partners.entity_type.partnership.label"),
           None,
           GroupRow.Member
-        ), None)
+        ),
+        None
+      ),
+      Helpers.createSummaryRow(
+        SummaryRowParams.ofString(
+          Some(Messages("fh.business_partners.partnership.name.label")),
+          partner.partnershipName,
+          None,
+          GroupRow.Member
+        ),
+        None),
+      if (partner.hasTradeName) {
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.tradingName.title")),
+            partner.tradeName,
+            None,
+            GroupRow.Member
+          ),
+          None)
+      } else {
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.partnerTradingName")),
+            partner.hasTradeName,
+            None,
+            GroupRow.Member
+          ),
+          None)
       },
-
-      /// need to change these ?
-
-//  if (partner.hasVat) {
-//    @SummaryRow(
-//      SummaryRowParams(
-//        Some(Messages("fh.vatNumber.label")),
-//        partner.vat,
-//        None
-//      )
-//    )
-//  }
-//
-//  if (partner.hasUniqueTaxpayerReference) {
-//    @SummaryRow(
-//      SummaryRowParams(
-//        Some(Messages("fh.ct_utr.label")),
-//        partner.uniqueTaxpayerReference,
-//        None
-//      )
-//    )
-//  }
-
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
@@ -87,5 +103,19 @@ object BusinessPartnerPartnershipHelper {
           GroupRow.Member),
         None)
     )
-}
 
+    (partner.hasVat, partner.hasUniqueTaxpayerReference) match {
+      case (true, true) =>
+        businessPartnerPartnership.dropRight(1) ++ partnerHasVat ++ hasUniqueTaxpayerReference ++ Seq(
+          businessPartnerPartnership.last)
+
+      case (true, false) =>
+        businessPartnerPartnership.dropRight(1) ++ partnerHasVat ++ Seq(businessPartnerPartnership.last)
+
+      case (false, true) =>
+        businessPartnerPartnership.dropRight(1) ++ hasUniqueTaxpayerReference ++ Seq(businessPartnerPartnership.last)
+
+      case (false, false) => businessPartnerPartnership
+    }
+  }
+}

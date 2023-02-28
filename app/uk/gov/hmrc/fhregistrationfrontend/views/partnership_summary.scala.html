@@ -81,13 +81,17 @@
         ))
     ))
 
-    <p class="govuk-body govuk-body-s">
-        <h2><strong>@{Messages("fh.summary.businessDetails")}</strong></h2>
-    </p>
-    @viewHelpers.govukSummaryList(SummaryList(
-       TradingNameHelper(applicationData.tradingName, params.mode) ++
-               VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
-               BusinessPartnersHelper(applicationData.businessPartners, params.mode)
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.businessDetails")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+                TradingNameHelper(applicationData.tradingName, params.mode) ++
+                VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
+                BusinessPartnersHelper(applicationData.businessPartners, params.mode)
+        ))
     ))
 
   @if(Mode isEditable params.mode) {

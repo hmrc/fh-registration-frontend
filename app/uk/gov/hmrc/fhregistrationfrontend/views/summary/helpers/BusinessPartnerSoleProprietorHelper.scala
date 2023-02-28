@@ -20,7 +20,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.SummaryListRow
-import uk.gov.hmrc.fhregistrationfrontend.forms.models. {BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerSoleProprietor => BusinessPartnerSoleProprietorModel}
 
 object BusinessPartnerSoleProprietorHelper {
   def apply(partner: BusinessPartnerSoleProprietorModel)(implicit messages: Messages): Seq[SummaryListRow] =
@@ -43,57 +43,67 @@ object BusinessPartnerSoleProprietorHelper {
         ),
         None
       ),
-
-      if(partner.hasTradeName) {
-        Helpers.createSummaryRow(SummaryRowParams(
-          Some(Messages("fh.tradingName.title")),
-          partner.tradeName,
-          None
-        ), None)
+      if (partner.hasTradeName) {
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.tradingName.title")),
+            partner.tradeName,
+            None
+          ),
+          None)
       } else {
-        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.partnerTradingName")),
-          partner.hasTradeName,
-          None,
-          GroupRow.Member
-        ), None)
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.partnerTradingName")),
+            partner.hasTradeName,
+            None,
+            GroupRow.Member
+          ),
+          None)
       },
-
-      if(partner.hasNino) {
-        Helpers.createSummaryRow(SummaryRowParams(
-          Some(Messages("fh.business_partners.individual.nino.label")),
-          partner.nino,
-          None
-        ), None)
+      if (partner.hasNino) {
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.business_partners.individual.nino.label")),
+            partner.nino,
+            None
+          ),
+          None)
       } else {
-        Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.partnerHasNino")),
-          partner.hasNino,
-          None,
-          GroupRow.Member
-        ), None)
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.partnerHasNino")),
+            partner.hasNino,
+            None,
+            GroupRow.Member
+          ),
+          None)
       },
-
-  if(partner.hasVat) {
-    Helpers.createSummaryRow(SummaryRowParams(
-      Some(Messages("fh.vatNumber.label")),
-      partner.vat,
-      None
-    ), None)
-  } else {
-    Helpers.createSummaryRow(SummaryRowParams.ofBoolean(
-      Some(Messages("fh.summary.partnerVat")),
-      partner.hasVat,
-      None,
-      GroupRow.Member
-    ), None)
-  },
+      if (partner.hasVat) {
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.vatNumber.label")),
+            partner.vat,
+            None
+          ),
+          None)
+      } else {
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.partnerVat")),
+            partner.hasVat,
+            None,
+            GroupRow.Member
+          ),
+          None)
+      },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
           Helpers.formatAddress(partner.address),
           None,
-          GroupRow.Bottom), None
+          GroupRow.Bottom),
+        None
       )
     )
 }
