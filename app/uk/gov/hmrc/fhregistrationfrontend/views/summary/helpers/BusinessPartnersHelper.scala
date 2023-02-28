@@ -38,28 +38,50 @@ import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, Sum
 
 object BusinessPartnersHelper {
 
-  def apply(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: Mode)(implicit messages: Messages): Seq[SummaryListRow] = {
+  def apply(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: Mode)(
+    implicit messages: Messages): Seq[SummaryListRow] =
+    businessPartners.values.zipWithIndex.flatMap {
 
-  val changeLink = {
-    if (Mode isEditable mode) {
-      Some("businessPartners")
-    } else {
-      None
-    }
-  }
+      case (businessPartner, index) =>
+        val summaryHeading = Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.business_partners.add_a_partner", { index + 1 })),
+            None,
+            None,
+            GroupRow.Single
+          ),
+          Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href = s"form/businessPartners/${index + 1}",
+                  content = Text("Change"),
+                  visuallyHiddenText = Some(Messages("fh.business_partners.add_a_partner", { index + 1 }))
+                )
+              )
+            ))
+        )
 
+        val summaryRows = businessPartner.identification match {
 
-// dummy row need to be changed to use Helpers instead.......
-    Seq(
-      Helpers.createSummaryRow(
-        SummaryRowParams(
-          Some(Messages("fh.vatNumber.label")),
-          Some("value"),
-          None,
-          GroupRow.Single
-        ),
-        None
-      ))
-  }
+          case partner: BusinessPartnerIndividualModel =>
+            BusinessPartnerIndividualHelper(partner)
 
+          case partner: BusinessPartnerSoleProprietorModel =>
+            BusinessPartnerSoleProprietorHelper(partner)
+
+          case partner: BusinessPartnerCorporateBody =>
+            BusinessPartnerCompanyHelper(partner)
+
+          case partner: BusinessPartnerLimitedLiabilityPartnership =>
+            BusinessPartnerLLPHelper(partner)
+
+          case partner: BusinessPartnerPartnershipModel =>
+            BusinessPartnerPartnershipHelper(partner)
+
+          case partner: BusinessPartnerUnincorporatedBodyModel =>
+            BusinessPartnerUnincorporatedBodyHelper(partner)
+        }
+        summaryHeading +: summaryRows
+    }.toSeq
 }

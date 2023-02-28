@@ -24,7 +24,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.SummaryListRow
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
 
 object BusinessPartnerIndividualHelper {
-  def apply(individual: BusinessPartnerIndividualModel, mode: Mode)(implicit messages: Messages): Seq[SummaryListRow] =
+  def apply(individual: BusinessPartnerIndividualModel)(implicit messages: Messages): Seq[SummaryListRow] =
     Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
