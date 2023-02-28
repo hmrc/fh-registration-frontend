@@ -93,10 +93,9 @@
   Messages("fh.other_storage_premises.title")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), Some(pageHeadBlock)) {
+@layout(title = titlePrefix + title, Some(pageScripts), Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
 
-  @Back(navigation, viewHelpers)
-  @if(otherStoragePremisesForm.errors.nonEmpty) {
+@if(otherStoragePremisesForm.errors.nonEmpty) {
 
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
       otherStoragePremisesForm.errors.groupBy(_.key).map(x => x._2.head).toList.sortBy(_.message).map { error =>

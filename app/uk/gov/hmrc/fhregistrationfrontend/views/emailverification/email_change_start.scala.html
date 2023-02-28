@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -33,9 +34,7 @@
   Messages("fh.emailVerification.edit.start.title")
 }
 
-@layout(title = title, Some(pageScripts)) {
-
-  @Back(navigation, viewHelpers)
+@layout(title = title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
   <h1 class="govuk-heading-l">@title</h1>
 

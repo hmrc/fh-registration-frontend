@@ -42,9 +42,7 @@
   Messages("fh.other_storage_premises.confirm.label")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
-
-  @Back(navigation, viewHelpers)
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
       @if(hasOtherStoragePremisesForm.errors.nonEmpty) {

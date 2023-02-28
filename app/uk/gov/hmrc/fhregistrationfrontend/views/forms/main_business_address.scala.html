@@ -26,7 +26,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
-@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.Back
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -137,11 +136,9 @@
       ))
 }
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-  @Back(navigation, viewHelpers)
 
 
 

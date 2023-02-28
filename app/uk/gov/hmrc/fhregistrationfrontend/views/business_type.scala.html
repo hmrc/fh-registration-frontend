@@ -54,9 +54,8 @@
 
 }
 
-@layout(pageTitle, Some(pageScripts)) {
+@layout(pageTitle, Some(pageScripts), None, Some(backUrl)) {
 
-    @viewHelpers.govukBackLink(BackLink(href =backUrl, content = Text(messages("fh.generic.back"))))
 
     @if(businessTypeForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
