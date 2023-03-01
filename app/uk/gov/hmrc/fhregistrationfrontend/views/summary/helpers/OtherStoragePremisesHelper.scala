@@ -82,7 +82,7 @@ object OtherStoragePremisesHelper {
     val storagePremise = Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.usesStoragePremises")),
+          Some(Messages("fh.summary.thirdPartyPremises")),
           data.hasValue,
           changeLink,
           GroupRow.Single
