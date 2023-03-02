@@ -26,21 +26,13 @@ import uk.gov.hmrc.govukfrontend.views.html.components.Text
 
 object NationalInsuranceHelper {
 
-  def apply(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit messages: Messages) = {
-
-    val changeLink =
-      if (Mode isEditable mode) {
-        Some("nationalInsuranceNumber")
-      } else {
-        None
-      }
-
+  def apply(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit messages: Messages) =
     Seq(if (nationalInsuranceForm.hasValue) {
       Helpers.createSummaryRow(
         SummaryRowParams(
           Some(Messages("fh.national_insurance_number.label")),
           nationalInsuranceForm.value,
-          changeLink
+          None
         ),
         Helpers.createChangeLink(
           Mode isEditable mode,
@@ -54,7 +46,7 @@ object NationalInsuranceHelper {
         SummaryRowParams.ofBoolean(
           Some(Messages("fh.summary.HasNino")),
           nationalInsuranceForm.hasValue,
-          changeLink,
+          None,
           GroupRow.Single
         ),
         Helpers.createChangeLink(
@@ -65,5 +57,4 @@ object NationalInsuranceHelper {
         )
       )
     })
-  }
 }

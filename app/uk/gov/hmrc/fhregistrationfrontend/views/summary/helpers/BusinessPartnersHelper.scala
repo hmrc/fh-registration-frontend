@@ -27,6 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerLimitedLia
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnership => BusinessPartnerPartnershipModel}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, SummaryListRow, Text}
 
@@ -44,16 +45,11 @@ object BusinessPartnersHelper {
             None,
             GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = s"form/businessPartners/${index + 1}",
-                  content = Text("Change"),
-                  visuallyHiddenText = Some(Messages("fh.business_partners.add_a_partner", { index + 1 }))
-                )
-              )
-            ))
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            s"form/businessPartners/${index + 1}",
+            Text("Change"),
+            Some(Messages("fh.business_partners.add_a_partner", { index + 1 })))
         )
 
         val summaryRows = businessPartner.identification match {

@@ -37,17 +37,10 @@ object OtherStoragePremisesHelper {
       }
     }
 
-    val href = {
-      if (changeLink.isDefined) {
-        changeLink.get
-      } else None
-    }
-
     val storageAddress = {
       data.value.values.zipWithIndex.flatMap {
         case (storagePremise: StoragePremise, index) =>
           val address = Helpers.formatAddress(storagePremise.address)
-
           Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofBoolean(
@@ -62,18 +55,13 @@ object OtherStoragePremisesHelper {
               SummaryRowParams(Some(Messages("fh.other_storage_premises.each.title", {
                 index + 1
               })), Some(address), None, GroupRow.Single),
-              Some(
-                Actions(
-                  items = Seq(
-                    ActionItem(
-                      href = href.toString + s"/${index + 1}",
-                      content = Text("Change"),
-                      visuallyHiddenText = Some(Messages("fh.other_storage_premises.each.title", {
-                        index + 1
-                      }))
-                    )
-                  )
-                ))
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                s"form/otherStoragePremises/${index + 1}",
+                Text("Change"),
+                Some(Messages("fh.other_storage_premises.each.title", {
+                  index + 1
+                })))
             )
           )
       }.toSeq

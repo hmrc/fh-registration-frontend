@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, ListWithTrackedChanges}
+import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.{Helpers, SummaryRowParams}
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
@@ -46,19 +47,13 @@ object CompanyOfficersHelper {
             None,
             GroupRow.Single
           ),
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = s"form/companyOfficers/${index + 1}",
-                  content = Text("Change"),
-                  visuallyHiddenText = Some(Messages("fh.company_officers.each.title", {
-                    index + 1
-                  }))
-                )
-              )
-            ))
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            s"form/companyOfficers/${index + 1}",
+            Text("Change"),
+            Some(Messages("fh.company_officers.each.title", { index + 1 })))
         )
+
         officerLabel +: individualOrCompanyDetails
     }.toSeq
 }
