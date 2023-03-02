@@ -48,18 +48,10 @@ object Helpers {
   def createSummaryRow(params: SummaryRowParams, summaryActions: Option[Actions]): SummaryListRow =
     SummaryListRow(
       key = Key(
-        content = if (params.label.isDefined) {
-          HtmlContent(params.label.get)
-        } else {
-          Empty // TODO: Change implementation later (not ideal?)
-        }
+        content = params.label.fold[Content](Empty)(label => HtmlContent(label))
       ),
       value = Value(
-        content = if (params.value.isDefined) {
-          HtmlContent(params.value.get)
-        } else {
-          Empty // TODO: Change implementation later (not ideal?)
-        }
+        content = params.value.fold[Content](Empty)(label => HtmlContent(label))
       ),
       actions = summaryActions
     )
