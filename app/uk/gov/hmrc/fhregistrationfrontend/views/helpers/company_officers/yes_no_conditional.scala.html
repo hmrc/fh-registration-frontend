@@ -1,0 +1,62 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
+
+
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], identificationKey: String, section: String, conditionYesHtml: Option[Html], conditionNoHtml: Option[Html], hasHint: Boolean = false, viewHelpers: ViewHelpers)(implicit messages: Messages)
+
+@{
+    viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages(s"fh.$identificationKey.confirm.label")),
+          classes = "govuk-fieldset__legend--m",
+          isPageHeading = false
+        ))
+      )),
+      hint = if (hasHint) {Some(Hint(
+        content = Text(messages(s"fh.$identificationKey.confirm.hint_text"))
+      ))}
+        else None,
+      idPrefix = Some(identificationKey),
+      name = identificationKey,
+      errorMessage = if (companyOfficersForm(s"$identificationKey").hasErrors) {
+        Some(ErrorMessage(content = Text(messages(s"fh.$identificationKey.error.required", section))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          id = Some(s"$identificationKey-true"),
+          content = Text("Yes"),
+          value = Some("true"),
+          checked = companyOfficersForm(identificationKey).value.contains("true"),
+          conditionalHtml = conditionYesHtml
+        ),
+        RadioItem(
+          id = Some(s"$identificationKey-false"),
+          content = Text("No"),
+          value = Some("false"),
+          checked = companyOfficersForm(identificationKey).value.contains("false"),
+          conditionalHtml = conditionNoHtml
+        )
+      )
+    ))
+}
