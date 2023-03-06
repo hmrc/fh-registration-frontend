@@ -14,22 +14,24 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-<div class="hidden-print summary-links">
-  <p class="js-show">
-    <a href="javascript:window.print()">@Messages("link.printSummary")</a>
+@()(implicit messages: Messages, viewHelpers: ViewHelpers)
+
+<div class="hidden-print summary-links govuk-body-m">
+  <p class="js-show gov">
+    <a class="govuk-link" href="javascript:window.print()">@Messages("link.printSummary")</a>
   </p>
-  <p>
-    <a class="button" role="button" href="@{
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.showDeclaration
-    }">
-    @Messages("button.continue")
-    </a>
-  </p>
+    <p class="govuk-button-group">
+        @viewHelpers.govukButton(Button(
+            href = Some(s"${uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.showDeclaration}"),
+            content = Text(Messages("button.continue"))
+        ))
+    </p>
 
   <p>
-    <a href="@{
+    <a class="govuk-link" href="@{
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.savedForLater
     }">
     @Messages("link.saveForLater")

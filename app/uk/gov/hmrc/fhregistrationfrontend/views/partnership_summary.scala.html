@@ -22,19 +22,19 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers._
 
-@this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, govukFieldset : GovukFieldset)
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
-@stylesheets = {<link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>}
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
-@showAlert = @{
+@conditionalText = @{
   params.hasAmendments.filter(_ == true).map { _ =>
-      AlertOld(Messages(s"fh.summary.${params.mode}.unsubmittedAlert"))
+      Messages(s"fh.summary.${params.mode}.unsubmittedAlert")
   }
 }
 
@@ -42,43 +42,90 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@mainTemplate(title = title, linkElement = Some(stylesheets), pageScripts = Some(scripts), environmentUrl = environment) {
+@layout(title, Some(scripts)) {
 
-  @BackHistory()
+    @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
 
-  @showAlert
+    @{PageHeading(PageHeadingParams(heading = title))}
 
-  @PageHeading(
-    PageHeadingParams(
-      heading = title
-    )
-  )
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.email.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+        EmailAddressHelper(verifiedEmail, params.mode)
+        ))
+    ))
 
-  @EmailAddress(verifiedEmail, params.mode)
-  @ContactPerson(applicationData.contactPerson, bpr, params.mode)
-  @MainBusinessAddress(applicationData.mainBusinessAddress, params.mode)
-  @SummarySectionHead(heading = Messages("fh.summary.businessDetails"))
-  <dl class="govuk-check-your-answers cya-questions-long">
-    @TradingName(applicationData.tradingName, params.mode)
-    @VATRegistrationNumber(applicationData.vatNumber, params.mode)
-    @BusinessPartners(applicationData.businessPartners, params.mode)
-  </dl>
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.contactPerson.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+        ContactPersonHelper(applicationData.contactPerson, bpr, params.mode)
+        ))
+    ))
+
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.main_business_address.title")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+        MainBusinessAddressHelper(applicationData.mainBusinessAddress, params.mode)
+        ))
+    ))
+
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.businessDetails")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+                TradingNameHelper(applicationData.tradingName, params.mode) ++
+                VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
+                BusinessPartnersHelper(applicationData.businessPartners, params.mode)
+        ))
+    ))
+
   @if(Mode isEditable params.mode) {
-    @SummaryAddMoreLink("businessPartners", (applicationData.businessPartners.size+1).toString, Messages("fh.summary.addMoreBusinessPartners"))
-  }
-  @SummarySectionHead(heading = Messages("fh.summary.businessActivities"))
-  <dl class="govuk-check-your-answers cya-questions-long">
-    @BusinessStatus(applicationData.businessStatus, params.mode)
-    @ImportingActivities(applicationData.importingActivities, params.mode)
-    @BusinessCustomers(applicationData.businessCustomers, params.mode)
-    @OtherStoragePremises(applicationData.otherStoragePremises, params.mode)
-  </dl>
-  @if(applicationData.otherStoragePremises.hasValue && Mode.isEditable(params.mode)) {
-    @SummaryAddMoreLink("otherStoragePremises", (applicationData.otherStoragePremises.value.size+1).toString, Messages("fh.summary.addMoreStoragePremises"))
+      <div style="display: flex; justify-content: flex-end">
+          <p class="govuk-body">
+              <a class="govuk-link" href="@{s"form/businessPartners/${(applicationData.businessPartners.size+1).toString}"}">@{Messages("fh.summary.addMoreBusinessPartners")}</a>
+          </p>
+      </div>
   }
 
-@if(Mode isEditable params.mode) {
-    @SummaryButtons()
-  }
+    @govukFieldset(Fieldset(
+        legend = Some(Legend(
+            content = Text(Messages("fh.summary.businessActivities")),
+            classes = "govuk-fieldset__legend--m",
+            isPageHeading = false
+        )),
+        html = viewHelpers.govukSummaryList(SummaryList(
+        BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
+                ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
+                BusinessCustomersHelper(applicationData.businessCustomers, params.mode) ++
+                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode)
+        ))
+    ))
+
+    @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
+        <div style="display: flex; justify-content: flex-end">
+            <p class="govuk-body">
+                <a class="govuk-link" href="@{s"form/otherStoragePremises/${(applicationData.otherStoragePremises.value.size+1).toString}"}">@{Messages("fh.summary.addMoreStoragePremises")}</a>
+            </p>
+        </div>
+    }
+
+    @if(Mode isEditable params.mode) {
+        @SummaryButtons()
+    }
 
 }

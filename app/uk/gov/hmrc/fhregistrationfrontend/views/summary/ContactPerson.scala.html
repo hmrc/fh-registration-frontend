@@ -34,87 +34,87 @@
 
 @SummarySectionHead(heading = Messages("fh.contactPerson.title"))
 <dl class="govuk-check-your-answers cya-questions-long">
-@SummaryRow(
-  SummaryRowParams.ofString(
-    Some(Messages("fh.generic.name")),
-    contactPersonForm.firstName + " " + contactPersonForm.lastName,
-    changeLink,
-    GroupRow.Top
-  )
-)
-
-@SummaryRow(
-  SummaryRowParams.ofString(
-    Some(Messages("fh.contact_person.job_title.label")),
-    contactPersonForm.jobTitle,
-    None,
-    GroupRow.Top
-  )
-)
-
-@SummaryRow(
-  SummaryRowParams.ofString(
-    Some(Messages("fh.contact_person.telephone.label")),
-    contactPersonForm.telephone,
-    None,
-    GroupRow.Top
-  )
-)
-
-@if(!contactPersonForm.usingSameContactAddress) {
-
-  @if(contactPersonForm.ukOtherAddress.contains(true)){
-      @contactPersonForm.otherUkContactAddress.map { address =>
-        @SummaryAddress(
-          SummaryAddressParams(
-            Some(Messages("fh.contact_person.contact_address_new.label")),
-            SummaryAddressBlock(
-              Line1 = Some(address.addressLine1),
-              Line2 = address.addressLine2,
-              Line3 = address.addressLine3,
-              Line4 = address.addressLine4,
-              postcode = Some(address.postcode)
-            ),
-            None,
-            GroupRow.Bottom
-          )
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.generic.name")),
+            contactPersonForm.firstName + " " + contactPersonForm.lastName,
+            changeLink,
+            GroupRow.Top
         )
-      }
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.contact_person.job_title.label")),
+            contactPersonForm.jobTitle,
+            None,
+            GroupRow.Top
+        )
+    )
+
+    @SummaryRow(
+        SummaryRowParams.ofString(
+            Some(Messages("fh.contact_person.telephone.label")),
+            contactPersonForm.telephone,
+            None,
+            GroupRow.Top
+        )
+    )
+
+    @if(!contactPersonForm.usingSameContactAddress) {
+
+        @if(contactPersonForm.ukOtherAddress.contains(true)){
+            @contactPersonForm.otherUkContactAddress.map { address =>
+                @SummaryAddress(
+                    SummaryAddressParams(
+                        Some(Messages("fh.contact_person.contact_address_new.label")),
+                        SummaryAddressBlock(
+                            Line1 = Some(address.addressLine1),
+                            Line2 = address.addressLine2,
+                            Line3 = address.addressLine3,
+                            Line4 = address.addressLine4,
+                            postcode = Some(address.postcode)
+                        ),
+                        None,
+                        GroupRow.Bottom
+                    )
+                )
+            }
+
+        } else {
+
+            @contactPersonForm.otherInternationalContactAddress.map { address =>
+                @SummaryAddress(
+                    SummaryAddressParams(
+                        Some("International Contact address"),
+                        SummaryAddressBlock(
+                            Line1 = Some(address.addressLine1),
+                            Line2 = address.addressLine2,
+                            Line3 = address.addressLine3,
+                            Line4 = Some(address.addressLine4)
+                        ),
+                        None,
+                        GroupRow.Bottom
+                    )
+                )
+            }
+        }
 
     } else {
 
-      @contactPersonForm.otherInternationalContactAddress.map { address =>
-      @SummaryAddress(
-        SummaryAddressParams(
-          Some("International Contact address"),
-          SummaryAddressBlock(
-            Line1 = Some(address.addressLine1),
-            Line2 = address.addressLine2,
-            Line3 = address.addressLine3,
-            Line4 = Some(address.addressLine4)
-          ),
-          None,
-          GroupRow.Bottom
+        @SummaryAddress(
+            SummaryAddressParams(
+                Some(Messages("fh.contact_person.contact_address.title")),
+                SummaryAddressBlock(
+                    Line1 = Some(bpr.businessAddress.line1),
+                    Line2 = Some(bpr.businessAddress.line2),
+                    Line3 = bpr.businessAddress.line3,
+                    Line4 = bpr.businessAddress.line4,
+                    postcode = bpr.businessAddress.postcode
+                ),
+                None,
+                GroupRow.Bottom
+            )
         )
-      )
     }
-  }
-
-} else {
-
-  @SummaryAddress(
-    SummaryAddressParams(
-      Some(Messages("fh.contact_person.contact_address.title")),
-      SummaryAddressBlock(
-        Line1 = Some(bpr.businessAddress.line1),
-        Line2 = Some(bpr.businessAddress.line2),
-        Line3 = bpr.businessAddress.line3,
-        Line4 = bpr.businessAddress.line4,
-        postcode = bpr.businessAddress.postcode
-      ),
-      None,
-      GroupRow.Bottom
-    )
-  )
-}
 </dl>

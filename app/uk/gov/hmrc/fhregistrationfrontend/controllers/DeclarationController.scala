@@ -34,7 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaratio
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -113,7 +113,7 @@ class DeclarationController @Inject()(
           _.flatMap {
             response =>
               keyStoreService
-                .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
+                .saveSummaryForPrint(getSummaryPrintable(journeys)(request, viewHelpers).toString())
                 .map(_ => true)
                 .recover { case _ => false }
                 .map { pdfSaved =>
