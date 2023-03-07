@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.companyRegistrationNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{companyRegistrationNumber, companyRegistrationNumberFormatted}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 
 object CompanyRegistrationNumberForm {
@@ -27,7 +27,8 @@ object CompanyRegistrationNumberForm {
 
   val companyRegistrationNumberForm = Form(
     mapping(
-      companyRegistrationNumberKey -> companyRegistrationNumber
+      companyRegistrationNumberKey -> companyRegistrationNumber,
+      companyRegistrationNumberKey -> companyRegistrationNumberFormatted
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 

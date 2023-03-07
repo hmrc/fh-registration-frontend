@@ -63,7 +63,15 @@ object Mappings {
   def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+\u2010\u002d]{1,24}$".r)
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
-  def companyRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
+  def companyRegistrationNumber =
+    nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
+      v
+    }) verifying Constraints.pattern("^[a-zA-Z0-9]{8}$".r)
+  def companyRegistrationNumberFormatted =
+    nonEmptyText transform (value => value.trim, { v: String =>
+      v
+    })
+
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
   def companyName =
     nonEmptyText verifying Constraints.pattern(
