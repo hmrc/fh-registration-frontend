@@ -32,10 +32,17 @@
     }
   }
 
+@companyRegistrationNumber = @{
+    companyRegistrationNumberForm.crnFormatted match {
+        case Some(value) => value
+        case None => companyRegistrationNumberForm.crn
+    }
+}
+
   @SummaryRow(
     SummaryRowParams.ofString(
       Some(Messages("fh.company_registration_number.title")),
-      companyRegistrationNumberForm.crnFormatted,
+      companyRegistrationNumber,
       changeLink,
       GroupRow.Single
     )

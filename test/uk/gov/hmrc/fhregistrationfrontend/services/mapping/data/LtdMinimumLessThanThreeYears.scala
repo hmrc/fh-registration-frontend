@@ -40,7 +40,7 @@ object LtdMinimumLessThanThreeYears {
       None,
       None
     ),
-    CompanyRegistrationNumber("12345678", "12345678"),
+    CompanyRegistrationNumber("12345678", None),
     DateOfIncorporation(LocalDate.of(2015, 3, 20)),
     TradingName(false, None),
     VatNumber(false, None),
