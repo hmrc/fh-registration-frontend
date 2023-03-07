@@ -356,7 +356,11 @@ class DesToFormImpl extends DesToForm {
     CompanyRegistrationNumber(
       businessDetails.limitedLiabilityPartnershipCorporateBody
         .flatMap(_.incorporationDetails.companyRegistrationNumber)
-        .get)
+        .get,
+      businessDetails.limitedLiabilityPartnershipCorporateBody
+        .flatMap(_.incorporationDetails.companyRegistrationNumber)
+        .get
+    )
 
   def dateOfIncorporation(businessDetails: des.BusinessDetail) =
     DateOfIncorporation(
