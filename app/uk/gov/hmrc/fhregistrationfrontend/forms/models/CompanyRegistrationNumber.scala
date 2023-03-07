@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 
 case class CompanyRegistrationNumber(
   crn: String,
-  crnFormatted: String
+  crnFormatted: Option[String]
 )
 
 object CompanyRegistrationNumber {

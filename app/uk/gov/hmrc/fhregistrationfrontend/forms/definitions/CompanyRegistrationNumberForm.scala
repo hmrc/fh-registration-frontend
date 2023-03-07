@@ -28,7 +28,7 @@ object CompanyRegistrationNumberForm {
   val companyRegistrationNumberForm = Form(
     mapping(
       companyRegistrationNumberKey -> companyRegistrationNumber,
-      companyRegistrationNumberKey -> companyRegistrationNumberFormatted
+      companyRegistrationNumberKey -> optional(companyRegistrationNumberFormatted)
     )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
   )
 
