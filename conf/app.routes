@@ -99,3 +99,6 @@ GET         /admin-page/get-status/:regNo                          @uk.gov.hmrc.
 
 GET         /admin-page/es2/:userId                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
 GET         /admin-page/es3/:groupId                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
+
+GET         /foo                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.TestController.load()
+GET         /foo/next                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.TestController.next()

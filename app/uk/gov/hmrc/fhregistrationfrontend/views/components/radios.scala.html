@@ -1,0 +1,57 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+
+@this(govukRadios: GovukRadios)
+
+@(
+    form: Form[_],
+    legendContent: String,
+    formFieldId: String = "",
+    items: Seq[RadioItem],
+    optLegendCaption: Option[String] = None,
+    hint: Option[Html] = None,
+    classes: String = "",
+    legendClasses: String = "",
+    inline: Boolean = false,
+)(implicit messages: Messages, request: Request[_], appConfig: AppConfig)
+
+@legend = {
+    <h1 class="govuk-fieldset__heading">
+        @optLegendCaption.map{ caption =>
+            <span class="govuk-caption-l business-partner-individual-nino-caption" id="business-partner-individual-nino">@caption</span>
+        }
+        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@legendContent</span>
+    </h1>
+}
+
+@govukRadios(Radios(
+    classes = if(inline) "govuk-radios--inline" else classes,
+    name = formFieldId,
+    fieldset = Some(Fieldset(
+        legend = Some(Legend(
+            content = HtmlContent(legend),
+            isPageHeading = false,
+            classes = if(legendClasses.nonEmpty) legendClasses else "govuk-fieldset__legend--xl"
+        ))
+    )),
+    hint = hint.map { hint => Hint(content = HtmlContent(hint))},
+    items = items,
+    errorMessage = form(formFieldId).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args: _*))))
+))
