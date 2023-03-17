@@ -29,9 +29,7 @@ class TestController @Inject()(radioHelper: RadioHelper, ds: CommonPlayDependenc
 ) extends AppController(ds, cc) {
 
   import actions._
-  //TODO - Remove println's
   def load(): Action[AnyContent] = userAction { implicit request =>
-    println(Console.BLUE_B + "hit load def" + Console.RESET)
     val ninoForm = nationalInsuranceNumberForm
     val items = radioHelper.conditionalYesNoRadio(ninoForm)
     val postAction =
@@ -40,17 +38,14 @@ class TestController @Inject()(radioHelper: RadioHelper, ds: CommonPlayDependenc
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    println(Console.BLUE_B + "hit next def" + Console.RESET)
     nationalInsuranceNumberForm.bindFromRequest.fold(
       formWithErrors => {
-        println(Console.RED_B + s"Form with errors: $formWithErrors" + Console.RESET)
         val items = radioHelper.conditionalYesNoRadio(formWithErrors)
         val postAction =
           Call(method = "POST", url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next().url)
         BadRequest(view.business_partners_v2(formWithErrors, items, postAction))
       },
       nino => {
-        println(Console.GREEN_B + s"Model: $nino" + Console.RESET)
         Ok(s"Next page! with form result: ${nino.toString}")
       }
     )

@@ -29,11 +29,6 @@ import javax.inject.Inject
 class RadioHelper @Inject()(input: text_input) extends ViewUtils {
 
   def conditionalYesNoRadio(form: Form[_])(implicit msgs: Messages): Seq[RadioItem] = {
-    println(Console.MAGENTA_B + s"Form: $form" + Console.RESET)
-    println(Console.MAGENTA_B + s"Form ID: ${form(nationalInsuranceNumberKey).id}" + Console.RESET)
-    println(Console.MAGENTA_B + s"Form ID: ${form(nationalInsuranceNumberKey).errors}" + Console.RESET)
-    println(Console.MAGENTA_B + s"Form errors: ${form.error(nationalInsuranceNumberKey)}" + Console.RESET)
-
     Seq(
       RadioItem(
         value = Some("true"),
