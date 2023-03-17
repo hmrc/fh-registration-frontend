@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
 import play.api.data.Form
 import play.api.i18n.Messages
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm._
 import uk.gov.hmrc.fhregistrationfrontend.utils.ViewUtils
 import uk.gov.hmrc.fhregistrationfrontend.views.html.components.text_input
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
@@ -27,27 +28,36 @@ import javax.inject.Inject
 
 class RadioHelper @Inject()(input: text_input) extends ViewUtils {
 
-  def conditionalYesNoRadio(form: Form[_])(implicit msgs: Messages): Seq[RadioItem] =
+  def conditionalYesNoRadio(form: Form[_])(implicit msgs: Messages): Seq[RadioItem] = {
+    println(Console.MAGENTA_B + s"Form: $form" + Console.RESET)
+    println(Console.MAGENTA_B + s"Form ID: ${form(nationalInsuranceNumberKey).id}" + Console.RESET)
+    println(Console.MAGENTA_B + s"Form ID: ${form(nationalInsuranceNumberKey).errors}" + Console.RESET)
+    println(Console.MAGENTA_B + s"Form errors: ${form.error(nationalInsuranceNumberKey)}" + Console.RESET)
+
     Seq(
       RadioItem(
-        value = Some("yes"),
+        value = Some("true"),
         content = Text(msgs("fh.generic.yes")),
-        checked = form("").value.contains("yes"),
+        checked = form(hasNationalInsuranceNumberKey).value.contains("true"),
         conditionalHtml = Some(
           html(
             input(
               form = form,
               legendContent = msgs("fh.national_insurance_number.title"),
+              inputKey = nationalInsuranceNumberKey,
               hintText = Some(msgs("fh.partner.national_insurance_number.hintText")),
+              id = form(nationalInsuranceNumberKey).name
             )
           )
         )
       ),
       RadioItem(
-        value = Some("no"),
+        id = Some(form("nationalInsuranceNumber_yesNo").name),
+        value = Some("false"),
         content = Text(msgs("fh.generic.no")),
-        checked = form("").value.contains("no")
+        checked = form(hasNationalInsuranceNumberKey).value.contains("false")
       )
     )
+  }
 
 }

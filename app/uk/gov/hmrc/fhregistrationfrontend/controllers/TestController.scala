@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.forms.BusinessPartnersV2.BusinessPartnerNino.businessPartnerNinoForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
@@ -29,19 +29,28 @@ class TestController @Inject()(radioHelper: RadioHelper, ds: CommonPlayDependenc
 ) extends AppController(ds, cc) {
 
   import actions._
+  //TODO - Remove println's
   def load(): Action[AnyContent] = userAction { implicit request =>
-    val ninoForm = businessPartnerNinoForm
+    println(Console.BLUE_B + "hit load def" + Console.RESET)
+    val ninoForm = nationalInsuranceNumberForm
     val items = radioHelper.conditionalYesNoRadio(ninoForm)
-    Ok(view.business_partners_v2(ninoForm, items))
+    val postAction =
+      Call(method = "POST", url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next().url)
+    Ok(view.business_partners_v2(ninoForm, items, postAction))
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    businessPartnerNinoForm.bindFromRequest.fold(
+    println(Console.BLUE_B + "hit next def" + Console.RESET)
+    nationalInsuranceNumberForm.bindFromRequest.fold(
       formWithErrors => {
+        println(Console.RED_B + s"Form with errors: $formWithErrors" + Console.RESET)
         val items = radioHelper.conditionalYesNoRadio(formWithErrors)
-        BadRequest(view.business_partners_v2(formWithErrors, items))
+        val postAction =
+          Call(method = "POST", url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next().url)
+        BadRequest(view.business_partners_v2(formWithErrors, items, postAction))
       },
       nino => {
+        println(Console.GREEN_B + s"Model: $nino" + Console.RESET)
         Ok(s"Next page! with form result: ${nino.toString}")
       }
     )

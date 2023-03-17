@@ -16,27 +16,46 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout,
         formHelper: FormWithCSRF,
         radios: components.radios,
         button: components.button,
+        viewHelpers: ViewHelpers
      )
 
-@(partnerNinoForm: Form[_], radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @layout(title = messages("fh.business_partners.title.v2"), backUrl = Some("#")){
 
- @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next){
-  @radios(
-    form = partnerNinoForm,
-    legendContent = messages("fh.business.partners.nino.h1", "Test User"),
-    optLegendCaption = Some(messages("fh.business.partners.caption")),
-    items = radioItems,
-    formFieldId = "nationalInsuranceNumber_yesNo"
-  )
+    @if(partnerNinoForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${partnerNinoForm.errors.head.key}"),
+                content = Text(messages(
+                    s"fh.${
+                        if(partnerNinoForm.errors.head.key == "nationalInsuranceNumber_yesNo") "partner." + partnerNinoForm.errors.head.key else partnerNinoForm.errors.head.key
+                    }.${partnerNinoForm.errors.head.message}"
+                ))
+            )),
+            title = Text(messages("fh.generic.error"))
+        ))
+    }
 
-  @button("button.save.continue")
- }
+    @formHelper(action = postAction){
+     @radios(
+        form = partnerNinoForm,
+        id = "nationalInsuranceNumber_yesNo",
+        legendContent = messages("fh.business.partners.nino.h1", "Test User"),
+        optLegendCaption = Some(messages("fh.business.partners.caption")),
+        items = radioItems
+     )
+
+     @button("button.save.continue")
+    }
+
+    @SaveForLater()
 
 }

@@ -337,6 +337,7 @@ fh.tradingName_value.error.pattern=Enter only valid characters for a trading nam
 fh.national_insurance_number.title=National Insurance Number
 fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
 fh.nationalInsuranceNumber_yesNo.error.required=Select whether you have a National Insurance number
+fh.partner.nationalInsuranceNumber_yesNo.error.required=Select whether they have a National Insurance number
 fh.national_insurance_number.label=National Insurance number
 fh.national_insurance_number.hintText=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 fh.partner.national_insurance_number.hintText=It’s on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.

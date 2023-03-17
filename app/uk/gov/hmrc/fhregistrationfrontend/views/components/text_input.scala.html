@@ -21,8 +21,9 @@
 @(
     form: Form[_],
     legendContent: String,
-    legendClasses: Option[String] = None,
+    inputKey: String,
     id: String = "nino",
+    legendClasses: Option[String] = None,
     hintText: Option[String] = None)(implicit msgs: Messages)
 
 
@@ -35,5 +36,6 @@
     ),
     classes = s"govuk-!-width-one-half${if(form(id).hasErrors || form.errors.exists(_.args.size > 1)) " govuk-input--error" else ""}",
     hint = hintText.map(hint => Hint(content = Text(msgs(hint)))),
-    errorMessage = form(id).error.orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(err.message, err.args: _*))))
+    errorMessage = form.error(id).orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(s"fh.$id.${err.message}", err.args: _*)))),
+    value = form(inputKey).value
 ))

@@ -23,13 +23,13 @@
 @(
     form: Form[_],
     legendContent: String,
-    formFieldId: String = "",
+    id: String = "",
     items: Seq[RadioItem],
     optLegendCaption: Option[String] = None,
     hint: Option[Html] = None,
     classes: String = "",
     legendClasses: String = "",
-    inline: Boolean = false,
+    inline: Boolean = false
 )(implicit messages: Messages, request: Request[_], appConfig: AppConfig)
 
 @legend = {
@@ -43,7 +43,7 @@
 
 @govukRadios(Radios(
     classes = if(inline) "govuk-radios--inline" else classes,
-    name = formFieldId,
+    name = id,
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = HtmlContent(legend),
@@ -53,5 +53,5 @@
     )),
     hint = hint.map { hint => Hint(content = HtmlContent(hint))},
     items = items,
-    errorMessage = form(formFieldId).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args: _*))))
+    errorMessage = form.error(id).map(err => ErrorMessage(content = Text(messages(s"fh.partner.$id.${err.message}", err.args: _*))))
 ))
