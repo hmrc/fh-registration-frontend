@@ -36,13 +36,19 @@
     if (businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@title = @{
-    Messages("fh.business_partners_address.label")
-}
-
 @layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
 
+    @manualAddress(
+        @AddressUK(
+            formDate = businessPartnersAddressForm,
+            params = AddressUKParams(
+                context = Some("businessPartnersAddress"),
+                name = "businessPartnersAddress",
+                hasErrors = businessPartnersAddressForm(s"$businessPartnersAddressKey").hasErrors,
+                error = Some(Messages("fh.business_partners_address.error"))
+        ),
+        viewHelpers = viewHelpers
+    )
 
-
-@button("button.save.continue")
+    @button("button.save.continue")
 }
