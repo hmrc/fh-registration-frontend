@@ -47,7 +47,7 @@ object FormTestData {
   )
 
   val nationalInsuranceNumber = NationalInsuranceNumber(true, Some("AA123111A"))
-  val companyRegistrationNumber = CompanyRegistrationNumber("12345678")
+  val companyRegistrationNumber = CompanyRegistrationNumber("12345678", Some("12 34 56 78"))
   val dateOfIncorporation = DateOfIncorporation(LocalDate.of(2014, 3, 20))
   val tradingName = TradingName(true, Some("DodgyCo"))
   val vatNumber = VatNumber(true, Some("123456789"))

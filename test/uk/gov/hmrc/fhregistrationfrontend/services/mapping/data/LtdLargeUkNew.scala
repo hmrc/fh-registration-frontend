@@ -41,7 +41,7 @@ object LtdLargeUkNew {
         Some(Address("New Flat", None, None, Some("Testtown"), "ZZ11 1AA", None, None)),
         None
       ),
-      CompanyRegistrationNumber("87654321"),
+      CompanyRegistrationNumber("87654321", Some("12 34 56 78")),
       DateOfIncorporation(LocalDate.of(2014, 5, 21)),
       TradingName(true, Some("CatCo")),
       VatNumber(true, Some("987654321")),
