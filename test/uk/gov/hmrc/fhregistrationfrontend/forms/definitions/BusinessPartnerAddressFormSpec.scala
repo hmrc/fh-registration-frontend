@@ -16,28 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class BusinessPartnerAddressFormSpec extends UnitSpec {
-  val form = BusinessPartnerAddressForm.BusinessPartnerAddressForm
+  val form = BusinessPartnersAddressForm.businessPartnersAddressForm
 
-  "valid Nino" should {
-    "bind without the nino" in {
-      val data = Map(
-        "nationalInsuranceNumber_yesNo" -> "false"
-      )
 
-      form.bind(data).get shouldBe NationalInsuranceNumber(false, None)
-    }
-
-    "bind with the nino" in {
-
-      val data = Map(
-        "nationalInsuranceNumber_yesNo" -> "true",
-        "nationalInsuranceNumber_value" -> "QQ123456C"
-      )
-      form.bind(data).get shouldBe NationalInsuranceNumber(true, Some("QQ123456C"))
-    }
-  }
 }
