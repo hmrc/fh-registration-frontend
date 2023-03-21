@@ -623,6 +623,11 @@ fh.businessPartnersType.error.required=Select the type of legal entity for the p
 
 fh.business_partners_address.title=What is {0}'s address?
 fh.business_partners_address.error=Enter a valid address
+fh.business.partners.caption = Business Partners
+fh.business_partners_address.caption=Property name or number (optional)
+fh.business_partners_address.hint=For example, The Mill, 116 or Flat 37a
+fh.business_partners_address.postcode.caption=UK postcode
+fh.business_partners_address.manually_enter=Enter address manually
 
 fh.business_partners.entity_type.individual.value=Individual
 fh.business_partners.entity_type.individual.label=Individual

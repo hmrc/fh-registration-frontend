@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+package uk.gov.hmrc.fhregistrationfrontend.utils
 
-@this(govukButton: GovukButton)
+import play.twirl.api.{Html, HtmlFormat}
 
-@(msg: String)(implicit messages: Messages)
+trait ViewUtils {
 
-@govukButton(Button(
-    content = Text(messages(msg)),
-    preventDoubleClick = true
-))
+  def html(content: HtmlFormat.Appendable*): Html =
+    HtmlFormat.fill(collection.immutable.Seq(content: _*))
+
+  def stringAsHtml(content: String): Html =
+    Html(content)
+}
