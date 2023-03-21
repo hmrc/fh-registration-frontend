@@ -16,10 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-class BusinessPartnerAddressFormSpec extends UnitSpec {
+class BusinessPartnerAddressFormSpec extends UnitSpec with FormSpecsHelper[UkAddressLookup] {
   val form = BusinessPartnersAddressForm.businessPartnersAddressForm
+  import BusinessPartnersAddressForm._
+
+  "Business Partner Address form" should {
+    "Fail if field not present" in {
+      formRequires(postcodeKey)
+    }
+  }
 
 
 }
