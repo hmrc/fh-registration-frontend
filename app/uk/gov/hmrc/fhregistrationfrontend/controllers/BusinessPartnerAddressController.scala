@@ -31,7 +31,6 @@ class BusinessPartnerAddressController @Inject()(ds: CommonPlayDependencies, vie
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     val bpAddressForm = businessPartnersAddressForm
-    //val items = radioHelper.conditionalYesNoRadio(ninoForm)
     val postAction =
       Call(
         method = "POST",

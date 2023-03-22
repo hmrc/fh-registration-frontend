@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 
 @this(layout: layout,
         viewHelpers: ViewHelpers,
@@ -28,7 +29,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[_], postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -42,7 +43,7 @@
 @layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
 
     <h1 class="govuk-fieldset__heading">
-        <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address-nino">@messages("fh.business.partners.caption")</span>
+        <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address">@messages("fh.business.partners.caption")</span>
         <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_address.title", "Test User")</span>
     </h1>
     </br>
