@@ -29,5 +29,4 @@ class BusinessPartnerAddressFormSpec extends UnitSpec with FormSpecsHelper[UkAdd
     }
   }
 
-
 }

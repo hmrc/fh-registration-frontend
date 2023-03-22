@@ -17,13 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Rendering
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class TestController @Inject()(ds: CommonPlayDependencies, view: Views, actions: Actions)(
+class BusinessPartnerAddressController @Inject()(ds: CommonPlayDependencies, view: Views, actions: Actions)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -32,16 +33,19 @@ class TestController @Inject()(ds: CommonPlayDependencies, view: Views, actions:
     val bpAddressForm = businessPartnersAddressForm
     //val items = radioHelper.conditionalYesNoRadio(ninoForm)
     val postAction =
-      Call(method = "POST", url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next().url)
+      Call(
+        method = "POST",
+        url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.load().url)
     Ok(view.business_partners_address(bpAddressForm, postAction))
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     businessPartnersAddressForm.bindFromRequest.fold(
       formWithErrors => {
-        //val items = radioHelper.conditionalYesNoRadio(formWithErrors)
         val postAction =
-          Call(method = "POST", url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TestController.next().url)
+          Call(
+            method = "POST",
+            url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next().url)
         BadRequest(view.business_partners_address(formWithErrors, postAction))
       },
       bpAddress => {

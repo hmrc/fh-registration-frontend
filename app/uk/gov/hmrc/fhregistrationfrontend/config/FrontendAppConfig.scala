@@ -66,4 +66,6 @@ class FrontendAppConfig @Inject()(
   lazy val password = getString("credentials.password")
 
   override def getConfiguration: Configuration = configuration
+
+  val newBusinessPartnerAddressEnabled: Boolean = getBoolean("business-partner-address-enabled")
 }
