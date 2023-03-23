@@ -66,6 +66,8 @@ class DefaultErrorHandler @Inject()(val messagesApi: MessagesApi, val configurat
             errorMsg.getOrElse(messages("fh.generic.forbidden.inf"))
           ))
       case BadRequest =>
+        println("***********************")
+        println(errorMsg)
         BadRequest(
           views.error_template(
             messages("fh.generic.bad_request"),

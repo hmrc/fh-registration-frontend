@@ -28,6 +28,8 @@ GET         /subscription/status                                   @uk.gov.hmrc.
 
 GET         /address-lookup                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
+GET         /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
+POST        /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 
 GET         /form/:page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
@@ -69,6 +71,9 @@ POST        /deregistration/reason                                 @uk.gov.hmrc.
 GET         /deregistration/confirm                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.confirm
 POST        /deregistration/confirm                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postConfirmation
 GET         /deregistration/acknowledgment                         @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.acknowledgment
+
+
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                          @controllers.Assets.at(path="/public", file)

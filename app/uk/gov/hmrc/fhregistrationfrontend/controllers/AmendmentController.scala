@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartUpdateRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
@@ -25,6 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyTy
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -44,7 +45,8 @@ class AmendmentController @Inject()(
     if (request.currentJourneyType contains JourneyType.Amendment)
       Future successful Redirect(routes.SummaryController.summary)
     else
-      setupJourney(JourneyType.Amendment)
+      errorHandler.errorResultsPages(Results.NotFound)
+    setupJourney(JourneyType.Amendment)
   }
 
   def startVariation() = startVariationAction.async { implicit request =>

@@ -608,6 +608,12 @@ fh.companyIdentification.role.error.required=Select what role company officer {0
 fh.company_officers.addMore=Are there any more company officers?
 fh.companyIdentification.error.required=Select whether there are any more to add
 
+# - Business partners v2
+#============================================================
+fh.businessPartners.caption=Business partners
+fh.businessPartners.screen-reader.section=this is for:
+fh.businessParners.chooseAddress.title=Choose address
+fh.chosenAddress.error.required=Select an address
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
