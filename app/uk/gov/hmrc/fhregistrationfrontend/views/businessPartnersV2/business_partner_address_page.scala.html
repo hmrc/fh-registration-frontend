@@ -29,7 +29,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -44,7 +44,7 @@
 
     <h1 class="govuk-fieldset__heading">
         <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address">@messages("fh.business.partners.caption")</span>
-        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_address.title", "Test User")</span>
+        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_address.heading", partnerName)</span>
     </h1>
     </br>
 

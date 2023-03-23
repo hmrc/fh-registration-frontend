@@ -28,6 +28,8 @@ GET         /subscription/status                                   @uk.gov.hmrc.
 
 GET         /address-lookup                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
+GET         /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
+POST        /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
 
 GET         /form/:page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
@@ -97,6 +99,3 @@ GET         /admin-page/get-status/:regNo                          @uk.gov.hmrc.
 
 GET         /admin-page/es2/:userId                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
 GET         /admin-page/es3/:groupId                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
-
-GET         /business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
-POST        /business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
