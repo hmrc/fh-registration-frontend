@@ -45,8 +45,7 @@ class AmendmentController @Inject()(
     if (request.currentJourneyType contains JourneyType.Amendment)
       Future successful Redirect(routes.SummaryController.summary)
     else
-      errorHandler.errorResultsPages(Results.NotFound)
-    setupJourney(JourneyType.Amendment)
+      setupJourney(JourneyType.Amendment)
   }
 
   def startVariation() = startVariationAction.async { implicit request =>

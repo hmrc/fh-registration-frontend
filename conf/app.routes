@@ -72,9 +72,6 @@ GET         /deregistration/confirm                                @uk.gov.hmrc.
 POST        /deregistration/confirm                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postConfirmation
 GET         /deregistration/acknowledgment                         @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.acknowledgment
 
-
-
-
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                          @controllers.Assets.at(path="/public", file)
 
