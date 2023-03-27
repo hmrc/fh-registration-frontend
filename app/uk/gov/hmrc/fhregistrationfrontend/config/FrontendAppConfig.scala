@@ -67,6 +67,8 @@ class FrontendAppConfig @Inject()(
   lazy val username = getString("credentials.username")
   lazy val password = getString("credentials.password")
 
+  lazy val businessPartnerV2PagesEnabled = getBoolean("business-partners-v2-pages-enabled")
+
   override def getConfiguration: Configuration = configuration
 
   override val newBusinessParnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")

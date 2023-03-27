@@ -1,104 +1,103 @@
 # microservice specific routes
-->          /hmrc-frontend                                         hmrcfrontend.Routes
-GET         /                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.main()
-GET         /enrolment-progress                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.enrolmentPending()
-GET         /start                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startOrContinueApplication()
-GET         /continue                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
-GET         /sign-out                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
-GET         /signed-out                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
+->          /hmrc-frontend                                              hmrcfrontend.Routes
+GET         /                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.main()
+GET         /enrolment-progress                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.enrolmentPending()
+GET         /start                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startOrContinueApplication()
+GET         /continue                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
+GET         /sign-out                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
+GET         /signed-out                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
 
-GET         /businessType                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
-POST        /submitBusinessType                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
+GET         /businessType                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
+POST        /submitBusinessType                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
-GET         /contact-email                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.contactEmail
-POST        /contact-email                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail
-GET         /contact-email-unverified                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.forcedContactEmail
-POST        /contact-email-unverified                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitForcedContactEmail
+GET         /contact-email                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.contactEmail
+POST        /contact-email                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail
+GET         /contact-email-unverified                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.forcedContactEmail
+POST        /contact-email-unverified                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitForcedContactEmail
 
-GET         /email-verification-status                             @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerificationStatus
-GET         /email-change                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailChange
-GET         /email-edit                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailEdit
-GET         /email-verify/:token                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerify(token)
-GET         /email-verified                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerified
+GET         /email-verification-status                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerificationStatus
+GET         /email-change                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailChange
+GET         /email-edit                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailEdit
+GET         /email-verify/:token                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerify(token)
+GET         /email-verified                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.emailVerified
 
 
-GET         /startForm                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
+GET         /startForm                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
-GET         /subscription/status                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
+GET         /subscription/status                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
 
-GET         /address-lookup                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
+GET         /address-lookup                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
+
+GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onLoad()
+POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onSubmit()
+
+GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
+GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
+POST        /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
+POST        /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
+POST        /form/:page/:section/delete/:timestamp                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String, timestamp: Long)
+GET         /form/:page/:section/confirmDelete/:timestamp               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, timestamp: Long)
+GET         /resume                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
+
+GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
+GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
+GET         /downloadPrintable                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
+
+GET         /declaration                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
+POST        /submit                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
+GET         /acknowledgement                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
+
+GET         /amend                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
+GET         /update                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation
 
 GET         /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 
-GET         /form/:page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
-GET         /form/:page/:section                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
-POST        /form/:page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
-POST        /form/:page/:section                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.saveWithSection(page: String, section: String)
-POST        /form/:page/:section/delete/:timestamp                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String, timestamp: Long)
-GET         /form/:page/:section/confirmDelete/:timestamp          @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, timestamp: Long)
-GET         /resume                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
+GET         /saved                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 
-GET         /summary                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
-GET         /view                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
-GET         /downloadPrintable                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
+POST        /deleteOrContinue                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
+GET         /confirmDelete                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
 
-GET         /declaration                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
-POST        /submit                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
-GET         /acknowledgement                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
+POST        /delete                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
 
-GET         /amend                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
-GET         /update                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation
+GET         /withdraw                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.startWithdraw
+GET         /withdraw/reason                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.reason
+POST        /withdraw/reason                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postReason
+GET         /withdraw/confirm                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.confirm
+POST        /withdraw/confirm                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postConfirmation
+GET         /withdraw/acknowledgment                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.acknowledgment
 
-
-GET         /saved                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
-
-POST        /deleteOrContinue                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitDeleteOrContinue
-GET         /confirmDelete                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.confirmDelete
-
-POST        /delete                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.deleteUserData
-
-GET         /withdraw                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.startWithdraw
-GET         /withdraw/reason                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.reason
-POST        /withdraw/reason                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postReason
-GET         /withdraw/confirm                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.confirm
-POST        /withdraw/confirm                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.postConfirmation
-GET         /withdraw/acknowledgment                               @uk.gov.hmrc.fhregistrationfrontend.controllers.WithdrawalController.acknowledgment
-
-GET         /deregister                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.startDeregister
-GET         /deregistration/reason                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.reason
-POST        /deregistration/reason                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postReason
-GET         /deregistration/confirm                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.confirm
-POST        /deregistration/confirm                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postConfirmation
-GET         /deregistration/acknowledgment                         @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.acknowledgment
+GET         /deregister                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.startDeregister
+GET         /deregistration/reason                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.reason
+POST        /deregistration/reason                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postReason
+GET         /deregistration/confirm                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.confirm
+POST        /deregistration/confirm                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.postConfirmation
+GET         /deregistration/acknowledgment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.DeregistrationController.acknowledgment
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                          @controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                               @controllers.Assets.at(path="/public", file)
 
-GET         /admin-page                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.showAdminPage
+GET         /admin-page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.showAdminPage
 
-GET         /admin-page/show-submissions                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions
+GET         /admin-page/show-submissions                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions
 
-GET         /admin-page/delete-submission/:formbundleId            @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeletePage(formbundleId)
-GET         /admin-page/delete-submission-del/:formbundleId        @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteSubmission(formbundleId)
+GET         /admin-page/delete-submission/:formbundleId                 @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeletePage(formbundleId)
+GET         /admin-page/delete-submission-del/:formbundleId             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteSubmission(formbundleId)
 
 
-GET         /admin-page/get-groupId                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadUserIdPage
-POST        /admin-page/get-groupId                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.sendAdminRequest()
+GET         /admin-page/get-groupId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadUserIdPage
+POST        /admin-page/get-groupId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.sendAdminRequest()
 
-GET         /admin-page/allocate-enrolment                         @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadAllocateEnrolment
-POST        /admin-page/allocate-enrolment                         @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.allocateEnrolment
+GET         /admin-page/allocate-enrolment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadAllocateEnrolment
+POST        /admin-page/allocate-enrolment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.allocateEnrolment
 
-GET         /admin-page/delete-enrolment                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeleteEnrolment
-POST        /admin-page/delete-enrolment                           @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteEnrolment
+GET         /admin-page/delete-enrolment                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeleteEnrolment
+POST        /admin-page/delete-enrolment                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteEnrolment
 
-GET         /admin-page/user-info/:userId                          @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
-GET         /admin-page/group-info/:groupId                        @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
+GET         /admin-page/user-info/:userId                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
+GET         /admin-page/group-info/:groupId                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
 
-GET         /admin-page/get-status/:regNo                          @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
+GET         /admin-page/get-status/:regNo                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
 
-GET         /admin-page/es2/:userId                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
-GET         /admin-page/es3/:groupId                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
-
-GET         /foo                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.TestController.load()
-POST        /foo/next                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.TestController.next()
+GET         /admin-page/es2/:userId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
+GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
