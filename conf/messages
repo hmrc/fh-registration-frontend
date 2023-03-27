@@ -646,6 +646,8 @@ fh.business_partners.entity_type.unincorporated_body.label=Unincorporated Body
 fh.business_partners.enter.title=Enter partner details
 fh.business_partners.enter.partner_address=Tell us the address of this partner
 fh.business_partners.enter.partner_address.error=Enter the address of this partner
+fh.partnerPostcode.error.required=Enter the postcode of the address
+fh.partnerPostcode.error.pattern=Enter a valid postcode
 
 fh.business_partners.individual.first_name.label=First name
 fh.businessPartnerIndividual.firstName.error.required=Enter the person''s first name
