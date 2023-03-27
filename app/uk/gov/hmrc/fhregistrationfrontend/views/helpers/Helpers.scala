@@ -45,6 +45,17 @@ object Helpers {
     s"""${address.addressLine1}""" + s"""$line2""" + s"""$line3""" + s"""$line4""" + s"""<br>${address.postcode}"""
   }
 
+  def createAddressString(address: Address): String = {
+
+    def convertOptionalAddressLineToString(optLine: Option[String]): String =
+      optLine.fold[String]("")(line => s", $line")
+
+    address.addressLine1 +
+      convertOptionalAddressLineToString(address.addressLine2) +
+      convertOptionalAddressLineToString(address.addressLine3) +
+      convertOptionalAddressLineToString(address.addressLine4) + s", ${address.postcode}"
+  }
+
   def createSummaryRow(params: SummaryRowParams, summaryActions: Option[Actions]): SummaryListRow =
     SummaryListRow(
       key = Key(

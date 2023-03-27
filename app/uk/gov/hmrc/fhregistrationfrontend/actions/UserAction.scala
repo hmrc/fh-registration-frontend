@@ -52,7 +52,6 @@ case class UserAction @Inject()(
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     implicit val r = request
-
     authorised(AuthProviders(GovernmentGateway))
       .retrieve(internalId and email and allEnrolments and credentialRole and affinityGroup) {
         case Some(id) ~ anEmail ~ enrolments ~ credentialRole ~ affinityGroup =>
