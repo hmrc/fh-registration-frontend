@@ -614,13 +614,15 @@ fh.companyIdentification.error.required=Select whether there are any more to add
 #============================================================
 fh.businessPartners.caption=Business partners
 fh.businessPartners.screen-reader.section=this is for:
-fh.businessParners.chooseAddress.title=Choose address
+fh.businessPartners.chooseAddress.title=Choose address
 fh.chosenAddress.error.required=Select an address
+fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
+fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
 fh.business_partners.intro=A partner can be a person, company or organisation who shares responsibility for the partnership. You must tell us about all the partners, including what type of legal entity they are. We will use this information to check their identity.
-fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 
 fh.business_partners.entity=What is a legal entity?
 fh.business_partners.entity_intro=A legal entity is an individual, company or other organisation that can legally enter into an agreement or contract. Select the option that best describes how each partner is represented in the partnership.
@@ -629,9 +631,6 @@ fh.business_partners.add_a_partner=Partner {0}
 fh.businessPartners.each.title=Partner {0}
 fh.business_partners.entity_type.label=What type of legal entity is this partner?
 fh.businessPartnersType.error.required=Select the type of legal entity for the partner {0}
-
-fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
-fh.business.partners.caption = Business Partners
 
 fh.business_partners.entity_type.individual.value=Individual
 fh.business_partners.entity_type.individual.label=Individual
