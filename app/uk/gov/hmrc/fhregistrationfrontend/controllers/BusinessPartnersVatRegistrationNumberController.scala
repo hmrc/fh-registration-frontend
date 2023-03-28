@@ -36,7 +36,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessParnerPagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       val form = vatNumberForm
       //ToDo read this data from the cache after being stored before the redirect
       val partnerName = "test partner"
@@ -47,7 +47,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessParnerPagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val partnerName = "test partner"
       vatNumberForm.bindFromRequest.fold(

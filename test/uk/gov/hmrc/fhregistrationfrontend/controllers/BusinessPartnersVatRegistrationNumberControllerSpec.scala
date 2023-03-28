@@ -40,7 +40,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
     "Render the businessPartnersVatRegistrationNumber page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -54,7 +54,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
     "Render the Not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -71,7 +71,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
       "return 200" when {
         "the form has no errors, yes is selected and vatnumber supplied" in {
           setupUserAction()
-          when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
             .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", "123456789"))
             .withMethod("POST")
@@ -84,7 +84,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
 
         "the form has no errors and no is selected" in {
           setupUserAction()
-          when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
             .withMethod("POST")
@@ -100,7 +100,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
     "Render the Not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
           .withFormUrlEncodedBody(("chosenAddress", "1"))
           .withMethod("POST")
