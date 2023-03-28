@@ -36,7 +36,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessParnerPagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       // ask UCD about added ' in name
       Ok(view.business_partner_confirm_partner_address(address, "partner name's"))
     } else {

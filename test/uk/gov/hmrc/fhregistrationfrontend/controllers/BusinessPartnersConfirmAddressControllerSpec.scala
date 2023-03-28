@@ -40,7 +40,7 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
     "Render the confirm address page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -50,6 +50,7 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
         // should be mocked out when Save4Later changes included
         page.body.text should include("Confirm partner name's address")
         page.body.text should include("1 Romford Road")
+        page.getElementById("confirm-edit").attr("href") should include("#")
         reset(mockActions)
       }
     }
@@ -57,7 +58,7 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
     "Render the page not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -65,6 +66,22 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
+      }
+    }
+  }
+
+  "next" when {
+    "the new business partner pages are enabled" should {
+      "return 200" when {
+        "the form has no errors and the address is found" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load())(request))
+
+          status(result) shouldBe OK
+          reset(mockActions)
+        }
       }
     }
   }

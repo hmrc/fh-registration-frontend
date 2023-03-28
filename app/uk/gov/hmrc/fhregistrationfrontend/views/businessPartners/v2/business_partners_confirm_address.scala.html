@@ -40,7 +40,7 @@ messages("fh.businessPartners.confirmAddress.title")
 
 @layout(title = title, Some(pageScripts), backUrl = Some("#")) {
 
-    <h1 class="govuk-heading-m">
+    <h1 class="govuk-heading-m" id="page-heading">
         <span class="govuk-caption-m">@messages("fh.businessPartners.caption")</span>
         @messages("fh.businessPartners.confirmAddress.heading", partnerName)
     </h1>
@@ -48,7 +48,7 @@ messages("fh.businessPartners.confirmAddress.title")
     <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
 
     <p class="govuk-body">
-        <a class="govuk-link" href="">@messages("fh.businessPartners.confirmAddress.edit")</a>
+        <a class="govuk-link" id="confirm-edit" href="#">@messages("fh.businessPartners.confirmAddress.edit")</a>
     </p>
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
