@@ -43,9 +43,10 @@ class FormPageController @Inject()(
     renderForm(request.page, false)
   }
 
-  def loadWithSection(pageId: String, sectionId: String) = pageAction(pageId, Some(sectionId)) { implicit request =>
-    renderForm(request.page, false)
-  }
+  def loadWithSection(pageId: String, sectionId: String) =
+    pageAction(pageId, Some(sectionId)) { implicit request =>
+      renderForm(request.page, false)
+    }
 
   def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
   def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))

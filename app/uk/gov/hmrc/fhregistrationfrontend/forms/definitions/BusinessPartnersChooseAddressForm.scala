@@ -16,20 +16,19 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{companyRegistrationNumber, companyRegistrationNumberFormatted}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+import play.api.data.{Form, Mapping}
+import play.api.data.Forms.{mapping, nonEmptyText}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
-object CompanyRegistrationNumberForm {
+object BusinessPartnersChooseAddressForm {
 
-  val companyRegistrationNumberKey = "companyRegistrationNumber"
+  val chooseAddressKey = "chosenAddress"
 
-  val companyRegistrationNumberForm = Form(
-    mapping(
-      companyRegistrationNumberKey -> companyRegistrationNumber,
-      companyRegistrationNumberKey -> optional(companyRegistrationNumberFormatted)
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
-  )
+  val chooseAddressMapping: Mapping[ChooseAddress] = mapping(
+    chooseAddressKey -> nonEmptyText
+  )(ChooseAddress.apply)(ChooseAddress.unapply)
+
+  val chooseAddressForm = Form(chooseAddressMapping)
 
 }

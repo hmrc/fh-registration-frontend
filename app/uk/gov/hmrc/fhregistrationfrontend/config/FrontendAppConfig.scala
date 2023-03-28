@@ -30,6 +30,8 @@ trait AppConfig {
   def emailVerificationCallback(hash: String): String
   val exciseEnquiryLink: String
   def getConfiguration: Configuration
+
+  val newBusinessParnerPagesEnabled: Boolean
 }
 
 @Singleton
@@ -67,5 +69,5 @@ class FrontendAppConfig @Inject()(
 
   override def getConfiguration: Configuration = configuration
 
-  val newBusinessPartnerAddressEnabled: Boolean = getBoolean("business-partner-address-enabled")
+  override val newBusinessParnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
 }

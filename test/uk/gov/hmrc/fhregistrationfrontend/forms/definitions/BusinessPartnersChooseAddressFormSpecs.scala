@@ -16,20 +16,22 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{companyRegistrationNumber, companyRegistrationNumberFormatted}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ChooseAddress, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-object CompanyRegistrationNumberForm {
+class BusinessPartnersChooseAddressFormSpecs extends UnitSpec with FormSpecsHelper[ChooseAddress] {
 
-  val companyRegistrationNumberKey = "companyRegistrationNumber"
+  val form = BusinessPartnersChooseAddressForm.chooseAddressForm
 
-  val companyRegistrationNumberForm = Form(
-    mapping(
-      companyRegistrationNumberKey -> companyRegistrationNumber,
-      companyRegistrationNumberKey -> optional(companyRegistrationNumberFormatted)
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
-  )
+  "chooseAddressForm" should {
+    "Fail if field not present" in {
+      formRequires("chosenAddress")
+    }
+
+    "Work for known field value" in {
+      dataFromValidForm(Map("chosenAddress" -> "1")) shouldBe ChooseAddress("1")
+    }
+  }
 
 }

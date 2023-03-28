@@ -18,11 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class CompanyRegistrationNumber(
-  crn: String,
-  crnFormatted: Option[String]
-)
+case class ChooseAddress(chosenAddress: String)
 
-object CompanyRegistrationNumber {
-  implicit val format = Json.format[CompanyRegistrationNumber]
+object ChooseAddress {
+  implicit val format = Json.format[ChooseAddress]
 }
