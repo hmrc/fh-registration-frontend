@@ -37,7 +37,7 @@ class BusinessPartnerNinoController @Inject()(
   import actions._
 
   def onLoad(): Action[AnyContent] = userAction { implicit request =>
-    if (config.businessPartnerV2PagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       val ninoForm = nationalInsuranceNumberForm
       val items = radioHelper.conditionalYesNoRadio(ninoForm)
       val postAction =
@@ -51,7 +51,7 @@ class BusinessPartnerNinoController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = userAction { implicit request =>
-    if (config.businessPartnerV2PagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       nationalInsuranceNumberForm.bindFromRequest.fold(
         formWithErrors => {
           val items = radioHelper.conditionalYesNoRadio(formWithErrors)

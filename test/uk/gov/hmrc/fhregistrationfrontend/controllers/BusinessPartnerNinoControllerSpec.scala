@@ -45,7 +45,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
       "The business partner v2 pages are enabled" in {
         setupUserAction()
 
-        when(mockAppConfig.businessPartnerV2PagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.onLoad())(request))
 
@@ -59,7 +59,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
     "render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.businessPartnerV2PagesEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.onLoad())(request))
 
@@ -76,7 +76,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
       "return 200" in {
         setupUserAction()
 
-        when(mockAppConfig.businessPartnerV2PagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(
             "nationalInsuranceNumber_yesNo" -> "true",
@@ -92,7 +92,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
       "return 400" in {
         setupUserAction()
 
-        when(mockAppConfig.businessPartnerV2PagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(
             "nationalInsuranceNumber_yesNo" -> "",
@@ -109,7 +109,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
     "the new business partner pages are disabled" should {
       "render the not found page" in {
         setupUserAction()
-        when(mockAppConfig.businessPartnerV2PagesEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.onSubmit())(request))
 
