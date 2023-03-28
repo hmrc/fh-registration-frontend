@@ -35,7 +35,7 @@
 )
 
 
-@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None )(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
+@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 
 @content = {
     @contentBlock

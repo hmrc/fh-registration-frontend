@@ -92,7 +92,10 @@ lazy val microservice = Project(appName, file("."))
     retrieveManaged := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     Compile / scalafmtOnCompile := true,
-    Test / scalafmtOnCompile := true
+    Test / scalafmtOnCompile := true,
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.fhregistrationfrontend.views.html._"
+    )
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)

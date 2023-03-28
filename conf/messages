@@ -337,8 +337,10 @@ fh.tradingName_value.error.pattern=Enter only valid characters for a trading nam
 fh.national_insurance_number.title=National Insurance Number
 fh.national_insurance_number.confirm.label=Do you have a National Insurance number?
 fh.nationalInsuranceNumber_yesNo.error.required=Select whether you have a National Insurance number
+fh.partner.nationalInsuranceNumber_yesNo.error.required=Select whether they have a National Insurance number
 fh.national_insurance_number.label=National Insurance number
 fh.national_insurance_number.hintText=It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+fh.partner.national_insurance_number.hintText=It’s on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 fh.nationalInsuranceNumber_value.error.required=Enter National Insurance number
 fh.nationalInsuranceNumber_value.error.pattern=Enter a valid National Insurance number
 
@@ -618,6 +620,8 @@ fh.businessPartner.vatNumber.title=Does the partner have a UK VAT registration n
 fh.businessPartner.vatNumber.heading=Does {0} have a UK VAT registration number?
 fh.businessPartner.vatNumber.label=VAT registration number
 fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
+fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
+fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 
 # - Business partners
 #============================================================

@@ -37,7 +37,7 @@ class BusinessPartnersChooseAddressController @Inject()(
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessParnerPagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       val form = chooseAddressForm
       //ToDo read this data from the cache after being stored before the redirect
       val addressList = testAddressData
@@ -48,7 +48,7 @@ class BusinessPartnersChooseAddressController @Inject()(
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessParnerPagesEnabled) {
+    if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val addressList = testAddressData
 
