@@ -632,6 +632,15 @@ fh.businessPartners.each.title=Partner {0}
 fh.business_partners.entity_type.label=What type of legal entity is this partner?
 fh.businessPartnersType.error.required=Select the type of legal entity for the partner {0}
 
+fh.business_partners_address.title=What is the partner’s address?
+fh.business_partners_address.heading=What is {0}’s address?
+fh.business_partners_address.error=Enter a valid address
+fh.business.partners.caption = Business Partners
+fh.business_partners_address.caption=Property name or number (optional)
+fh.business_partners_address.hint=For example, The Mill, 116 or Flat 37a
+fh.business_partners_address.postcode.caption=UK postcode
+fh.business_partners_address.manually_enter=Enter address manually
+
 fh.business_partners.entity_type.individual.value=Individual
 fh.business_partners.entity_type.individual.label=Individual
 fh.business_partners.entity_type.sole_proprietor.value=SoleProprietor
@@ -648,6 +657,8 @@ fh.business_partners.entity_type.unincorporated_body.label=Unincorporated Body
 fh.business_partners.enter.title=Enter partner details
 fh.business_partners.enter.partner_address=Tell us the address of this partner
 fh.business_partners.enter.partner_address.error=Enter the address of this partner
+fh.partnerPostcode.error.required=Enter the postcode of the address
+fh.partnerPostcode.error.pattern=Enter a valid postcode
 
 fh.business_partners.individual.first_name.label=First name
 fh.businessPartnerIndividual.firstName.error.required=Enter the person''s first name

@@ -1,0 +1,93 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
+
+@this(layout: layout,
+        viewHelpers: ViewHelpers,
+        button: components.button,
+        textInput: components.text_field,
+        formHelper: FormWithCSRF
+    )
+
+@(businessPartnersAddressForm: Form[UkAddressLookup], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@pageScripts = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@titlePrefix = @{
+    if (businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
+@layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
+
+    <h1 class="govuk-fieldset__heading">
+        <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address">@messages("fh.business.partners.caption")</span>
+        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_address.heading", partnerName)</span>
+    </h1>
+    </br>
+
+    @if(businessPartnersAddressForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"#${businessPartnersAddressForm.errors.head.key}"),
+                content = Text(messages(
+                    s"fh.${
+                        if(businessPartnersAddressForm.errors.head.key == "addressLineKey") "partner." + businessPartnersAddressForm.errors.head.key else businessPartnersAddressForm.errors.head.key
+                    }.${businessPartnersAddressForm.errors.head.message}"
+                ))
+            )),
+            title = Text(messages("fh.generic.error"))
+        ))
+    }
+
+    @formHelper(action = postAction){
+        @textInput(
+            form = businessPartnersAddressForm,
+            legendContent = messages("fh.business_partners_address.caption"),
+            hintText = Some(messages("fh.business_partners_address.hint")),
+            inputKey = addressLineKey,
+            id = "businessPartnersAddressForm",
+            optLegendCaption = Some(messages("fh.business_partners_address.title")),
+            classes = "govuk-!-width-two-thirds"
+        )
+        @textInput(
+            form = businessPartnersAddressForm,
+            legendContent = messages("fh.business_partners_address.postcode.caption"),
+            inputKey = postcodeKey,
+            id = "businessPartnersAddressPostcode",
+            optLegendCaption = Some(messages("fh.business.partners.caption")),
+            classes = "govuk-!-width-one-third"
+        )
+
+        <p class="govuk-body">
+            <a href="#" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
+        </p>
+
+        @button("button.save.continue")
+    }
+
+    @SaveForLater()
+
+}
