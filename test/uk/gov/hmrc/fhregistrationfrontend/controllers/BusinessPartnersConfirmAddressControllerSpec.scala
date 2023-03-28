@@ -39,24 +39,23 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
   "load" should {
     "Render the confirm address page" when {
       "the new business partner pages are enabled" in {
-        // Make fake request
         setupUserAction()
         when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
-        // if successful status should be 200
-        // page title should also appear
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Confirm the partner’s address?")
+        // should be mocked out when Save4Later changes included
+        page.body.text should include("Confirm partner name's address")
+        page.body.text should include("1 Romford Road")
         reset(mockActions)
       }
     }
 
     "Render the page not found page" when {
       "the new business partner pages are disabled" in {
-        // Make fake request
         setupUserAction()
         when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()

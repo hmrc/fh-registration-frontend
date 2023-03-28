@@ -28,7 +28,7 @@
       formHelper: FormWithCSRF,
       viewHelpers: ViewHelpers)
 
-@(address: Address)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(address: Address, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
 <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -39,6 +39,13 @@ messages("fh.businessPartners.confirmAddress.title")
 }
 
 @layout(title = title, Some(pageScripts), backUrl = Some("#")) {
+
+    <h1 class="govuk-heading-m">
+        <span class="govuk-caption-m">@messages("fh.businessPartners.caption")</span>
+        @messages("fh.businessPartners.confirmAddress.heading", partnerName)
+    </h1>
+
+    @Helpers.createAddressString(address)
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()

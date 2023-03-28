@@ -37,7 +37,8 @@ class BusinessPartnersConfirmAddressController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessParnerPagesEnabled) {
-      Ok(view.business_partner_confirm_partner_address(address))
+      // ask UCD about added ' in name
+      Ok(view.business_partner_confirm_partner_address(address, "partner name's"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

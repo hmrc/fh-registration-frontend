@@ -616,6 +616,7 @@ fh.businessPartners.caption=Business partners
 fh.businessPartners.screen-reader.section=this is for:
 fh.businessPartners.chooseAddress.title=Choose address
 fh.businessPartners.confirmAddress.title=Confirm the partner’s address?
+fh.businessPartners.confirmAddress.heading=Confirm {0} address
 fh.chosenAddress.error.required=Select an address
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
