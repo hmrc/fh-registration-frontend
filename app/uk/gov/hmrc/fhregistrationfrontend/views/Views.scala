@@ -78,4 +78,5 @@ class Views @Inject()(
   val show_submission: uk.gov.hmrc.fhregistrationfrontend.views.html.show_submission,
 ////////////////////////////BusinessParners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address
+  // val business_partner_confirm_partner_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address
 )
