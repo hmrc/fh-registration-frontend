@@ -612,8 +612,13 @@ fh.companyIdentification.error.required=Select whether there are any more to add
 #============================================================
 fh.businessPartners.caption=Business partners
 fh.businessPartners.screen-reader.section=this is for:
-fh.businessParners.chooseAddress.title=Choose address
+fh.businessPartners.chooseAddress.title=Choose address
 fh.chosenAddress.error.required=Select an address
+fh.businessPartner.vatNumber.title=Does the partner have a UK VAT registration number?
+fh.businessPartner.vatNumber.heading=Does {0} have a UK VAT registration number?
+fh.businessPartner.vatNumber.label=VAT registration number
+fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
