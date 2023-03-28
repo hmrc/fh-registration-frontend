@@ -36,7 +36,11 @@ class BusinessPartnersConfirmAddressController @Inject()(
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
-    Ok("str")
+    if (config.newBusinessParnerPagesEnabled) {
+      Ok(view.business_partner_confirm_partner_address(address))
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
   }
 
   val address: Address = Address(

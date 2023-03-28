@@ -41,13 +41,31 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
       "the new business partner pages are enabled" in {
         // Make fake request
         setupUserAction()
-        // when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
         // if successful status should be 200
         // page title should also appear
         status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("Confirm the partner’s address?")
+        reset(mockActions)
+      }
+    }
+
+    "Render the page not found page" when {
+      "the new business partner pages are disabled" in {
+        // Make fake request
+        setupUserAction()
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        result.header.status shouldBe NOT_FOUND
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("Page not found")
+        reset(mockActions)
       }
     }
   }
