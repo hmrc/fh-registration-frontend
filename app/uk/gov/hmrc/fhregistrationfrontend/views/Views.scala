@@ -33,8 +33,7 @@ class Views @Inject()(
   ////////////////////////////Forms/////////////////////////////////////////////
   val business_customers: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_customers,
   val business_partners: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_partners,
-  val business_partners_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partner_address_page,
-  val business_partners_v2: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partner_nino_page,
+  val business_partners_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_address_page,
   val business_status: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_status,
   val company_officers: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.company_officers,
   val company_registration_number: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.company_registration_number,
@@ -61,7 +60,7 @@ class Views @Inject()(
   val allocate_enrolment: uk.gov.hmrc.fhregistrationfrontend.views.html.allocate_enrolment,
   val declaration: uk.gov.hmrc.fhregistrationfrontend.views.html.declaration,
   val enrolment_pending: uk.gov.hmrc.fhregistrationfrontend.views.html.enrolment_pending,
-////////////////////////////Miscellaneous/////////////////////////////////////////////////
+  ////////////////////////////Miscellaneous/////////////////////////////////////////////////
   val error_forbidden: uk.gov.hmrc.fhregistrationfrontend.views.html.error_forbidden,
   val error_template: uk.gov.hmrc.fhregistrationfrontend.views.html.error_template,
   val govuk_wrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
@@ -76,7 +75,8 @@ class Views @Inject()(
   val temp_admin_page: uk.gov.hmrc.fhregistrationfrontend.views.html.temp_admin_page,
   val show_all_submissions: uk.gov.hmrc.fhregistrationfrontend.views.html.show_all_submissions,
   val show_submission: uk.gov.hmrc.fhregistrationfrontend.views.html.show_submission,
-////////////////////////////BusinessPartners///////////////////////////////////////////////
+  ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
+  val business_partner_nino_page: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_nino_page,
   val business_partner_confirm_partner_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_confirm_address
 )

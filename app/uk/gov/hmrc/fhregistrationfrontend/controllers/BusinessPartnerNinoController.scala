@@ -44,7 +44,7 @@ class BusinessPartnerNinoController @Inject()(
         Call(
           method = "POST",
           url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.onLoad().url)
-      Ok(view.business_partners_v2(ninoForm, items, postAction))
+      Ok(view.business_partner_nino_page(ninoForm, items, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -59,7 +59,7 @@ class BusinessPartnerNinoController @Inject()(
             Call(
               method = "POST",
               url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.onSubmit().url)
-          BadRequest(view.business_partners_v2(formWithErrors, items, postAction))
+          BadRequest(view.business_partner_nino_page(formWithErrors, items, postAction))
         },
         nino => {
           Ok(s"Form submiteed, with result: ${nino.toString}")

@@ -51,6 +51,6 @@ messages("fh.businessPartners.confirmAddress.title")
         <a class="govuk-link" id="confirm-edit" href="#">@messages("fh.businessPartners.confirmAddress.edit")</a>
     </p>
 
-    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit"), href=Some("#")))
     @SaveForLater()
 }

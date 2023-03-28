@@ -80,6 +80,8 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
           val result = await(csrfAddToken(controller.load())(request))
 
           status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.getElementsByClass("govuk-button").first.attr("href") should include("#")
           reset(mockActions)
         }
       }
