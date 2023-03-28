@@ -45,7 +45,11 @@ messages("fh.businessPartners.confirmAddress.title")
         @messages("fh.businessPartners.confirmAddress.heading", partnerName)
     </h1>
 
-    @Helpers.createAddressString(address)
+    <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
+
+    <p class="govuk-body">
+        <a class="govuk-link" href="">@messages("fh.businessPartners.confirmAddress.edit")</a>
+    </p>
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()
