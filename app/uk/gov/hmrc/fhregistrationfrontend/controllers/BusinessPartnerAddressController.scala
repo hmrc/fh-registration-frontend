@@ -35,7 +35,7 @@ class BusinessPartnerAddressController @Inject()(
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerAddressEnabled) {
+    if (config.newBusinessParnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       val bpAddressForm = businessPartnersAddressForm
@@ -50,7 +50,7 @@ class BusinessPartnerAddressController @Inject()(
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerAddressEnabled) {
+    if (config.newBusinessParnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       businessPartnersAddressForm.bindFromRequest.fold(

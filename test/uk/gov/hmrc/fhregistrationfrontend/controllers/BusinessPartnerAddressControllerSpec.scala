@@ -39,7 +39,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
     "Render the business partner address page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessPartnerAddressEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -53,7 +53,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
     "Render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessPartnerAddressEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -69,7 +69,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
     "the new business partner pages are enabled" should {
       "return 200" when {
         setupUserAction()
-        when(mockAppConfig.newBusinessPartnerAddressEnabled).thenReturn(true)
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"))
         val result = await(csrfAddToken(controller.load())(request))
@@ -84,7 +84,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
     "Render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
-        when(mockAppConfig.newBusinessPartnerAddressEnabled).thenReturn(false)
+        when(mockAppConfig.newBusinessParnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
