@@ -31,7 +31,7 @@ trait AppConfig {
   val exciseEnquiryLink: String
   def getConfiguration: Configuration
 
-  val newBusinessParnerPagesEnabled: Boolean
+  val newBusinessPartnerPagesEnabled: Boolean
 }
 
 @Singleton
@@ -69,5 +69,5 @@ class FrontendAppConfig @Inject()(
 
   override def getConfiguration: Configuration = configuration
 
-  override val newBusinessParnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
+  override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
 }
