@@ -66,6 +66,8 @@ class BusinessPartnersChooseAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
           }
         }
       }
@@ -86,6 +88,8 @@ class BusinessPartnersChooseAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
           }
         }
       }
@@ -106,6 +110,8 @@ class BusinessPartnersChooseAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
           }
         }
       }
