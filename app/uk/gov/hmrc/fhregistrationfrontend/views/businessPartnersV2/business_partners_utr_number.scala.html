@@ -1,0 +1,62 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+
+@this(layout: layout,
+    formHelper: FormWithCSRF,
+    radios: components.radios,
+    button: components.button,
+    viewHelpers: ViewHelpers
+)
+
+@(businessPartnersUtrForm: Form[_], postAction: Call, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages, config: AppConfig)
+
+@layout(title = messages("fh.business_partners_utr.title"), backUrl = Some("#")){
+
+    @if(businessPartnersUtrForm.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+            href = Some(s"#${businessPartnersUtrForm.errors.head.key}"),
+            content = Text(messages(
+                s"fh.${
+                    if(businessPartnersUtrForm.errors.head.key == "uniqueTaxpayerReference_yesNo") "partner." + businessPartnersUtrForm.errors.head.key else businessPartnersUtrForm.errors.head.key
+                }.${businessPartnersUtrForm.errors.head.message}"
+            ))
+        )),
+        title = Text(messages("fh.generic.error"))
+    ))
+    }
+
+    @formHelper(action = postAction){
+
+        @radios(
+            form = businessPartnersUtrForm,
+            id = "uniqueTaxpayerReference_yesNo",
+            legendContent = messages("fh.business_partners.utr.label", "Test User"),
+            optLegendCaption = Some(messages("fh.businessPartners.caption")),
+            items = radioItems
+        )
+
+        @button("button.save.continue")
+    }
+
+    @SaveForLater()
+
+}

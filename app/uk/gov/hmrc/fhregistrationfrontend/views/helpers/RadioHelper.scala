@@ -28,20 +28,26 @@ import javax.inject.Inject
 
 class RadioHelper @Inject()(input: text_input) extends ViewUtils {
 
-  def conditionalYesNoRadio(form: Form[_])(implicit msgs: Messages): Seq[RadioItem] =
+  def conditionalYesNoRadio(
+    form: Form[_],
+    hasKey: String,
+    legendContent: String,
+    inputKey: String,
+    hintText: String
+  )(implicit msgs: Messages): Seq[RadioItem] =
     Seq(
       RadioItem(
         value = Some("true"),
         content = Text(msgs("fh.generic.yes")),
-        checked = form(hasNationalInsuranceNumberKey).value.contains("true"),
+        checked = form(hasKey).value.contains("true"),
         conditionalHtml = Some(
           html(
             input(
               form = form,
-              legendContent = msgs("fh.national_insurance_number.title"),
-              inputKey = nationalInsuranceNumberKey,
-              hintText = Some(msgs("fh.partner.national_insurance_number.hintText")),
-              id = form(nationalInsuranceNumberKey).name
+              legendContent = msgs(legendContent),
+              inputKey = inputKey,
+              hintText = Some(msgs(hintText)),
+              id = form(hintText).name
             )
           )
         )

@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.{hasNationalInsuranceNumberKey, nationalInsuranceNumberForm, nationalInsuranceNumberKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUtrForm.{businessPartnerUtrForm, businessPartnerUtrKey, hasBusinessPartnerUtrKey}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
 
-class BusinessPartnerNinoController @Inject()(
+class BusinessPartnerUtrController @Inject()(
   radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
   view: Views,
@@ -35,46 +35,48 @@ class BusinessPartnerNinoController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-
-  def onLoad(): Action[AnyContent] = userAction { implicit request =>
+  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val ninoForm = nationalInsuranceNumberForm
+      // Todo get this from cache later
+      val bpUtrForm = businessPartnerUtrForm
       val items = radioHelper.conditionalYesNoRadio(
-        ninoForm,
-        hasKey = hasNationalInsuranceNumberKey,
-        legendContent = "fh.national_insurance_number.title",
-        inputKey = nationalInsuranceNumberKey,
-        hintText = "fh.partner.national_insurance_number.hintText"
+        bpUtrForm,
+        hasKey = hasBusinessPartnerUtrKey,
+        legendContent = "fh.business_partners.utr.label",
+        inputKey = businessPartnerUtrKey,
+        hintText = "fh.business_partners_utr.hintText"
       )
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.onLoad().url)
-      Ok(view.business_partners_v2(ninoForm, items, postAction))
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.load().url)
+      Ok(view.business_partners_utr(bpUtrForm, postAction, items))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def onSubmit(): Action[AnyContent] = userAction { implicit request =>
+  def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm.bindFromRequest.fold(
+      // Todo get this from cache later
+      val bpUtrForm = businessPartnerUtrForm
+      val items = radioHelper.conditionalYesNoRadio(
+        bpUtrForm,
+        hasKey = hasBusinessPartnerUtrKey,
+        legendContent = "fh.business_partners.utr.label",
+        inputKey = businessPartnerUtrKey,
+        hintText = "fh.business_partners_utr.hintText"
+      )
+      businessPartnerUtrForm.bindFromRequest.fold(
         formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(
-            formWithErrors,
-            hasKey = hasNationalInsuranceNumberKey,
-            legendContent = "fh.national_insurance_number.title",
-            inputKey = nationalInsuranceNumberKey,
-            hintText = "fh.partner.national_insurance_number.hintText"
-          )
           val postAction =
             Call(
               method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.onSubmit().url)
-          BadRequest(view.business_partners_v2(formWithErrors, items, postAction))
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
+          BadRequest(view.business_partners_utr(formWithErrors, postAction, items))
         },
-        nino => {
-          Ok(s"Form submitted, with result: ${nino.toString}")
+        bpAddress => {
+          Ok(s"Next page! with form result: ${bpAddress.toString}")
         }
       )
     } else {

@@ -28,9 +28,11 @@ GET         /subscription/status                                        @uk.gov.
 
 GET         /address-lookup                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
-GET         /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
-POST        /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
+GET         /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
+POST        /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
 
+GET         /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.load()
+POST        /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.next()
 
 GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onLoad()
 POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onSubmit()
