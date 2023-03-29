@@ -32,6 +32,9 @@ GET         /form/business-partners/choose-address                 @uk.gov.hmrc.
 POST        /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 GET         /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
 POST        /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
+GET         /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
+POST        /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
+
 GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onLoad()
 POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onSubmit()
 
