@@ -34,6 +34,9 @@ POST        /form/business-partners/partner-address                     @uk.gov.
 GET         /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.load()
 POST        /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.next()
 
+GET         /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
+POST        /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
+
 GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onLoad()
 POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onSubmit()
 

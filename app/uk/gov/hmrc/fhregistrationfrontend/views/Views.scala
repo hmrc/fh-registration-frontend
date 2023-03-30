@@ -33,9 +33,6 @@ class Views @Inject()(
   ////////////////////////////Forms/////////////////////////////////////////////
   val business_customers: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_customers,
   val business_partners: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_partners,
-  val business_partners_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partner_address_page,
-  val business_partners_utr: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partners_utr_number,
-  val business_partners_v2: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partner_nino_page,
   val business_status: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_status,
   val company_officers: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.company_officers,
   val company_registration_number: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.company_registration_number,
@@ -77,6 +74,10 @@ class Views @Inject()(
   val temp_admin_page: uk.gov.hmrc.fhregistrationfrontend.views.html.temp_admin_page,
   val show_all_submissions: uk.gov.hmrc.fhregistrationfrontend.views.html.show_all_submissions,
   val show_submission: uk.gov.hmrc.fhregistrationfrontend.views.html.show_submission,
-////////////////////////////BusinessParners///////////////////////////////////////////////
-  val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address
+////////////////////////////BusinessPartners///////////////////////////////////////////////
+  val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
+  val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
+  val business_partner_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_nino_page,
+  val business_partners_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_address_page,
+  val business_partners_utr: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartnersV2.business_partners_utr_number,
 )
