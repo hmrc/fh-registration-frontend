@@ -17,13 +17,13 @@ class BusinessPartnerUtrControllerIntegrationSpec
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 200
             val page = Jsoup.parse(res.body)
             page.title must include("Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
-
             page.getElementById("page-heading").text must include("Does Test User have a Self Assessment Unique Taxpayer Reference (UTR)?")
           }
         }
@@ -44,8 +44,8 @@ class BusinessPartnerUtrControllerIntegrationSpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "nationalInsuranceNumber_yesNo" -> Seq("true"),
-                "nationalInsuranceNumber_value" -> Seq("1234567890")
+                "uniqueTaxpayerReference_yesNo" -> Seq("true"),
+                "uniqueTaxpayerReference_value" -> Seq("1234567890")
               ))
 
             whenReady(result) { res =>
@@ -62,8 +62,8 @@ class BusinessPartnerUtrControllerIntegrationSpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "nationalInsuranceNumber_yesNo" -> Seq("false"),
-                "nationalInsuranceNumber_value" -> Seq.empty
+                "uniqueTaxpayerReference_yesNo" -> Seq("false"),
+                "uniqueTaxpayerReference_value" -> Seq.empty
               ))
 
             whenReady(result) { res =>
@@ -83,8 +83,8 @@ class BusinessPartnerUtrControllerIntegrationSpec
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq.empty,
-              "nationalInsuranceNumber_value" -> Seq.empty
+              "uniqueTaxpayerReference_yesNo" -> Seq.empty,
+              "uniqueTaxpayerReference_value" -> Seq.empty
             ))
 
           whenReady(result) { res =>
@@ -103,8 +103,8 @@ class BusinessPartnerUtrControllerIntegrationSpec
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq("true"),
-              "nationalInsuranceNumber_value" -> Seq.empty
+              "uniqueTaxpayerReference_yesNo" -> Seq("true"),
+              "uniqueTaxpayerReference_value" -> Seq.empty
             ))
 
           whenReady(result) { res =>
