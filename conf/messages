@@ -619,6 +619,10 @@ fh.chosenAddress.error.required=Select an address
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 
+fh.business.partners.enterAddress.title = Enter the partner’s address?
+fh.business.partners.enterAddress.h1 = Enter {0}'s address
+fh.business.partners.enterAddress.town = Town or City
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
