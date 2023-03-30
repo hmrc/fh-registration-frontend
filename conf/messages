@@ -620,7 +620,7 @@ fh.business_partners.title.v2= Does the partner have a National Insurance number
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.business_partners_utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
-fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called 'reference', 'UTR' or 'official use'.
+fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called `reference`, `UTR` or `official use`.
 fh.uniqueTaxpayerReference_value.error.required=Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_yesNo.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
 

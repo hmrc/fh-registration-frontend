@@ -22,36 +22,17 @@
 
 @(
     form: Form[_],
-    legendContent: String,
     id: String = "",
     items: Seq[RadioItem],
-    optLegendCaption: Option[String] = None,
     hint: Option[Html] = None,
     classes: String = "",
     legendClasses: String = "",
     inline: Boolean = false
 )(implicit messages: Messages, request: Request[_], appConfig: AppConfig)
 
-@legend = {
-    <h1 class="govuk-fieldset__heading">
-        @optLegendCaption.map{ caption =>
-            <span class="govuk-caption-l business-partner-individual-nino-caption" id="business-partner-individual-nino">@caption</span>
-        }
-        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@legendContent</span>
-    </h1>
-}
-
 @govukRadios(Radios(
     classes = if(inline) "govuk-radios--inline" else classes,
     name = id,
-    fieldset = Some(Fieldset(
-        legend = Some(Legend(
-            content = HtmlContent(legend),
-            isPageHeading = false,
-            classes = if(legendClasses.nonEmpty) legendClasses else "govuk-fieldset__legend--xl"
-        ))
-    )),
-    hint = hint.map { hint => Hint(content = HtmlContent(hint))},
     items = items,
     errorMessage = form.error(id).map(err => ErrorMessage(content = Text(messages(s"fh.partner.$id.${err.message}", err.args: _*))))
 ))

@@ -44,13 +44,20 @@
     ))
     }
 
+    <h1 class="govuk-fieldset__heading">
+        <span class="govuk-caption-l business-partner-individual-caption" id="business-partner-individual">@messages("fh.businessPartners.caption")</span>
+        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_utr.heading", "Test User")</span>
+    </h1><br>
+
+    <p class="govuk-body">
+        You can <a href="#" class="govuk-link">find a lost UTR.</a>
+    </p>
+
     @formHelper(action = postAction){
 
         @radios(
             form = businessPartnersUtrForm,
             id = "uniqueTaxpayerReference_yesNo",
-            legendContent = messages("fh.business_partners.utr.label", "Test User"),
-            optLegendCaption = Some(messages("fh.businessPartners.caption")),
             items = radioItems
         )
 
