@@ -1,0 +1,166 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@this(viewHelpers: ViewHelpers,
+layout: layout,
+formHelper: FormWithCSRF,
+textInput: components.text_field
+)
+
+@(form: Form[Address],postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+
+@AddressContent = @{AddressUK(
+form,
+AddressUKParams(
+name = s"form.$enterAddressKey",
+label = Messages("fh.business.partners.enterAddress.title","company"),
+hasErrors = form(s"form.postcode").hasErrors,
+error = Some(Messages("fh.business_partners.enter.partner_address.error"))
+),
+viewHelpers = viewHelpers
+)}
+
+
+@fieldName = @{s"form.$enterAddressKey"+"-title"}
+
+
+@layout(title = messages("fh.business.partners.enterAddress.title"), backUrl = Some("#")){
+
+
+@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersChooseAddressController.next, 'novalidate -> "novalidate"){
+@if(form.errors.nonEmpty) {
+@viewHelpers.govukErrorSummary(
+ErrorSummary(errorList = Seq(ErrorLink(
+href = Some(s"#${form.errors.head.key}"),
+content = Text(messages(s"fh.${form.errors.head.key}.${form.errors.head.message}"))
+))
+,
+title = Text(messages("fh.generic.error"))))
+}
+
+
+@formHelper(action = postAction){
+
+<fieldset class="govuk-fieldset" xmlns="http://www.w3.org/1999/html">
+    <legend id="fieldName" class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h1 class="govuk-fieldset__heading">
+            <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address">@Messages("fh.businessPartners.caption")</span>
+            <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@Messages("fh.business.partners.enterAddress.h1",partnerName)</span>
+        </h1>
+    </legend>
+    </br>
+    @viewHelpers.govukInput(Input(
+    id = s"$fieldName.Line1",
+    name = s"$fieldName.Line1",
+    label = Label(
+    isPageHeading = false,
+    classes = "govuk-!-font-weight-bold",
+    content = HtmlContent(s"${Messages("fh.address.line1.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line1"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.Line1").value.getOrElse("")}"),
+    errorMessage =
+    form(s"$fieldName.Line1").error.map{ e =>
+    ErrorMessage(
+    content = Text(Messages(s"fh.$fieldName.Line1.${e.message}")),
+    visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
+    )
+    }
+    ))
+
+    @viewHelpers.govukInput(Input(
+    id = s"$fieldName.Line2",
+    name = s"$fieldName.Line2",
+    label = Label(
+    isPageHeading = false,
+    classes = "govuk-!-font-weight-bold",
+    content = HtmlContent(s"${Messages("fh.address.line2_optional.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line2"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.Line2").value.getOrElse("")}"),
+    errorMessage =
+    form(s"$fieldName.Line2").error.map{ e =>
+    ErrorMessage(
+    content = Text(Messages(s"fh.$fieldName.Line2.${e.message}")),
+    visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
+    )
+    }
+    ))
+
+    @viewHelpers.govukInput(Input(
+    id = s"$fieldName.Line3",
+    name = s"$fieldName.Line3",
+    label = Label(
+    isPageHeading = false,
+    classes = "govuk-!-font-weight-bold",
+    content = HtmlContent(s"${Messages("fh.business.partners.enterAddress.town")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line3"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.Line3").value.getOrElse("")}"),
+    errorMessage =
+    form(s"$fieldName.Line3").error.map{ e =>
+    ErrorMessage(
+    content = Text(Messages(s"fh.$fieldName.Line3.${e.message}")),
+    visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
+    )
+    }
+    ))
+
+    @viewHelpers.govukInput(Input(
+    id = s"$fieldName.postcode",
+    name = s"$fieldName.postcode",
+    label = Label(
+    isPageHeading = false,
+    classes = "govuk-!-font-weight-bold",
+    content = HtmlContent(s"${Messages("fh.address.postcode.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("postal-code"),
+    classes = "govuk-!-width-one-third",
+    value = Some(s"${form(s"$fieldName.postcode").value.getOrElse("")}"),
+    errorMessage =
+    form(s"$fieldName.postcode").error.map{ e =>
+    ErrorMessage(
+    content = Text(Messages(s"fh.$fieldName.postcode.${e.message}")),
+    visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
+    )
+    }
+    ))
+</fieldset>
+
+
+}
+
+@viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+@SaveForLater()
+}
+
+}

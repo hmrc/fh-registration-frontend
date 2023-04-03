@@ -27,12 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
 class BusinessPartnersConfirmAddressController @Inject()(
-                                                          ds: CommonPlayDependencies,
-                                                          view: Views,
-                                                          actions: Actions,
-                                                          config: FrontendAppConfig)(
-                                                          cc: MessagesControllerComponents
-                                                        ) extends AppController(ds, cc) {
+  ds: CommonPlayDependencies,
+  view: Views,
+  actions: Actions,
+  config: FrontendAppConfig)(
+  cc: MessagesControllerComponents
+) extends AppController(ds, cc) {
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>

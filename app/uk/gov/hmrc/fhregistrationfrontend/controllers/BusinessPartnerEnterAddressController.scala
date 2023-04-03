@@ -42,7 +42,7 @@ class BusinessPartnerEnterAddressController @Inject()(
         Call(
           method = "POST",
           url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.load().url)
-      Ok(view.business_partners_enter_address(bpAddressForm, postAction, partnerName))
+      Ok(view.business_partner_enter_address(bpAddressForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -59,7 +59,7 @@ class BusinessPartnerEnterAddressController @Inject()(
               method = "POST",
               url =
                 uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.next().url)
-          BadRequest(view.business_partners_enter_address(formWithErrors, postAction, partnerName))
+          BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName))
         },
         bpAddress => {
           Ok(s"Next page! with form result: ${bpAddress.toString}")
