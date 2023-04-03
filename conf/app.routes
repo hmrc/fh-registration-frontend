@@ -45,6 +45,9 @@ POST        /form/business-partners/choose-address                      @uk.gov.
 
 GET         /form/business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load()
 
+GET         /form/business-partners/partnership-registered-office-address @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.load()
+POST        /form/business-partners/partnership-registered-office-address @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.next()
+
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
@@ -111,4 +114,4 @@ GET         /admin-page/group-info/:groupId                             @uk.gov.
 GET         /admin-page/get-status/:regNo                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
 
 GET         /admin-page/es2/:userId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
-GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
+GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
