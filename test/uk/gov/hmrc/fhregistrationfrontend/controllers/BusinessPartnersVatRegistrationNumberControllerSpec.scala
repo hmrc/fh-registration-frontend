@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,10 +34,10 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersChooseAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersVatRegistrationNumberController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
-    "Render the choose address page" when {
+    "Render the businessPartnersVatRegistrationNumber page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -46,7 +46,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Choose address")
+        page.title() should include("Does the partner have a UK VAT registration number?")
         reset(mockActions)
       }
     }
@@ -69,16 +69,29 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
   "next" when {
     "the new business partner pages are enabled" should {
       "return 200" when {
-        "the form has no errors and the address is found" in {
+        "the form has no errors, yes is selected and vatnumber supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody("chosenAddress" -> "1")
+            .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", "123456789"))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe OK
-          contentAsString(result) should include("Next page! with form result:")
+          contentAsString(result) shouldBe "Next page! with vatNumber: 123456789"
+          reset(mockActions)
+        }
+
+        "the form has no errors and no is selected" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Next page! with no vatNumber"
           reset(mockActions)
         }
       }
@@ -89,7 +102,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-          .withFormUrlEncodedBody("chosenAddress" -> "1")
+          .withFormUrlEncodedBody(("chosenAddress", "1"))
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 

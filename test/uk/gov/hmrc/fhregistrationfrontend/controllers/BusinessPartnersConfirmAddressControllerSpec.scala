@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,10 +34,10 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersChooseAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersConfirmAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
-    "Render the choose address page" when {
+    "Render the confirm address page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -46,12 +46,16 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Choose address")
+        page.title() should include("Confirm the partner’s address?")
+        // should be mocked out when Save4Later changes included
+        page.body.text should include("Confirm partner name's address")
+        page.body.text should include("1 Romford Road")
+        page.getElementById("confirm-edit").attr("href") should include("#")
         reset(mockActions)
       }
     }
 
-    "Render the Not found page" when {
+    "Render the page not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
@@ -73,30 +77,13 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody("chosenAddress" -> "1")
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load())(request))
 
           status(result) shouldBe OK
-          contentAsString(result) should include("Next page! with form result:")
+          val page = Jsoup.parse(contentAsString(result))
+          page.getElementsByClass("govuk-button").first.attr("href") should include("#")
           reset(mockActions)
         }
-      }
-    }
-
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody("chosenAddress" -> "1")
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
       }
     }
   }

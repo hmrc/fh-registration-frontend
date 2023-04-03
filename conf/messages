@@ -616,6 +616,13 @@ fh.businessPartners.caption=Business partners
 fh.businessPartners.screen-reader.section=this is for:
 fh.businessPartners.chooseAddress.title=Choose address
 fh.chosenAddress.error.required=Select an address
+fh.businessPartners.confirmAddress.title=Confirm the partner’s address?
+fh.businessPartners.confirmAddress.heading=Confirm {0} address
+fh.businessPartners.confirmAddress.edit=Edit this address
+fh.businessPartner.vatNumber.title=Does the partner have a UK VAT registration number?
+fh.businessPartner.vatNumber.heading=Does {0} have a UK VAT registration number?
+fh.businessPartner.vatNumber.label=VAT registration number
+fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 
