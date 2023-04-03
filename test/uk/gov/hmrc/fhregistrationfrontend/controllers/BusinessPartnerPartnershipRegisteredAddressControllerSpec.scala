@@ -33,7 +33,9 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
   val mockAppConfig = mock[FrontendAppConfig]
 
-  val controller = new BusinessPartnerAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val controller =
+    new BusinessPartnerPartnershipRegisteredAddressController(commonDependencies, views, mockActions, mockAppConfig)(
+      mockMcc)
 
   "load" should {
     "Render the business partner address page" when {
@@ -46,6 +48,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title should include("What is the partner’s address?")
+        page.body.text() should include("Example text")
         reset(mockActions)
       }
     }
