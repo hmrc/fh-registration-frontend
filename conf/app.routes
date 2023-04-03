@@ -30,6 +30,7 @@ GET         /address-lookup                                             @uk.gov.
 
 GET         /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
+
 GET         /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
 POST        /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
 GET         /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
@@ -42,6 +43,8 @@ GET         /form/business-partners/choose-address                      @uk.gov.
 POST        /form/business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 
 GET         /form/business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load()
+
+GET         /form/business-partners/partnership-registered-office-address @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.load()
 
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)

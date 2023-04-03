@@ -16,41 +16,37 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import com.google.inject.{Inject, Singleton}
-import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-@Singleton
-class BusinessPartnersConfirmAddressController @Inject()(
+import javax.inject.Inject
+
+class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-  import actions._
 
+  import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // ask UCD about added ' in name
-      Ok(view.business_partner_confirm_partner_address(address, "partner name's"))
+      // Todo get this from cache later
+      val partnerName = "Test User"
+      val bpAddressForm = businessPartnersAddressForm
+      val postAction =
+        Call(
+          method = "POST",
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.load().url
+        )
+      Ok(view.business_partner_partnership_registered_address(bpAddressForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
-    addressLine4 = None,
-    postcode = "TF1 4ER",
-    countryCode = None,
-    lookupId = None
-  )
 }
