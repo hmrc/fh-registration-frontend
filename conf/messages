@@ -810,6 +810,8 @@ fh.business_partners.utr.confirm.error=Select whether the business partner has a
 fh.business_partners.utr.label=Self Assessment Taxpayer Reference
 fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.hintText=For example, 1234567890
+fh.business_partners.utr.link1=You can
+fh.business_partners.utr.link2=find a lost UTR.
 
 fh.ct_utr.label=Unique Taxpayer Reference
 

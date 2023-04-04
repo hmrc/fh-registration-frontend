@@ -20,10 +20,10 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 
 @this(layout: layout,
-    formHelper: FormWithCSRF,
-    radios: components.radios,
-    button: components.button,
-    viewHelpers: ViewHelpers
+        formHelper: FormWithCSRF,
+        radios: components.radios,
+        button: components.button,
+        viewHelpers: ViewHelpers
 )
 
 @(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
@@ -45,15 +45,15 @@
     }
 
     @formHelper(action = postAction){
-        @radios(
-            form = partnerNinoForm,
-            id = "nationalInsuranceNumber_yesNo",
-            legendContent = messages("fh.business.partners.nino.h1", "Test User"),
-            optLegendCaption = Some(messages("fh.businessPartners.caption")),
-            items = radioItems
-        )
+     @radios(
+        form = partnerNinoForm,
+        id = "nationalInsuranceNumber_yesNo",
+        legendContent = messages("fh.business.partners.nino.h1", "Test User"),
+        optLegendCaption = Some(messages("fh.businessPartners.caption")),
+        items = radioItems
+     )
 
-        @button("button.save.continue")
+     @button("button.save.continue")
     }
 
     @SaveForLater()

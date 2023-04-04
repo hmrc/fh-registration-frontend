@@ -87,6 +87,9 @@
                     isPageHeading = true
                 ))
             )),
+            hint = Some(Hint(
+                content = HtmlContent(Html(s"${LostUtrLink()}"))
+            )),
             idPrefix = Some(hasBusinessPartnerUtrKey),
             name = hasBusinessPartnerUtrKey,
             errorMessage = if (businessPartnersUtrForm(hasBusinessPartnerUtrKey).hasErrors) {

@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
+
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -23,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
+
 class BusinessPartnerNinoController @Inject()(
   radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
@@ -31,7 +33,9 @@ class BusinessPartnerNinoController @Inject()(
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
+
   import actions._
+
   def onLoad(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val ninoForm = nationalInsuranceNumberForm
@@ -45,6 +49,7 @@ class BusinessPartnerNinoController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
+
   def onSubmit(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       nationalInsuranceNumberForm.bindFromRequest.fold(
@@ -64,4 +69,5 @@ class BusinessPartnerNinoController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
+
 }
