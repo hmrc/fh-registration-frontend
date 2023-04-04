@@ -8,113 +8,152 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerUtrControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 
+  "GET /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" should {
 
-  "GET /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" when {
+    "render the partnership-self-assessment-unique-taxpayer-reference page" in {
+      given
+        .commonPrecondition
 
-    "render the business partner Unique Taxpayer Reference page" when {
-      "the user is authenticated" in {
-        given.commonPrecondition
+      WsTestClient.withClient { client =>
+        val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .get()
-
-          whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include("Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
-            page.getElementById("page-heading").text must include("Does Test User have a Self Assessment Unique Taxpayer Reference (UTR)?")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title() must include("Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
+          page.getElementsByTag("h1").text() must include("Does test partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
         }
       }
     }
-
   }
 
   "POST /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" when {
-
-    "form with no errors" should {
-      "return 200" when {
-        "the user is authenticated" in {
-          given.commonPrecondition
-
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "uniqueTaxpayerReference_yesNo" -> Seq("true"),
-                "uniqueTaxpayerReference_value" -> Seq("1234567890")
-              ))
-
-            whenReady(result) { res =>
-              res.status mustBe 200
-            }
-          }
-        }
-
-        "the user selects no" in {
-          given.commonPrecondition
-
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "uniqueTaxpayerReference_yesNo" -> Seq("false"),
-                "uniqueTaxpayerReference_value" -> Seq.empty
-              ))
-
-            whenReady(result) { res =>
-              res.status mustBe 200
-            }
-          }
-        }
-      }
-    }
-
-    "no radio is selected by the user" should {
-      "return 400" in {
-        given.commonPrecondition
+    "yes is selected and the UTR is entered" should {
+      "return 200 with UTR" in {
+        given
+          .commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "uniqueTaxpayerReference_yesNo" -> Seq.empty,
-              "uniqueTaxpayerReference_value" -> Seq.empty
-            ))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("true"),
+              "uniqueTaxpayerReference_value" -> Seq("1234567890")))
 
           whenReady(result) { res =>
-            res.status mustBe 400
+            res.status mustBe 200
+            res.body mustBe "Next page! with UTR: 1234567890"
           }
         }
       }
     }
 
-    "yes is selected but no UTR is entered" should {
-      "return 400" in {
-        given.commonPrecondition
+    "no is selected" should {
+      "return 200 with no UTR message" in {
+        given
+          .commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "uniqueTaxpayerReference_yesNo" -> Seq("true"),
-              "uniqueTaxpayerReference_value" -> Seq.empty
-            ))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("false")))
 
           whenReady(result) { res =>
-            res.status mustBe 400
+            res.status mustBe 200
+            res.body mustBe "Next page! with no UTR"
           }
         }
       }
     }
 
+    "no option selected" should {
+      "return 400" in {
+        given
+          .commonPrecondition
 
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq.empty))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether they have a Self Assessment Unique Taxpayer Reference")
+          }
+        }
+      }
+    }
+
+    "option selected but UTR not supplied" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("true")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a Self Assessment Unique Taxpayer Reference (UTR)")
+          }
+        }
+      }
+    }
+
+    "the form hasUtr field is invalid format" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("error")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)")
+          }
+        }
+      }
+    }
+
+    "the UTR field is invalid format" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("true"),
+              "uniqueTaxpayerReference_value" -> Seq("1234")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid Self Assessment Unique Taxpayer Reference (UTR)")
+          }
+        }
+      }
+    }
   }
-
 }

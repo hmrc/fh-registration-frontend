@@ -14,56 +14,101 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
+@import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.UniqueTaxpayerReference
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUtrForm.{hasBusinessPartnerUtrKey, businessPartnerUtrKey}
 
-@this(layout: layout,
-    formHelper: FormWithCSRF,
-    radios: components.radios,
-    button: components.button,
-    viewHelpers: ViewHelpers
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessPartnersUtrForm: Form[_], postAction: Call, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(businessPartnersUtrForm: Form[UniqueTaxpayerReference], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@layout(title = messages("fh.business_partners_utr.title"), backUrl = Some("#")){
+@titlePrefix = @{
+    if (businessPartnersUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
 
-    @if(businessPartnersUtrForm.errors.nonEmpty) {
-        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-            Seq(ErrorLink(
-            href = Some(s"#${businessPartnersUtrForm.errors.head.key}"),
-            content = Text(messages(
-                s"fh.${
-                    if(businessPartnersUtrForm.errors.head.key == "uniqueTaxpayerReference_yesNo") "partner." + businessPartnersUtrForm.errors.head.key else businessPartnersUtrForm.errors.head.key
-                }.${businessPartnersUtrForm.errors.head.message}"
-            ))
+@title = @{
+    Messages("fh.business_partners_utr.title")
+}
+
+@heading = @{
+    Messages("fh.business_partners_utr.heading", partnerName)
+}
+
+@conditionalHtml = @{
+    viewHelpers.govukInput(Input(
+        id = businessPartnerUtrKey,
+        name = businessPartnerUtrKey,
+        label = Label(
+            isPageHeading = false,
+            content = HtmlContent(s"<strong>${Messages("fh.business_partners.utr.label")}</strong>")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-half",
+        hint = Some(Hint(
+            content = Text(Messages("fh.business_partners_utr.hintText"))
         )),
-        title = Text(messages("fh.generic.error"))
+        errorMessage =
+            businessPartnersUtrForm.error(businessPartnerUtrKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
+            },
+        value = businessPartnersUtrForm(businessPartnerUtrKey).value
     ))
+}
+
+@layout(title = titlePrefix + title, backUrl = Some("#")) {
+
+    @viewHelpers.form(action = postAction) {
+        @if(businessPartnersUtrForm.errors.nonEmpty) {
+            @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                Seq(ErrorLink(
+                    href = Some(s"#${businessPartnersUtrForm.errors.head.key}"),
+                    content = Text(messages(s"fh.${businessPartnersUtrForm.errors.head.key}.${businessPartnersUtrForm.errors.head.message}"))
+                )),
+                title = Text(messages("fh.generic.error"))
+            ))
+        }
+
+        @viewHelpers.govUkRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = HtmlContent(Html(s"${BusinessPartnersHeader(heading)}")),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                ))
+            )),
+            idPrefix = Some(hasBusinessPartnerUtrKey),
+            name = hasBusinessPartnerUtrKey,
+            errorMessage = if (businessPartnersUtrForm(hasBusinessPartnerUtrKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.uniqueTaxpayerReference_yesNo.error.required"))))
+            } else None,
+            items = Seq(
+                RadioItem(
+                    content = Text("Yes"),
+                    value = Some("true"),
+                    checked = businessPartnersUtrForm.data.values.toList.contains("true"),
+                    conditionalHtml = Some(conditionalHtml)
+                ),
+                RadioItem(
+                    content = Text("No"),
+                    value = Some("false"),
+                    checked = businessPartnersUtrForm.data.values.toList.contains("false"),
+                )
+            )
+        ))
+
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
+
     }
-
-    <h1 class="govuk-fieldset__heading">
-        <span class="govuk-caption-l business-partner-individual-caption" id="business-partner-individual">@messages("fh.businessPartners.caption")</span>
-        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_utr.heading", "Test User")</span>
-    </h1><br>
-
-    <p class="govuk-body">
-        You can <a href="#" class="govuk-link">find a lost UTR.</a>
-    </p>
-
-    @formHelper(action = postAction){
-
-        @radios(
-            form = businessPartnersUtrForm,
-            id = "uniqueTaxpayerReference_yesNo",
-            items = radioItems
-        )
-
-        @button("button.save.continue")
-    }
-
-    @SaveForLater()
-
 }

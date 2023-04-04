@@ -15,16 +15,14 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
-
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.{hasNationalInsuranceNumberKey, nationalInsuranceNumberForm, nationalInsuranceNumberKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
-
 class BusinessPartnerNinoController @Inject()(
   radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
@@ -33,19 +31,11 @@ class BusinessPartnerNinoController @Inject()(
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-
   import actions._
-
   def onLoad(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val ninoForm = nationalInsuranceNumberForm
-      val items = radioHelper.conditionalYesNoRadio(
-        ninoForm,
-        hasKey = hasNationalInsuranceNumberKey,
-        legendContent = "fh.national_insurance_number.title",
-        inputKey = nationalInsuranceNumberKey,
-        hintText = "fh.partner.national_insurance_number.hintText"
-      )
+      val items = radioHelper.conditionalYesNoRadio(ninoForm)
       val postAction =
         Call(
           method = "POST",
@@ -55,18 +45,11 @@ class BusinessPartnerNinoController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
   def onSubmit(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       nationalInsuranceNumberForm.bindFromRequest.fold(
         formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(
-            formWithErrors,
-            hasKey = hasNationalInsuranceNumberKey,
-            legendContent = "fh.national_insurance_number.title",
-            inputKey = nationalInsuranceNumberKey,
-            hintText = "fh.partner.national_insurance_number.hintText"
-          )
+          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
           val postAction =
             Call(
               method = "POST",
@@ -74,12 +57,11 @@ class BusinessPartnerNinoController @Inject()(
           BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
         },
         nino => {
-          Ok(s"Form submitted, with result: ${nino.toString}")
+          Ok(s"Form submiteed, with result: ${nino.toString}")
         }
       )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
 }
