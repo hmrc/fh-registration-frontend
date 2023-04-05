@@ -18,7 +18,7 @@ class BusinessPartnersEnterAddressControllerSpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-partners-address")
+            val result = client.url(s"$baseUrl/form/business-partners/enter-partner-address")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
