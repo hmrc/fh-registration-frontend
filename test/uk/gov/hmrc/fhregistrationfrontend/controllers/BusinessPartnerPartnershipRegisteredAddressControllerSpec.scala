@@ -67,4 +67,39 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
       }
     }
   }
+
+  "next" when {
+    "the new business partner pages are enabled" should {
+      "return 200" when {
+        "the form has no errors, postcode is entered" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA"
+          reset(mockActions)
+        }
+      }
+
+      "Render the Not found page" when {
+        "the new business partner pages are disabled" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("Page not found")
+          reset(mockActions)
+        }
+      }
+    }
+  }
 }

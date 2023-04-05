@@ -49,4 +49,25 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
     }
   }
 
+  def next(): Action[AnyContent] = userAction { implicit request =>
+    if (config.newBusinessPartnerPagesEnabled) {
+      // Todo get this from cache later
+      val partnerName = "Test User"
+      businessPartnersAddressForm.bindFromRequest.fold(
+        formWithErrors => {
+          val postAction =
+            Call(
+              method = "POST",
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next().url)
+          BadRequest(view.business_partners_address(formWithErrors, postAction, partnerName))
+        },
+        bpAddress => {
+          Ok(s"Next page! with postcode: ${bpAddress.postcode}")
+        }
+      )
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
+  }
+
 }
