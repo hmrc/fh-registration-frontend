@@ -625,6 +625,9 @@ fh.businessPartner.vatNumber.label=VAT registration number
 fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
+fh.business.partners.find.address.button = Find UK address
+fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
+
 
 # - Business partners
 #============================================================
