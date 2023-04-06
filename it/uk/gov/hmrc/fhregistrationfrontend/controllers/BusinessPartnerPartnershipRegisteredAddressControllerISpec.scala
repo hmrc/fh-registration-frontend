@@ -51,7 +51,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ"
+            res.body mustBe "Next page! with postcode: AB1 2YZ and address line 1"
           }
         }
       }
@@ -71,7 +71,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ"
+            res.body mustBe "Next page! with postcode: AB1 2YZ and no address line"
           }
         }
       }
