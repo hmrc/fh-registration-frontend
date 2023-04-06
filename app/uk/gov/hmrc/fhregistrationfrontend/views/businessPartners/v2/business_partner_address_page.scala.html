@@ -85,7 +85,7 @@
             <a href="#" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
         </p>
 
-        @button("button.save.continue")
+        @viewHelpers.govukButton(Button(content = Text(messages("fh.business.partners.find.address.button")), inputType = Some("submit")))
     }
 
     @SaveForLater()
