@@ -66,7 +66,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
   }
 
   "next" when {
-    "the new business partner pages are enabled" should {
+    "the new business partner pages are enabled - postcode only" should {
       "return 200" when {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -77,6 +77,23 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
 
         status(result) shouldBe OK
         contentAsString(result) shouldBe "Next page! with form result: None, AB1 2YZ"
+        reset(mockActions)
+      }
+    }
+
+    "the new business partner pages are enabled - postcode and address line" should {
+      "return 200" when {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            ("businessPartnersAddressLine", "The Lane"),
+            ("businessPartnersAddressPostcode", "AB1 2YZ"))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe OK
+        contentAsString(result) shouldBe "Next page! with form result: Some(The Lane), AB1 2YZ"
         reset(mockActions)
       }
     }

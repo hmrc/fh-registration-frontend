@@ -42,7 +42,7 @@ class BusinessPartnerAddressController @Inject()(
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.load().url)
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next().url)
       Ok(view.business_partners_address(bpAddressForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

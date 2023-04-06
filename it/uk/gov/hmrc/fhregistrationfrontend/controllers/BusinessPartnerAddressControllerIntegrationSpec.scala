@@ -46,8 +46,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
           val result = client.url(s"$baseUrl/form/business-partners/partner-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-                      "partnerPostcode"    -> Seq("AB1 2YZ")))
+            .post(Map("businessPartnersAddressLine" -> Seq("1"),
+                      "businessPartnersAddressPostcode"    -> Seq("AB1 2YZ")))
 
           whenReady(result) { res =>
             res.status mustBe 200
@@ -65,8 +65,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
           val result = client.url(s"$baseUrl/form/business-partners/partner-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq.empty,
-                      "partnerPostcode"    -> Seq("AB1 2YZ")))
+            .post(Map("businessPartnersAddressLine" -> Seq.empty,
+                      "businessPartnersAddressPostcode"    -> Seq("AB1 2YZ")))
 
           whenReady(result) { res =>
             res.status mustBe 200
@@ -84,8 +84,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
           val result = client.url(s"$baseUrl/form/business-partners/partner-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-                      "partnerPostcode"    -> Seq.empty))
+            .post(Map("businessPartnersAddressLine" -> Seq("1"),
+                      "businessPartnersAddressPostcode"    -> Seq.empty))
 
           whenReady(result) { res =>
             res.status mustBe 400
@@ -103,8 +103,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
           val result = client.url(s"$baseUrl/form/business-partners/partner-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-                      "partnerPostcode"    -> Seq("A")))
+            .post(Map("businessPartnersAddressLine" -> Seq("1"),
+                      "businessPartnersAddressPostcode"    -> Seq("A")))
 
           whenReady(result) { res =>
             res.status mustBe 400

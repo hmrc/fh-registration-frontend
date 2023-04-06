@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 
 object BusinessPartnersAddressForm {
 
-  val addressLineKey = "businessPartnersAddressForm"
+  val addressLineKey = "businessPartnersAddressLine"
   val postcodeKey = "businessPartnersAddressPostcode"
 
   val addressLineMapping = addressLineKey -> optional(addressLine)
