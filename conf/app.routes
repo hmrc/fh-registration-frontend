@@ -28,15 +28,17 @@ GET         /subscription/status                                        @uk.gov.
 
 GET         /address-lookup                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
-GET         /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
-POST        /form/business-partners/choose-address                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
+GET         /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
+POST        /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
+
+GET         /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.load()
+POST        /form/business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUtrController.next()
+
 GET         /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
 POST        /form/business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
-GET         /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
-POST        /form/business-partners/partner-address                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
 
-GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onLoad()
-POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.onSubmit()
+GET         /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.load()
+POST        /form/business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerNinoController.next()
 
 GET         /form/business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /form/business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
@@ -45,6 +47,9 @@ GET         /form/business-partners/enter-partner-address              @uk.gov.h
 POST        /form/business-partners/enter-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerEnterAddressController.next()
 
 GET         /form/business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load()
+
+GET         /form/business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.load()
+POST        /form/business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.next()
 
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)

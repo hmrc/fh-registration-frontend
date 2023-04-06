@@ -24,11 +24,11 @@
         radios: components.radios,
         button: components.button,
         viewHelpers: ViewHelpers
-     )
+)
 
 @(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@layout(title = messages("fh.business_partners.title.v2"), backUrl = Some("#")){
+@layout(title = messages("fh.businessPartners.nino.title.v2"), backUrl = Some("#")){
 
     @if(partnerNinoForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
@@ -48,7 +48,7 @@
      @radios(
         form = partnerNinoForm,
         id = "nationalInsuranceNumber_yesNo",
-        legendContent = messages("fh.business.partners.nino.h1", "Test User"),
+        legendContent = messages("fh.businessPartners.nino.h1", "Test User"),
         optLegendCaption = Some(messages("fh.businessPartners.caption")),
         items = radioItems
      )

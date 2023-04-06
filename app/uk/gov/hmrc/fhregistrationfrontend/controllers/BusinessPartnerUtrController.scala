@@ -16,35 +16,33 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.google.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUtrForm.businessPartnerUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
-import javax.inject.Inject
-
-class BusinessPartnerNinoController @Inject()(
-  radioHelper: RadioHelper,
+@Singleton
+class BusinessPartnerUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val ninoForm = nationalInsuranceNumberForm
-      val items = radioHelper.conditionalYesNoRadio(ninoForm)
+      val form = businessPartnerUtrForm
+      //ToDo read this data from the cache after being stored before the redirect
+      val partnerName = "test partner"
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.load().url)
-      Ok(view.business_partner_nino(ninoForm, items, postAction))
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.load().url)
+      Ok(view.business_partners_utr(form, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -52,22 +50,26 @@ class BusinessPartnerNinoController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm.bindFromRequest.fold(
+      //ToDo read this data from the cache after being stored before the redirect
+      val partnerName = "test partner"
+      businessPartnerUtrForm.bindFromRequest.fold(
         formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
           val postAction =
             Call(
               method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-          BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
+          BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
         },
-        nino => {
-          Ok(s"Form submiteed, with result: ${nino.toString}")
+        businessPartnersUtr => {
+          businessPartnersUtr.value match {
+            case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
+            case None =>
+              Ok(s"Next page! with no UTR")
+          }
         }
       )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
 }
