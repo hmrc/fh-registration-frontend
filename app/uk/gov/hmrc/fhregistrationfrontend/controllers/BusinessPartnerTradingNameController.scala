@@ -16,17 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
 
-class BusinessPartnerNinoController @Inject()(
-  radioHelper: RadioHelper,
+class BusinessPartnerTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -38,13 +36,7 @@ class BusinessPartnerNinoController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val ninoForm = nationalInsuranceNumberForm
-      val items = radioHelper.conditionalYesNoRadio(ninoForm)
-      val postAction =
-        Call(
-          method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.load().url)
-      Ok(view.business_partner_nino(ninoForm, items, postAction))
+      Ok(view.business_partner_trading_name(tradingNameForm, "Test User"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -52,17 +44,12 @@ class BusinessPartnerNinoController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm.bindFromRequest.fold(
+      tradingNameForm.bindFromRequest.fold(
         formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-          BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
+          BadRequest(view.business_partner_trading_name(formWithErrors, "Test User"))
         },
-        nino => {
-          Ok(s"Form submiteed, with result: ${nino.toString}")
+        tradingName => {
+          Ok(s"Form submiteed, with result: $tradingName")
         }
       )
     } else {
