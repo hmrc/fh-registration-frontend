@@ -48,7 +48,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title should include("What is the partner’s address?")
-        page.body.text() should include("Example text")
+        page.body.text() should include("What is Test User’s registered office address?")
         reset(mockActions)
       }
     }
