@@ -68,31 +68,34 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
   "next" when {
     "the new business partner pages are enabled" should {
       "return 200" when {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"))
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        "the form has no errors, postcode is entered" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("What is the partner’s address?")
-        reset(mockActions)
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA and address line 44"
+          reset(mockActions)
+        }
       }
-    }
 
-    "Render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+      "Render the Not found page" when {
+        "the new business partner pages are disabled" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("Page not found")
+          reset(mockActions)
+        }
       }
     }
   }

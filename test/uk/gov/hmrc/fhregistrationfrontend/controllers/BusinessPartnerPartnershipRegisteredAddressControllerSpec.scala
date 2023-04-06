@@ -75,12 +75,12 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA"
+          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA and address line 44"
           reset(mockActions)
         }
       }
