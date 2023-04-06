@@ -62,7 +62,7 @@ class BusinessPartnerAddressController @Inject()(
           BadRequest(view.business_partners_address(formWithErrors, postAction, partnerName))
         },
         bpAddress => {
-          Ok(s"Next page! with form result: ${bpAddress.toString}")
+          Ok(s"Next page! with form result: ${bpAddress.addressLine.toString}, ${bpAddress.postcode.toString}")
         }
       )
     } else {

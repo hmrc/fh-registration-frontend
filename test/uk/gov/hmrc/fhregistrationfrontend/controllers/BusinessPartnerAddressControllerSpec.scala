@@ -71,12 +71,12 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-          .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"))
-        val result = await(csrfAddToken(controller.load())(request))
+          .withFormUrlEncodedBody(("businessPartnersAddressPostcode", "AB1 2YZ"))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("What is the partner’s address?")
+        contentAsString(result) shouldBe "Next page! with form result: None, AB1 2YZ"
         reset(mockActions)
       }
     }
@@ -86,7 +86,9 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+          .withFormUrlEncodedBody(("businessPartnersAddressPostcode", "AB1 2YZ"))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

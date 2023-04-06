@@ -733,6 +733,8 @@ fh.businessPartnerPartnership.partnerAddress.Line3.error.pattern=Address lines m
 fh.businessPartnerPartnership.partnerAddress.Line4.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 fh.businessPartnerPartnership.partnerAddress.postcode.error.required=Enter the postcode of the address
 fh.businessPartnerPartnership.partnerAddress.postcode.error.pattern=Enter a valid postcode
+fh.businessPartnersAddressPostcode.error.required=Enter the postcode of the address
+fh.businessPartnersAddressPostcode.error.pattern=Enter a valid postcode
 
 fh.business_partners.liability_partnership.name.label=Limited liability partnership name
 fh.businessPartnerLimitedLiabilityPartnership.limitedLiabilityPartnershipName.error.required=Enter limited liability partnership name
