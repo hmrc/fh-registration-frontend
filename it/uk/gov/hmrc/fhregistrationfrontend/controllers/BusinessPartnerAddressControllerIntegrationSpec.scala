@@ -51,6 +51,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 200
+            res.body mustBe "Next page! with postcode: AB1 2YZ and address line 1"
           }
         }
       }
@@ -70,6 +71,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 200
+            res.body mustBe "Next page! with postcode: AB1 2YZ and no address line"
           }
         }
       }
@@ -89,6 +91,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("Enter the postcode of the address")
           }
         }
       }
@@ -108,6 +112,8 @@ class BusinessPartnerAddressControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid postcode")
           }
         }
       }
