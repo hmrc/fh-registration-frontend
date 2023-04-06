@@ -29,7 +29,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -62,13 +62,13 @@
         ))
     }
 
-    @formHelper(action = postAction){
+    @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController.next()){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),
             hintText = Some(messages("fh.business_partners_address.hint")),
             inputKey = addressLineKey,
-            id = "businessPartnersAddressForm",
+            id = "partnerAddressLine",
             optLegendCaption = Some(messages("fh.business_partners_address.title")),
             classes = "govuk-!-width-two-thirds"
         )
@@ -76,7 +76,7 @@
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.postcode.caption"),
             inputKey = postcodeKey,
-            id = "businessPartnersAddressPostcode",
+            id = "partnerPostcode",
             optLegendCaption = Some(messages("fh.business.partners.caption")),
             classes = "govuk-!-width-one-third"
         )
