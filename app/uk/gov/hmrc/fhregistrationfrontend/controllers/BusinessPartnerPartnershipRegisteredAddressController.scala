@@ -58,8 +58,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
           val postAction =
             Call(
               method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next().url)
-          BadRequest(view.business_partners_address(formWithErrors, postAction, partnerName))
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController.next().url)
+          BadRequest(view.business_partner_partnership_registered_address(formWithErrors, postAction, partnerName))
         },
         bpAddress => {
           Ok(s"Next page! with postcode: ${bpAddress.postcode}")
