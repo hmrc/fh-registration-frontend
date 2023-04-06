@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
-
 @this(govukRadios: GovukRadios)
 
 @(
@@ -35,7 +34,7 @@
 @legend = {
     <h1 class="govuk-fieldset__heading">
         @optLegendCaption.map{ caption =>
-            <span class="govuk-caption-l business-partner-individual-nino-caption" id="business-partner-individual-nino">@caption</span>
+        <span class="govuk-caption-l business-partner-individual-nino-caption" id="business-partner-individual-nino">@caption</span>
         }
         <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@legendContent</span>
     </h1>

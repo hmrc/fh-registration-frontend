@@ -23,7 +23,6 @@ import uk.gov.hmrc.fhregistrationfrontend.utils.ViewUtils
 import uk.gov.hmrc.fhregistrationfrontend.views.html.components.text_input
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-
 import javax.inject.Inject
 
 class RadioHelper @Inject()(input: text_input) extends ViewUtils {
@@ -53,5 +52,4 @@ class RadioHelper @Inject()(input: text_input) extends ViewUtils {
         checked = form(hasNationalInsuranceNumberKey).value.contains("false")
       )
     )
-
 }
