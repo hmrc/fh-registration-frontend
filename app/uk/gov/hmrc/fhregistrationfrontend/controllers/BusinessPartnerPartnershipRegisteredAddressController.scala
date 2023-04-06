@@ -53,7 +53,11 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
           BadRequest(view.business_partner_partnership_registered_address(formWithErrors, partnerName))
         },
         bpAddress => {
-          Ok(s"Next page! with postcode: ${bpAddress.postcode}")
+          val addressLineMsg = bpAddress.addressLine match {
+            case Some(addressLine) => s"address line $addressLine"
+            case _                 => "no address line"
+          }
+          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
         }
       )
     } else {

@@ -34,35 +34,31 @@ class BusinessPartnerAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  def load(): Action[AnyContent] = Action { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       val bpAddressForm = businessPartnersAddressForm
-      val postAction =
-        Call(
-          method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.load().url)
-      Ok(view.business_partners_address(bpAddressForm, postAction, partnerName))
+      Ok(view.business_partners_address(bpAddressForm, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+  def next(): Action[AnyContent] = Action { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next().url)
-          BadRequest(view.business_partners_address(formWithErrors, postAction, partnerName))
+          BadRequest(view.business_partners_address(formWithErrors, partnerName))
         },
         bpAddress => {
-          Ok(s"Next page! with form result: ${bpAddress.toString}")
+          val addressLineMsg = bpAddress.addressLine match {
+            case Some(addressLine) => s"address line $addressLine"
+            case _                 => "no address line"
+          }
+          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
         }
       )
     } else {
