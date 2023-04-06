@@ -25,20 +25,17 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object BusinessPartnersEnterAddressForm {
 
-  val enterAddressKey = "enteredAddress"
+  val enterAddressKey = "enterAddress"
 
   def postcode: Mapping[String] =
     nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$".r))
 
-  val enterAddressMapping: Mapping[Address] = mapping(
-    "Line1"       -> addressLine,
-    "Line2"       -> optional(addressLine),
-    "Line3"       -> optional(addressLine),
-    "Line4"       -> optional(addressLine),
-    "postcode"    -> postcode,
-    "countryCode" -> optional(nonEmptyText),
-    "lookupId"    -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
-  )(Address.apply)(Address.unapply)
+  val enterAddressMapping: Mapping[BusinessPartnersAddress] = mapping(
+    s"$enterAddressKey.line1"    -> addressLine,
+    s"$enterAddressKey.line2"    -> optional(addressLine),
+    s"$enterAddressKey.line3"    -> addressLine,
+    s"$enterAddressKey.postcode" -> optional(postcode)
+  )(BusinessPartnersAddress.apply)(BusinessPartnersAddress.unapply)
 
   val chooseAddressForm = Form(enterAddressMapping)
 
