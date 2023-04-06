@@ -625,6 +625,9 @@ fh.businessPartner.vatNumber.label=VAT registration number
 fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
+fh.business.partners.find.address.button = Find UK address
+fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
+
 fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.business_partners_utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called `reference`, `UTR` or `official use`.

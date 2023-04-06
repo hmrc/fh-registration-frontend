@@ -114,4 +114,4 @@ GET         /admin-page/group-info/:groupId                             @uk.gov.
 GET         /admin-page/get-status/:regNo                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
 
 GET         /admin-page/es2/:userId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
-GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
+GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)
