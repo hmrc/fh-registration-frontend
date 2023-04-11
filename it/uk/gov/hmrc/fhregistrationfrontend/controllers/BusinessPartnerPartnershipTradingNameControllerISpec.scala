@@ -11,7 +11,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
   "GET /form/business-partners/partnership-trading-name" when {
 
-    "render the business partner trading name page" when {
+    "render the business partner partnership trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
@@ -31,9 +31,9 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
   }
 
-  "POST /form/business-partners/partner-trading-name" when {
+  "POST /form/business-partners/partnership-trading-name" when {
 
-    "form with no errors" should {
+    "the user selects yes and enters a trading name" should {
       "return 200" when {
         "the user is authenticated" in {
           given.commonPrecondition
@@ -44,12 +44,12 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
                 "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("new trading name")
+                "tradingName_value" -> Seq("Shelby Company Limited")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(new trading name))")
+              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
             }
           }
         }
