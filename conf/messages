@@ -635,7 +635,7 @@ fh.businessPartners.nino.title.v2= Does the partner have a National Insurance nu
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
 fh.businessPartners.tradingName.title = Does the partner’s business use a trading name that is different from its registered name?
 fh.businessPartners.tradingName.heading = Does {0}’s business use a trading name that is different from its registered name?
-fh.businessPartners.partnership.tradingName.title = Stand in title
+fh.businessPartners.partnership.tradingName.title = Does the partnership use a trading name that is different from its registered name?
 fh.businessPartners.partnership.tradingName.heading = Does {0} use a trading name that is different from its registered name ?
 
 # - Business partners

@@ -32,7 +32,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
   override lazy val views = app.injector.instanceOf[Views]
   lazy val mockAppConfig = mock[FrontendAppConfig]
 
-  val pageTitle = "Stand in title"
+  val pageTitle = "Does the partnership use a trading name that is different from its registered name?"
 
   val controller =
     new BusinessPartnerPartnershipTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
