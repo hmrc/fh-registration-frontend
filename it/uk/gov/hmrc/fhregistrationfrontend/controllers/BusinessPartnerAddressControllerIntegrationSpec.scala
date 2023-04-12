@@ -26,7 +26,6 @@ class BusinessPartnerAddressControllerIntegrationSpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("What is the partner’s address?")
-              page.getElementById("page-heading").text() must include("What is Test User’s address?")
             }
           }
         }
@@ -114,6 +113,48 @@ class BusinessPartnerAddressControllerIntegrationSpec
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid postcode")
+          }
+        }
+      }
+    }
+
+    "address line contains invalid characters" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partner-address")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+            .post(Map("partnerAddressLine" -> Seq("The lane;"),
+              "partnerPostcode" -> Seq("AB1 2YZ")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces")
+          }
+        }
+      }
+    }
+
+    "address line contains more than 35 characters" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/partner-address")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+            .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
+              "partnerPostcode" -> Seq("AB1 2YZ")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("Address lines must not be longer than 35 characters")
           }
         }
       }

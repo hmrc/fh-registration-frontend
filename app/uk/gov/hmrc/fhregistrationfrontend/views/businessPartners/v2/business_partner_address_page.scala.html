@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
+@import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.BusinessPartnersHeader
 
 @this(layout: layout,
         viewHelpers: ViewHelpers,
@@ -42,20 +43,14 @@
 
 @layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
 
-    <h1 class="govuk-fieldset__heading">
-        <span class="govuk-caption-l business-partner-individual-address-caption" id="business-partner-address">@messages("fh.business.partners.caption")</span>
-        <span class="govuk-heading-l govuk-!-margin-bottom-0" id="page-heading">@messages("fh.business_partners_address.heading", partnerName)</span>
-    </h1>
-    </br>
+    @BusinessPartnersHeader(messages("fh.business.partners.partnership.registered.address.heading", partnerName))
 
     @if(businessPartnersAddressForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
                 href = Some(s"#${businessPartnersAddressForm.errors.head.key}"),
                 content = Text(messages(
-                    s"fh.${
-                        if(businessPartnersAddressForm.errors.head.key == "addressLineKey") "partner." + businessPartnersAddressForm.errors.head.key else businessPartnersAddressForm.errors.head.key
-                    }.${businessPartnersAddressForm.errors.head.message}"
+                    s"fh.${businessPartnersAddressForm.errors.head.key}.${businessPartnersAddressForm.errors.head.message}"
                 ))
             )),
             title = Text(messages("fh.generic.error"))
