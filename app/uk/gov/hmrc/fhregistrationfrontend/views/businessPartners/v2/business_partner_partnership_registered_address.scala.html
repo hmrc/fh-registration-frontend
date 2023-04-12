@@ -43,7 +43,7 @@
 
 @layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
 
-    @BusinessPartnersHeader(messages("fh.business.partners.partnership.registered.address.heading", partnerName))
+    @Html(BusinessPartnersHeader(messages("fh.business.partners.partnership.registered.address.heading", partnerName)))
 
     @if(businessPartnersAddressForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
