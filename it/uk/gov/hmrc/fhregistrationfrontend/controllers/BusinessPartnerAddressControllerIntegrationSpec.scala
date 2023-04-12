@@ -26,6 +26,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("What is the partner’s address?")
+              page.getElementsByTag("h1").text() must include("What is Test User’s registered office address?")
             }
           }
         }
