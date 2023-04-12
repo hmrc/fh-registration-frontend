@@ -33,7 +33,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-  def load(): Action[AnyContent] = Action { implicit request =>
+  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
@@ -44,7 +44,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = Action { implicit request =>
+  def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
