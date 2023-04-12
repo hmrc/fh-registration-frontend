@@ -21,27 +21,22 @@ import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
-import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnerTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
   override lazy val views = app.injector.instanceOf[Views]
-  lazy val radioHelper = app.injector.instanceOf[RadioHelper]
   lazy val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnerNinoController(radioHelper, commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnerTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
-    "Render the business partner nino page" when {
+    "Render the business partner trading name page" when {
       "The business partner v2 pages are enabled" in {
         setupUserAction()
 
@@ -51,7 +46,8 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Does the partner have a National Insurance number?")
+        page.title should include(
+          "Does the partner’s business use a trading name that is different from its registered name?")
         reset(mockActions)
       }
     }
@@ -79,8 +75,8 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(
-            "nationalInsuranceNumber_yesNo" -> "true",
-            "nationalInsuranceNumber_value" -> "QQ123456C"
+            "tradingName_yesNo" -> "true",
+            "tradingName_value" -> "Blue Peter"
           )
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
@@ -95,8 +91,8 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(
-            "nationalInsuranceNumber_yesNo" -> "",
-            "nationalInsuranceNumber_value" -> ""
+            "tradingName_yesNo" -> "",
+            "tradingName_value" -> ""
           )
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))

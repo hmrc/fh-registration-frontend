@@ -19,14 +19,12 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
 
-class BusinessPartnerNinoController @Inject()(
-  radioHelper: RadioHelper,
+class BusinessPartnerEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,16 +33,16 @@ class BusinessPartnerNinoController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val ninoForm = nationalInsuranceNumberForm
-      val items = radioHelper.conditionalYesNoRadio(ninoForm)
+      // Todo get this from cache later
+      val partnerName = "Test User"
+      val bpAddressForm = chooseAddressForm
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.load().url)
-      Ok(view.business_partner_nino(ninoForm, items, postAction))
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.load().url)
+      Ok(view.business_partner_enter_address(bpAddressForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -52,17 +50,19 @@ class BusinessPartnerNinoController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm.bindFromRequest.fold(
+      // Todo get this from cache later
+      val partnerName = "Test User"
+      chooseAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
           val postAction =
             Call(
               method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-          BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
+              url =
+                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.next().url)
+          BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName))
         },
-        nino => {
-          Ok(s"Form submiteed, with result: ${nino.toString}")
+        bpAddress => {
+          Ok(s"Next page! with form result: ${bpAddress.toString}")
         }
       )
     } else {

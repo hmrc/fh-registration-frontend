@@ -30,6 +30,7 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 # Generic messages
 fh.generic.error=There is a problem
 fh.generic.errorPrefix=Error:
+fh.generic.errorPrefix.noColon=Error
 
 fh.generic.not_found=Page not found
 fh.generic.not_found.label=This page can’t be found
@@ -636,6 +637,24 @@ fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Uni
 fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
 fh.business.partners.find.address.button = Find UK address
 fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
+
+fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
+fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
+fh.businessPartners.tradingName.title = Does the partner’s business use a trading name that is different from its registered name?
+fh.businessPartners.tradingName.heading = Does {0}’s business use a trading name that is different from its registered name?
+
+fh.business.partners.enterAddress.title = Enter the partner’s address?
+fh.business.partners.enterAddress.h1 = Enter {0}’s address
+fh.business.partners.enterAddress.line1.label = Address line 1
+fh.business.partners.enterAddress.line1.error.required = You must enter line 1 of the address
+fh.business.partners.enterAddress.line1.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+fh.business.partners.enterAddress.line2.label = Address line 2 (optional)
+fh.business.partners.enterAddress.line2.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+fh.business.partners.enterAddress.line3.label = Town or City
+fh.business.partners.enterAddress.line3.error.required = You must enter the Town or City of the address
+fh.business.partners.enterAddress.line3.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+fh.business.partners.enterAddress.postcode.label = Postcode (optional)
+fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcode
 
 # - Business partners
 #============================================================

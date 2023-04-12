@@ -28,8 +28,8 @@ object BusinessPartnersHeader {
 
   def apply(title: String)(implicit messages: Messages) =
     s"""<header>
-      <h1 class="govuk-heading-xl">
-        <span class="govuk-caption-xl hmrc-caption-xl">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l hmrc-caption-l">
           <span class="govuk-visually-hidden">${messages("fh.businessPartners.screen-reader.section")}</span>
           ${messages("fh.businessPartners.caption")}</span>
         $title
