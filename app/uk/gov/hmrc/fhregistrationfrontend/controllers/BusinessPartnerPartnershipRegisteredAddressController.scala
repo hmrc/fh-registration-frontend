@@ -16,16 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
+import play.api.mvc._
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Rendering
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerAddressController @Inject()(
+class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -34,24 +33,24 @@ class BusinessPartnerAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-  def load(): Action[AnyContent] = Action { implicit request =>
+  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       val bpAddressForm = businessPartnersAddressForm
-      Ok(view.business_partners_address(bpAddressForm, partnerName))
+      Ok(view.business_partner_partnership_registered_address(bpAddressForm, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def next(): Action[AnyContent] = Action { implicit request =>
+  def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partners_address(formWithErrors, partnerName))
+          BadRequest(view.business_partner_partnership_registered_address(formWithErrors, partnerName))
         },
         bpAddress => {
           val addressLineMsg = bpAddress.addressLine match {

@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -33,7 +33,9 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
 
   val mockAppConfig = mock[FrontendAppConfig]
 
-  val controller = new BusinessPartnerAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val controller =
+    new BusinessPartnerPartnershipRegisteredAddressController(commonDependencies, views, mockActions, mockAppConfig)(
+      mockMcc)
 
   "load" should {
     "Render the business partner address page" when {
@@ -46,6 +48,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title should include("What is the partner’s address?")
+        page.body.text() should include("What is Test User’s registered office address?")
         reset(mockActions)
       }
     }

@@ -38,7 +38,7 @@
 }
 
 @titlePrefix = @{
-    if (businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+    if(businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
@@ -57,7 +57,7 @@
         ))
     }
 
-    @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerAddressController.next()){
+    @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController.next()){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),
@@ -82,5 +82,4 @@
     }
 
     @SaveForLater()
-
 }
