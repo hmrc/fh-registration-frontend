@@ -636,6 +636,8 @@ fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It
 fh.uniqueTaxpayerReference_yesNo.error.required=Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
+fh.businessPartners.partnership.tradingName.title = Does the partnership use a trading name that is different from its registered name?
+fh.businessPartners.partnership.tradingName.heading = Does {0} use a trading name that is different from its registered name ?
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
