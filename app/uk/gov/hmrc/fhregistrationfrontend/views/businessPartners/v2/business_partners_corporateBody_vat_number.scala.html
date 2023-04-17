@@ -36,11 +36,11 @@
 }
 
 @title = @{
-    Messages("fh.businessPartner.corporateBody.vatNumber.title")
+    messages("fh.businessPartner.corporateBody.vatNumber.title")
 }
 
 @heading = @{
-    Messages("fh.businessPartner.corporateBody.vatNumber.heading", corporateBody)
+    messages("fh.businessPartner.corporateBody.vatNumber.heading", corporateBody)
 }
 
 @conditionalHtml = @{
@@ -70,7 +70,7 @@
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyVatNumberController.next) {
 
         @if(vatNumberForm.errors.nonEmpty) {
 
@@ -106,15 +106,12 @@
                 RadioItem(
                     content = Text("No"),
                     value = Some("false"),
-                    checked = vatNumberForm.data.values.toList.contains("false"),
-
-
+                    checked = vatNumberForm.data.values.toList.contains("false")
                 )
             )
         ))
 
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
         @SaveForLater()
-
     }
 }
