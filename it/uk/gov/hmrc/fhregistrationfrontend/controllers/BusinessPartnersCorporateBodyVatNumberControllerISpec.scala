@@ -29,7 +29,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
     }
   }
 
-  "POST /form/business-partners/partnership-vat-registration-number" when {
+  "POST /form/business-partners/corporate-body-vat-registration-number" when {
     "yes is selected and the vatnumber entered" should {
       "return 200 with vatnumber" in {
         given
