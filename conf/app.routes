@@ -62,12 +62,9 @@ POST        /form/business-partners/partnership-vat-registration-number         
 
 GET         /form/business-partners/confirm-partnership-registered-office-address  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load()
 
-<<<<<<< HEAD
 GET         /form/business-partners/corporate-body-vat-registration-number        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.load()
 POST        /form/business-partners/corporate-body-vat-registration-number          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.next()
 
-=======
->>>>>>> 9e7de29a33c4f384adae5692fec7f2bde98647b2
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
