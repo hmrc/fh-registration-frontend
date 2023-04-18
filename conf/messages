@@ -646,6 +646,9 @@ fh.businessPartners.tradingName.heading = Does {0}’s business use a trading na
 
 fh.business.partners.enterAddress.title = Enter the partner’s address?
 fh.business.partners.enterAddress.h1 = Enter {0}’s address
+fh.business.partners.enterRegisteredOfficeAddress.title = Enter the partnership’s registered office address?
+fh.business.partners.enterRegisteredOfficeAddress.h1 = Enter {0}’s registered office address?
+
 fh.business.partners.enterAddress.line1.label = Address line 1
 fh.business.partners.enterAddress.line1.error.required = You must enter line 1 of the address
 fh.business.partners.enterAddress.line1.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
