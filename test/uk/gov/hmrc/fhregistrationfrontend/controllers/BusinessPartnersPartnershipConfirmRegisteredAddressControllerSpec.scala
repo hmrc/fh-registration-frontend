@@ -51,7 +51,8 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Confirm the partnership’s address")
+        page.title() should include(
+          "Confirm the partnership’s registered office address? - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
         // should be mocked out when Save4Later changes included
         page.body.text should include("Confirm the company’s registered office address")
         page.body.text should include("1 Romford Road")
