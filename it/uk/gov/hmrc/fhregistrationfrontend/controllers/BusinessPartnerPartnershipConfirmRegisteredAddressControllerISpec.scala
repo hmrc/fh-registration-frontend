@@ -25,7 +25,7 @@ class BusinessPartnerPartnershipConfirmRegisteredAddressControllerISpec
             whenReady(result) { res =>
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
-              page.title() must include("Confirm the partnership’s address")
+              page.title() must include("Confirm the partnership’s registered office address?")
               page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
             }
           }
