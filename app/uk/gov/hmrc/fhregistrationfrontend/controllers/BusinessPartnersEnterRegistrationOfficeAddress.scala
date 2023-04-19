@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerEnterAddressController @Inject()(
+class BusinessPartnersEnterRegistrationOfficeAddress @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -38,11 +38,11 @@ class BusinessPartnerEnterAddressController @Inject()(
       // Todo get this from cache later
       val partnerName = "Test User"
       val bpAddressForm = chooseAddressForm
-      val journeyType = "enterAddress"
+      val journeyType = "enterRegisteredOfficeAddress"
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersEnterRegistrationOfficeAddress
             .load()
             .url)
       Ok(view.business_partner_enter_address(bpAddressForm, postAction, partnerName, journeyType))
@@ -53,16 +53,17 @@ class BusinessPartnerEnterAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache lat`er
+      // Todo get this from cache later
       val partnerName = "Test User"
-      val journeyType = "enterAddress"
+      val journeyType = "enterRegisteredOfficeAddress"
       chooseAddressForm.bindFromRequest.fold(
         formWithErrors => {
           val postAction =
             Call(
               method = "POST",
-              url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.next().url)
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersEnterRegistrationOfficeAddress
+                .next()
+                .url)
           BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName, journeyType))
         },
         bpAddress => {
@@ -73,4 +74,5 @@ class BusinessPartnerEnterAddressController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
+
 }
