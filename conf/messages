@@ -662,6 +662,9 @@ fh.business.partners.enterAddress.line3.error.pattern = Address lines must not b
 fh.business.partners.enterAddress.postcode.label = Postcode (optional)
 fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcode
 
+fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
+fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
