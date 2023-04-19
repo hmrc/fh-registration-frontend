@@ -54,7 +54,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         page.title() should include(
           "Confirm the partnership’s registered office address? - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
         // should be mocked out when Save4Later changes included
-        page.body.text should include("Confirm the company’s registered office address")
+        page.body.text should include("Confirm the company’s registered office address?")
         page.body.text should include("1 Romford Road")
         page.getElementById("confirm-edit").attr("href") should include("#")
         reset(mockActions)
