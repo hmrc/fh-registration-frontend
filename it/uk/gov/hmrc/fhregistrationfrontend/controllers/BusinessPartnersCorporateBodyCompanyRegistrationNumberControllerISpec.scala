@@ -48,6 +48,24 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           }
         }
       }
+
+      "return 200 with letter formatted companyRegistrationNumber" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("companyRegistrationNumber" -> Seq("AB123456")))
+
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body mustBe "Next page! with companyRegistrationNumber: AB123456"
+          }
+        }
+      }
     }
 
     "companyRegistrationNumber is not supplied" should {
