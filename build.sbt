@@ -14,7 +14,7 @@ val playVersion = "play-28"
 val compile = Seq(
   ws,
   "uk.gov.hmrc"                 %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"3.34.0-$playVersion",
+  "uk.gov.hmrc"                 %% "play-frontend-hmrc"               % s"4.0.0-$playVersion",
   "uk.gov.hmrc"                 %% "govuk-template"                   % "5.78.0-play-28",
   "uk.gov.hmrc"                 %% "play-ui"                          % "9.11.0-play-28",
   "uk.gov.hmrc"                 %% "play-partials"                    % "8.3.0-play-28",
