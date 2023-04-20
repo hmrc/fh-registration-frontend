@@ -665,6 +665,15 @@ fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcod
 fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
 fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
 
+fh.businessPartners.corporateBody.companyRegistrationNumber.title=What is the company’s company registration number?
+fh.businessPartners.corporateBody.companyRegistrationNumber.h1=What is {0}’s company registration number?
+fh.businessPartners.corporateBody.companyRegistrationNumber.text.p1=You can
+fh.businessPartners.corporateBody.companyRegistrationNumber.text.p2=search Companies House for a company registration number (opens in new tab)
+fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For example, 01234567
+fh.businessPartners.companyRegistrationNumber.error.required=Enter the company registration number
+fh.businessPartners.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
+
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners
