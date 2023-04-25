@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
-@import views.html.helper.CSPNonce
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
@@ -53,6 +52,5 @@
     displayHmrcBanner = true,
     additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)),
     additionalScriptsBlock = pageScripts,
-    // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl)),
-    nonce = CSPNonce.get,
+    // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
 )(content)
