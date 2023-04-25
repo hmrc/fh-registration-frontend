@@ -9,10 +9,12 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
+
 import scala.jdk.CollectionConverters._
 
 trait TestConfiguration
@@ -64,7 +66,8 @@ trait TestConfiguration
       "fhdds",
       "business-customer-frontend",
       "cachable.short-lived-cache",
-      "cachable.session-cache"
+      "cachable.session-cache",
+      "address-lookup"
     )))
     .build()
         app.injector.instanceOf[HealthController]
@@ -89,6 +92,9 @@ trait TestConfiguration
 
   val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 
+  lazy val ws: WSClient = app.injector.instanceOf[WSClient]
+
+
   override def beforeAll() = {
     wireMockServer.stop()
     wireMockServer.start()
@@ -111,5 +117,11 @@ trait TestConfiguration
       .map(_.getRequest).map(r => s"${r.getLoggedDate.toInstant.toEpochMilli}\t${r.getMethod}\t${r.getUrl}")
       .foreach(println)
     println("===== END =====")
+  }
+
+  def buildRequest(path: String,
+                   followRedirects: Boolean = false): WSRequest = {
+    ws.url(s"$baseUrl$path")
+      .withFollowRedirects(followRedirects)
   }
 }

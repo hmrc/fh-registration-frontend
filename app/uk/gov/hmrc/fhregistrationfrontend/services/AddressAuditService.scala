@@ -21,17 +21,21 @@ import com.google.inject.ImplementedBy
 import org.apache.commons.lang3.StringUtils
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.AddressRecord
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.audit.AuditExtensions.auditHeaderCarrier
+
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.Logging
 
 @ImplementedBy(classOf[DefaultAddressAuditService])
 trait AddressAuditService extends Logging {
   def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any]
+
+  def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(
+    implicit headerCarrier: HeaderCarrier): Future[Any]
 }
 
 object AddressAuditService {
@@ -56,19 +60,30 @@ class DefaultAddressAuditService @Inject()(
       logger info s"Auditing ${addresses.size} addresses for $page"
     val auditResults = addresses map { address =>
       addressAuditData(address)
-        .flatMap(sendAuditEvent(page, _))
+        .flatMap(sendAuditEvent(s"/fhdds/form/$page", _))
         .recover({ case t => AuditResult.Failure("failed to generate the event", Some(t)) })
     }
 
     Future sequence auditResults
   }
 
-  private def sendAuditEvent(page: String, addressAuditData: AddressAuditData)(
+  override def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(
+    implicit headerCarrier: HeaderCarrier): Future[Any] = {
+    val auditResults = recordSet.addresses.map { addressRecord =>
+      val address = addressRecordToAddress(addressRecord)
+      postcodeAddress(addressRecord.id, address)
+        .flatMap(sendAuditEvent(path, _))
+        .recover({ case t => AuditResult.Failure("failed to generate the event", Some(t)) })
+    }
+    Future sequence auditResults
+  }
+
+  private def sendAuditEvent(path: String, addressAuditData: AddressAuditData)(
     implicit headerCarrier: HeaderCarrier) = {
     val event = DataEvent(
       AddressAuditService.AuditSource,
       addressAuditData.auditType,
-      tags = headerCarrier.toAuditTags("fh-registration", s"/fhdds/form/$page"),
+      tags = headerCarrier.toAuditTags("fh-registration", path),
       detail = headerCarrier.toAuditDetails(addressAuditData.details: _*)
     )
     logger.info(s"Submitting event with id ${event.eventId}")
@@ -139,4 +154,5 @@ class DefaultAddressAuditService @Inject()(
       Some(addressRecord.address.country.code),
       Some(addressRecord.id)
     )
+
 }

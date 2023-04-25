@@ -16,25 +16,30 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
+import play.api.data.FormError
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Rendering
+import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
+import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnerAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  addressService: AddressService)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit ec: ExecutionContext)
+    extends AppController(ds, cc) {
 
   import actions._
-  def load(): Action[AnyContent] = Action { implicit request =>
+  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
@@ -45,24 +50,38 @@ class BusinessPartnerAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = Action { implicit request =>
+  def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partners_address(formWithErrors, partnerName))
+          Future.successful(
+            BadRequest(view.business_partners_address(formWithErrors, partnerName))
+          )
         },
         bpAddress => {
-          val addressLineMsg = bpAddress.addressLine match {
-            case Some(addressLine) => s"address line $addressLine"
-            case _                 => "no address line"
-          }
-          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
+          addressService
+            .addressLookup(
+              routes.BusinessPartnerAddressController.load().path(),
+              bpAddress.postcode,
+              bpAddress.addressLine
+            )
+            .map {
+              case Right(addressListMap) =>
+                //ToDo store the addressListMap in save4Later
+                Redirect(routes.BusinessPartnersChooseAddressController.load())
+              case Left(AddressLookupErrorResponse(_)) =>
+                val formWithErrors = businessPartnersAddressForm
+                  .fill(bpAddress)
+                  .withError(FormError(postcodeKey, "address.lookup.error"))
+                BadRequest(view.business_partners_address(formWithErrors, partnerName))
+              case _ => errorHandler.errorResultsPages(Results.InternalServerError)
+            }
         }
       )
     } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
