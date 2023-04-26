@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
 
 @this(
         hmrcLayout: HmrcLayout,
@@ -34,7 +35,7 @@
 )
 
 
-@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
+@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None, isBrowserBackMimic: Boolean = false)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 
 @content = {
     @contentBlock
@@ -49,6 +50,7 @@
     // serviceUrl = Some(routes.IndexController.index().url),
     signOutUrl = Some(routes.SignOutController.signout.url),
     backLinkUrl = backUrl,
+    backLink = if(isBrowserBackMimic) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else None,
     displayHmrcBanner = true,
     additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)),
     additionalScriptsBlock = pageScripts,

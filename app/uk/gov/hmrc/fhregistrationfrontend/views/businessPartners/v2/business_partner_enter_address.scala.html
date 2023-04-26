@@ -33,7 +33,7 @@ button: components.button
 @fieldName = @{s"enterAddress"}
 
 
-@layout(title = messages(s"fh.business.partners.${journeyType}.title"), backUrl = Some("#")){
+@layout(title = messages(s"fh.business.partners.${journeyType}.title"), backUrl = None, isBrowserBackMimic = true){
 
 
 @if(form.errors.nonEmpty) {

@@ -92,6 +92,8 @@ fh.address.country.error = Enter a country and select from the list
 fh.address.other.error = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 fh.address.empty.error = What is the address?
 
+fh.partnerPostcode.address.lookup.error = Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually
+
 # Buttons & links
 fh.generic.save_continue=Save and continue
 fh.generic.continue=Continue
@@ -630,6 +632,7 @@ fh.business_partners.title.v2= Does the partner have a National Insurance number
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 fh.business.partners.find.address.button = Find UK address
 fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
+fh.business_partners_address.heading=What is {0}’s address?
 fh.partnerAddressLine.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 
 fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?

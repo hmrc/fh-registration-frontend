@@ -10,4 +10,6 @@ class PreconditionBuilder extends PreconditionHelpers {
   def save4later = Save4LaterStub()
   def keyStore = KeyStoreStub()
 
+  def addressLookup = AddressLookupStub()
+
 }
