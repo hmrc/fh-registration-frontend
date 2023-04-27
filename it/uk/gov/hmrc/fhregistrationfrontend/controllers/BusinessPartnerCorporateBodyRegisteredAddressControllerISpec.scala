@@ -14,7 +14,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
 
     "the new business partners flow is enabled" should {
 
-      "render the business partner address page" when {
+      "render the business partner corporate body registered address page" when {
         "the user is authenticated" in {
           given
             .commonPrecondition
@@ -46,12 +46,12 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
           val result = client.url(s"$baseUrl$requestURL")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
+            .post(Map("partnerAddressLine" -> Seq("Drury Lane"),
               "partnerPostcode" -> Seq("AB1 2YZ")))
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ and address line 1"
+            res.body mustBe "Next page! with postcode: AB1 2YZ and address line Drury Lane"
           }
         }
       }
