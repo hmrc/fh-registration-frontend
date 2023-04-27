@@ -4,6 +4,8 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
+import scala.collection.immutable.Seq
 
 class BusinessPartnerNinoControllerIntegrationSpec
   extends Specifications with TestConfiguration {
@@ -33,48 +35,65 @@ class BusinessPartnerNinoControllerIntegrationSpec
   }
 
   "POST /form/business-partners/partner-national-insurance-number" when {
-
-    "form with no errors" should {
-      "return 200" when {
-        "the user is authenticated" in {
+    "the Yes radio button is selected and a valid NINO is provided (for Individual)" should {
+      "redirect to the VAT number page" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partner-national-insurance-number")
+          val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
                 "nationalInsuranceNumber_yesNo" -> Seq("true"),
-                "nationalInsuranceNumber_value" -> Seq("QQ123456C")
+                "nationalInsuranceNumber_value" -> Seq("AB123456C")
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-address")
             }
           }
         }
 
-        "the user selects no" in {
-          given.commonPrecondition
+        "the Yes radio button is selected and a valid NINO is provided (for Sole Proprietor)" should {
+          "redirect to the VAT number page" in {
+            given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partner-national-insurance-number")
+            val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "nationalInsuranceNumber_yesNo" -> Seq("false"),
-                "nationalInsuranceNumber_value" -> Seq.empty
+                "nationalInsuranceNumber_yesNo" -> Seq("true"),
+                "nationalInsuranceNumber_value" -> Seq("QQ456789C")
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-vat-registration-number")
+            }
+          }
+        }
+
+        "the No radio button is selected" should {
+          "redirect to the VAT number page" in {
+            given.commonPrecondition
+
+            val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+                .post(Map(
+                  "nationalInsuranceNumber_yesNo" -> Seq("false"),
+                  "nationalInsuranceNumber_value" -> Seq.empty
+                ))
+
+              whenReady(result) { res =>
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partner-vat-registration-number")
             }
           }
         }
       }
-    }
 
-    "no radio is selected by the user" should {
+    "neither radio button is selected by the user" should {
       "return 400" in {
         given.commonPrecondition
 
@@ -89,6 +108,8 @@ class BusinessPartnerNinoControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("Select whether they have a National Insurance number")
           }
         }
       }
@@ -109,12 +130,11 @@ class BusinessPartnerNinoControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("Enter National Insurance number")
           }
         }
       }
     }
-
-
-  }
 
 }
