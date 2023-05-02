@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
 @this(layout: layout,
       formHelper: FormWithCSRF,
@@ -45,8 +46,8 @@ messages("fh.businessPartners.chooseAddress.title")
 }
 
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
-@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersChooseAddressController.next, 'novalidate -> "novalidate") {
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = None, isBrowserBackMimic = true) {
+@viewHelpers.form(action = BusinessPartnersChooseAddressController.next(), 'novalidate -> "novalidate") {
   @if(form.errors.nonEmpty) {
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
       Seq(ErrorLink(

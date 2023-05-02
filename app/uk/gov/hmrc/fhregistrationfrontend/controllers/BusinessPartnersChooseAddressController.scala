@@ -19,10 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.google.inject.{Inject, Singleton}
 import play.api.data.FormError
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-import play.filters.csrf.CSRF.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.{chooseAddressForm, chooseAddressKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -51,14 +50,13 @@ class BusinessPartnersChooseAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val addressList = testAddressData
-
       chooseAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData))
-        },
+        formWithErrors => { BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData)) },
         addressKey => {
+          // TODO save the selected address to cache
           addressList.get(addressKey.chosenAddress) match {
-            case Some(address) => Ok(s"Next page! with form result: ${address.toString}")
+            case Some(address) =>
+              Redirect(routes.BusinessPartnersConfirmAddressController.load())
             case None =>
               val formWithError =
                 chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
