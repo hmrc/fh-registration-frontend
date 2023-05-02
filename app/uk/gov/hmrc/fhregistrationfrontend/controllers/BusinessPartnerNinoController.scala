@@ -62,7 +62,13 @@ class BusinessPartnerNinoController @Inject()(
           BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
         },
         nino => {
-          Ok(s"Form submiteed, with result: ${nino.toString}")
+          // Todo implement reading from legal entity page
+          val ninoForIndividual = "AB123456C"
+          if (nino.value.contains(ninoForIndividual)) {
+            Redirect(routes.BusinessPartnerAddressController.load())
+          } else {
+            Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
+          }
         }
       )
     } else {

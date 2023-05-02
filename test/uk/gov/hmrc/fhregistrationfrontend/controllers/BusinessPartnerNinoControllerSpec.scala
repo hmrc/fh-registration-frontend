@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
@@ -73,36 +73,42 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "return 200" in {
-        setupUserAction()
+      "redirect to VAT number page" when {
+        "the Yes radio button is selected and a NINO is entered" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "nationalInsuranceNumber_yesNo" -> "true",
-            "nationalInsuranceNumber_value" -> "QQ123456C"
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "nationalInsuranceNumber_yesNo" -> "true",
+              "nationalInsuranceNumber_value" -> "QQ123456C"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        reset(mockActions)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/form/business-partners/partner-vat-registration-number")
+
+          reset(mockActions)
+        }
       }
 
-      "return 400" in {
-        setupUserAction()
+      "return 400" when {
+        "a radio button is not selected" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "nationalInsuranceNumber_yesNo" -> "",
-            "nationalInsuranceNumber_value" -> ""
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "nationalInsuranceNumber_yesNo" -> "",
+              "nationalInsuranceNumber_value" -> ""
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe BAD_REQUEST
-        reset(mockActions)
+          status(result) shouldBe BAD_REQUEST
+          reset(mockActions)
+        }
       }
     }
 

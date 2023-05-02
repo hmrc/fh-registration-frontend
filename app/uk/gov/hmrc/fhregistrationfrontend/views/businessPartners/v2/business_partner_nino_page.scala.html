@@ -28,7 +28,7 @@
 
 @(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@layout(title = messages("fh.businessPartners.nino.title.v2"), backUrl = Some("#")){
+@layout(title = messages("fh.businessPartners.nino.title.v2"), backUrl = None, isBrowserBackMimic = true){
 
     @if(partnerNinoForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
