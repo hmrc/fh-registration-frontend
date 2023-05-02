@@ -678,6 +678,11 @@ fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For exam
 fh.businessPartners.companyRegistrationNumber.error.required=Enter the company registration number
 fh.businessPartners.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 
+fh.businessPartners.corporateBody.business_partners_utr.title = Does the company have a Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
+fh.businessPartners.corporateBody.business_partners_utr.heading = Does {0} have a Corporation Tax Unique Taxpayer Reference (UTR)?
+
+fh.business_partners.utr.link1 = You can
+fh.business_partners.utr.link2 = find a lost UTR.
 
 # - Business partners
 #============================================================
