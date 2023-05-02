@@ -53,7 +53,7 @@ class BusinessPartnerEnterAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache lat`er
+      // Todo get this from cache later
       val partnerName = "Test User"
       val journeyType = "enterAddress"
       chooseAddressForm.bindFromRequest.fold(

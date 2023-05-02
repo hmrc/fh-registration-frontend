@@ -20,10 +20,11 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
 class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -68,7 +69,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "return redirect (303) to the confirm address page" when {
         "the form has no errors and the address is found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -77,8 +78,8 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) should include("Next page! with form result:")
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(BusinessPartnersConfirmAddressController.load().url)
           reset(mockActions)
         }
       }
