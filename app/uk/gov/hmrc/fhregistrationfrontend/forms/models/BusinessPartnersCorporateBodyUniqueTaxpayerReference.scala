@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.i18n.Messages
+import play.api.libs.json.Json
 
-object LostUtrLink {
+case class BusinessPartnersCorporateBodyUniqueTaxpayerReference(
+  value: String
+)
 
-  def apply()(implicit messages: Messages) =
-    s"""<p class="govuk-body">${messages("fh.business_partners.utr.link1")}
-      <a class="govuk-link" href="#">
-        ${messages("fh.business_partners.utr.link2")}
-      </a>
-    </p>"""
-
+object BusinessPartnersCorporateBodyUniqueTaxpayerReference {
+  implicit val format = Json.format[BusinessPartnersCorporateBodyUniqueTaxpayerReference]
 }

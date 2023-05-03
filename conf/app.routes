@@ -68,6 +68,9 @@ GET         /form/business-partners/confirm-partnership-registered-office-addres
 GET         /form/business-partners/corporate-body-vat-registration-number        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.load()
 POST        /form/business-partners/corporate-body-vat-registration-number          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.next()
 
+GET         /form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyUtrController.load()
+POST        /form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyUtrController.next()
+
 GET         /form/business-partners/corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyTradingNameController.load()
 POST        /form/business-partners/corporate-body-trading-name              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyTradingNameController.next()
 
