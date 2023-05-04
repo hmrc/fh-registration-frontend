@@ -39,6 +39,109 @@
 
 @layout(title = title, backUrl = None, isBrowserBackMimic = true){
 
- @SaveForLater()
+ @if(form.errors.nonEmpty) {
+  @viewHelpers.govukErrorSummary(
+   ErrorSummary(errorList =
+    form.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+     ErrorLink(
+      href = Some(s"#${form.errors.head.key}"),
+      content = Text(messages(s"fh.business.partners.${error._1.key}.${error._1.message}"))
+     )
+    }
+    ,
+    title = Text(messages("fh.generic.error"))))
+ }
 
+
+ @formHelper(action = postAction){
+
+  <fieldset class="govuk-fieldset" xmlns="http://www.w3.org/1999/html">
+   @Html(BusinessPartnersHeader(heading))
+
+   @viewHelpers.govukInput(Input(
+    id = s"$fieldName.line1",
+    name = s"$fieldName.line1",
+    label = Label(
+     isPageHeading = false,
+     content = HtmlContent(s"${Messages("fh.business.partners.enterAddress.line1.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line1"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.line1").value.getOrElse("")}"),
+    errorMessage =
+     form(s"$fieldName.line1").error.map{ e =>
+      ErrorMessage(
+       content = Text(Messages(s"fh.business.partners.$fieldName.line1.${e.message}")),
+       visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+      )
+     }
+   ))
+
+   @viewHelpers.govukInput(Input(
+    id = s"$fieldName.line2",
+    name = s"$fieldName.line2",
+    label = Label(
+     isPageHeading = false,
+     content = HtmlContent(s"${Messages("fh.business.partners.enterAddress.line2.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line2"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.line2").value.getOrElse("")}"),
+    errorMessage =
+     form(s"$fieldName.line2").error.map{ e =>
+      ErrorMessage(
+       content = Text(Messages(s"fh.business.partners.$fieldName.line2.${e.message}")),
+       visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+      )
+     }
+   ))
+
+   @viewHelpers.govukInput(Input(
+    id = s"$fieldName.line3",
+    name = s"$fieldName.line3",
+    label = Label(
+     isPageHeading = false,
+     content = HtmlContent(s"${Messages("fh.business.partners.enterAddress.line3.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("address-line3"),
+    classes = "govuk-!-width-two-thirds",
+    value = Some(s"${form(s"$fieldName.line3").value.getOrElse("")}"),
+    errorMessage =
+     form(s"$fieldName.line3").error.map{ e =>
+      ErrorMessage(
+       content = Text(Messages(s"fh.business.partners.$fieldName.line3.${e.message}")),
+       visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+      )
+     }
+   ))
+
+   @viewHelpers.govukInput(Input(
+    id = s"$fieldName.postcode",
+    name = s"$fieldName.postcode",
+    label = Label(
+     isPageHeading = false,
+     content = HtmlContent(s"${Messages("fh.business.partners.enterAddress.postcode.label")}")
+    ),
+    spellcheck = Some(false),
+    autocomplete = Some("postal-code"),
+    classes = "govuk-!-width-one-third",
+    value = Some(s"${form(s"$fieldName.postcode").value.getOrElse("")}"),
+    errorMessage =
+     form(s"$fieldName.postcode").error.map{ e =>
+      ErrorMessage(
+       content = Text(Messages(s"fh.business.partners.$fieldName.postcode.${e.message}")),
+       visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+      )
+     }
+   ))
+  </fieldset>
+
+  @button("button.save.continue")
+
+ }
+
+ @SaveForLater()
 }
