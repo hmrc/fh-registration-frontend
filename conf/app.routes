@@ -80,6 +80,8 @@ POST        /form/business-partners/corporate-body-registered-office-address    
 GET         /form/business-partners/company-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegNumberController.load()
 POST        /form/business-partners/company-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegNumberController.next()
 
+GET         /form/business-partners/enter-corporate-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyEnterAddressController.load()
+
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
