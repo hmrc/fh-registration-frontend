@@ -54,33 +54,29 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
     }
   }
 
-//  def next(): Action[AnyContent] = userAction { implicit request =>
-//    if (config.newBusinessPartnerPagesEnabled) {
-//      // Todo get this from cache lat`er
-//      val partnerName = "Test Corporate Body"
-//      val journeyType = "enterAddress"
-//      chooseAddressForm.bindFromRequest.fold(
-//        formWithErrors => {
-//          val postAction =
-//            Call(
-//              method = "POST",
-//              url =
-//                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerCoporateBodyEnterAddressController
-//                  .next()
-//                  .url)
-//          BadRequest(
-//            view.business_partners_corporateBody_enter__address(
-//              formWithErrors,
-//              postAction,
-//              partnerName,
-//              journeyType))
-//        },
-//        bpAddress => {
-//          Ok(s"Next page! with form result: ${bpAddress.toString}")
-//        }
-//      )
-//    } else {
-//      errorHandler.errorResultsPages(Results.NotFound)
-//    }
-//  }
+  def next(): Action[AnyContent] = userAction { implicit request =>
+    if (config.newBusinessPartnerPagesEnabled) {
+      // Todo get this from cache later
+      val partnerName = "Test Corporate Body"
+      val journeyType = "enterAddress"
+      chooseAddressForm.bindFromRequest.fold(
+        formWithErrors => {
+          val postAction =
+            Call(
+              method = "POST",
+              url =
+                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyEnterAddressController
+                  .next()
+                  .url)
+          BadRequest(
+            view.business_partners_corporateBody_enter_address(formWithErrors, postAction, partnerName, journeyType))
+        },
+        bpAddress => {
+          Ok(s"Next page! with form result: ${bpAddress.toString}")
+        }
+      )
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
+  }
 }
