@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNum
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersCorporateBodyVatNumberController @Inject()(
+class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -37,15 +37,16 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       val form = vatNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      val corporateBody = "test corporateBody"
-      val title = "corporateBody"
+      val unincorporateBody = "test unincorporatedBody"
+      val title = "unincorporatedBody"
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyVatNumberController
-            .load()
-            .url)
-      Ok(view.business_partners_corporateBody_vat_number(form, corporateBody, title, postAction))
+          url =
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
+              .load()
+              .url)
+      Ok(view.business_partners_corporateBody_vat_number(form, unincorporateBody, title, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,8 +55,9 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      val corporateBody = "test corporateBody"
-      val title = "corporateBody"
+      val unincorporateBody = "test unincorporatedBody"
+      val title = "unincorporatedBody"
+
       vatNumberForm.bindFromRequest.fold(
         formWithErrors => {
           val postAction =
@@ -65,7 +67,8 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
                 uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
                   .next()
                   .url)
-          BadRequest(view.business_partners_corporateBody_vat_number(formWithErrors, corporateBody, title, postAction))
+          BadRequest(
+            view.business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction))
         },
         vatNumber => {
           vatNumber.value match {

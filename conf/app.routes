@@ -49,6 +49,9 @@ POST        /form/business-partners/enter-partner-address              @uk.gov.h
 GET         /form/business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.load()
 POST        /form/business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.next()
 
+GET         /form/business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedVatRegistrationController.load()
+POST        /form/business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedVatRegistrationController.next()
+
 GET         /form/business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load()
 
 GET         /form/business-partners/partnership-registered-office-address @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.load()
