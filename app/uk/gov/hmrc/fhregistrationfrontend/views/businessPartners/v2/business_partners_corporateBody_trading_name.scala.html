@@ -23,7 +23,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(tradingNameForm: Form[_], companyName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(tradingNameForm: Form[_], typeOfBusiness: String, companyName: String, postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 
 @titlePrefix = @{
@@ -31,11 +31,11 @@
 }
 
 @title = @{
-    Messages("fh.businessPartners.corporateBody.tradingName.title") + " - " + Messages("fh.businessPartners.caption")
+    Messages(s"fh.businessPartners.${typeOfBusiness}.tradingName.title") + " - " + Messages("fh.businessPartners.caption")
 }
 
 @heading = @{
-    Messages("fh.businessPartners.corporateBody.tradingName.heading", companyName)
+    Messages(s"fh.businessPartners.${typeOfBusiness}.tradingName.heading", companyName)
 }
 
 @conditionalHtml = @{
@@ -64,7 +64,7 @@
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerCorporateBodyTradingNameController.next) {
+    @viewHelpers.form(action = postAction) {
 
         @if(tradingNameForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

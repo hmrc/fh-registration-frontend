@@ -36,7 +36,10 @@ class BusinessPartnerCorporateBodyTradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_corporate_body_trading_name(tradingNameForm, "Shelby Limited"))
+      val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
+      Ok(
+        view
+          .business_partner_corporate_body_trading_name(tradingNameForm, "corporateBody", "Shelby Limited", postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -44,9 +47,15 @@ class BusinessPartnerCorporateBodyTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
+      lazy val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
       tradingNameForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_corporate_body_trading_name(formWithErrors, "Shelby Limited"))
+          BadRequest(
+            view.business_partner_corporate_body_trading_name(
+              formWithErrors,
+              "corporateBody",
+              "Shelby Limited",
+              postAction))
         },
         tradingName => {
           Ok(s"Form submitted, with result: $tradingName")
