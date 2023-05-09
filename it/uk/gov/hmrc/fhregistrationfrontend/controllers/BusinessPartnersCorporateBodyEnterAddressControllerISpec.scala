@@ -26,7 +26,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerISpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("Enter the company’s registered office address?")
-              page.getElementsByTag("h1").text() must include("Enter the Test Corporate Body’s registered office address")
+              page.getElementsByTag("h1").text() must include("Enter Test Corporate Body’s registered office address")
             }
           }
         }
@@ -79,7 +79,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerISpec
               whenReady(result) { res =>
                 res.status mustBe 400
                 val page = Jsoup.parse(res.body)
-                page.getElementsByTag("h1").text() must include("Enter the Test Corporate Body’s registered office address")
+                page.getElementsByTag("h1").text() must include("Enter Test Corporate Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("You must enter line 1 of the address")
               }
             }
@@ -103,7 +103,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerISpec
               whenReady(result) { res =>
                 res.status mustBe 400
                 val page = Jsoup.parse(res.body)
-                page.getElementsByTag("h1").text() must include("Enter the Test Corporate Body’s registered office address")
+                page.getElementsByTag("h1").text() must include("Enter Test Corporate Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("You must enter the Town or City of the address")
               }
             }
@@ -127,7 +127,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerISpec
               whenReady(result) { res =>
                 res.status mustBe 400
                 val page = Jsoup.parse(res.body)
-                page.getElementsByTag("h1").text() must include("Enter the Test Corporate Body’s registered office address")
+                page.getElementsByTag("h1").text() must include("Enter Test Corporate Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter a valid postcode")
               }
             }

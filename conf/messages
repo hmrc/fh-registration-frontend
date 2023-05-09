@@ -684,7 +684,7 @@ fh.businessPartners.corporateBody.business_partners_utr.title = Does the company
 fh.businessPartners.corporateBody.business_partners_utr.heading = Does {0} have a Corporation Tax Unique Taxpayer Reference (UTR)?
 
 fh.business.partners.corporateBody.enter.registered.address.title=Enter the company’s registered office address?
-fh.business.partners.corporateBody.enter.registered.address.heading=Enter the {0}’s registered office address
+fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
 
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
