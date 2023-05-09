@@ -38,6 +38,31 @@
     Messages("fh.trading_name.confirm.label", companyName)
 }
 
+@conditionalHtml = @{
+    viewHelpers.govukInput(Input(
+        id = tradingNameKey,
+        name = tradingNameKey,
+        label = Label(
+            isPageHeading = false,
+            content = HtmlContent(s"<strong>${messages("fh.tradingName.label")}</strong>")
+        ),
+        spellcheck = Some(false),
+        classes = "govuk-!-width-one-half",
+        hint = Some(Hint(
+            content = Text(messages("fh.tradingName.hintText"))
+        )),
+        errorMessage =
+            tradingNameForm.error(tradingNameKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
+
+            },
+        value = tradingNameForm(tradingNameKey).value
+    ))
+}
+
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
         @if(tradingNameForm.errors.nonEmpty) {
@@ -67,7 +92,8 @@
                 RadioItem(
                     content = Text("Yes"),
                     value = Some("true"),
-                    checked = tradingNameForm.data.values.toList.contains("true")
+                    checked = tradingNameForm.data.values.toList.contains("true"),
+                    conditionalHtml = Some(conditionalHtml)
                 ),
                 RadioItem(
                     content = Text("No"),

@@ -50,7 +50,21 @@ class TradingNameControllerSpec
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.text() should include("Page has loaded")
+        page.title() should include("Trading name - Apply for the Fulfilment House Due Diligence Scheme")
+        reset(mockActions)
+      }
+    }
+
+    "render the not found page" when {
+      "the new business partner pages are disabled" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe NOT_FOUND
+        val page = Jsoup.parse(contentAsString(result))
+        page.title should include("Page not found")
         reset(mockActions)
       }
     }
