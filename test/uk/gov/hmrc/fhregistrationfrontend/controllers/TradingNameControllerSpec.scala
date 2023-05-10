@@ -69,4 +69,59 @@ class TradingNameControllerSpec
       }
     }
   }
+
+  "next" when {
+    "The business partner v2 pages are enabled" should {
+      "return 200" in {
+        setupUserAction()
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            "tradingName_yesNo" -> "true",
+            "tradingName_value" -> "new trading name"
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe OK
+        contentAsString(result) shouldBe "Form submitted, with result: TradingName(true,Some(new trading name))"
+        reset(mockActions)
+      }
+
+      "return 400" when {
+        "no value is selected" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "tradingName_yesNo" -> "",
+              "tradingName_value" -> ""
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe BAD_REQUEST
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Trading name - Apply for the Fulfilment House Due Diligence Scheme")
+          reset(mockActions)
+        }
+      }
+    }
+
+    "the new business partner pages are disabled" should {
+      "render the not found page" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe NOT_FOUND
+        val page = Jsoup.parse(contentAsString(result))
+        page.title should include("Page not found")
+        reset(mockActions)
+      }
+    }
+  }
 }

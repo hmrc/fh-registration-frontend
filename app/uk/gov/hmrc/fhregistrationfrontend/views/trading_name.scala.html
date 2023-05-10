@@ -65,6 +65,8 @@
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.TradingNameController.next) {
+
         @if(tradingNameForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
                 Seq(ErrorLink(
@@ -85,7 +87,7 @@
             )),
             idPrefix = Some(hasTradingNameKey),
             name = hasTradingNameKey,
-            errorMessage = if (tradingNameForm(hasTradingNameKey).hasErrors) {
+            errorMessage = if(tradingNameForm(hasTradingNameKey).hasErrors) {
                 Some(ErrorMessage(content = Text(messages(s"fh.${hasTradingNameKey}.error.required"))))
             } else None,
             items = Seq(
@@ -105,4 +107,5 @@
 
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
         @SaveForLater()
+    }
 }
