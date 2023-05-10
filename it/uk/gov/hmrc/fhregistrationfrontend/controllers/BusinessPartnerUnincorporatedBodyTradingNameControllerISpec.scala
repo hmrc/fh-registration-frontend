@@ -5,25 +5,25 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerPartnershipTradingNameControllerISpec
+class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
 
-  "GET /form/business-partners/partnership-trading-name" when {
+  "GET /form/business-partners/unincorporated-body-trading-name" when {
 
-    "render the business partner partnership trading name page" when {
+    "render the business partner unincorporated body trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
             res.status mustBe 200
             val page = Jsoup.parse(res.body)
-            page.title must include("Does the partnership use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text must include("Does Test User use a trading name that is different from its registered name?")
+            page.title must include("Does the unincorporated body use a trading name that is different from its registered name?")
+            page.getElementsByTag("h1").text must include("Does Shelby unincorporated use a trading name that is different from its registered name?")
           }
         }
       }
@@ -31,7 +31,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
   }
 
-  "POST /form/business-partners/partnership-trading-name" when {
+  "POST /form/business-partners/unincorporated-body-trading-name" when {
 
     "the user selects yes and enters a trading name" should {
       "return 200" when {
@@ -39,17 +39,17 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+            val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
                 "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("Shelby Company Limited")
+                "tradingName_value" -> Seq("Shelby Unincorporated")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
+              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Unincorporated))")
             }
           }
         }
@@ -58,7 +58,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+            val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -80,7 +80,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -91,7 +91,8 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.title must include("Does the partnership use a trading name that is different from its registered name?")
+            page.title must include("Does the unincorporated body use a trading name that is different from its registered name?")
+            page.getElementsByTag("h1").text() must include("Does Shelby unincorporated use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
           }
         }
@@ -103,7 +104,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -114,7 +115,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.title must include("Does the partnership use a trading name that is different from its registered name?")
+            page.title must include("Does the unincorporated body use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
           }
         }
