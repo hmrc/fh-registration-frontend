@@ -633,6 +633,7 @@ fh.businessPartner.corporateBody.vatNumber.heading=Does {0} have a UK VAT regist
 fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
 fh.business.partners.find.address.button = Find UK address
+fh.business.partners.partnership.registered.address.title=What is the partnership’s registered office address?
 fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
 fh.business_partners_address.heading=What is {0}’s address?
 fh.partnerAddressLine.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
