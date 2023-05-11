@@ -89,8 +89,11 @@ POST        /form/business-partners/unincorporated-body-trading-name            
 GET         /form/business-partners/enter-corporate-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyEnterAddressController.load()
 POST        /form/business-partners/enter-corporate-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyEnterAddressController.next()
 
-GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
-POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
+GET         /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.load()
+POST        /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.next()
+
+GET         /form/tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
+POST        /form/tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
