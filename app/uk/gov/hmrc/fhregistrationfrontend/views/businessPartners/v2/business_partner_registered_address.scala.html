@@ -30,20 +30,22 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, titleType: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
     <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
 
+@title = @{messages(s"fh.business.partners.$titleType.registered.address.title") + " - " + Messages("fh.businessPartners.caption")}
+
 @titlePrefix = @{
     if(businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@layout(title = messages("fh.business_partners_address.title"), backUrl = Some("#")){
+@layout(title = title, backUrl = Some("#")){
 
-    @Html(BusinessPartnersHeader(messages("fh.business.partners.partnership.registered.address.heading", partnerName)))
+    @Html(BusinessPartnersHeader(messages("fh.business.partners.registered.address.heading", corporateBody)))
 
     @if(businessPartnersAddressForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
@@ -56,8 +58,7 @@
             title = Text(messages("fh.generic.error"))
         ))
     }
-
-    @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController.next()){
+    @formHelper(action = postAction){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),

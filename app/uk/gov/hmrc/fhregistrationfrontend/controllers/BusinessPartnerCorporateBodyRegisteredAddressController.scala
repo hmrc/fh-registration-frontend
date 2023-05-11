@@ -32,13 +32,20 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
+  // Todo get this from cache later
+  val postAction: Call = Call(
+    method = "POST",
+    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerCorporateBodyRegisteredAddressController
+      .next()
+      .url
+  )
+  val title = "corporateBody"
+  val corporateBody = "Test Corporate Body"
+
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache later
-      val corporateBody = "Test Corporate Body"
-      val bpAddressForm = businessPartnersAddressForm
-      Ok(view.business_partners_corporateBody_registered_address(bpAddressForm, corporateBody))
+      Ok(view.business_partner_registered_address(businessPartnersAddressForm, corporateBody, title, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -46,11 +53,9 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache later
-      val corporateBody = "Test Corporate Body"
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partners_corporateBody_registered_address(formWithErrors, corporateBody))
+          BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, title, postAction))
         },
         bpAddress => {
           val addressLineMsg = bpAddress.addressLine match {
