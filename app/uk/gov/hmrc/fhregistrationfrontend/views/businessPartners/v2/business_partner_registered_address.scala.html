@@ -45,7 +45,7 @@
 
 @layout(title = title, backUrl = Some("#")){
 
-    @Html(BusinessPartnersHeader(messages("fh.business.partners.corporateBody.registered.address.heading", corporateBody)))
+    @Html(BusinessPartnersHeader(messages("fh.business.partners.registered.address.heading", corporateBody)))
 
     @if(businessPartnersAddressForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

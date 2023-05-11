@@ -648,7 +648,7 @@ fh.businessPartners.partnership.tradingName.title = Does the partnership use a t
 fh.businessPartners.partnership.tradingName.heading = Does {0} use a trading name that is different from its registered name ?
 fh.businessPartners.corporateBody.tradingName.title = Does the corporate body use a trading name that is different from its registered name?
 fh.businessPartners.corporateBody.tradingName.heading = Does {0} use a trading name that is different from its registered name ?
-fh.business.partners.corporateBody.registered.address.heading = What is {0}’s registered office address?
+fh.business.partners.registered.address.heading = What is {0}’s registered office address?
 fh.business.partners.corporateBody.registered.address.title=What is the company’s registered office address?
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
