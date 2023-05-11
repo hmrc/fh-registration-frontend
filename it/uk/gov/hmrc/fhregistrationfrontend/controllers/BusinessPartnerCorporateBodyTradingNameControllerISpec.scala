@@ -23,7 +23,7 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
             res.status mustBe 200
             val page = Jsoup.parse(res.body)
             page.title must include("Does the corporate body use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text must include("Does Shelby Limited use a trading name that is different from its registered name ?")
+            page.getElementsByTag("h1").text must include("Does Shelby Limited use a trading name that is different from its registered name?")
           }
         }
       }
@@ -92,7 +92,7 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.title must include("Does the corporate body use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text() must include("Does Shelby Limited use a trading name that is different from its registered name ?")
+            page.getElementsByTag("h1").text() must include("Does Shelby Limited use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
           }
         }

@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerCorporateBodyTradingNameController @Inject()(
+class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,25 +36,28 @@ class BusinessPartnerCorporateBodyTradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
+      val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
       Ok(
-        view
-          .business_partner_corporate_body_trading_name(tradingNameForm, "corporateBody", "Shelby Limited", postAction))
+        view.business_partner_corporate_body_trading_name(
+          tradingNameForm,
+          "unincorporatedBody",
+          "Shelby unincorporated",
+          postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
+    val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
     if (config.newBusinessPartnerPagesEnabled) {
-      lazy val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
       tradingNameForm.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(
             view.business_partner_corporate_body_trading_name(
               formWithErrors,
-              "corporateBody",
-              "Shelby Limited",
+              "unincorporatedBody",
+              "Shelby unincorporated",
               postAction))
         },
         tradingName => {
