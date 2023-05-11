@@ -91,6 +91,6 @@ class Views @Inject()(
   val business_partners_corporateBody_vat_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_vat_number,
   val business_partner_corporate_body_trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_trading_name,
   val business_partners_corporateBody_reg_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_reg_number,
-  val business_partners_corporateBody_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_corporateBody_registered_address,
+  val business_partner_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_registered_address,
   val business_partners_corporateBody_enter_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_enter_address
 )

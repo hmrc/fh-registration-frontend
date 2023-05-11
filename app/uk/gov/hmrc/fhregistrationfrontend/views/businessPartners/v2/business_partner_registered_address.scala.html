@@ -30,14 +30,14 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, titleType: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
     <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
 }
 
-@title = @{messages("fh.business.partners.corporateBody.registered.address.title") + " - " + Messages("fh.businessPartners.caption")}
+@title = @{messages(s"fh.business.partners.$titleType.registered.address.title") + " - " + Messages("fh.businessPartners.caption")}
 
 @titlePrefix = @{
     if(businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -58,7 +58,7 @@
             title = Text(messages("fh.generic.error"))
         ))
     }
-    @formHelper(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerCorporateBodyRegisteredAddressController.next()){
+    @formHelper(action = postAction){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),
