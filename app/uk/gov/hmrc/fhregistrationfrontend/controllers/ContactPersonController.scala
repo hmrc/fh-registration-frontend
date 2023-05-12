@@ -21,12 +21,11 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm.contactPersonForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
 import javax.inject.Inject
 
-class TradingNameController @Inject()(
+class ContactPersonController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -48,17 +47,16 @@ class TradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.contact_person(contactPersonForm, address))
+      Ok(view.contact_person_page(contactPersonForm, address))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val bpr = BusinessRegistrationDetails.apply()
       contactPersonForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.contact_person(formWithErrors, address))
+          BadRequest(view.contact_person_page(formWithErrors, address))
         },
         contactPerson => {
           Ok(s"Form submitted, with result: $contactPerson")
