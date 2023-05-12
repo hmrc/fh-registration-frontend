@@ -97,6 +97,9 @@ POST        /form/:page/:section/delete/:timestamp                      @uk.gov.
 GET         /form/:page/:section/confirmDelete/:timestamp               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, timestamp: Long)
 GET         /resume                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
 
+GET         /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.load()
+POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.next()
+
 GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
 GET         /downloadPrintable                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable

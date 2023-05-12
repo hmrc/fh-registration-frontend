@@ -172,7 +172,10 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.vat_registration(form, navigation)
+          views.vat_registration(
+            form,
+            navigation,
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
       }
     )
 
