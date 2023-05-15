@@ -38,6 +38,13 @@
   Messages("fh.vatNumber.confirm.label")
 }
 
+@tempBackUrl = @{
+    BackHelper.getUrl(navigation) match {
+        case Some(navigationUrl) => Some(navigationUrl)
+        case _ => Some("#")
+    }
+}
+
 @conditionalHtml = @{
     viewHelpers.govukInput(Input(
         id = vatNumberKey,
@@ -63,7 +70,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, backUrl = tempBackUrl) {
 
   @viewHelpers.form(action = postAction) {
 

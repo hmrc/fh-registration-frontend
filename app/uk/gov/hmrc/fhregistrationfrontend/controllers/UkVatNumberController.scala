@@ -38,7 +38,6 @@ class UkVatNumberController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val corporateBody = "Test Corporate Body"
       val bpAddressForm = vatNumberForm
       val postAction =
         Call(
@@ -53,7 +52,6 @@ class UkVatNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val corporateBody = "Test Corporate Body"
       val postAction =
         Call(
           method = "POST",
