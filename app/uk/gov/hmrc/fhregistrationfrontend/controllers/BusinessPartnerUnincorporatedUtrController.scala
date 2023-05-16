@@ -17,14 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUtrForm.businessPartnerUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnerUtrController @Inject()(
+class BusinessPartnerUnincorporatedUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,12 +36,13 @@ class BusinessPartnerUtrController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val form = businessPartnerUtrForm
-      //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
+      //Todo get partnerName from cache
+      val partnerName = "{{Unincorporated body name}}"
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
+          url =
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController.load().url)
       Ok(view.business_partners_utr(form, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -50,14 +51,16 @@ class BusinessPartnerUtrController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
+      //Todo get partnerName from cache
+      val partnerName = "{{Unincorporated body name}}"
       businessPartnerUtrForm.bindFromRequest.fold(
         formWithErrors => {
           val postAction =
             Call(
               method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
+              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController
+                .next()
+                .url)
           BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
         },
         businessPartnersUtr => {

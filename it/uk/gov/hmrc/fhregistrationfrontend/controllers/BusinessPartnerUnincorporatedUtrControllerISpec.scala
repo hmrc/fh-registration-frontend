@@ -5,19 +5,17 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerUtrControllerIntegrationSpec
+class BusinessPartnerUnincorporatedUtrControllerISpec
   extends Specifications with TestConfiguration {
 
-  val unincorporatedBodyUTRUrl = s"$baseUrl/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference"
+  "GET /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" should {
 
-  "GET /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference " should {
-
-    "render the unincorporated-body-self-assessment-unique-taxpayer-reference page" in {
+    "render the partnership-self-assessment-unique-taxpayer-reference page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(unincorporatedBodyUTRUrl)
+        val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -25,20 +23,20 @@ class BusinessPartnerUtrControllerIntegrationSpec
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
           page.title() must include("Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
-          page.getElementsByTag("h1").text() must include("Does {{Unincorporated body name}} have a Self Assessment Unique Taxpayer Reference (UTR)?")
+          page.getElementsByTag("h1").text() must include("Does test partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
         }
       }
     }
   }
 
-  "POST /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference" when {
+  "POST /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" when {
     "yes is selected and the UTR is entered" should {
       "return 200 with UTR" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -59,7 +57,7 @@ class BusinessPartnerUtrControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -79,7 +77,7 @@ class BusinessPartnerUtrControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -100,7 +98,7 @@ class BusinessPartnerUtrControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -121,7 +119,7 @@ class BusinessPartnerUtrControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -142,7 +140,7 @@ class BusinessPartnerUtrControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(unincorporatedBodyUTRUrl)
+          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")

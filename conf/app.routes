@@ -92,6 +92,9 @@ POST        /form/business-partners/enter-corporate-body-registered-office-addre
 GET         /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.load()
 POST        /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.next()
 
+GET         /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedUtrController.load()
+POST        /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedUtrController.next()
+
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
