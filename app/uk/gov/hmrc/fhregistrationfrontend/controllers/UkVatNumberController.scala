@@ -20,32 +20,30 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
+class UkVatNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
+
   import actions._
-
-  // Todo get this from cache later
-  val partnerName = "Test User"
-  val title = "partnership"
-  val postAction: Call = Call(
-    method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
-      .next()
-      .url
-  )
-
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, partnerName, title, postAction))
+      // Todo get this from cache later
+      val bpAddressForm = vatNumberForm
+      val postAction =
+        Call(
+          method = "POST",
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url)
+      Ok(view.vat_registration(bpAddressForm, Navigation.noNavigation, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,16 +51,17 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm.bindFromRequest.fold(
+      // Todo get this from cache later
+      val postAction =
+        Call(
+          method = "POST",
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url)
+      vatNumberForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, partnerName, title, postAction))
+          BadRequest(view.vat_registration(formWithErrors, Navigation.noNavigation, postAction))
         },
         bpAddress => {
-          val addressLineMsg = bpAddress.addressLine match {
-            case Some(addressLine) => s"address line $addressLine"
-            case _                 => "no address line"
-          }
-          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
+          Ok(s"Next page!")
         }
       )
     } else {

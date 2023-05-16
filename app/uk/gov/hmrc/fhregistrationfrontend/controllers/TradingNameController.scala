@@ -19,50 +19,36 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
+class TradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-  import actions._
 
-  // Todo get this from cache later
-  val partnerName = "Test User"
-  val title = "partnership"
-  val postAction: Call = Call(
-    method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
-      .next()
-      .url
-  )
+  import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, partnerName, title, postAction))
+      Ok(view.trading_name_page(tradingNameForm, "Test User"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm.bindFromRequest.fold(
+      tradingNameForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, partnerName, title, postAction))
+          BadRequest(view.trading_name_page(formWithErrors, "Test User"))
         },
-        bpAddress => {
-          val addressLineMsg = bpAddress.addressLine match {
-            case Some(addressLine) => s"address line $addressLine"
-            case _                 => "no address line"
-          }
-          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
+        tradingName => {
+          Ok(s"Form submitted, with result: $tradingName")
         }
       )
     } else {

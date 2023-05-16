@@ -92,6 +92,9 @@ POST        /form/business-partners/enter-corporate-body-registered-office-addre
 GET         /contactPerson                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.ContactPersonController.load()
 POST        /contactPerson                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.ContactPersonController.next()
 
+GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
+POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
+
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)
 POST        /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.save(page: String)
@@ -99,6 +102,9 @@ POST        /form/:page/:section                                        @uk.gov.
 POST        /form/:page/:section/delete/:timestamp                      @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.deleteSection(page: String, section: String, timestamp: Long)
 GET         /form/:page/:section/confirmDelete/:timestamp               @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.confirmDeleteSection(page: String, section: String, timestamp: Long)
 GET         /resume                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.resumeForm
+
+GET         /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.load()
+POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.next()
 
 GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
