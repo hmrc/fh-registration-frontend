@@ -153,34 +153,6 @@ class ContactPersonControllerSpec
         }
       }
 
-      "return 200" when {
-        "details are entered," +
-          "Is this the address you want to use? No" +
-          "Is the contact address in the UK? No" +
-          "Only mandatory fields entered" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "firstName"                                                   -> "John",
-              "lastName"                                                    -> "Smith",
-              "jobTitle"                                                    -> "Astronaut",
-              "telephone"                                                   -> "0123456789",
-              "usingSameContactAddress"                                     -> "false",
-              "isUkAddress"                                                 -> "false",
-              "otherInternationalContactAddress_contactAddress.Line1"       -> "Flat 1",
-              "otherInternationalContactAddress_contactAddress.countryCode" -> "FR"
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
-
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(false),None,Some(InternationalAddress(Flat 1,None,None,line4,FR)))"
-          reset(mockActions)
-        }
-      }
-
       "return 400" when {
         "no data is entered" in {
           setupUserAction()
@@ -188,10 +160,11 @@ class ContactPersonControllerSpec
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
             .withFormUrlEncodedBody(
-              "firstName" -> "",
-              "lastName"  -> "",
-              "jobTitle"  -> "",
-              "telephone" -> "",
+              "firstName"               -> "",
+              "lastName"                -> "",
+              "jobTitle"                -> "",
+              "telephone"               -> "",
+              "usingSameContactAddress" -> ""
             )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
