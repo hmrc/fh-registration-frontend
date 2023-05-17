@@ -656,6 +656,7 @@ fh.business.partners.corporateBody.registered.address.title=What is the company�
 fh.businessPartners.unincorporatedBody.tradingName.title = Does the unincorporated body use a trading name that is different from its registered name?
 fh.businessPartners.unincorporatedBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
 fh.business.partners.incorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
+fh.businessPartners.unincorporated.confirmRegisteredAddress.title=Confirm the unincorporated body’s registered office address?
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
