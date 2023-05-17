@@ -76,7 +76,6 @@ class Views @Inject()(
   val show_submission: uk.gov.hmrc.fhregistrationfrontend.views.html.show_submission,
   val contact_person_page: uk.gov.hmrc.fhregistrationfrontend.views.html.contact_person,
   val trading_name_page: uk.gov.hmrc.fhregistrationfrontend.views.html.trading_name,
-
 ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
   val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
@@ -89,10 +88,10 @@ class Views @Inject()(
   val business_partner_confirm_partner_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_confirm_address,
   val business_partner_partnership_trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_partnership_trading_partner_name,
   val business_partner_partnership_vat_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_partnership_vat_number,
-  val business_partner_partnership_confirm_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_partnership_confirm_registered_address,
   val business_partners_corporateBody_vat_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_vat_number,
   val business_partner_corporate_body_trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_trading_name,
   val business_partners_corporateBody_reg_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_reg_number,
   val business_partner_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_registered_address,
-  val business_partners_corporateBody_enter_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_enter_address
+  val business_partners_corporateBody_enter_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_corporateBody_enter_address,
+  val business_partners_confirm_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_confirm_registered_address
 )

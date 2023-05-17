@@ -38,12 +38,11 @@
     messages("fh.businessPartners.confirmAddress.title")
 }
 
+@heading = @{messages("fh.businessPartners.confirmAddress.heading", partnerName)}
+
 @layout(title = title, Some(pageScripts), backUrl = Some("#")) {
 
-    <h1 class="govuk-heading-m" id="page-heading">
-        <span class="govuk-caption-m">@messages("fh.businessPartners.caption")</span>
-        @messages("fh.businessPartners.confirmAddress.heading", partnerName)
-    </h1>
+    @Html(BusinessPartnersHeader(heading))
 
     <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
 

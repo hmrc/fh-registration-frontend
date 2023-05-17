@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
+class BusinessPartnersConfirmUnincorporatedRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,16 +35,16 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "company"))
+      Ok(view.business_partners_confirm_registered_address(address, "Test Corp"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
+    addressLine1 = "44 Romford Road",
+    addressLine2 = Some("Testville"),
+    addressLine3 = Some("Test town"),
     addressLine4 = None,
     postcode = "TF1 4ER",
     countryCode = None,
