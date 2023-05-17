@@ -30,7 +30,8 @@ class ContactPersonControllerISpec
   }
 
   "POST /fhdds/contactPerson" when {
-    "details are entered and Yes radio button selected" should {
+    "details are entered \n" +
+      "Is this the address you want to use? Yes" should {
       "return 200 with contact person's details" in {
         given
           .commonPrecondition
@@ -56,11 +57,11 @@ class ContactPersonControllerISpec
       }
     }
 
-    "details are entered," +
-      "Is this the address you want to use? No" +
-      "Is the contact address in the UK? Yes" +
+    "details are entered, \n" +
+      "Is this the address you want to use? No \n" +
+      "Is the contact address in the UK? Yes \n" +
       "Only mandatory fields entered" should {
-      "return 200 with no contact person's details message" in {
+      "return 200 with contact person's details message" in {
         given
           .commonPrecondition
 
@@ -88,11 +89,11 @@ class ContactPersonControllerISpec
       }
     }
 
-    "details are entered," +
-      "Is this the address you want to use? No" +
-      "Is the contact address in the UK? Yes" +
+    "details are entered, \n" +
+      "Is this the address you want to use? No \n" +
+      "Is the contact address in the UK? Yes \n" +
       "All fields entered" should {
-      "return 200 with no contact person's details message" in {
+      "return 200 with contact person's details message" in {
         given
           .commonPrecondition
 
@@ -102,16 +103,16 @@ class ContactPersonControllerISpec
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
             .post(Map(
-              "firstName"                                     -> Seq("John"),
-              "lastName"                                      -> Seq("Smith"),
-              "jobTitle"                                      -> Seq("Astronaut"),
-              "telephone"                                     -> Seq("0123456789"),
-              "usingSameContactAddress"                       -> Seq("false"),
-              "isUkAddress"                                   -> Seq("true"),
-              "otherUkContactAddress_contactAddress.Line1"    -> Seq("Flat 1"),
-              "otherUkContactAddress_contactAddress.Line2"    -> Seq("5 High Street"),
-              "otherUkContactAddress_contactAddress.Line3"    -> Seq("Worthing"),
-              "otherUkContactAddress_contactAddress.Line4"    -> Seq("West Sussex"),
+              "firstName" -> Seq("John"),
+              "lastName" -> Seq("Smith"),
+              "jobTitle" -> Seq("Astronaut"),
+              "telephone" -> Seq("0123456789"),
+              "usingSameContactAddress" -> Seq("false"),
+              "isUkAddress" -> Seq("true"),
+              "otherUkContactAddress_contactAddress.Line1" -> Seq("Flat 1"),
+              "otherUkContactAddress_contactAddress.Line2" -> Seq("5 High Street"),
+              "otherUkContactAddress_contactAddress.Line3" -> Seq("Worthing"),
+              "otherUkContactAddress_contactAddress.Line4" -> Seq("West Sussex"),
               "otherUkContactAddress_contactAddress.postcode" -> Seq("AB1 2YZ")
             ))
 
@@ -122,6 +123,41 @@ class ContactPersonControllerISpec
         }
       }
     }
+
+      /*"details are entered, \n" +
+        "Is this the address you want to use? No \n" +
+        "Is the contact address in the UK? No \n" +
+        "All fields entered" should {
+        "return 200 with contact person's details message" in {
+          given
+            .commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/contactPerson")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId,
+                "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "firstName"                                                   -> Seq("John"),
+                "lastName"                                                    -> Seq("Smith"),
+                "jobTitle"                                                    -> Seq("Astronaut"),
+                "telephone"                                                   -> Seq("0123456789"),
+                "usingSameContactAddress"                                     -> Seq("false"),
+                "isUkAddress"                                                 -> Seq("false"),
+                "otherInternationalContactAddress_contactAddress.Line1"       -> Seq("Flat 1"),
+                "otherInternationalContactAddress_contactAddress.Line2"       -> Seq("Le Street"),
+                "otherInternationalContactAddress_contactAddress.Line3"       -> Seq("Paris"),
+                "otherInternationalContactAddress_contactAddress.countryCode" -> Seq("FR")
+              ))
+
+            whenReady(result) { res =>
+              println("RES = " + Jsoup.parse(res.body))
+              res.status mustBe 200
+              res.body mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
+            }
+          }
+        }
+    }*/
 
     "no data entered" should {
       "return 400" in {
@@ -154,8 +190,8 @@ class ContactPersonControllerISpec
       }
     }
 
-    "Contact Details entered" +
-      "Is this the contact address you want to use? No" +
+    "Contact Details entered \n" +
+      "Is this the contact address you want to use? No \n" +
       "Is the contact address in the UK? Not selected" should {
       "return 400" in {
         given
@@ -184,9 +220,9 @@ class ContactPersonControllerISpec
       }
     }
 
-    "Contact Details entered" +
-      "Is this the contact address you want to use? No" +
-      "Is the contact address in the UK? Yes" +
+    "Contact Details entered \n" +
+      "Is this the contact address you want to use? No \n" +
+      "Is the contact address in the UK? Yes \n" +
       "Address details not entered" should {
       "return 400" in {
         given
@@ -220,9 +256,9 @@ class ContactPersonControllerISpec
       }
     }
 
-    "Contact Details entered" +
-      "Is this the contact address you want to use? No" +
-      "Is the contact address in the UK? No" +
+    "Contact Details entered \n" +
+      "Is this the contact address you want to use? No \n" +
+      "Is the contact address in the UK? No \n" +
       "Address details not entered" should {
       "return 400" in {
         given
