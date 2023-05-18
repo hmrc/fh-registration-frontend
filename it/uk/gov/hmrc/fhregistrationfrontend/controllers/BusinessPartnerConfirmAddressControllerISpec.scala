@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerConfirmAddressControllerIntegrationSpec
+class BusinessPartnerConfirmAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/partner-address" when {
@@ -26,7 +26,7 @@ class BusinessPartnerConfirmAddressControllerIntegrationSpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("Confirm the partner’s address?")
-              page.getElementById("page-heading").text() must include("Confirm partner name's address")
+              page.getElementsByTag("h1").text() must include("Confirm partner name's address")
             }
           }
         }
