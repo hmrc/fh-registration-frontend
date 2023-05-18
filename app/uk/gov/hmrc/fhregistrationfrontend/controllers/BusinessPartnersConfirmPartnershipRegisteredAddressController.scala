@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
+class BusinessPartnersConfirmPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
