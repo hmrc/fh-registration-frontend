@@ -88,4 +88,33 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
       }
     }
   }
+
+  "next" should {
+    "return 200" when {
+      "the use clicks save and continue" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe OK
+        contentAsString(result) shouldBe "Form submitted, with result:"
+        reset(mockActions)
+      }
+    }
+
+    "Render the page not found page" when {
+      "the new business partner pages are disabled" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next())(request))
+
+        result.header.status shouldBe NOT_FOUND
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("Page not found")
+        reset(mockActions)
+      }
+    }
+  }
 }
