@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerPartnershipConfirmRegisteredAddressControllerISpec
+class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/confirm-partnership-registered-office-address" when {
@@ -27,6 +27,31 @@ class BusinessPartnerPartnershipConfirmRegisteredAddressControllerISpec
               val page = Jsoup.parse(res.body)
               page.title() must include("Confirm the partnership’s registered office address?")
               page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
+            }
+          }
+        }
+      }
+    }
+  }
+
+  "POST /form/business-partners/confirm-partnership-registered-office-address" when {
+
+    "the user clicks save and continue" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/form/business-partners/confirm-partnership-registered-office-address")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "mock" -> Seq("true"),
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Form submitted, with result:")
             }
           }
         }
