@@ -61,7 +61,7 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
     }
 
     "return 200" when {
-      "the form has no errors and the address is found" in {
+      "redirect to the next page" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
@@ -80,6 +80,35 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
+
+        result.header.status shouldBe NOT_FOUND
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("Page not found")
+        reset(mockActions)
+      }
+    }
+  }
+
+  "next" should {
+    "return 200" when {
+      "the use clicks save and continue" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe OK
+        contentAsString(result) shouldBe "Form submitted, with result:"
+        reset(mockActions)
+      }
+    }
+
+    "Render the page not found page" when {
+      "the new business partner pages are disabled" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next())(request))
 
         result.header.status shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

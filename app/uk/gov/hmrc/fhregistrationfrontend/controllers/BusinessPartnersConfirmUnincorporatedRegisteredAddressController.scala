@@ -41,6 +41,14 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressController @Inject()
     }
   }
 
+  def next(): Action[AnyContent] = userAction { implicit request =>
+    if (config.newBusinessPartnerPagesEnabled) {
+      Ok(s"Form submitted, with result:")
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
+  }
+
   val address: Address = Address(
     addressLine1 = "44 Romford Road",
     addressLine2 = Some("Testville"),
