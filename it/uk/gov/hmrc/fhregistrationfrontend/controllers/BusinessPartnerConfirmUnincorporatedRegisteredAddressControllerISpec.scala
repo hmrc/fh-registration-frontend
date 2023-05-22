@@ -33,4 +33,29 @@ class BusinessPartnerConfirmUnincorporatedRegisteredAddressControllerISpec
       }
     }
   }
+
+  "POST /form/business-partners/confirm-unincorporated-body-registered-office-address" when {
+
+    "the user clicks save and continue" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/form/business-partners/confirm-unincorporated-body-registered-office-address")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "mock" -> Seq("true"),
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Form submitted, with result:")
+            }
+          }
+        }
+      }
+    }
+  }
 }
