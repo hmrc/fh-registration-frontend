@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
+class BusinessPartnersUnincorporatedOfficeAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,14 +36,14 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test Corporate Body"
+      val partnerName = "Test Unincorporated Body"
       val bpAddressForm = chooseAddressForm
       val journeyType = "enterAddress"
       val postAction =
         Call(
           method = "POST",
           url =
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyEnterAddressController
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedOfficeAddressController
               .load()
               .url)
       Ok(
@@ -57,7 +57,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test Corporate Body"
+      val partnerName = "Test Unincorporated Body"
       val journeyType = "enterAddress"
       chooseAddressForm.bindFromRequest.fold(
         formWithErrors => {
@@ -65,7 +65,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
             Call(
               method = "POST",
               url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyEnterAddressController
+                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedOfficeAddressController
                   .next()
                   .url)
           BadRequest(
