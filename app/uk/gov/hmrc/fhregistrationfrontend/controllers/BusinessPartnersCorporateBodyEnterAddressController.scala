@@ -48,7 +48,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
               .url)
       Ok(
         view
-          .business_partners_corporateBody_enter_address(bpAddressForm, postAction, partnerName, journeyType))
+          .business_partners_enter_registered_address(bpAddressForm, postAction, partnerName, journeyType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -69,7 +69,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
                   .next()
                   .url)
           BadRequest(
-            view.business_partners_corporateBody_enter_address(formWithErrors, postAction, partnerName, journeyType))
+            view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, journeyType))
         },
         bpAddress => {
           Ok(s"Next page! with form result: ${bpAddress.toString}")
