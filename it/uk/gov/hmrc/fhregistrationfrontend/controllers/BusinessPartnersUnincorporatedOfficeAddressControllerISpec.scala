@@ -84,7 +84,7 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
           }
         }
 
-        "redirect when form is filled out incorrectly" when {
+        "return error when form is filled out incorrectly" when {
           "address line 1 is missing" in {
             given
               .commonPrecondition
