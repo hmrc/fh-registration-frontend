@@ -19,49 +19,39 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.unincorporatedBodyNameForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
 class BusinessPartnersUnincorporatedBodyNameController @Inject()(
-                                                                  ds: CommonPlayDependencies,
-                                                                  view: Views,
-                                                                  actions: Actions,
-                                                                  config: FrontendAppConfig)(
-                                                                  cc: MessagesControllerComponents
+  ds: CommonPlayDependencies,
+  view: Views,
+  actions: Actions,
+  config: FrontendAppConfig)(
+  cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
   import actions._
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction = routes.BusinessPartnerUnincorporatedBodyNameController.next()
-      Ok(
-        view.business_partner_corporate_body_trading_name(
-          tradingNameForm,
-          "unincorporatedBody",
-          "Shelby unincorporated",
-          postAction))
+      val postAction = routes.BusinessPartnersUnincorporatedBodyNameController.next()
+      Ok(view.business_partners_unincorporated_body_name(unincorporatedBodyNameForm, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
+    val postAction = routes.BusinessPartnersUnincorporatedBodyNameController.next()
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest.fold(
+      unincorporatedBodyNameForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(
-            view.business_partner_corporate_body_trading_name(
-              formWithErrors,
-              "unincorporatedBody",
-              "Shelby unincorporated",
-              postAction))
+          BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction))
         },
-        tradingName => {
-          Ok(s"Form submitted, with result: $tradingName")
+        unincorporatedBodyName => {
+          Ok(s"Form submitted, with result: $unincorporatedBodyName")
         }
       )
     } else {
