@@ -28,14 +28,14 @@
         formHelper: FormWithCSRF,
         viewHelpers: ViewHelpers)
 
-@(address: Address, companyName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(address: Address, companyName: String, titleType: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
 @title = @{
-    messages("fh.businessPartners.partnership.confirmRegisteredAddress.title")
+    messages(s"fh.businessPartners.$titleType.confirmRegisteredAddress.title") + " - Business partners"
 }
 
 @layout(title = title, Some(pageScripts), backUrl = Some("#")) {
