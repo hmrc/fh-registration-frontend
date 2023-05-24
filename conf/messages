@@ -698,6 +698,8 @@ fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’
 
 fh.businessPartners.corporateBody.companyName.heading =What is the company name?
 fh.businessPartners.corporateBody.companyName.title =What is the company name? - Business partners
+fh.businessPartners.companyName.error.required=Enter a valid company name
+fh.businessPartners.companyName.error.pattern=Company Name must be less than 140 characters
 
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
