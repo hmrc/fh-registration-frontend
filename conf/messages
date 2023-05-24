@@ -697,6 +697,8 @@ fh.business.partners.corporateBody.enter.registered.address.title=Enter the comp
 fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
 
 fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body name?
+fh.businessPartners.unincorporatedBodyName_value.error.required=Enter the unincorporated body name
+fh.businessPartners.unincorporatedBodyName_value.error.pattern=Enter a valid unincorporated body name
 
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
