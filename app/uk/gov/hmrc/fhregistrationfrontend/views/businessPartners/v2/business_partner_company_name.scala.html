@@ -35,7 +35,7 @@
         formHelper: FormWithCSRF
     )
 
-@(journeyType: String, postAction: Call, form: Form[companyNameModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(journeyType: String, postAction: Call, form: Form[_], formKey: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
@@ -43,10 +43,10 @@
 }
 
 @title = @{
-    messages("fh.businessPartners.corporateBody.companyName.title")
+    messages(s"fh.businessPartners.$journeyType.companyName.title")
 }
 
-@heading = @{messages("fh.businessPartners.corporateBody.companyName.heading")}
+@heading = @{messages(s"fh.businessPartners.$journeyType.companyName.heading")}
 
 @layout(title = title + titlePrefix, backUrl = None){
 
@@ -55,11 +55,11 @@
         @Html(BusinessPartnersHeader(heading))
 
         @viewHelpers.govukInput(Input(
-            id = companyNameKey,
-            name = companyNameKey,
+            id = formKey,
+            name = formKey,
             classes = "govuk-label--l",
-            value = Some(s"${form(companyNameKey).value.getOrElse("")}"),
-            errorMessage = form(companyNameKey).error.map { e =>
+            value = Some(s"${form(formKey).value.getOrElse("")}"),
+            errorMessage = form(formKey).error.map { e =>
                 ErrorMessage(
                     content = Text(Messages(s"fh.businessPartners.${e.key}.${e.message}")),
                     visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
