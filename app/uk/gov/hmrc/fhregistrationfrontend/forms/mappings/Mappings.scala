@@ -81,6 +81,9 @@ object Mappings {
   def unincorporatedBodyName =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+  def ltdLiabilityPartnership =
+    nonEmptyText verifying Constraints.pattern(
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
   def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
   def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
