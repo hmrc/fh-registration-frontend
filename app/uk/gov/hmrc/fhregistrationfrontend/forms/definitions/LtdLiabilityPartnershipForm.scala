@@ -27,7 +27,7 @@ object LtdLiabilityPartnershipForm {
 
   private val ltdLiabilityPartnershipMapping = ltdLiabilityPartnershipKey -> ltdLiabilityPartnership
 
-  val ltdLiabilityPartnershipeForm = Form(
+  val ltdLiabilityPartnershipForm = Form(
     mapping(
       ltdLiabilityPartnershipMapping
     )(LtdLiabilityPartnership.apply)(LtdLiabilityPartnership.unapply)

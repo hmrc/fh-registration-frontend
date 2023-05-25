@@ -19,12 +19,12 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipForm.ltdLiabilityPartnershipForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerLtdLiabilityPartnershipController @Inject()(
+class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,20 +36,22 @@ class BusinessPartnerLtdLiabilityPartnershipController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_trading_name(tradingNameForm, "Test User"))
+      val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
+      Ok(view.business_partners_ltd_liability_partnership_name(ltdLiabilityPartnershipForm, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
+    val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest.fold(
+      ltdLiabilityPartnershipForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_trading_name(formWithErrors, "Test User"))
+          BadRequest(view.business_partners_ltd_liability_partnership_name(formWithErrors, postAction))
         },
-        tradingName => {
-          Ok(s"Form submiteed, with result: $tradingName")
+        ltdLiabilityPartnership => {
+          Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
         }
       )
     } else {
