@@ -64,7 +64,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the unincorporated body name")
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter an unincorporated body name")
           }
         }
       }
@@ -85,7 +85,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid unincorporated body name")
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Unincorporated body name must be 120 characters or less")
           }
         }
       }

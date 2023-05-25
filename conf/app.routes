@@ -108,6 +108,9 @@ POST         /form/business-partners/confirm-unincorporated-body-registered-offi
 GET          /form/business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load()
 POST         /form/business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next()
 
+GET          /form/business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load()
+POST         /form/business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.next()
+
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
