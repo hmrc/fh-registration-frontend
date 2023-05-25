@@ -74,7 +74,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
             val page = Jsoup.parse(res.body)
             page.title must include("What is the company name? - Business partners")
             page.getElementsByTag("h1").text() must include("What is the company name?")
-            page.getElementById("companyName-error").text() must include("Enter a valid company name")
+            page.getElementById("companyName-error").text() must include("Enter a company name")
           }
         }
       }
@@ -99,7 +99,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
             val page = Jsoup.parse(res.body)
             page.title must include("What is the company name? - Business partners")
             page.getElementsByTag("h1").text() must include("What is the company name?")
-            page.getElementById("companyName-error").text() must include("Company Name must be less than 140 characters")
+            page.getElementById("companyName-error").text() must include("Company name must be 140 characters or less")
           }
         }
       }

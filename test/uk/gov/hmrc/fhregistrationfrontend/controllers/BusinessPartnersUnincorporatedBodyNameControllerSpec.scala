@@ -94,7 +94,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("What is the unincorporated body name?")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter the unincorporated body name")
+            "Enter an unincorporated body name")
           reset(mockActions)
         }
       }
