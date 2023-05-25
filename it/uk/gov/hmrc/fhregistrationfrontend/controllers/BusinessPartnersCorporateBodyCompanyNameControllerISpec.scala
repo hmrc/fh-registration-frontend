@@ -33,9 +33,9 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
 
   }
 
-  "POST /form/business-partners/unincorporated-body-trading-name" when {
+  "POST /form/business-partners/company-name" when {
 
-    "the user selects yes and enters a trading name" should {
+    "the user submits with a company name" should {
       "return 200" when {
         "the user is authenticated" in {
           given.commonPrecondition
@@ -89,10 +89,9 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
-              "companyName" -> Seq("ghfgdhdgfhfgfhghf" +
-                "gdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhg" +
-                "hfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
-                "dhdgfhfgfhghfgdhdgfhfgfhs")
+              "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
+                "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
+                "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
             ))
 
           whenReady(result) { res =>

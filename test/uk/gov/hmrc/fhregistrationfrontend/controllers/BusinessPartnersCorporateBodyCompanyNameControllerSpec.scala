@@ -37,7 +37,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
       mockMcc)
 
   "load" should {
-    "Render the business partner trading name page" when {
+    "Render the business partner company name page" when {
       "The business partner v2 pages are enabled" in {
         setupUserAction()
 
