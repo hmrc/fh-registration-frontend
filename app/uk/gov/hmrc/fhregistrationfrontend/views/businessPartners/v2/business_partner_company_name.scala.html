@@ -44,7 +44,7 @@
 
 @heading = @{messages(s"fh.businessPartners.$journeyType.companyName.heading")}
 
-@layout(title = title + titlePrefix, backUrl = None){
+@layout(title = title + titlePrefix, backUrl = None, isBrowserBackMimic = true){
 
     @viewHelpers.form(action = postAction) {
 
