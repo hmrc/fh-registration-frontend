@@ -69,5 +69,26 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
         }
       }
     }
+
+    "Unincorporated body name is not valid (exceeds 120 chars)" should {
+      "return 400" in {
+        given
+          .commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-name")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("unincorporatedBodyName_value" -> Seq("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid unincorporated body name")
+          }
+        }
+      }
+    }
   }
 }

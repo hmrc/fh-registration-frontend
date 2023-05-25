@@ -82,7 +82,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
           reset(mockActions)
         }
 
-        "the user doesn't enter a company registration number" in {
+        "the user doesn't enter a unincorporated body name" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
