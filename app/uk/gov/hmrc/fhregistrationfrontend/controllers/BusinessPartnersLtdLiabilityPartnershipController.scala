@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipForm.ltdLiabilityPartnershipForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.ltdLiabilityPartnershipNameForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
-      Ok(view.business_partners_ltd_liability_partnership_name(ltdLiabilityPartnershipForm, postAction))
+      Ok(view.business_partners_ltd_liability_partnership_name(ltdLiabilityPartnershipNameForm, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -46,7 +46,7 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
     if (config.newBusinessPartnerPagesEnabled) {
-      ltdLiabilityPartnershipForm.bindFromRequest.fold(
+      ltdLiabilityPartnershipNameForm.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(view.business_partners_ltd_liability_partnership_name(formWithErrors, postAction))
         },

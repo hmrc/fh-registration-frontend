@@ -700,9 +700,9 @@ fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body
 fh.businessPartners.unincorporatedBodyName_value.error.required=Enter the unincorporated body name
 fh.businessPartners.unincorporatedBodyName_value.error.pattern=Enter a valid unincorporated body name
 
-fh.businessPartners.companyName.title=What is the company name?
-fh.businessPartners.companyName.error.required=Enter a company name
-fh.businessPartners.companyName.error.pattern=Company name must be 140 characters or less
+fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
+fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
+fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
 
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.

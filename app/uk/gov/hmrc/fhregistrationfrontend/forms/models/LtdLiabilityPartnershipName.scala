@@ -18,10 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class LtdLiabilityPartnership(
+case class LtdLiabilityPartnershipName(
   value: String
 )
 
-object LtdLiabilityPartnership {
-  implicit val format = Json.format[LtdLiabilityPartnership]
+object LtdLiabilityPartnershipName {
+  implicit val format = Json.format[LtdLiabilityPartnershipName]
 }

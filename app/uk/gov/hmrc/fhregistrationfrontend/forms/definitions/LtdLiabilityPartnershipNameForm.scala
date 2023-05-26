@@ -18,18 +18,18 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.ltdLiabilityPartnership
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.LtdLiabilityPartnership
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.ltdLiabilityPartnershipName
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.LtdLiabilityPartnershipName
 
-object LtdLiabilityPartnershipForm {
+object LtdLiabilityPartnershipNameForm {
 
-  val ltdLiabilityPartnershipKey = "ltdLiabilityPartnership"
+  val ltdLiabilityPartnershipNameKey = "ltdLiabilityPartnershipName"
 
-  private val ltdLiabilityPartnershipMapping = ltdLiabilityPartnershipKey -> ltdLiabilityPartnership
+  private val ltdLiabilityPartnershipNameMapping = ltdLiabilityPartnershipNameKey -> ltdLiabilityPartnershipName
 
-  val ltdLiabilityPartnershipForm = Form(
+  val ltdLiabilityPartnershipNameForm = Form(
     mapping(
-      ltdLiabilityPartnershipMapping
-    )(LtdLiabilityPartnership.apply)(LtdLiabilityPartnership.unapply)
+      ltdLiabilityPartnershipNameMapping
+    )(LtdLiabilityPartnershipName.apply)(LtdLiabilityPartnershipName.unapply)
   )
 }
