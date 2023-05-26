@@ -702,8 +702,8 @@ fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated bo
 
 fh.businessPartners.corporateBody.companyName.heading =What is the company name?
 fh.businessPartners.corporateBody.companyName.title =What is the company name? - Business partners
-fh.businessPartners.corporateBody.companyName.error.required=Enter a company name
-fh.businessPartners.corporateBody.companyName.error.pattern=Company name must be 140 characters or less
+fh.businessPartners.companyName.error.required=Enter a company name
+fh.businessPartners.companyName.error.pattern=Company name must be 140 characters or less
 
 fh.businessPartners.partnership.companyName.heading =What is the name of the partnership?
 fh.businessPartners.partnership.companyName.title =What is the name of the partnership? - Business partners
