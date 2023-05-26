@@ -13,7 +13,7 @@ class BusinessPartnersPartnershipNameControllerISpec
 
   "GET /form/business-partners/partnership-name" when {
 
-    "render the business partner unincorporated body trading name page" when {
+    "render the business partners partnership name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
