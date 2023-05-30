@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipNameControllerISpec
       }
     }
 
-    "User enters over 140 characters" should {
+    "User enters over 120 characters" should {
       "return 400" in {
         given.commonPrecondition
 
@@ -89,17 +89,17 @@ class BusinessPartnersPartnershipNameControllerISpec
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
-              "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
-                "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
-                "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
-            ))
+              "partnershipName" -> Seq("hghghghghghghghhghghghghghghghhghghgh" +
+                "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghgh" +
+                "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghghg"
+            )))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.title must include("What is the name of the partnership? - Business partners")
             page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
-            page.getElementById("partnershipName-error").text() must include("Enter a partnership name")
+            page.getElementById("partnershipName-error").text() must include("Partnership name must be 120 characters or less")
           }
         }
       }

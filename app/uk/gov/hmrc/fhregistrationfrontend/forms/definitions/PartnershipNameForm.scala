@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.partnerhshipName
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.partnershipName
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipNameModel
 
 object PartnershipNameForm {
@@ -27,7 +27,7 @@ object PartnershipNameForm {
 
   val partnershipNameForm = Form(
     mapping(
-      partnershipNameKey -> partnerhshipName
+      partnershipNameKey -> partnershipName
     )(PartnershipNameModel.apply)(PartnershipNameModel.unapply)
   )
 }
