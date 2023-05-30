@@ -705,6 +705,10 @@ fh.businessPartners.corporateBody.companyName.title =What is the company name? -
 fh.businessPartners.companyName.error.required=Enter a company name
 fh.businessPartners.companyName.error.pattern=Company name must be 140 characters or less
 
+fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
+fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
+fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
+
 fh.businessPartners.partnership.companyName.heading =What is the name of the partnership?
 fh.businessPartners.partnership.companyName.title =What is the name of the partnership? - Business partners
 fh.businessPartners.partnershipName.error.required=Enter a partnership name
