@@ -697,8 +697,13 @@ fh.business.partners.corporateBody.enter.registered.address.title=Enter the comp
 fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
 
 fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body name?
-fh.businessPartners.unincorporatedBodyName_value.error.required=Enter the unincorporated body name
-fh.businessPartners.unincorporatedBodyName_value.error.pattern=Enter a valid unincorporated body name
+fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
+fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
+
+fh.businessPartners.corporateBody.companyName.heading =What is the company name?
+fh.businessPartners.corporateBody.companyName.title =What is the company name? - Business partners
+fh.businessPartners.companyName.error.required=Enter a company name
+fh.businessPartners.companyName.error.pattern=Company name must be 140 characters or less
 
 fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
 fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
