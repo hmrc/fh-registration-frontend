@@ -68,34 +68,38 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
   "next" should {
     "The business partner v2 pages are enabled" should {
-      "return 200" in {
-        setupUserAction()
+      "return 200" when {
+        "the form has no errors and the partnership name name is supplied" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "partnershipName" -> "Partnership name goes here"
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "partnershipName" -> "Partnership name goes here"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        reset(mockActions)
+          status(result) shouldBe OK
+          reset(mockActions)
+        }
       }
 
-      "return 400" in {
-        setupUserAction()
+      "return 400" when {
+        "a partnership name isn't entered" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "partnershipName" -> ""
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "partnershipName" -> ""
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe BAD_REQUEST
-        reset(mockActions)
+          status(result) shouldBe BAD_REQUEST
+          reset(mockActions)
+        }
       }
     }
 
