@@ -8,13 +8,13 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersLtdLiabilityPartnershipControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/limited-liability-partnernership-name" should {
+  "GET /form/business-partners/limited-liability-partnership-name" should {
     "render the Limited Liability Partnership Name page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnernership-name")
+        val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -28,14 +28,14 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
     }
   }
 
-  "POST /form/business-partners/limited-liability-partnernership-name" when {
+  "POST /form/business-partners/limited-liability-partnership-name" when {
     "the limited liability partnership name is entered" should {
       "return 200 with ltdLiabilityPartnershipName" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnernership-name")
+          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -55,7 +55,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnernership-name")
+          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -76,7 +76,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnernership-name")
+          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
