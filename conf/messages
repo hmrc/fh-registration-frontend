@@ -709,6 +709,11 @@ fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the li
 fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
 fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
 
+fh.businessPartners.partnership.companyName.heading =What is the name of the partnership?
+fh.businessPartners.partnership.companyName.title =What is the name of the partnership? - Business partners
+fh.businessPartners.partnershipName.error.required=Enter a partnership name
+fh.businessPartners.partnershipName.error.pattern=Partnership name must be 120 characters or less
+
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
 
