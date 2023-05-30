@@ -21,10 +21,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyNameForm.{companyNameForm, companyNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnershipNameForm.{partnershipNameForm, partnershipNameKey}
 
 @Singleton
-class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
+class BusinessPartnersPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,12 +33,12 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val journeyType = "corporateBody"
-  val postAction = routes.BusinessPartnersCorporateBodyCompanyNameController.next()
+  val journeyType = "partnership"
+  val postAction = routes.BusinessPartnersPartnershipNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, companyNameForm, companyNameKey))
+      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -46,12 +46,12 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      companyNameForm.bindFromRequest.fold(
+      partnershipNameForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, companyNameKey))
+          BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey))
         },
-        companyName => {
-          Ok(s"Form submitted, with result: $companyName")
+        partnership => {
+          Ok(s"Form submitted, with result: $partnership")
         }
       )
     } else {
