@@ -117,6 +117,9 @@ POST         /form/business-partners/partnership-name                           
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
+GET         /businessCustomers                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessCustomersController.load()
+POST        /businessCustomers                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessCustomersController.next()
+
 GET         /form/business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipController.load()
 POST        /form/business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipController.next()
 

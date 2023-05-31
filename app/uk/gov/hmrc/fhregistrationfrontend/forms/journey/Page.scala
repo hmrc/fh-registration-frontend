@@ -243,7 +243,10 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.business_customers(form, navigation)
+          views.business_customers(
+            form,
+            navigation,
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"))
       }
     )
 
