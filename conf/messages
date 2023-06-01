@@ -657,6 +657,7 @@ fh.businessPartners.unincorporatedBody.tradingName.title = Does the unincorporat
 fh.businessPartners.unincorporatedBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
 fh.business.partners.incorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
 fh.businessPartners.unincorporated.confirmRegisteredAddress.title=Confirm the unincorporated body’s registered office address?
+fh.businessPartners.corporate.confirmRegisteredAddress.title=Confirm the company’s registered office address?
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
@@ -680,7 +681,7 @@ fh.business.partners.enterAddress.postcode.label = Postcode (optional)
 fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcode
 
 fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
-fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address
+fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
 
 fh.businessPartners.corporateBody.companyRegistrationNumber.title=What is the company’s company registration number?
 fh.businessPartners.corporateBody.companyRegistrationNumber.heading=What is {0}’s company registration number?
