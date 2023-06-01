@@ -131,6 +131,9 @@ GET         /resume                                                     @uk.gov.
 GET         /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.load()
 POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.controllers.UkVatNumberController.next()
 
+GET         /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.load()
+POST        /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.next()
+
 GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
 GET         /downloadPrintable                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
