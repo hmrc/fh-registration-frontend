@@ -54,22 +54,9 @@ class BusinessPartnersConfirmCorporateRegisteredAddressControllerSpec
         // should be mocked out when Save4Later changes included
         page.title() should include("Confirm the unincorporated body’s registered office address?")
         page.getElementsByTag("h1").text should include("Confirm the Test Corp’s registered office address")
+        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
         page.body.text should include("Test town")
         page.getElementById("confirm-edit").attr("href") should include("#")
-        reset(mockActions)
-      }
-    }
-
-    "return 200" when {
-      "redirect to the next page" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
         reset(mockActions)
       }
     }
