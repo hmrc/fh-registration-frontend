@@ -223,6 +223,9 @@ object Page {
       }
     )
 
+    val importingActivitiesPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
+
     val importingActivitiesPage = new BasicPage[ImportingActivities](
       "importingActivities",
       ImportingActivitiesForm.importingActivitiesForm,
@@ -231,7 +234,7 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.importing_activities(form, navigation)
+          views.importing_activities(form, navigation, importingActivitiesPostUrl)
       }
     )
 
