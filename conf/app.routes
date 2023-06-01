@@ -114,6 +114,9 @@ POST         /form/business-partners/company-name                               
 GET          /form/business-partners/partnership-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipNameController.load()
 POST         /form/business-partners/partnership-name                           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipNameController.next()
 
+GET          /form/business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmCorporateRegisteredAddressController.load()
+POST         /form/business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmCorporateRegisteredAddressController.next()
+
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
