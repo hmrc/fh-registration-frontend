@@ -22,7 +22,8 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation.noNavigation
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm.importingActivitiesForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm.{eoriNumberKey, hasEoriMapping, importingActivitiesForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
 
 @Singleton
 class ImportingActivitiesController @Inject()(
@@ -48,10 +49,13 @@ class ImportingActivitiesController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       importingActivitiesForm.bindFromRequest.fold(
         formWithErrors => {
+          println("+++++++++++++++++++++++++++++++++++++")
+          println(Console.BLUE + " now it's really blue!")
+          println(formWithErrors.errors)
           BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
         },
-        importingActivitiesForm => {
-          Ok(s"Form submitted, with result: $importingActivitiesForm")
+        importingActivities => {
+          Ok(s"Form submitted, with result: $importingActivities")
         }
       )
     } else {
