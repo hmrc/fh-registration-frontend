@@ -9,7 +9,6 @@ class BusinessCustomersControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /businessCustomers" when {
-
     "render the business customers page" when {
       "the user is authenticated" in {
         given.commonPrecondition
@@ -28,12 +27,53 @@ class BusinessCustomersControllerISpec
         }
       }
     }
-
   }
 
   "POST /businessCustomers" when {
+    "the user selects None" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
 
-    "the user selects" should {
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/businessCustomers")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "numberOfCustomers" -> Seq("None")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Next page! with form result: BusinessCustomers(None)")
+            }
+          }
+        }
+      }
+    }
+    "the user selects 1-10" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/businessCustomers")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "numberOfCustomers" -> Seq("1-10")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Next page! with form result: BusinessCustomers(1-10)")
+            }
+          }
+        }
+      }
+    }
+
+    "the user selects 11-50" should {
       "return 200" when {
         "the user is authenticated" in {
           given.commonPrecondition
@@ -53,7 +93,53 @@ class BusinessCustomersControllerISpec
           }
         }
       }
+    }
 
+    "the user selects 51-100" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/businessCustomers")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "numberOfCustomers" -> Seq("51-100")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Next page! with form result: BusinessCustomers(51-100)")
+            }
+          }
+        }
+      }
+    }
+
+    "the user selects Over 100" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/businessCustomers")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "numberOfCustomers" -> Seq("Over 100")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              res.body must include("Next page! with form result: BusinessCustomers(Over 100)")
+            }
+          }
+        }
+      }
+    }
+
+    "the user does not select a radio button" should {
       "return 400" when {
         "the user doesn't select a radio button" in {
           given.commonPrecondition
@@ -75,7 +161,6 @@ class BusinessCustomersControllerISpec
           }
         }
       }
-
     }
   }
 }
