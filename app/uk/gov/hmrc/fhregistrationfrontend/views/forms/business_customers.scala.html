@@ -28,7 +28,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -45,7 +45,7 @@
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"), 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
     @if(businessCustomersForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
