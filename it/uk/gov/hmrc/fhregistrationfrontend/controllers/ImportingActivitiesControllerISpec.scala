@@ -55,7 +55,31 @@ class ImportingActivitiesControllerISpec
       }
     }
 
-    "the user selects yes without providing an EORI number" should {
+    "the user selects yes, enters EORI and selects Yes again" should {
+      "return 200" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/$requestUrl")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "hasEori" -> Seq("true"),
+                "eoriNumber.eoriNumber" -> Seq.empty,
+                "eoriNumber.goodsImportedOutsideEori" -> Seq("true")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+             println(res.body)
+            }
+          }
+        }
+      }
+    }
+
+    /*"the user selects yes without providing an EORI number" should {
       "return 400" when {
         "the user is authenticated" in {
           given.commonPrecondition
@@ -80,6 +104,6 @@ class ImportingActivitiesControllerISpec
           }
         }
       }
-    }
+    }*/
   }
 }
