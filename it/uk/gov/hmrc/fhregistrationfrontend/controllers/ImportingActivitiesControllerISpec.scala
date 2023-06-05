@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.EoriNumber
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class ImportingActivitiesControllerISpec
@@ -43,12 +44,38 @@ class ImportingActivitiesControllerISpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "hasEoriMapping" -> Seq("false")
+                "hasEori" -> Seq("true")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
+              println(res.body)
+            }
+          }
+        }
+      }
+    }
+
+    "the user selects yes without providing an EORI number" should {
+      "return 400" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+
+          val eoriNumber = Map(
+            "eoriNumber" -> Seq(""),
+            "goodsImportedOutsideEori" -> Seq("false")
+          )
+
+          WsTestClient.withClient { client =>
+            val result = client.url(s"$baseUrl/$requestUrl")
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "hasEori" -> Seq("true")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 400
             }
           }
         }

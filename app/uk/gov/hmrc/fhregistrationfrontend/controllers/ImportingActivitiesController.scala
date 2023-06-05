@@ -50,12 +50,12 @@ class ImportingActivitiesController @Inject()(
       importingActivitiesForm.bindFromRequest.fold(
         formWithErrors => {
           println("+++++++++++++++++++++++++++++++++++++")
-          println(Console.BLUE + " now it's really blue!")
+          println(Console.BLUE + "HERE IS THE ERROR IN BLUE")
           println(formWithErrors.errors)
           BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
         },
-        importingActivities => {
-          Ok(s"Form submitted, with result: $importingActivities")
+        hasEori => {
+          Ok(s"Form submitted, with result: $hasEori")
         }
       )
     } else {
