@@ -49,9 +49,6 @@ class ImportingActivitiesController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       importingActivitiesForm.bindFromRequest.fold(
         formWithErrors => {
-          println("+++++++++++++++++++++++++++++++++++++")
-          println(Console.BLUE + "HERE IS THE ERROR IN BLUE")
-          println(formWithErrors.errors)
           BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
         },
         hasEori => {
