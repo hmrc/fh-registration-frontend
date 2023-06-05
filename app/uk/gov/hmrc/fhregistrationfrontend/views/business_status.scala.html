@@ -1,0 +1,127 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessStatus
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessStatusForm.{isNewFulfilmentBusinessKey, proposedStartDateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+
+@this(layout: layout, viewHelpers: ViewHelpers)
+
+@(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@pageScripts = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@titlePrefix = @{
+    if (businessStatusForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
+@title = @{
+    Messages("fh.business_status.label")
+}
+
+@inputHasErrors(input: String) = @{input match {
+    case i: String if businessStatusForm.hasErrors && businessStatusForm.errors.head.toString.contains(i) => true
+    case _: String if businessStatusForm.hasErrors && (businessStatusForm.errors.head.toString.contains("date.empty.error") || businessStatusForm.errors.head.toString.contains("error.invalid"))=> true
+    case _ => false
+}}
+
+@deriveErrorKey(message: String) = @{
+    if(businessStatusForm(isNewFulfilmentBusinessKey).hasErrors) isNewFulfilmentBusinessKey
+    else {
+        message match {
+            case e: String if e.contains("day") => s"$proposedStartDateKey-$proposedStartDateKey.day"
+            case e: String if e.contains("month") => s"$proposedStartDateKey-$proposedStartDateKey.month"
+            case e: String if e.contains("year") => s"$proposedStartDateKey-$proposedStartDateKey.year"
+            case _ => s"$proposedStartDateKey-$proposedStartDateKey.day"
+        }
+    }
+}
+
+@conditionalHtml= @{
+    viewHelpers.govukDateInput(DateInput(
+        id = proposedStartDateKey,
+        hint = Some(Hint(
+        content = Text(Messages("fh.business_status.new_business.hint_text"))
+    )),
+    errorMessage = businessStatusForm(proposedStartDateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.proposedStartDate.${e.message}", e.args:_*)))),
+    items = Seq(
+        InputItem(name = s"$proposedStartDateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = businessStatusForm.data.get(s"$proposedStartDateKey.day")),
+        InputItem(name = s"$proposedStartDateKey.month", classes = s"govuk-input--width-2${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = businessStatusForm.data.get(s"$proposedStartDateKey.month")),
+        InputItem(name = s"$proposedStartDateKey.year", classes = s"govuk-input--width-4${if(inputHasErrors("year")){" govuk-input--error"} else {""}}", label=Some("Year"), value = businessStatusForm.data.get(s"$proposedStartDateKey.year"))),
+        fieldset = Some(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("fh.business_status.new_business.label")),
+                classes = "govuk-fieldset__legend--m",
+                isPageHeading = false
+            ))
+        ))
+    ))
+}
+
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
+
+    @viewHelpers.form(action = BusinessStatusController.next(), 'novalidate -> "novalidate") {
+
+        @if(businessStatusForm.errors.nonEmpty) {
+
+            @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                Seq(ErrorLink(
+                    href = Some(s"#${deriveErrorKey(businessStatusForm.errors.head.message)}") ,
+                    content = Text(messages(s"fh.${businessStatusForm.errors.head.key}.${businessStatusForm.errors.head.message}"))
+                )),
+            title = Text(messages("fh.generic.error"))))
+        }
+
+        @viewHelpers.govUkRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(Messages(title)),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                ))
+            )),
+            idPrefix = Some(isNewFulfilmentBusinessKey),
+            name = isNewFulfilmentBusinessKey,
+            errorMessage = if (businessStatusForm(isNewFulfilmentBusinessKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.isNewFulfilmentBusiness.error.required"))))
+            } else None,
+            items = Seq(
+                RadioItem(
+                    content = Text(messages("fh.generic.yes")),
+                    value = Some("true"),
+                    checked = businessStatusForm.data.values.toList.contains("true"),
+                    conditionalHtml = Some(conditionalHtml)
+                ),
+            RadioItem(
+                content = Text("No"),
+                value = Some("false"),
+                checked = businessStatusForm.data.values.toList.contains("false"),
+            )
+        )
+    ))
+
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
+}
+}
