@@ -44,12 +44,11 @@ class ImportingActivitiesControllerISpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "hasEori" -> Seq("true")
+                "hasEori" -> Seq("false")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              println(res.body)
             }
           }
         }
@@ -71,7 +70,8 @@ class ImportingActivitiesControllerISpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "hasEori" -> Seq("true")
+                "hasEori" -> Seq("true"),
+                "eoriNumber" -> Seq.empty
               ))
 
             whenReady(result) { res =>
