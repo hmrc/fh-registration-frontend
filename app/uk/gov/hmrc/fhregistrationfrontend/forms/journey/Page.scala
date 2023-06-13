@@ -98,7 +98,11 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.main_business_address(form, bpr, navigation)
+          views.main_business_address(
+            form,
+            bpr,
+            navigation,
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"))
       },
       addressOnPage = _.previousAddress
     )
