@@ -26,7 +26,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(hasOtherStoragePremisesForm: Form[Boolean])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(hasOtherStoragePremisesForm: Form[Boolean], postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -42,7 +42,7 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
 
-    @viewHelpers.form(action = OtherStoragePremisesController.next(), 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = postAction, 'novalidate -> "novalidate") {
         @if(hasOtherStoragePremisesForm.errors.nonEmpty) {
 
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

@@ -34,9 +34,11 @@ class OtherStoragePremisesController @Inject()(
 
   import actions._
 
+  val postAction: Call = routes.OtherStoragePremisesController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.other_storage_premises_page(hasOtherStoragePrmisesForm))
+      Ok(view.other_storage_premises_page(hasOtherStoragePrmisesForm, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -45,7 +47,7 @@ class OtherStoragePremisesController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       hasOtherStoragePrmisesForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.other_storage_premises_page(formWithErrors))
+          BadRequest(view.other_storage_premises_page(formWithErrors, postAction))
         },
         otherStorePremises => {
           Ok(s"Form submitted, with result: $otherStorePremises")

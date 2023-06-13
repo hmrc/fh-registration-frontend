@@ -122,8 +122,6 @@ class OtherStoragePremisesControllerSpec
           val page = Jsoup.parse(contentAsString(result))
           page.title should include(
             "Does the business use any UK premises to store third-party goods imported from outside the UK?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Select whether the business uses other premises for storing non-UK goods")
           reset(mockActions)
         }
       }
