@@ -77,6 +77,7 @@ class Views @Inject()(
   val contact_person_page: uk.gov.hmrc.fhregistrationfrontend.views.html.contact_person,
   val trading_name_page: uk.gov.hmrc.fhregistrationfrontend.views.html.trading_name,
   val business_status_page: uk.gov.hmrc.fhregistrationfrontend.views.html.business_status,
+  val other_storage_premises_page: uk.gov.hmrc.fhregistrationfrontend.views.html.other_storage_premises,
 ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
   val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
