@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.BusinessPartnersHeader
 @import play.api.mvc._
 @import play.api.data.Form
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
 
 
 @this(layout: layout,
@@ -35,8 +36,7 @@
 
 
 @titlePrefix = @{
-    //if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
-    ""
+    if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
@@ -52,8 +52,8 @@
         @Html(BusinessPartnersHeader(heading))
 
         @viewHelpers.govukInput(Input(
-        id = "formKey",
-        name = "formKey",
+        id = firstNameKey,
+        name = firstNameKey,
         label = Label(
         isPageHeading = false,
         content = HtmlContent(s"${messages(s"fh.business_partners.$journeyType.first_name.label")}")
@@ -61,13 +61,19 @@
         spellcheck = Some(false),
         classes = "govuk-!-width-one-half",
         hint = None,
-        errorMessage = None,
-        value = None
+        errorMessage = form.error(firstNameKey).map{ e =>
+            ErrorMessage(
+                content = Text(messages(s"fh.${e.key}.${e.message}")),
+                visuallyHiddenText = Some(messages("generic.errorPrefix"))
+            )
+
+        },
+        value = form(firstNameKey).value
         ))
 
         @viewHelpers.govukInput(Input(
-            id = "formKey",
-            name = "formKey",
+            id = lastNameKey,
+            name = lastNameKey,
             label = Label(
                 isPageHeading = false,
                 content = HtmlContent(s"${messages(s"fh.business_partners.$journeyType.last_name.label")}")
@@ -76,7 +82,7 @@
             classes = "govuk-!-width-one-half",
             hint = None,
             errorMessage = None,
-            value = None
+            value = form(lastNameKey).value
         ))
 
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
