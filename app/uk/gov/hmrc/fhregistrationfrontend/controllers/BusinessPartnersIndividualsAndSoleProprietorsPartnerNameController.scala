@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersPartnerNameController @Inject()(
+class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,8 +33,8 @@ class BusinessPartnersPartnerNameController @Inject()(
 
   import actions._
 
-  val journeyType = "Individuals&SoleProprietors"
-  val postAction = routes.BusinessPartnersPartnerNameController.next()
+  val journeyType = "individual"
+  val postAction = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -45,6 +45,10 @@ class BusinessPartnersPartnerNameController @Inject()(
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    Ok("Next page")
+    if (config.newBusinessPartnerPagesEnabled) {
+      Ok("Next page")
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
   }
 }

@@ -760,6 +760,7 @@ fh.partnerPostcode.error.required=Enter the postcode of the address
 fh.partnerPostcode.error.pattern=Enter a valid postcode
 
 fh.business_partners.individual.partnerName.heading=What is the name of the first partner?
+fh.business_partners.individual.partnerName.title=What is the name of the partner? - Business partners
 fh.business_partners.individual.first_name.label=First name
 fh.businessPartnerIndividual.firstName.error.required=Enter the person''s first name
 fh.businessPartnerIndividual.firstName.error.pattern=Enter only valid characters for a first name
