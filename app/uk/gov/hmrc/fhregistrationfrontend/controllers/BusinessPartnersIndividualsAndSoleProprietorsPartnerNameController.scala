@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{partnerNameForm => form}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -38,7 +39,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_partner_name(journeyType, postAction))
+      Ok(view.business_partners_partner_name(form, journeyType, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -47,6 +48,14 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok("Next page")
+      form.bindFromRequest.fold(
+        formWithErrors => {
+          BadRequest(view.business_partners_partner_name(formWithErrors, journeyType, postAction))
+        },
+        partnerName => {
+          Ok(s"Form submitted, with result: $partnerName")
+        }
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

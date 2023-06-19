@@ -31,7 +31,7 @@
         formHelper: FormWithCSRF
 )
 
-@(journeyType: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[_], journeyType: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{

@@ -85,12 +85,14 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
           .withFormUrlEncodedBody(
-            )
+            "firstName" -> "first name",
+            "lastName"  -> "last name"
+          )
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe OK
-        contentAsString(result) shouldBe "Next page"
+        contentAsString(result) shouldBe "Form submitted, with result: PartnerName(first name,last name)"
         reset(mockActions)
       }
     }
