@@ -43,7 +43,7 @@
     messages(s"fh.businessPartners.$journeyType.partnerName.title")
 }
 
-@heading = @{messages(s"fh.businessPartners.$journeyType.partnerName.heading")}
+@heading = @{messages(s"fh.business_partners.individual.partnerName.heading")}
 
 @layout(title = title + titlePrefix, backUrl = None, isBrowserBackMimic = true){
 
@@ -56,13 +56,13 @@
         name = "formKey",
         label = Label(
         isPageHeading = false,
-        content = HtmlContent(s"<strong>${messages("fh.tradingName.label")}</strong>")
+        content = HtmlContent(s"${messages("fh.business_partners.individual.first_name.label")}")
         ),
         spellcheck = Some(false),
         classes = "govuk-!-width-one-half",
         hint = None,
         errorMessage = None,
-        value = Some("NameKey")
+        value = None
         ))
 
         @viewHelpers.govukInput(Input(
@@ -70,13 +70,13 @@
             name = "formKey",
             label = Label(
                 isPageHeading = false,
-                content = HtmlContent(s"<strong>${messages("fh.tradingName.label")}</strong>")
+                content = HtmlContent(s"${messages("fh.business_partners.individual.last_name.label")}")
             ),
             spellcheck = Some(false),
             classes = "govuk-!-width-one-half",
             hint = None,
             errorMessage = None,
-            value = Some("NameKey")
+            value = None
         ))
 
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
