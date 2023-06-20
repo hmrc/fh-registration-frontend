@@ -34,12 +34,11 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   import actions._
 
-  val journeyType = "individual"
   val postAction = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_partner_name(form, journeyType, postAction))
+      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -50,7 +49,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
       Ok("Next page")
       form.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partners_partner_name(formWithErrors, journeyType, postAction))
+          BadRequest(view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction))
         },
         partnerName => {
           Ok(s"Form submitted, with result: $partnerName")

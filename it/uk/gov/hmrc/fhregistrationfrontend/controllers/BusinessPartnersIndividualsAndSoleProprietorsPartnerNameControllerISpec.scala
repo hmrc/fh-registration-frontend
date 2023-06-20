@@ -2,7 +2,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import  uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
 
@@ -35,31 +34,50 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         val result = buildRequest("/partner-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
 
         whenReady(result) { res =>
           res.status mustBe 200
-          // res.body mustBe "fsrf"
+          res.body mustBe "Form submitted, with result: PartnerName(Coca,Cola)"
         }
       }
     }
 
-//    "return 400" when {
-//      "the form fields are left blank" in {
-//
-//      }
-//
-//      "first name is missing" in {
-//
-//
-//      }
-//
-//      "last name is missing" in {
-//
-//      }
-//
-//    }
+    "return 400" when {
+      "the form fields are left blank" in {
+        given.commonPrecondition
 
+        val result = buildRequest("/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq(""), lastNameKey -> Seq("")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person’s first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person's last name")
+
+        }
+      }
+
+      "fields contain invalid characters" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("&&"), lastNameKey -> Seq("%%")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a last name")
+        }
+      }
+    }
   }
 
 }
