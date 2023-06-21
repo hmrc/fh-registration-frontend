@@ -9,13 +9,13 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
   extends Specifications with TestConfiguration {
 
 
-  "GET /partner-name" when {
+  "GET /business-partners/partner-name" when {
 
     "render the business partner IndividualsAndSoleProprietors partner name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/partner-name")
+        val result = buildRequest("/business-partners/partner-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
         whenReady(result) { res =>
@@ -27,12 +27,12 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
     }
   }
 
-  "POST /partner-name" when {
+  "POST /business-partners/partner-name" when {
     "return 200" when {
       "the form is filled out correctly" in {
         given.commonPrecondition
 
-        val result = buildRequest("/partner-name")
+        val result = buildRequest("/business-partners/partner-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
@@ -48,7 +48,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the form fields are left blank" in {
         given.commonPrecondition
 
-        val result = buildRequest("/partner-name")
+        val result = buildRequest("/business-partners/partner-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq(""), lastNameKey -> Seq("")))
@@ -56,16 +56,15 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person’s first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person's first name")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person's last name")
-
         }
       }
 
       "fields contain invalid characters" in {
         given.commonPrecondition
 
-        val result = buildRequest("/partner-name")
+        val result = buildRequest("/business-partners/partner-name")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("&&"), lastNameKey -> Seq("%%")))
@@ -74,6 +73,70 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a last name")
+        }
+      }
+
+      "the first name field is left blank" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq(""), lastNameKey -> Seq("Cola")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person's first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() mustNot include("Enter the person's last name")
+        }
+      }
+
+      "the last name field is left blank" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() mustNot include("Enter the person's first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the person's last name")
+        }
+      }
+
+      "the first name field contains invalid characters" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("$$$"), lastNameKey -> Seq("cola")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a first name")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() mustNot include("Enter only valid characters for a last name")
+        }
+      }
+
+      "the last name field contains invalid characters" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("$$%%")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() mustNot include("Enter only valid characters for a first name")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter only valid characters for a last name")
         }
       }

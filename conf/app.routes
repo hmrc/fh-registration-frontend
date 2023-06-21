@@ -149,8 +149,8 @@ POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.con
 GET         /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.load()
 POST        /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.next()
 
-GET         /partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load()
-POST        /partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
+GET         /business-partners/partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load()
+POST        /business-partners/partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
 
 GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
