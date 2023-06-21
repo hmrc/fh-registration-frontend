@@ -36,7 +36,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   // Todo get this from cache later
 
-  val journeyTypes = Array("partnership", "LLP")
+  val journeyTypes: Array[String] = Array("partnership", "LLP")
 
   val partnerName = "Test User"
   val title = "partnership"
@@ -52,8 +52,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
       Ok(
         view.business_partner_registered_address(
           businessPartnersAddressForm,
+          partnerName,
           Random.shuffle(journeyTypes.toList).head,
-          title,
           postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -64,7 +64,12 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, partnerName, title, postAction))
+          BadRequest(
+            view.business_partner_registered_address(
+              formWithErrors,
+              partnerName,
+              Random.shuffle(journeyTypes.toList).head,
+              postAction))
         },
         bpAddress => {
           // Todo implement address lookup

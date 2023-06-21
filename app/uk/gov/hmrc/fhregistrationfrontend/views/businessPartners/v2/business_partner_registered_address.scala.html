@@ -47,8 +47,9 @@
 
 @backLink = @{
     titleType match {
-        case "partnership" => "@BusinessPartnerUtrController.load()"
-        case "LLP" => "@BusinessPartnersVatRegistrationNumberController.load()"
+        case "partnership" => "/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference"
+        case "LLP" => "/fhdds/form/business-partners/partner-vat-registration-number"
+        case _ => "#"
     }
 }
 
