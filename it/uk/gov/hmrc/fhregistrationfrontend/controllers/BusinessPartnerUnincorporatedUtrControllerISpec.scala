@@ -4,6 +4,7 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnerUnincorporatedUtrControllerISpec
   extends Specifications with TestConfiguration {
@@ -31,42 +32,41 @@ class BusinessPartnerUnincorporatedUtrControllerISpec
 
   "POST /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" when {
     "yes is selected and the UTR is entered" should {
-      "return 200 with UTR" in {
+      "redirect to the Partnership Registered Office Address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("true"),
-              "uniqueTaxpayerReference_value" -> Seq("1234567890")))
+        val result = buildRequest("/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "uniqueTaxpayerReference_yesNo" -> Seq("true"),
+            "uniqueTaxpayerReference_value" -> Seq("1234567890")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with UTR: 1234567890"
-          }
+        whenReady(result) { res =>
+          println("========= " + res)
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
         }
       }
     }
 
     "no is selected" should {
-      "return 200 with no UTR message" in {
+      "redirect to the Partnership Registered Office Address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("false")))
+        val result = buildRequest("/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("false")))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with no UTR"
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
         }
       }
     }

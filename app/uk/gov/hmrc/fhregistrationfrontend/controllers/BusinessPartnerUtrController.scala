@@ -61,11 +61,7 @@ class BusinessPartnerUtrController @Inject()(
           BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
         },
         businessPartnersUtr => {
-          businessPartnersUtr.value match {
-            case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
-            case None =>
-              Ok(s"Next page! with no UTR")
-          }
+          Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
         }
       )
     } else {
