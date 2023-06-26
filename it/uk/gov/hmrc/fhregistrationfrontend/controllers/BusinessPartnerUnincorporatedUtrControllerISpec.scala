@@ -46,7 +46,6 @@ class BusinessPartnerUnincorporatedUtrControllerISpec
           ))
 
         whenReady(result) { res =>
-          println("========= " + res)
           res.status mustBe 303
           res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
         }
