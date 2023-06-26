@@ -29,7 +29,6 @@ val compile = Seq(
   "org.julienrf"                %% "play-json-derived-codecs"         % "10.1.0",
   "com.github.julien-truffaut"  %% "monocle-core"                     % monocleVersion,
   "com.github.julien-truffaut"  %% "monocle-macro"                    % monocleVersion,
-  "com.github.julien-truffaut"  %% "monocle-law"                      % monocleVersion,
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
   "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.5",
 
@@ -38,15 +37,16 @@ val compile = Seq(
 )
 
 def test(scope: String = "test,it") = Seq(
-  "uk.gov.hmrc"                 %% "bootstrap-test-play-28"         % bootstrapVersion   % scope,
-  "org.scalatest"               %% "scalatest"                      % "3.2.9"    % scope,
-  "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"    % scope,
-  "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"  % scope,
-  "org.scalatestplus"           %% "mockito-3-4"                    % "3.2.9.0"  % scope,
-  "com.github.tomakehurst"       % "wiremock-standalone"            % "2.27.2"   % scope,
-  "org.pegdown"                  % "pegdown"                        % "1.6.0"    % scope,
-  "org.jsoup"                    % "jsoup"                          % "1.13.1"   % scope,
-  "org.scalacheck"              %% "scalacheck"                     % "1.15.4"   % scope
+  "uk.gov.hmrc"                 %% "bootstrap-test-play-28"         % bootstrapVersion % scope,
+  "org.scalatest"               %% "scalatest"                      % "3.2.9"          % scope,
+  "org.scalatestplus.play"      %% "scalatestplus-play"             % "5.1.0"          % scope,
+  "com.vladsch.flexmark"         % "flexmark-all"                   % "0.35.10"        % scope,
+  "org.scalatestplus"           %% "mockito-3-4"                    % "3.2.9.0"        % scope,
+  "com.github.tomakehurst"       % "wiremock-standalone"            % "2.27.2"         % scope,
+  "org.pegdown"                  % "pegdown"                        % "1.6.0"          % scope,
+  "org.jsoup"                    % "jsoup"                          % "1.13.1"         % scope,
+  "org.scalacheck"              %% "scalacheck"                     % "1.15.4"         % scope,
+  "com.github.julien-truffaut"  %% "monocle-law"                    % monocleVersion   % scope
 )
 
 val appName = "fh-registration-frontend"
@@ -83,7 +83,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(scalaVersion := "2.13.10")
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
