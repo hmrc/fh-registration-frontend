@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -68,7 +68,7 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Partnership Registered Office Address page" when {
         "the form has no errors, yes is selected and UTR supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -79,8 +79,9 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with UTR: 1234567890"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/partnership-registered-office-address")
           reset(mockActions)
         }
 
@@ -92,8 +93,9 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with no UTR"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/partnership-registered-office-address")
           reset(mockActions)
         }
       }
