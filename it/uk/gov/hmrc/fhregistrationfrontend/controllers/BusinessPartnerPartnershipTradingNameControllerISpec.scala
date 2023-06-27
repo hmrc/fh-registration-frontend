@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnerPartnershipTradingNameControllerISpec
@@ -33,48 +34,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
   "POST /form/business-partners/partnership-trading-name" when {
 
-    "the user selects yes and enters a trading name" should {
-      "return 200" when {
-        "the user is authenticated" in {
-          given.commonPrecondition
-
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("Shelby Company Limited")
-              ))
-
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
-            }
-          }
-        }
-
-        "the user selects no" in {
-          given.commonPrecondition
-
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("false"),
-                "tradingName_value" -> Seq.empty
-              ))
-
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(false,None)")
-            }
-          }
-        }
-      }
-    }
-
     "no radio option is selected by the user" should {
       "return 400" in {
         given.commonPrecondition
@@ -94,6 +53,25 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
             page.title must include("Does the partnership use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
           }
+        }
+      }
+    }
+
+    "the user selects no" should {
+      "redirect to the partnership name page" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/form/business-partners/partnership-trading-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "tradingName_yesNo" -> Seq("false"),
+            "tradingName_value" -> Seq.empty
+          ))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
         }
       }
     }
@@ -121,6 +99,24 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       }
     }
 
+    "the user selects yes and enters a trading name" should {
+      "redirect to the partnership name page" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/form/business-partners/partnership-trading-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "tradingName_yesNo" -> Seq("true"),
+            "tradingName_value" -> Seq("Shelby Company Limited")
+          ))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+        }
+      }
+    }
 
   }
 

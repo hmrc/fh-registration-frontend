@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
@@ -30,21 +31,18 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
 
   "POST /form/business-partners/limited-liability-partnership-name" when {
     "the limited liability partnership name is entered" should {
-      "return 200 with ltdLiabilityPartnershipName" in {
-        given
-          .commonPrecondition
+      "redirect to the registration number page" in {
+        given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
+        val result = buildRequest("/form/business-partners/limited-liability-partnership-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number ")
         }
       }
     }

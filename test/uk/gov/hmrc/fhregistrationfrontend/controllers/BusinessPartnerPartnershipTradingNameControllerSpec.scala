@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -70,7 +70,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "return 200" in {
+      "redirect to the partnership name page" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -82,8 +82,8 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        contentAsString(result) shouldBe "Form submitted, with result: TradingName(true,Some(new trading name))"
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include("/form/business-partners/partnership-vat-registration-number")
         reset(mockActions)
       }
 
