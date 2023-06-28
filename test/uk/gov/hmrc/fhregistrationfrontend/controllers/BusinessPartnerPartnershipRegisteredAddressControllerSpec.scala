@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -70,17 +70,33 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
-        "the form has no errors, postcode is entered" in {
+      "redirect to the Choose Address page" when {
+        "multiple addresses are found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
+            .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", ""))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA and address line 44"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/form/business-partners/choose-address")
+          reset(mockActions)
+        }
+      }
+
+      "redirect to the Confirm Address page" when {
+        "a single address is found" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", "1 Romford Road"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/confirm-partnership-registered-office-address")
           reset(mockActions)
         }
       }

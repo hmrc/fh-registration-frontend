@@ -23,6 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddr
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.util.Random
 
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
@@ -34,18 +35,26 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   import actions._
 
   // Todo get this from cache later
+
+  val journeyTypes: Array[String] = Array("partnership", "LLP")
+
   val partnerName = "Test User"
   val title = "partnership"
   val postAction: Call = Call(
     method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
+    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController
       .next()
       .url
   )
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, partnerName, title, postAction))
+      Ok(
+        view.business_partner_registered_address(
+          businessPartnersAddressForm,
+          partnerName,
+          Random.shuffle(journeyTypes.toList).head,
+          postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -55,14 +64,20 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, partnerName, title, postAction))
+          BadRequest(
+            view.business_partner_registered_address(
+              formWithErrors,
+              partnerName,
+              Random.shuffle(journeyTypes.toList).head,
+              postAction))
         },
         bpAddress => {
-          val addressLineMsg = bpAddress.addressLine match {
-            case Some(addressLine) => s"address line $addressLine"
-            case _                 => "no address line"
+          // Todo implement address lookup
+          if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
+            Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+          } else {
+            Redirect(routes.BusinessPartnersChooseAddressController.load())
           }
-          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
         }
       )
     } else {

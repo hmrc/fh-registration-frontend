@@ -22,6 +22,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.BusinessPartnersHeader
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 
 @this(layout: layout,
         viewHelpers: ViewHelpers,
@@ -43,7 +45,15 @@
     if(businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
-@layout(title = title, backUrl = Some("#")){
+@backLink = @{
+    titleType match {
+        case "partnership" => "/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference"
+        case "LLP" => "/fhdds/form/business-partners/partner-vat-registration-number"
+        case _ => "#"
+    }
+}
+
+@layout(title = title, backUrl = Some(backLink)){
 
     @Html(BusinessPartnersHeader(messages("fh.business.partners.registered.address.heading", corporateBody)))
 
@@ -76,7 +86,7 @@
         )
 
         <p class="govuk-body">
-            <a href="#" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
+            <a href="@BusinessPartnersEnterRegistrationOfficeAddress.load()" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
         </p>
 
         @viewHelpers.govukButton(Button(content = Text(messages("fh.business.partners.find.address.button")), inputType = Some("submit")))

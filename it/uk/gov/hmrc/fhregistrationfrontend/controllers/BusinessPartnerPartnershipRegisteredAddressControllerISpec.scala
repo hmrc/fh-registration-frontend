@@ -4,6 +4,7 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnerPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
@@ -37,45 +38,48 @@ class BusinessPartnerPartnershipRegisteredAddressControllerISpec
   }
 
   "POST /form/business-partners/partner-address" when {
-    "the form has no errors" should {
-      "return 200" in {
+    "address entered where single address found" should {
+      "redirect to the Choose Address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(s"/form/business-partners/partnership-registered-office-address")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+          .post(Map(
+            "partnerAddressLine" -> Seq("1 Romford Road"),
+            "partnerPostcode" -> Seq("TF1 4ER")
+          ))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ and address line 1"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/confirm-partnership-registered-office-address")
           }
-        }
       }
     }
 
-    "address line not populated" should {
-      "return 200" in {
+    "address entered where multiple found" should {
+      "redirect to the Choose Address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(s"/form/business-partners/partnership-registered-office-address")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq.empty,
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+          .post(Map(
+            "partnerAddressLine" -> Seq.empty,
+            "partnerPostcode" -> Seq("TF1 4ER")
+          ))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ and no address line"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/choose-address")
           }
         }
       }
-    }
+
 
     "postcode not populated" should {
       "return 400" in {
