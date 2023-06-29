@@ -33,7 +33,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
   }
 
   "POST /form/business-partners/partnership-trading-name" when {
-
     "no radio option is selected by the user" should {
       "return 400" in {
         given.commonPrecondition
@@ -57,24 +56,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       }
     }
 
-    "the user selects no" should {
-      "redirect to the partnership name page" in {
-        given.commonPrecondition
-
-        val result = buildRequest("/form/business-partners/partnership-trading-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq("false"),
-            "tradingName_value" -> Seq.empty
-          ))
-
-        whenReady(result) { res =>
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
-        }
-      }
-    }
 
     "yes is selected but no trading name is entered" should {
       "return 400" in {
@@ -99,12 +80,85 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       }
     }
 
-    "the user selects yes and enters a trading name" should {
+
+    "the businessType/legal entity of the partnership is a 'partnership'" when {
+      "the user selects no" should {
+        "redirect to the partnership name page" in {
+          given.commonPrecondition
+
+          val result = buildRequest("/form/business-partners/partnership-trading-name")
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie),
+              DefaultWSCookie("businessType", "partnership")
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "tradingName_yesNo" -> Seq("false"),
+              "tradingName_value" -> Seq.empty
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+          }
+        }
+      }
+
+      "the user selects yes and enters a trading name" should {
+        "redirect to the partnership name page" in {
+          given.commonPrecondition
+
+          val result = buildRequest("/form/business-partners/partnership-trading-name")
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie),
+              DefaultWSCookie("businessType", "partnership")
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "tradingName_yesNo" -> Seq("true"),
+              "tradingName_value" -> Seq("Shelby Company Limited")
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+          }
+        }
+      }
+    }
+
+    "the businessType/legal entity of the partnership is a 'limited liability partnership'" when {
+      "the user selects no" should {
       "redirect to the partnership name page" in {
         given.commonPrecondition
 
         val result = buildRequest("/form/business-partners/partnership-trading-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "limited-liability-partnership")
+          )
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "tradingName_yesNo" -> Seq("false"),
+            "tradingName_value" -> Seq.empty
+          ))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
+        }
+      }
+    }
+
+      "the user selects yes and enters a trading name" should {
+      "redirect to the partnership name page" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/form/business-partners/partnership-trading-name")
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "limited-liability-partnership")
+          )
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(
             "tradingName_yesNo" -> Seq("true"),
@@ -113,9 +167,10 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
         }
       }
+    }
     }
 
   }

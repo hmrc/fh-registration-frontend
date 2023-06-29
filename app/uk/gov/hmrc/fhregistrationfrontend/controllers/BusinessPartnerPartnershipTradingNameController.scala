@@ -20,19 +20,15 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
-import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class BusinessPartnerPartnershipTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig,
-  save4LaterService: Save4LaterService)(
+  config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -40,54 +36,45 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
+      val businessType: String = config.getRandomBusinessType()
       Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User"))
+        .withCookies(Cookie("businessType", "limited-liability-partnership"))
+        .bakeCookies() // TODO [DLS-7603] - temp save4later solution
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def next(): Action[AnyContent] = userAction.async { implicit request =>
+  def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest.fold(
-        formWithErrors => {
-          Future.successful(BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User")))
-        },
-        tradingName => {
-          //Todo cache tradingName data
-          //fetch data from save4later
-
-          // businessType match {
-          // case "partnership" => redirect to BusinessPartnersPartnershipVatNumberController.load
-          // case "ltd partnership" => redirect to BusinessPartnersCorporateBodyCompanyRegNumberController.load
-          // case _ => log error with message s"Could not parse businessType $businessType" then redirect to errorHandler.errorResultsPages(Results.BadRequest)
-
-          save4LaterService
-            .fetchBusinessType(request.userId)
-            .map {
-              case Some(businessType) if businessType.equals("Partnership") =>
-                println(Console.MAGENTA + s"Business Type: $businessType" + Console.RESET)
-                logger.info(s"Business Type: $businessType")
+      tradingNameForm.bindFromRequest
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User"))
+          },
+          tradingName => {
+            //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache
+            println(Console.YELLOW + request.cookies.get("businessType") + Console.RESET)
+            request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType) if businessType.equals("partnership") =>
                 Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
-              // There is no "ltd partnership" option in businessType enum object, so this will never be hit
-              case Some(businessType) if businessType.equals("ltd partnership") =>
-                println(Console.MAGENTA + s"Business Type: $businessType" + Console.RESET)
+              case Some(businessType) if businessType.equals("limited-liability-partnership") =>
+                //TODO need to refactor from 'corporate body reg number' controller to 'company reg number' controller
                 Redirect(routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load())
-              case Some(businessType) =>
-                println(Console.MAGENTA + s"Business Type: $businessType" + Console.RESET)
+              case Some(unknownBusinessType) =>
                 logger.warn(
-                  s"[BusinessPartnerPartnershipTradingNameController][next] - Could not parse businessType $businessType")
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unknownBusinessType retrieved")
                 errorHandler.errorResultsPages(Results.BadRequest)
-            }
-            .recover {
               case _ =>
                 logger.error(
-                  s"[BusinessPartnerPartnershipTradingNameController][next][recover] - Failed to retrieve businessType from cache")
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
                 errorHandler.errorResultsPages(Results.InternalServerError)
             }
-        }
-      )
+          }
+        ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
     } else {
-      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
+      errorHandler
+        .errorResultsPages(Results.NotFound) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
     }
   }
 

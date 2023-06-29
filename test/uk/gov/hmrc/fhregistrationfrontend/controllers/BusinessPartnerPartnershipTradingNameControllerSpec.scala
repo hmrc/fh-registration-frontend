@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -43,7 +44,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
+        val request = FakeRequest().withCookies(Cookie(name = "businessType", value = ""))
         val result = await(csrfAddToken(controller.load())(request))
 
         status(result) shouldBe OK
@@ -70,24 +71,47 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "redirect to the partnership name page" in {
-        setupUserAction()
+      "redirect to the partnership vat number page" when {
+        "the businessType/legal entity of the partnership is a 'partnership'" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "tradingName_yesNo" -> "true",
-            "tradingName_value" -> "new trading name"
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "partnership")) //TODO [DLS-7603] - temp save4later solution
+            .withFormUrlEncodedBody(
+              "tradingName_yesNo" -> "true",
+              "tradingName_value" -> "new trading name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/form/business-partners/partnership-vat-registration-number")
-        reset(mockActions)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/form/business-partners/partnership-vat-registration-number")
+          reset(mockActions)
+        }
       }
 
-      "return 400" in {
+      "redirect to the partnership reg number page" when {
+        "the businessType/legal entity of the partnership is a 'limited liability partnership'" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "limited-liability-partnership")) //TODO [DLS-7603] - temp save4later solution
+            .withFormUrlEncodedBody(
+              "tradingName_yesNo" -> "true",
+              "tradingName_value" -> "new trading name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/form/business-partners/company-registration-number")
+          reset(mockActions)
+        }
+      }
+
+      "return 400 when the form containes errors" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)

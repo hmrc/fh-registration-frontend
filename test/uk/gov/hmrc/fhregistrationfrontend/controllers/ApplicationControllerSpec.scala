@@ -422,7 +422,7 @@ class ApplicationControllerSpec
     }
   }
 
-  "submitBusinessType" should {[]
+  "submitBusinessType" should {
     "Fail if the businessType is not given" in {
       setupUserAction()
 

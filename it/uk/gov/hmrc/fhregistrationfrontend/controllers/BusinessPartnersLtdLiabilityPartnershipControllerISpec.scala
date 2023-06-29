@@ -10,20 +10,22 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/limited-liability-partnership-name" should {
-    "render the Limited Liability Partnership Name page" in {
-      given
-        .commonPrecondition
+    "the limited liability partnership name is entered" should {
+      "return 200 with ltdLiabilityPartnershipName" in {
+        given
+          .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("What is the name of the limited liability partnership?")
-          page.getElementsByTag("h1").text() must include("What is the name of the limited liability partnership?")
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body mustBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
+          }
         }
       }
     }
@@ -31,18 +33,21 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
 
   "POST /form/business-partners/limited-liability-partnership-name" when {
     "the limited liability partnership name is entered" should {
-      "redirect to the registration number page" in {
-        given.commonPrecondition
+      "return 200 with ltdLiabilityPartnershipName" in {
+        given
+          .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/limited-liability-partnership-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck")
-          .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck")
+            .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
 
-        whenReady(result) { res =>
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number ")
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body mustBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
+          }
         }
       }
     }

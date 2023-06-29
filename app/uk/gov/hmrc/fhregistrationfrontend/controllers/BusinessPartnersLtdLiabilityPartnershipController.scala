@@ -51,8 +51,7 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
           BadRequest(view.business_partners_ltd_liability_partnership_name(formWithErrors, postAction))
         },
         ltdLiabilityPartnership => {
-          //Todo cache ltdLiabilityPartnership data
-          Redirect(routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load())
+          Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
         }
       )
     } else {
