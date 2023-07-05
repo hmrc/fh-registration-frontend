@@ -45,7 +45,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User", backAction = backUrl)) // change back to url
+      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User", backAction = backUrl))
         .withCookies(Cookie("businessType", getBusinessType))
         .bakeCookies() // TODO [DLS-7603] - temp save4later solution
     } else {
@@ -58,7 +58,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
       tradingNameForm.bindFromRequest
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User", backUrl)) // change back to url
+            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User", backUrl))
           },
           tradingName => {
             //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache

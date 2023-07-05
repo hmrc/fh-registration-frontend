@@ -61,7 +61,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some(backAction), isBrowserBackMimic = false) {
+@layout(title = titlePrefix + title, backUrl = Some(backAction)) {
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipTradingNameController.next) {
 
