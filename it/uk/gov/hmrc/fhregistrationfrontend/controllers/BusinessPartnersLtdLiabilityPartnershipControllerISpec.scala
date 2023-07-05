@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}

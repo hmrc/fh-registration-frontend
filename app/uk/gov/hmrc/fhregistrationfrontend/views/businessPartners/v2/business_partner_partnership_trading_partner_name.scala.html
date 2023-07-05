@@ -23,7 +23,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(tradingNameForm: Form[_], partnerName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(tradingNameForm: Form[_], partnerName: String, backAction: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 
 @titlePrefix = @{
@@ -61,10 +61,9 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(backAction)) {
 
-
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerTradingNameController.next) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipTradingNameController.next) {
 
         @if(tradingNameForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

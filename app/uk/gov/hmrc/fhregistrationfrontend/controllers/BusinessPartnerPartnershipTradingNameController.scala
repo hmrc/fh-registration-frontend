@@ -34,9 +34,20 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   import actions._
 
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnersPartnershipNameController.load().url
+    else
+      routes.BusinessPartnersLtdLiabilityPartnershipController.load().url
+  }
+
+  private def getBusinessType: String = config.getRandomBusinessType()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User"))
+      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User", backAction = backUrl))
+        .withCookies(Cookie("businessType", getBusinessType))
+        .bakeCookies() // TODO [DLS-7603] - temp save4later solution
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -44,16 +55,33 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User"))
-        },
-        tradingName => {
-          Ok(s"Form submitted, with result: $tradingName")
-        }
-      )
+      tradingNameForm.bindFromRequest
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User", backUrl))
+          },
+          tradingName => {
+            //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache
+            request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType) if businessType.equals("partnership") =>
+                Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
+              case Some(businessType) if businessType.equals("limited-liability-partnership") =>
+                //TODO need to refactor from 'corporate body reg number' controller to 'company reg number' controller
+                Redirect(routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load())
+              case Some(unknownBusinessType) =>
+                logger.warn(
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unknownBusinessType retrieved")
+                errorHandler.errorResultsPages(Results.BadRequest)
+              case _ =>
+                logger.error(
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
+                errorHandler.errorResultsPages(Results.InternalServerError)
+            }
+          }
+        ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
     } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+      errorHandler
+        .errorResultsPages(Results.NotFound) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
     }
   }
 

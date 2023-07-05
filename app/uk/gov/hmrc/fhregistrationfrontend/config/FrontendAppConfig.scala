@@ -19,7 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.bootstrap.config.{ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import scala.util.Random
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
@@ -70,4 +72,8 @@ class FrontendAppConfig @Inject()(
   override def getConfiguration: Configuration = configuration
 
   override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
+
+  // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
+  val staticBusinessTypes = Seq("partnership", "limited-liability-partnership")
+  def getRandomBusinessType(): String = staticBusinessTypes(Random.nextInt(2))
 }
