@@ -34,11 +34,19 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   import actions._
 
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnersPartnershipNameController.load().url
+    else
+      routes.BusinessPartnersLtdLiabilityPartnershipController.load().url
+  }
+
+  private def getBusinessType: String = config.getRandomBusinessType()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val businessType: String = config.getRandomBusinessType()
-      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User"))
-        .withCookies(Cookie("businessType", "limited-liability-partnership"))
+      Ok(view.business_partner_partnership_trading_name(tradingNameForm, "Test User", backAction = backUrl)) // change back to url
+        .withCookies(Cookie("businessType", getBusinessType))
         .bakeCookies() // TODO [DLS-7603] - temp save4later solution
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -50,11 +58,10 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
       tradingNameForm.bindFromRequest
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User"))
+            BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User", backUrl)) // change back to url
           },
           tradingName => {
             //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache
-            println(Console.YELLOW + request.cookies.get("businessType") + Console.RESET)
             request.cookies.get("businessType").map(_.value) match {
               case Some(businessType) if businessType.equals("partnership") =>
                 Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())

@@ -44,7 +44,9 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest().withCookies(Cookie(name = "businessType", value = ""))
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+
+        val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
         status(result) shouldBe OK
@@ -58,6 +60,8 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -76,6 +80,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
@@ -96,6 +101,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
@@ -115,6 +121,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
         val request = FakeRequest()
           .withFormUrlEncodedBody(
             "tradingName_yesNo" -> "",
