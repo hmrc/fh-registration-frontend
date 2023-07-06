@@ -17,10 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.data.Form
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
@@ -33,12 +35,23 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val form: Form[VatNumber] = vatNumberForm
+  val partnerName = "Test Partner"
+
+  private def getBusinessType: String = config.getRandomBusinessType()
+
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnerPartnershipTradingNameController.load().url
+    else
+      routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load().url
+  }
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = vatNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
-      Ok(view.business_partner_partnership_vat_number(form, partnerName))
+      Ok(view.business_partner_partnership_vat_number(form, partnerName, backUrl))
+        .withCookies(Cookie("businessType", getBusinessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -47,16 +60,26 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
       vatNumberForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_partnership_vat_number(formWithErrors, partnerName))
+          BadRequest(view.business_partner_partnership_vat_number(formWithErrors, partnerName, backUrl))
         },
         vatNumber => {
-          vatNumber.value match {
-            case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-            case None =>
-              Ok(s"Next page! with no vatNumber")
+          request.cookies.get("businessType").map(_.value) match {
+            case Some(businessType)
+                if businessType.equals("partnership") || (businessType
+                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
+              Redirect(routes.BusinessPartnerUtrController.load())
+            case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
+              Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
+            case Some(unknownBusinessType) =>
+              logger.warn(
+                s"[BusinessPartnersPartnershipVatNumberController][next]: Unexpected error, $unknownBusinessType retrieved")
+              errorHandler.errorResultsPages(Results.BadRequest)
+            case _ =>
+              logger.error(
+                s"[BusinessPartnersPartnershipVatNumberController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
+              errorHandler.errorResultsPages(Results.InternalServerError)
           }
         }
       )
