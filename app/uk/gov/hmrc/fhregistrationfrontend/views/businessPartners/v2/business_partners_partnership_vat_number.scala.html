@@ -28,7 +28,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(vatNumberForm: Form[VatNumber], partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(vatNumberForm: Form[VatNumber], partnerName: String, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
@@ -68,9 +68,9 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(backAction)) {
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersPartnershipVatNumberController.next) {
 
         @if(vatNumberForm.errors.nonEmpty) {
 
