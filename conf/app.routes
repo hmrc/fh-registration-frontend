@@ -28,6 +28,10 @@ GET         /subscription/status                                        @uk.gov.
 
 GET         /address-lookup                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
+GET         /business-partners                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersController.load()
+POST        /business-partners                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersController.next()
+
+
 GET         /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
 POST        /form/business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
 
