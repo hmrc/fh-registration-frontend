@@ -14,11 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnerTypeForm._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -31,7 +31,7 @@
       formHelper: FormWithCSRF,
       viewHelpers: ViewHelpers)
 
-@(form: Form[BusinessPartner], addressList: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnerType.Value], addressList: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
 <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -75,8 +75,8 @@ content = Text(messages("fh.business_partners.entity_intro"))))
         isPageHeading = true
       ))
     )),
-    idPrefix = Some(businessPartnersKey),
-    name = businessPartnersKey,
+    idPrefix = Some(businessPartnerTypeKey),
+    name = businessPartnerTypeKey,
     errorMessage = form.errors.headOption.map{ e =>
         ErrorMessage(
             content = Text(messages(s"fh.${e.key}.${e.message}",""))
@@ -85,32 +85,32 @@ content = Text(messages("fh.business_partners.entity_intro"))))
     hint = None,
     items = Seq(
         RadioItem(
-            id = Some(s"${businessPartnerIndividualKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.individual.label")),
             value = Some(Messages("fh.business_partners.entity_type.individual.value")),
         ),
         RadioItem(
-            id = Some(s"${businessPartnerSoleProprietorKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.sole_proprietor.label")),
             value = Some(Messages("fh.business_partners.entity_type.sole_proprietor.value")),
         ),
         RadioItem(
-            id = Some(s"${businessPartnerPartnershipKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.partnership.label")),
             value = Some(Messages("fh.business_partners.entity_type.partnership.value")),
         ),
         RadioItem(
-            id = Some(s"${businessPartnerLimitedLiabilityPartnershipKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.limited_liability_partnership.label")),
             value = Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value")),
         ),
         RadioItem(
-            id = Some(s"${businessPartnerCorporateBodyKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.corporate_body.label")),
             value = Some(Messages("fh.business_partners.entity_type.corporate_body.value")),
         ),
         RadioItem(
-            id = Some(s"${businessPartnerUnincorporatedBodyKey}"),
+            id = Some(s"${businessPartnerTypeKey}"),
             content = Text(messages("fh.business_partners.entity_type.unincorporated_body.label")),
             value = Some(Messages("fh.business_partners.entity_type.unincorporated_body.value")),
         )

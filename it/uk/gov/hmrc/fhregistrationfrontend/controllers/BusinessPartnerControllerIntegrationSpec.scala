@@ -42,7 +42,7 @@ class BusinessPartnerControllerIntegrationSpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "mock" -> Seq("true"),
+                "businessType" -> Seq("Individual"),
               ))
 
             whenReady(result) { res =>
