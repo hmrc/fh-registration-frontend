@@ -52,7 +52,7 @@ messages("fh.business_partners.title")
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
       Seq(ErrorLink(
         href = Some(s"#${form.errors.head.key}"),
-        content = Text(messages(s"fh.${form.errors.head.key}.${form.errors.head.message}",""))
+        content = Text(messages(s"fh.businessPartnersType.${form.errors.head.message}",""))
     ))
     ,
       title = Text(messages("fh.generic.error"))))
@@ -79,7 +79,7 @@ content = Text(messages("fh.business_partners.entity_intro"))))
     name = businessPartnerTypeKey,
     errorMessage = form.errors.headOption.map{ e =>
         ErrorMessage(
-            content = Text(messages(s"fh.${e.key}.${e.message}",""))
+            content = Text(messages(s"fh.businessPartnersType.${e.message}",""))
         )
     },
     hint = None,
