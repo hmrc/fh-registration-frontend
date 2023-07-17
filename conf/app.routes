@@ -127,6 +127,8 @@ POST         /form/business-partners/partnership-name                           
 GET          /form/business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmCorporateRegisteredAddressController.load()
 POST         /form/business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmCorporateRegisteredAddressController.next()
 
+GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
+
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
