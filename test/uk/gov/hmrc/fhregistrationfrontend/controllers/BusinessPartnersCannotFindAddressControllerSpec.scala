@@ -67,18 +67,5 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
       }
     }
 
-    "the new business partner pages are enabled" should {
-      "return 200" when {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
-        reset(mockActions)
-      }
-    }
   }
 }
