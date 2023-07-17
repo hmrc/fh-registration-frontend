@@ -66,9 +66,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         reset(mockActions)
       }
     }
-  }
 
-  "next" when {
     "the new business partner pages are enabled" should {
       "return 200" when {
         setupUserAction()
