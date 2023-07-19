@@ -278,7 +278,14 @@ object Page {
           navigation: Navigation,
           sectionId: String,
           params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-          views.storage_premise(form, navigation, sectionId, params)
+          views.storage_premise(
+            form,
+            navigation,
+            sectionId,
+            params,
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+              .saveWithSection("otherStoragePremises", sectionId)
+          )
       },
       StoragePremisesForm.storagePremiseMapping,
       addressOnPage = { sp =>
