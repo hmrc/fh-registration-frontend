@@ -80,6 +80,27 @@ class BusinessPartnerPartnershipRegisteredAddressControllerISpec
         }
       }
 
+    "address entered where none found" should {
+      "redirect to the Cannot Find Address page" in {
+        given
+          .commonPrecondition
+
+        val result = buildRequest(s"/form/business-partners/partnership-registered-office-address")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "partnerAddressLine" -> Seq.empty,
+            "partnerPostcode" -> Seq("HR33 7GP")
+          ))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/cannot-find-address")
+        }
+      }
+    }
+
 
     "postcode not populated" should {
       "return 400" in {

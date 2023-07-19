@@ -36,10 +36,19 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   // Todo get this from cache later
 
-  val journeyTypes: Array[String] = Array("partnership", "LLP")
+  //val journeyTypes: Array[String] = Array("partnership", "LLP")
+
+  private def getBusinessType: String = config.getRandomBusinessType()
+
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnerUtrController.load().url
+    else
+      routes.BusinessPartnersVatRegistrationNumberController.load().url
+  }
 
   val partnerName = "Test User"
-  val title = "partnership"
+  val journey = "partnership"
   val postAction: Call = Call(
     method = "POST",
     url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController
@@ -50,11 +59,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
-        view.business_partner_registered_address(
-          businessPartnersAddressForm,
-          partnerName,
-          Random.shuffle(journeyTypes.toList).head,
-          postAction))
+        view
+          .business_partner_registered_address(businessPartnersAddressForm, partnerName, backUrl, postAction, journey))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -65,16 +71,14 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(
-            view.business_partner_registered_address(
-              formWithErrors,
-              partnerName,
-              Random.shuffle(journeyTypes.toList).head,
-              postAction))
+            view.business_partner_registered_address(formWithErrors, partnerName, backUrl, postAction, journey))
         },
         bpAddress => {
           // Todo implement address lookup
           if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
             Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+          } else if (bpAddress.postcode.contains("HR33 7GP")) {
+            Redirect(routes.BusinessPartnersCannotFindAddressController.load())
           } else {
             Redirect(routes.BusinessPartnersChooseAddressController.load())
           }
