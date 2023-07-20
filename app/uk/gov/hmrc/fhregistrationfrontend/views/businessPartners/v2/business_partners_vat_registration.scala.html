@@ -70,7 +70,7 @@ Messages("fh.businessPartner.vatNumber.heading", partnerName)
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next) {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next()) {
 
       @if(vatNumberForm.errors.nonEmpty) {
 

@@ -95,7 +95,7 @@
 
   @Details(Messages("fh.business_partners.entity"), entityDetails)
 
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("businessPartners", section), 'novalidate -> "novalidate") {
+  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("businessPartners", section), Symbol("novalidate") -> "novalidate") {
 
     @helper.CSRF.formField
 

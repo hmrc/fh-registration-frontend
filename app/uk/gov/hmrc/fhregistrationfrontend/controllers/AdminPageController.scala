@@ -78,15 +78,17 @@ class AdminPageController @Inject()(
   }
 
   def sendAdminRequest() = authAction.async { implicit request =>
-    requestForm.bindFromRequest.fold(
-      formWithErrors => {
-        Future.successful(BadRequest(views.admin_get_groupID(formWithErrors)))
-      },
-      formData =>
-        fhddsConnector
-          .addEnrolment(formData.userId, formData.groupId, formData.registrationNumber)
-          .map(result => Ok(result.body))
-    )
+    requestForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(BadRequest(views.admin_get_groupID(formWithErrors)))
+        },
+        formData =>
+          fhddsConnector
+            .addEnrolment(formData.userId, formData.groupId, formData.registrationNumber)
+            .map(result => Ok(result.body))
+      )
   }
 
   def loadAllocateEnrolment = authAction { implicit request =>
@@ -94,14 +96,16 @@ class AdminPageController @Inject()(
   }
 
   def allocateEnrolment = authAction.async { implicit request =>
-    allocateEnrolmentForm.bindFromRequest.fold(
-      formWithErrors => {
-        Future.successful(BadRequest(views.allocate_enrolment(formWithErrors)))
-      },
-      formData => {
-        fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-      }
-    )
+    allocateEnrolmentForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(BadRequest(views.allocate_enrolment(formWithErrors)))
+        },
+        formData => {
+          fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
+        }
+      )
   }
 
   def loadDeleteEnrolment = authAction { implicit request =>
@@ -109,15 +113,17 @@ class AdminPageController @Inject()(
   }
 
   def deleteEnrolment = authAction.async { implicit request =>
-    deleteEnrolmentForm.bindFromRequest.fold(
-      formWithErrors => {
-        Future.successful(BadRequest(views.delete_enrolment(formWithErrors)))
+    deleteEnrolmentForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(BadRequest(views.delete_enrolment(formWithErrors)))
 
-      },
-      formData => {
-        fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-      }
-    )
+        },
+        formData => {
+          fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
+        }
+      )
   }
 
   def checkStatus(regNo: String) = authAction.async { _ =>

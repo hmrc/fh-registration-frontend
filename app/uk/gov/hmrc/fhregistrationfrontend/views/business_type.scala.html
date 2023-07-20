@@ -67,7 +67,7 @@
             title = Text(messages("fh.generic.error"))))
     }
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType,'novalidate -> "novalidate") {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.submitBusinessType, Symbol("novalidate") -> "novalidate") {
 
         @viewHelpers.govUkRadios(
             Radios(

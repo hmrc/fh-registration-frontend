@@ -45,14 +45,16 @@ class OtherStoragePremisesController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      hasOtherStoragePrmisesForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.other_storage_premises_page(formWithErrors, postAction))
-        },
-        otherStorePremises => {
-          Ok(s"Form submitted, with result: $otherStorePremises")
-        }
-      )
+      hasOtherStoragePrmisesForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.other_storage_premises_page(formWithErrors, postAction))
+          },
+          otherStorePremises => {
+            Ok(s"Form submitted, with result: $otherStorePremises")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

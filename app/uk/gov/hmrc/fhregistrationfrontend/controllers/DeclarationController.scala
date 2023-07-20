@@ -113,7 +113,7 @@ class DeclarationController @Inject()(
           _.flatMap {
             response =>
               keyStoreService
-                .saveSummaryForPrint(getSummaryPrintable(journeys)(request, viewHelpers).toString())
+                .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
                 .map(_ => true)
                 .recover { case _ => false }
                 .map { pdfSaved =>

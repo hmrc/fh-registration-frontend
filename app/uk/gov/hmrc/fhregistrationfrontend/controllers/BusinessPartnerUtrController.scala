@@ -52,18 +52,20 @@ class BusinessPartnerUtrController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val partnerName = "test partner"
-      businessPartnerUtrForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
-          BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
-        },
-        businessPartnersUtr => {
-          Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
-        }
-      )
+      businessPartnerUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUtrController.next().url)
+            BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
+          },
+          businessPartnersUtr => {
+            Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

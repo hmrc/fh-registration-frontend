@@ -45,7 +45,7 @@
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyCompanyRegNumberController.next) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyCompanyRegNumberController.next()) {
 
         @if(regNumberForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

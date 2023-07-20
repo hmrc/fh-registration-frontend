@@ -124,7 +124,7 @@
 
 @layout(title = title,  pageScripts = Some(pageScripts)) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, Symbol("novalidate") -> "novalidate") {
     @if(confirmationForm.errors.nonEmpty) {
 
       @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

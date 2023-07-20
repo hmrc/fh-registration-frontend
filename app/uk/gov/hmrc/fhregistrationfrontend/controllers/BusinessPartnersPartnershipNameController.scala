@@ -46,14 +46,16 @@ class BusinessPartnersPartnershipNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      partnershipNameForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey))
-        },
-        partnership => {
-          Ok(s"Form submitted, with result: $partnership")
-        }
-      )
+      partnershipNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey))
+          },
+          partnership => {
+            Ok(s"Form submitted, with result: $partnership")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

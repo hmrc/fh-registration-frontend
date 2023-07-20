@@ -56,19 +56,22 @@ class BusinessPartnerEnterAddressController @Inject()(
       // Todo get this from cache later
       val partnerName = "Test User"
       val journeyType = "enterAddress"
-      chooseAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController.next().url)
-          BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName, journeyType))
-        },
-        bpAddress => {
-          Ok(s"Next page! with form result: ${bpAddress.toString}")
-        }
-      )
+      chooseAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
+                  .next()
+                  .url)
+            BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName, journeyType))
+          },
+          bpAddress => {
+            Ok(s"Next page! with form result: ${bpAddress.toString}")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

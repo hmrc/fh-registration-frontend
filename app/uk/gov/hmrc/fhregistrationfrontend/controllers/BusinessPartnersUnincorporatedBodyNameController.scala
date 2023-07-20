@@ -46,14 +46,16 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     val postAction = routes.BusinessPartnersUnincorporatedBodyNameController.next()
     if (config.newBusinessPartnerPagesEnabled) {
-      unincorporatedBodyNameForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction))
-        },
-        unincorporatedBodyName => {
-          Ok(s"Form submitted, with result: $unincorporatedBodyName")
-        }
-      )
+      unincorporatedBodyNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction))
+          },
+          unincorporatedBodyName => {
+            Ok(s"Form submitted, with result: $unincorporatedBodyName")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -59,22 +59,24 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
       // Todo get this from cache later
       val partnerName = "Test Corporate Body"
       val journeyType = "enterAddress"
-      chooseAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyEnterAddressController
-                  .next()
-                  .url)
-          BadRequest(
-            view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, journeyType))
-        },
-        bpAddress => {
-          Ok(s"Next page! with form result: ${bpAddress.toString}")
-        }
-      )
+      chooseAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url =
+                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyEnterAddressController
+                    .next()
+                    .url)
+            BadRequest(
+              view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, journeyType))
+          },
+          bpAddress => {
+            Ok(s"Next page! with form result: ${bpAddress.toString}")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -52,18 +52,20 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val partnerName = "test partner"
-      businessPartnersCorporateBodyUtrForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyUtrController
-                .next()
-                .url)
-          BadRequest(view.business_partner_corporateBody_utr_number(formWithErrors, postAction, partnerName))
-        },
-        businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
-      )
+      businessPartnersCorporateBodyUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyUtrController
+                  .next()
+                  .url)
+            BadRequest(view.business_partner_corporateBody_utr_number(formWithErrors, postAction, partnerName))
+          },
+          businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

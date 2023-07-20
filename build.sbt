@@ -111,6 +111,7 @@ lazy val microservice = Project(appName, file("."))
   ))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(scalacOptions += "-P:silencer:pathFilters=routes")
+  .settings(scalacOptions += "-Wconf:cat=lint-multiarg-infix:silent")
   .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(Global / lintUnusedKeysOnLoad := false)
 

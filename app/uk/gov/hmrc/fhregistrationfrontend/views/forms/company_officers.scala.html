@@ -125,7 +125,7 @@ title = Text(messages("fh.generic.error"))))
 
 <p class="govuk-body">@messages("fh.company_officers.intro")</p>
 
-@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), 'novalidate -> "novalidate") {
+@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.saveWithSection("companyOfficers", section), Symbol("novalidate") -> "novalidate") {
 @if(params.canRemove) {
 <a class="govuk-link" style="float:right" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
               .confirmDeleteSection("companyOfficers", section, navigation.lastUpdateTimestamp)}">

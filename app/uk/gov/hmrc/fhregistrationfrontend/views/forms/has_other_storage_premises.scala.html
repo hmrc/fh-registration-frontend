@@ -44,7 +44,7 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), Symbol("novalidate") -> "novalidate") {
       @if(hasOtherStoragePremisesForm.errors.nonEmpty) {
 
           @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

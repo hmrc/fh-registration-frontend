@@ -144,7 +144,7 @@
   <h1 class="govuk-heading-l">@title</h1>
   <p class="govuk-body">@Messages("fh.contact_person.intro")</p>
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("contactPerson"), Symbol("novalidate") -> "novalidate") {
 
     @viewHelpers.govukInput(Input(
       id = firstNameKey,
