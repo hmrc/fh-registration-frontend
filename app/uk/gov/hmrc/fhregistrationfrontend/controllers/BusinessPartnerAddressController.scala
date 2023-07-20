@@ -54,32 +54,34 @@ class BusinessPartnerAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
-      businessPartnersAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(view.business_partners_address(formWithErrors, partnerName))
-          )
-        },
-        bpAddress => {
-          addressService
-            .addressLookup(
-              routes.BusinessPartnerAddressController.load().path(),
-              bpAddress.postcode,
-              bpAddress.addressLine
+      businessPartnersAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(view.business_partners_address(formWithErrors, partnerName))
             )
-            .map {
-              case Right(addressListMap) =>
-                //ToDo store the addressListMap in save4Later
-                Redirect(routes.BusinessPartnersChooseAddressController.load())
-              case Left(AddressLookupErrorResponse(_)) =>
-                val formWithErrors = businessPartnersAddressForm
-                  .fill(bpAddress)
-                  .withError(FormError(postcodeKey, "address.lookup.error"))
-                BadRequest(view.business_partners_address(formWithErrors, partnerName))
-              case _ => errorHandler.errorResultsPages(Results.InternalServerError)
-            }
-        }
-      )
+          },
+          bpAddress => {
+            addressService
+              .addressLookup(
+                routes.BusinessPartnerAddressController.load().path(),
+                bpAddress.postcode,
+                bpAddress.addressLine
+              )
+              .map {
+                case Right(addressListMap) =>
+                  //ToDo store the addressListMap in save4Later
+                  Redirect(routes.BusinessPartnersChooseAddressController.load())
+                case Left(AddressLookupErrorResponse(_)) =>
+                  val formWithErrors = businessPartnersAddressForm
+                    .fill(bpAddress)
+                    .withError(FormError(postcodeKey, "address.lookup.error"))
+                  BadRequest(view.business_partners_address(formWithErrors, partnerName))
+                case _ => errorHandler.errorResultsPages(Results.InternalServerError)
+              }
+          }
+        )
     } else {
       Future.successful(errorHandler.errorResultsPages(Results.NotFound))
     }

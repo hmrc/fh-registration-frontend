@@ -50,20 +50,22 @@ class BusinessPartnersChooseAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val addressList = testAddressData
-      chooseAddressForm.bindFromRequest.fold(
-        formWithErrors => { BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData)) },
-        addressKey => {
-          // TODO save the selected address to cache
-          addressList.get(addressKey.chosenAddress) match {
-            case Some(address) =>
-              Redirect(routes.BusinessPartnersConfirmAddressController.load())
-            case None =>
-              val formWithError =
-                chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
-              BadRequest(view.business_partner_choose_address(formWithError, testAddressData))
+      chooseAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => { BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData)) },
+          addressKey => {
+            // TODO save the selected address to cache
+            addressList.get(addressKey.chosenAddress) match {
+              case Some(address) =>
+                Redirect(routes.BusinessPartnersConfirmAddressController.load())
+              case None =>
+                val formWithError =
+                  chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
+                BadRequest(view.business_partner_choose_address(formWithError, testAddressData))
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -54,14 +54,16 @@ class ContactPersonController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      contactPersonForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.contact_person_page(formWithErrors, address))
-        },
-        contactPerson => {
-          Ok(s"Form submitted, with result: $contactPerson")
-        }
-      )
+      contactPersonForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.contact_person_page(formWithErrors, address))
+          },
+          contactPerson => {
+            Ok(s"Form submitted, with result: $contactPerson")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

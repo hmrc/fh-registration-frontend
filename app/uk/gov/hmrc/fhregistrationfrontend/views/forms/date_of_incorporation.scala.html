@@ -64,7 +64,7 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), Symbol("novalidate") -> "novalidate") {
 
       @if(dateOfIncorporationForm.errors.nonEmpty) {
 

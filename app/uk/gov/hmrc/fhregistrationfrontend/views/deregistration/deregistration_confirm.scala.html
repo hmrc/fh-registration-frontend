@@ -137,7 +137,7 @@
         @errorHeading
     }
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postConfirmation, Symbol("novalidate") -> "novalidate") {
 
         @viewHelpers.govUkRadios(Radios(
             fieldset = Some(Fieldset(

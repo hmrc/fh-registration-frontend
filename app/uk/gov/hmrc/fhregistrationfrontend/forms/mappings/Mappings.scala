@@ -95,7 +95,7 @@ object Mappings {
 
   def withdrwalReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
   def deregistrationReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
-  def nino = of(ninoFormatter)
+  def nino = of(ninoFormatter())
   def nationalIdNumber =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
@@ -192,7 +192,7 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
 
   def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
-  def enum[E <: Enumeration](enum: E): Mapping[E#Value] = of(enumFormat(enum))
+  def `enum`[E <: Enumeration](`enum`: E): Mapping[E#Value] = of(enumFormat(`enum`))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)

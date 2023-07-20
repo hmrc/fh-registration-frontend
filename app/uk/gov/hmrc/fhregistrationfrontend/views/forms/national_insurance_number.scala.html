@@ -81,7 +81,7 @@
     }
 
   @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.
-          save("nationalInsuranceNumber"), 'novalidate -> "novalidate") {
+          save("nationalInsuranceNumber"), Symbol("novalidate") -> "novalidate") {
 
     @helper.CSRF.formField
       @viewHelpers.govUkRadios(Radios(

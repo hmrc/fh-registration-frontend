@@ -48,18 +48,20 @@ class BusinessPartnersCorporateBodyCompanyRegNumberController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val corporateBody = "test corporateBody"
-      companyRegistrationNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_corporateBody_reg_number(formWithErrors, corporateBody))
-        },
-        regNumber => {
-          regNumber.crnFormatted match {
-            case Some(vatNumber) => Ok(s"Next page! with companyRegistrationNumber: $vatNumber")
-            case None =>
-              Ok(s"Next page! with no companyRegistrationNumber")
+      companyRegistrationNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partners_corporateBody_reg_number(formWithErrors, corporateBody))
+          },
+          regNumber => {
+            regNumber.crnFormatted match {
+              case Some(vatNumber) => Ok(s"Next page! with companyRegistrationNumber: $vatNumber")
+              case None =>
+                Ok(s"Next page! with no companyRegistrationNumber")
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

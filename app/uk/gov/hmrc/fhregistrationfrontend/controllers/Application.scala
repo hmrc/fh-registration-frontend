@@ -63,8 +63,8 @@ class Application @Inject()(
   def main = userAction.async { implicit request =>
     fhddsConnector.getEnrolmentProgress
       .map {
-        case EnrolmentProgress.Pending => Redirect(routes.Application.enrolmentPending)
-        case EnrolmentProgress.Error   => Redirect(routes.Application.enrolmentPending)
+        case EnrolmentProgress.Pending => Redirect(routes.Application.enrolmentPending())
+        case EnrolmentProgress.Error   => Redirect(routes.Application.enrolmentPending())
         case _ =>
           val whenRegistered = request.registrationNumber
             .map { _ =>

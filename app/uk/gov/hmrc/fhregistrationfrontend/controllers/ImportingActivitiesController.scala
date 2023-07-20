@@ -47,14 +47,16 @@ class ImportingActivitiesController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      importingActivitiesForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
-        },
-        hasEori => {
-          Ok(s"Form submitted, with result: $hasEori")
-        }
-      )
+      importingActivitiesForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
+          },
+          hasEori => {
+            Ok(s"Form submitted, with result: $hasEori")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

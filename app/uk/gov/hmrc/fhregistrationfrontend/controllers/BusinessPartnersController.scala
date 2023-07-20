@@ -45,14 +45,16 @@ class BusinessPartnersController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnerTypeForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_type(formWithErrors, "Test User"))
-        },
-        tradingName => {
-          Ok(s"Form submitted, with result: $tradingName")
-        }
-      )
+      businessPartnerTypeForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partners_type(formWithErrors, "Test User"))
+          },
+          tradingName => {
+            Ok(s"Form submitted, with result: $tradingName")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

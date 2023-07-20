@@ -53,18 +53,20 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, title, postAction))
-        },
-        bpAddress => {
-          val addressLineMsg = bpAddress.addressLine match {
-            case Some(addressLine) => s"address line $addressLine"
-            case _                 => "no address line"
+      businessPartnersAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, title, postAction))
+          },
+          bpAddress => {
+            val addressLineMsg = bpAddress.addressLine match {
+              case Some(addressLine) => s"address line $addressLine"
+              case _                 => "no address line"
+            }
+            Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
           }
-          Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

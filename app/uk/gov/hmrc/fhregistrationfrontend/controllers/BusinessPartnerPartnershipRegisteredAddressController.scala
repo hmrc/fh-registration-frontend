@@ -62,24 +62,26 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(
-            view.business_partner_registered_address(
-              formWithErrors,
-              partnerName,
-              Random.shuffle(journeyTypes.toList).head,
-              postAction))
-        },
-        bpAddress => {
-          // Todo implement address lookup
-          if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
-            Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
-          } else {
-            Redirect(routes.BusinessPartnersChooseAddressController.load())
+      businessPartnersAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(
+              view.business_partner_registered_address(
+                formWithErrors,
+                partnerName,
+                Random.shuffle(journeyTypes.toList).head,
+                postAction))
+          },
+          bpAddress => {
+            // Todo implement address lookup
+            if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
+              Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+            } else {
+              Redirect(routes.BusinessPartnersChooseAddressController.load())
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

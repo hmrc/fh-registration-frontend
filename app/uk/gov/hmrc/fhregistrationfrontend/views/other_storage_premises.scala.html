@@ -42,7 +42,7 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
 
-    @viewHelpers.form(action = postAction, 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
         @if(hasOtherStoragePremisesForm.errors.nonEmpty) {
 
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

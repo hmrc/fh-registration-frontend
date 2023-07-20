@@ -55,7 +55,8 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest
+      tradingNameForm
+        .bindFromRequest()
         .fold(
           formWithErrors => {
             BadRequest(view.business_partner_partnership_trading_name(formWithErrors, "Test User", backUrl))

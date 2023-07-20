@@ -46,14 +46,16 @@ class BusinessCustomersController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessCustomersForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_customers(formWithErrors, noNavigation, postAction))
-        },
-        numberOfCustomers => {
-          Ok(s"Next page! with form result: $numberOfCustomers")
-        }
-      )
+      businessCustomersForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_customers(formWithErrors, noNavigation, postAction))
+          },
+          numberOfCustomers => {
+            Ok(s"Next page! with form result: $numberOfCustomers")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

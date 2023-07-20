@@ -83,7 +83,7 @@ case class RepeatingPage[T](
   override def parseFromRequest[X](onErrors: Rendering => X, onSuccess: Page[ListWithTrackedChanges[T]] => X)(
     implicit r: Request[_]): X = {
     import play.api.data.FormBinding.Implicits._
-    val updatedForm = form.bindFromRequest
+    val updatedForm = form.bindFromRequest()
     if (updatedForm.hasErrors)
       onErrors(errorRenderer(updatedForm))
     else if (index > maxItems)

@@ -47,7 +47,7 @@ messages("fh.business_partners.title")
 
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = None, isBrowserBackMimic = true) {
-@viewHelpers.form(action = BusinessPartnersController.next(), 'novalidate -> "novalidate") {
+@viewHelpers.form(action = BusinessPartnersController.next(), Symbol("novalidate") -> "novalidate") {
   @if(form.errors.nonEmpty) {
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
       Seq(ErrorLink(

@@ -20,7 +20,7 @@ import play.api.i18n.Messages
 
 object BusinessPartnersSecondaryHeader {
 
-  def apply(title: String)(implicit messages: Messages) =
+  def apply(title: String) =
     s"""<header>
       <h1 class="govuk-heading-m">
 
