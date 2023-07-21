@@ -45,16 +45,25 @@ class BusinessPartnersController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnerTypeForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            BadRequest(view.business_partners_type(formWithErrors, "Test User"))
-          },
-          tradingName => {
-            Ok(s"Form submitted, with result: $tradingName")
+      businessPartnerTypeForm.bindFromRequest.fold(
+        formWithErrors => {
+          BadRequest(view.business_partners_type(formWithErrors, "Test User"))
+        },
+        businessType => {
+          if (businessType.toString.equals("Individual") || businessType.toString.equals("SoleProprietor")) {
+            Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load())
+          } else if (businessType.toString.equals("Partnership")) {
+            Redirect(routes.BusinessPartnersPartnershipNameController.load())
+          } else if (businessType.toString.equals("LimitedLiabilityPartnership")) {
+            Redirect(routes.BusinessPartnersLtdLiabilityPartnershipController.load())
+          } else if (businessType.toString.equals("CorporateBody")) {
+            Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
+          } else {
+            Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
           }
-        )
+
+        }
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
