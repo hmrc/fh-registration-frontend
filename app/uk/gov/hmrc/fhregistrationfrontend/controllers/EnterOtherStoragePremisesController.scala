@@ -50,22 +50,31 @@ class EnterOtherStoragePremisesController @Inject()(
     )
   )
 
-  val postAction = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EnterOtherStoragePremisesController.next()
+  def load(storagePremisesNum: String = "1"): Action[AnyContent] = userAction { implicit request =>
+    val postAction =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EnterOtherStoragePremisesController.next(storagePremisesNum)
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.storage_premise(form, noNavigation, "1", RepeatingPageParams(false, None), postAction))
+      Ok(view.storage_premise(form, noNavigation, storagePremisesNum, RepeatingPageParams(false, None), postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+  def next(storagePremisesNum: String = "1"): Action[AnyContent] = userAction { implicit request =>
+    val postAction =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EnterOtherStoragePremisesController.next(storagePremisesNum)
+
     if (config.newBusinessPartnerPagesEnabled) {
       form.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(
-            view.storage_premise(formWithErrors, noNavigation, "1", RepeatingPageParams(false, None), postAction))
+            view.storage_premise(
+              formWithErrors,
+              noNavigation,
+              storagePremisesNum,
+              RepeatingPageParams(false, None),
+              postAction))
         },
         result => {
           Ok(s"Form submitted with: $result")
