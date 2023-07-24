@@ -40,13 +40,13 @@ class EnterOtherStoragePremisesController @Inject()(
 
   import actions._
 
-  val AddMoreKey = "addMore"
-  val ElementKey = "element"
+  val addMoreKey = "addMore"
+  val elementKey = "element"
 
   val form: Form[(StoragePremise, Boolean)] = Form(
     tuple(
-      ElementKey -> skippingOnePrefix(StoragePremisesForm.storagePremiseMapping),
-      AddMoreKey -> yesOrNo
+      elementKey -> skippingOnePrefix(StoragePremisesForm.storagePremiseMapping),
+      addMoreKey -> yesOrNo
     )
   )
 
