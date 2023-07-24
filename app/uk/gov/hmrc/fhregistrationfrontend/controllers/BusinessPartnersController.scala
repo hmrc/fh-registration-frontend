@@ -50,18 +50,18 @@ class BusinessPartnersController @Inject()(
           BadRequest(view.business_partners_type(formWithErrors, "Test User"))
         },
         businessType => {
-          if (businessType.toString.equals("Individual") || businessType.toString.equals("SoleProprietor")) {
-            Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load())
-          } else if (businessType.toString.equals("Partnership")) {
-            Redirect(routes.BusinessPartnersPartnershipNameController.load())
-          } else if (businessType.toString.equals("LimitedLiabilityPartnership")) {
-            Redirect(routes.BusinessPartnersLtdLiabilityPartnershipController.load())
-          } else if (businessType.toString.equals("CorporateBody")) {
-            Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
-          } else {
-            Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
+          businessType.toString match {
+            case "UnincorporatedBody" =>
+              Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
+            case "Partnership" =>
+              Redirect(routes.BusinessPartnersPartnershipNameController.load())
+            case "LimitedLiabilityPartnership" =>
+              Redirect(routes.BusinessPartnersLtdLiabilityPartnershipController.load())
+            case "CorporateBody" =>
+              Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
+            case _ =>
+              Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load())
           }
-
         }
       )
     } else {

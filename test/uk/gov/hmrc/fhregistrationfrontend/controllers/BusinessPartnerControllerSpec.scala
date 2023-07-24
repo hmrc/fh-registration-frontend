@@ -70,6 +70,65 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
 
   "next" when {
     "The business partner v2 pages are enabled" should {
+      "return 303" when {
+        "User selects Individual and submits" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("businessType" -> "Individual")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          reset(mockActions)
+        }
+      }
+
+      "return 303" when {
+        "User selects Partnership and submits" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("businessType" -> "Partnership")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          reset(mockActions)
+        }
+      }
+
+      "return 303" when {
+        "User selects LimitedLiabilityPartnership and submits" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("businessType" -> "LimitedLiabilityPartnership")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          reset(mockActions)
+        }
+      }
+
+      "return 303" when {
+        "User selects UnincorporatedBody and submits" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("businessType" -> "UnincorporatedBody")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          reset(mockActions)
+        }
+      }
 
       "return 400" when {
         "a radio button is not selected" in {
@@ -77,10 +136,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "nationalInsuranceNumber_yesNo" -> "",
-              "nationalInsuranceNumber_value" -> ""
-            )
+            .withFormUrlEncodedBody()
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
