@@ -41,11 +41,14 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   )
   val title = "corporateBody"
   val corporateBody = "Test Corporate Body"
+  val unknownPostcode = "AB1 2YX"
+  val hasVatNum = true
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, corporateBody, title, postAction))
+      Ok(view
+        .business_partner_registered_address(businessPartnersAddressForm, corporateBody, title, postAction, hasVatNum))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -61,7 +64,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
           // Todo implement address lookup
           if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
             Redirect(routes.BusinessPartnersConfirmCorporateRegisteredAddressController.load())
-          } else if (bpAddress.postcode == "AB1 2YX") {
+          } else if (bpAddress.postcode == unknownPostcode) {
             Redirect(routes.BusinessPartnersCannotFindAddressController.load())
           } else {
             Redirect(routes.BusinessPartnersChooseAddressController.load())
