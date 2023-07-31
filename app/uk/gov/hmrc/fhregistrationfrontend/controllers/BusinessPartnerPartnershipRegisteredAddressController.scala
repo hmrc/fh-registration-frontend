@@ -79,10 +79,10 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
           } else {
             Redirect(routes.BusinessPartnersChooseAddressController.load())
           }
-        )
+        }
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
 }
