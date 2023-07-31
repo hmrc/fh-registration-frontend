@@ -32,9 +32,11 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val partnerName = "Test User"
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_cannot_find_address("HR33 7GP"))
+      Ok(view.business_partners_cannot_find_address("HR33 7GP", partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
