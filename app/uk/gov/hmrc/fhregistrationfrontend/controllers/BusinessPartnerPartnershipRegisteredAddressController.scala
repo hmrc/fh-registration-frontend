@@ -36,8 +36,6 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   // Todo get this from cache later
 
-  //val journeyTypes: Array[String] = Array("partnership", "LLP")
-
   private def getBusinessType: String = config.getRandomBusinessType()
 
   val backUrl: String = {
