@@ -32,7 +32,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, titleType: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, titleType: String, postAction: Call, hasVatNum: Boolean = false)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -46,9 +46,11 @@
 }
 
 @backLink = @{
-    titleType match {
-        case "partnership" => "/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference"
-        case "LLP" => "/fhdds/form/business-partners/partner-vat-registration-number"
+    (titleType, hasVatNum) match {
+        case ("partnership", true) => "/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference"
+        case ("LLP", true) => "/fhdds/form/business-partners/partner-vat-registration-number"
+        case ("corporateBody", true) => "/fhdds/form/business-partners/corporate-body-vat-registration-number"
+        case ("corporateBody", false) => "/fhdds/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference"
         case _ => "#"
     }
 }
