@@ -42,7 +42,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   val title = "corporateBody"
   val corporateBody = "Test Corporate Body"
   val unknownPostcode = "AB1 2YX"
-  val hasVatNum = true
+  val hasVatNum = config.hasVatNumber()
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
