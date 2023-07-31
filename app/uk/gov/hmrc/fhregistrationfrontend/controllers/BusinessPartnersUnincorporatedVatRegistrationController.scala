@@ -58,26 +58,28 @@ class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
       val unincorporateBody = "test unincorporatedBody"
       val title = "unincorporatedBody"
 
-      vatNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
-                  .next()
-                  .url)
-          BadRequest(
-            view.business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction))
-        },
-        vatNumber => {
-          vatNumber.value match {
-            case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-            case None =>
-              Ok(s"Next page! with no vatNumber")
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url =
+                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
+                    .next()
+                    .url)
+            BadRequest(
+              view.business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction))
+          },
+          vatNumber => {
+            vatNumber.value match {
+              case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
+              case None =>
+                Ok(s"Next page! with no vatNumber")
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

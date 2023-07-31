@@ -56,25 +56,28 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
       //ToDo read this data from the cache after being stored before the redirect
       val corporateBody = "test corporateBody"
       val title = "corporateBody"
-      vatNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url =
-                uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
-                  .next()
-                  .url)
-          BadRequest(view.business_partners_corporateBody_vat_number(formWithErrors, corporateBody, title, postAction))
-        },
-        vatNumber => {
-          vatNumber.value match {
-            case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-            case None =>
-              Ok(s"Next page! with no vatNumber")
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url =
+                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
+                    .next()
+                    .url)
+            BadRequest(
+              view.business_partners_corporateBody_vat_number(formWithErrors, corporateBody, title, postAction))
+          },
+          vatNumber => {
+            vatNumber.value match {
+              case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
+              case None =>
+                Ok(s"Next page! with no vatNumber")
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

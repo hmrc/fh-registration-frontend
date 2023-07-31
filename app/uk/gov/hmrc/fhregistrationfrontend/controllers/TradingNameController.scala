@@ -43,14 +43,16 @@ class TradingNameController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.trading_name_page(formWithErrors, "Test User"))
-        },
-        tradingName => {
-          Ok(s"Form submitted, with result: $tradingName")
-        }
-      )
+      tradingNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.trading_name_page(formWithErrors, "Test User"))
+          },
+          tradingName => {
+            Ok(s"Form submitted, with result: $tradingName")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

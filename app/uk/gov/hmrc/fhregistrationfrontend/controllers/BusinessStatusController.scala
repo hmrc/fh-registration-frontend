@@ -43,14 +43,16 @@ class BusinessStatusController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessStatusForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_status_page(formWithErrors))
-        },
-        businessStatus => {
-          Ok(s"Form submitted, with result: $businessStatus")
-        }
-      )
+      businessStatusForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_status_page(formWithErrors))
+          },
+          businessStatus => {
+            Ok(s"Form submitted, with result: $businessStatus")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

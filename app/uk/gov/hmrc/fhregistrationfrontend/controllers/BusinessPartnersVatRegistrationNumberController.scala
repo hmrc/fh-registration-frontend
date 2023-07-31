@@ -50,18 +50,20 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       val partnerName = "test partner"
-      vatNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partner_vat_registration(formWithErrors, partnerName))
-        },
-        vatNumber => {
-          vatNumber.value match {
-            case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-            case None =>
-              Ok(s"Next page! with no vatNumber")
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partner_vat_registration(formWithErrors, partnerName))
+          },
+          vatNumber => {
+            vatNumber.value match {
+              case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
+              case None =>
+                Ok(s"Next page! with no vatNumber")
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

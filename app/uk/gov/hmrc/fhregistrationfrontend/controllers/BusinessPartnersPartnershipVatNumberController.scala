@@ -60,29 +60,31 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      vatNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partner_partnership_vat_number(formWithErrors, partnerName, backUrl))
-        },
-        vatNumber => {
-          request.cookies.get("businessType").map(_.value) match {
-            case Some(businessType)
-                if businessType.equals("partnership") || (businessType
-                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-              Redirect(routes.BusinessPartnerUtrController.load())
-            case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-              Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
-            case Some(unknownBusinessType) =>
-              logger.warn(
-                s"[BusinessPartnersPartnershipVatNumberController][next]: Unexpected error, $unknownBusinessType retrieved")
-              errorHandler.errorResultsPages(Results.BadRequest)
-            case _ =>
-              logger.error(
-                s"[BusinessPartnersPartnershipVatNumberController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
-              errorHandler.errorResultsPages(Results.InternalServerError)
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partner_partnership_vat_number(formWithErrors, partnerName, backUrl))
+          },
+          vatNumber => {
+            request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType)
+                  if businessType.equals("partnership") || (businessType
+                    .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
+                Redirect(routes.BusinessPartnerUtrController.load())
+              case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
+                Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
+              case Some(unknownBusinessType) =>
+                logger.warn(
+                  s"[BusinessPartnersPartnershipVatNumberController][next]: Unexpected error, $unknownBusinessType retrieved")
+                errorHandler.errorResultsPages(Results.BadRequest)
+              case _ =>
+                logger.error(
+                  s"[BusinessPartnersPartnershipVatNumberController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
+                errorHandler.errorResultsPages(Results.InternalServerError)
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -63,8 +63,7 @@ trait SummaryFunctions {
         views.partnership_summary(a, bpr, verifiedEmail, None, params)
     }
 
-  protected def getSummaryPrintable(
-    journeys: Journeys)(implicit request: SummaryRequest[AnyContent], viewHelpers: ViewHelpers) = {
+  protected def getSummaryPrintable(journeys: Journeys)(implicit request: SummaryRequest[AnyContent]) = {
     val application = request.businessType match {
       case BusinessType.CorporateBody => journeys ltdApplication request
       case BusinessType.SoleTrader    => journeys soleTraderApplication request

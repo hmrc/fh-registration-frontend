@@ -53,24 +53,26 @@ class BusinessPartnerUnincorporatedUtrController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //Todo get partnerName from cache
       val partnerName = "{{Unincorporated body name}}"
-      businessPartnerUtrForm.bindFromRequest.fold(
-        formWithErrors => {
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController
-                .next()
-                .url)
-          BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
-        },
-        businessPartnersUtr => {
-          businessPartnersUtr.value match {
-            case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
-            case None =>
-              Ok(s"Next page! with no UTR")
+      businessPartnerUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val postAction =
+              Call(
+                method = "POST",
+                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController
+                  .next()
+                  .url)
+            BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
+          },
+          businessPartnersUtr => {
+            businessPartnersUtr.value match {
+              case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
+              case None =>
+                Ok(s"Next page! with no UTR")
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

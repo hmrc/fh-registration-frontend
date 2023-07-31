@@ -45,14 +45,17 @@ class MainBusinessAddressController @Inject()(
   }
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      mainBusinessAddressForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.main_business_address(formWithErrors, businessRegistrationDetails, noNavigation, postAction))
-        },
-        mainBusinessAddress => {
-          Ok(s"Form submitted, with result:$mainBusinessAddress")
-        }
-      )
+      mainBusinessAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(
+              view.main_business_address(formWithErrors, businessRegistrationDetails, noNavigation, postAction))
+          },
+          mainBusinessAddress => {
+            Ok(s"Form submitted, with result:$mainBusinessAddress")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

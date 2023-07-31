@@ -25,7 +25,7 @@
 
 @mainTemplate(title = Messages("home.admin.submisson.page.title")) {
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.allocateEnrolment, 'novalidate -> "novalidate") {
+    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AdminPageController.allocateEnrolment, Symbol("novalidate") -> "novalidate") {
         @helper.CSRF.formField
 
         <fieldset>

@@ -69,7 +69,7 @@
             ,
             title = Text(messages("generic.errorSummary"))))
     }
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason, 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.postReason, Symbol("novalidate") -> "novalidate") {
       @viewHelpers.govUkRadios(Radios(
           fieldset = Some(Fieldset(
               legend = Some(Legend(

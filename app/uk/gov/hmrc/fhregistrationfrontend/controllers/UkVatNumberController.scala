@@ -56,14 +56,16 @@ class UkVatNumberController @Inject()(
         Call(
           method = "POST",
           url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url)
-      vatNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.vat_registration(formWithErrors, Navigation.noNavigation, postAction))
-        },
-        bpAddress => {
-          Ok(s"Next page!")
-        }
-      )
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.vat_registration(formWithErrors, Navigation.noNavigation, postAction))
+          },
+          bpAddress => {
+            Ok(s"Next page!")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

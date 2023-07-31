@@ -52,25 +52,27 @@ class BusinessPartnerNinoController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm.bindFromRequest.fold(
-        formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
-          val postAction =
-            Call(
-              method = "POST",
-              url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-          BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
-        },
-        nino => {
-          // Todo implement reading from legal entity page
-          val ninoForIndividual = "AB123456C"
-          if (nino.value.contains(ninoForIndividual)) {
-            Redirect(routes.BusinessPartnerAddressController.load())
-          } else {
-            Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
+      nationalInsuranceNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val items = radioHelper.conditionalYesNoRadio(formWithErrors)
+            val postAction =
+              Call(
+                method = "POST",
+                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
+            BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
+          },
+          nino => {
+            // Todo implement reading from legal entity page
+            val ninoForIndividual = "AB123456C"
+            if (nino.value.contains(ninoForIndividual)) {
+              Redirect(routes.BusinessPartnerAddressController.load())
+            } else {
+              Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
+            }
           }
-        }
-      )
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

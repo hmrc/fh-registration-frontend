@@ -49,8 +49,19 @@ class BusinessPartnersController @Inject()(
         formWithErrors => {
           BadRequest(view.business_partners_type(formWithErrors, "Test User"))
         },
-        tradingName => {
-          Ok(s"Form submitted, with result: $tradingName")
+        businessType => {
+          businessType.toString match {
+            case "UnincorporatedBody" =>
+              Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
+            case "Partnership" =>
+              Redirect(routes.BusinessPartnersPartnershipNameController.load())
+            case "LimitedLiabilityPartnership" =>
+              Redirect(routes.BusinessPartnersLtdLiabilityPartnershipController.load())
+            case "CorporateBody" =>
+              Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
+            case _ =>
+              Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load())
+          }
         }
       )
     } else {

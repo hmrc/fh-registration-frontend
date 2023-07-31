@@ -81,7 +81,7 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
 
-    @viewHelpers.form(action = BusinessStatusController.next(), 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = BusinessStatusController.next(), Symbol("novalidate") -> "novalidate") {
 
         @if(businessStatusForm.errors.nonEmpty) {
 

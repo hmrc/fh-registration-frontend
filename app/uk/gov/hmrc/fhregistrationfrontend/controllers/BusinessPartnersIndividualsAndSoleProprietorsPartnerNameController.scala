@@ -47,14 +47,16 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok("Next page")
-      form.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction))
-        },
-        partnerName => {
-          Ok(s"Form submitted, with result: $partnerName")
-        }
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction))
+          },
+          partnerName => {
+            Ok(s"Form submitted, with result: $partnerName")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -88,7 +88,7 @@
             title = Text(messages("generic.errorSummary"))))
     }
 
-    @viewHelpers.form(action = action, 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = action, Symbol("novalidate") -> "novalidate") {
 
 
         <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail.getOrElse("")}"/>

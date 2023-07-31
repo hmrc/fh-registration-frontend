@@ -52,7 +52,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {

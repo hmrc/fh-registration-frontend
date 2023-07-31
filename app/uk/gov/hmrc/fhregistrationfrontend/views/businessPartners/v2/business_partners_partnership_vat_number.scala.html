@@ -70,7 +70,7 @@
 
 @layout(title = titlePrefix + title, backUrl = Some(backAction)) {
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersPartnershipVatNumberController.next) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersPartnershipVatNumberController.next()) {
 
         @if(vatNumberForm.errors.nonEmpty) {
 

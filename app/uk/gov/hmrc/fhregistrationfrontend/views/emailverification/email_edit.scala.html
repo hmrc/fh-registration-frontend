@@ -43,7 +43,7 @@
 
     <h1 class="govuk-heading-l">@title</h1>
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, 'novalidate -> "novalidate") {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, Symbol("novalidate") -> "novalidate") {
         @if(emailVerificationForm.errors.nonEmpty) {
 
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
