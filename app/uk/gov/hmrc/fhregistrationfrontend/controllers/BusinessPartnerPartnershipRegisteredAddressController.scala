@@ -23,7 +23,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddr
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
-import scala.util.Random
 
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
