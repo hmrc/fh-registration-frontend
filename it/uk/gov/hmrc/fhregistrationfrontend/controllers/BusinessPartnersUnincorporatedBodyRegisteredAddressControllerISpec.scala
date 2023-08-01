@@ -29,7 +29,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("What is the unincorporated body’s registered office address?")
-              page.getElementsByTag("h1").text() must include("What is Test incorporated Body’s registered office address?")
+              page.getElementsByTag("h1").text() must include("What is Test Unincorporated Body’s registered office address?")
             }
           }
         }
