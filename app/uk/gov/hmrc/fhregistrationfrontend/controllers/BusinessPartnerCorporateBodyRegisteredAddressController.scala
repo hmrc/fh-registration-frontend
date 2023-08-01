@@ -42,13 +42,25 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   val title = "corporateBody"
   val corporateBody = "Test Corporate Body"
   val unknownPostcode = "AB1 2YX"
-  val hasVatNum = config.hasVatNumber()
+  val hasVatNum: Boolean = config.hasVatNumber()
+
+  val backUrl: String = {
+    if (hasVatNum) routes.BusinessPartnerUtrController.load().url
+    else routes.BusinessPartnersCorporateBodyUtrController.load().url
+  }
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view
-        .business_partner_registered_address(businessPartnersAddressForm, corporateBody, title, postAction, hasVatNum))
+      Ok(
+        view
+          .business_partner_registered_address(
+            businessPartnersAddressForm,
+            corporateBody,
+            backUrl,
+            postAction,
+            title
+          ))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -58,7 +70,8 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
-          BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, title, postAction))
+          BadRequest(
+            view.business_partner_registered_address(formWithErrors, corporateBody, backUrl, postAction, title))
         },
         bpAddress => {
           // Todo implement address lookup

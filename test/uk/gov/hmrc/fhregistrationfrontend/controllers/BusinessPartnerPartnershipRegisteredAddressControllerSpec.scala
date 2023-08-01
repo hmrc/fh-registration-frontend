@@ -101,6 +101,23 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         }
       }
 
+      "redirect to the Cannot Find Address page" when {
+        "no addresses are found" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              ("partnerPostcode", "HR33 7GP"),
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
+          reset(mockActions)
+        }
+      }
+
       "Render the Not found page" when {
         "the new business partner pages are disabled" in {
           setupUserAction()

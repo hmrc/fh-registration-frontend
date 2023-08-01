@@ -46,7 +46,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, corporateBody, title, postAction))
+      Ok(view.business_partner_registered_address(businessPartnersAddressForm, corporateBody, "#", postAction, title))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -58,7 +58,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, title, postAction))
+            BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, "#", postAction, title))
           },
           bpAddress => {
             val addressLineMsg = bpAddress.addressLine match {
