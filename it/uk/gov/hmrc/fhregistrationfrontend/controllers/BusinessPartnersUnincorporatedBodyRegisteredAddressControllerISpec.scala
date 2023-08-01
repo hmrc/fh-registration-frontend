@@ -3,9 +3,10 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersIncorporatedBodyRegisteredAddressControllerISpec
+class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val requestURL = "/form/business-partners/unincorporated-body-registered-office-address"
@@ -37,41 +38,58 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressControllerISpec
   }
 
   "POST /form/business-partners/unincorporated-body-registered-office-address" when {
-    "the form has no errors" should {
-      "return 200" in {
-        given
-          .commonPrecondition
+    "the form has no errors and multiple addresses are found" should {
+      "return 303" in {
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map("partnerAddressLine" -> Seq("Drury Lane"),
               "partnerPostcode" -> Seq("AB1 2YZ")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ and address line 1"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/choose-address")
+          }
+        }
+      }
+    }
+
+    "the form has no errors and a matching address is found" should {
+      "return 303" in {
+        given.commonPrecondition
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl$requestURL")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map("partnerAddressLine" -> Seq("44 Romford Road"),
+              "partnerPostcode" -> Seq("TF1 4ER")))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/confirm-unincorporated-body-registered-office-address")
           }
         }
       }
     }
 
     "address line not populated" should {
-      "return 200" in {
-        given
-          .commonPrecondition
+      "return 303" in {
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck")
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("partnerAddressLine" -> Seq.empty,
               "partnerPostcode" -> Seq("AB1 2YZ")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with postcode: AB1 2YZ and no address line"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/choose-address")
           }
         }
       }
@@ -79,8 +97,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressControllerISpec
 
     "postcode not populated" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -100,8 +117,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressControllerISpec
 
     "postcode invalid format" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -121,8 +137,7 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressControllerISpec
 
     "address line contains invalid characters" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")

@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
+class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,17 +36,25 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
   val postAction: Call = Call(
     method = "POST",
     url =
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersIncorporatedBodyRegisteredAddressController
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController
         .next()
         .url
   )
   val title = "incorporatedBody"
-  val corporateBody = "Test incorporated Body"
+  val UnincorporatedBody = "Test Unincorporated Body"
+  val unknownPostcode = "AB1 2YX"
+  val backAction = routes.BusinessPartnerUnincorporatedUtrController.load().url
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_registered_address(businessPartnersAddressForm, corporateBody, "#", postAction, title))
+      Ok(
+        view.business_partner_registered_address(
+          businessPartnersAddressForm,
+          UnincorporatedBody,
+          backAction,
+          postAction,
+          title))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -58,14 +66,19 @@ class BusinessPartnersIncorporatedBodyRegisteredAddressController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_registered_address(formWithErrors, corporateBody, "#", postAction, title))
+            BadRequest(
+              view
+                .business_partner_registered_address(formWithErrors, UnincorporatedBody, backAction, postAction, title))
           },
           bpAddress => {
-            val addressLineMsg = bpAddress.addressLine match {
-              case Some(addressLine) => s"address line $addressLine"
-              case _                 => "no address line"
+            // Todo implement address lookup
+            if (bpAddress.addressLine.contains("44 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
+              Redirect(routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load())
+            } else if (bpAddress.postcode == unknownPostcode) {
+              Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+            } else {
+              Redirect(routes.BusinessPartnersChooseAddressController.load())
             }
-            Ok(s"Next page! with postcode: ${bpAddress.postcode} and $addressLineMsg")
           }
         )
     } else {
