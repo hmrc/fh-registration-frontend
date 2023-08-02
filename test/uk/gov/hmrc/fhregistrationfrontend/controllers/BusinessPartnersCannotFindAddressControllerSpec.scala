@@ -48,7 +48,8 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include("#")
+        page.getElementById("enter-manually").attr("href") should include(
+          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
         reset(mockActions)
       }
     }
