@@ -32,7 +32,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, backAction: String, postAction: Call, journey: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessPartnersAddressForm: Form[UkAddressLookup], corporateBody: String, backAction: String, postAction: Call, journey: String, enterManualAddressUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -78,7 +78,7 @@
         )
 
         <p class="govuk-body">
-            <a href="@BusinessPartnersEnterRegistrationOfficeAddress.load()" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
+            <a href=@enterManualAddressUrl class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
         </p>
 
         @viewHelpers.govukButton(Button(content = Text(messages("fh.business.partners.find.address.button")), inputType = Some("submit")))

@@ -106,8 +106,8 @@ POST        /otherStoragePremises                                               
 GET         /otherStoragePremises/:storagePremisesNum                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EnterOtherStoragePremisesController.load(storagePremisesNum: String)
 POST        /otherStoragePremises/:storagePremisesNum                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EnterOtherStoragePremisesController.next(storagePremisesNum: String)
 
-GET         /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.load()
-POST        /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIncorporatedBodyRegisteredAddressController.next()
+GET         /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load()
+POST        /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyRegisteredAddressController.next()
 
 GET         /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedUtrController.load()
 POST        /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedUtrController.next()

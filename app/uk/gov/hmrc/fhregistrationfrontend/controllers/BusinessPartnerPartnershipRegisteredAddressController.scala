@@ -21,9 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-
 import javax.inject.Inject
-import scala.util.Random
 
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
@@ -49,21 +47,27 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   val journey = "partnership"
   val postAction: Call = Call(
     method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController
+    url = routes.BusinessPartnerPartnershipRegisteredAddressController
       .next()
       .url
   )
+  val enterManualAddressUrl: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
         view
-          .business_partner_registered_address(businessPartnersAddressForm, partnerName, backUrl, postAction, journey))
+          .business_partner_registered_address(
+            businessPartnersAddressForm,
+            partnerName,
+            backUrl,
+            postAction,
+            journey,
+            enterManualAddressUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm
@@ -76,7 +80,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                 partnerName,
                 backUrl,
                 postAction,
-                journey
+                journey,
+                enterManualAddressUrl
               ))
           },
           bpAddress => {
