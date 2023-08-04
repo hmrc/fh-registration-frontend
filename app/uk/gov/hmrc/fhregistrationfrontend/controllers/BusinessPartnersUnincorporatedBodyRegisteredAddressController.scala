@@ -35,15 +35,15 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   // Todo get this from cache later
   val postAction: Call = Call(
     method = "POST",
-    url =
-      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController
+    url = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController
         .next()
         .url
   )
   val title = "incorporatedBody"
   val UnincorporatedBody = "Test Unincorporated Body"
   val unknownPostcode = "AB1 2YX"
-  val backAction = routes.BusinessPartnerUnincorporatedUtrController.load().url
+  val backAction: String = routes.BusinessPartnerUnincorporatedUtrController.load().url
+  val manualAddressUrl: String = routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
@@ -54,7 +54,9 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
           UnincorporatedBody,
           backAction,
           postAction,
-          title))
+          title,
+          manualAddressUrl))
+
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -68,7 +70,13 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
           formWithErrors => {
             BadRequest(
               view
-                .business_partner_registered_address(formWithErrors, UnincorporatedBody, backAction, postAction, title))
+                .business_partner_registered_address(
+                  formWithErrors,
+                  UnincorporatedBody,
+                  backAction,
+                  postAction,
+                  title,
+                  manualAddressUrl))
           },
           bpAddress => {
             // Todo implement address lookup

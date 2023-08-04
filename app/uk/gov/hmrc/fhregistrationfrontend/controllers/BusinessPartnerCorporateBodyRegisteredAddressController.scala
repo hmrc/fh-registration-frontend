@@ -43,6 +43,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   val corporateBody = "Test Corporate Body"
   val unknownPostcode = "AB1 2YX"
   val hasVatNum: Boolean = config.hasVatNumber()
+  val enterManualAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
 
   val backUrl: String = {
     if (hasVatNum) routes.BusinessPartnerUtrController.load().url
@@ -59,7 +60,8 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
             corporateBody,
             backUrl,
             postAction,
-            title
+            title,
+            enterManualAddressUrl
           ))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -71,7 +73,14 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(
-            view.business_partner_registered_address(formWithErrors, corporateBody, backUrl, postAction, title))
+            view.business_partner_registered_address(
+              formWithErrors,
+              corporateBody,
+              backUrl,
+              postAction,
+              title,
+              enterManualAddressUrl
+            ))
         },
         bpAddress => {
           // Todo implement address lookup
