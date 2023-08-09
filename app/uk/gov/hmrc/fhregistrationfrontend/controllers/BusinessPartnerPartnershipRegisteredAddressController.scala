@@ -27,7 +27,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Random
 
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
@@ -97,9 +96,15 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
               )
               .map {
                 case Right(addressListMap) =>
-                  // ToDo store the addressListMap in save4Later
-                  println(Console.CYAN + addressListMap + Console.RESET)
-                  Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+                  println(Console.CYAN + addressListMap.size + Console.RESET)
+                  // ToDo store the addressListMap in cache
+                  if (addressListMap.isEmpty)
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                  else if (addressListMap.size == 1)
+                    Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+                  else
+                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
