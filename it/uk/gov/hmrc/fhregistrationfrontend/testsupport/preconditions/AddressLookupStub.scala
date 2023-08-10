@@ -64,9 +64,4 @@ case class AddressLookupStub()
     )
     builder
   }
-
-  def lookupNoAddress(isSuccess: Boolean = true): PreconditionBuilder = {
-    Json.toJson(List(None)).toString()
-    builder
-  }
 }

@@ -96,7 +96,6 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
               )
               .map {
                 case Right(addressListMap) =>
-                  println(Console.CYAN + addressListMap.size + Console.RESET)
                   // ToDo store the addressListMap in cache
                   if (addressListMap.isEmpty)
                     Redirect(routes.BusinessPartnersCannotFindAddressController.load())
@@ -119,15 +118,6 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                     ))
                 case _ => errorHandler.errorResultsPages(Results.InternalServerError)
               }
-
-            /*// Todo implement address lookup
-            if (bpAddress.addressLine.contains("1 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
-              Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
-            } else if (bpAddress.postcode.contains("HR33 7GP")) {
-              Redirect(routes.BusinessPartnersCannotFindAddressController.load())
-            } else {
-              Redirect(routes.BusinessPartnersChooseAddressController.load())
-            }*/
           }
         )
     } else {

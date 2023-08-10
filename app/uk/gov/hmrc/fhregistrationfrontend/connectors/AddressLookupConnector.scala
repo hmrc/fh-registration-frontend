@@ -61,7 +61,6 @@ class AddressLookupConnector @Inject()(
           )
         }
         val addressRec = RecordSet(results)
-        println(Console.RED + AddressLookupSuccessResponse(addressRec) + Console.RESET)
         AddressLookupSuccessResponse(addressRec)
       } recover {
       case e: Exception =>
