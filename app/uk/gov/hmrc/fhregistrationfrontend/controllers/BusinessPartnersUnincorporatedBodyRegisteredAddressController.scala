@@ -36,8 +36,8 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   val postAction: Call = Call(
     method = "POST",
     url = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController
-        .next()
-        .url
+      .next()
+      .url
   )
   val title = "incorporatedBody"
   val UnincorporatedBody = "Test Unincorporated Body"

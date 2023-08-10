@@ -18,12 +18,17 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.Future
 
 class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -33,9 +38,15 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
   val mockAppConfig = mock[FrontendAppConfig]
 
+  val mockAddressService = mock[AddressService]
+
   val controller =
-    new BusinessPartnerPartnershipRegisteredAddressController(commonDependencies, views, mockActions, mockAppConfig)(
-      mockMcc)
+    new BusinessPartnerPartnershipRegisteredAddressController(
+      commonDependencies,
+      views,
+      mockActions,
+      mockAppConfig,
+      mockAddressService)(mockMcc)
 
   "load" should {
     "Render the business partner address page" when {
@@ -74,8 +85,24 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         "multiple addresses are found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(
+            mockAddressService
+              .addressLookup(any(), any(), any())(any())
+          ).thenReturn(
+            Future.successful(
+              Right(
+                Map(
+                  "123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")),
+                  "234" -> Address("45 test lane", None, None, None, "SW1A 2AA", None, Some("234")))
+              )
+            )
+          )
+
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", ""))
+            .withFormUrlEncodedBody(
+              ("partnerAddressLine", ""),
+              ("partnerPostcode", "SW1A 2AA")
+            )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
@@ -89,8 +116,24 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         "a single address is found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(
+            mockAddressService
+              .addressLookup(any(), any(), any())(any())
+          ).thenReturn(
+            Future.successful(
+              Right(
+                Map(
+                  "345" -> Address("1 Romford Road", None, None, None, "TF1 4ER", None, Some("345"))
+                )
+              )
+            )
+          )
+
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", "1 Romford Road"))
+            .withFormUrlEncodedBody(
+              ("partnerAddressLine", "1 Romford Road"),
+              ("partnerPostcode", "TF1 4ER")
+            )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
@@ -105,6 +148,17 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
         "no addresses are found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(
+            mockAddressService
+              .addressLookup(any(), any(), any())(any())
+          ).thenReturn(
+            Future.successful(
+              Right(
+                Map()
+              )
+            )
+          )
+
           val request = FakeRequest()
             .withFormUrlEncodedBody(
               ("partnerPostcode", "HR33 7GP"),

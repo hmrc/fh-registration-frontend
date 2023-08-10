@@ -43,7 +43,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
     "the postcode is valid, address line provided and addresses are returned from address lookup" should {
       "redirect to choose address" in {
         given
-          .commonPreconditionWithAddressLookup(true)
+          .commonPreconditionWithMultipleAddressLookup(true)
 
         val result = buildRequest(s"/form/business-partners/partner-address")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
@@ -61,7 +61,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
     "the postcode is valid, address line not provided and addresses are returned from address lookup" should {
       "redirect to choose address" in {
         given
-          .commonPreconditionWithAddressLookup(true)
+          .commonPreconditionWithMultipleAddressLookup(true)
 
 
         val result = buildRequest(s"/form/business-partners/partner-address")
@@ -80,7 +80,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
     "the postcode is valid, address line not provided and address lookup returns an error" should {
       "return 400" in {
         given
-          .commonPreconditionWithAddressLookup(false)
+          .commonPreconditionWithMultipleAddressLookup(false)
 
         val result = buildRequest(s"/form/business-partners/partner-address")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
