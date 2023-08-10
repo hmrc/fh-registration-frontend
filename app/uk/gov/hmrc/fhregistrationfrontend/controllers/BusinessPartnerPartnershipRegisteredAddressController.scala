@@ -27,7 +27,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
@@ -89,7 +88,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                   partnerName,
                   backUrl,
                   postAction,
-                  journey
+                  journey,
+                  enterManualAddressUrl
                 )
               )
             )
@@ -121,7 +121,8 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                       partnerName,
                       backUrl,
                       postAction,
-                      journey
+                      journey,
+                      enterManualAddressUrl
                     ))
                 case _ => errorHandler.errorResultsPages(Results.InternalServerError)
               }
