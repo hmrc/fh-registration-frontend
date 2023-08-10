@@ -20,12 +20,12 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerIncorporatedBodyRegisteredAddressControllerSpec
+class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
@@ -35,7 +35,7 @@ class BusinessPartnerIncorporatedBodyRegisteredAddressControllerSpec
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersIncorporatedBodyRegisteredAddressController(
+    new BusinessPartnersUnincorporatedBodyRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
@@ -52,7 +52,8 @@ class BusinessPartnerIncorporatedBodyRegisteredAddressControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title should include("What is the unincorporated body’s registered office address?")
-        page.body.text() should include("What is Test incorporated Body’s registered office address?")
+        page.body.text() should include("What is Test Unincorporated Body’s registered office address?")
+
         reset(mockActions)
       }
     }
@@ -74,17 +75,48 @@ class BusinessPartnerIncorporatedBodyRegisteredAddressControllerSpec
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
-        "the form has no errors, postcode is entered" in {
+      "redirect to the choose-address page" when {
+        "multiple results are found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
+            .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"), ("partnerAddressLine", "The Mill"))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with postcode: SW1A 2AA and address line 44"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/form/business-partners/choose-address")
+          reset(mockActions)
+        }
+      }
+
+      "redirect to the /confirm-unincorporated-body-registered-office-address page" when {
+        "One result is found" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", "44 Romford Road"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/confirm-unincorporated-body-registered-office-address")
+          reset(mockActions)
+        }
+      }
+
+      "redirect to /business-partners/cannot-find-address page" when {
+        "No match is found for postcode" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YX"), ("partnerAddressLine", "44"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
           reset(mockActions)
         }
       }

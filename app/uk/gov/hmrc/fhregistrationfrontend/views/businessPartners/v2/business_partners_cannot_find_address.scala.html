@@ -23,12 +23,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
 @this(layout: layout,
         formHelper: FormWithCSRF,
         viewHelpers: ViewHelpers)
 
-@(postcode: String, name: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(postcode: String, name: String, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -40,14 +41,14 @@
 
 @heading = @{messages("fh.businessPartners.cannotFindAddress.title", postcode)}
 
-@layout(title = title, Some(pageScripts), backUrl = Some("#")) {
+@layout(title = title, Some(pageScripts), backUrl = Some(backAction)) {
 
     @Html(BusinessPartnersHeader(heading))
 
     <p class="govuk-body">
-        <a class="govuk-link" id="enter-manually" href="#">@messages("fh.businessPartners.cannotFindAddress.enterManually", name)</a>
+        <a class="govuk-link" id="enter-manually" href="@BusinessPartnersEnterRegistrationOfficeAddress.load().url">@messages("fh.businessPartners.cannotFindAddress.enterManually", name)</a>
     </p>
 
-    @viewHelpers.govukButton(Button(content = Text(messages("fh.businessPartners.cannotFindAddress.differentPostcode")), inputType = Some("submit"), href=Some("#")))
+    @viewHelpers.govukButton(Button(content = Text(messages("fh.businessPartners.cannotFindAddress.differentPostcode")), inputType = Some("submit"), href=Some("/fhdds/form/business-partners/partnership-registered-office-address")))
     <br>
 }

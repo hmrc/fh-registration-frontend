@@ -24,9 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+
 
 class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
@@ -54,16 +54,23 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   val journey = "partnership"
   val postAction: Call = Call(
     method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerPartnershipRegisteredAddressController
+    url = routes.BusinessPartnerPartnershipRegisteredAddressController
       .next()
       .url
   )
+  val enterManualAddressUrl: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
         view
-          .business_partner_registered_address(businessPartnersAddressForm, partnerName, backUrl, postAction, journey))
+          .business_partner_registered_address(
+            businessPartnersAddressForm,
+            partnerName,
+            backUrl,
+            postAction,
+            journey,
+            enterManualAddressUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
