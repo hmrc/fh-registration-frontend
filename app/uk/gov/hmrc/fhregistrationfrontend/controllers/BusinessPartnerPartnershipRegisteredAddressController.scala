@@ -34,13 +34,15 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   // Todo get this from cache later
 
-  private def getBusinessType: String = config.getRandomBusinessType()
+  private def getBusinessType: String = config.getRandomBusinessType
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
       routes.BusinessPartnerUtrController.load().url
-    else
+    else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersVatRegistrationNumberController.load().url
+    else
+      "#"
   }
 
   val partnerName = "Test User"

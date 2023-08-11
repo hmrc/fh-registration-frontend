@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
@@ -32,21 +33,39 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  private def getBusinessType: String = config.getRandomBusinessType()
-
-  val backUrl: String =
-    if (getBusinessType == "partnership" || getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
-    else "#"
-
   val partnerName = "Test User"
 
   def load(): Action[AnyContent] = userAction { implicit request =>
+    val backLinkAndButtonUrl: String = getUrlFromBusinessType(
+      routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
+      routes.BusinessPartnerAddressController.load().url,
+      config.getRandomBusinessType()
+    )
+
+    val manuallyEnterAddressUrl: String = getUrlFromBusinessType(
+      routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
+      routes.BusinessPartnerEnterAddressController.load().url,
+      config.getRandomBusinessType()
+    )
+
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_cannot_find_address("HR33 7GP", partnerName, backUrl))
+      Ok(
+        view.business_partners_cannot_find_address(
+          "HR33 7GP",
+          partnerName,
+          backAction = backLinkAndButtonUrl,
+          manuallyEnterAddressUrl = manuallyEnterAddressUrl,
+          buttonUrl = backLinkAndButtonUrl
+        )
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
+  def getUrlFromBusinessType(url1: String, url2: String, partnerType: String): String = {
+    if (partnerType == "partnership" || partnerType == "limited-liability-partnership") url1
+    else if (partnerType == "individual" || partnerType == "sole-proprietor") url2
+    else "#"
+  }
 }

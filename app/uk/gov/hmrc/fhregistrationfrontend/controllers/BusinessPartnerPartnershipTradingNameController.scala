@@ -37,11 +37,12 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
   val backUrl: String = {
     if (getBusinessType == "partnership")
       routes.BusinessPartnersPartnershipNameController.load().url
-    else
+    else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersLtdLiabilityPartnershipController.load().url
+    else "#"
   }
 
-  private def getBusinessType: String = config.getRandomBusinessType()
+  private def getBusinessType: String = config.getRandomBusinessType
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -67,12 +68,11 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
               case Some(businessType) if businessType.equals("partnership") =>
                 Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
               case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-                //TODO need to refactor from 'corporate body reg number' controller to 'company reg number' controller
                 Redirect(routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load())
-              case Some(unknownBusinessType) =>
+              case Some(unexpectedBusinessType) =>
                 logger.warn(
-                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unknownBusinessType retrieved")
-                errorHandler.errorResultsPages(Results.BadRequest)
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unexpectedBusinessType refreshing the page ")
+                Redirect(routes.BusinessPartnerPartnershipTradingNameController.load().url).discardingCookies()
               case _ =>
                 logger.error(
                   s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
