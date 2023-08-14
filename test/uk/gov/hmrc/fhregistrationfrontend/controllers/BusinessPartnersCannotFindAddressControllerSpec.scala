@@ -105,6 +105,23 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           "/fhdds/form/business-partners/enter-partner-address")
         reset(mockActions)
       }
+
+      "the businessType returned is a corporateBody" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("corporateBody")
+
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("We cannot find any addresses for HR33 7GP")
+        // should be mocked out when Save4Later changes included
+        page.getElementById("enter-manually").attr("href") should include(
+          "/fhdds/form/business-partners/enter-corporate-body-registered-office-address")
+        reset(mockActions)
+      }
     }
 
     "Render the page not found page" when {
