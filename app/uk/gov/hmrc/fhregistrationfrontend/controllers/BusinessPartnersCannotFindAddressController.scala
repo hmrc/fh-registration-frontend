@@ -39,12 +39,14 @@ class BusinessPartnersCannotFindAddressController @Inject()(
     val backLinkAndButtonUrl: String = getUrlFromBusinessType(
       routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
       routes.BusinessPartnerAddressController.load().url,
+      routes.BusinessPartnerCorporateBodyRegisteredAddressController.load().url,
       config.getRandomBusinessType()
     )
 
     val manuallyEnterAddressUrl: String = getUrlFromBusinessType(
       routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
       routes.BusinessPartnerEnterAddressController.load().url,
+      routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
       config.getRandomBusinessType()
     )
 
@@ -63,9 +65,9 @@ class BusinessPartnersCannotFindAddressController @Inject()(
     }
   }
 
-  def getUrlFromBusinessType(url1: String, url2: String, partnerType: String): String = {
+  def getUrlFromBusinessType(url1: String, url2: String, url3: String, partnerType: String): String =
     if (partnerType == "partnership" || partnerType == "limited-liability-partnership") url1
     else if (partnerType == "individual" || partnerType == "sole-proprietor") url2
+    else if (partnerType == "corporateBody") url3
     else "#"
-  }
 }
