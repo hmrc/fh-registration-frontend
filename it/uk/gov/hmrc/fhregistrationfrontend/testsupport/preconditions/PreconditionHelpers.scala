@@ -1,5 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
+import uk.gov.hmrc.fhregistrationfrontend.models.des.PartnerType
+
 trait PreconditionHelpers {
   implicit val builder: PreconditionBuilder
 

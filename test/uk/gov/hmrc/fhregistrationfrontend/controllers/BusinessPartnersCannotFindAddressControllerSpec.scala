@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
@@ -29,10 +30,8 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-
-  val mockAppConfig = mock[FrontendAppConfig]
-
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val controller =
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
@@ -40,7 +39,10 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
     "Render the Cannot Find Address page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
+
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -50,6 +52,57 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
           "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+        reset(mockActions)
+      }
+
+      "the businessType returned is a limited-liability-partnership" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("We cannot find any addresses for HR33 7GP")
+        // should be mocked out when Save4Later changes included
+        page.getElementById("enter-manually").attr("href") should include(
+          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+        reset(mockActions)
+      }
+
+      "the businessType returned is a sole-proprietor" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("sole-proprietor")
+
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("We cannot find any addresses for HR33 7GP")
+        // should be mocked out when Save4Later changes included
+        page.getElementById("enter-manually").attr("href") should include(
+          "/fhdds/form/business-partners/enter-partner-address")
+        reset(mockActions)
+      }
+
+      "the businessType returned is a individual" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("individual")
+
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("We cannot find any addresses for HR33 7GP")
+        // should be mocked out when Save4Later changes included
+        page.getElementById("enter-manually").attr("href") should include(
+          "/fhdds/form/business-partners/enter-partner-address")
         reset(mockActions)
       }
     }
