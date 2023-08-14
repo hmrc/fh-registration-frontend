@@ -72,7 +72,12 @@ class BusinessPartnerAddressController @Inject()(
               .map {
                 case Right(addressListMap) =>
                   //ToDo store the addressListMap in save4Later
-                  Redirect(routes.BusinessPartnersChooseAddressController.load())
+                  if (addressListMap.isEmpty)
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                  else if (addressListMap.size == 1)
+                    Redirect(routes.BusinessPartnersConfirmAddressController.load())
+                  else
+                    Redirect(routes.BusinessPartnersChooseAddressController.load())
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
