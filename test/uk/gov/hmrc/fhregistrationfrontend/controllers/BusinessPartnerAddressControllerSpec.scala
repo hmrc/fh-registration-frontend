@@ -90,11 +90,13 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
             .thenReturn(
               Future.successful(
                 Right(
-                  Map("123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")))
+                  Map(
+                    "123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")),
+                    "234" -> Address("77 test lane", None, None, None, "SW1A 2AA", None, Some("234")))
                 )
               ))
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", ""))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 

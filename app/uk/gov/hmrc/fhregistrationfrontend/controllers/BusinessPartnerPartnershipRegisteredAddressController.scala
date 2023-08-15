@@ -112,7 +112,6 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                     Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
-
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
