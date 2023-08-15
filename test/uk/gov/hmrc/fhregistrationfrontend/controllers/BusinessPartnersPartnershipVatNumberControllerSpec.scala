@@ -42,7 +42,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -58,7 +58,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -77,7 +77,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "Yes is selected and Vat Number supplied, and legal entity type is Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
             .withFormUrlEncodedBody(
@@ -96,7 +96,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "No is selected, and legal entity type is Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
             .withFormUrlEncodedBody(
@@ -114,7 +114,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "No is selected, and legal entity type is Limited Liability Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
@@ -132,7 +132,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "Yes is selected and Vat Number supplied, and legal entity type is Limited Liability Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -153,7 +153,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "the user selects yes but doesn't enter a VAT number" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(

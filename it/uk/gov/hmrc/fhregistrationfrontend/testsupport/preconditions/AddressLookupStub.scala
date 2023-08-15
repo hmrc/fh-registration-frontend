@@ -26,8 +26,10 @@ case class AddressLookupStub()
 
 
   private val addressList = List(address1, address2, address3)
+  private val singleAddressList = List(address1)
 
   private val addressListJson = Json.toJson(addressList)
+  private val singleAddressListJson = Json.toJson(singleAddressList)
 
   def lookupAddress(isSuccess: Boolean = true) = {
     val response = if (isSuccess) {
@@ -42,6 +44,23 @@ case class AddressLookupStub()
         s"/lookup")
       )
       .willReturn(response)
+    )
+    builder
+  }
+
+  def lookupSingleAddress(isSuccess: Boolean = true): PreconditionBuilder = {
+    val response = if (isSuccess) {
+      okJson(
+        singleAddressListJson.toString
+      )
+    } else {
+      serverError()
+    }
+    stubFor(
+      post(urlPathEqualTo(
+        s"/lookup")
+      )
+        .willReturn(response)
     )
     builder
   }

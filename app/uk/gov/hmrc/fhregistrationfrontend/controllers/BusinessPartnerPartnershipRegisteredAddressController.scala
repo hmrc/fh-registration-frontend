@@ -40,13 +40,15 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   // Todo get this from cache later
 
-  private def getBusinessType: String = config.getRandomBusinessType()
+  private def getBusinessType: String = config.getRandomBusinessType
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
       routes.BusinessPartnerUtrController.load().url
-    else
+    else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersVatRegistrationNumberController.load().url
+    else
+      "#"
   }
 
   val partnerName = "Test User"
@@ -103,9 +105,13 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
               )
               .map {
                 case Right(addressListMap) =>
-                  // ToDo store the addressListMap in save4Later
-                  println(Console.CYAN + addressListMap + Console.RESET)
-                  Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+                  // ToDo store the addressListMap in cache
+                  if (addressListMap.isEmpty)
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                  else if (addressListMap.size == 1)
+                    Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+                  else
+                    Redirect(routes.BusinessPartnersChooseAddressController.load())
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)

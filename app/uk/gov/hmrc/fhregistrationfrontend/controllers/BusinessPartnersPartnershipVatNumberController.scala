@@ -38,13 +38,15 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   val form: Form[VatNumber] = vatNumberForm
   val partnerName = "Test Partner"
 
-  private def getBusinessType: String = config.getRandomBusinessType()
+  def getBusinessType: String = config.getRandomBusinessType
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
       routes.BusinessPartnerPartnershipTradingNameController.load().url
-    else
+    else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load().url
+    else
+      "#"
   }
 
   def load(): Action[AnyContent] = userAction { implicit request =>
