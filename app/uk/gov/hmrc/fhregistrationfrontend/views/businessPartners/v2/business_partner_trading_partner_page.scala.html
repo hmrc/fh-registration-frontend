@@ -61,7 +61,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load().url)) {
 
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerTradingNameController.next()) {
