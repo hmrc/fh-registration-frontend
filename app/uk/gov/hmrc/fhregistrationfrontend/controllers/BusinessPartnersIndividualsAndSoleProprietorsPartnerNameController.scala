@@ -54,7 +54,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
             BadRequest(view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction))
           },
           partnerName => {
-            Redirect(routes.BusinessPartnerNinoController.load())
+            Ok(s"Form submitted, with result: $partnerName")
           }
         )
     } else {

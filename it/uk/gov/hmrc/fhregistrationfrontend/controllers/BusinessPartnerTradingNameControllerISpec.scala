@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
@@ -34,40 +35,44 @@ class BusinessPartnerTradingNameControllerISpec
   "POST /form/business-partners/partner-trading-name" when {
 
     "form with no errors" should {
-      "return 200" when {
+      "redirect to the Business Partners National Insurance Number page" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partner-trading-name")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("Blue Peter")
-              ))
+          val result = buildRequest("/form/business-partners/partner-trading-name")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(
+              xSessionId,
+              "Csrf-Token" -> "nocheck"
+            )
+            .post(Map(
+              "tradingName_yesNo" -> Seq("true"),
+              "tradingName_value" -> Seq("Blue Peter")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-            }
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-national-insurance-number")
           }
         }
 
         "the user selects no" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/partner-trading-name")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("false"),
-                "tradingName_value" -> Seq.empty
-              ))
+          val result = buildRequest("/form/business-partners/partner-trading-name")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(
+              xSessionId,
+              "Csrf-Token" -> "nocheck"
+            )
+            .post(Map(
+              "tradingName_yesNo" -> Seq("false"),
+              "tradingName_value" -> Seq.empty
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-            }
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-national-insurance-number")
           }
         }
       }

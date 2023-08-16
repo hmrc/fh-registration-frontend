@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -69,7 +69,7 @@ class BusinessPartnerTradingNameControllerSpec extends ControllerSpecWithGuiceAp
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "return 200" in {
+      "redirect to the Business Partners National Insurance Number page" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -81,7 +81,8 @@ class BusinessPartnerTradingNameControllerSpec extends ControllerSpecWithGuiceAp
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include("/fhdds/form/business-partners/partner-national-insurance-number")
         reset(mockActions)
       }
 
