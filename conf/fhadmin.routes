@@ -1,0 +1,26 @@
+GET         /admin-page/allocate-enrolment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadAllocateEnrolment
+
+GET         /admin-page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.showAdminPage
+
+GET         /admin-page/show-submissions                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getSubmissions
+
+GET         /admin-page/delete-submission/:formbundleId                 @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeletePage(formbundleId)
+GET         /admin-page/delete-submission-del/:formbundleId             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteSubmission(formbundleId)
+
+
+GET         /admin-page/get-groupId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadUserIdPage
+POST        /admin-page/get-groupId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.sendAdminRequest()
+
+GET         /admin-page/allocate-enrolment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadAllocateEnrolment
+POST        /admin-page/allocate-enrolment                              @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.allocateEnrolment
+
+GET         /admin-page/delete-enrolment                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.loadDeleteEnrolment
+POST        /admin-page/delete-enrolment                                @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.deleteEnrolment
+
+GET         /admin-page/user-info/:userId                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getUserInfo(userId: String)
+GET         /admin-page/group-info/:groupId                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.getGroupInfo(groupId: String)
+
+GET         /admin-page/get-status/:regNo                               @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.checkStatus(regNo: String)
+
+GET         /admin-page/es2/:userId                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es2(userId: String)
+GET         /admin-page/es3/:groupId                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.AdminPageController.es3(groupId: String)

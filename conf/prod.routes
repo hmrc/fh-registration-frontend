@@ -2,5 +2,6 @@
 ->         /fhdds                     app.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
+->         /fh-admin-page             fhadmin.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
