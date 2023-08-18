@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.controllers
+package uk.gov.hmrc.fhregistrationfrontend.controllers.admin
 
-import javax.inject.{Inject, Singleton}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.libs.json.{Format, Json}
 import play.api.mvc.{Action, AnyContent, BodyParser, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.controllers.AdminRequest.requestForm
-import uk.gov.hmrc.fhregistrationfrontend.controllers.EnrolmentForm.{allocateEnrolmentForm, deleteEnrolmentForm}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.AdminRequest.requestForm
+import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.EnrolmentForm.{allocateEnrolmentForm, deleteEnrolmentForm}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.{AuthenticationController, Credentials}
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
