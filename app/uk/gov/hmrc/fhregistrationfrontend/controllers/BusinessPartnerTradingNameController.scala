@@ -51,7 +51,7 @@ class BusinessPartnerTradingNameController @Inject()(
             BadRequest(view.business_partner_trading_name(formWithErrors, "Test User"))
           },
           tradingName => {
-            Ok(s"Form submiteed, with result: $tradingName")
+            Redirect(routes.BusinessPartnerNinoController.load())
           }
         )
     } else {

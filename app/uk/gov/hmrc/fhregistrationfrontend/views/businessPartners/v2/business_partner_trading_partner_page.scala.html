@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{hasTradingNameKey, tradingNameKey}
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
@@ -61,7 +62,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load().url)) {
 
 
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerTradingNameController.next()) {
