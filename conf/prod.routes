@@ -1,5 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /fhdds                     app.Routes
+->         /fh-admin-page             fhadmin.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
 
