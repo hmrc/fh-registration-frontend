@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
@@ -79,11 +80,35 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "return 200" in {
+      "return 200" when {
+        "business type is neither Sole Proprietor or Individual" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "firstName" -> "first name",
+              "lastName"  -> "last name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Form submitted, with result: PartnerName(first name,last name)"
+          reset(mockActions)
+        }
+      }
+    }
+
+    "redirect to Business Partner NINO page" when {
+      "business type is Individual" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
+
         val request = FakeRequest()
+          .withCookies(Cookie("businessType", "individual"))
           .withFormUrlEncodedBody(
             "firstName" -> "first name",
             "lastName"  -> "last name"
@@ -91,8 +116,30 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        contentAsString(result) shouldBe "Form submitted, with result: PartnerName(first name,last name)"
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include("/business-partners/partner-national-insurance-number")
+        reset(mockActions)
+      }
+    }
+
+    "redirect to Business Partner Trading Name page" when {
+      "business type is Sole Proprietor" in {
+        setupUserAction()
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
+
+        val request = FakeRequest()
+          .withCookies(Cookie("businessType", "sole-proprietor"))
+          .withFormUrlEncodedBody(
+            "firstName" -> "first name",
+            "lastName"  -> "last name"
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include("/business-partners/partner-trading-name")
         reset(mockActions)
       }
     }

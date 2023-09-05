@@ -23,6 +23,7 @@
 @import play.api.mvc._
 @import play.api.data.Form
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
 
 @this(layout: layout,
@@ -60,7 +61,7 @@
     }
 }
 
-@layout(title = title + titlePrefix, backUrl = None, isBrowserBackMimic = true){
+@layout(title = title + titlePrefix, backUrl = Some(BusinessPartnersController.load().url)){
 
     @viewHelpers.form(action = postAction) {
 
@@ -69,22 +70,22 @@
         @Html(BusinessPartnersHeader(heading))
 
         @viewHelpers.govukInput(Input(
-        id = firstNameKey,
-        name = firstNameKey,
-        label = Label(
-        isPageHeading = false,
-        content = HtmlContent(s"${messages(s"fh.business_partners.individual.first_name.label")}")
-        ),
-        spellcheck = Some(false),
-        classes = "govuk-!-width-one-half",
-        hint = None,
-        errorMessage = form.error(firstNameKey).map{ e =>
-            ErrorMessage(
-                content = Text(messages(s"fh.businessPartnerIndividual.${e.key}.${e.message}")),
-                visuallyHiddenText = Some(messages("generic.errorPrefix"))
-            )
-        },
-        value = form(firstNameKey).value
+            id = firstNameKey,
+            name = firstNameKey,
+            label = Label(
+                isPageHeading = false,
+                content = HtmlContent(s"${messages(s"fh.business_partners.individual.first_name.label")}")
+            ),
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-half",
+            hint = None,
+            errorMessage = form.error(firstNameKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.businessPartnerIndividual.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
+            },
+            value = form(firstNameKey).value
         ))
 
         @viewHelpers.govukInput(Input(
