@@ -722,6 +722,8 @@ fh.businessPartners.cannotFindAddress.title=We cannot find any addresses for {0}
 fh.businessPartners.cannotFindAddress.enterManually=Enter the address manually for {0}
 fh.businessPartners.cannotFindAddress.differentPostcode=Try a different postcode
 
+fh.businessPartners.checkYourAnswers.title=Check your answers
+
 # - Business partners
 #============================================================
 fh.business_partners.title=Business partners

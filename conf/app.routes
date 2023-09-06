@@ -132,6 +132,10 @@ POST         /form/business-partners/confirm-corporate-body-registered-office-ad
 
 GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
 
+GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load()
+POST         /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.next()
+
+
 GET         /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.load()
 POST        /tradingName                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.TradingNameController.next()
 
