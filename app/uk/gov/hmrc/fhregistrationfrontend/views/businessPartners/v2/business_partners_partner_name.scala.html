@@ -33,7 +33,7 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[_], postAction: Call, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
@@ -61,7 +61,7 @@
     }
 }
 
-@layout(title = title + titlePrefix, backUrl = Some(BusinessPartnersController.load().url)){
+@layout(title = title + titlePrefix, backUrl = Some(backAction)){
 
     @viewHelpers.form(action = postAction) {
 
