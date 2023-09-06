@@ -2,8 +2,9 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-import  uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
 
 class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
   extends Specifications with TestConfiguration {
@@ -29,17 +30,58 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
   "POST /business-partners/partner-name" when {
     "return 200" when {
-      "the form is filled out correctly" in {
+      "business type is neither Individual or Sole Proprietor and the form is filled out correctly" in {
         given.commonPrecondition
 
         val result = buildRequest("/business-partners/partner-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "partnership")
+          )
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
 
         whenReady(result) { res =>
           res.status mustBe 200
           res.body mustBe "Form submitted, with result: PartnerName(Coca,Cola)"
+        }
+      }
+    }
+
+    "redirect to Business Partner NINO page" when {
+      "business type is Individual and the form is filled out correctly" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "individual")
+          )
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-national-insurance-number")
+        }
+      }
+    }
+
+    "redirect to Business Partner Trading Name page" when {
+      "business type is Sole Proprietor and the form is filled out correctly" in {
+        given.commonPrecondition
+
+        val result = buildRequest("/business-partners/partner-name")
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "sole-proprietor")
+          )
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-trading-name")
         }
       }
     }

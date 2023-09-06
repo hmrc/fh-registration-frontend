@@ -34,11 +34,16 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   import actions._
 
-  val postAction = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
+  private def getBusinessType: String = config.getRandomBusinessType()
+
+  val postAction: Call = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
+
+  val backUrl: String = routes.BusinessPartnersController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction))
+      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction, backUrl))
+        .withCookies(Cookie("businessType", getBusinessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -46,15 +51,22 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok("Next page")
       form
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction))
+            BadRequest(
+              view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction, backUrl))
           },
           partnerName => {
-            Ok(s"Form submitted, with result: $partnerName")
+            request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType) if businessType.equals("individual") =>
+                Redirect(routes.BusinessPartnerNinoController.load())
+              case Some(businessType) if businessType.equals("sole-proprietor") =>
+                Redirect(routes.BusinessPartnerTradingNameController.load())
+              case _ =>
+                Ok(s"Form submitted, with result: $partnerName")
+            }
           }
         )
     } else {
