@@ -101,5 +101,6 @@ class Views @Inject()(
   val business_partners_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_name,
   val business_partners_individualsAndSoleProprietors_partner_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_partner_name,
   val business_partners_cannot_find_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_cannot_find_address,
-  val business_partners_type: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_type
+  val business_partners_type: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_type,
+  val business_partners_check_your_answers: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_check_your_answers
 )
