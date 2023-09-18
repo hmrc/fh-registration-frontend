@@ -31,7 +31,7 @@
         formHelper: FormWithCSRF
 )
 
-@(journeyType: String, postAction: Call, form: Form[_], formKey: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(journeyType: String, postAction: Call, form: Form[_], formKey: String, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
@@ -44,7 +44,7 @@
 
 @heading = @{messages(s"fh.businessPartners.$journeyType.companyName.heading")}
 
-@layout(title = title + titlePrefix, backUrl = None, isBrowserBackMimic = true){
+@layout(title = title + titlePrefix, backUrl = Some(backAction)){
 
     @viewHelpers.form(action = postAction) {
 
