@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersCorporateBodyUtrControllerIntegrationSpec
+class BusinessPartnersCorporateBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference" should {
@@ -45,7 +45,7 @@ class BusinessPartnersCorporateBodyUtrControllerIntegrationSpec
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body mustBe "Next page! with UTR: BusinessPartnersCorporateBodyUniqueTaxpayerReference(1234567890)"
+            res.body mustBe "Next page! with UTR: BusinessPartnersEnterUniqueTaxpayerReference(1234567890)"
           }
         }
       }

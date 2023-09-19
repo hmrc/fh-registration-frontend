@@ -718,6 +718,9 @@ fh.businessPartners.partnershipName.error.pattern=Partnership name must be 120 c
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
 
+fh.businessPartners.SoleProprietor.utr.title=Does the partner have a Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.businessPartners.SoleProprietor.utr.heading=Does {0} have a Corporation Tax Unique Taxpayer Reference (UTR)?
+
 fh.businessPartners.cannotFindAddress.title=We cannot find any addresses for {0}
 fh.businessPartners.cannotFindAddress.enterManually=Enter the address manually for {0}
 fh.businessPartners.cannotFindAddress.differentPostcode=Try a different postcode

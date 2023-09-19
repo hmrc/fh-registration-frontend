@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerCorporateBodyUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,10 +34,10 @@ class BusinessPartnerCorporateBodyUtrControllerSpec extends ControllerSpecWithGu
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersCorporateBodyUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnerSoleProprietorUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
-    "Render the businessPartnersUtr page" when {
+    "Render the SoleProprietor Utr page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -46,7 +46,7 @@ class BusinessPartnerCorporateBodyUtrControllerSpec extends ControllerSpecWithGu
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Does the company have a Corporation Tax Unique Taxpayer Reference (UTR)?")
+        page.title() should include("Does the partner have a Corporation Tax Unique Taxpayer Reference (UTR)?")
         reset(mockActions)
       }
     }

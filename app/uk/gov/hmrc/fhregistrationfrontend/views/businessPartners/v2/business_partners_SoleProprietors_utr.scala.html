@@ -28,18 +28,18 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessPartnersCorporateBodyUtrForm: Form[BusinessPartnersEnterUniqueTaxpayerReference], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(businessPartnersUtrForm: Form[BusinessPartnersEnterUniqueTaxpayerReference], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @titlePrefix = @{
-    if (businessPartnersCorporateBodyUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+    if (businessPartnersUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-    Messages("fh.businessPartners.corporateBody.business_partners_utr.title")
+    Messages("fh.businessPartners.SoleProprietor.utr.title")
 }
 
 @heading = @{
-    Messages("fh.businessPartners.corporateBody.business_partners_utr.heading", partnerName)
+    Messages("fh.businessPartners.SoleProprietor.utr.heading", partnerName)
 }
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
@@ -47,33 +47,33 @@
     @Html(s"${BusinessPartnersHeader(heading)}")
 
     @viewHelpers.form(action = postAction) {
-        @if(businessPartnersCorporateBodyUtrForm.errors.nonEmpty) {
+        @if(businessPartnersUtrForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
                 Seq(ErrorLink(
-                    href = Some(s"#${businessPartnersCorporateBodyUtrForm.errors.head.key}"),
-                    content = Text(messages(s"fh.${businessPartnersCorporateBodyUtrForm.errors.head.key}.${businessPartnersCorporateBodyUtrForm.errors.head.message}"))
+                    href = Some(s"#${businessPartnersUtrForm.errors.head.key}"),
+                    content = Text(messages(s"fh.${businessPartnersUtrForm.errors.head.key}.${businessPartnersUtrForm.errors.head.message}"))
                 )),
                 title = Text(messages("fh.generic.error"))
             ))
         }
 
-    @Html(s"${LostUtrLink()}")
-    @viewHelpers.govukInput(Input(
-        id = businessPartnerUtrKey,
-        name = businessPartnerUtrKey,
-        spellcheck = Some(false),
-        classes = "govuk-!-width-one-third",
-        hint = Some(Hint(
-            content = Text(Messages("fh.business_partners_utr.hintText"))
-        )),
-        errorMessage = businessPartnersCorporateBodyUtrForm.error(businessPartnerUtrKey).map{ e =>
-            ErrorMessage(
-                content = Text(messages(s"fh.${e.key}.${e.message}")),
-                visuallyHiddenText = Some(messages("generic.errorPrefix"))
-            )
-        },
-        value = businessPartnersCorporateBodyUtrForm(businessPartnerUtrKey).value
-    ))
+        @Html(s"${LostUtrLink()}")
+        @viewHelpers.govukInput(Input(
+            id = businessPartnerUtrKey,
+            name = businessPartnerUtrKey,
+            spellcheck = Some(false),
+            classes = "govuk-!-width-one-third",
+            hint = Some(Hint(
+                content = Text(Messages("fh.business_partners_utr.hintText"))
+            )),
+            errorMessage = businessPartnersUtrForm.error(businessPartnerUtrKey).map{ e =>
+                ErrorMessage(
+                    content = Text(messages(s"fh.${e.key}.${e.message}")),
+                    visuallyHiddenText = Some(messages("generic.errorPrefix"))
+                )
+            },
+            value = businessPartnersUtrForm(businessPartnerUtrKey).value
+        ))
 
 
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
