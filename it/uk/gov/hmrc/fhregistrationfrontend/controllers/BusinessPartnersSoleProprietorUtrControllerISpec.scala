@@ -24,8 +24,8 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
         whenReady(result) { res =>
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
-          page.title() must include("Does the partner have a Corporation Tax Unique Taxpayer Reference (UTR)?")
-          page.getElementsByTag("h1").text() must include("Does {{partner name}} have a Corporation Tax Unique Taxpayer Reference (UTR)?")
+          page.title() must include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+          page.getElementsByTag("h1").text() must include("What is {{partner name}}’s Self Assessment Unique Taxpayer Reference (UTR)?")
         }
       }
     }
