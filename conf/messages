@@ -683,6 +683,8 @@ fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcod
 fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
 fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
 
+fh.businessPartners.partnership.companyRegistrationNumber.title=What is the partnership’s company registration number?
+
 fh.businessPartners.corporateBody.companyRegistrationNumber.title=What is the company’s company registration number?
 fh.businessPartners.corporateBody.companyRegistrationNumber.heading=What is {0}’s company registration number?
 fh.businessPartners.corporateBody.companyRegistrationNumber.text.p1=You can
