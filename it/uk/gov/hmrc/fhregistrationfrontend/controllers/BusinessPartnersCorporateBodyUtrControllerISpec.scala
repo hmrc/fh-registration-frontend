@@ -53,7 +53,7 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
     }
 
 
-    "option selected but UTR not supplied" should {
+    "UTR not supplied" should {
       "return 400" in {
         given
           .commonPrecondition

@@ -10,7 +10,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
 
   val route = "/business-partners/partner-self-assessment-unique-taxpayer-reference"
 
-  s"GET /business-partners/partner-self-assessment-unique-taxpayer-reference" should {
+  s"GET $route" should {
 
     "render the partnership-self-assessment-unique-taxpayer-reference page" in {
       given
@@ -31,7 +31,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
     }
   }
 
-  "POST /business-partners/partner-self-assessment-unique-taxpayer-reference" when {
+  s"POST $route" when {
     "yes is selected and the UTR is entered" should {
       "return 200 with UTR" in {
         given
