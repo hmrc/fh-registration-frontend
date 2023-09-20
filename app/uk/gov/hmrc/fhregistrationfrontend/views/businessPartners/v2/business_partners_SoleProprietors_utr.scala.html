@@ -44,7 +44,7 @@
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
 
-    @Html(s"${BusinessPartnersHeader(heading)}")
+    @Html(BusinessPartnersHeader(heading))
 
     @viewHelpers.form(action = postAction) {
         @if(businessPartnersUtrForm.errors.nonEmpty) {
@@ -57,7 +57,7 @@
             ))
         }
 
-        @Html(s"${LostUtrLink()}")
+        @Html(LostUtrLink())
         @viewHelpers.govukInput(Input(
             id = businessPartnerUtrKey,
             name = businessPartnerUtrKey,

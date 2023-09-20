@@ -17,7 +17,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl" + s"$route")
+        val result = client.url(baseUrl + route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -38,7 +38,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl" + s"$route")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -58,7 +58,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl" + s"$route")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -79,7 +79,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl" + s"$route")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")

@@ -691,8 +691,6 @@ fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For exam
 fh.businessPartners.companyRegistrationNumber.error.required=Enter the company registration number
 fh.businessPartners.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 
-fh.businessPartners.SoleProprietor.utr.heading=What is {0}’s Self Assessment Unique Taxpayer Reference (UTR)?
-
 fh.businessPartners.corporateBody.business_partners_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
 fh.businessPartners.corporateBody.business_partners_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
