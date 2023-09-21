@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -68,7 +68,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "return 303" when {
         "the form has no errors, yes is selected and vatnumber supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -77,8 +77,8 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with vatNumber: 123456789"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/form/business-partners/partner-address")
           reset(mockActions)
         }
 
@@ -90,8 +90,9 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with no vatNumber"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/business-partners/partner-self-assessment-unique-taxpayer-reference")
           reset(mockActions)
         }
       }
