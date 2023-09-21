@@ -1,6 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
@@ -36,22 +37,20 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   "POST /form/business-partners/company-name" when {
 
     "the user submits with a company name" should {
-      "return 200" when {
+      "redirect to the corporate body Trading Name page" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "companyName" -> Seq("Shelby Limited")
-              ))
+          val result = buildRequest(s"/$requestUrl")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "companyName" -> Seq("Shelby Limited")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: companyNameModel(Shelby Limited)")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-trading-name")
           }
         }
       }

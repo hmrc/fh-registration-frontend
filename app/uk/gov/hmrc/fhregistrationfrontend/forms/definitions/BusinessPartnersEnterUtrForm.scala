@@ -20,18 +20,17 @@ import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{uniqueTaxpayerReferenceNumber, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnersCorporateBodyUniqueTaxpayerReference, UniqueTaxpayerReference}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterUniqueTaxpayerReference
 
-object BusinessPartnersCorporateBodyUtrForm {
+object BusinessPartnersEnterUtrForm {
 
   val businessPartnerUtrKey = "uniqueTaxpayerReference_value"
 
   private val businessPartnerUtrMapping = businessPartnerUtrKey -> uniqueTaxpayerReferenceNumber
 
-  val businessPartnersCorporateBodyUtrForm = Form(
+  val businessPartnersEnterUtrForm = Form(
     mapping(
       businessPartnerUtrMapping
-    )(BusinessPartnersCorporateBodyUniqueTaxpayerReference.apply)(
-      BusinessPartnersCorporateBodyUniqueTaxpayerReference.unapply)
+    )(BusinessPartnersEnterUniqueTaxpayerReference.apply)(BusinessPartnersEnterUniqueTaxpayerReference.unapply)
   )
 }

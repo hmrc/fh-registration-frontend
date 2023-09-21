@@ -691,8 +691,8 @@ fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For exam
 fh.businessPartners.companyRegistrationNumber.error.required=Enter the company registration number
 fh.businessPartners.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 
-fh.businessPartners.corporateBody.business_partners_utr.title = Does the company have a Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
-fh.businessPartners.corporateBody.business_partners_utr.heading = Does {0} have a Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.businessPartners.corporateBody.business_partners_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
+fh.businessPartners.corporateBody.business_partners_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
 
 fh.business.partners.corporateBody.enter.registered.address.title=Enter the company’s registered office address?
 fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
@@ -717,6 +717,9 @@ fh.businessPartners.partnershipName.error.pattern=Partnership name must be 120 c
 
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
+
+fh.businessPartners.SoleProprietor.utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.businessPartners.SoleProprietor.utr.heading=What is {0}’s Self Assessment Unique Taxpayer Reference (UTR)?
 
 fh.businessPartners.cannotFindAddress.title=We cannot find any addresses for {0}
 fh.businessPartners.cannotFindAddress.enterManually=Enter the address manually for {0}

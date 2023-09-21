@@ -17,14 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnersEnterUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnershipNameForm.{partnershipNameForm, partnershipNameKey}
 
 @Singleton
-class BusinessPartnersPartnershipNameController @Inject()(
+class BusinessPartnerSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,12 +33,15 @@ class BusinessPartnersPartnershipNameController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val journeyType = "partnership"
-  val postAction = routes.BusinessPartnersPartnershipNameController.next()
+  val partnerName = "{{partner name}}"
+  val postAction =
+    Call(
+      method = "POST",
+      url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerSoleProprietorUtrController.next().url)
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey, "#"))
+      Ok(view.business_partners_SoleProprietors_utr(businessPartnersEnterUtrForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -46,15 +49,13 @@ class BusinessPartnersPartnershipNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      partnershipNameForm
+      businessPartnersEnterUtrForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey, "#"))
+            BadRequest(view.business_partners_SoleProprietors_utr(formWithErrors, postAction, partnerName))
           },
-          partnership => {
-            Ok(s"Form submitted, with result: $partnership")
-          }
+          businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
