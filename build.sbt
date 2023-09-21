@@ -45,7 +45,6 @@ def test(scope: String = "test,it") = Seq(
   "org.pegdown"                  % "pegdown"                        % "1.6.0"          % scope,
   "org.jsoup"                    % "jsoup"                          % "1.13.1"         % scope,
   "org.scalacheck"              %% "scalacheck"                     % "1.15.4"         % scope,
-  "org.pegdown"                  % "pegdown"                        % "1.6.0"          % scope,
   "com.github.julien-truffaut"  %% "monocle-law"                    % monocleVersion   % scope
 )
 
