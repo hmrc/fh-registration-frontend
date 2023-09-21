@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import com.google.inject.Inject
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import com.google.inject.{Inject, Singleton}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnersEnterUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersCorporateBodyUtrController @Inject()(
+@Singleton
+class BusinessPartnerSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -32,16 +33,15 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val partnerName = "test partner"
+  val partnerName = "{{partner name}}"
   val postAction =
     Call(
       method = "POST",
-      url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyUtrController.next().url)
+      url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerSoleProprietorUtrController.next().url)
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partner_corporateBody_utr_number(businessPartnersEnterUtrForm, postAction, partnerName))
+      Ok(view.business_partners_SoleProprietors_utr(businessPartnersEnterUtrForm, postAction, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,7 +53,7 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_corporateBody_utr_number(formWithErrors, postAction, partnerName))
+            BadRequest(view.business_partners_SoleProprietors_utr(formWithErrors, postAction, partnerName))
           },
           businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
         )
@@ -61,5 +61,4 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
 }
