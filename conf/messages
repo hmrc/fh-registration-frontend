@@ -614,61 +614,29 @@ fh.company_officers.addMore=Are there any more company officers?
 fh.companyIdentification.error.required=Select whether there are any more to add
 
 # - Business partners v2
-#============================================================
+#====================================================================================================================================================================================
 fh.businessPartners.caption=Business partners
 fh.businessPartners.screen-reader.section=this is for:
 fh.businessPartners.chooseAddress.title=Choose address
 fh.chosenAddress.error.required=Select an address
-fh.businessPartners.confirmAddress.title=Confirm the partner’s address?
-fh.businessPartners.confirmAddress.heading=Confirm {0} address
-fh.businessPartners.confirmAddress.edit=Edit this address
+
 fh.businessPartner.vatNumber.title=Does the partner have a UK VAT registration number?
 fh.businessPartner.vatNumber.heading=Does {0} have a UK VAT registration number?
 fh.businessPartner.vatNumber.label=VAT registration number
 fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
-fh.businessPartner.corporateBody.vatNumber.title=Does the corporate body have a UK VAT registration number?
-fh.businessPartner.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number? - Business partners
-
-fh.businessPartner.corporateBody.vatNumber.heading=Does {0} have a UK VAT registration number?
-fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
-fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
-fh.business.partners.find.address.button = Find UK address
-fh.business.partners.partnership.registered.address.title=What is the partnership’s registered office address?
-fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
-fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
-fh.business_partners_address.heading=What is {0}’s address?
-fh.partnerAddressLine.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
-
-fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)? - Business partners
-fh.business_partners_utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
-fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
-fh.uniqueTaxpayerReference_yesNo.error.required=Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)
-fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Unique Taxpayer Reference (UTR)
-fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
-fh.businessPartners.partnership.tradingName.title = Does the partnership use a trading name that is different from its registered name?
-fh.businessPartners.partnership.tradingName.heading = Does {0} use a trading name that is different from its registered name?
-fh.businessPartners.corporateBody.tradingName.title = Does the corporate body use a trading name that is different from its registered name?
-fh.businessPartners.corporateBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
-fh.business.partners.registered.address.heading = What is {0}’s registered office address?
-
-fh.business.partners.corporateBody.registered.address.title=What is the company’s registered office address?
-
-fh.businessPartners.unincorporatedBody.tradingName.title = Does the unincorporated body use a trading name that is different from its registered name?
-fh.businessPartners.unincorporatedBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
-fh.business.partners.incorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
-fh.businessPartners.unincorporated.confirmRegisteredAddress.title=Confirm the unincorporated body’s registered office address?
-fh.businessPartners.corporate.confirmRegisteredAddress.title=Confirm the company’s registered office address?
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
+
 fh.businessPartners.tradingName.title = Does the partner’s business use a trading name that is different from its registered name?
 fh.businessPartners.tradingName.heading = Does {0}’s business use a trading name that is different from its registered name?
 
+fh.businessPartners.confirmAddress.title=Confirm the partner’s address?
+fh.businessPartners.confirmAddress.heading=Confirm {0} address
+fh.businessPartners.confirmAddress.edit=Edit this address
+
 fh.business.partners.enterAddress.title = Enter the partner’s address?
 fh.business.partners.enterAddress.h1 = Enter {0}’s address
-fh.business.partners.enterRegisteredOfficeAddress.title = Enter the partnership’s registered office address?
-fh.business.partners.enterRegisteredOfficeAddress.h1 = Enter {0}’s registered office address?
-
 fh.business.partners.enterAddress.line1.label = Address line 1
 fh.business.partners.enterAddress.line1.error.required = You must enter line 1 of the address
 fh.business.partners.enterAddress.line1.error.pattern = Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
@@ -680,52 +648,91 @@ fh.business.partners.enterAddress.line3.error.pattern = Address lines must not b
 fh.business.partners.enterAddress.postcode.label = Postcode (optional)
 fh.business.partners.enterAddress.postcode.error.pattern = Enter a valid postcode
 
-fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
-fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
-
-fh.businessPartners.corporateBody.companyRegistrationNumber.title=What is the company’s company registration number?
-fh.businessPartners.corporateBody.companyRegistrationNumber.heading=What is {0}’s company registration number?
-fh.businessPartners.corporateBody.companyRegistrationNumber.text.p1=You can
-fh.businessPartners.corporateBody.companyRegistrationNumber.text.p2=search Companies House for a company registration number (opens in new tab)
-fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For example, 01234567
 fh.businessPartners.companyRegistrationNumber.error.required=Enter the company registration number
 fh.businessPartners.companyRegistrationNumber.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 
-fh.businessPartners.corporateBody.business_partners_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
-fh.businessPartners.corporateBody.business_partners_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
-
-fh.business.partners.corporateBody.enter.registered.address.title=Enter the company’s registered office address?
-fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
-
-fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body name?
-fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
-fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
-
-fh.businessPartners.corporateBody.companyName.heading =What is the company name?
-fh.businessPartners.corporateBody.companyName.title =What is the company name? - Business partners
 fh.businessPartners.companyName.error.required=Enter a company name
 fh.businessPartners.companyName.error.pattern=Company name must be 140 characters or less
 
-fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
-fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
-fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
-
-fh.businessPartners.partnership.companyName.heading =What is the name of the partnership?
-fh.businessPartners.partnership.companyName.title =What is the name of the partnership? - Business partners
-fh.businessPartners.partnershipName.error.required=Enter a partnership name
-fh.businessPartners.partnershipName.error.pattern=Partnership name must be 120 characters or less
-
 fh.business_partners.utr.link1 = You can
 fh.business_partners.utr.link2 = find a lost UTR.
-
-fh.businessPartners.SoleProprietor.utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
-fh.businessPartners.SoleProprietor.utr.heading=What is {0}’s Self Assessment Unique Taxpayer Reference (UTR)?
 
 fh.businessPartners.cannotFindAddress.title=We cannot find any addresses for {0}
 fh.businessPartners.cannotFindAddress.enterManually=Enter the address manually for {0}
 fh.businessPartners.cannotFindAddress.differentPostcode=Try a different postcode
 
+fh.business_partners.title.v2= Does the partner have a National Insurance number? - Business partners
+fh.business.partners.nino.h1 = Does {0} have a National Insurance number?
+fh.business.partners.find.address.button = Find UK address
+fh.business_partners_address.heading=What is {0}’s address?
+fh.business.partners.registered.address.heading=What is {0}’s registered office address?
+fh.partnerAddressLine.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
+
+fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)? - Business partners
+fh.business_partners_utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
+fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
+fh.uniqueTaxpayerReference_yesNo.error.required=Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)
+fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Unique Taxpayer Reference (UTR)
+fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
+
 fh.businessPartners.checkYourAnswers.title=Check your answers
+
+# - Individual =========================================================================================================
+
+# - Sole Proprietor  ===================================================================================================
+fh.businessPartners.SoleProprietor.utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.businessPartners.SoleProprietor.utr.heading=What is {0}’s Self Assessment Unique Taxpayer Reference (UTR)?
+
+# - Partnership ========================================================================================================
+fh.business.partners.partnership.registered.address.title=What is the partnership’s registered office address?
+fh.businessPartners.partnership.tradingName.title = Does the partnership use a trading name that is different from its registered name?
+fh.businessPartners.partnership.tradingName.heading = Does {0} use a trading name that is different from its registered name?
+fh.businessPartners.partnership.companyName.heading =What is the name of the partnership?
+fh.businessPartners.partnership.companyName.title =What is the name of the partnership? - Business partners
+fh.businessPartners.partnershipName.error.required=Enter a partnership name
+fh.businessPartners.partnershipName.error.pattern=Partnership name must be 120 characters or less
+fh.businessPartners.partnership.confirmRegisteredAddress.title=Confirm the partnership’s registered office address?
+fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}’s registered office address?
+fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
+fh.business.partners.enterRegisteredOfficeAddress.title = Enter the partnership’s registered office address?
+fh.business.partners.enterRegisteredOfficeAddress.h1 = Enter {0}’s registered office address?
+
+# - Limited Liability Partnership ======================================================================================
+fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
+fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
+fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
+fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
+
+# - Corporate Body =====================================================================================================
+fh.businessPartner.corporateBody.vatNumber.title=Does the corporate body have a UK VAT registration number?
+fh.businessPartner.corporateBody.vatNumber.heading=Does {0} have a UK VAT registration number?
+fh.business.partners.corporateBody.registered.address.title=What is the company’s registered office address?
+fh.businessPartners.corporateBody.tradingName.title = Does the corporate body use a trading name that is different from its registered name?
+fh.businessPartners.corporateBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
+fh.businessPartners.corporateBody.companyRegistrationNumber.title=What is the company’s company registration number?
+fh.businessPartners.corporateBody.companyRegistrationNumber.heading=What is {0}’s company registration number?
+fh.businessPartners.corporateBody.companyRegistrationNumber.text.p1=You can
+fh.businessPartners.corporateBody.companyRegistrationNumber.text.p2=search Companies House for a company registration number (opens in new tab)
+fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For example, 01234567
+fh.businessPartners.corporateBody.business_partners_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
+fh.businessPartners.corporateBody.business_partners_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.business.partners.corporateBody.enter.registered.address.title=Enter the company’s registered office address?
+fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
+fh.businessPartners.corporateBody.companyName.heading =What is the company name?
+fh.businessPartners.corporateBody.companyName.title =What is the company name? - Business partners
+fh.businessPartners.corporate.confirmRegisteredAddress.title=Confirm the company’s registered office address?
+
+# - Unincorporated Body ================================================================================================
+fh.businessPartners.unincorporatedBody.tradingName.title = Does the unincorporated body use a trading name that is different from its registered name?
+fh.businessPartners.unincorporatedBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
+fh.businessPartners.unincorporated.confirmRegisteredAddress.title=Confirm the unincorporated body’s registered office address?
+fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body name?
+fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
+fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
+fh.business.partners.unincorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
+fh.businessPartner.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number? - Business partners
+
+#====================================================================================================================================================================================
 
 # - Business partners
 #============================================================
