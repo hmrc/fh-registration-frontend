@@ -48,7 +48,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        //when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
         val request = FakeRequest()
           .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -66,7 +65,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
         val request = FakeRequest()
           .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -87,7 +85,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -104,7 +101,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          //when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -127,7 +123,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
         val request = FakeRequest()
           .withMethod("POST")

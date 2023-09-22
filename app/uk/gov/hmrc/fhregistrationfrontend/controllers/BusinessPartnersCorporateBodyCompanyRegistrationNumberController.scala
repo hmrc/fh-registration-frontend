@@ -35,13 +35,12 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberController @Inject()
 
   val staticBusinessTypes = Seq("limited-liability-partnership", "corporateBody")
   val businessType: String = "corporateBody"
+  val companyName = "Test CorporateBody"
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = companyRegistrationNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      val companyName = "Test corporateBody"
-      Ok(view.business_partners_company_reg_number(form, companyName, businessType))
+      Ok(view.business_partners_company_reg_number(companyRegistrationNumberForm, companyName, businessType))
         .withCookies(Cookie("businessType", businessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -51,7 +50,6 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberController @Inject()
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      val companyName = "Test Name"
       companyRegistrationNumberForm
         .bindFromRequest()
         .fold(

@@ -34,12 +34,12 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
   import actions._
 
   val businessType: String = "limited-liability-partnership"
+  val companyName = "Test Partnership"
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val form = companyRegistrationNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      val companyName = "Test Partnership"
       Ok(view.business_partners_company_reg_number(form, companyName, businessType))
         .withCookies(Cookie("businessType", businessType))
     } else {
@@ -50,7 +50,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      val companyName = "Test Name"
       companyRegistrationNumberForm
         .bindFromRequest()
         .fold(
