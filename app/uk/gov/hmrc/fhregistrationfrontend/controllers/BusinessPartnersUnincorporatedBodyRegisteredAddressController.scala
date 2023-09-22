@@ -39,7 +39,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
       .next()
       .url
   )
-  val title = "incorporatedBody"
+  val title = "unincorporatedBody"
   val UnincorporatedBody = "Test Unincorporated Body"
   val unknownPostcode = "AB1 2YX"
   val backAction: String = routes.BusinessPartnerUnincorporatedUtrController.load().url
