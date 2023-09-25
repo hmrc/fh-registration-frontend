@@ -44,7 +44,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
     if (getBusinessType == "partnership")
       routes.BusinessPartnerPartnershipTradingNameController.load().url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load().url
+      routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
     else
       "#"
   }

@@ -5,41 +5,44 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
+class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/company-registration-number" should {
-    "render the corporate-body-company-registration-number page" in {
+  "GET /business-partners/partnership-company-registration-number" should {
+    "render the partnership-company-registration-number page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "limited-liability-partnership")
+          )
           .get()
 
         whenReady(result) { res =>
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
-          page.title() must include("What is the company’s company registration number?")
-          page.getElementsByTag("h1").text() must include("What is Test CorporateBody’s company registration number?")
+          page.title() must include("What is the partnership’s company registration number?")
+          page.getElementsByTag("h1").text() must include("What is Test Partnership’s company registration number?")
           page.getElementsByTag("p").text() must include("You can search Companies House for a company registration number (opens in new tab)")
         }
       }
     }
   }
 
-  "POST /form/business-partners/company-registration-number" when {
+  "POST /business-partners/partnership-company-registration-number" when {
     "the companyRegistrationNumber is entered" should {
       "return 200 with companyRegistrationNumber" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
+              DefaultWSCookie("businessType", "limited-liability-partnership")
             )
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -57,10 +60,10 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
+              DefaultWSCookie("businessType", "limited-liability-partnership")
             )
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -80,10 +83,10 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
+              DefaultWSCookie("businessType", "limited-liability-partnership")
             )
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -104,10 +107,10 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
+              DefaultWSCookie("businessType", "limited-liability-partnership")
             )
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")

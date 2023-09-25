@@ -112,7 +112,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/form/business-partners/company-registration-number")
+          redirectLocation(result).get should include("/business-partners/partnership-company-registration-number")
           reset(mockActions)
         }
       }

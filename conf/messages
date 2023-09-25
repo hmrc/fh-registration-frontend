@@ -696,6 +696,7 @@ fh.businessPartners.partnership.confirmRegisteredAddress.heading=Confirm the {0}
 fh.business.partners.partnership.registered.address.heading=What is {0}’s registered office address?
 fh.business.partners.enterRegisteredOfficeAddress.title = Enter the partnership’s registered office address?
 fh.business.partners.enterRegisteredOfficeAddress.h1 = Enter {0}’s registered office address?
+fh.businessPartners.partnership.companyRegistrationNumber.title=What is the partnership’s company registration number?
 
 # - Limited Liability Partnership ======================================================================================
 fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?

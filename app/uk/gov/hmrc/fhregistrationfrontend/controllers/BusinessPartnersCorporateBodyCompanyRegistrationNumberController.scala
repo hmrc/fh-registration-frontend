@@ -17,14 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Cookie, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersCorporateBodyCompanyRegNumberController @Inject()(
+class BusinessPartnersCorporateBodyCompanyRegistrationNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,12 +33,15 @@ class BusinessPartnersCorporateBodyCompanyRegNumberController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val staticBusinessTypes = Seq("limited-liability-partnership", "corporateBody")
+  val businessType: String = "corporateBody"
+  val companyName = "Test CorporateBody"
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = companyRegistrationNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      val corporateBody = "test corporateBody"
-      Ok(view.business_partners_corporateBody_reg_number(form, corporateBody))
+      Ok(view.business_partners_company_reg_number(companyRegistrationNumberForm, companyName, businessType))
+        .withCookies(Cookie("businessType", businessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -47,16 +50,15 @@ class BusinessPartnersCorporateBodyCompanyRegNumberController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      val corporateBody = "test corporateBody"
       companyRegistrationNumberForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_corporateBody_reg_number(formWithErrors, corporateBody))
+            BadRequest(view.business_partners_company_reg_number(formWithErrors, companyName, businessType))
           },
           regNumber => {
             regNumber.crnFormatted match {
-              case Some(vatNumber) => Ok(s"Next page! with companyRegistrationNumber: $vatNumber")
+              case Some(regNumber) => Ok(s"Next page! with companyRegistrationNumber: $regNumber")
               case None =>
                 Ok(s"Next page! with no companyRegistrationNumber")
             }

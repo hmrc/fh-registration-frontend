@@ -145,7 +145,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partnership-company-registration-number")
         }
       }
     }
@@ -167,7 +167,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partnership-company-registration-number")
         }
       }
     }

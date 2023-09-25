@@ -68,7 +68,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
               case Some(businessType) if businessType.equals("partnership") =>
                 Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
               case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-                Redirect(routes.BusinessPartnersCorporateBodyCompanyRegNumberController.load())
+                Redirect(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load())
               case Some(unexpectedBusinessType) =>
                 logger.warn(
                   s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unexpectedBusinessType refreshing the page ")

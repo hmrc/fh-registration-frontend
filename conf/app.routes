@@ -85,8 +85,11 @@ POST        /form/business-partners/corporate-body-trading-name              @uk
 GET         /form/business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyRegisteredAddressController.load()
 POST        /form/business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyRegisteredAddressController.next()
 
-GET         /form/business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegNumberController.load()
-POST        /form/business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegNumberController.next()
+GET         /form/business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load()
+POST        /form/business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.next()
+
+GET         /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
+POST        /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
 
 GET         /form/business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.load()
 POST        /form/business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.next()
