@@ -24,7 +24,6 @@ val compile = Seq(
   "com.typesafe.play"           %% "play-json"                        % "2.9.3",
   "org.typelevel"               %% "cats-core"                        % "2.9.0",
   "org.typelevel"               %% "cats-kernel"                      % "2.9.0",
-  "org.pegdown"                  % "pegdown"                          % "1.6.0",
   "com.github.tototoshi"        %% "play-json-naming"                 % "1.5.0",
   "org.julienrf"                %% "play-json-derived-codecs"         % "10.1.0",
   "com.github.julien-truffaut"  %% "monocle-core"                     % monocleVersion,

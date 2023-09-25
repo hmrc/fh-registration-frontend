@@ -18,11 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class UniqueTaxpayerReference(
+case class HasUniqueTaxpayerReference(
   hasValue: Boolean,
   value: Option[String]
 )
 
-object UniqueTaxpayerReference {
-  implicit val format = Json.format[UniqueTaxpayerReference]
+object HasUniqueTaxpayerReference {
+  implicit val format = Json.format[HasUniqueTaxpayerReference]
 }

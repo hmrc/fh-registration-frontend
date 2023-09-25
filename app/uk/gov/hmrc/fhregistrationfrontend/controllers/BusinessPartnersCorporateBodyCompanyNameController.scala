@@ -35,10 +35,11 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
 
   val journeyType = "corporateBody"
   val postAction = routes.BusinessPartnersCorporateBodyCompanyNameController.next()
+  val backUrl: String = routes.BusinessPartnersController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, companyNameForm, companyNameKey))
+      Ok(view.business_partners_name(journeyType, postAction, companyNameForm, companyNameKey, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -50,10 +51,10 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, companyNameKey))
+            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, companyNameKey, backUrl))
           },
           companyName => {
-            Ok(s"Form submitted, with result: $companyName")
+            Redirect(routes.BusinessPartnerCorporateBodyTradingNameController.load())
           }
         )
     } else {

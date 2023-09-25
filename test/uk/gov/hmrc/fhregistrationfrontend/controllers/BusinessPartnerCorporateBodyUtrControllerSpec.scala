@@ -46,7 +46,7 @@ class BusinessPartnerCorporateBodyUtrControllerSpec extends ControllerSpecWithGu
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Does the company have a Corporation Tax Unique Taxpayer Reference (UTR)?")
+        page.title() should include("What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)?")
         reset(mockActions)
       }
     }
@@ -80,7 +80,7 @@ class BusinessPartnerCorporateBodyUtrControllerSpec extends ControllerSpecWithGu
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with UTR: BusinessPartnersCorporateBodyUniqueTaxpayerReference(1234567890)"
+          contentAsString(result) shouldBe "Next page! with UTR: BusinessPartnersEnterUniqueTaxpayerReference(1234567890)"
           reset(mockActions)
         }
       }

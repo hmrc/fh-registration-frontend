@@ -28,19 +28,19 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(vatNumberForm: Form[VatNumber], partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(vatNumberForm: Form[VatNumber], partnerName: String, backLink: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
-  if (vatNumberForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+    if (vatNumberForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-  Messages("fh.businessPartner.vatNumber.title")
+    Messages("fh.businessPartner.vatNumber.title")
 }
 
 @heading = @{
-Messages("fh.businessPartner.vatNumber.heading", partnerName)
+    Messages("fh.businessPartner.vatNumber.heading", partnerName)
 }
 
 @conditionalHtml = @{
@@ -68,53 +68,53 @@ Messages("fh.businessPartner.vatNumber.heading", partnerName)
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(backLink)) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next()) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next()) {
 
-      @if(vatNumberForm.errors.nonEmpty) {
+        @if(vatNumberForm.errors.nonEmpty) {
 
-          @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-              Seq(ErrorLink(
-                  href = Some(s"#${vatNumberForm.errors.head.key}"),
-                  content = Text(messages(s"fh.${vatNumberForm.errors.head.key}.${vatNumberForm.errors.head.message}"))
-              ))
-              ,
-              title = Text(messages("fh.generic.error"))))
-      }
+            @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                Seq(ErrorLink(
+                    href = Some(s"#${vatNumberForm.errors.head.key}"),
+                    content = Text(messages(s"fh.${vatNumberForm.errors.head.key}.${vatNumberForm.errors.head.message}"))
+                ))
+                ,
+                title = Text(messages("fh.generic.error"))))
+        }
 
-      @viewHelpers.govUkRadios(Radios(
-          fieldset = Some(Fieldset(
-              legend = Some(Legend(
-                  content = HtmlContent(Html(s"${BusinessPartnersHeader(heading)}")),
-                  classes = "govuk-fieldset__legend--l",
-                  isPageHeading = true
-              ))
-          )),
-          idPrefix = Some(hasVatNumberKey),
-          name = hasVatNumberKey,
-          errorMessage = if (vatNumberForm(hasVatNumberKey).hasErrors) {
-              Some(ErrorMessage(content = Text(messages(s"fh.vatNumber_yesNo.error.required"))))
-          } else None,
-          items = Seq(
-              RadioItem(
-                  content = Text("Yes"),
-                  value = Some("true"),
-                  checked = vatNumberForm.data.values.toList.contains("true"),
-                  conditionalHtml = Some(conditionalHtml)
-              ),
-              RadioItem(
-                  content = Text("No"),
-                  value = Some("false"),
-                  checked = vatNumberForm.data.values.toList.contains("false"),
+        @viewHelpers.govUkRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = HtmlContent(Html(s"${BusinessPartnersHeader(heading)}")),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                ))
+            )),
+            idPrefix = Some(hasVatNumberKey),
+            name = hasVatNumberKey,
+            errorMessage = if (vatNumberForm(hasVatNumberKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.vatNumber_yesNo.error.required"))))
+            } else None,
+            items = Seq(
+                RadioItem(
+                    content = Text("Yes"),
+                    value = Some("true"),
+                    checked = vatNumberForm.data.values.toList.contains("true"),
+                    conditionalHtml = Some(conditionalHtml)
+                ),
+                RadioItem(
+                    content = Text("No"),
+                    value = Some("false"),
+                    checked = vatNumberForm.data.values.toList.contains("false"),
 
 
-              )
-          )
-      ))
+                )
+            )
+        ))
 
-      @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
-      @SaveForLater()
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
 
-  }
+    }
 }
