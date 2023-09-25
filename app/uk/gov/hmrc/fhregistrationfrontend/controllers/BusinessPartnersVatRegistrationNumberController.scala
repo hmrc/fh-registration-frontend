@@ -35,12 +35,13 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  //ToDo read this data from the cache after being stored before the redirect
+  val partnerName = "test partner"
+  val backUrl = routes.BusinessPartnerNinoController.load().url
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = vatNumberForm
-      //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
-      Ok(view.business_partner_vat_registration(form, partnerName))
+      Ok(view.business_partner_vat_registration(vatNumberForm, partnerName, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -48,19 +49,16 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      val partnerName = "test partner"
       vatNumberForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_vat_registration(formWithErrors, partnerName))
+            BadRequest(view.business_partner_vat_registration(formWithErrors, partnerName, backUrl))
           },
           vatNumber => {
             vatNumber.value match {
-              case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-              case None =>
-                Ok(s"Next page! with no vatNumber")
+              case Some(vatNumber) => Redirect(routes.BusinessPartnerAddressController.load())
+              case None            => Redirect(routes.BusinessPartnerSoleProprietorUtrController.load())
             }
           }
         )
