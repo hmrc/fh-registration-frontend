@@ -33,9 +33,9 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberController @Inject()
 ) extends AppController(ds, cc) {
   import actions._
 
-  val staticBusinessTypes = Seq("limited-liability-partnership", "corporateBody")
   val businessType: String = "corporateBody"
   val companyName = "Test CorporateBody"
+  val backLink = routes.BusinessPartnersCorporateBodyTradingNameController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
