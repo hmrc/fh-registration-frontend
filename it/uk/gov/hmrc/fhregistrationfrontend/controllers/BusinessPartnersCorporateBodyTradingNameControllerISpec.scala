@@ -6,7 +6,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.mvc.Http.HeaderNames
 
-class BusinessPartnerCorporateBodyTradingNameControllerISpec
+class BusinessPartnersCorporateBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route = "/form/business-partners/corporate-body-trading-name"

@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerCorporateBodyTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -33,7 +33,7 @@ class BusinessPartnerCorporateBodyTradingNameControllerSpec extends ControllerSp
   lazy val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnerCorporateBodyTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(
+    new BusinessPartnersCorporateBodyTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(
       mockMcc)
 
   "load" should {
