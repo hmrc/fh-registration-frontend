@@ -54,7 +54,7 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
             BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, companyNameKey, backUrl))
           },
           companyName => {
-            Redirect(routes.BusinessPartnerCorporateBodyTradingNameController.load())
+            Redirect(routes.BusinessPartnersCorporateBodyTradingNameController.load())
           }
         )
     } else {

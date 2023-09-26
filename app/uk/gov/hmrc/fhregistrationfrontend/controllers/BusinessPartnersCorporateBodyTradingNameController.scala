@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerCorporateBodyTradingNameController @Inject()(
+class BusinessPartnersCorporateBodyTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -34,12 +34,16 @@ class BusinessPartnerCorporateBodyTradingNameController @Inject()(
 
   import actions._
 
+  val businessType = "corporateBody"
+  val companyName = "Shelby Limited"
+  val backLink = routes.BusinessPartnersCorporateBodyCompanyNameController.load().url
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
+      val postAction: Call = routes.BusinessPartnersCorporateBodyTradingNameController.next()
       Ok(
         view
-          .business_partner_corporate_body_trading_name(tradingNameForm, "corporateBody", "Shelby Limited", postAction))
+          .business_partners_trading_name(tradingNameForm, businessType, companyName, postAction, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -47,20 +51,16 @@ class BusinessPartnerCorporateBodyTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      lazy val postAction: Call = routes.BusinessPartnerCorporateBodyTradingNameController.next()
+      lazy val postAction: Call = routes.BusinessPartnersCorporateBodyTradingNameController.next()
       tradingNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partner_corporate_body_trading_name(
-                formWithErrors,
-                "corporateBody",
-                "Shelby Limited",
-                postAction))
+              view.business_partners_trading_name(formWithErrors, businessType, companyName, postAction, backLink))
           },
           tradingName => {
-            Ok(s"Form submitted, with result: $tradingName")
+            Redirect(routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load())
           }
         )
     } else {

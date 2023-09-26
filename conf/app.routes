@@ -79,8 +79,8 @@ POST        /form/business-partners/corporate-body-vat-registration-number      
 GET         /form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyUtrController.load()
 POST        /form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyUtrController.next()
 
-GET         /form/business-partners/corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyTradingNameController.load()
-POST        /form/business-partners/corporate-body-trading-name              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyTradingNameController.next()
+GET         /form/business-partners/corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.load()
+POST        /form/business-partners/corporate-body-trading-name              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.next()
 
 GET         /form/business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyRegisteredAddressController.load()
 POST        /form/business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerCorporateBodyRegisteredAddressController.next()

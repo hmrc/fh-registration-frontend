@@ -23,7 +23,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(tradingNameForm: Form[_], typeOfBusiness: String, companyName: String, postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(tradingNameForm: Form[_], businessType: String, companyName: String, postAction: Call, backLink: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 
 @titlePrefix = @{
@@ -31,11 +31,11 @@
 }
 
 @title = @{
-    Messages(s"fh.businessPartners.${typeOfBusiness}.tradingName.title") + " - " + Messages("fh.businessPartners.caption")
+    Messages(s"fh.businessPartners.${businessType}.tradingName.title") + " - " + Messages("fh.businessPartners.caption")
 }
 
 @heading = @{
-    Messages(s"fh.businessPartners.${typeOfBusiness}.tradingName.heading", companyName)
+    Messages(s"fh.businessPartners.${businessType}.tradingName.heading", companyName)
 }
 
 @conditionalHtml = @{
@@ -61,7 +61,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(backLink)) {
 
 
     @viewHelpers.form(action = postAction) {
