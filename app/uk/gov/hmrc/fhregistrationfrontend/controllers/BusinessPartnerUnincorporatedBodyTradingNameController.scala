@@ -34,15 +34,13 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
 
   import actions._
 
+  val companyName = "Shelby unincorporated"
+  val businessType = "unincorporatedBody"
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
-      Ok(
-        view.business_partner_corporate_body_trading_name(
-          tradingNameForm,
-          "unincorporatedBody",
-          "Shelby unincorporated",
-          postAction))
+      Ok(view.business_partners_trading_name(tradingNameForm, businessType, companyName, postAction, "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -55,12 +53,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partner_corporate_body_trading_name(
-                formWithErrors,
-                "unincorporatedBody",
-                "Shelby unincorporated",
-                postAction))
+            BadRequest(view.business_partners_trading_name(formWithErrors, businessType, companyName, postAction, "#"))
           },
           tradingName => {
             Ok(s"Form submitted, with result: $tradingName")

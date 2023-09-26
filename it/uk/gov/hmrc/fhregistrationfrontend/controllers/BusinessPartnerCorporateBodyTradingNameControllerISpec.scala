@@ -4,19 +4,21 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnerCorporateBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
+  val route = "/form/business-partners/corporate-body-trading-name"
 
-  "GET /form/business-partners/corporate-body-trading-name" when {
+  s"GET $route" when {
 
     "render the business partner corporate body trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-trading-name")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -31,25 +33,25 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
 
   }
 
-  "POST /form/business-partners/corporate-body-trading-name" when {
+  s"POST $route" when {
 
     "the user selects yes and enters a trading name" should {
-      "return 200" when {
+      "return 303" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/corporate-body-trading-name")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            val result = client.url(baseUrl + route)
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
               .post(Map(
                 "tradingName_yesNo" -> Seq("true"),
                 "tradingName_value" -> Seq("Shelby Company Limited")
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
             }
           }
         }
@@ -58,17 +60,17 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/corporate-body-trading-name")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
               .post(Map(
                 "tradingName_yesNo" -> Seq("false"),
                 "tradingName_value" -> Seq.empty
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(false,None)")
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
             }
           }
         }
@@ -80,7 +82,7 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-trading-name")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -104,7 +106,7 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-trading-name")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -121,8 +123,5 @@ class BusinessPartnerCorporateBodyTradingNameControllerISpec
         }
       }
     }
-
-
   }
-
 }
