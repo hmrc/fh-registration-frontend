@@ -4,17 +4,20 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/company-registration-number" should {
+  val route = "/form/business-partners/company-registration-number"
+
+  s"GET $route" should {
     "render the corporate-body-company-registration-number page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+        val result = client.url(baseUrl + route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -29,46 +32,46 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
     }
   }
 
-  "POST /form/business-partners/company-registration-number" when {
+  s"POST $route" when {
     "the companyRegistrationNumber is entered" should {
-      "return 200 with companyRegistrationNumber" in {
+      "return 303 with companyRegistrationNumber" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "corporateBody")
             )
             .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("companyRegistrationNumber" -> Seq("01234567")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with companyRegistrationNumber: 01234567"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-vat-registration-number")
           }
         }
       }
 
-      "return 200 with letter formatted companyRegistrationNumber" in {
+      "return 303 with letter formatted companyRegistrationNumber" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "corporateBody")
             )
             .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("companyRegistrationNumber" -> Seq("AB123456")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with companyRegistrationNumber: AB123456"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-vat-registration-number")
           }
         }
       }
@@ -80,7 +83,7 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "corporateBody")
@@ -104,7 +107,7 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/company-registration-number")
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "corporateBody")

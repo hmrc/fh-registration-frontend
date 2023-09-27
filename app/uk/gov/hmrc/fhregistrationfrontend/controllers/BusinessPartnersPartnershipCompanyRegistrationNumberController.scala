@@ -35,12 +35,14 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   val businessType: String = "limited-liability-partnership"
   val companyName = "Test Partnership"
+  val backLink = "#"
+  val postAction = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val form = companyRegistrationNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partners_company_reg_number(form, companyName, businessType))
+      Ok(view.business_partners_company_reg_number(form, companyName, businessType, postAction, backLink))
         .withCookies(Cookie("businessType", businessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -54,7 +56,9 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_company_reg_number(formWithErrors, companyName, businessType))
+            BadRequest(
+              view
+                .business_partners_company_reg_number(formWithErrors, companyName, businessType, postAction, backLink))
           },
           regNumber => {
             regNumber.crnFormatted match {
