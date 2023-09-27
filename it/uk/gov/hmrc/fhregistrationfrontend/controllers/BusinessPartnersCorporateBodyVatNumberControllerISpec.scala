@@ -4,6 +4,7 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnersCorporateBodyVatNumberControllerISpec
   extends Specifications with TestConfiguration {
@@ -31,42 +32,40 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
 
   "POST /form/business-partners/corporate-body-vat-registration-number" when {
     "yes is selected and the vatnumber entered" should {
-      "return 200 with vatnumber" in {
+      "redirect to the Corporate Body Registered Office Address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true"),
-              "vatNumber_value" -> Seq("123456789")))
+        val result = buildRequest("/form/business-partners/corporate-body-vat-registration-number")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "vatNumber_yesNo" -> Seq("true"),
+            "vatNumber_value" -> Seq("123456789")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with vatNumber: 123456789"
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-registered-office-address")
         }
       }
     }
 
     "no is selected" should {
-      "return 200 with no vatnumber message" in {
+      "redirect to the Corporate Body UTR page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("false")))
+        val result = buildRequest("/form/business-partners/corporate-body-vat-registration-number")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq("false")))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with no vatNumber"
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference")
         }
       }
     }
