@@ -668,9 +668,9 @@ fh.business_partners_address.heading=What is {0}’s address?
 fh.business.partners.registered.address.heading=What is {0}’s registered office address?
 fh.partnerAddressLine.error.pattern=Address lines must not be longer than 35 characters and only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces
 
-fh.business_partners_utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)? - Business partners
-fh.business_partners_utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
-fh.business_partners_utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
+fh.businessPartners.utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)? - Business partners
+fh.businessPartners.utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
+fh.businessPartners.utr.hintText=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 fh.uniqueTaxpayerReference_yesNo.error.required=Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
@@ -715,8 +715,8 @@ fh.businessPartners.corporateBody.companyRegistrationNumber.heading=What is {0}�
 fh.businessPartners.corporateBody.companyRegistrationNumber.text.p1=You can
 fh.businessPartners.corporateBody.companyRegistrationNumber.text.p2=search Companies House for a company registration number (opens in new tab)
 fh.businessPartners.corporateBody.companyRegistrationNumber.input.label=For example, 01234567
-fh.businessPartners.corporateBody.business_partners_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
-fh.businessPartners.corporateBody.business_partners_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
+fh.businessPartners.corporateBody.enter_utr.title=What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)? - Business partners
+fh.businessPartners.corporateBody.enter_utr.heading=What is {0}’s Corporation Tax Unique Taxpayer Reference (UTR)?
 fh.business.partners.corporateBody.enter.registered.address.title=Enter the company’s registered office address?
 fh.business.partners.corporateBody.enter.registered.address.heading=Enter {0}’s registered office address
 fh.businessPartners.corporateBody.companyName.heading =What is the company name?
@@ -732,6 +732,8 @@ fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincor
 fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
 fh.business.partners.unincorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
 fh.businessPartner.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number? - Business partners
+fh.businessPartners.unincorporatedBody.utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?
+fh.businessPartners.unincorporatedBody.utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
 
 #====================================================================================================================================================================================
 
@@ -912,7 +914,7 @@ fh.businessPartnerUnincorporatedBody.partnerAddress.postcode.error.pattern=Enter
 
 fh.business_partners.utr.confirm.label=Do they have a Self Assessment Unique Taxpayer Reference?
 fh.business_partners.utr.confirm.error=Select whether the business partner has a Unique Taxpayer Reference?
-fh.business_partners.utr.label=Self Assessment Unique Taxpayer Reference
+fh.businessPartners.utr.label=Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.hintText=For example, 1234567890
 

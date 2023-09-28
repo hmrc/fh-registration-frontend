@@ -33,15 +33,23 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
   import actions._
 
   val partnerName = "test partner"
-  val postAction =
-    Call(
-      method = "POST",
-      url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyUtrController.next().url)
+  val businessPartnerType = "corporateBody"
+  val backLink = routes.BusinessPartnersCorporateBodyVatNumberController.load().url
+  val postAction = Call(
+    method = "POST",
+    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyUtrController.next().url)
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partner_corporateBody_utr_number(businessPartnersEnterUtrForm, postAction, partnerName))
+      Ok(
+        view.business_partners_enter_utr_number(
+          businessPartnersEnterUtrForm,
+          partnerName,
+          businessPartnerType,
+          postAction,
+          backLink)
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,9 +61,15 @@ class BusinessPartnersCorporateBodyUtrController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_corporateBody_utr_number(formWithErrors, postAction, partnerName))
+            BadRequest(
+              view.business_partners_enter_utr_number(
+                formWithErrors,
+                partnerName,
+                businessPartnerType,
+                postAction,
+                backLink))
           },
-          businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
+          businessPartnersUtr => Redirect(routes.BusinessPartnersCorporateBodyRegisteredAddressController.load())
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
