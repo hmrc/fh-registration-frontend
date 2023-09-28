@@ -46,7 +46,7 @@ class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
             uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
               .load()
               .url)
-      Ok(view.business_partners_corporateBody_vat_number(form, unincorporateBody, title, postAction))
+      Ok(view.business_partners_corporateBody_vat_number(form, unincorporateBody, title, postAction, "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -70,7 +70,8 @@ class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
                     .next()
                     .url)
             BadRequest(
-              view.business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction))
+              view
+                .business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction, "#"))
           },
           vatNumber => {
             vatNumber.value match {

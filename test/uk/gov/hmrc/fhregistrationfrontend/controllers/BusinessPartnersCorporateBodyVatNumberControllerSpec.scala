@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -77,8 +77,10 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with vatNumber: 123456789"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/corporate-body-registered-office-address")
+
           reset(mockActions)
         }
 
@@ -90,8 +92,10 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with no vatNumber"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference")
+
           reset(mockActions)
         }
 
