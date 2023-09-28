@@ -6,7 +6,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.mvc.Http.HeaderNames
 
-class BusinessPartnerUnincorporatedUtrControllerISpec
+class BusinessPartnersUnincorporatedBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" should {

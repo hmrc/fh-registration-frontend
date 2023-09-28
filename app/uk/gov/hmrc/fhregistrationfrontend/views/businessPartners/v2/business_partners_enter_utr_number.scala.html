@@ -28,18 +28,18 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessPartnersCorporateBodyUtrForm: Form[BusinessPartnersEnterUniqueTaxpayerReference], postAction: Call, partnerName: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(businessPartnersUtrForm: Form[BusinessPartnersEnterUniqueTaxpayerReference], partnerName: String, businessPartnerType: String, postAction: Call, backLink: String )(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @titlePrefix = @{
-    if (businessPartnersCorporateBodyUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+    if (businessPartnersUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-    Messages("fh.businessPartners.corporateBody.business_partners_utr.title")
+    Messages(s"fh.businessPartners.${businessPartnerType}.enter_utr.title")
 }
 
 @heading = @{
-    Messages("fh.businessPartners.corporateBody.business_partners_utr.heading", partnerName)
+    Messages(s"fh.businessPartners.${businessPartnerType}.enter_utr.heading", partnerName)
 }
 
 @layout(title = titlePrefix + title, backUrl = Some("#")) {
@@ -47,11 +47,11 @@
     @Html(s"${BusinessPartnersHeader(heading)}")
 
     @viewHelpers.form(action = postAction) {
-        @if(businessPartnersCorporateBodyUtrForm.errors.nonEmpty) {
+        @if(businessPartnersUtrForm.errors.nonEmpty) {
             @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
                 Seq(ErrorLink(
-                    href = Some(s"#${businessPartnersCorporateBodyUtrForm.errors.head.key}"),
-                    content = Text(messages(s"fh.${businessPartnersCorporateBodyUtrForm.errors.head.key}.${businessPartnersCorporateBodyUtrForm.errors.head.message}"))
+                    href = Some(s"#${businessPartnersUtrForm.errors.head.key}"),
+                    content = Text(messages(s"fh.${businessPartnersUtrForm.errors.head.key}.${businessPartnersUtrForm.errors.head.message}"))
                 )),
                 title = Text(messages("fh.generic.error"))
             ))
@@ -64,15 +64,15 @@
         spellcheck = Some(false),
         classes = "govuk-!-width-one-third",
         hint = Some(Hint(
-            content = Text(Messages("fh.business_partners_utr.hintText"))
+            content = Text(Messages("fh.businessPartners.utr.hintText"))
         )),
-        errorMessage = businessPartnersCorporateBodyUtrForm.error(businessPartnerUtrKey).map{ e =>
+        errorMessage = businessPartnersUtrForm.error(businessPartnerUtrKey).map{ e =>
             ErrorMessage(
                 content = Text(messages(s"fh.${e.key}.${e.message}")),
                 visuallyHiddenText = Some(messages("generic.errorPrefix"))
             )
         },
-        value = businessPartnersCorporateBodyUtrForm(businessPartnerUtrKey).value
+        value = businessPartnersUtrForm(businessPartnerUtrKey).value
     ))
 
 

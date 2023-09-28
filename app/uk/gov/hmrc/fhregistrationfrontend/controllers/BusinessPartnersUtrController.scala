@@ -17,14 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersHasUtrForm.businessPartnerUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnerUnincorporatedUtrController @Inject()(
+class BusinessPartnersUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,17 +33,15 @@ class BusinessPartnerUnincorporatedUtrController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val partnerName = "test partner"
+  val businessPartnerType = ""
+  val postAction = Call(method = "POST", url = routes.BusinessPartnersUtrController.next().url)
+  val backLink = ""
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = businessPartnerUtrForm
-      //Todo get partnerName from cache
-      val partnerName = "{{Unincorporated body name}}"
-      val postAction =
-        Call(
-          method = "POST",
-          url =
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController.load().url)
-      Ok(view.business_partners_utr(form, postAction, partnerName))
+      //ToDo read this data from the cache after being stored before the redirect
+      Ok(view.business_partners_has_utr(businessPartnerUtrForm, partnerName, businessPartnerType, postAction, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -51,26 +49,16 @@ class BusinessPartnerUnincorporatedUtrController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      //Todo get partnerName from cache
-      val partnerName = "{{Unincorporated body name}}"
+      //ToDo read this data from the cache after being stored before the redirect
       businessPartnerUtrForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            val postAction =
-              Call(
-                method = "POST",
-                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerUnincorporatedUtrController
-                  .next()
-                  .url)
-            BadRequest(view.business_partners_utr(formWithErrors, postAction, partnerName))
+            BadRequest(
+              view.business_partners_has_utr(formWithErrors, partnerName, businessPartnerType, postAction, backLink))
           },
           businessPartnersUtr => {
-            businessPartnersUtr.value match {
-              case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
-              case None =>
-                Ok(s"Next page! with no UTR")
-            }
+            Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
           }
         )
     } else {

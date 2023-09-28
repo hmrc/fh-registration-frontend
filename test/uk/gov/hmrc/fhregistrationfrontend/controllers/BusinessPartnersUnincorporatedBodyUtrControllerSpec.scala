@@ -20,12 +20,12 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,10 +34,10 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnerUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersUnincorporatedBodyUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
-    "Render the businessPartnersUtr page" when {
+    "Render the businessPartnersUnincorporatedUtr page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -68,7 +68,7 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "redirect to the Partnership Registered Office Address page" when {
+      "return 200" when {
         "the form has no errors, yes is selected and UTR supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -79,9 +79,8 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/partnership-registered-office-address")
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Next page! with UTR: 1234567890"
           reset(mockActions)
         }
 
@@ -93,9 +92,8 @@ class BusinessPartnerUtrControllerSpec extends ControllerSpecWithGuiceApp with A
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/partnership-registered-office-address")
+          status(result) shouldBe OK
+          contentAsString(result) shouldBe "Next page! with no UTR"
           reset(mockActions)
         }
       }

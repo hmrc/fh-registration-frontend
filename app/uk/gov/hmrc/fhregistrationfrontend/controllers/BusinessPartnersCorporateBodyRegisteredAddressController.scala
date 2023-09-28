@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
+class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,7 +35,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   // Todo get this from cache later
   val postAction: Call = Call(
     method = "POST",
-    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerCorporateBodyRegisteredAddressController
+    url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersCorporateBodyRegisteredAddressController
       .next()
       .url
   )
@@ -46,7 +46,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressController @Inject()(
   val enterManualAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
 
   val backUrl: String = {
-    if (hasVatNum) routes.BusinessPartnerUtrController.load().url
+    if (hasVatNum) routes.BusinessPartnersUtrController.load().url
     else routes.BusinessPartnersCorporateBodyUtrController.load().url
   }
 
