@@ -40,9 +40,9 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
       .url
   )
   val title = "unincorporatedBody"
-  val UnincorporatedBody = "Test Unincorporated Body"
+  val businessPartnerType = "Test Unincorporated Body"
   val unknownPostcode = "AB1 2YX"
-  val backAction: String = routes.BusinessPartnerUnincorporatedUtrController.load().url
+  val backAction: String = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url
   val manualAddressUrl: String = routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
 
   import actions._
@@ -51,7 +51,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
       Ok(
         view.business_partner_registered_address(
           businessPartnersAddressForm,
-          UnincorporatedBody,
+          businessPartnerType,
           backAction,
           postAction,
           title,
@@ -72,7 +72,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
               view
                 .business_partner_registered_address(
                   formWithErrors,
-                  UnincorporatedBody,
+                  businessPartnerType,
                   backAction,
                   postAction,
                   title,

@@ -74,7 +74,7 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
           },
           vatNumber => {
             vatNumber.value match {
-              case Some(vatNumber) => Redirect(routes.BusinessPartnerCorporateBodyRegisteredAddressController.load())
+              case Some(vatNumber) => Redirect(routes.BusinessPartnersCorporateBodyRegisteredAddressController.load())
               case None            => Redirect(routes.BusinessPartnersCorporateBodyUtrController.load())
             }
           }

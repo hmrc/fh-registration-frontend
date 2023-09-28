@@ -39,7 +39,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
     val backLinkAndButtonUrl: String = getUrlFromBusinessType(
       routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
       routes.BusinessPartnerAddressController.load().url,
-      routes.BusinessPartnerCorporateBodyRegisteredAddressController.load().url,
+      routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url,
       config.getRandomBusinessType()
     )
 

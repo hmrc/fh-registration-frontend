@@ -4,6 +4,7 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.mvc.Http.HeaderNames
 
 class BusinessPartnersCorporateBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
@@ -33,7 +34,7 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
 
   s"POST $route" when {
     "The UTR is entered" should {
-      "return 200 with UTR" in {
+      "return 303" in {
         given
           .commonPrecondition
 
@@ -41,13 +42,12 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
           val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("uniqueTaxpayerReference_value" -> Seq("1234567890")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Next page! with UTR: BusinessPartnersEnterUniqueTaxpayerReference(1234567890)"
-          }
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/corporate-body-registered-office-address")          }
         }
       }
     }

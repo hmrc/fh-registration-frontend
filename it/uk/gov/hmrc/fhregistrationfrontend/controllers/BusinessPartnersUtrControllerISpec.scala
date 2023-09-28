@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerUtrControllerIntegrationSpec
+class BusinessPartnersUtrControllerISpec
   extends Specifications with TestConfiguration {
 
   val unincorporatedBodyUTRUrl = s"$baseUrl/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference"
