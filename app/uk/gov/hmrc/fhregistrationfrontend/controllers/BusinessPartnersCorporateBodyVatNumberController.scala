@@ -38,7 +38,7 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
   val form: Form[VatNumber] = vatNumberForm
   val corporateBody: String = "test corporateBody"
   val title: String = "corporateBody"
-  val backAction: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+  val backAction: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
