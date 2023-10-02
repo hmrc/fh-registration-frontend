@@ -43,7 +43,7 @@ case class AddressLookupStub()
       post(urlPathEqualTo(
         s"/lookup")
       )
-      .willReturn(response)
+        .willReturn(response)
     )
     builder
   }

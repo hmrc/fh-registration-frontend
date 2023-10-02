@@ -40,7 +40,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
   "POST /form/business-partners/unincorporated-body-registered-office-address" when {
     "the form has no errors and multiple addresses are found" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithMultipleAddressLookup(true)
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -59,7 +59,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
 
     "the form has no errors and a matching address is found" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithSingleAddressLookup(true)
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -78,7 +78,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
 
     "address line not populated" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithMultipleAddressLookup(true)
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -95,9 +95,44 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       }
     }
 
+    "the form has no errors but no address is found" should {
+      "return 303" in {
+        given.commonPreconditionWithEmptyAddressLookup(true)
+
+        WsTestClient.withClient { client =>
+          val result = client.url(s"$baseUrl$requestURL")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map("partnerAddressLine" -> Seq.empty,
+              "partnerPostcode" -> Seq("AB1 2YZ")))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/cannot-find-address")
+          }
+        }
+      }
+    }
+
+    "the form has an error from address lookup raising an exception" should {
+      "return 400" in {
+        given.commonPreconditionWithEmptyAddressLookup(false)
+
+        val result = buildRequest(requestURL).addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+          "Csrf-Token" -> "nocheck").post(Map("partnerAddressLine" -> Seq.empty,
+          "partnerPostcode" -> Seq("AB1 2YZ")))
+
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually")
+        }
+      }
+    }
+
     "postcode not populated" should {
       "return 400" in {
-        given.commonPrecondition
+        given.commonPreconditionWithMultipleAddressLookup(true)
 
         WsTestClient.withClient { client =>
           val result = client.url(s"$baseUrl$requestURL")
@@ -175,5 +210,6 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
         }
       }
     }
+
   }
 }

@@ -16,19 +16,25 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.businessPartnersAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
+import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  addressService: AddressService)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -39,8 +45,8 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
       .next()
       .url
   )
-  val title = "unincorporatedBody"
-  val businessPartnerType = "Test Unincorporated Body"
+  val partnerType = "unincorporatedBody"
+  val partnerName = "Test Unincorporated Body"
   val unknownPostcode = "AB1 2YX"
   val backAction: String = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url
   val manualAddressUrl: String = routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
@@ -51,10 +57,10 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
       Ok(
         view.business_partners_registered_address(
           businessPartnersAddressForm,
-          businessPartnerType,
+          partnerName,
           backAction,
           postAction,
-          title,
+          partnerType,
           manualAddressUrl))
 
     } else {
@@ -62,35 +68,59 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+  def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       businessPartnersAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view
-                .business_partners_registered_address(
+            Future.successful(
+              BadRequest(
+                view.business_partners_registered_address(
                   formWithErrors,
-                  businessPartnerType,
+                  partnerName,
                   backAction,
                   postAction,
-                  title,
-                  manualAddressUrl))
+                  partnerType,
+                  manualAddressUrl)
+              )
+            )
           },
           bpAddress => {
-            // Todo implement address lookup
-            if (bpAddress.addressLine.contains("44 Romford Road") && bpAddress.postcode.contains("TF1 4ER")) {
-              Redirect(routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load())
-            } else if (bpAddress.postcode == unknownPostcode) {
-              Redirect(routes.BusinessPartnersCannotFindAddressController.load())
-            } else {
-              Redirect(routes.BusinessPartnersChooseAddressController.load())
-            }
+            addressService
+              .addressLookup(
+                routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().path(),
+                bpAddress.postcode,
+                bpAddress.addressLine
+              )
+              .map {
+                case Right(addressListMap) =>
+                  if (addressListMap.isEmpty)
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                  else if (addressListMap.size == 1)
+                    Redirect(routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load())
+                  else
+                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+
+                case Left(AddressLookupErrorResponse(_)) =>
+                  val formWithErrors = businessPartnersAddressForm
+                    .fill(bpAddress)
+                    .withError(FormError(postcodeKey, "address.lookup.error"))
+                  BadRequest(
+                    view.business_partners_registered_address(
+                      formWithErrors,
+                      partnerName,
+                      backAction,
+                      postAction,
+                      partnerType,
+                      manualAddressUrl)
+                  )
+                case _ => errorHandler.errorResultsPages(Results.InternalServerError)
+              }
           }
         )
     } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 
