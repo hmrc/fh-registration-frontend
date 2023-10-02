@@ -1,7 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, Json}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address, AddressRecord, Country}
 
 
@@ -52,6 +52,23 @@ case class AddressLookupStub()
     val response = if (isSuccess) {
       okJson(
         singleAddressListJson.toString
+      )
+    } else {
+      serverError()
+    }
+    stubFor(
+      post(urlPathEqualTo(
+        s"/lookup")
+      )
+        .willReturn(response)
+    )
+    builder
+  }
+
+  def lookupNoAddress(isSuccess: Boolean = true): PreconditionBuilder = {
+    val response = if (isSuccess) {
+      okJson(
+        JsArray().toString
       )
     } else {
       serverError()

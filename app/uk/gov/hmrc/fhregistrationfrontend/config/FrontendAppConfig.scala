@@ -74,7 +74,7 @@ class FrontendAppConfig @Inject()(
   override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
-  val staticBusinessTypes =
+  val staticBusinessTypes: Seq[String] =
     Seq("partnership", "limited-liability-partnership", "sole-proprietor", "individual", "corporateBody")
   def getRandomBusinessType(): String = staticBusinessTypes(Random.nextInt(5))
 
