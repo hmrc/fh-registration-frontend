@@ -55,7 +55,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
         view
-          .business_partner_registered_address(
+          .business_partners_registered_address(
             businessPartnersAddressForm,
             corporateBody,
             backUrl,
@@ -73,7 +73,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
       businessPartnersAddressForm.bindFromRequest.fold(
         formWithErrors => {
           BadRequest(
-            view.business_partner_registered_address(
+            view.business_partners_registered_address(
               formWithErrors,
               corporateBody,
               backUrl,
