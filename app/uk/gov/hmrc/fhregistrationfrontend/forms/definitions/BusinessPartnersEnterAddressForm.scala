@@ -29,12 +29,12 @@ object BusinessPartnersEnterAddressForm {
   def postcode: Mapping[String] =
     nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$".r))
 
-  val enterAddressMapping: Mapping[BusinessPartnersAddress] = mapping(
+  val enterAddressMapping: Mapping[BusinessPartnersEnterAddress] = mapping(
     s"$enterAddressKey.line1"    -> addressLine,
     s"$enterAddressKey.line2"    -> optional(addressLine),
     s"$enterAddressKey.line3"    -> addressLine,
     s"$enterAddressKey.postcode" -> optional(postcode)
-  )(BusinessPartnersAddress.apply)(BusinessPartnersAddress.unapply)
+  )(BusinessPartnersEnterAddress.apply)(BusinessPartnersEnterAddress.unapply)
 
   val chooseAddressForm = Form(enterAddressMapping)
 

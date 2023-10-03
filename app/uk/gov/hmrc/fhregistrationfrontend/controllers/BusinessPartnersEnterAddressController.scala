@@ -21,12 +21,12 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersAddress
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerEnterAddressController @Inject()(
+class BusinessPartnersEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,7 +35,7 @@ class BusinessPartnerEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   val partnerName: String = "Test User"
-  val bpAddressForm: Form[BusinessPartnersAddress] = chooseAddressForm
+  val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
   val journeyType: String = "enterAddress"
   val backUrl: String = routes.BusinessPartnerAddressController.load().url
   val postAction: Call = Call(

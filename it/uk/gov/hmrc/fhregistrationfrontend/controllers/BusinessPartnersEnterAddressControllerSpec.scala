@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersEnterAddressControllerSpec
+class BusinessPartnersEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/enter-address" when {
