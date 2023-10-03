@@ -80,7 +80,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
           formWithErrors => {
             Future.successful(
               BadRequest(
-                view.business_partner_registered_address(
+                view.business_partners_registered_address(
                   formWithErrors,
                   corporateBody,
                   backUrl,
@@ -113,7 +113,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
                   BadRequest(
-                    view.business_partner_registered_address(
+                    view.business_partners_registered_address(
                       formWithErrors,
                       corporateBody,
                       backUrl,
