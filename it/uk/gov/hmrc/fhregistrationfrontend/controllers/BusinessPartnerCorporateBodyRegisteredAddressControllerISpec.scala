@@ -9,9 +9,9 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestURL = "/form/business-partners/corporate-body-registered-office-address"
+  val route = "/form/business-partners/corporate-body-registered-office-address"
 
-  "GET /form/business-partners/corporate-body-registered-office-address" when {
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -19,7 +19,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
         "the user is authenticated" in {
           given.commonPrecondition
 
-          val result = buildRequest(requestURL)
+          val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
             whenReady(result) { res =>
@@ -33,13 +33,13 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
       }
     }
 
-  "POST /form/business-partners/corporate-body-registered-office-address" when {
+  s"POST $route" when {
     "the form has no errors and multiple addresses are found" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithMultipleAddressLookup(true)
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("partnerAddressLine" -> Seq("Drury Lane"),
@@ -55,10 +55,10 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
 
     "the form has no errors and a matching address is found" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithSingleAddressLookup(true)
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("partnerAddressLine" -> Seq("1 Romford Road"),
@@ -74,10 +74,10 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
 
     "postcode supplied but address line not populated" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithMultipleAddressLookup(true)
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck").withFollowRedirects(false)
@@ -94,10 +94,10 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
 
     "address cannot be found for postcode" should {
       "return 303" in {
-        given.commonPrecondition
+        given.commonPreconditionWithEmptyAddressLookup(true)
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck").withFollowRedirects(false)
@@ -112,12 +112,33 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
       }
     }
 
+    "address lookup service request is unsuccessful" should {
+      "return 400" in {
+        given.commonPreconditionWithEmptyAddressLookup(false)
+
+        WsTestClient.withClient { client =>
+          val result = client.url(baseUrl + route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId,
+              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map("partnerAddressLine" -> Seq.empty,
+              "partnerPostcode" -> Seq("AB1 2YX")))
+
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Sorry, there was problem performing this search, please try again and if the problem persists then enter the address manually")
+          }
+        }
+      }
+    }
+
     "postcode not populated" should {
       "return 400" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -137,7 +158,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -158,7 +179,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("The lane;"),
@@ -179,7 +200,7 @@ class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
