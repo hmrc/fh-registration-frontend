@@ -25,7 +25,6 @@ import scala.util.Random
 
 @ImplementedBy(classOf[FrontendAppConfig])
 trait AppConfig {
-  val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val exitSurveyUrl: String
   val appName: String
@@ -56,8 +55,6 @@ class FrontendAppConfig @Inject()(
   override lazy val appName: String = loadConfig("appName")
 
   private val contactFormServiceIdentifier = appName
-  override lazy val reportAProblemPartialUrl =
-    s"$contactFrontend/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl =
     s"$contactFrontend/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   override lazy val exitSurveyUrl: String =
