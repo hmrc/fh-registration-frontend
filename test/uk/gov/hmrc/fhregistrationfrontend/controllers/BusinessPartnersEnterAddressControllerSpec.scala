@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -68,16 +68,60 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Check Your Answers page" when {
+        "all address fields are populated" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "enterAddress.line1"    -> "1",
+              "enterAddress.line2"    -> "Old Town",
+              "enterAddress.line3"    -> "Cityville",
+              "enterAddress.postcode" -> "AA1 2YZ"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners/check-your-answers")
+          reset(mockActions)
+        }
+
+        "only mandatory address fields are populated" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "enterAddress.line1" -> "1",
+              "enterAddress.line3" -> "Cityville"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners/check-your-answers")
+          reset(mockActions)
+        }
+      }
+    }
+
+    "return a 400" when {
+      "mandatory fields are not populated" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-          .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"))
-        val result = await(csrfAddToken(controller.load())(request))
+          .withFormUrlEncodedBody(
+            "enterAddress.line1" -> "",
+            "enterAddress.line3" -> ""
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
+        status(result) shouldBe BAD_REQUEST
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Enter the partner’s address?")
+        page.title() should include("Enter the partner’s address?")
+        page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
+          "You must enter line 1 of the address You must enter the Town or City of the address")
         reset(mockActions)
       }
     }

@@ -47,8 +47,8 @@ POST        /form/business-partners/partner-national-insurance-number   @uk.gov.
 GET         /form/business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /form/business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 
-GET         /form/business-partners/enter-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerEnterAddressController.load()
-POST        /form/business-partners/enter-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerEnterAddressController.next()
+GET         /form/business-partners/enter-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load()
+POST        /form/business-partners/enter-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next()
 
 GET         /form/business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.load()
 POST        /form/business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.next()

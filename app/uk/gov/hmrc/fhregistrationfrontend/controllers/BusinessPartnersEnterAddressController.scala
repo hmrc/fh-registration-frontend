@@ -40,7 +40,7 @@ class BusinessPartnersEnterAddressController @Inject()(
   val backUrl: String = routes.BusinessPartnerAddressController.load().url
   val postAction: Call = Call(
     method = "POST",
-    url = routes.BusinessPartnerEnterAddressController.next().url
+    url = routes.BusinessPartnersEnterAddressController.next().url
   )
 
   import actions._
