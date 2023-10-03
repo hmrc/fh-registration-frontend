@@ -1,7 +1,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
-import uk.gov.hmrc.fhregistrationfrontend.models.des.PartnerType
-
 trait PreconditionHelpers {
   implicit val builder: PreconditionBuilder
 
@@ -35,6 +33,17 @@ trait PreconditionHelpers {
       .save4later.getNoneData()
       .fhddsBackend.hasNoEnrolmentProgress()
       .addressLookup.lookupSingleAddress(isSuccess)
+  }
+
+  def commonPreconditionWithEmptyAddressLookup(isSuccess: Boolean) = {
+    builder
+      .audit.writesAuditOrMerged()
+      .user.isAuthorised()
+      .businessCustomerFrontend.hasBusinessCustomerRecord
+      .save4later.businessRecordWasSaved()
+      .save4later.getNoneData()
+      .fhddsBackend.hasNoEnrolmentProgress()
+      .addressLookup.lookupNoAddress(isSuccess)
   }
 
   def commonPreconditionAssist = {
