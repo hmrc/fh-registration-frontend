@@ -120,11 +120,11 @@
 }
 
 @getHelpForm = {
-@{
-    viewHelpers.reportAProblemLink(
-        appConfig.reportAProblemPartialUrl,
-        appConfig.reportAProblemNonJSUrl)
-}
+    @{
+        viewHelpers.reportAProblemLink(
+            appConfig.reportAProblemNonJSUrl,
+            appConfig.reportAProblemNonJSUrl)
+    }
 }
 
     @content = {
