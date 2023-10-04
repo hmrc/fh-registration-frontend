@@ -17,11 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -35,15 +33,6 @@ class BusinessPartnersConfirmAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      // ask UCD about added ' in name
-      Ok(view.business_partner_confirm_partner_address(address, "partner name's"))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
-  }
-
   val address: Address = Address(
     addressLine1 = "1 Romford Road",
     addressLine2 = Some("Wellington"),
@@ -53,4 +42,24 @@ class BusinessPartnersConfirmAddressController @Inject()(
     countryCode = None,
     lookupId = None
   )
+
+  val partnerName = "test business partner"
+  val postAction: Call = routes.BusinessPartnersConfirmAddressController.next()
+  val backLink = routes.BusinessPartnerAddressController.load().url
+
+  def load(): Action[AnyContent] = userAction { implicit request =>
+    if (config.newBusinessPartnerPagesEnabled) {
+      Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
+  }
+
+  def next(): Action[AnyContent] = userAction { implicit request =>
+    if (config.newBusinessPartnerPagesEnabled) {
+      Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
+  }
 }
