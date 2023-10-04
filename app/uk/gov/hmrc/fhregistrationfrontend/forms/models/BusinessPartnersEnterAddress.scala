@@ -18,13 +18,13 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class BusinessPartnersAddress(
+case class BusinessPartnersEnterAddress(
   addressLine1: String,
   addressLine2: Option[String],
   addressLine3: String,
   postcode: Option[String]
 )
 
-object BusinessPartnersAddress {
-  implicit val format = Json.format[BusinessPartnersAddress]
+object BusinessPartnersEnterAddress {
+  implicit val format = Json.format[BusinessPartnersEnterAddress]
 }

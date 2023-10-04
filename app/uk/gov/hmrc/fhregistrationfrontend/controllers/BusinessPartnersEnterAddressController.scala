@@ -16,15 +16,17 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.data.Form
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerEnterAddressController @Inject()(
+class BusinessPartnersEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -32,20 +34,20 @@ class BusinessPartnerEnterAddressController @Inject()(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
+  val partnerName: String = "Test User"
+  val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
+  val journeyType: String = "enterAddress"
+  val backUrl: String = routes.BusinessPartnerAddressController.load().url
+  val postAction: Call = Call(
+    method = "POST",
+    url = routes.BusinessPartnersEnterAddressController.next().url
+  )
+
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test User"
-      val bpAddressForm = chooseAddressForm
-      val journeyType = "enterAddress"
-      val postAction =
-        Call(
-          method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
-            .load()
-            .url)
-      Ok(view.business_partner_enter_address(bpAddressForm, postAction, partnerName, journeyType))
+      Ok(view.business_partners_enter_address(bpAddressForm, postAction, partnerName, journeyType, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,22 +56,15 @@ class BusinessPartnerEnterAddressController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test User"
-      val journeyType = "enterAddress"
       chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            val postAction =
-              Call(
-                method = "POST",
-                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerEnterAddressController
-                  .next()
-                  .url)
-            BadRequest(view.business_partner_enter_address(formWithErrors, postAction, partnerName, journeyType))
+            BadRequest(
+              view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, backUrl))
           },
           bpAddress => {
-            Ok(s"Next page! with form result: ${bpAddress.toString}")
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
           }
         )
     } else {

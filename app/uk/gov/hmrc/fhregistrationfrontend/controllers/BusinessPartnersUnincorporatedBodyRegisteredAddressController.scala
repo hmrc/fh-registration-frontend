@@ -49,7 +49,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
-        view.business_partner_registered_address(
+        view.business_partners_registered_address(
           businessPartnersAddressForm,
           businessPartnerType,
           backAction,
@@ -70,7 +70,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
           formWithErrors => {
             BadRequest(
               view
-                .business_partner_registered_address(
+                .business_partners_registered_address(
                   formWithErrors,
                   businessPartnerType,
                   backAction,

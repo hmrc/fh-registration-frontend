@@ -45,7 +45,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 
     val manuallyEnterAddressUrl: String = getUrlFromBusinessType(
       routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
-      routes.BusinessPartnerEnterAddressController.load().url,
+      routes.BusinessPartnersEnterAddressController.load().url,
       routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
       config.getRandomBusinessType()
     )

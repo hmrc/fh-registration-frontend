@@ -55,7 +55,7 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body mustBe "Next page! with form result: BusinessPartnersAddress(1 street,Some(Option lane),City name,Some(AB1 2XZ))"
+              res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 street,Some(Option lane),City name,Some(AB1 2XZ))"
             }
           }
         }
@@ -78,7 +78,7 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
 
               whenReady(result) { res =>
                 res.status mustBe 200
-                res.body mustBe "Next page! with form result: BusinessPartnersAddress(1 Street,None,City name,None)"
+                res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 Street,None,City name,None)"
               }
             }
           }
