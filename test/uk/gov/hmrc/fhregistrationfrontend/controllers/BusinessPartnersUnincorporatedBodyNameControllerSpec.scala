@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -29,9 +29,9 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -68,17 +68,19 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Unincorporated Body Trading Name page" when {
         "the form has no errors and unincorporated body name is supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("unincorporatedBodyName_value", "Test Body"))
+            .withFormUrlEncodedBody(
+              ("unincorporatedBodyName_value", "Test Body")
+            )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: UnincorporatedBodyName(Test Body)"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/form/business-partners/unincorporated-body-trading-name")
           reset(mockActions)
         }
 

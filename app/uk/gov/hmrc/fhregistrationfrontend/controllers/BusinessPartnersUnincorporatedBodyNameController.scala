@@ -34,26 +34,27 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
 
   import actions._
 
+  val backUrl: String = routes.BusinessPartnersController.load().url
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyNameController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction = routes.BusinessPartnersUnincorporatedBodyNameController.next()
-      Ok(view.business_partners_unincorporated_body_name(unincorporatedBodyNameForm, postAction))
+      Ok(view.business_partners_unincorporated_body_name(unincorporatedBodyNameForm, postAction, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    val postAction = routes.BusinessPartnersUnincorporatedBodyNameController.next()
     if (config.newBusinessPartnerPagesEnabled) {
       unincorporatedBodyNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction))
+            BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction, backUrl))
           },
           unincorporatedBodyName => {
-            Ok(s"Form submitted, with result: $unincorporatedBodyName")
+            Redirect(routes.BusinessPartnerUnincorporatedBodyTradingNameController.load())
           }
         )
     } else {

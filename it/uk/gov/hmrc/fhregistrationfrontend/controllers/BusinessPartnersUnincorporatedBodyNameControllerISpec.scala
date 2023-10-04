@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersUnincorporatedBodyNameControllerISpec
@@ -30,21 +31,21 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
 
   "POST /form/business-partners/unincorporated-body-name" when {
     "the unincorporated body name is entered" should {
-      "return 200 with companyRegistrationNumber" in {
+      "redirect to the Unincorporated Body Trading Name page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-name")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("unincorporatedBodyName_value" -> Seq("Test Body")))
+        val result = buildRequest("/form/business-partners/unincorporated-body-name")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "unincorporatedBodyName_value" -> Seq("Test Body")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Form submitted, with result: UnincorporatedBodyName(Test Body)"
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/unincorporated-body-trading-name")
         }
       }
     }
