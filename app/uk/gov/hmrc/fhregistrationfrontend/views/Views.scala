@@ -59,7 +59,7 @@ class Views @Inject()(
   val allocate_enrolment: uk.gov.hmrc.fhregistrationfrontend.views.html.allocate_enrolment,
   val declaration: uk.gov.hmrc.fhregistrationfrontend.views.html.declaration,
   val enrolment_pending: uk.gov.hmrc.fhregistrationfrontend.views.html.enrolment_pending,
-////////////////////////////Miscellaneous/////////////////////////////////////////////////
+  ////////////////////////////Miscellaneous/////////////////////////////////////////////////
   val error_forbidden: uk.gov.hmrc.fhregistrationfrontend.views.html.error_forbidden,
   val error_template: uk.gov.hmrc.fhregistrationfrontend.views.html.error_template,
   val govuk_wrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
@@ -78,7 +78,7 @@ class Views @Inject()(
   val trading_name_page: uk.gov.hmrc.fhregistrationfrontend.views.html.trading_name,
   val business_status_page: uk.gov.hmrc.fhregistrationfrontend.views.html.business_status,
   val other_storage_premises_page: uk.gov.hmrc.fhregistrationfrontend.views.html.other_storage_premises,
-////////////////////////////BusinessPartners///////////////////////////////////////////////
+  ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
   val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
   val business_partner_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_nino_page,
