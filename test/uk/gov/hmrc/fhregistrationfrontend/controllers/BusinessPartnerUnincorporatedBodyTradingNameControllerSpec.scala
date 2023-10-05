@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -70,8 +70,8 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "return 200" when {
-        "the user clicks yes and supplies an updated trading name" in {
+      "redirect to the 'does the unincorporated body have a uk vat reg number' page" when {
+        "the user clicks yes, supplies a trading name and submits" in {
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -83,8 +83,27 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: TradingName(true,Some(Blue peter unincorporated))"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(
+            "/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
+          reset(mockActions)
+        }
+
+        "the user clicks no and submits" in {
+          setupUserAction()
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "tradingName_yesNo" -> "false",
+              "tradingName_value" -> ""
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(
+            "/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
           reset(mockActions)
         }
       }
@@ -103,25 +122,6 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe BAD_REQUEST
-          reset(mockActions)
-        }
-      }
-
-      "return 200" when {
-        "the user clicks no and submits form" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "tradingName_yesNo" -> "false",
-              "tradingName_value" -> ""
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
-
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: TradingName(false,None)"
           reset(mockActions)
         }
       }
