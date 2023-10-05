@@ -43,7 +43,7 @@ class BusinessPartnersCorporateBodyTradingNameController @Inject()(
       val postAction: Call = routes.BusinessPartnersCorporateBodyTradingNameController.next()
       Ok(
         view
-          .business_partners_trading_name(tradingNameForm, businessType, companyName, postAction, backLink))
+          .business_partners_has_trading_name(tradingNameForm, businessType, companyName, postAction, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -57,7 +57,7 @@ class BusinessPartnersCorporateBodyTradingNameController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_trading_name(formWithErrors, businessType, companyName, postAction, backLink))
+              view.business_partners_has_trading_name(formWithErrors, businessType, companyName, postAction, backLink))
           },
           tradingName => {
             Redirect(routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load())
