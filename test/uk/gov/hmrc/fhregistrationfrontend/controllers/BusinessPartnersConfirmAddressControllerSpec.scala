@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -35,6 +35,8 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
 
   val controller =
     new BusinessPartnersConfirmAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val backLink = "/fhdds/form/business-partners/partner-address"
+  val enterAddressLink = "/fhdds/form/business-partners/enter-partner-address"
 
   "load" should {
     "Render the confirm address page" when {
@@ -48,9 +50,10 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Confirm the partner’s address?")
         // should be mocked out when Save4Later changes included
-        page.body.text should include("Confirm partner name's address")
+        page.body.text should include("Confirm test business partner’s address")
         page.body.text should include("1 Romford Road")
-        page.getElementById("confirm-edit").attr("href") should include("#")
+        page.getElementById("confirm-edit").attr("href") should include(enterAddressLink)
+        page.getElementsByClass("govuk-back-link").attr("href") should include(backLink)
         reset(mockActions)
       }
     }
@@ -73,15 +76,14 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
   "next" when {
     "the new business partner pages are enabled" should {
       "return 200" when {
-        "the form has no errors and the address is found" in {
+        "the user clicks 'save and continue' button" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load())(request))
+          val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          val page = Jsoup.parse(contentAsString(result))
-          page.getElementsByClass("govuk-button").first.attr("href") should include("#")
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/fhdds/business-partners/check-your-answers")
           reset(mockActions)
         }
       }

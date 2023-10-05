@@ -632,7 +632,7 @@ fh.businessPartners.tradingName.title = Does the partner’s business use a trad
 fh.businessPartners.tradingName.heading = Does {0}’s business use a trading name that is different from its registered name?
 
 fh.businessPartners.confirmAddress.title=Confirm the partner’s address?
-fh.businessPartners.confirmAddress.heading=Confirm {0} address
+fh.businessPartners.confirmAddress.heading=Confirm {0}’s address
 fh.businessPartners.confirmAddress.edit=Edit this address
 
 fh.business.partners.enterAddress.title = Enter the partner’s address?

@@ -23,12 +23,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.{routes => controllerRoutes}
 
 @this(layout: layout,
         formHelper: FormWithCSRF,
         viewHelpers: ViewHelpers)
 
-@(address: Address, partnerName: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(address: Address, partnerName: String, postAction: Call, backLink: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -40,16 +41,25 @@
 
 @heading = @{messages("fh.businessPartners.confirmAddress.heading", partnerName)}
 
-@layout(title = title, Some(pageScripts), backUrl = Some("#")) {
+@layout(title = title, Some(pageScripts), backUrl = Some(backLink)) {
 
-    @Html(BusinessPartnersHeader(heading))
+    @viewHelpers.form(action = postAction) {
 
-    <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
+        @Html(BusinessPartnersHeader(heading))
 
-    <p class="govuk-body">
-        <a class="govuk-link" id="confirm-edit" href="#">@messages("fh.businessPartners.confirmAddress.edit")</a>
-    </p>
+        <p class="govuk-body-m">@{
+            Html(Helpers.formatAddress(address))
+        }</p>
 
-    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit"), href=Some("#")))
-    @SaveForLater()
+        <p class="govuk-body">
+            <a class="govuk-link" id="confirm-edit" href=@{controllerRoutes.BusinessPartnersEnterAddressController.load().url}>
+                @messages("fh.businessPartners.confirmAddress.edit")
+            </a>
+        </p>
+
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
+
+    }
+
 }
