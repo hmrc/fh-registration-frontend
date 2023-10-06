@@ -48,7 +48,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
       mockActions,
       mockAppConfig,
       mockAddressService
-    )(mockMcc)
+    )(scala.concurrent.ExecutionContext.Implicits.global, mockMcc)
 
   "load" should {
     "Render the business partner address page" when {
