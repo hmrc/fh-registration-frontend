@@ -44,7 +44,7 @@ class BusinessPartnerAddressController @Inject()(
       // Todo get this from cache later
       val partnerName = "Test User"
       val bpAddressForm = businessPartnersAddressForm
-      Ok(view.business_partners_address(bpAddressForm, partnerName))
+      Ok(view.business_partners_search_address(bpAddressForm, partnerName))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -59,7 +59,7 @@ class BusinessPartnerAddressController @Inject()(
         .fold(
           formWithErrors => {
             Future.successful(
-              BadRequest(view.business_partners_address(formWithErrors, partnerName))
+              BadRequest(view.business_partners_search_address(formWithErrors, partnerName))
             )
           },
           bpAddress => {
@@ -82,7 +82,7 @@ class BusinessPartnerAddressController @Inject()(
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
-                  BadRequest(view.business_partners_address(formWithErrors, partnerName))
+                  BadRequest(view.business_partners_search_address(formWithErrors, partnerName))
                 case _ => errorHandler.errorResultsPages(Results.InternalServerError)
               }
           }

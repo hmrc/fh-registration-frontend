@@ -36,7 +36,7 @@ class BusinessPartnerTradingNameController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_trading_name(tradingNameForm, "Test User"))
+      Ok(view.business_partners_has_trading_partner_name(tradingNameForm, "Test User"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -48,7 +48,7 @@ class BusinessPartnerTradingNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_trading_name(formWithErrors, "Test User"))
+            BadRequest(view.business_partners_has_trading_partner_name(formWithErrors, "Test User"))
           },
           tradingName => {
             Redirect(routes.BusinessPartnerNinoController.load())

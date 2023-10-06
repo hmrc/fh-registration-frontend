@@ -44,7 +44,7 @@ class BusinessPartnerNinoController @Inject()(
         Call(
           method = "POST",
           url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.load().url)
-      Ok(view.business_partner_nino(ninoForm, items, postAction))
+      Ok(view.business_partners_nino(ninoForm, items, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -61,7 +61,7 @@ class BusinessPartnerNinoController @Inject()(
               Call(
                 method = "POST",
                 url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-            BadRequest(view.business_partner_nino(formWithErrors, items, postAction))
+            BadRequest(view.business_partners_nino(formWithErrors, items, postAction))
           },
           nino => {
             // Todo implement reading from legal entity page

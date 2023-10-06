@@ -81,9 +81,9 @@ class Views @Inject()(
   ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partner_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
   val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
-  val business_partner_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_nino_page,
-  val business_partner_trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_trading_partner_page,
-  val business_partners_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partner_address_page,
+  val business_partners_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_nino_page,
+  val business_partners_has_trading_partner_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_trading_partner_name,
+  val business_partners_search_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_search_address,
   val business_partners_has_utr: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_utr_number,
   val business_partners_enter_utr_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_utr_number,
   val business_partners_enter_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_address,
