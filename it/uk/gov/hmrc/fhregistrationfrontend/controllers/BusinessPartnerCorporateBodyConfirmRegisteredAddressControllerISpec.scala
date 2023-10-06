@@ -5,7 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerConfirmCorporateRegisteredAddressControllerISpec
+class BusinessPartnerCorporateBodyConfirmRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/confirm-corporate-body-registered-office-address" when {

@@ -26,17 +26,15 @@ import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig,
-  addressService: AddressService)(
-  cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+  addressService: AddressService)(implicit ec: ExecutionContext, cc: MessagesControllerComponents)
+    extends AppController(ds, cc) {
 
   // Todo get this from cache later
   val postAction: Call = Call(

@@ -36,8 +36,8 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
   import actions._
 
   val form: Form[VatNumber] = vatNumberForm
-  val corporateBody: String = "test corporateBody"
-  val title: String = "corporateBody"
+  val corporateBodyName: String = "test corporateBody"
+  val businessPartnerType: String = "corporateBody"
   val backAction: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
@@ -49,7 +49,7 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
           .load()
           .url
       )
-      Ok(view.business_partners_corporateBody_vat_number(form, corporateBody, title, postAction, backAction))
+      Ok(view.business_partners_has_vat_number(form, businessPartnerType, corporateBodyName, postAction, backAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -69,8 +69,14 @@ class BusinessPartnersCorporateBodyVatNumberController @Inject()(
                   .next()
                   .url
             )
-            BadRequest(view
-              .business_partners_corporateBody_vat_number(formWithErrors, corporateBody, title, postAction, backAction))
+            BadRequest(
+              view
+                .business_partners_has_vat_number(
+                  formWithErrors,
+                  businessPartnerType,
+                  corporateBodyName,
+                  postAction,
+                  backAction))
           },
           vatNumber => {
             vatNumber.value match {

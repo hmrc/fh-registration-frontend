@@ -37,6 +37,8 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
 
   val form: Form[VatNumber] = vatNumberForm
   val partnerName = "Test Partner"
+  val businessPartnerType = "partnership"
+  val postUrl = routes.BusinessPartnersPartnershipVatNumberController.next()
 
   def getBusinessType: String = config.getRandomBusinessType
 
@@ -52,7 +54,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partner_partnership_vat_number(form, partnerName, backUrl))
+      Ok(view.business_partners_has_vat_number(form, businessPartnerType, partnerName, postUrl, backUrl))
         .withCookies(Cookie("businessType", getBusinessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -66,7 +68,8 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_partnership_vat_number(formWithErrors, partnerName, backUrl))
+            BadRequest(
+              view.business_partners_has_vat_number(formWithErrors, businessPartnerType, partnerName, postUrl, backUrl))
           },
           vatNumber => {
             request.cookies.get("businessType").map(_.value) match {

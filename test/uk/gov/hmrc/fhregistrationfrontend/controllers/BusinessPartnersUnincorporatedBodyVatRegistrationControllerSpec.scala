@@ -25,7 +25,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersUninicorporatedVatRegistrationControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
+    extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,8 +35,11 @@ class BusinessPartnersUninicorporatedVatRegistrationControllerSpec extends Contr
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersUnincorporatedVatRegistrationController(commonDependencies, views, mockActions, mockAppConfig)(
-      mockMcc)
+    new BusinessPartnersUnincorporatedBodyVatRegistrationController(
+      commonDependencies,
+      views,
+      mockActions,
+      mockAppConfig)(mockMcc)
 
   "load" should {
     "Render the businessPartnersCorporateBodyVatNumber page" when {
