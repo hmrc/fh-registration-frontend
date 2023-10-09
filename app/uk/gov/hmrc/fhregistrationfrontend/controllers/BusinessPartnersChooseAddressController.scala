@@ -35,12 +35,20 @@ class BusinessPartnersChooseAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  private def getBusinessType: String = config.getRandomBusinessType()
+
+  val backUrl: String = {
+    if (getBusinessType == "unincorporated-body")
+      routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
+    else "#"
+  }
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val form = chooseAddressForm
       //ToDo read this data from the cache after being stored before the redirect
       val addressList = testAddressData
-      Ok(view.business_partner_choose_address(form, addressList))
+      Ok(view.business_partner_choose_address(form, addressList, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,16 +61,18 @@ class BusinessPartnersChooseAddressController @Inject()(
       chooseAddressForm
         .bindFromRequest()
         .fold(
-          formWithErrors => { BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData)) },
+          formWithErrors => {
+            BadRequest(view.business_partner_choose_address(formWithErrors, testAddressData, backUrl))
+          },
           addressKey => {
             // TODO save the selected address to cache
             addressList.get(addressKey.chosenAddress) match {
               case Some(address) =>
-                Redirect(routes.BusinessPartnersConfirmAddressController.load())
+                Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
               case None =>
                 val formWithError =
                   chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
-                BadRequest(view.business_partner_choose_address(formWithError, testAddressData))
+                BadRequest(view.business_partner_choose_address(formWithError, testAddressData, backUrl))
             }
           }
         )

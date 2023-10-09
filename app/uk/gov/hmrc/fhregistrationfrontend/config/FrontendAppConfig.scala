@@ -72,8 +72,14 @@ class FrontendAppConfig @Inject()(
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =
-    Seq("partnership", "limited-liability-partnership", "sole-proprietor", "individual", "corporateBody")
-  def getRandomBusinessType(): String = staticBusinessTypes(Random.nextInt(5))
+    Seq(
+      "partnership",
+      "limited-liability-partnership",
+      "sole-proprietor",
+      "individual",
+      "corporateBody",
+      "unincorporated-body")
+  def getRandomBusinessType(): String = staticBusinessTypes(Random.nextInt(6))
 
   val vatNumber = Seq(true, false)
   def hasVatNumber(): Boolean = vatNumber(Random.nextInt(2))
