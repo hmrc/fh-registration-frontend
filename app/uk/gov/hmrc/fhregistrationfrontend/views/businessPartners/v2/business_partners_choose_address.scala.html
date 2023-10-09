@@ -31,60 +31,60 @@
       formHelper: FormWithCSRF,
       viewHelpers: ViewHelpers)
 
-@(form: Form[ChooseAddress], addressList: Map[String, Address])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[ChooseAddress], addressList: Map[String, Address], backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
-<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
 @titlePrefix = @{
-if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
+    if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-messages("fh.businessPartners.chooseAddress.title")
+    messages("fh.businessPartners.chooseAddress.title")
 }
 
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = None, isBrowserBackMimic = true) {
-@viewHelpers.form(action = BusinessPartnersChooseAddressController.next(), Symbol("novalidate") -> "novalidate") {
-  @if(form.errors.nonEmpty) {
-    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-      Seq(ErrorLink(
-        href = Some(s"#${form.errors.head.key}"),
-        content = Text(messages(s"fh.${form.errors.head.key}.${form.errors.head.message}"))
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some(backAction)) {
+    @viewHelpers.form(action = BusinessPartnersChooseAddressController.next(), Symbol("novalidate") -> "novalidate") {
+      @if(form.errors.nonEmpty) {
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+          Seq(ErrorLink(
+            href = Some(s"#${form.errors.head.key}"),
+            content = Text(messages(s"fh.${form.errors.head.key}.${form.errors.head.message}"))
+        ))
+        ,
+          title = Text(messages("fh.generic.error"))))
+      }
+    
+      @viewHelpers.govUkRadios(Radios(
+        fieldset = Some(Fieldset(
+            describedBy = Some("Business Partners"),
+          legend = Some(Legend(
+            content = HtmlContent(Html(s"${BusinessPartnersHeader(title)}")),
+            classes = "govuk-fieldset__legend--l",
+            isPageHeading = true
+          ))
+        )),
+        idPrefix = Some(chooseAddressKey),
+        name = chooseAddressKey,
+        errorMessage = form.errors.headOption.map{ e =>
+            ErrorMessage(
+                content = Text(messages(s"fh.${e.key}.${e.message}"))
+            )
+        },
+        hint = None,
+        items = addressList.map{ case (index, address) =>
+            RadioItem(
+                id = Some(s"${chooseAddressKey}.$index"),
+                content = Text(Helpers.createAddressString(address)),
+                value = Some(index),
+            )
+        }.toSeq
     ))
-    ,
-      title = Text(messages("fh.generic.error"))))
-  }
-
-  @viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-        describedBy = Some("Business Partners"),
-      legend = Some(Legend(
-        content = HtmlContent(Html(s"${BusinessPartnersHeader(title)}")),
-        classes = "govuk-fieldset__legend--l",
-        isPageHeading = true
-      ))
-    )),
-    idPrefix = Some(chooseAddressKey),
-    name = chooseAddressKey,
-    errorMessage = form.errors.headOption.map{ e =>
-        ErrorMessage(
-            content = Text(messages(s"fh.${e.key}.${e.message}"))
-        )
-    },
-    hint = None,
-    items = addressList.map{ case (index, address) =>
-        RadioItem(
-            id = Some(s"${chooseAddressKey}.$index"),
-            content = Text(Helpers.createAddressString(address)),
-            value = Some(index),
-        )
-    }.toSeq
-))
-
-@viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
-@SaveForLater()
-}
+    
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
+    }
 }

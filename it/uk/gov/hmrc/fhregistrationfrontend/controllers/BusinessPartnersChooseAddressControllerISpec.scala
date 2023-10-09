@@ -35,7 +35,7 @@ class BusinessPartnersChooseAddressControllerISpec
   "POST /form/business-partners/choose-address" when {
     "the form has no errors" should {
       //Todo this will change when navigation is implemented
-      "redirect the user to the 'confirm the partner's address" in {
+      "redirect the user to the Check Your Answers page" in {
         given.commonPrecondition
 
           val result = buildRequest("/form/business-partners/choose-address")
@@ -47,7 +47,7 @@ class BusinessPartnersChooseAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/confirm-partner-address")
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers")
           }
       }
     }

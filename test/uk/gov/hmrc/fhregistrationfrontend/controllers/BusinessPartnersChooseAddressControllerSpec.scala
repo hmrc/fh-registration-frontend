@@ -69,7 +69,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return redirect (303) to the confirm address page" when {
+      "return redirect (303) to the Check Your Answers page" when {
         "the form has no errors and the address is found" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -79,7 +79,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(BusinessPartnersConfirmAddressController.load().url)
+          redirectLocation(result) shouldBe Some(BusinessPartnersCheckYourAnswersController.load().url)
           reset(mockActions)
         }
       }
