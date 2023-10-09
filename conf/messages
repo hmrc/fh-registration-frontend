@@ -620,10 +620,10 @@ fh.businessPartners.screen-reader.section=this is for:
 fh.businessPartners.chooseAddress.title=Choose address
 fh.chosenAddress.error.required=Select an address
 
-fh.businessPartner.vatNumber.title=Does the partner have a UK VAT registration number?
-fh.businessPartner.vatNumber.heading=Does {0} have a UK VAT registration number?
-fh.businessPartner.vatNumber.label=VAT registration number
-fh.businessPartner.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
+fh.businessPartners.vatNumber.title=Does the partner have a UK VAT registration number?
+fh.businessPartners.vatNumber.heading=Does {0} have a UK VAT registration number?
+fh.businessPartners.vatNumber.label=VAT registration number
+fh.businessPartners.vatNumber.hintText=This is 9 numbers, sometimes with 'GB' at the start, for example 123456789 or GB123456789. You can find it on {0}’s VAT registration certificate.
 
 fh.businessPartners.nino.title.v2= Does the partner have a National Insurance number? - Business partners
 fh.businessPartners.nino.h1 = Does {0} have a National Insurance number?
@@ -697,6 +697,8 @@ fh.business.partners.partnership.registered.address.heading=What is {0}’s regi
 fh.business.partners.enterRegisteredOfficeAddress.title = Enter the partnership’s registered office address?
 fh.business.partners.enterRegisteredOfficeAddress.h1 = Enter {0}’s registered office address?
 fh.businessPartners.partnership.companyRegistrationNumber.title=What is the partnership’s company registration number?
+fh.businessPartners.partnership.vatNumber.title=Does the partner have a UK VAT registration number?
+fh.businessPartners.partnership.vatNumber.heading=Does {0} have a UK VAT registration number?
 
 # - Limited Liability Partnership ======================================================================================
 fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
@@ -705,8 +707,8 @@ fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability 
 fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
 
 # - Corporate Body =====================================================================================================
-fh.businessPartner.corporateBody.vatNumber.title=Does the corporate body have a UK VAT registration number?
-fh.businessPartner.corporateBody.vatNumber.heading=Does {0} have a UK VAT registration number?
+fh.businessPartners.corporateBody.vatNumber.title=Does the corporate body have a UK VAT registration number?
+fh.businessPartners.corporateBody.vatNumber.heading=Does {0} have a UK VAT registration number?
 fh.business.partners.corporateBody.registered.address.title=What is the company’s registered office address?
 fh.businessPartners.corporateBody.tradingName.title = Does the corporate body use a trading name that is different from its registered name?
 fh.businessPartners.corporateBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
@@ -731,9 +733,12 @@ fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body
 fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
 fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
 fh.business.partners.unincorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
-fh.businessPartner.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number? - Business partners
 fh.businessPartners.unincorporatedBody.utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.businessPartners.unincorporatedBody.utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
+fh.businessPartners.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number?
+fh.businessPartners.unincorporatedBody.vatNumber.heading=Does {0} have a UK VAT registration number?
+
+
 
 #====================================================================================================================================================================================
 

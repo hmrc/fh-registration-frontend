@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNum
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
+class BusinessPartnersUnincorporatedBodyVatRegistrationController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,20 +33,14 @@ class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  //ToDo read this data from the cache after being stored before the redirect
+  val partnerName: String = "test unincorporatedBody"
+  val businessPartnerType = "unincorporatedBody"
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = vatNumberForm
-      //ToDo read this data from the cache after being stored before the redirect
-      val unincorporateBody = "test unincorporatedBody"
-      val title = "unincorporatedBody"
-      val postAction =
-        Call(
-          method = "POST",
-          url =
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
-              .load()
-              .url)
-      Ok(view.business_partners_corporateBody_vat_number(form, unincorporateBody, title, postAction, "#"))
+      Ok(view.business_partners_has_vat_number(vatNumberForm, businessPartnerType, partnerName, postAction, "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,24 +48,13 @@ class BusinessPartnersUnincorporatedVatRegistrationController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      val unincorporateBody = "test unincorporatedBody"
-      val title = "unincorporatedBody"
-
       vatNumberForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            val postAction =
-              Call(
-                method = "POST",
-                url =
-                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedVatRegistrationController
-                    .next()
-                    .url)
             BadRequest(
               view
-                .business_partners_corporateBody_vat_number(formWithErrors, unincorporateBody, title, postAction, "#"))
+                .business_partners_has_vat_number(formWithErrors, businessPartnerType, partnerName, postAction, "#"))
           },
           vatNumber => {
             vatNumber.value match {

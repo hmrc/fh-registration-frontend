@@ -38,12 +38,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
     extends AppController(ds, cc) {
 
   // Todo get this from cache later
-  val postAction: Call = Call(
-    method = "POST",
-    url = routes.BusinessPartnersCorporateBodyRegisteredAddressController
-      .next()
-      .url
-  )
+  val postAction: Call = routes.BusinessPartnersCorporateBodyRegisteredAddressController.next()
   val businessType = "corporateBody"
   val corporateBody = "Test Corporate Body"
   val hasVatNum: Boolean = config.hasVatNumber()
@@ -104,7 +99,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
                   if (addressListMap.isEmpty)
                     Redirect(routes.BusinessPartnersCannotFindAddressController.load())
                   else if (addressListMap.size == 1)
-                    Redirect(routes.BusinessPartnersConfirmCorporateRegisteredAddressController.load())
+                    Redirect(routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load())
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
 

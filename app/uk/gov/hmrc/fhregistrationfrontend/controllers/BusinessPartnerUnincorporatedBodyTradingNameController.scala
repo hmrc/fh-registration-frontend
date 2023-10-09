@@ -58,7 +58,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
           },
           tradingName => {
             //TODO: save trading name data to cache
-            Redirect(routes.BusinessPartnersUnincorporatedVatRegistrationController.load())
+            Redirect(routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load())
           }
         )
     } else {
