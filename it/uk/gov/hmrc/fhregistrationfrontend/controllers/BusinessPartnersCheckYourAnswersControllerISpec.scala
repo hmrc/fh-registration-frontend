@@ -8,17 +8,16 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCheckYourAnswersControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /business-partners/check-your-answers" when {
+  val route = "/business-partners/check-your-answers"
 
+  s"GET $route" when {
     "the new business partners flow is enabled" should {
-
       "render the Check Your Answers page" when {
         "the user is authenticated" in {
-          given
-            .commonPrecondition
+          given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/business-partners/check-your-answers")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -33,7 +32,7 @@ class BusinessPartnersCheckYourAnswersControllerISpec
     }
   }
 
-  "POST /business-partners/check-your-answers" when {
+  s"POST $route" when {
 
     "the user clicks save and continue" should {
       "return 200" when {
@@ -41,7 +40,7 @@ class BusinessPartnersCheckYourAnswersControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/business-partners/check-your-answers")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(

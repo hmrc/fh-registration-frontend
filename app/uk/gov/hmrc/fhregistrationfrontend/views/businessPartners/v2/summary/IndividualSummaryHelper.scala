@@ -21,6 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividua
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.SummaryListRow
+import uk.gov.hmrc.govukfrontend.views.html.components.Text
 
 object IndividualSummaryHelper {
   def apply(individual: BusinessPartnerIndividualModel)(implicit messages: Messages): Seq[SummaryListRow] =
@@ -32,7 +33,7 @@ object IndividualSummaryHelper {
           None,
           GroupRow.Member
         ),
-        None
+        Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
       ),
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
@@ -41,7 +42,7 @@ object IndividualSummaryHelper {
           None,
           GroupRow.Member
         ),
-        None
+        Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
       ),
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
@@ -50,7 +51,7 @@ object IndividualSummaryHelper {
           None,
           GroupRow.Member
         ),
-        None
+        Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
       ),
       if (individual.hasNino) {
         Helpers.createSummaryRow(
@@ -59,17 +60,17 @@ object IndividualSummaryHelper {
             individual.nino,
             None
           ),
-          None
+          Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
         )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
-            Some(Messages("fh.summary.partnerHasNino")),
+            Some(Messages("fh.businessPartners.individual.nino.label")),
             individual.hasNino,
             None,
             GroupRow.Member
           ),
-          None
+          Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
         )
       },
       Helpers.createSummaryRow(
@@ -78,7 +79,7 @@ object IndividualSummaryHelper {
           Helpers.formatAddress(individual.address),
           None,
           GroupRow.Member),
-        None
+        Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
       )
     )
 }

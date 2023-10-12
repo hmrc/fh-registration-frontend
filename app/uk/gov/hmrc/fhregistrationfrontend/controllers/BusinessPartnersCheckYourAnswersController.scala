@@ -20,11 +20,8 @@ import com.google.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerIndividual
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
-import uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers.BusinessPartnerIndividualHelper
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
 @Singleton
 class BusinessPartnersCheckYourAnswersController @Inject()(
@@ -36,6 +33,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val businessPartnerType = "individual"
   val address: Address = Address(
     addressLine1 = "1 Romford Road",
     addressLine2 = Some("Wellington"),
@@ -45,13 +43,12 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     countryCode = None,
     lookupId = None
   )
-
   val individualSummaryModel =
     BusinessPartnerIndividual("first name", "last name", hasNino = true, Some("QQ123456C"), address)
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_check_your_answers("#", individualSummaryModel))
+      Ok(view.business_partners_check_your_answers("#", individualSummaryModel, businessPartnerType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

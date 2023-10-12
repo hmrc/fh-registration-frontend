@@ -28,7 +28,7 @@
         viewHelpers: ViewHelpers,
         govukFieldset: GovukFieldset)
 
-@(backAction: String, summaryModel: BusinessPartnerIndividual)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(backAction: String, summaryModel: BusinessPartnerIndividual, businessPartnerType: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @title = @{
     messages("fh.businessPartners.checkYourAnswers.title")
@@ -40,16 +40,18 @@
 
     @Html(BusinessPartnersHeader(heading))
 
-    @govukFieldset(Fieldset(
-        legend = Some(Legend(
-            content = Text("First partner's details"),
-            classes = "govuk-fieldset__legend--m",
-            isPageHeading = false
-        )),
-        html = viewHelpers.govukSummaryList(SummaryList(
-            IndividualSummaryHelper(summaryModel)
-        )))
-    )
+    @if(businessPartnerType == "individual"){
+        @govukFieldset(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("fh.businessPartners.individual.checkYourAnswers.heading")),
+                classes = "govuk-fieldset__legend--m",
+                isPageHeading = false
+            )),
+            html = viewHelpers.govukSummaryList(SummaryList(
+                IndividualSummaryHelper(summaryModel)
+            )))
+        )
+    }
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()

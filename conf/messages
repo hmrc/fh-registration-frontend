@@ -683,8 +683,7 @@ fh.businessPartners.individual.firstName.label=First name
 fh.businessPartners.individual.lastName.label=Last name
 fh.businessPartners.individual.nino.label=National Insurance number
 fh.businessPartners.individual.address.label=Address
-
-
+fh.businessPartners.individual.checkYourAnswers.heading=First partner’s details
 
 # - Sole Proprietor  ===================================================================================================
 fh.businessPartners.SoleProprietor.utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
