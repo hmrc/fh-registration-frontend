@@ -40,9 +40,14 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val form = companyRegistrationNumberForm
       //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partners_company_reg_number(form, companyName, businessType, postAction, backLink))
+      Ok(
+        view.business_partners_company_reg_number(
+          companyRegistrationNumberForm,
+          companyName,
+          businessType,
+          postAction,
+          backLink))
         .withCookies(Cookie("businessType", businessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

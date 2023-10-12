@@ -17,7 +17,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl$requestUrl")
+        val result = client.url(baseUrl + requestUrl)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -40,7 +40,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest(s"$requestUrl")
+        val result = buildRequest(requestUrl)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -59,7 +59,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest(s"$requestUrl")
+        val result = buildRequest(requestUrl)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -81,7 +81,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestUrl")
+          val result = client.url(baseUrl + requestUrl)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -105,7 +105,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partnership-company-registration-number")
+          val result = client.url(baseUrl + requestUrl)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
