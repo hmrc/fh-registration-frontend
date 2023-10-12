@@ -21,7 +21,7 @@ import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -31,9 +31,9 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersPartnershipCompanyRegistrationNumberController(
@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Partnership VAT Reg Number page" when {
         "the form has no errors and companyRegistrationNumber supplied" in {
           setupUserAction()
 
@@ -92,11 +92,14 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with companyRegistrationNumber: 01234567"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/fhdds/form/business-partners/partnership-vat-registration-number")
           reset(mockActions)
         }
+      }
 
+      "display the correct error" when {
         "the user doesn't enter a company registration number" in {
           setupUserAction()
 
