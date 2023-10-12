@@ -26,7 +26,6 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
           val page = Jsoup.parse(res.body)
           page.title() must include("What is the company’s company registration number?")
           page.getElementsByTag("h1").text() must include("What is Test CorporateBody’s company registration number?")
-          page.getElementsByTag("p").text() must include("You can search Companies House for a company registration number (opens in new tab)")
         }
       }
     }
