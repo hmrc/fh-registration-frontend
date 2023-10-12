@@ -31,10 +31,10 @@
 @(backAction: String, summaryModel: BusinessPartnerIndividual, businessPartnerType: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @title = @{
-    messages("fh.businessPartners.checkYourAnswers.title")
+    messages("fh.businessPartners.summary.title")
 }
 
-@heading = @{messages("fh.businessPartners.checkYourAnswers.title")}
+@heading = @{messages("fh.businessPartners.summary.title")}
 
 @layout(title = title, backUrl = Some(backAction)) {
 
@@ -43,7 +43,7 @@
     @if(businessPartnerType == "individual"){
         @govukFieldset(Fieldset(
             legend = Some(Legend(
-                content = Text(messages("fh.businessPartners.individual.checkYourAnswers.heading")),
+                content = Text(messages("fh.businessPartners.individual.summary.heading")),
                 classes = "govuk-fieldset__legend--m",
                 isPageHeading = false
             )),
