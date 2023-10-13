@@ -30,11 +30,14 @@ class BusinessPartnersCheckYourAnswersControllerISpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title() must include("Check your answers")
-              page.body().text() must include("Type of partner Individual")
-              page.body().text() must include("First name first name")
-              page.body().text() must include("Last name last name")
-              page.body().text() must include("National Insurance number QQ123456C")
-              page.body().text() must include(" Address 1 Romford Road Wellington Telford TF1 4ER")
+              page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+              page.getElementsByClass("govuk-summary-list__value").text() must include("Individual")
+              page.getElementsByClass("govuk-summary-list__key").text() must include("First name")
+              page.getElementsByClass("govuk-summary-list__value").text() must include("first name")
+              page.getElementsByClass("govuk-summary-list__key").text() must include("National Insurance number")
+              page.getElementsByClass("govuk-summary-list__value").text() must include("QQ123456C")
+              page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+              page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
             }
           }
         }
