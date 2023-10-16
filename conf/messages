@@ -675,9 +675,15 @@ fh.uniqueTaxpayerReference_yesNo.error.required=Select whether they have a Self 
 fh.uniqueTaxpayerReference_value.error.pattern=Enter a valid Self Assessment Unique Taxpayer Reference (UTR)
 fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique Taxpayer Reference (UTR)
 
-fh.businessPartners.checkYourAnswers.title=Check your answers
+fh.businessPartners.summary.title=Check your answers
+fh.businessPartners.summary.businessType.label=Type of partner
 
 # - Individual =========================================================================================================
+fh.businessPartners.individual.firstName.label=First name
+fh.businessPartners.individual.lastName.label=Last name
+fh.businessPartners.individual.nino.label=National Insurance number
+fh.businessPartners.individual.address.label=Address
+fh.businessPartners.individual.summary.heading=First partner’s details
 
 # - Sole Proprietor  ===================================================================================================
 fh.businessPartners.SoleProprietor.utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
@@ -737,6 +743,7 @@ fh.businessPartners.unincorporatedBody.utr.title=Does the partner have a Self As
 fh.businessPartners.unincorporatedBody.utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.businessPartners.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number?
 fh.businessPartners.unincorporatedBody.vatNumber.heading=Does {0} have a UK VAT registration number?
+
 
 
 

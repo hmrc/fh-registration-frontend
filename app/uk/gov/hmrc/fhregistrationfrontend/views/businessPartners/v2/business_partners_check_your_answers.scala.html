@@ -14,34 +14,44 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
-@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
-@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerIndividual
+@import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.IndividualSummaryHelper
 
 @this(layout: layout,
         formHelper: FormWithCSRF,
-        viewHelpers: ViewHelpers)
+        viewHelpers: ViewHelpers,
+        govukFieldset: GovukFieldset)
 
-@(backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(backAction: String, summaryModel: BusinessPartnerIndividual, businessPartnerType: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @title = @{
-    messages("fh.businessPartners.checkYourAnswers.title")
+    messages("fh.businessPartners.summary.title")
 }
 
-@heading = @{messages("fh.businessPartners.checkYourAnswers.title")}
+@heading = @{messages("fh.businessPartners.summary.title")}
 
 @layout(title = title, backUrl = Some(backAction)) {
 
     @Html(BusinessPartnersHeader(heading))
 
-    <h2 class="govuk-heading-m">First partner's details</h2>
+    @if(businessPartnerType == "individual"){
+        @govukFieldset(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("fh.businessPartners.individual.summary.heading")),
+                classes = "govuk-fieldset__legend--m",
+                isPageHeading = false
+            )),
+            html = viewHelpers.govukSummaryList(SummaryList(
+                IndividualSummaryHelper(summaryModel)
+            )))
+        )
+    }
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()
