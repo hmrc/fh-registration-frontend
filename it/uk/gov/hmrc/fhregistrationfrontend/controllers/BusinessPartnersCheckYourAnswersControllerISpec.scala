@@ -22,7 +22,7 @@ class BusinessPartnersCheckYourAnswersControllerISpec
           when(mockAppConfig.getRandomBusinessType()).thenReturn("individual")
 
           WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
+            val result = client.url(s"$baseUrl$route?partnerType=individual")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
