@@ -54,7 +54,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 
   val llpSummaryModel = BusinessPartnerLimitedLiabilityPartnership(
     "llp trading name",
-    hasTradeName = true,
+    hasTradeName = false,
     Some("trade name"),
     "01234567",
     hasVat = true,

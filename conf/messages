@@ -712,6 +712,14 @@ fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of
 fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
 fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
 
+fh.businessPartners.LLP.summary.partnershipName=Name of partnership
+fh.businessPartners.LLP.summary.compRegNum=Company registration number
+fh.businessPartners.LLP.summary.ctUtr=Corporate Tax Unique Tax Reference (UTR)
+fh.businessPartners.llp.summary.address=Address
+
+fh.businessPartners.summary.none=None
+
+
 # - Corporate Body =====================================================================================================
 fh.businessPartners.corporateBody.vatNumber.title=Does the corporate body have a UK VAT registration number?
 fh.businessPartners.corporateBody.vatNumber.heading=Does {0} have a UK VAT registration number?

@@ -109,7 +109,7 @@ object LLPSummaryHelper {
 
     val addressRow = Helpers.createSummaryRow(
       SummaryRowParams.ofString(
-        Some(Messages("fh.businessPartners.llp.address.label")),
+        Some(Messages("fh.businessPartners.llp.summary.address")),
         Helpers.formatAddress(llp.address),
         None,
         GroupRow.Member),
