@@ -68,7 +68,7 @@ class BusinessPartnersChooseAddressController @Inject()(
             // TODO save the selected address to cache
             addressList.get(addressKey.chosenAddress) match {
               case Some(address) =>
-                Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
+                Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
               case None =>
                 val formWithError =
                   chooseAddressForm.withError(FormError("chosenAddress", "error.required"))

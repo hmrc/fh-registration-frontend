@@ -17,18 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual => BusinessPartnerIndividualModel}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerIndividual => BusinessPartnerIndividualModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.govukfrontend.views.html.components.{SummaryListRow, Text}
 
 object LLPSummaryHelper {
-  def apply(individual: BusinessPartnerIndividualModel)(implicit messages: Messages): Seq[SummaryListRow] =
-    Seq(
+  def apply(llp: BusinessPartnerLimitedLiabilityPartnership)(implicit messages: Messages): Seq[SummaryListRow] = {
+    val base = Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.businessPartners.summary.businessType.label")),
-          Messages("fh.business_partners.entity_type.individual.label"),
+          Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
           None,
           GroupRow.Member
         ),
@@ -36,36 +36,28 @@ object LLPSummaryHelper {
       ),
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(Messages("fh.businessPartners.individual.firstName.label")),
-          individual.firstName,
+          Some(Messages("fh.businessPartners.LLP.summary.partnershipName")),
+          llp.limitedLiabilityPartnershipName,
           None,
           GroupRow.Member
         ),
         Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
       ),
-      Helpers.createSummaryRow(
-        SummaryRowParams.ofString(
-          Some(Messages("fh.businessPartners.individual.lastName.label")),
-          individual.lastName,
-          None,
-          GroupRow.Member
-        ),
-        Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
-      ),
-      if (individual.hasNino) {
+      if (llp.hasTradeName) {
         Helpers.createSummaryRow(
-          SummaryRowParams(
-            Some(Messages("fh.businessPartners.individual.nino.label")),
-            individual.nino,
-            None
+          SummaryRowParams.ofString(
+            Some(Messages("fh.tradingName.label")),
+            llp.tradeName,
+            None,
+            GroupRow.Member
           ),
           Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
         )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
-            Some(Messages("fh.businessPartners.individual.nino.label")),
-            individual.hasNino,
+            Some(Messages("fh.tradingName.label")),
+            llp.hasTradeName,
             None,
             GroupRow.Member
           ),
@@ -74,11 +66,56 @@ object LLPSummaryHelper {
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(Messages("fh.businessPartners.individual.address.label")),
-          Helpers.formatAddress(individual.address),
+          Some(Messages("fh.companyRegistrationNumber.title")),
+          llp.companyRegistrationNumber,
           None,
-          GroupRow.Member),
+          GroupRow.Member
+        ),
         Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
-      )
+      ),
     )
+
+    val extraFields = if (llp.hasVat) {
+      Seq(
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.businessPartners.vatNumber.label")),
+            llp.vat,
+            None
+          ),
+          Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
+        ))
+    } else
+      Seq(
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.businessPartners.vatNumber.label")),
+            llp.hasVat,
+            None,
+            GroupRow.Member
+          ),
+          Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
+        ),
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofString(
+            Some(Messages("fh.businessPartners.LLP.summary.ctUtr")),
+            llp.uniqueTaxpayerReference,
+            None,
+            GroupRow.Member
+          ),
+          Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
+        )
+      )
+
+    val addressRow = Helpers.createSummaryRow(
+      SummaryRowParams.ofString(
+        Some(Messages("fh.businessPartners.llp.address.label")),
+        Helpers.formatAddress(llp.address),
+        None,
+        GroupRow.Member),
+      Helpers.createChangeLink(isEditable = true, "#", Text("Change"), Some(messages("hidden text")))
+    )
+
+    base ++ extraFields :+ addressRow
+  }
 }

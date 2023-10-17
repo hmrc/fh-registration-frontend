@@ -17,12 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.IndividualSummaryHelper
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper}
+import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 @Singleton
 class BusinessPartnersCheckYourAnswersController @Inject()(
@@ -32,6 +34,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
+
   import actions._
 
   val businessPartnerType = "individual"
@@ -92,9 +95,10 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     )
 
     partnerTypeWithModel(partnerType) match {
-      case individual: BusinessPartnerIndividual => IndividualSummaryHelper(individual)
-            case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
-      case _ => Seq.empty
+      case individual: BusinessPartnerIndividual           => IndividualSummaryHelper(individual)
+      case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
+      case _                                               => Seq.empty
     }
 
   }
+}

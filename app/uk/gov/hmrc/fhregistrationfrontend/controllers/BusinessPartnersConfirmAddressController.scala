@@ -57,7 +57,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
+      Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

@@ -140,7 +140,7 @@ POST         /business-partners/partner-self-assessment-unique-taxpayer-referenc
 
 GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
 
-GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load()
+GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load(partnerType: String)
 POST         /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.next()
 
 
