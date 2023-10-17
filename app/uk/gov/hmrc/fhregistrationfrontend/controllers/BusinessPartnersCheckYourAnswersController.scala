@@ -20,8 +20,9 @@ import com.google.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.IndividualSummaryHelper
 
 @Singleton
 class BusinessPartnersCheckYourAnswersController @Inject()(
@@ -34,6 +35,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
   import actions._
 
   val businessPartnerType = "individual"
+
   val address: Address = Address(
     addressLine1 = "1 Romford Road",
     addressLine2 = Some("Wellington"),
@@ -43,12 +45,32 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     countryCode = None,
     lookupId = None
   )
+
   val individualSummaryModel =
     BusinessPartnerIndividual("first name", "last name", hasNino = true, Some("QQ123456C"), address)
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  val llpSummaryModel = BusinessPartnerLimitedLiabilityPartnership(
+    "llp trading name",
+    hasTradeName = true,
+    Some("trade name"),
+    "01234567",
+    hasVat = true,
+    vat = Some("123456789"),
+    uniqueTaxpayerReference = Some("1234567890"),
+    address
+  )
+
+  // TODO temp solution for it testing - passes data cleaner than using cookies as workaround
+  // TODO remove when cache is implemented
+  def load(partnerType: String): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_check_your_answers("#", individualSummaryModel, businessPartnerType))
+      val summaryRows = getRowsBasedOnPartnerType(partnerType)
+      if (summaryRows.nonEmpty) {
+        Ok(view.business_partners_check_your_answers("#", summaryRows))
+      } else {
+        logger.warn("[BusinessPartnersCheckYourAnswersController][load] - Unable to create CYA summary rows")
+        errorHandler.errorResultsPages(Results.BadRequest)
+      }
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -62,4 +84,17 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     }
   }
 
-}
+  private def getRowsBasedOnPartnerType(partnerType: String)(implicit messages: Messages): Seq[SummaryListRow] = {
+
+    val partnerTypeWithModel = Map(
+      "individual"                    -> individualSummaryModel,
+      "limited-liability-partnership" -> llpSummaryModel
+    )
+
+    partnerTypeWithModel(partnerType) match {
+      case individual: BusinessPartnerIndividual => IndividualSummaryHelper(individual)
+            case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
+      case _ => Seq.empty
+    }
+
+  }
