@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -73,17 +73,21 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Self Assessment UTR page" when {
         "the form has no errors, yes is selected and vatnumber supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", "123456789"))
+            .withFormUrlEncodedBody(
+              ("vatNumber_yesNo", "true"),
+              ("vatNumber_value", "123456789")
+            )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with vatNumber: 123456789"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference")
           reset(mockActions)
         }
 
@@ -95,8 +99,9 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with no vatNumber"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(
+            "/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference")
           reset(mockActions)
         }
 
@@ -123,7 +128,7 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-          .withFormUrlEncodedBody(("chosenAddress", "1"))
+          .withFormUrlEncodedBody(("vatNumber_yesNo", "true"))
           .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 

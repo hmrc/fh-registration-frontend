@@ -35,12 +35,13 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationController @Inject()(
 
   //ToDo read this data from the cache after being stored before the redirect
   val partnerName: String = "test unincorporatedBody"
-  val businessPartnerType = "unincorporatedBody"
-  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
+  val businessPartnerType: String = "unincorporatedBody"
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()
+  val backUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_vat_number(vatNumberForm, businessPartnerType, partnerName, postAction, "#"))
+      Ok(view.business_partners_has_vat_number(vatNumberForm, businessPartnerType, partnerName, postAction, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -52,16 +53,11 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view
-                .business_partners_has_vat_number(formWithErrors, businessPartnerType, partnerName, postAction, "#"))
+            BadRequest(view
+              .business_partners_has_vat_number(formWithErrors, businessPartnerType, partnerName, postAction, backUrl))
           },
           vatNumber => {
-            vatNumber.value match {
-              case Some(vatNumber) => Ok(s"Next page! with vatNumber: $vatNumber")
-              case None =>
-                Ok(s"Next page! with no vatNumber")
-            }
+            Redirect(routes.BusinessPartnersUnincorporatedBodyUtrController.load())
           }
         )
     } else {
