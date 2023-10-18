@@ -55,7 +55,7 @@ class BusinessPartnersEnterAddressControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers")
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers?partnerType=individual")
         }
       }
 
@@ -74,7 +74,7 @@ class BusinessPartnersEnterAddressControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers")
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers?partnerType=individual")
         }
       }
     }

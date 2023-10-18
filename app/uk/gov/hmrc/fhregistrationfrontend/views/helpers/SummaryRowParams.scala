@@ -45,6 +45,13 @@ object SummaryRowParams {
   def ofString(label: Option[String], value: String, changeLink: Option[String], groupRow: GroupRow): SummaryRowParams =
     SummaryRowParams(label, Some(value), changeLink, groupRow)
 
+  def ofString(
+    label: Option[String],
+    value: Option[String],
+    changeLink: Option[String],
+    groupRow: GroupRow): SummaryRowParams =
+    SummaryRowParams(label, value, changeLink, groupRow)
+
   def ofBoolean(
     label: Option[String],
     value: Option[Boolean],

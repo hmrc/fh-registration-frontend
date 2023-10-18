@@ -64,7 +64,7 @@ class BusinessPartnersEnterAddressController @Inject()(
               view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, backUrl))
           },
           bpAddress => {
-            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
           }
         )
     } else {
