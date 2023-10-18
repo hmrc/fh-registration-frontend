@@ -55,7 +55,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
   val llpSummaryModel = BusinessPartnerLimitedLiabilityPartnership(
     "llp trading name",
     hasTradeName = false,
-    Some("trade name"),
+    Some("trade partner name"),
     "01234567",
     hasVat = false,
     vat = Some("123456789"),
@@ -91,7 +91,9 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 
     val partnerTypeWithModel = Map(
       "individual"                    -> individualSummaryModel,
-      "limited-liability-partnership" -> llpSummaryModel
+      "limited-liability-partnership" -> llpSummaryModel,
+      "limited-liability-partnership-with-vat-and-trading-name" -> llpSummaryModel
+        .copy(hasTradeName = true, hasVat = true)
     )
 
     partnerTypeWithModel(partnerType) match {

@@ -11,8 +11,8 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCheckYourAnswersControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/check-your-answers"
   lazy val mockAppConfig = mock[FrontendAppConfig]
+  val route = "/business-partners/check-your-answers"
 
   s"GET $route" when {
     "the new business partners flow is enabled" should {
@@ -40,32 +40,63 @@ class BusinessPartnersCheckYourAnswersControllerISpec
             }
           }
         }
-        "the business partnerType is an limited liability partnership" in {
-          given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl$route?partnerType=limited-liability-partnership")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+        "the business partnerType is an limited liability partnership" when {
+          "No trading name and VAT number provided" in {
+            given.commonPrecondition
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Check your answers")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("Limited Liability Partnership")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Name of partnership")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("llp trading name")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("No")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Company registration number")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("01234567")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("123456789")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Corporation Tax Unique Taxpayer Reference (UTR)")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
-              page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
-              page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+            WsTestClient.withClient { client =>
+              val result = client.url(s"$baseUrl$route?partnerType=limited-liability-partnership")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Limited Liability Partnership")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Name of partnership")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("llp trading name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("01234567")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Corporation Tax Unique Taxpayer Reference (UTR)")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
+            }
+          }
+
+          "trading name and VAT number provided" in {
+            given.commonPrecondition
+
+            WsTestClient.withClient { client =>
+              val result = client.url(s"$baseUrl$route?partnerType=limited-liability-partnership-with-vat-and-trading-name")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Limited Liability Partnership")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Name of partnership")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("llp trading name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("trade partner name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("01234567")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("123456789")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
             }
           }
         }

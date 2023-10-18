@@ -27,8 +27,8 @@ object LLPSummaryHelper {
     val base = Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(Messages("fh.businessPartners.summary.businessType.label")),
-          Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
+          Some(messages("fh.businessPartners.summary.businessType.label")),
+          messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
           None,
           GroupRow.Member
         ),
@@ -36,7 +36,7 @@ object LLPSummaryHelper {
       ),
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(Messages("fh.businessPartners.LLP.summary.partnershipName")),
+          Some(messages("fh.businessPartners.LLP.summary.partnershipName")),
           llp.limitedLiabilityPartnershipName,
           None,
           GroupRow.Member
@@ -46,7 +46,7 @@ object LLPSummaryHelper {
       if (llp.hasTradeName) {
         Helpers.createSummaryRow(
           SummaryRowParams.ofString(
-            Some(Messages("fh.tradingName.label")),
+            Some(messages("fh.tradingName.label")),
             llp.tradeName,
             None,
             GroupRow.Member
@@ -55,9 +55,9 @@ object LLPSummaryHelper {
         )
       } else {
         Helpers.createSummaryRow(
-          SummaryRowParams.ofBoolean(
-            Some(Messages("fh.tradingName.label")),
-            llp.hasTradeName,
+          SummaryRowParams.ofString(
+            Some(messages("fh.tradingName.label")),
+            messages("fh.businessPartners.summary.none"),
             None,
             GroupRow.Member
           ),
@@ -66,7 +66,7 @@ object LLPSummaryHelper {
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(Messages("fh.companyRegistrationNumber.title")),
+          Some(messages("fh.companyRegistrationNumber.title")),
           llp.companyRegistrationNumber,
           None,
           GroupRow.Member
@@ -79,7 +79,7 @@ object LLPSummaryHelper {
       Seq(
         Helpers.createSummaryRow(
           SummaryRowParams(
-            Some(Messages("fh.businessPartners.vatNumber.label")),
+            Some(messages("fh.businessPartners.vatNumber.label")),
             llp.vat,
             None
           ),
@@ -88,9 +88,9 @@ object LLPSummaryHelper {
     } else
       Seq(
         Helpers.createSummaryRow(
-          SummaryRowParams.ofBoolean(
-            Some(Messages("fh.businessPartners.vatNumber.label")),
-            llp.hasVat,
+          SummaryRowParams.ofString(
+            Some(messages("fh.businessPartners.vatNumber.label")),
+            messages("fh.businessPartners.summary.none"),
             None,
             GroupRow.Member
           ),
@@ -98,7 +98,7 @@ object LLPSummaryHelper {
         ),
         Helpers.createSummaryRow(
           SummaryRowParams.ofString(
-            Some(Messages("fh.businessPartners.LLP.summary.ctUtr")),
+            Some(messages("fh.businessPartners.LLP.summary.ctUtr")),
             llp.uniqueTaxpayerReference,
             None,
             GroupRow.Member
@@ -109,7 +109,7 @@ object LLPSummaryHelper {
 
     val addressRow = Helpers.createSummaryRow(
       SummaryRowParams.ofString(
-        Some(Messages("fh.businessPartners.llp.summary.address")),
+        Some(messages("fh.businessPartners.llp.summary.address")),
         Helpers.formatAddress(llp.address),
         None,
         GroupRow.Member),
