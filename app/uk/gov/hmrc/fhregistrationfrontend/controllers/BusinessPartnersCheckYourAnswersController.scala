@@ -57,7 +57,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     hasTradeName = false,
     Some("trade name"),
     "01234567",
-    hasVat = true,
+    hasVat = false,
     vat = Some("123456789"),
     uniqueTaxpayerReference = Some("1234567890"),
     address
