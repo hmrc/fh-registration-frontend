@@ -100,6 +100,65 @@ class BusinessPartnersCheckYourAnswersControllerISpec
             }
           }
         }
+
+        "the business partnerType is a partnership" when {
+          "optional values are included" in {
+            given.commonPrecondition
+
+            WsTestClient.withClient { client =>
+              val result = client.url(s"$baseUrl$route?partnerType=partnership-with-optional-values")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Partnership")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Name of partnership")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("partnership name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("partnership trading name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("123456789")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Self Assessment Unique Taxpayer Reference (UTR)")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
+            }
+          }
+
+          "optional values are none" in {
+            given.commonPrecondition
+
+            WsTestClient.withClient { client =>
+              val result = client.url(s"$baseUrl$route?partnerType=partnership")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Partnership")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Name of partnership")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("partnership name")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Self Assessment Unique Taxpayer Reference (UTR)")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
+            }
+          }
+        }
+
       }
     }
   }

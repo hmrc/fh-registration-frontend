@@ -21,9 +21,9 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerPartnership}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper}
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper}
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 @Singleton
@@ -36,8 +36,6 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-
-  val businessPartnerType = "individual"
 
   val address: Address = Address(
     addressLine1 = "1 Romford Road",
@@ -60,6 +58,17 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     hasVat = false,
     vat = Some("123456789"),
     uniqueTaxpayerReference = Some("1234567890"),
+    address
+  )
+
+  val partnershipModel = BusinessPartnerPartnership(
+    "partnership name",
+    hasTradeName = false,
+    Some("partnership trading name"),
+    hasVat = false,
+    Some("123456789"),
+    hasUniqueTaxpayerReference = false,
+    Some("1234567890"),
     address
   )
 
@@ -93,12 +102,16 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "individual"                    -> individualSummaryModel,
       "limited-liability-partnership" -> llpSummaryModel,
       "limited-liability-partnership-with-vat-and-trading-name" -> llpSummaryModel
-        .copy(hasTradeName = true, hasVat = true)
+        .copy(hasTradeName = true, hasVat = true),
+      "partnership" -> partnershipModel,
+      "partnership-with-optional-values" -> partnershipModel
+        .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
     )
 
     partnerTypeWithModel(partnerType) match {
       case individual: BusinessPartnerIndividual           => IndividualSummaryHelper(individual)
       case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
+      case partnership: BusinessPartnerPartnership         => PartnershipSummaryHelper(partnership)
       case _                                               => Seq.empty
     }
 
