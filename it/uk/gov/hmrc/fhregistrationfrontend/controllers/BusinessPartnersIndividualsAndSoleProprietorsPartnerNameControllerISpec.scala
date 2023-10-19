@@ -62,7 +62,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-national-insurance-number")
+          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-national-insurance-number")
         }
       }
     }

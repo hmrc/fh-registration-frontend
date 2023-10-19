@@ -11,14 +11,14 @@ class BusinessPartnerNinoControllerIntegrationSpec
   extends Specifications with TestConfiguration {
 
 
-  "GET /form/business-partners/partner-national-insurance-number" when {
+  "GET /business-partners/partner-national-insurance-number" when {
 
     "render the business partner national insurance number page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partner-national-insurance-number")
+          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -34,12 +34,12 @@ class BusinessPartnerNinoControllerIntegrationSpec
 
   }
 
-  "POST /form/business-partners/partner-national-insurance-number" when {
+  "POST /business-partners/partner-national-insurance-number" when {
     "the Yes radio button is selected and a valid NINO is provided (for Individual)" should {
       "redirect to the VAT number page" in {
           given.commonPrecondition
 
-          val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
+          val result = buildRequest(s"/business-partners/partner-national-insurance-number")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -49,7 +49,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-address")
+              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-address")
             }
           }
         }
@@ -58,7 +58,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
           "redirect to the VAT number page" in {
             given.commonPrecondition
 
-            val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
+            val result = buildRequest(s"/business-partners/partner-national-insurance-number")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -77,7 +77,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
           "redirect to the VAT number page" in {
             given.commonPrecondition
 
-            val result = buildRequest(s"/form/business-partners/partner-national-insurance-number")
+            val result = buildRequest(s"/business-partners/partner-national-insurance-number")
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
@@ -98,7 +98,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partner-national-insurance-number")
+          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -120,7 +120,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partner-national-insurance-number")
+          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(

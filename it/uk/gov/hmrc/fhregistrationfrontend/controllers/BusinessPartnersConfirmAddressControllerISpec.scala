@@ -9,7 +9,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersConfirmAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/confirm-partner-address"
+  val route = "/business-partners/confirm-partner-address"
 
   s"GET $route" when {
 

@@ -9,7 +9,7 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/enter-address" when {
+  "GET /business-partners/enter-address" when {
 
     "the new business partners flow is enabled" should {
 
@@ -19,7 +19,7 @@ class BusinessPartnersEnterAddressControllerISpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-partner-address")
+            val result = client.url(s"$baseUrl/business-partners/enter-partner-address")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -36,12 +36,12 @@ class BusinessPartnersEnterAddressControllerISpec
     }
   }
 
-  "POST /form/business-partners/enter-address" should {
+  "POST /business-partners/enter-address" should {
     "redirect to the Check Your Answers page" when {
       "all address fields are populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/enter-partner-address")
+        val result = buildRequest("/business-partners/enter-partner-address")
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )
@@ -62,7 +62,7 @@ class BusinessPartnersEnterAddressControllerISpec
       "only mandatory fields are populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/enter-partner-address")
+        val result = buildRequest("/business-partners/enter-partner-address")
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )
@@ -83,7 +83,7 @@ class BusinessPartnersEnterAddressControllerISpec
       "mandatory fields are not populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/enter-partner-address")
+        val result = buildRequest("/business-partners/enter-partner-address")
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )

@@ -35,8 +35,8 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
 
   val controller =
     new BusinessPartnersConfirmAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
-  val backLink = "/fhdds/form/business-partners/partner-address"
-  val enterAddressLink = "/fhdds/form/business-partners/enter-partner-address"
+  val backLink = "/fhdds/business-partners/partner-address"
+  val enterAddressLink = "/fhdds/business-partners/enter-partner-address"
 
   "load" should {
     "Render the confirm address page" when {

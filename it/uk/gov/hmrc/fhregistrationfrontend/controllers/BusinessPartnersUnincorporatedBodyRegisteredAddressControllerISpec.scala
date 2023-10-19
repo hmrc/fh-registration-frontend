@@ -51,7 +51,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/choose-address")
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
           }
         }
       }
@@ -89,7 +89,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/choose-address")
+            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
           }
         }
       }

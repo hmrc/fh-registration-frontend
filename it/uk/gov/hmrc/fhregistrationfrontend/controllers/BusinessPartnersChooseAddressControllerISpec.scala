@@ -11,14 +11,14 @@ import scala.collection.immutable.Seq
 class BusinessPartnersChooseAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/choose-address" should {
+  "GET /business-partners/choose-address" should {
 
       "render the choose address page" in {
         given
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/choose-address")
+          val result = client.url(s"$baseUrl/business-partners/choose-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .get()
 
@@ -32,13 +32,13 @@ class BusinessPartnersChooseAddressControllerISpec
       }
     }
 
-  "POST /form/business-partners/choose-address" when {
+  "POST /business-partners/choose-address" when {
     "the form has no errors" should {
       //Todo this will change when navigation is implemented
       "redirect the user to the Check Your Answers page" in {
         given.commonPrecondition
 
-          val result = buildRequest("/form/business-partners/choose-address")
+          val result = buildRequest("/business-partners/choose-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -59,7 +59,7 @@ class BusinessPartnersChooseAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/choose-address")
+          val result = client.url(s"$baseUrl/business-partners/choose-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -81,7 +81,7 @@ class BusinessPartnersChooseAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/choose-address")
+          val result = client.url(s"$baseUrl/business-partners/choose-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -103,7 +103,7 @@ class BusinessPartnersChooseAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/choose-address")
+          val result = client.url(s"$baseUrl/business-partners/choose-address")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
