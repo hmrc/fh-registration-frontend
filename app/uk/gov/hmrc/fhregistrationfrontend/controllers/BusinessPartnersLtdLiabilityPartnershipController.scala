@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.ltdLiabilityPartnershipNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.{ltdLiabilityPartnershipNameForm, ltdLiabilityPartnershipNameKey}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -37,11 +37,13 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
   val businessPartnerType = "ltdLiabilityPartnership"
   val backLink = "#"
   val postActon = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
-        view.business_partners_ltd_liability_partnership_name(
+        view.business_partners_enter_company_name(
           ltdLiabilityPartnershipNameForm,
+          ltdLiabilityPartnershipNameKey,
           businessPartnerType,
           postActon,
           backLink))
@@ -57,8 +59,9 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_ltd_liability_partnership_name(
+              view.business_partners_enter_company_name(
                 formWithErrors,
+                ltdLiabilityPartnershipNameKey,
                 businessPartnerType,
                 postActon,
                 backLink))

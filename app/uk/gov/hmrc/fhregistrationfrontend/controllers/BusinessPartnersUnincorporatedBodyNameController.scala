@@ -41,7 +41,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
-        view.business_partners_unincorporated_body_name(
+        view.business_partners_enter_company_name(
           unincorporatedBodyNameForm,
           unincorporatedBodyNameKey,
           businessPartnerType,
@@ -59,8 +59,8 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_unincorporated_body_name(
-                unincorporatedBodyNameForm,
+              view.business_partners_enter_company_name(
+                formWithErrors,
                 unincorporatedBodyNameKey,
                 businessPartnerType,
                 postAction,

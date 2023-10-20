@@ -36,15 +36,13 @@ class BusinessPartnerNinoController @Inject()(
 
   import actions._
 
+  val postAction = routes.BusinessPartnerNinoController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       val ninoForm = nationalInsuranceNumberForm
       val items = radioHelper.conditionalYesNoRadio(ninoForm)
-      val postAction =
-        Call(
-          method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.load().url)
-      Ok(view.business_partners_nino(ninoForm, items, postAction))
+      Ok(view.business_partners_has_nino(ninoForm, items, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -57,11 +55,7 @@ class BusinessPartnerNinoController @Inject()(
         .fold(
           formWithErrors => {
             val items = radioHelper.conditionalYesNoRadio(formWithErrors)
-            val postAction =
-              Call(
-                method = "POST",
-                url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerNinoController.next().url)
-            BadRequest(view.business_partners_nino(formWithErrors, items, postAction))
+            BadRequest(view.business_partners_has_nino(formWithErrors, items, postAction))
           },
           nino => {
             // Todo implement reading from legal entity page
