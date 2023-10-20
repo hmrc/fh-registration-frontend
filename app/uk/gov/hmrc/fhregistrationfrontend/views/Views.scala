@@ -80,7 +80,7 @@ class Views @Inject()(
   val other_storage_premises_page: uk.gov.hmrc.fhregistrationfrontend.views.html.other_storage_premises,
   ////////////////////////////BusinessPartners///////////////////////////////////////////////
   val business_partners_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
-  val business_partner_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_vat_registration,
+  val business_partners_enter_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_vat_registration,
   val business_partners_has_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_nino_page,
   val business_partners_has_trading_partner_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_trading_partner_name,
   val business_partners_search_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_search_address,
