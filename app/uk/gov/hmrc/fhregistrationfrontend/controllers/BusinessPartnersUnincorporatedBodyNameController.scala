@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.unincorporatedBodyNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.{unincorporatedBodyNameForm, unincorporatedBodyNameKey}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -36,10 +36,17 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
 
   val backUrl: String = routes.BusinessPartnersController.load().url
   val postAction: Call = routes.BusinessPartnersUnincorporatedBodyNameController.next()
+  val businessPartnerType = "unincorporatedBody"
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_unincorporated_body_name(unincorporatedBodyNameForm, postAction, backUrl))
+      Ok(
+        view.business_partners_unincorporated_body_name(
+          unincorporatedBodyNameForm,
+          unincorporatedBodyNameKey,
+          businessPartnerType,
+          postAction,
+          backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -51,7 +58,13 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_unincorporated_body_name(formWithErrors, postAction, backUrl))
+            BadRequest(
+              view.business_partners_unincorporated_body_name(
+                unincorporatedBodyNameForm,
+                unincorporatedBodyNameKey,
+                businessPartnerType,
+                postAction,
+                backUrl))
           },
           unincorporatedBodyName => {
             Redirect(routes.BusinessPartnerUnincorporatedBodyTradingNameController.load())

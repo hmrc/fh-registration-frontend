@@ -34,23 +34,34 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
 
   import actions._
 
+  val businessPartnerType = "ltdLiabilityPartnership"
+  val backLink = "#"
+  val postActon = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
-      Ok(view.business_partners_ltd_liability_partnership_name(ltdLiabilityPartnershipNameForm, postAction))
+      Ok(
+        view.business_partners_ltd_liability_partnership_name(
+          ltdLiabilityPartnershipNameForm,
+          businessPartnerType,
+          postActon,
+          backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
     if (config.newBusinessPartnerPagesEnabled) {
       ltdLiabilityPartnershipNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_ltd_liability_partnership_name(formWithErrors, postAction))
+            BadRequest(
+              view.business_partners_ltd_liability_partnership_name(
+                formWithErrors,
+                businessPartnerType,
+                postActon,
+                backLink))
           },
           ltdLiabilityPartnership => {
             Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
