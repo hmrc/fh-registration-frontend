@@ -101,7 +101,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/form/business-partners/choose-address")
+          redirectLocation(result).get should include("/business-partners/choose-address")
           reset(mockActions)
         }
       }

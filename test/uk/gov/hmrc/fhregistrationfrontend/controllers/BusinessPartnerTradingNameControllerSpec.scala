@@ -82,7 +82,7 @@ class BusinessPartnerTradingNameControllerSpec extends ControllerSpecWithGuiceAp
         val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/fhdds/form/business-partners/partner-national-insurance-number")
+        redirectLocation(result).get should include("/fhdds/business-partners/partner-national-insurance-number")
         reset(mockActions)
       }
 

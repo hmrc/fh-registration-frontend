@@ -101,7 +101,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/form/business-partners/choose-address")
+          redirectLocation(result).get should include("/fhdds/business-partners/choose-address")
           reset(mockActions)
         }
       }
