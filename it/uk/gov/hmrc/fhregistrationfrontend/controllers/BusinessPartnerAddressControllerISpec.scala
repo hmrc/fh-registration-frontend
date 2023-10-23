@@ -8,10 +8,12 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 
 import scala.collection.immutable.Seq
 
-class BusinessPartnerAddressControllerIntegrationSpec
+class BusinessPartnerAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /business-partners/partner-address" when {
+  val route = "/business-partners/partner-address"
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -21,7 +23,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/business-partners/partner-address")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -39,13 +41,13 @@ class BusinessPartnerAddressControllerIntegrationSpec
 
   }
 
-  "POST /business-partners/partner-address" when {
+  s"POST $route" when {
     "the postcode is valid, address line provided and addresses are returned from address lookup" should {
       "redirect to choose address" in {
         given
           .commonPreconditionWithMultipleAddressLookup(true)
 
-        val result = buildRequest(s"/business-partners/partner-address")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq("1"),
@@ -64,7 +66,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
           .commonPreconditionWithMultipleAddressLookup(true)
 
 
-        val result = buildRequest(s"/business-partners/partner-address")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq.empty,
@@ -82,7 +84,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
         given
           .commonPreconditionWithMultipleAddressLookup(false)
 
-        val result = buildRequest(s"/business-partners/partner-address")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq.empty,
@@ -102,7 +104,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-address")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -123,7 +125,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-address")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -144,7 +146,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-address")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("The lane;"),
@@ -165,7 +167,7 @@ class BusinessPartnerAddressControllerIntegrationSpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-address")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),

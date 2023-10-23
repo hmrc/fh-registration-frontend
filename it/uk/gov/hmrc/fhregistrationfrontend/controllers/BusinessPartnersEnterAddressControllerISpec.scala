@@ -9,7 +9,9 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /business-partners/enter-address" when {
+  val route = "/business-partners/enter-partner-address"
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -19,7 +21,7 @@ class BusinessPartnersEnterAddressControllerISpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/business-partners/enter-partner-address")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -36,12 +38,12 @@ class BusinessPartnersEnterAddressControllerISpec
     }
   }
 
-  "POST /business-partners/enter-address" should {
+  s"POST $route" should {
     "redirect to the Check Your Answers page" when {
       "all address fields are populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/enter-partner-address")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )
@@ -62,7 +64,7 @@ class BusinessPartnersEnterAddressControllerISpec
       "only mandatory fields are populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/enter-partner-address")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )
@@ -83,7 +85,7 @@ class BusinessPartnersEnterAddressControllerISpec
       "mandatory fields are not populated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/enter-partner-address")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie)
           )

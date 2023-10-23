@@ -7,18 +7,20 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.mvc.Http.HeaderNames
 import scala.collection.immutable.Seq
 
-class BusinessPartnerNinoControllerIntegrationSpec
+class BusinessPartnerNinoControllerISpec
   extends Specifications with TestConfiguration {
 
 
-  "GET /business-partners/partner-national-insurance-number" when {
+  val route = "/business-partners/partner-national-insurance-number"
+
+  s"GET $route" when {
 
     "render the business partner national insurance number page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -34,12 +36,12 @@ class BusinessPartnerNinoControllerIntegrationSpec
 
   }
 
-  "POST /business-partners/partner-national-insurance-number" when {
+  s"POST $route" when {
     "the Yes radio button is selected and a valid NINO is provided (for Individual)" should {
       "redirect to the VAT number page" in {
           given.commonPrecondition
 
-          val result = buildRequest(s"/business-partners/partner-national-insurance-number")
+          val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -58,7 +60,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
           "redirect to the VAT number page" in {
             given.commonPrecondition
 
-            val result = buildRequest(s"/business-partners/partner-national-insurance-number")
+            val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -77,7 +79,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
           "redirect to the VAT number page" in {
             given.commonPrecondition
 
-            val result = buildRequest(s"/business-partners/partner-national-insurance-number")
+            val result = buildRequest(route)
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
@@ -98,7 +100,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -120,7 +122,7 @@ class BusinessPartnerNinoControllerIntegrationSpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/business-partners/partner-national-insurance-number")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
