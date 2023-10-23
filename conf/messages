@@ -690,8 +690,12 @@ fh.businessPartners.individual.address.label=Address
 fh.businessPartners.individual.summary.heading=First partner’s details
 
 # - Sole Proprietor  ===================================================================================================
+fh.businessPartners.soleProprietor.firstName.label=First name
+fh.businessPartners.soleProprietor.lastName.label=Last name
+fh.businessPartners.soleProprietor.address.label=Address
 fh.businessPartners.SoleProprietor.enter_utr.title=What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?
 fh.businessPartners.SoleProprietor.enter_utr.heading=What is {0}’s Self Assessment Unique Taxpayer Reference (UTR)?
+fh.businessPartners.soleProprietor.utr.label=Self Assessment Unique Taxpayer Reference (UTR)?
 
 # - Partnership ========================================================================================================
 fh.business.partners.partnership.registered.address.title=What is the partnership’s registered office address?

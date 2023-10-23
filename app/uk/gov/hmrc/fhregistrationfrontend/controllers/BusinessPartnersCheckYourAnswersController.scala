@@ -21,9 +21,9 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerPartnership}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper}
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper, SoleProprietorSummaryHelper}
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 @Singleton
@@ -47,10 +47,10 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     lookupId = None
   )
 
-  val individualSummaryModel =
+  val individualSummaryModel: BusinessPartnerIndividual =
     BusinessPartnerIndividual("first name", "last name", hasNino = true, Some("QQ123456C"), address)
 
-  val llpSummaryModel = BusinessPartnerLimitedLiabilityPartnership(
+  val llpSummaryModel: BusinessPartnerLimitedLiabilityPartnership = BusinessPartnerLimitedLiabilityPartnership(
     "llp trading name",
     hasTradeName = false,
     Some("trade partner name"),
@@ -58,6 +58,19 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     hasVat = false,
     vat = Some("123456789"),
     uniqueTaxpayerReference = Some("1234567890"),
+    address
+  )
+
+  val soleProprietorSummaryModel: BusinessPartnerSoleProprietor = BusinessPartnerSoleProprietor(
+    "Bob",
+    "Testman",
+    hasTradeName = true,
+    Some("Trade Name Ltd"),
+    hasNino = true,
+    Some("AB123456C"),
+    hasVat = false,
+    Some("123456789"),
+    Some("1234567890"),
     address
   )
 
@@ -103,7 +116,9 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "limited-liability-partnership" -> llpSummaryModel,
       "limited-liability-partnership-with-vat-and-trading-name" -> llpSummaryModel
         .copy(hasTradeName = true, hasVat = true),
-      "partnership" -> partnershipModel,
+      "sole-proprietor"          -> soleProprietorSummaryModel,
+      "sole-proprietor-with-vat" -> soleProprietorSummaryModel.copy(hasVat = true),
+      "partnership"              -> partnershipModel,
       "partnership-with-optional-values" -> partnershipModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
     )
@@ -111,6 +126,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     partnerTypeWithModel(partnerType) match {
       case individual: BusinessPartnerIndividual           => IndividualSummaryHelper(individual)
       case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
+      case soleProprietor: BusinessPartnerSoleProprietor   => SoleProprietorSummaryHelper(soleProprietor)
       case partnership: BusinessPartnerPartnership         => PartnershipSummaryHelper(partnership)
       case _                                               => Seq.empty
     }
