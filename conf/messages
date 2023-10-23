@@ -715,7 +715,7 @@ fh.businessPartners.partnership.vatNumber.title=Does the partner have a UK VAT r
 fh.businessPartners.partnership.vatNumber.heading=Does {0} have a UK VAT registration number?
 
 # - Limited Liability Partnership ======================================================================================
-fh.businessPartners.ltdLiabilityPartnershipName.title=What is the name of the limited liability partnership?
+fh.businessPartners.ltdLiabilityPartnership.companyName.title=What is the name of the limited liability partnership?
 fh.businessPartners.ltdLiabilityPartnershipName.error.required=Enter the name of the limited liability partnership
 fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability partnership name must be 120 characters or less
 fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
@@ -751,17 +751,14 @@ fh.businessPartners.corporate.confirmRegisteredAddress.title=Confirm the company
 fh.businessPartners.unincorporatedBody.tradingName.title = Does the unincorporated body use a trading name that is different from its registered name?
 fh.businessPartners.unincorporatedBody.tradingName.heading = Does {0} use a trading name that is different from its registered name?
 fh.businessPartners.unincorporated.confirmRegisteredAddress.title=Confirm the unincorporated body’s registered office address?
-fh.businessPartners.unincorporatedBodyName.title=What is the unincorporated body name?
-fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
-fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
 fh.business.partners.unincorporatedBody.registered.address.title= What is the unincorporated body’s registered office address?
 fh.businessPartners.unincorporatedBody.utr.title=Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.businessPartners.unincorporatedBody.utr.heading=Does {0} have a Self Assessment Unique Taxpayer Reference (UTR)?
 fh.businessPartners.unincorporatedBody.vatNumber.title=Does the unincorporated body have a UK VAT registration number?
 fh.businessPartners.unincorporatedBody.vatNumber.heading=Does {0} have a UK VAT registration number?
-
-
-
+fh.businessPartners.unincorporatedBody.companyName.title=What is the unincorporated body name?
+fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
+fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
 
 #====================================================================================================================================================================================
 

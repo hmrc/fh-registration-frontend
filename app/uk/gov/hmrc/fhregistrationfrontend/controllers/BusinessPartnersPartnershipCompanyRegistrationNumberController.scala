@@ -42,12 +42,8 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       //ToDo read this data from the cache after being stored before the redirect
       Ok(
-        view.business_partners_company_reg_number(
-          companyRegistrationNumberForm,
-          companyName,
-          businessType,
-          postAction,
-          backLink))
+        view
+          .business_partners_enter_crn(companyRegistrationNumberForm, companyName, businessType, postAction, backLink))
         .withCookies(Cookie("businessType", businessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -63,7 +59,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
           formWithErrors => {
             BadRequest(
               view
-                .business_partners_company_reg_number(formWithErrors, companyName, businessType, postAction, backLink))
+                .business_partners_enter_crn(formWithErrors, companyName, businessType, postAction, backLink))
           },
           regNumber => {
             Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())

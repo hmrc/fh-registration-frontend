@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.ltdLiabilityPartnershipNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.{ltdLiabilityPartnershipNameForm, ltdLiabilityPartnershipNameKey}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -34,23 +34,37 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
 
   import actions._
 
+  val businessPartnerType = "ltdLiabilityPartnership"
+  val backLink = "#"
+  val postActon = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
-      Ok(view.business_partners_ltd_liability_partnership_name(ltdLiabilityPartnershipNameForm, postAction))
+      Ok(
+        view.business_partners_enter_company_name(
+          ltdLiabilityPartnershipNameForm,
+          ltdLiabilityPartnershipNameKey,
+          businessPartnerType,
+          postActon,
+          backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
   def next(): Action[AnyContent] = userAction { implicit request =>
-    val postAction = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
     if (config.newBusinessPartnerPagesEnabled) {
       ltdLiabilityPartnershipNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_ltd_liability_partnership_name(formWithErrors, postAction))
+            BadRequest(
+              view.business_partners_enter_company_name(
+                formWithErrors,
+                ltdLiabilityPartnershipNameKey,
+                businessPartnerType,
+                postActon,
+                backLink))
           },
           ltdLiabilityPartnership => {
             Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
