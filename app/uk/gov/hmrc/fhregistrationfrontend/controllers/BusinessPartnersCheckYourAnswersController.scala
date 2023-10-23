@@ -21,6 +21,8 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
+import uk.gov.hmrc.fhregistrationfrontend.utils.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper, SoleProprietorSummaryHelper}
@@ -36,54 +38,6 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-
-  val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
-    addressLine4 = None,
-    postcode = "TF1 4ER",
-    countryCode = None,
-    lookupId = None
-  )
-
-  val individualSummaryModel: BusinessPartnerIndividual =
-    BusinessPartnerIndividual("first name", "last name", hasNino = true, Some("QQ123456C"), address)
-
-  val llpSummaryModel: BusinessPartnerLimitedLiabilityPartnership = BusinessPartnerLimitedLiabilityPartnership(
-    "llp trading name",
-    hasTradeName = false,
-    Some("trade partner name"),
-    "01234567",
-    hasVat = false,
-    vat = Some("123456789"),
-    uniqueTaxpayerReference = Some("1234567890"),
-    address
-  )
-
-  val soleProprietorSummaryModel: BusinessPartnerSoleProprietor = BusinessPartnerSoleProprietor(
-    "Bob",
-    "Testman",
-    hasTradeName = true,
-    Some("Trade Name Ltd"),
-    hasNino = true,
-    Some("AB123456C"),
-    hasVat = false,
-    Some("123456789"),
-    Some("1234567890"),
-    address
-  )
-
-  val partnershipModel = BusinessPartnerPartnership(
-    "partnership name",
-    hasTradeName = false,
-    Some("partnership trading name"),
-    hasVat = false,
-    Some("123456789"),
-    hasUniqueTaxpayerReference = false,
-    Some("1234567890"),
-    address
-  )
 
   // TODO temp solution for it testing - passes data cleaner than using cookies as workaround
   // TODO remove when cache is implemented
@@ -112,9 +66,9 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
   private def getRowsBasedOnPartnerType(partnerType: String)(implicit messages: Messages): Seq[SummaryListRow] = {
 
     val partnerTypeWithModel = Map(
-      "individual"                    -> individualSummaryModel,
-      "limited-liability-partnership" -> llpSummaryModel,
-      "limited-liability-partnership-with-vat-and-trading-name" -> llpSummaryModel
+      "individual"                    -> TestData.individualSummaryModel,
+      "limited-liability-partnership" -> TestData.llpSummaryModel,
+      "limited-liability-partnership-with-vat-and-trading-name" -> TestData.llpSummaryModel
         .copy(hasTradeName = true, hasVat = true),
       "sole-proprietor"          -> soleProprietorSummaryModel,
       "sole-proprietor-with-vat" -> soleProprietorSummaryModel.copy(hasVat = true),
