@@ -27,7 +27,7 @@ object BusinessPartnersUnincorporatedBodyNameForm {
 
   private val unincorporatedBodyNameMapping = unincorporatedBodyNameKey -> unincorporatedBodyName
 
-  val unincorporatedBodyNameForm = Form(
+  val unincorporatedBodyNameForm: Form[UnincorporatedBodyName] = Form(
     mapping(
       unincorporatedBodyNameMapping
     )(UnincorporatedBodyName.apply)(UnincorporatedBodyName.unapply)

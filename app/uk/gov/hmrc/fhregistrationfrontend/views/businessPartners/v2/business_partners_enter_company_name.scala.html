@@ -22,21 +22,19 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.unincorporatedBodyNameKey
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.UnincorporatedBodyName
 
 @this(layout: layout,
     viewHelpers: ViewHelpers
 )
 
-@(form: Form[UnincorporatedBodyName], postAction: Call, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[_], formKey: String, businessPartnerType: String, postAction: Call, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @titlePrefix = @{
     if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-    messages("fh.businessPartners.unincorporatedBodyName.title")
+    messages(s"fh.businessPartners.$businessPartnerType.companyName.title")
 }
 
 @layout(title = title, backUrl = Some(backAction)) {
@@ -58,12 +56,12 @@
         @viewHelpers.govukInput(
 
             Input(
-                id = unincorporatedBodyNameKey,
-                name = unincorporatedBodyNameKey,
+                id = formKey,
+                name = formKey,
                 spellcheck = Some(false),
                 classes = "govuk-label--l",
-                value = Some(s"${form(unincorporatedBodyNameKey).value.getOrElse("")}"),
-                errorMessage = form(unincorporatedBodyNameKey).error.map{ e =>
+                value = Some(s"${form(formKey).value.getOrElse("")}"),
+                errorMessage = form(formKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.businessPartners.${e.key}.${e.message}")),
                         visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))

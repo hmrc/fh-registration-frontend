@@ -41,7 +41,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partner_vat_registration(vatNumberForm, partnerName, backUrl))
+      Ok(view.business_partners_enter_vat_registration(vatNumberForm, partnerName, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,7 +53,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partner_vat_registration(formWithErrors, partnerName, backUrl))
+            BadRequest(view.business_partners_enter_vat_registration(formWithErrors, partnerName, backUrl))
           },
           vatNumber => {
             vatNumber.value match {

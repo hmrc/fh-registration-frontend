@@ -34,14 +34,19 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
   import actions._
 
   val partnerName = "{{partner name}}"
-  val postAction =
-    Call(
-      method = "POST",
-      url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnerSoleProprietorUtrController.next().url)
+  val postAction = routes.BusinessPartnerSoleProprietorUtrController.next()
+  val businessPartnerType = "SoleProprietor"
+  val backLink = "#"
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_SoleProprietors_utr(businessPartnersEnterUtrForm, postAction, partnerName))
+      Ok(
+        view.business_partners_enter_utr_number(
+          businessPartnersEnterUtrForm,
+          partnerName,
+          businessPartnerType,
+          postAction,
+          backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,7 +58,13 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_SoleProprietors_utr(formWithErrors, postAction, partnerName))
+            BadRequest(
+              view.business_partners_enter_utr_number(
+                formWithErrors,
+                partnerName,
+                businessPartnerType,
+                postAction,
+                backLink))
           },
           businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
         )
