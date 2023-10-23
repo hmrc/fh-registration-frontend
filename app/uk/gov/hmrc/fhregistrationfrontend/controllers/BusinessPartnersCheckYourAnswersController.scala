@@ -21,9 +21,9 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerSoleProprietor}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, SoleProprietorSummaryHelper}
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper, SoleProprietorSummaryHelper}
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 @Singleton
@@ -36,8 +36,6 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 ) extends AppController(ds, cc) {
 
   import actions._
-
-  val businessPartnerType = "individual"
 
   val address: Address = Address(
     addressLine1 = "1 Romford Road",
@@ -76,6 +74,17 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
     address
   )
 
+  val partnershipModel = BusinessPartnerPartnership(
+    "partnership name",
+    hasTradeName = false,
+    Some("partnership trading name"),
+    hasVat = false,
+    Some("123456789"),
+    hasUniqueTaxpayerReference = false,
+    Some("1234567890"),
+    address
+  )
+
   // TODO temp solution for it testing - passes data cleaner than using cookies as workaround
   // TODO remove when cache is implemented
   def load(partnerType: String): Action[AnyContent] = userAction { implicit request =>
@@ -108,13 +117,17 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "limited-liability-partnership-with-vat-and-trading-name" -> llpSummaryModel
         .copy(hasTradeName = true, hasVat = true),
       "sole-proprietor"          -> soleProprietorSummaryModel,
-      "sole-proprietor-with-vat" -> soleProprietorSummaryModel.copy(hasVat = true)
+      "sole-proprietor-with-vat" -> soleProprietorSummaryModel.copy(hasVat = true),
+      "partnership"              -> partnershipModel,
+      "partnership-with-optional-values" -> partnershipModel
+        .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
     )
 
     partnerTypeWithModel(partnerType) match {
       case individual: BusinessPartnerIndividual           => IndividualSummaryHelper(individual)
       case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
       case soleProprietor: BusinessPartnerSoleProprietor   => SoleProprietorSummaryHelper(soleProprietor)
+      case partnership: BusinessPartnerPartnership         => PartnershipSummaryHelper(partnership)
       case _                                               => Seq.empty
     }
 

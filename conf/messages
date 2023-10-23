@@ -677,6 +677,10 @@ fh.uniqueTaxpayerReference_value.error.required=Enter a Self Assessment Unique T
 
 fh.businessPartners.summary.title=Check your answers
 fh.businessPartners.summary.businessType.label=Type of partner
+fh.businessPartners.summary.partnershipName=Name of partnership
+fh.businessPartners.summary.vatRegistrationNumber= VAT registration number
+fh.businessPartners.summary.address=Address
+fh.businessPartners.summary.utr=Self Assessment Unique Taxpayer Reference (UTR)?
 
 # - Individual =========================================================================================================
 fh.businessPartners.individual.firstName.label=First name
