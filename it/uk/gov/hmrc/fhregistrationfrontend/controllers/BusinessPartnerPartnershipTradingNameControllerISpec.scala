@@ -9,15 +9,14 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerPartnershipTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
+  val route = routes.BusinessPartnerPartnershipTradingNameController.load().url.drop(6)
 
-  "GET /form/business-partners/partnership-trading-name" when {
+  s"GET $route" when {
 
     "render the business partner partnership trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -26,7 +25,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
             page.title must include("Does the partnership use a trading name that is different from its registered name?")
             page.getElementsByTag("h1").text must include("Does Test User use a trading name that is different from its registered name?")
           }
-        }
       }
     }
 
@@ -36,9 +34,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
     "no radio option is selected by the user" should {
       "return 400" in {
         given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -52,7 +48,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
             page.title must include("Does the partnership use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
           }
-        }
       }
     }
 
@@ -60,9 +55,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
     "yes is selected but no trading name is entered" should {
       "return 400" in {
         given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-trading-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -76,7 +69,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
             page.title must include("Does the partnership use a trading name that is different from its registered name?")
             page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
           }
-        }
       }
     }
 
@@ -85,8 +77,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       "the user selects no" should {
         "redirect to the partnership name page" in {
           given.commonPrecondition
-
-          val result = buildRequest("/form/business-partners/partnership-trading-name")
+          val result = buildRequest(route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "partnership")
@@ -99,7 +90,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipVatNumberController.load().url)
           }
         }
       }
@@ -107,8 +98,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       "the user selects yes and enters a trading name" should {
         "redirect to the partnership name page" in {
           given.commonPrecondition
-
-          val result = buildRequest("/form/business-partners/partnership-trading-name")
+          val result = buildRequest(route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "partnership")
@@ -121,7 +111,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partnership-vat-registration-number")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipVatNumberController.load().url)
           }
         }
       }
@@ -131,8 +121,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
       "the user selects no" should {
       "redirect to the partnership name page" in {
         given.commonPrecondition
-
-        val result = buildRequest("/form/business-partners/partnership-trading-name")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -145,34 +134,31 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partnership-company-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
         }
       }
     }
-
       "the user selects yes and enters a trading name" should {
-      "redirect to the partnership name page" in {
-        given.commonPrecondition
+        "redirect to the partnership name page" in {
+          given.commonPrecondition
+          val result = buildRequest(route)
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie),
+              DefaultWSCookie("businessType", "limited-liability-partnership")
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "tradingName_yesNo" -> Seq("true"),
+              "tradingName_value" -> Seq("Shelby Company Limited")
+            ))
 
-        val result = buildRequest("/form/business-partners/partnership-trading-name")
-          .addCookies(
-            DefaultWSCookie("mdtp", authAndSessionCookie),
-            DefaultWSCookie("businessType", "limited-liability-partnership")
-          )
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq("true"),
-            "tradingName_value" -> Seq("Shelby Company Limited")
-          ))
-
-        whenReady(result) { res =>
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partnership-company-registration-number")
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
+          }
         }
       }
     }
-    }
-
   }
 
 }

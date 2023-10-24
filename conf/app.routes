@@ -66,8 +66,8 @@ POST        /form/business-partners/partnership-registered-office-address @uk.go
 GET         /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.load()
 POST        /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.next()
 
-GET         /form/business-partners/partnership-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.load()
-POST        /form/business-partners/partnership-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.next()
+GET         /business-partners/partnership-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.load()
+POST        /business-partners/partnership-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.next()
 
 GET         /form/business-partners/partnership-vat-registration-number         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.load()
 POST        /form/business-partners/partnership-vat-registration-number         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.next()
