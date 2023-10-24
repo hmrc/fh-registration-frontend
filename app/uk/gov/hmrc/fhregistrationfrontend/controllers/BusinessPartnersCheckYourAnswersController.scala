@@ -73,8 +73,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "sole-proprietor-with-vat" -> TestData.soleProprietorSummaryModel.copy(hasVat = true),
       "partnership"              -> TestData.partnershipModel,
       "partnership-with-optional-values" -> TestData.partnershipModel
-        .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
-        .copy(hasTradeName = true, hasVat = true),
+        .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true),
       "unincorporated-body" -> TestData.unincoporateBodyModel,
       "unincorporated-body-optional-values" -> TestData.unincoporateBodyModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
