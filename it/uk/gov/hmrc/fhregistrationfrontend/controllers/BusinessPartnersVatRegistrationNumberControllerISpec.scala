@@ -9,7 +9,7 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersVatRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/partner-vat-registration-number"
+  val route = "/business-partners/partner-vat-registration-number"
 
   s"GET $route" should {
 

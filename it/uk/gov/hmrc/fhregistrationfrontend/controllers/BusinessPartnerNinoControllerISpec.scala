@@ -70,7 +70,7 @@ class BusinessPartnerNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-vat-registration-number")
+              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-vat-registration-number")
             }
           }
         }
@@ -89,7 +89,7 @@ class BusinessPartnerNinoControllerISpec
 
               whenReady(result) { res =>
                 res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partner-vat-registration-number")
+                res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/partner-vat-registration-number")
             }
           }
         }
