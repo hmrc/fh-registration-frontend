@@ -21,11 +21,11 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerUnincorporatedBody}
 import uk.gov.hmrc.fhregistrationfrontend.utils.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary.{IndividualSummaryHelper, LLPSummaryHelper, PartnershipSummaryHelper, SoleProprietorSummaryHelper}
+import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary._
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 @Singleton
@@ -75,6 +75,10 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "partnership"              -> partnershipModel,
       "partnership-with-optional-values" -> partnershipModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
+        .copy(hasTradeName = true, hasVat = true),
+      "unincorporated-body" -> TestData.unincoporateBodyModel,
+      "unincorporated-body-optional-values" -> TestData.unincoporateBodyModel
+        .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
     )
 
     partnerTypeWithModel(partnerType) match {
@@ -82,6 +86,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
       case soleProprietor: BusinessPartnerSoleProprietor   => SoleProprietorSummaryHelper(soleProprietor)
       case partnership: BusinessPartnerPartnership         => PartnershipSummaryHelper(partnership)
+      case uBody: BusinessPartnerUnincorporatedBody        => UnincorporatedBodySummaryHelper(uBody)
       case _                                               => Seq.empty
     }
 

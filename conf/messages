@@ -759,6 +759,12 @@ fh.businessPartners.unincorporatedBody.vatNumber.heading=Does {0} have a UK VAT 
 fh.businessPartners.unincorporatedBody.companyName.title=What is the unincorporated body name?
 fh.businessPartners.unincorporatedBodyName_value.error.required=Enter an unincorporated body name
 fh.businessPartners.unincorporatedBodyName_value.error.pattern=Unincorporated body name must be 120 characters or less
+fh.businessPartners.unincorporatedBody.summary.label=Unincorporated body
+fh.businessPartners.unincorporatedBody.summary.companyName=Company name
+fh.businessPartners.unincorporatedBody.summary.compRegNum=Company registration number
+fh.businessPartners.unincorporatedBody.summary.saUtr=Self Assessment Unique Taxpayer Reference (UTR)
+
+
 
 #====================================================================================================================================================================================
 

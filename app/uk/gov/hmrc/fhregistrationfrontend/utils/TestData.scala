@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.utils
 
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerUnincorporatedBody}
 
 object TestData {
 
@@ -44,4 +44,14 @@ object TestData {
     address
   )
 
+  val unincoporateBodyModel = BusinessPartnerUnincorporatedBody(
+    "unincorporated name",
+    hasTradeName = false,
+    Some("unincorporated trade name"),
+    hasVat = false,
+    vat = Some("123456789"),
+    hasUniqueTaxpayerReference = false,
+    uniqueTaxpayerReference = Some("1234567890"),
+    address
+  )
 }
