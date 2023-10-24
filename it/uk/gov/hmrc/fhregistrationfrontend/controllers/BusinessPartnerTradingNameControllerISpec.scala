@@ -3,22 +3,19 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnerTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/partner-trading-name"
+  val route = routes.BusinessPartnerTradingNameController.load().url.drop(6)
 
   s"GET $route" when {
 
     "render the business partner trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -28,7 +25,6 @@ class BusinessPartnerTradingNameControllerISpec
              page.getElementsByTag("h1").text must include("Does Test User’s business use a trading name that is different from its registered name?")
           }
         }
-      }
     }
 
   }
@@ -53,7 +49,7 @@ class BusinessPartnerTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-national-insurance-number")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
           }
         }
 
@@ -73,7 +69,7 @@ class BusinessPartnerTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-national-insurance-number")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
           }
         }
       }
@@ -83,8 +79,7 @@ class BusinessPartnerTradingNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -96,15 +91,13 @@ class BusinessPartnerTradingNameControllerISpec
             res.status mustBe 400
           }
         }
-      }
     }
 
     "yes is selected but no trading name is entered" should {
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -116,10 +109,6 @@ class BusinessPartnerTradingNameControllerISpec
             res.status mustBe 400
           }
         }
-      }
     }
-
-
   }
-
 }
