@@ -21,9 +21,8 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerIndividual, BusinessPartnerLimitedLiabilityPartnership, BusinessPartnerUnincorporatedBody}
-import uk.gov.hmrc.fhregistrationfrontend.utils.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.utils.TestData
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.summary._
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -70,10 +69,10 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "limited-liability-partnership" -> TestData.llpSummaryModel,
       "limited-liability-partnership-with-vat-and-trading-name" -> TestData.llpSummaryModel
         .copy(hasTradeName = true, hasVat = true),
-      "sole-proprietor"          -> soleProprietorSummaryModel,
-      "sole-proprietor-with-vat" -> soleProprietorSummaryModel.copy(hasVat = true),
-      "partnership"              -> partnershipModel,
-      "partnership-with-optional-values" -> partnershipModel
+      "sole-proprietor"          -> TestData.soleProprietorSummaryModel,
+      "sole-proprietor-with-vat" -> TestData.soleProprietorSummaryModel.copy(hasVat = true),
+      "partnership"              -> TestData.partnershipModel,
+      "partnership-with-optional-values" -> TestData.partnershipModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
         .copy(hasTradeName = true, hasVat = true),
       "unincorporated-body" -> TestData.unincoporateBodyModel,
