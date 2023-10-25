@@ -34,6 +34,9 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val controller =
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val enterPartnershipRegAddressPage: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url
+  val enterPartnerAddressPage: String = routes.BusinessPartnersEnterAddressController.load().url
+  val enterCorpBodyAddressPage: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
 
   "load" should {
     "Render the Cannot Find Address page" when {
@@ -50,8 +53,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+        page.getElementById("enter-manually").attr("href") should include(enterPartnershipRegAddressPage)
         reset(mockActions)
       }
 
@@ -67,8 +69,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+        page.getElementById("enter-manually").attr("href") should include(enterPartnershipRegAddressPage)
         reset(mockActions)
       }
 
@@ -84,8 +85,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/business-partners/enter-partner-address")
+        page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressPage)
         reset(mockActions)
       }
 
@@ -101,8 +101,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/business-partners/enter-partner-address")
+        page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressPage)
         reset(mockActions)
       }
 
@@ -118,8 +117,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
-        page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-corporate-body-registered-office-address")
+        page.getElementById("enter-manually").attr("href") should include(enterCorpBodyAddressPage)
         reset(mockActions)
       }
     }

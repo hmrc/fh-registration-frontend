@@ -34,11 +34,11 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  val mockAddressService = mock[AddressService]
+  val mockAddressService: AddressService = mock[AddressService]
 
   val controller =
     new BusinessPartnerPartnershipRegisteredAddressController(
@@ -107,7 +107,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/business-partners/choose-address")
+          redirectLocation(result).get should include(routes.BusinessPartnersChooseAddressController.load().url)
           reset(mockActions)
         }
       }
@@ -139,7 +139,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/confirm-partnership-registered-office-address")
+            routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url)
           reset(mockActions)
         }
       }
@@ -167,7 +167,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
+          redirectLocation(result).get should include(routes.BusinessPartnersCannotFindAddressController.load().url)
           reset(mockActions)
         }
       }

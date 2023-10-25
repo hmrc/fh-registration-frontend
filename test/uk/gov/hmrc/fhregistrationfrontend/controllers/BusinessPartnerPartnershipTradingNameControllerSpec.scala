@@ -30,8 +30,8 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val pageTitle = "Does the partnership use a trading name that is different from its registered name?"
 
@@ -44,7 +44,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -60,7 +60,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -80,7 +80,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
@@ -91,7 +91,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/form/business-partners/partnership-vat-registration-number")
+          redirectLocation(result).get should include(routes.BusinessPartnersPartnershipVatNumberController.load().url)
           reset(mockActions)
         }
       }
@@ -101,7 +101,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
@@ -112,16 +112,17 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/partnership-company-registration-number")
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
           reset(mockActions)
         }
       }
 
-      "return 400 when the form containes errors" in {
+      "return 400 when the form contains errors" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
         val request = FakeRequest()
           .withFormUrlEncodedBody(
             "tradingName_yesNo" -> "",

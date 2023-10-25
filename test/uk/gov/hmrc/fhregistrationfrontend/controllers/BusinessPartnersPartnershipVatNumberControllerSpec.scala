@@ -30,9 +30,10 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-
-  val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val partnershipUtrPage: String = routes.BusinessPartnersUtrController.load().url
+  val partnershipRegisteredAddressPage: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   val controller =
     new BusinessPartnersPartnershipVatNumberController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -42,7 +43,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -58,7 +59,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
@@ -77,7 +78,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "Yes is selected and Vat Number supplied, and legal entity type is Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
             .withFormUrlEncodedBody(
@@ -88,15 +89,14 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          redirectLocation(result).get should include(partnershipUtrPage)
           reset(mockActions)
         }
 
         "No is selected, and legal entity type is Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
             .withFormUrlEncodedBody(
@@ -106,15 +106,14 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          redirectLocation(result).get should include(partnershipUtrPage)
           reset(mockActions)
         }
 
         "No is selected, and legal entity type is Limited Liability Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
@@ -122,8 +121,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          redirectLocation(result).get should include(partnershipUtrPage)
           reset(mockActions)
         }
       }
@@ -132,7 +130,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "Yes is selected and Vat Number supplied, and legal entity type is Limited Liability Partnership" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -144,7 +142,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/form/business-partners/partnership-registered-office-address")
+          redirectLocation(result).get should include(partnershipRegisteredAddressPage)
           reset(mockActions)
         }
       }
@@ -153,7 +151,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
         "the user selects yes but doesn't enter a VAT number" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(
