@@ -30,7 +30,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
 
   }
 
-  "POST /form/business-partners/partnership-trading-name" when {
+  s"POST $route" when {
     "no radio option is selected by the user" should {
       "return 400" in {
         given.commonPrecondition
