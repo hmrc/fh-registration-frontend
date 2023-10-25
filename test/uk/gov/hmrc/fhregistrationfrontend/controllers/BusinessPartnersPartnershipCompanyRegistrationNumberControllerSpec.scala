@@ -93,8 +93,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/partnership-vat-registration-number")
+          redirectLocation(result).get should include(routes.BusinessPartnersPartnershipVatNumberController.load().url)
           reset(mockActions)
         }
       }

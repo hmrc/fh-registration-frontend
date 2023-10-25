@@ -91,7 +91,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/form/business-partners/partnership-vat-registration-number")
+          redirectLocation(result).get should include(routes.BusinessPartnersPartnershipVatNumberController.load().url)
           reset(mockActions)
         }
       }
@@ -112,7 +112,8 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
           reset(mockActions)
         }
       }
