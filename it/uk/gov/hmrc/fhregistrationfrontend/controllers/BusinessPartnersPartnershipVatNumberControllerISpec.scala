@@ -9,14 +9,15 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersPartnershipVatNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/partnership-vat-registration-number" should {
+  val route = routes.BusinessPartnersPartnershipVatNumberController.load().url.drop(6)
+
+  s"GET $route" should {
 
     "render the partnership-vat-registration-number page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/partnership-vat-registration-number")
+      val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -26,17 +27,16 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
           page.title() must include("Does the partner have a UK VAT registration number?")
           page.getElementsByTag("h1").text() must include("Does Test Partner have a UK VAT registration number?")
         }
-      }
     }
   }
 
-  "POST /form/business-partners/partnership-vat-registration-number" when {
+  s"POST $route" when {
     "Yes is selected and Vat Number supplied, and legal entity type is Partnership" should {
       "redirect to the Partnership SA UTR page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "partnership")
@@ -50,7 +50,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersUtrController.load().url)
         }
       }
     }
@@ -60,7 +60,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "partnership")
@@ -70,7 +70,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersUtrController.load().url)
         }
       }
     }
@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -93,7 +93,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerPartnershipRegisteredAddressController.load().url)
         }
       }
     }
@@ -103,7 +103,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -113,7 +113,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersUtrController.load().url)
         }
       }
     }
@@ -123,8 +123,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -138,7 +137,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
           }
-        }
       }
     }
 
@@ -147,8 +145,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -162,7 +159,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the VAT registration number")
           }
-        }
       }
     }
 
@@ -171,8 +167,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -186,7 +181,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
           }
-        }
       }
     }
 
@@ -195,8 +189,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-vat-registration-number")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -208,7 +201,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid UK VAT registration number")
           }
-        }
       }
     }
   }
