@@ -87,7 +87,7 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/form/business-partners/partner-vat-registration-number")
+          redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
 
           reset(mockActions)
         }

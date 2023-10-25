@@ -9,7 +9,7 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersVatRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/partner-vat-registration-number"
+  val route = routes.BusinessPartnersVatRegistrationNumberController.load().url.drop(6)
 
   s"GET $route" should {
 
@@ -17,8 +17,7 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(baseUrl + route)
+      val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -26,10 +25,11 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
           page.title() must include("Does the partner have a UK VAT registration number?")
-          page.getElementsByTag("h1").text() must include("Does test partner have a UK VAT registration number?")
+          page.getElementsByTag("h1").text() must include(
+            "Does test partner have a UK VAT registration number?"
+          )
         }
       }
-    }
   }
 
   s"POST $route" when {
@@ -38,20 +38,17 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
             .post(Map("vatNumber_yesNo" -> Seq("true"),
               "vatNumber_value" -> Seq("123456789")))
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"${routes.BusinessPartnerAddressController.load().url}")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerAddressController.load().url)
           }
         }
-      }
     }
 
     "no is selected" should {
@@ -59,18 +56,16 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("vatNumber_yesNo" -> Seq("false")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("vatNumber_yesNo" -> Seq("false")))
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"${routes.BusinessPartnerSoleProprietorUtrController.load().url}")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerSoleProprietorUtrController.load().url)
           }
         }
-      }
     }
 
     "no hasVat number selected" should {
@@ -78,16 +73,17 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq.empty))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq.empty))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Select whether the business has a VAT registration number"
+            )
           }
         }
       }
@@ -98,8 +94,8 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq("true")))
@@ -107,9 +103,10 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Enter the VAT registration number"
+            )
           }
-        }
       }
     }
 
@@ -118,8 +115,8 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq("error")))
@@ -127,31 +124,29 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Select whether the business has a VAT registration number"
+            )
           }
         }
-      }
     }
 
     "the vatnumber field is invalid format" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true"),
-              "vatNumber_value" -> Seq("1234")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq("true"), "vatNumber_value" -> Seq("1234")))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid UK VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Enter a valid UK VAT registration number"
+            )
           }
         }
-      }
     }
-  }
 }

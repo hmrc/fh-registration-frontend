@@ -5,35 +5,38 @@ import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
+import play.api.test.WsTestClient
 
-class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
+class
+BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
   extends Specifications with TestConfiguration {
 
+  val route = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load().url.drop(6)
 
-  "GET /business-partners/partner-name" when {
+  s"GET $route" when {
 
     "render the business partner IndividualsAndSoleProprietors partner name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title must include("What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
-        }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title must include("What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
+          }
       }
     }
   }
 
-  "POST /business-partners/partner-name" when {
+  s"POST $route" when {
     "return 200" when {
       "business type is neither Individual or Sole Proprietor and the form is filled out correctly" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "partnership")
@@ -52,7 +55,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "business type is Individual and the form is filled out correctly" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "individual")
@@ -62,7 +65,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-national-insurance-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
         }
       }
     }
@@ -71,7 +74,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "business type is Sole Proprietor and the form is filled out correctly" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "sole-proprietor")
@@ -81,7 +84,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-trading-name")
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerTradingNameController.load().url)
         }
       }
     }
@@ -90,7 +93,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the form fields are left blank" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq(""), lastNameKey -> Seq("")))
@@ -106,7 +109,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "fields contain invalid characters" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("&&"), lastNameKey -> Seq("%%")))
@@ -122,7 +125,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the first name field is left blank" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq(""), lastNameKey -> Seq("Cola")))
@@ -138,7 +141,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the last name field is left blank" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("")))
@@ -154,7 +157,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the first name field contains invalid characters" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("$$$"), lastNameKey -> Seq("cola")))
@@ -170,7 +173,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "the last name field contains invalid characters" in {
         given.commonPrecondition
 
-        val result = buildRequest("/business-partners/partner-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("$$%%")))

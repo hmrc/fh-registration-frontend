@@ -9,9 +9,8 @@ import scala.collection.immutable.Seq
 
 class BusinessPartnerNinoControllerISpec
   extends Specifications with TestConfiguration {
-
-
-  val route = "/business-partners/partner-national-insurance-number"
+  
+  val route = routes.BusinessPartnerNinoController.load().url.drop(6)
 
   s"GET $route" when {
 
@@ -51,7 +50,7 @@ class BusinessPartnerNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-address")
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerAddressController.load().url)
             }
           }
         }
@@ -70,7 +69,7 @@ class BusinessPartnerNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partner-vat-registration-number")
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load().url)
             }
           }
         }
@@ -89,7 +88,7 @@ class BusinessPartnerNinoControllerISpec
 
               whenReady(result) { res =>
                 res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/partner-vat-registration-number")
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load().url)
             }
           }
         }
