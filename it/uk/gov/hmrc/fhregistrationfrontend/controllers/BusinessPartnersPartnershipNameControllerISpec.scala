@@ -8,17 +8,16 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersPartnershipNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestUrl = "form/business-partners/partnership-name"
+  val route: String = routes.BusinessPartnersPartnershipNameController.load().url.drop(6)
 
-
-  "GET /form/business-partners/partnership-name" when {
+  s"GET $route" when {
 
     "render the business partners partnership name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
@@ -33,7 +32,7 @@ class BusinessPartnersPartnershipNameControllerISpec
 
   }
 
-  "POST /form/business-partners/partnership-name" when {
+  s"POST $route" when {
 
     "the user submits with a company name" should {
       "return 200" when {
@@ -41,7 +40,7 @@ class BusinessPartnersPartnershipNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -62,7 +61,7 @@ class BusinessPartnersPartnershipNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -85,7 +84,7 @@ class BusinessPartnersPartnershipNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(

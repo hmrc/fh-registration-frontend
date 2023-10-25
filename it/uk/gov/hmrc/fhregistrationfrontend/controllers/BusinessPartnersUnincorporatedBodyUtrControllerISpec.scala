@@ -9,14 +9,17 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersUnincorporatedBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" should {
+  val route: String = routes.BusinessPartnersUtrController.load().url.drop(6)
+  val partnershipRegAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+
+  s"GET $route" should {
 
     "render the partnership-self-assessment-unique-taxpayer-reference page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+        val result = client.url(baseUrl + route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -30,13 +33,13 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
     }
   }
 
-  "POST /form/business-partners/partnership-self-assessment-unique-taxpayer-reference" when {
+  s"POST $route" when {
     "yes is selected and the UTR is entered" should {
       "redirect to the Partnership Registered Office Address page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
@@ -47,7 +50,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipRegAddressUrl)
         }
       }
     }
@@ -57,7 +60,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
@@ -65,7 +68,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-registered-office-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipRegAddressUrl)
         }
       }
     }
@@ -76,7 +79,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -97,7 +100,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -118,7 +121,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -139,7 +142,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/partnership-self-assessment-unique-taxpayer-reference")
+          val result = client.url(baseUrl + route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")

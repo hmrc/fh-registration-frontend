@@ -8,7 +8,9 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/confirm-partnership-registered-office-address" when {
+  val route = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url.drop(6)
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -18,7 +20,7 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/confirm-partnership-registered-office-address")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -34,7 +36,7 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
     }
   }
 
-  "POST /form/business-partners/confirm-partnership-registered-office-address" when {
+  s"POST $route" when {
 
     "the user clicks save and continue" should {
       "return 200" when {
@@ -42,7 +44,7 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/confirm-partnership-registered-office-address")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(

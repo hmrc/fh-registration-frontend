@@ -8,7 +8,9 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/enter-partnership-registered-office-address" when {
+  val route: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url.drop(6)
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -18,7 +20,7 @@ class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-partnership-registered-office-address")
+            val result = client.url(baseUrl + route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 

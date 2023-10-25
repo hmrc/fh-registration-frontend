@@ -9,15 +9,16 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestUrl: String = "/business-partners/partnership-company-registration-number"
+  val route: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url.drop(6)
+  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
 
-  "GET /business-partners/partnership-company-registration-number" should {
+  s"GET $route" should {
     "render the partnership-company-registration-number page" in {
       given
         .commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(baseUrl + requestUrl)
+        val result = client.url(baseUrl + route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -34,13 +35,13 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
     }
   }
 
-  "POST /business-partners/partnership-company-registration-number" when {
+  s"POST $route" when {
     "the companyRegistrationNumber is entered" should {
       "redirect to the Partnership VAT Registration Number page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest(requestUrl)
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -51,7 +52,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatNumUrl)
         }
       }
 
@@ -59,7 +60,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest(requestUrl)
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -70,7 +71,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatNumUrl)
         }
       }
     }
@@ -81,7 +82,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + requestUrl)
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -105,7 +106,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + requestUrl)
+          val result = client.url(baseUrl + route)
             .addCookies(
               DefaultWSCookie("mdtp", authAndSessionCookie),
               DefaultWSCookie("businessType", "limited-liability-partnership")
