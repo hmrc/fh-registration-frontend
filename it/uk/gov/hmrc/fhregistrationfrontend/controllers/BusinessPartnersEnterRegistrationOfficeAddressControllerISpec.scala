@@ -5,10 +5,12 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersEnterRegistrationOfficeAddressControllerSpec
+class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/enter-partnership-registered-office-address" when {
+  val route = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url.drop(6)
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -17,8 +19,7 @@ class BusinessPartnersEnterRegistrationOfficeAddressControllerSpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-partnership-registered-office-address")
+          val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -29,7 +30,6 @@ class BusinessPartnersEnterRegistrationOfficeAddressControllerSpec
               page.getElementById("page-heading").text() must include("Enter")
               page.getElementById("page-heading").text() must include("registered office address?")
             }
-          }
         }
       }
     }

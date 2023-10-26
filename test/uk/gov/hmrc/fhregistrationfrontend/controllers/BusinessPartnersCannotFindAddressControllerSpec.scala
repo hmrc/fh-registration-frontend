@@ -51,7 +51,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+          routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url)
         reset(mockActions)
       }
 
@@ -68,7 +68,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-partnership-registered-office-address")
+          routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url)
         reset(mockActions)
       }
 
@@ -85,7 +85,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/business-partners/enter-partner-address")
+          routes.BusinessPartnersEnterAddressController.load().url)
         reset(mockActions)
       }
 
@@ -102,7 +102,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/business-partners/enter-partner-address")
+          routes.BusinessPartnersEnterAddressController.load().url)
         reset(mockActions)
       }
 
@@ -119,7 +119,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(
-          "/fhdds/form/business-partners/enter-corporate-body-registered-office-address")
+          routes.BusinessPartnersCorporateBodyEnterAddressController.load().url)
         reset(mockActions)
       }
     }
