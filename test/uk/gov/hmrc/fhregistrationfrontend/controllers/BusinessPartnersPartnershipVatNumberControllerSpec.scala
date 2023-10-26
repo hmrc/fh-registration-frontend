@@ -32,8 +32,8 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
   override lazy val views: Views = app.injector.instanceOf[Views]
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val partnershipUtrPage: String = routes.BusinessPartnersUtrController.load().url
-  val partnershipRegisteredAddressPage: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+  val partnershipUtrUrl: String = routes.BusinessPartnersUtrController.load().url
+  val partnershipRegisteredAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   val controller =
     new BusinessPartnersPartnershipVatNumberController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -89,7 +89,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
+          redirectLocation(result).get should include(partnershipUtrUrl)
           reset(mockActions)
         }
 
@@ -106,7 +106,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
+          redirectLocation(result).get should include(partnershipUtrUrl)
           reset(mockActions)
         }
 
@@ -121,7 +121,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
+          redirectLocation(result).get should include(partnershipUtrUrl)
           reset(mockActions)
         }
       }
@@ -142,7 +142,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipRegisteredAddressPage)
+          redirectLocation(result).get should include(partnershipRegisteredAddressUrl)
           reset(mockActions)
         }
       }

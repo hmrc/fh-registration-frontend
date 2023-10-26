@@ -38,6 +38,10 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
   val controller =
     new BusinessPartnerPartnershipTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
+  val partnershipVatNumberUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+  val partnershipCompanyRegNumUrl: String =
+    routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+
   "load" should {
     "Render the business partner trading name page" when {
       "The business partner v2 pages are enabled" in {
@@ -91,7 +95,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersPartnershipVatNumberController.load().url)
+          redirectLocation(result).get should include(partnershipVatNumberUrl)
           reset(mockActions)
         }
       }
@@ -112,8 +116,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
+          redirectLocation(result).get should include(partnershipCompanyRegNumUrl)
           reset(mockActions)
         }
       }

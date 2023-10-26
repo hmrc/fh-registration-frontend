@@ -31,7 +31,7 @@ class BusinessPartnersUtrControllerSpec extends ControllerSpecWithGuiceApp with 
 
   override lazy val views: Views = app.injector.instanceOf[Views]
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val partnershipRegOfficeAddressPage: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+  val partnershipRegOfficeAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   val controller =
     new BusinessPartnersUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -80,7 +80,7 @@ class BusinessPartnersUtrControllerSpec extends ControllerSpecWithGuiceApp with 
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipRegOfficeAddressPage)
+          redirectLocation(result).get should include(partnershipRegOfficeAddressUrl)
           reset(mockActions)
         }
 
@@ -93,7 +93,7 @@ class BusinessPartnersUtrControllerSpec extends ControllerSpecWithGuiceApp with 
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipRegOfficeAddressPage)
+          redirectLocation(result).get should include(partnershipRegOfficeAddressUrl)
           reset(mockActions)
         }
       }

@@ -19,17 +19,15 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Confirm the partnership’s registered office address?")
-              page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title() must include("Confirm the partnership’s registered office address?")
+            page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
           }
         }
       }
@@ -43,18 +41,16 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "mock" -> Seq("true"),
-              ))
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "mock" -> Seq("true"),
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result:")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body must include("Form submitted, with result:")
           }
         }
       }

@@ -19,18 +19,16 @@ class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Enter the partnership’s registered office address?")
-              page.getElementById("page-heading").text() must include("Enter")
-              page.getElementById("page-heading").text() must include("registered office address?")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title() must include("Enter the partnership’s registered office address?")
+            page.getElementById("page-heading").text() must include("Enter")
+            page.getElementById("page-heading").text() must include("registered office address?")
           }
         }
       }
