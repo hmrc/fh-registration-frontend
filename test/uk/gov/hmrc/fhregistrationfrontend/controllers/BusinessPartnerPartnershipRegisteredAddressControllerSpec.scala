@@ -139,7 +139,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/confirm-partnership-registered-office-address")
+            routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url)
           reset(mockActions)
         }
       }

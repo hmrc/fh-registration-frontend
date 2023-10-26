@@ -8,7 +8,9 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/confirm-partnership-registered-office-address" when {
+  val route = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load.url.drop(6)
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -17,8 +19,7 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/confirm-partnership-registered-office-address")
+          val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -28,21 +29,19 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
               page.title() must include("Confirm the partnership’s registered office address?")
               page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
             }
-          }
         }
       }
     }
   }
 
-  "POST /form/business-partners/confirm-partnership-registered-office-address" when {
+  s"POST $route" when {
 
     "the user clicks save and continue" should {
       "return 200" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/confirm-partnership-registered-office-address")
+          val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
@@ -53,7 +52,6 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
               res.status mustBe 200
               res.body must include("Form submitted, with result:")
             }
-          }
         }
       }
     }
