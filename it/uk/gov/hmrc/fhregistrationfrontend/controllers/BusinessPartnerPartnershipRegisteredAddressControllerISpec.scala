@@ -9,7 +9,6 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnerPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestURL = "/form/business-partners/partnership-registered-office-address"
   val route = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url.drop(6)
 
   s"GET $route" when {
