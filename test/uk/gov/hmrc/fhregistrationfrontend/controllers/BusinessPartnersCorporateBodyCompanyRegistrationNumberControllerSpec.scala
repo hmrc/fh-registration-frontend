@@ -31,9 +31,9 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersCorporateBodyCompanyRegistrationNumberController(
@@ -88,7 +88,7 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerSpec
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/corporate-body-vat-registration-number")
+            routes.BusinessPartnersCorporateBodyVatNumberController.load().url)
           reset(mockActions)
         }
 
