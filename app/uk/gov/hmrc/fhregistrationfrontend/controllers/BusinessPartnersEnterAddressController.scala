@@ -35,19 +35,15 @@ class BusinessPartnersEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   val partnerName: String = "Test User"
-  val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
   val journeyType: String = "enterAddress"
   val backUrl: String = routes.BusinessPartnerAddressController.load().url
-  val postAction: Call = Call(
-    method = "POST",
-    url = routes.BusinessPartnersEnterAddressController.next().url
-  )
+  val postAction: Call = routes.BusinessPartnersEnterAddressController.next()
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      Ok(view.business_partners_enter_address(bpAddressForm, postAction, partnerName, journeyType, backUrl))
+      Ok(view.business_partners_enter_address(chooseAddressForm, postAction, partnerName, journeyType, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
