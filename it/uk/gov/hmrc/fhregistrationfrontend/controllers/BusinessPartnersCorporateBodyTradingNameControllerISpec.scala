@@ -9,7 +9,8 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersCorporateBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/corporate-body-trading-name"
+  val route: String = routes.BusinessPartnersCorporateBodyTradingNameController.load().url.drop(6)
+  val companyRegNumUrl: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
 
   s"GET $route" when {
 
@@ -17,16 +18,14 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
       "the user is authenticated" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include("Does the corporate body use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text must include("Does Shelby Limited use a trading name that is different from its registered name?")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title must include("Does the corporate body use a trading name that is different from its registered name?")
+          page.getElementsByTag("h1").text must include("Does Shelby Limited use a trading name that is different from its registered name?")
         }
       }
     }
@@ -40,38 +39,34 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-              .post(Map(
-                "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("Shelby Company Limited")
-              ))
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map(
+              "tradingName_yesNo" -> Seq("true"),
+              "tradingName_value" -> Seq("Shelby Company Limited")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(companyRegNumUrl)
           }
         }
 
         "the user selects no" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-              .post(Map(
-                "tradingName_yesNo" -> Seq("false"),
-                "tradingName_value" -> Seq.empty
-              ))
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+            .post(Map(
+              "tradingName_yesNo" -> Seq("false"),
+              "tradingName_value" -> Seq.empty
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/company-registration-number")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(companyRegNumUrl)
           }
         }
       }
@@ -81,22 +76,20 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq.empty,
-              "tradingName_value" -> Seq.empty
-            ))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "tradingName_yesNo" -> Seq.empty,
+            "tradingName_value" -> Seq.empty
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("Does the corporate body use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text() must include("Does Shelby Limited use a trading name that is different from its registered name?")
-            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("Does the corporate body use a trading name that is different from its registered name?")
+          page.getElementsByTag("h1").text() must include("Does Shelby Limited use a trading name that is different from its registered name?")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
         }
       }
     }
@@ -105,21 +98,19 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq("true"),
-              "tradingName_value" -> Seq.empty
-            ))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "tradingName_yesNo" -> Seq("true"),
+            "tradingName_value" -> Seq.empty
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("Does the corporate body use a trading name that is different from its registered name?")
-            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("Does the corporate body use a trading name that is different from its registered name?")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
         }
       }
     }

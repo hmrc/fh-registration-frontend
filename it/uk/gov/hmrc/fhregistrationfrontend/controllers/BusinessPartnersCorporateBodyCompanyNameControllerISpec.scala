@@ -9,39 +9,37 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestUrl = "form/business-partners/company-name"
+  val route: String = routes.BusinessPartnersCorporateBodyCompanyNameController.load().url.drop(6)
+  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load().url
 
-
-  "GET /form/business-partners/company-name" when {
+  s"GET $route" when {
 
     "render the business partners corporate body company name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the company name? - Business partners")
-            page.getElementsByTag("h1").text must include("What is the company name?")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the company name? - Business partners")
+          page.getElementsByTag("h1").text must include("What is the company name?")
         }
       }
     }
 
   }
 
-  "POST /form/business-partners/company-name" when {
+  s"POST $route" when {
 
     "the user submits with a company name" should {
       "redirect to the corporate body Trading Name page" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
-          val result = buildRequest(s"/$requestUrl")
+          val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -50,7 +48,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-trading-name")
+            res.header(HeaderNames.LOCATION) mustBe Some(corpBodyTradingNameUrl)
           }
         }
       }
@@ -60,21 +58,19 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "companyName" -> Seq("")
-            ))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "companyName" -> Seq("")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the company name? - Business partners")
-            page.getElementsByTag("h1").text() must include("What is the company name?")
-            page.getElementById("companyName-error").text() must include("Enter a company name")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the company name? - Business partners")
+          page.getElementsByTag("h1").text() must include("What is the company name?")
+          page.getElementById("companyName-error").text() must include("Enter a company name")
         }
       }
     }
@@ -83,23 +79,21 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
-                "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
-                "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
-            ))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
+              "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
+              "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the company name? - Business partners")
-            page.getElementsByTag("h1").text() must include("What is the company name?")
-            page.getElementById("companyName-error").text() must include("Company name must be 140 characters or less")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the company name? - Business partners")
+          page.getElementsByTag("h1").text() must include("What is the company name?")
+          page.getElementById("companyName-error").text() must include("Company name must be 140 characters or less")
         }
       }
     }

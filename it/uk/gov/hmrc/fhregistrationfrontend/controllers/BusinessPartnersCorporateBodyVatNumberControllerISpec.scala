@@ -9,34 +9,36 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersCorporateBodyVatNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/corporate-body-vat-registration-number" should {
+  val route: String = routes.BusinessPartnersCorporateBodyVatNumberController.load().url.drop(6)
+  val corpBodyRegAddressUrl: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url
+  val corpBodyUtrUrl: String = routes.BusinessPartnersCorporateBodyUtrController.load().url
+
+  s"GET $route" should {
 
     "render the corporate-body-vat-registration-number page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()
+      val result = buildRequest(route)
+        .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        .get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("Does the corporate body have a UK VAT registration number?")
-          page.getElementsByTag("h1").text() must include("Does test corporateBody have a UK VAT registration number?")
-        }
+      whenReady(result) { res =>
+        res.status mustBe 200
+        val page = Jsoup.parse(res.body)
+        page.title() must include("Does the corporate body have a UK VAT registration number?")
+        page.getElementsByTag("h1").text() must include("Does test corporateBody have a UK VAT registration number?")
       }
     }
   }
 
-  "POST /form/business-partners/corporate-body-vat-registration-number" when {
+  s"POST $route" when {
     "yes is selected and the vatnumber entered" should {
       "redirect to the Corporate Body Registered Office Address page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/corporate-body-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
@@ -47,7 +49,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-registered-office-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(corpBodyRegAddressUrl)
         }
       }
     }
@@ -57,7 +59,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/corporate-body-vat-registration-number")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
@@ -65,7 +67,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference")
+          res.header(HeaderNames.LOCATION) mustBe Some(corpBodyUtrUrl)
         }
       }
     }
@@ -75,18 +77,16 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq.empty))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq.empty))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
         }
       }
     }
@@ -96,18 +96,16 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq("true")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the VAT registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the VAT registration number")
         }
       }
     }
@@ -117,18 +115,16 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("error")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq("error")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
         }
       }
     }
@@ -138,19 +134,17 @@ class BusinessPartnersCorporateBodyVatNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/corporate-body-vat-registration-number")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true"),
-              "vatNumber_value" -> Seq("1234")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("vatNumber_yesNo" -> Seq("true"),
+            "vatNumber_value" -> Seq("1234")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid UK VAT registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid UK VAT registration number")
         }
       }
     }
