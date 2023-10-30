@@ -8,7 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load.url.drop(6)
+  val route = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url.drop(6)
 
   s"GET $route" when {
 
@@ -20,15 +20,15 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
             .commonPrecondition
 
           val result = buildRequest(route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Confirm the partnership’s registered office address?")
-              page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title() must include("Confirm the partnership’s registered office address?")
+            page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
+          }
         }
       }
     }
@@ -42,16 +42,16 @@ class BusinessPartnerConfirmPartnershipRegisteredAddressControllerISpec
           given.commonPrecondition
 
           val result = buildRequest(route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "mock" -> Seq("true"),
-              ))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "mock" -> Seq("true"),
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result:")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body must include("Form submitted, with result:")
+          }
         }
       }
     }

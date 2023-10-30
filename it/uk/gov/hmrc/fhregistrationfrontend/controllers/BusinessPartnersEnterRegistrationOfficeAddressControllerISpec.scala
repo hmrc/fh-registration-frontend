@@ -8,7 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url.drop(6)
+  val route: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url.drop(6)
 
   s"GET $route" when {
 
@@ -20,16 +20,16 @@ class BusinessPartnersEnterRegistrationOfficeAddressControllerISpec
             .commonPrecondition
 
           val result = buildRequest(route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Enter the partnership’s registered office address?")
-              page.getElementById("page-heading").text() must include("Enter")
-              page.getElementById("page-heading").text() must include("registered office address?")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title() must include("Enter the partnership’s registered office address?")
+            page.getElementById("page-heading").text() must include("Enter")
+            page.getElementById("page-heading").text() must include("registered office address?")
+          }
         }
       }
     }

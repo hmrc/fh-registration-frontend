@@ -8,50 +8,45 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersPartnershipNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestUrl = "form/business-partners/partnership-name"
+  val route: String = routes.BusinessPartnersPartnershipNameController.load().url.drop(6)
 
-
-  "GET /form/business-partners/partnership-name" when {
+  s"GET $route" when {
 
     "render the business partners partnership name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the name of the partnership? - Business partners")
-            page.getElementsByTag("h1").text must include("What is the name of the partnership?")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the name of the partnership? - Business partners")
+          page.getElementsByTag("h1").text must include("What is the name of the partnership?")
         }
       }
     }
 
   }
 
-  "POST /form/business-partners/partnership-name" when {
+  s"POST $route" when {
 
     "the user submits with a company name" should {
       "return 200" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "partnershipName" -> Seq("Shelby Limited")
-              ))
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "partnershipName" -> Seq("Shelby Limited")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              res.body must include("Form submitted, with result: PartnershipNameModel(Shelby Limited)")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            res.body must include("Form submitted, with result: PartnershipNameModel(Shelby Limited)")
           }
         }
       }
@@ -61,21 +56,19 @@ class BusinessPartnersPartnershipNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "partnershipName" -> Seq("")
-            ))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "partnershipName" -> Seq("")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the name of the partnership? - Business partners")
-            page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
-            page.getElementById("partnershipName-error").text() must include("Enter a partnership name")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the name of the partnership? - Business partners")
+          page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
+          page.getElementById("partnershipName-error").text() must include("Enter a partnership name")
         }
       }
     }
@@ -84,23 +77,21 @@ class BusinessPartnersPartnershipNameControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "partnershipName" -> Seq("hghghghghghghghhghghghghghghghhghghgh" +
-                "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghgh" +
-                "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghghg"
-            )))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+          .post(Map(
+            "partnershipName" -> Seq("hghghghghghghghhghghghghghghghhghghgh" +
+              "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghgh" +
+              "ghghghghhghghghghghghghhghghghghghghghhghghghghghghghhghghghg")
+          ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("What is the name of the partnership? - Business partners")
-            page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
-            page.getElementById("partnershipName-error").text() must include("Partnership name must be 120 characters or less")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.title must include("What is the name of the partnership? - Business partners")
+          page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
+          page.getElementById("partnershipName-error").text() must include("Partnership name must be 120 characters or less")
         }
       }
     }
