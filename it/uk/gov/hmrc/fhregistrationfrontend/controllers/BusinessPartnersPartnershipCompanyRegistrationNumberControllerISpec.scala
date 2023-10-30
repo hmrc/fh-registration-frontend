@@ -9,38 +9,37 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestUrl: String = "/business-partners/partnership-company-registration-number"
+  val route: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url.drop(6)
+  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
 
-  "GET /business-partners/partnership-company-registration-number" should {
+  s"GET $route" should {
     "render the partnership-company-registration-number page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(baseUrl + requestUrl)
-          .addCookies(
-            DefaultWSCookie("mdtp", authAndSessionCookie),
-            DefaultWSCookie("businessType", "limited-liability-partnership")
-          )
-          .get()
+      val result = buildRequest(route)
+        .addCookies(
+          DefaultWSCookie("mdtp", authAndSessionCookie),
+          DefaultWSCookie("businessType", "limited-liability-partnership")
+        )
+        .get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("What is the partnership’s company registration number?")
-          page.getElementsByTag("h1").text() must include("What is Test Partnership’s company registration number?")
-        }
+      whenReady(result) { res =>
+        res.status mustBe 200
+        val page = Jsoup.parse(res.body)
+        page.title() must include("What is the partnership’s company registration number?")
+        page.getElementsByTag("h1").text() must include("What is Test Partnership’s company registration number?")
       }
     }
   }
 
-  "POST /business-partners/partnership-company-registration-number" when {
+  s"POST $route" when {
     "the companyRegistrationNumber is entered" should {
       "redirect to the Partnership VAT Registration Number page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest(requestUrl)
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -51,7 +50,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatNumUrl)
         }
       }
 
@@ -59,7 +58,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        val result = buildRequest(requestUrl)
+        val result = buildRequest(route)
           .addCookies(
             DefaultWSCookie("mdtp", authAndSessionCookie),
             DefaultWSCookie("businessType", "limited-liability-partnership")
@@ -70,7 +69,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/partnership-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatNumUrl)
         }
       }
     }
@@ -80,21 +79,19 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + requestUrl)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "limited-liability-partnership")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("companyRegistrationNumber" -> Seq("")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "limited-liability-partnership")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("companyRegistrationNumber" -> Seq("")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the company registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the company registration number")
         }
       }
     }
@@ -104,21 +101,19 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + requestUrl)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "limited-liability-partnership")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("companyRegistrationNumber" -> Seq("aaa")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "limited-liability-partnership")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("companyRegistrationNumber" -> Seq("aaa")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Company registration number must be 8 numbers, or 2 letters followed by 6 numbers")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Company registration number must be 8 numbers, or 2 letters followed by 6 numbers")
         }
       }
     }

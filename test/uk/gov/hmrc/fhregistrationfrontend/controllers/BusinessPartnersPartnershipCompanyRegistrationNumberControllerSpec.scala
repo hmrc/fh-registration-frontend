@@ -32,7 +32,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
@@ -41,6 +40,8 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
       views,
       mockActions,
       mockAppConfig)(mockMcc)
+
+  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
 
   "load" should {
     "Render the Company Registration page" when {
@@ -93,8 +94,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/partnership-vat-registration-number")
+          redirectLocation(result).get should include(partnershipVatNumUrl)
           reset(mockActions)
         }
       }
