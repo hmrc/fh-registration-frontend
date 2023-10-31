@@ -9,7 +9,8 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersCorporateBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference"
+  val route: String = routes.BusinessPartnersCorporateBodyUtrController.load().url.drop(6)
+  val corpBodyRegAddressUrl: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url
 
   s"GET $route" should {
 
@@ -17,17 +18,15 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(baseUrl + route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()
+      val result = buildRequest(route)
+        .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        .get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)?")
-          page.getElementsByTag("h1").text() must include("What is test partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
-        }
+      whenReady(result) { res =>
+        res.status mustBe 200
+        val page = Jsoup.parse(res.body)
+        page.title() must include("What is the company’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+        page.getElementsByTag("h1").text() must include("What is test partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
       }
     }
   }
@@ -38,16 +37,15 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("uniqueTaxpayerReference_value" -> Seq("1234567890")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("uniqueTaxpayerReference_value" -> Seq("1234567890")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/corporate-body-registered-office-address")          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(corpBodyRegAddressUrl)
         }
       }
     }
@@ -58,18 +56,16 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("uniqueTaxpayerReference_value" -> Seq("")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("uniqueTaxpayerReference_value" -> Seq("")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a Self Assessment Unique Taxpayer Reference (UTR)")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a Self Assessment Unique Taxpayer Reference (UTR)")
         }
       }
     }
@@ -79,18 +75,16 @@ class BusinessPartnersCorporateBodyUtrControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("uniqueTaxpayerReference_value" -> Seq("1234")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("uniqueTaxpayerReference_value" -> Seq("1234")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid Self Assessment Unique Taxpayer Reference (UTR)")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid Self Assessment Unique Taxpayer Reference (UTR)")
         }
       }
     }

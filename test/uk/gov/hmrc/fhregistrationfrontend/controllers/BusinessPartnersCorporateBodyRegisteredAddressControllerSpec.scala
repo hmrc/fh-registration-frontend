@@ -46,6 +46,8 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
     mockAppConfig,
     mockAddressService)(mockMcc)
 
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+
   "load" should {
     "Render the business partner address page" when {
       "the new business partner pages are enabled" in {
@@ -106,7 +108,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
             val result = await(csrfAddToken(controller.next())(request))
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include("/fhdds/business-partners/choose-address")
+            redirectLocation(result).get should include(routes.BusinessPartnersChooseAddressController.load().url)
             reset(mockActions)
           }
         }
@@ -136,7 +138,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
             val result = await(csrfAddToken(controller.next())(request))
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(
-              "/fhdds/form/business-partners/confirm-corporate-body-registered-office-address")
+              routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load().url)
             reset(mockActions)
           }
         }
@@ -160,7 +162,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
 
             val result = await(csrfAddToken(controller.next())(request))
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
+            redirectLocation(result).get should include(cannotFindAddressUrl)
             reset(mockActions)
           }
 
@@ -186,7 +188,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
             val result = await(csrfAddToken(controller.next())(request))
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
+            redirectLocation(result).get should include(cannotFindAddressUrl)
             reset(mockActions)
           }
         }

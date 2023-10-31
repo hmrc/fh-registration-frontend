@@ -29,9 +29,9 @@ class BusinessPartnersCorporateBodyUtrControllerSpec extends ControllerSpecWithG
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersCorporateBodyUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -81,7 +81,7 @@ class BusinessPartnersCorporateBodyUtrControllerSpec extends ControllerSpecWithG
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/corporate-body-registered-office-address")
+            routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url)
           reset(mockActions)
         }
       }

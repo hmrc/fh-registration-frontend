@@ -9,24 +9,23 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/form/business-partners/company-registration-number"
+  val route: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url.drop(6)
+  val corpBodyVatNumUrl: String = routes.BusinessPartnersCorporateBodyVatNumberController.load().url
 
   s"GET $route" should {
     "render the corporate-body-company-registration-number page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(baseUrl + route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()
+      val result = buildRequest(route)
+        .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        .get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("What is the company’s company registration number?")
-          page.getElementsByTag("h1").text() must include("What is Test CorporateBody’s company registration number?")
-        }
+      whenReady(result) { res =>
+        res.status mustBe 200
+        val page = Jsoup.parse(res.body)
+        page.title() must include("What is the company’s company registration number?")
+        page.getElementsByTag("h1").text() must include("What is Test CorporateBody’s company registration number?")
       }
     }
   }
@@ -37,20 +36,18 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("companyRegistrationNumber" -> Seq("01234567")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "corporateBody")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("companyRegistrationNumber" -> Seq("01234567")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-vat-registration-number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(corpBodyVatNumUrl)
         }
       }
 
@@ -58,20 +55,18 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("companyRegistrationNumber" -> Seq("AB123456")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "corporateBody")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("companyRegistrationNumber" -> Seq("AB123456")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/corporate-body-vat-registration-number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(corpBodyVatNumUrl)
         }
       }
     }
@@ -81,21 +76,19 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("companyRegistrationNumber" -> Seq("")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "corporateBody")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("companyRegistrationNumber" -> Seq("")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the company registration number")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the company registration number")
         }
       }
     }
@@ -105,21 +98,19 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "corporateBody")
-            )
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("companyRegistrationNumber" -> Seq("aaa")))
+        val result = buildRequest(route)
+          .addCookies(
+            DefaultWSCookie("mdtp", authAndSessionCookie),
+            DefaultWSCookie("businessType", "corporateBody")
+          )
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("companyRegistrationNumber" -> Seq("aaa")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Company registration number must be 8 numbers, or 2 letters followed by 6 numbers")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Company registration number must be 8 numbers, or 2 letters followed by 6 numbers")
         }
       }
     }

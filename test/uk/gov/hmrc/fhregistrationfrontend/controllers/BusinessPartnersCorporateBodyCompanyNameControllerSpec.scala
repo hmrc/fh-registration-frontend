@@ -29,8 +29,8 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersCorporateBodyCompanyNameController(commonDependencies, views, mockActions, mockAppConfig)(
@@ -81,7 +81,8 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
         val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/fhdds/form/business-partners/corporate-body-trading-name")
+        redirectLocation(result).get should include(
+          routes.BusinessPartnersCorporateBodyTradingNameController.load().url)
         reset(mockActions)
       }
 

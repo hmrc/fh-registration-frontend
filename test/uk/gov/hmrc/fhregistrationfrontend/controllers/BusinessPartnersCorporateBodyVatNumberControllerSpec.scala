@@ -29,9 +29,9 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersCorporateBodyVatNumberController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
@@ -79,7 +79,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/corporate-body-registered-office-address")
+            routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url)
 
           reset(mockActions)
         }
@@ -93,8 +93,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/corporate-body-corporation-tax-unique-taxpayer-reference")
+          redirectLocation(result).get should include(routes.BusinessPartnersCorporateBodyUtrController.load().url)
 
           reset(mockActions)
         }
