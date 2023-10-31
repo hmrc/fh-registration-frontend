@@ -20,8 +20,7 @@ class BusinessPartnersCheckYourAnswersControllerISpec
         "the business partnerType is an individual" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl$route?partnerType=individual")
+          val result = buildRequest(route + "?partnerType=individual")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -38,15 +37,12 @@ class BusinessPartnersCheckYourAnswersControllerISpec
               page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
               page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
             }
-          }
         }
 
         "the business partnerType is an limited liability partnership" when {
           "No trading name and VAT number provided" in {
             given.commonPrecondition
-
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl$route?partnerType=limited-liability-partnership")
+            val result = buildRequest(route + "?partnerType=limited-liability-partnership")
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .get()
 
@@ -69,14 +65,11 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                 page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                 page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
               }
-            }
           }
 
           "trading name and VAT number provided" in {
             given.commonPrecondition
-
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl$route?partnerType=limited-liability-partnership-with-vat-and-trading-name")
+            val result = buildRequest(route + "?partnerType=limited-liability-partnership-with-vat-and-trading-name")
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .get()
 
@@ -97,16 +90,13 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                 page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                 page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
               }
-            }
           }
         }
 
         "the business partnerType is a partnership" when {
             "optional values are included" in {
                 given.commonPrecondition
-
-                WsTestClient.withClient { client =>
-                    val result = client.url(s"$baseUrl$route?partnerType=partnership-with-optional-values")
+                val result = buildRequest(route + "?partnerType=partnership-with-optional-values")
                       .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                       .get()
 
@@ -127,14 +117,11 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                         page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                         page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
                     }
-                }
             }
 
             "optional values are none" in {
                 given.commonPrecondition
-
-                WsTestClient.withClient { client =>
-                    val result = client.url(s"$baseUrl$route?partnerType=partnership")
+                val result = buildRequest(route + "?partnerType=partnership")
                       .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                       .get()
 
@@ -155,16 +142,13 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                         page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                         page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
                     }
-                }
             }
         }
 
         "the business partnerType is a Sole Proprietor" when {
             "No VAT number provided" in {
                 given.commonPrecondition
-
-                WsTestClient.withClient { client =>
-                    val result = client.url(s"$baseUrl$route?partnerType=sole-proprietor")
+                val result = buildRequest(route + "?partnerType=sole-proprietor")
                       .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                       .get()
 
@@ -189,14 +173,11 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                         page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                         page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
                     }
-                }
             }
 
             "VAT number provided" in {
                 given.commonPrecondition
-
-                WsTestClient.withClient { client =>
-                    val result = client.url(s"$baseUrl$route?partnerType=sole-proprietor-with-vat")
+                val result = buildRequest(route + "?partnerType=sole-proprietor-with-vat")
                       .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                       .get()
 
@@ -221,16 +202,13 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                         page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                         page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
                     }
-                }
             }
         }
 
         "the business partnerType is an unincorporated body" when {
           "no tradeName, VAT and self assessment utr are provided" in {
             given.commonPrecondition
-
-            WsTestClient.withClient{ client =>
-              val result = client.url(s"$baseUrl$route?partnerType=unincorporated-body")
+            val result = buildRequest(route + "?partnerType=unincorporated-body")
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .get()
 
@@ -251,14 +229,11 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                 page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                 page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
               }
-            }
           }
 
           "tradeName, VAT and self assessment utr are provided" in {
             given.commonPrecondition
-
-            WsTestClient.withClient{ client =>
-              val result = client.url(s"$baseUrl$route?partnerType=unincorporated-body-optional-values")
+            val result = buildRequest(route + "?partnerType=unincorporated-body-optional-values")
                 .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .get()
 
@@ -279,7 +254,6 @@ class BusinessPartnersCheckYourAnswersControllerISpec
                 page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
                 page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
               }
-            }
           }
         }
 

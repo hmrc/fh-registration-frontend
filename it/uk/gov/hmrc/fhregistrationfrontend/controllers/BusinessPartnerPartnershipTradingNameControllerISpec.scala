@@ -146,7 +146,7 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
         }
       }
     }
-
+      
       "the user selects yes and enters a trading name" should {
       "redirect to the partnership name page" in {
         given.commonPrecondition
@@ -169,7 +169,6 @@ class BusinessPartnerPartnershipTradingNameControllerISpec
         }
       }
     }
-
   }
 
 }

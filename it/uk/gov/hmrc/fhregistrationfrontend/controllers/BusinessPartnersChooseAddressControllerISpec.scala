@@ -11,9 +11,9 @@ import scala.collection.immutable.Seq
 class BusinessPartnersChooseAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/choose-address"
+  val route = routes.BusinessPartnersChooseAddressController.load().url.drop(6)
 
-  "GET route" should {
+  s"GET $route" should {
 
       "render the choose address page" in {
         given
@@ -49,7 +49,7 @@ class BusinessPartnersChooseAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/check-your-answers?partnerType=individual")
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load("individual").url)
           }
       }
     }

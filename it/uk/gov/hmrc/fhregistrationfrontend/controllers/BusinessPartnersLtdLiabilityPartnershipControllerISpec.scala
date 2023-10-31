@@ -9,13 +9,14 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersLtdLiabilityPartnershipControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/limited-liability-partnership-name" should {
+  val route = routes.BusinessPartnersLtdLiabilityPartnershipController.load().url.drop(6)
+
+  s"GET $route" should {
     "render the Limited Liability Partnership Name page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+      val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -25,18 +26,16 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
           page.title() must include("What is the name of the limited liability partnership?")
           page.getElementsByTag("h1").text() must include("What is the name of the limited liability partnership?")
         }
-      }
     }
   }
 
-  "POST /form/business-partners/limited-liability-partnership-name" when {
+  s"POST $route" when {
     "the limited liability partnership name is entered" should {
       "return 200 with ltdLiabilityPartnershipName" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -46,7 +45,6 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
             res.status mustBe 200
             res.body mustBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
           }
-        }
       }
     }
 
@@ -55,8 +53,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -67,7 +64,6 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the name of the limited liability partnership")
           }
-        }
       }
     }
 
@@ -76,8 +72,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/limited-liability-partnership-name")
+        val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
@@ -88,7 +83,6 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Limited liability partnership name must be 120 characters or less")
           }
-        }
       }
     }
   }

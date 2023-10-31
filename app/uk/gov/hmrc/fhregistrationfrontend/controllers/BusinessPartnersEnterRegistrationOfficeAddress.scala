@@ -31,21 +31,16 @@ class BusinessPartnersEnterRegistrationOfficeAddress @Inject()(
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-
   import actions._
+
+  val partnerName = "Test User"
+  val journeyType = "enterRegisteredOfficeAddress"
+  val postAction = routes.BusinessPartnersEnterRegistrationOfficeAddress.load()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test User"
-      val bpAddressForm = chooseAddressForm
-      val journeyType = "enterRegisteredOfficeAddress"
-      val postAction =
-        Call(
-          method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersEnterRegistrationOfficeAddress
-            .load()
-            .url)
-      Ok(view.business_partners_enter_address(bpAddressForm, postAction, partnerName, journeyType, "#"))
+      Ok(view.business_partners_enter_address(chooseAddressForm, postAction, partnerName, journeyType, "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,19 +49,10 @@ class BusinessPartnersEnterRegistrationOfficeAddress @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test User"
-      val journeyType = "enterRegisteredOfficeAddress"
       chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            val postAction =
-              Call(
-                method = "POST",
-                url =
-                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersEnterRegistrationOfficeAddress
-                    .next()
-                    .url)
             BadRequest(view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, "#"))
           },
           bpAddress => {
