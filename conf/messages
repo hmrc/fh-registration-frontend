@@ -721,11 +721,11 @@ fh.businessPartners.ltdLiabilityPartnershipName.error.pattern=Limited liability 
 fh.business.partners.LLP.registered.address.title=What is the partnership’s registered office address?
 
 fh.businessPartners.LLP.summary.partnershipName=Name of partnership
-fh.businessPartners.LLP.summary.compRegNum=Company registration number
-fh.businessPartners.LLP.summary.ctUtr=Corporation Tax Unique Taxpayer Reference (UTR)
 fh.businessPartners.llp.summary.address=Address
 
 fh.businessPartners.summary.none=None
+fh.businessPartners.summary.compRegNum=Company registration number
+fh.businessPartners.summary.ctUtr=Corporation Tax Unique Taxpayer Reference (UTR)
 
 
 # - Corporate Body =====================================================================================================

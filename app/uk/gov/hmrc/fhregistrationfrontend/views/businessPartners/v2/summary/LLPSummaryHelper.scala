@@ -66,7 +66,7 @@ object LLPSummaryHelper {
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
-          Some(messages("fh.companyRegistrationNumber.title")),
+          Some(messages("fh.businessPartners.summary.compRegNum")),
           llp.companyRegistrationNumber,
           None,
           GroupRow.Member
@@ -98,7 +98,7 @@ object LLPSummaryHelper {
         ),
         Helpers.createSummaryRow(
           SummaryRowParams.ofString(
-            Some(messages("fh.businessPartners.LLP.summary.ctUtr")),
+            Some(messages("fh.businessPartners.summary.ctUtr")),
             llp.uniqueTaxpayerReference,
             None,
             GroupRow.Member

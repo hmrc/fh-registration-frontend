@@ -74,8 +74,11 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       "partnership"              -> TestData.partnershipModel,
       "partnership-with-optional-values" -> TestData.partnershipModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true),
-      "unincorporated-body" -> TestData.unincoporateBodyModel,
-      "unincorporated-body-optional-values" -> TestData.unincoporateBodyModel
+      "corporate-body" -> TestData.corporateBodyModel,
+      "corporate-body-optional-values" -> TestData.corporateBodyModel
+        .copy(hasTradeName = true, hasVat = true),
+      "unincorporated-body" -> TestData.unincorporatedBodyModel,
+      "unincorporated-body-optional-values" -> TestData.unincorporatedBodyModel
         .copy(hasTradeName = true, hasVat = true, hasUniqueTaxpayerReference = true)
     )
 
@@ -84,6 +87,7 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
       case llp: BusinessPartnerLimitedLiabilityPartnership => LLPSummaryHelper(llp)
       case soleProprietor: BusinessPartnerSoleProprietor   => SoleProprietorSummaryHelper(soleProprietor)
       case partnership: BusinessPartnerPartnership         => PartnershipSummaryHelper(partnership)
+      case cBody: BusinessPartnerCorporateBody             => CorporateBodySummaryHelper(cBody)
       case uBody: BusinessPartnerUnincorporatedBody        => UnincorporatedBodySummaryHelper(uBody)
       case _                                               => Seq.empty
     }
