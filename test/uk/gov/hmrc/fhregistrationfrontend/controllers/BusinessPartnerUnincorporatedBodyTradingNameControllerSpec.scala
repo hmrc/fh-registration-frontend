@@ -29,8 +29,9 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val unincorpBodyVatRegNumUrl: String = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load().url
 
   val controller =
     new BusinessPartnerUnincorporatedBodyTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(
@@ -84,8 +85,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(
-            "/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
+          redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
           reset(mockActions)
         }
 
@@ -102,8 +102,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(
-            "/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
+          redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
           reset(mockActions)
         }
       }

@@ -30,9 +30,8 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-
-  val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersUnincorporatedBodyVatRegistrationController(
@@ -40,6 +39,8 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
       views,
       mockActions,
       mockAppConfig)(mockMcc)
+
+  val unincorpBodySaUtrUrl: String = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url
 
   "load" should {
     "Render the businessPartnersCorporateBodyVatNumber page" when {
@@ -86,8 +87,7 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference")
+          redirectLocation(result).get should include(unincorpBodySaUtrUrl)
           reset(mockActions)
         }
 
@@ -100,8 +100,7 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference")
+          redirectLocation(result).get should include(unincorpBodySaUtrUrl)
           reset(mockActions)
         }
 
