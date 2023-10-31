@@ -225,6 +225,66 @@ class BusinessPartnersCheckYourAnswersControllerISpec
             }
         }
 
+        "the business partnerType is an corporate body" when {
+          "no tradeName, VAT is provided (utr not shown)" in {
+            given.commonPrecondition
+
+            WsTestClient.withClient{ client =>
+              val result = client.url(s"$baseUrl$route?partnerType=corporate-body")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Corporate Body")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("corporate body name ltd")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("None")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Corporation Tax Unique Taxpayer Reference (UTR)")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
+            }
+          }
+
+          "has tradeName, but VAT not provided (utr shown)" in {
+            given.commonPrecondition
+
+            WsTestClient.withClient{ client =>
+              val result = client.url(s"$baseUrl$route?partnerType=corporate-body-optional-values")
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Check your answers")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Type of partner")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("Corporate Body")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("corporate body name ltd")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Trading name")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("corporate body name ltd")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Company registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1234567890")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("VAT registration number")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("123456789")
+                page.getElementsByClass("govuk-summary-list__key").text() must include("Address")
+                page.getElementsByClass("govuk-summary-list__value").text() must include("1 Romford Road Wellington Telford TF1 4ER")
+              }
+            }
+          }
+        }
+
         "the business partnerType is an unincorporated body" when {
           "no tradeName, VAT and self assessment utr are provided" in {
             given.commonPrecondition
