@@ -68,7 +68,18 @@ object TestData {
     address
   )
 
-  val unincoporateBodyModel = BusinessPartnerUnincorporatedBody(
+  val corporateBodyModel = BusinessPartnerCorporateBody(
+    "corporate body name ltd",
+    hasTradeName = false,
+    Some("corporate body name ltd"),
+    "1234567890",
+    hasVat = false,
+    vat = Some("123456789"),
+    uniqueTaxpayerReference = Some("1234567890"),
+    address
+  )
+
+  val unincorporatedBodyModel = BusinessPartnerUnincorporatedBody(
     "unincorporated name",
     hasTradeName = false,
     Some("unincorporated trade name"),
