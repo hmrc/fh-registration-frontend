@@ -9,33 +9,34 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersUnincorporatedBodyNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/unincorporated-body-name" should {
+  val route: String = routes.BusinessPartnersUnincorporatedBodyNameController.load().url.drop(6)
+  val unincorpBodyTradingNameUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
+
+  s"GET $route" should {
     "render the Unincorporated Body Name page" in {
       given
         .commonPrecondition
 
-      WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-name")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()
+      val result = buildRequest(route)
+        .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+        .get()
 
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title() must include("What is the unincorporated body name?")
-          page.getElementsByTag("h1").text() must include("What is the unincorporated body name?")
-        }
+      whenReady(result) { res =>
+        res.status mustBe 200
+        val page = Jsoup.parse(res.body)
+        page.title() must include("What is the unincorporated body name?")
+        page.getElementsByTag("h1").text() must include("What is the unincorporated body name?")
       }
     }
   }
 
-  "POST /form/business-partners/unincorporated-body-name" when {
+  s"POST $route" when {
     "the unincorporated body name is entered" should {
       "redirect to the Unincorporated Body Trading Name page" in {
         given
           .commonPrecondition
 
-        val result = buildRequest("/form/business-partners/unincorporated-body-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
@@ -45,7 +46,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/unincorporated-body-trading-name")
+          res.header(HeaderNames.LOCATION) mustBe Some(unincorpBodyTradingNameUrl)
         }
       }
     }
@@ -55,18 +56,16 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-name")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("unincorporatedBodyName_value" -> Seq("")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("unincorporatedBodyName_value" -> Seq("")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter an unincorporated body name")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter an unincorporated body name")
         }
       }
     }
@@ -76,18 +75,16 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-name")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("unincorporatedBodyName_value" -> Seq("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("unincorporatedBodyName_value" -> Seq("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Unincorporated body name must be 120 characters or less")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Unincorporated body name must be 120 characters or less")
         }
       }
     }

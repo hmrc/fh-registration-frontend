@@ -3,44 +3,43 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.Helpers.redirectLocation
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
+  val route: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url.drop(6)
+  val unincorpBodyVatRegNumUrl: String = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load().url
 
-  "GET /form/business-partners/unincorporated-body-trading-name" when {
+  s"GET $route" when {
 
     "render the business partner unincorporated body trading name page" when {
       "the user is authenticated" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/form/business-partners/unincorporated-body-trading-name")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-          whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include("Does the unincorporated body use a trading name that is different from its registered name?")
-            page.getElementsByTag("h1").text must include("Does Shelby unincorporated use a trading name that is different from its registered name?")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title must include("Does the unincorporated body use a trading name that is different from its registered name?")
+          page.getElementsByTag("h1").text must include("Does Shelby unincorporated use a trading name that is different from its registered name?")
         }
       }
     }
 
   }
 
-  "POST /form/business-partners/unincorporated-body-trading-name" should {
+  s"POST $route" should {
 
     "redirect to the 'does the unincorporated body have a uk vat reg number' page" when {
       "the user selects yes and enters a trading name" in {
         given.commonPrecondition
 
 
-        val result = buildRequest("/form/business-partners/unincorporated-body-trading-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(
@@ -50,14 +49,14 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(unincorpBodyVatRegNumUrl)
         }
       }
 
       "the user selects no" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/unincorporated-body-trading-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(
@@ -67,7 +66,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/form/business-partners/unincorporated-body-vat-registration-number")
+          res.header(HeaderNames.LOCATION) mustBe Some(unincorpBodyVatRegNumUrl)
         }
       }
     }
@@ -76,7 +75,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
       "no radio option is selected by the user" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/unincorporated-body-trading-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(
@@ -96,7 +95,7 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
       "yes is selected but no trading name is entered" in {
         given.commonPrecondition
 
-        val result = buildRequest("/form/business-partners/unincorporated-body-trading-name")
+        val result = buildRequest(route)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
           .post(Map(
