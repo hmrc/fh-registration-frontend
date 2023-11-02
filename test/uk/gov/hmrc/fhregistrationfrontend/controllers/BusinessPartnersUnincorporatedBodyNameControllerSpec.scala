@@ -30,11 +30,10 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
   val controller =
     new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val unincorpoBodyTradingNameUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
 
   "load" should {
     "Render the Unincorporated Body Name page" when {
@@ -80,7 +79,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/form/business-partners/unincorporated-body-trading-name")
+          redirectLocation(result).get should include(unincorpoBodyTradingNameUrl)
           reset(mockActions)
         }
 

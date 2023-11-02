@@ -53,8 +53,8 @@ POST        /business-partners/enter-partner-address              @uk.gov.hmrc.f
 GET         /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.load()
 POST        /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.next()
 
-GET         /form/business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
-POST        /form/business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()
+GET         /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
+POST        /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()
 
 GET         /business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load()
 POST        /business-partners/confirm-partner-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.next()
@@ -92,8 +92,8 @@ POST        /business-partners/company-registration-number                      
 GET         /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
 POST        /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
 
-GET         /form/business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.load()
-POST        /form/business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.next()
+GET         /business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.load()
+POST        /business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerUnincorporatedBodyTradingNameController.next()
 
 GET         /business-partners/enter-corporate-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyEnterAddressController.load()
 POST        /business-partners/enter-corporate-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyEnterAddressController.next()
@@ -113,17 +113,17 @@ POST        /otherStoragePremises/:storagePremisesNum                           
 GET         /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load()
 POST        /form/business-partners/unincorporated-body-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyRegisteredAddressController.next()
 
-GET         /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.load()
-POST        /form/business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.next()
+GET         /business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.load()
+POST        /business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.next()
 
 GET         /form/business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedOfficeAddressController.load()
 POST        /form/business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedOfficeAddressController.next()
 
-GET          /form/business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load()
-POST         /form/business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.next()
+GET          /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load()
+POST         /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.next()
 
-GET          /form/business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load()
-POST         /form/business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next()
+GET          /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load()
+POST         /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next()
 
 GET          /business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load()
 POST         /business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.next()

@@ -35,11 +35,9 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-
-  val mockAppConfig = mock[FrontendAppConfig]
-
-  val mockAddressService = mock[AddressService]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val mockAddressService: AddressService = mock[AddressService]
 
   val controller =
     new BusinessPartnersUnincorporatedBodyRegisteredAddressController(
@@ -49,6 +47,11 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
       mockAppConfig,
       mockAddressService
     )(scala.concurrent.ExecutionContext.Implicits.global, mockMcc)
+
+  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
+  val confirmRegOfficeAddressUrl: String =
+    routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 
   "load" should {
     "Render the business partner address page" when {
@@ -101,7 +104,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/business-partners/choose-address")
+          redirectLocation(result).get should include(chooseAddressUrl)
           reset(mockActions)
         }
       }
@@ -122,8 +125,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            "/fhdds/form/business-partners/confirm-unincorporated-body-registered-office-address")
+          redirectLocation(result).get should include(confirmRegOfficeAddressUrl)
           reset(mockActions)
         }
       }
@@ -139,7 +141,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/business-partners/cannot-find-address")
+          redirectLocation(result).get should include(cannotFindAddressUrl)
           reset(mockActions)
         }
       }

@@ -9,9 +9,12 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val requestURL = "/form/business-partners/unincorporated-body-registered-office-address"
+  val route: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url.drop(6)
+  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
+  val regOfficeAddressUrl: String = routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 
-  "GET /form/business-partners/unincorporated-body-registered-office-address" when {
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -20,39 +23,36 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl$requestURL")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("What is the unincorporated body’s registered office address?")
-              page.getElementsByTag("h1").text() must include("What is Test Unincorporated Body’s registered office address?")
-            }
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title() must include("What is the unincorporated body’s registered office address?")
+            page.getElementsByTag("h1").text() must include("What is Test Unincorporated Body’s registered office address?")
           }
         }
       }
     }
   }
 
-  "POST /form/business-partners/unincorporated-body-registered-office-address" when {
+  s"POST $route" when {
     "the form has no errors and multiple addresses are found" should {
       "return 303" in {
         given.commonPreconditionWithMultipleAddressLookup(true)
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("partnerAddressLine" -> Seq("Drury Lane"),
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+          "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("partnerAddressLine" -> Seq("Drury Lane"),
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(chooseAddressUrl)
         }
       }
     }
@@ -61,17 +61,16 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 303" in {
         given.commonPreconditionWithSingleAddressLookup(true)
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("partnerAddressLine" -> Seq("44 Romford Road"),
-              "partnerPostcode" -> Seq("TF1 4ER")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+          "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("partnerAddressLine" -> Seq("44 Romford Road"),
+            "partnerPostcode" -> Seq("TF1 4ER")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/form/business-partners/confirm-unincorporated-body-registered-office-address")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(regOfficeAddressUrl)
         }
       }
     }
@@ -80,17 +79,16 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 303" in {
         given.commonPreconditionWithMultipleAddressLookup(true)
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("partnerAddressLine" -> Seq.empty,
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+          "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("partnerAddressLine" -> Seq.empty,
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(chooseAddressUrl)
         }
       }
     }
@@ -99,17 +97,16 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 303" in {
         given.commonPreconditionWithEmptyAddressLookup(true)
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("partnerAddressLine" -> Seq.empty,
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+          "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+          .post(Map("partnerAddressLine" -> Seq.empty,
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/cannot-find-address")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(cannotFindAddressUrl)
         }
       }
     }
@@ -118,9 +115,12 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 400" in {
         given.commonPreconditionWithEmptyAddressLookup(false)
 
-        val result = buildRequest(requestURL).addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
-          "Csrf-Token" -> "nocheck").post(Map("partnerAddressLine" -> Seq.empty,
-          "partnerPostcode" -> Seq("AB1 2YZ")))
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+          .post(Map("partnerAddressLine" -> Seq.empty,
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
         whenReady(result) { res =>
           res.status mustBe 400
@@ -134,18 +134,17 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 400" in {
         given.commonPreconditionWithMultipleAddressLookup(true)
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-              "partnerPostcode" -> Seq.empty))
+          .post(Map("partnerAddressLine" -> Seq("1"),
+            "partnerPostcode" -> Seq.empty))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Enter the postcode of the address")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("Enter the postcode of the address")
         }
       }
     }
@@ -154,18 +153,17 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("1"),
-              "partnerPostcode" -> Seq("A")))
+          .post(Map("partnerAddressLine" -> Seq("1"),
+            "partnerPostcode" -> Seq("A")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid postcode")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid postcode")
         }
       }
     }
@@ -174,18 +172,17 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
       "return 400" in {
         given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("The lane;"),
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+          .post(Map("partnerAddressLine" -> Seq("The lane;"),
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("only include letters a to z, numbers, apostrophes, commas, dashes, exclamation marks, forward slashes, full stops, hyphens, quotation marks, round brackets and spaces")
         }
       }
     }
@@ -195,18 +192,17 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl$requestURL")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
-            .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
-              "partnerPostcode" -> Seq("AB1 2YZ")))
+          .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
+            "partnerPostcode" -> Seq("AB1 2YZ")))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Address lines must not be longer than 35 characters")
-          }
+        whenReady(result) { res =>
+          res.status mustBe 400
+          val page = Jsoup.parse(res.body)
+          page.getElementsByClass("govuk-error-summary").text() must include("Address lines must not be longer than 35 characters")
         }
       }
     }
