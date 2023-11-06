@@ -82,7 +82,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "2.13.10")
+  .settings(scalaVersion := "2.13.8")
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
