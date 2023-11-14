@@ -56,7 +56,7 @@ class FrontendAppConfig @Inject()(
 
   private val contactFormServiceIdentifier = appName
   override lazy val reportAProblemNonJSUrl =
-    s"$contactFrontend/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+    s"$contactFrontend/contact/report-technical-problem?service=$contactFormServiceIdentifier"
   override lazy val exitSurveyUrl: String =
     s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
 
