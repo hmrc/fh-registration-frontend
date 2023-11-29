@@ -69,7 +69,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" in {
+      "return 303" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
