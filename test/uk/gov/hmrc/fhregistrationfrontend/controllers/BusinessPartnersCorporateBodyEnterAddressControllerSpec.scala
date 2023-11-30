@@ -69,7 +69,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" in {
+      "return 303" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
@@ -78,7 +78,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
 
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
+        status(result) shouldBe SEE_OTHER
         reset(mockActions)
       }
 

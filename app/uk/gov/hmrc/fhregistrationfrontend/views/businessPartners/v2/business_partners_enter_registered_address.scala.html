@@ -29,15 +29,15 @@
         button: components.button
 )
 
-@(form: Form[BusinessPartnersEnterAddress],postAction: Call, corporateBody: String, journeyType:String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, journeyType: String, backLink: String = "#")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @fieldName = @{s"enterAddress"}
 
 @title = @{messages("fh.business.partners.corporateBody.enter.registered.address.title") + " - " + messages("fh.businessPartners.caption")}
 
-@heading = @{messages("fh.business.partners.corporateBody.enter.registered.address.heading", corporateBody)}
+@heading = @{messages("fh.business.partners.corporateBody.enter.registered.address.heading", partnerName)}
 
-@layout(title = title, backUrl = None, isBrowserBackMimic = true){
+@layout(title = title, backUrl = Some(backLink)){
 
  @if(form.errors.nonEmpty) {
   @viewHelpers.govukErrorSummary(

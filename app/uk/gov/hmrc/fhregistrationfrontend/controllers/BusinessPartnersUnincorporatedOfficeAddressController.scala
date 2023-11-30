@@ -32,23 +32,19 @@ class BusinessPartnersUnincorporatedOfficeAddressController @Inject()(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
+  val partnerName = "Test Unincorporated Body"
+  val bpAddressForm = chooseAddressForm
+  val journeyType = "enterAddress"
+  val postAction = routes.BusinessPartnersUnincorporatedOfficeAddressController.load()
+  val backLink = "#"
+
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test Unincorporated Body"
-      val bpAddressForm = chooseAddressForm
-      val journeyType = "enterAddress"
-      val postAction =
-        Call(
-          method = "POST",
-          url =
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedOfficeAddressController
-              .load()
-              .url)
       Ok(
         view
-          .business_partners_enter_registered_address(bpAddressForm, postAction, partnerName, journeyType))
+          .business_partners_enter_registered_address(bpAddressForm, postAction, partnerName, journeyType, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -57,21 +53,17 @@ class BusinessPartnersUnincorporatedOfficeAddressController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      val partnerName = "Test Unincorporated Body"
-      val journeyType = "enterAddress"
       chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            val postAction =
-              Call(
-                method = "POST",
-                url =
-                  uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersUnincorporatedOfficeAddressController
-                    .next()
-                    .url)
             BadRequest(
-              view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, journeyType))
+              view.business_partners_enter_registered_address(
+                formWithErrors,
+                postAction,
+                partnerName,
+                journeyType,
+                backLink))
           },
           bpAddress => {
             Ok(s"Next page! with form result: ${bpAddress.toString}")
