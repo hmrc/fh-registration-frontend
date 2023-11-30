@@ -20,7 +20,7 @@ val compile = Seq(
   "uk.gov.hmrc"                 %% "play-hmrc-api"                    % "7.1.0-play-28",
   "uk.gov.hmrc"                 %% "http-caching-client"              % "10.0.0-play-28",
   "uk.gov.hmrc"                 %% "play-conditional-form-mapping"    % "1.12.0-play-28",
-  "com.typesafe.play"           %% "play-json"                        % "2.9.3",
+  "com.typesafe.play"           %% "play-json"                        % "2.9.4",
   "org.typelevel"               %% "cats-core"                        % "2.9.0",
   "org.typelevel"               %% "cats-kernel"                      % "2.9.0",
   "com.github.tototoshi"        %% "play-json-naming"                 % "1.5.0",
@@ -81,7 +81,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "2.13.8")
+  .settings(scalaVersion := "2.13.10")
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
