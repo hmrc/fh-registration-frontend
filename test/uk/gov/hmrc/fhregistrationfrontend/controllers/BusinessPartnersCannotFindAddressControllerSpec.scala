@@ -37,6 +37,8 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val enterPartnerRegOfficeAddressUrl: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url
   val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load().url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
+  val enterUnincorpBodyRegOfficeAddressUrl: String =
+    routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
 
   "load" should {
     "Render the Cannot Find Address page" when {
@@ -118,6 +120,22 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         page.title() should include("We cannot find any addresses for HR33 7GP")
         // should be mocked out when Save4Later changes included
         page.getElementById("enter-manually").attr("href") should include(enterCorpBodyRegOfficeAddressUrl)
+        reset(mockActions)
+      }
+
+      "the businessType returned is a unincorporated-body" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("unincorporated-body")
+
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include("We cannot find any addresses for HR33 7GP")
+        // should be mocked out when Save4Later changes included
+        page.getElementById("enter-manually").attr("href") should include(enterUnincorpBodyRegOfficeAddressUrl)
         reset(mockActions)
       }
     }

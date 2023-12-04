@@ -8,7 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCannotFindAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersCannotFindAddressController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersCannotFindAddressController.load().url.drop(6)
 
   s"GET $route" when {
 
