@@ -39,6 +39,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
       routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
       routes.BusinessPartnerAddressController.load().url,
       routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url,
+      routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url,
       config.getRandomBusinessType()
     )
 
@@ -46,6 +47,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
       routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
       routes.BusinessPartnersEnterAddressController.load().url,
       routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
+      routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url,
       config.getRandomBusinessType()
     )
 
@@ -64,9 +66,10 @@ class BusinessPartnersCannotFindAddressController @Inject()(
     }
   }
 
-  def getUrlFromBusinessType(url1: String, url2: String, url3: String, partnerType: String): String =
+  def getUrlFromBusinessType(url1: String, url2: String, url3: String, url4: String, partnerType: String): String =
     if (partnerType == "partnership" || partnerType == "limited-liability-partnership") url1
     else if (partnerType == "individual" || partnerType == "sole-proprietor") url2
     else if (partnerType == "corporateBody") url3
+    else if (partnerType == "unincorporated-body") url4
     else "#"
 }
