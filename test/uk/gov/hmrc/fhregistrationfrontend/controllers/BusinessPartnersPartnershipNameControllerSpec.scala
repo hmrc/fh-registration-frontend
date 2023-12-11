@@ -29,11 +29,13 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersPartnershipNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+  val PartnershipNameTitle = "What is the name of the partnership? - Business partners"
+  val pageNotFoundTitle = "Page not found"
 
   "load" should {
     "Render the business partner partnership name page" when {
@@ -46,7 +48,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("What is the name of the partnership? - Business partners")
+        page.title should include(PartnershipNameTitle)
         reset(mockActions)
       }
     }
@@ -60,7 +62,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
+        page.title should include(pageNotFoundTitle)
         reset(mockActions)
       }
     }
@@ -68,7 +70,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
   "next" should {
     "The business partner v2 pages are enabled" should {
-      "return 200" when {
+      "return 303" when {
         "the form has no errors and the partnership name name is supplied" in {
           setupUserAction()
 
@@ -80,7 +82,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
+          status(result) shouldBe SEE_OTHER
           reset(mockActions)
         }
       }
@@ -112,7 +114,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
+        page.title should include(pageNotFoundTitle)
         reset(mockActions)
       }
     }
