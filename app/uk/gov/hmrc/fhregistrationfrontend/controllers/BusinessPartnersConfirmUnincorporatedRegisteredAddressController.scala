@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
@@ -33,9 +33,12 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressController @Inject()
 ) extends AppController(ds, cc) {
   import actions._
 
+  val postAction: Call = routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "Test Corp", "unincorporated"))
+      Ok(
+        view.business_partners_confirm_registered_address(address, "Test Corp", "unincorporated", postAction, "#", "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

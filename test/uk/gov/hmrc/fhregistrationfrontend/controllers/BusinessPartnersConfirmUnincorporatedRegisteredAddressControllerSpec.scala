@@ -30,9 +30,9 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
     new BusinessPartnersConfirmUnincorporatedRegisteredAddressController(
@@ -69,7 +69,7 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
+        page.title should include("Confirm the unincorporated body’s registered office address?")
         reset(mockActions)
       }
     }

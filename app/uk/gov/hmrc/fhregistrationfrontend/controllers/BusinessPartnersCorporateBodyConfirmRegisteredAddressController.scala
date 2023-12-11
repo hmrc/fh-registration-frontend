@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
@@ -33,9 +33,20 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
+  val backUrl: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url
+  val editAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
+  val postAction: Call = routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "Test Corp", "corporate"))
+      Ok(
+        view.business_partners_confirm_registered_address(
+          address,
+          "Test Corp",
+          "corporate",
+          postAction,
+          backUrl,
+          editAddressUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -43,7 +54,7 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(s"Form submitted, with result:")
+      Redirect(routes.BusinessPartnersCheckYourAnswersController.load("corporate-body"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
