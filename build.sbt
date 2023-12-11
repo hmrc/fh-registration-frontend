@@ -3,6 +3,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, s
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
+import play.core.PlayVersion
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
@@ -31,7 +32,7 @@ val compile = Seq(
   "com.github.julien-truffaut"  %% "monocle-macro"                    % monocleVersion,
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
   "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.5",
-  "uk.gov.hmrc.mongo"           %% s"hmrc-mongo-$playVersion"          % hmrcMongoVersion,
+  "uk.gov.hmrc.mongo"           %% s"hmrc-mongo-$playVersion"         % hmrcMongoVersion,
 
   compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full
@@ -48,7 +49,8 @@ def test(scope: String = "test,it") = Seq(
   "org.jsoup"                    % "jsoup"                          % "1.15.4"         % scope,
   "org.scalacheck"              %% "scalacheck"                     % "1.17.0"         % scope,
   "com.github.julien-truffaut"  %% "monocle-law"                    % monocleVersion   % scope,
-  "uk.gov.hmrc.mongo"           %% s"hmrc-mongo-test-$playVersion"  % hmrcMongoVersion % scope
+  "uk.gov.hmrc.mongo"           %% s"hmrc-mongo-test-$playVersion"  % hmrcMongoVersion % scope,
+  "com.typesafe.play"           %% "play-test"                      % PlayVersion.current % scope,
 )
 
 val appName = "fh-registration-frontend"
