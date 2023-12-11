@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package queries
 
-import queries.{Gettable, Settable}
+import models.UserAnswers
+import play.api.libs.json.JsPath
 
-trait QuestionPage[A] extends Page with Gettable[A] with Settable[A]
+import scala.util.{Success, Try}
+
+sealed trait Query {
+
+  def path: JsPath
+}
+
+trait Gettable[A] extends Query
+
+trait Settable[A] extends Query {
+
+  def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
+    Success(userAnswers)
+}
