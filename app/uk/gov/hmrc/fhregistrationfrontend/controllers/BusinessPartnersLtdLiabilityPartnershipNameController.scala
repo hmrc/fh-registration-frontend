@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
+class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -36,8 +36,8 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
 
   val businessPartnerType = "ltdLiabilityPartnership"
   val backAction: String = routes.BusinessPartnersController.load().url
-  val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
-  val tradingNamePageUrl: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
+  val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
+  val tradingNamePage: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -68,8 +68,7 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
                 backAction))
           },
           ltdLiabilityPartnership => {
-            Redirect(tradingNamePageUrl)
-            //Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
+            Redirect(tradingNamePage)
           }
         )
     } else {

@@ -5,10 +5,10 @@ import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersLtdLiabilityPartnershipControllerISpec
+class BusinessPartnersLtdLiabilityPartnershipNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersLtdLiabilityPartnershipController.load().url.drop(6)
+  val route = routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url.drop(6)
 
   val pageTitle: String = "What is the name of the limited liability partnership?"
   val pageHeading: String = "What is the name of the limited liability partnership?"

@@ -38,7 +38,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
     if (getBusinessType == "partnership")
       routes.BusinessPartnersPartnershipNameController.load().url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersLtdLiabilityPartnershipController.load().url
+      routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url
     else "#"
   }
   val businessType = "partnership"

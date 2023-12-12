@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -33,8 +33,8 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  val controller: BusinessPartnersLtdLiabilityPartnershipController =
-    new BusinessPartnersLtdLiabilityPartnershipController(commonDependencies, views, mockActions, mockAppConfig)(
+  val controller: BusinessPartnersLtdLiabilityPartnershipNameController =
+    new BusinessPartnersLtdLiabilityPartnershipNameController(commonDependencies, views, mockActions, mockAppConfig)(
       mockMcc)
 
   val pageHeading: String = "Enter the name of the limited liability partnership"
