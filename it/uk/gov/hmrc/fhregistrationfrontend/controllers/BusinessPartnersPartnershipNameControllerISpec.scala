@@ -2,13 +2,18 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersPartnershipNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersPartnershipNameController.load().url.drop(6)
+  val pageHeading: String = "What is the name of the partnership?"
+  val pageTitle: String = "What is the name of the partnership? - Business partners"
+  val emptyTextError: String = "Enter a partnership name"
+  val characterLimitError: String = "Partnership name must be 120 characters or less"
+  val tradingNamePageUrl: String = routes.BusinessPartnerPartnershipTradingNameController.load().url
 
   s"GET $route" when {
 
@@ -16,14 +21,13 @@ class BusinessPartnersPartnershipNameControllerISpec
       "the user is authenticated" in {
         given.commonPrecondition
 
-        val result = buildRequest(route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = buildRequest(route).addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
         whenReady(result) { res =>
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
-          page.title must include("What is the name of the partnership? - Business partners")
-          page.getElementsByTag("h1").text must include("What is the name of the partnership?")
+          page.title must include(pageTitle)
+          page.getElementsByTag("h1").text must include(pageHeading)
         }
       }
     }
@@ -33,7 +37,7 @@ class BusinessPartnersPartnershipNameControllerISpec
   s"POST $route" when {
 
     "the user submits with a company name" should {
-      "return 200" when {
+      "return 303" when {
         "the user is authenticated" in {
           given.commonPrecondition
 
@@ -45,8 +49,8 @@ class BusinessPartnersPartnershipNameControllerISpec
             ))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body must include("Form submitted, with result: PartnershipNameModel(Shelby Limited)")
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(tradingNamePageUrl)
           }
         }
       }
@@ -66,9 +70,9 @@ class BusinessPartnersPartnershipNameControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.title must include("What is the name of the partnership? - Business partners")
-          page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
-          page.getElementById("partnershipName-error").text() must include("Enter a partnership name")
+          page.title must include(pageTitle)
+          page.getElementsByTag("h1").text() must include(pageHeading)
+          page.getElementById("partnershipName-error").text() must include(emptyTextError)
         }
       }
     }
@@ -89,9 +93,9 @@ class BusinessPartnersPartnershipNameControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.title must include("What is the name of the partnership? - Business partners")
-          page.getElementsByTag("h1").text() must include("What is the name of the partnership?")
-          page.getElementById("partnershipName-error").text() must include("Partnership name must be 120 characters or less")
+          page.title must include(pageTitle)
+          page.getElementsByTag("h1").text() must include(pageHeading)
+          page.getElementById("partnershipName-error").text() must include(characterLimitError)
         }
       }
     }

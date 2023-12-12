@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -34,11 +34,13 @@ class BusinessPartnersPartnershipNameController @Inject()(
   import actions._
 
   val journeyType = "partnership"
-  val postAction = routes.BusinessPartnersPartnershipNameController.next()
+  val postAction: Call = routes.BusinessPartnersPartnershipNameController.next()
+  val backAction: String = routes.BusinessPartnersController.load().url
+  val tradingNamePageUrl: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey, "#"))
+      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey, backAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -50,10 +52,11 @@ class BusinessPartnersPartnershipNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey, "#"))
+            BadRequest(
+              view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey, backAction))
           },
           partnership => {
-            Ok(s"Form submitted, with result: $partnership")
+            Redirect(tradingNamePageUrl)
           }
         )
     } else {
