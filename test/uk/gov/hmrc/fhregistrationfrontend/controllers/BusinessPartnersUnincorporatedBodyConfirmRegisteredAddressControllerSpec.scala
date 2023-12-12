@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
+class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
@@ -35,7 +35,7 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersConfirmPartnershipRegisteredAddressController(
+    new BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
@@ -52,16 +52,16 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         // should be mocked out when Save4Later changes included
-        page.title() should include("Confirm the partnership’s registered office address?")
-        page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
-        page.body.text should include("1 Romford Road")
+        page.title() should include("Confirm the unincorporated body’s registered office address?")
+        page.getElementsByTag("h1").text should include("Confirm the Test Corp’s registered office address")
+        page.body.text should include("Test town")
         page.getElementById("confirm-edit").attr("href") should include("#")
         reset(mockActions)
       }
     }
 
     "return 200" when {
-      "the form has no errors and the address is found" in {
+      "redirect to the next page" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
@@ -69,7 +69,7 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Confirm the partnership’s registered office address?")
+        page.title should include("Confirm the unincorporated body’s registered office address?")
         reset(mockActions)
       }
     }

@@ -109,7 +109,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
                   if (addressListMap.isEmpty)
                     Redirect(routes.BusinessPartnersCannotFindAddressController.load())
                   else if (addressListMap.size == 1)
-                    Redirect(routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load())
+                    Redirect(routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load())
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
                 case Left(AddressLookupErrorResponse(_)) =>

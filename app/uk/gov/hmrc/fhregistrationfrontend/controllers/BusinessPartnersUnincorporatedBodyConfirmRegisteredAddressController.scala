@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersConfirmPartnershipRegisteredAddressController @Inject()(
+class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,11 +33,12 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val postAction: Call = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.next()
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "company", "partnership", postAction, "#", "#"))
+      Ok(
+        view.business_partners_confirm_registered_address(address, "Test Corp", "unincorporated", postAction, "#", "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -52,9 +53,9 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressController @Inject()(
   }
 
   val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
+    addressLine1 = "44 Romford Road",
+    addressLine2 = Some("Testville"),
+    addressLine3 = Some("Test town"),
     addressLine4 = None,
     postcode = "TF1 4ER",
     countryCode = None,

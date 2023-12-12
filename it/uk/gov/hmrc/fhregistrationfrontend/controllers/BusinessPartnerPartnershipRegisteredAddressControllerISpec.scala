@@ -10,7 +10,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url.drop(6)
-  val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url
+  val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 

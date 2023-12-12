@@ -11,7 +11,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerISpec
 
   val route: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url.drop(6)
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
-  val regOfficeAddressUrl: String = routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load().url
+  val regOfficeAddressUrl: String = routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 
   s"GET $route" when {
