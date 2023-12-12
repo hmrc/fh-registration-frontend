@@ -25,21 +25,23 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersConfirmCorporateRegisteredAddressControllerSpec
+class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersConfirmUnincorporatedRegisteredAddressController(
+    new BusinessPartnersPartnershipConfirmRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
       mockAppConfig)(mockMcc)
+
+  val pageTitle: String = "Confirm the partnership’s registered office address?"
 
   "load" should {
     "Render the confirm address page" when {
@@ -52,11 +54,24 @@ class BusinessPartnersConfirmCorporateRegisteredAddressControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         // should be mocked out when Save4Later changes included
-        page.title() should include("Confirm the unincorporated body’s registered office address?")
-        page.getElementsByTag("h1").text should include("Confirm the Test Corp’s registered office address")
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
-        page.body.text should include("Test town")
+        page.title() should include(pageTitle)
+        page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
+        page.body.text should include("1 Romford Road")
         page.getElementById("confirm-edit").attr("href") should include("#")
+        reset(mockActions)
+      }
+    }
+
+    "return 200" when {
+      "the form has no errors and the address is found" in {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load())(request))
+
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title() should include(pageTitle)
         reset(mockActions)
       }
     }

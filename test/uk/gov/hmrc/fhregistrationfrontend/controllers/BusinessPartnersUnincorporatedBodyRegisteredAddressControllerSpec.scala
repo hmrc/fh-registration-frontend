@@ -50,7 +50,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
 
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val confirmRegOfficeAddressUrl: String =
-    routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load().url
+    routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 
   "load" should {

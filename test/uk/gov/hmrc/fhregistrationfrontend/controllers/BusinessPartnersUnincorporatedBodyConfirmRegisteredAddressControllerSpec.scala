@@ -25,17 +25,17 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
+class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersConfirmUnincorporatedRegisteredAddressController(
+    new BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
@@ -69,7 +69,7 @@ class BusinessPartnersConfirmUnincorporatedRegisteredAddressControllerSpec
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
+        page.title should include("Confirm the unincorporated body’s registered office address?")
         reset(mockActions)
       }
     }

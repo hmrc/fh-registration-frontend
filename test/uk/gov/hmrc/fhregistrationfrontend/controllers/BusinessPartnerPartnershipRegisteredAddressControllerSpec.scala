@@ -46,7 +46,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
       mockAddressService)(mockMcc)
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val confirmPartnershipRegAddressUrl: String =
-    routes.BusinessPartnersConfirmPartnershipRegisteredAddressController.load().url
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
 
   "load" should {

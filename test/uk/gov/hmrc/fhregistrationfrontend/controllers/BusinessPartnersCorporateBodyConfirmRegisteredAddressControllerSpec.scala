@@ -20,26 +20,28 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
+class BusinessPartnersCorporateBodyConfirmRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersConfirmPartnershipRegisteredAddressController(
+    new BusinessPartnersCorporateBodyConfirmRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
       mockAppConfig)(mockMcc)
+
+  val corpBodyEnterAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
 
   "load" should {
     "Render the confirm address page" when {
@@ -52,24 +54,10 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         // should be mocked out when Save4Later changes included
-        page.title() should include("Confirm the partnership’s registered office address?")
-        page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
-        page.body.text should include("1 Romford Road")
-        page.getElementById("confirm-edit").attr("href") should include("#")
-        reset(mockActions)
-      }
-    }
-
-    "return 200" when {
-      "the form has no errors and the address is found" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.getElementsByClass("govuk-button").first.attr("href") should include("#")
+        page.title() should include("Confirm the company’s registered office address?")
+        page.getElementsByTag("h1").text should include("Confirm the Test Corp’s registered office address")
+        page.body.text should include("Test town")
+        page.getElementById("confirm-edit").attr("href") should include(corpBodyEnterAddressUrl)
         reset(mockActions)
       }
     }
@@ -90,15 +78,16 @@ class BusinessPartnersConfirmPartnershipRegisteredAddressControllerSpec
   }
 
   "next" should {
-    "return 200" when {
+    "redirect to the Check Your Answers page" when {
       "the use clicks save and continue" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
-        contentAsString(result) shouldBe "Form submitted, with result:"
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include(
+          routes.BusinessPartnersCheckYourAnswersController.load("corporate-body").url)
         reset(mockActions)
       }
     }

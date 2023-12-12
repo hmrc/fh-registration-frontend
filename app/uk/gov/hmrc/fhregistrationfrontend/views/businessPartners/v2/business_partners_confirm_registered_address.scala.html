@@ -28,7 +28,7 @@
         formHelper: FormWithCSRF,
         viewHelpers: ViewHelpers)
 
-@(address: Address, companyName: String, titleType: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(address: Address, companyName: String, titleType: String, postAction: Call, backAction: String, editAddressUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -38,16 +38,21 @@
     messages(s"fh.businessPartners.$titleType.confirmRegisteredAddress.title") + " - Business partners"
 }
 
-@layout(title = title, Some(pageScripts), backUrl = Some("#")) {
+@layout(title = title, Some(pageScripts), backUrl = Some(backAction)) {
 
-    @Html(BusinessPartnersHeader(messages("fh.businessPartners.partnership.confirmRegisteredAddress.heading", companyName)))
+    @viewHelpers.form(action = postAction) {
 
-    <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
+        @Html(BusinessPartnersHeader(messages("fh.businessPartners.partnership.confirmRegisteredAddress.heading", companyName)))
+    
+        <p class="govuk-body-m">@{Html(Helpers.formatAddress(address))}</p>
+    
+        <p class="govuk-body">
+            <a class="govuk-link" id="confirm-edit" href="@editAddressUrl">@messages("fh.businessPartners.confirmAddress.edit")</a>
+        </p>
+    
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
 
-    <p class="govuk-body">
-        <a class="govuk-link" id="confirm-edit" href="#">@messages("fh.businessPartners.confirmAddress.edit")</a>
-    </p>
+    }
 
-    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit"), href=Some("#")))
-    @SaveForLater()
 }

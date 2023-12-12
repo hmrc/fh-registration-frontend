@@ -96,7 +96,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
                   if (addressListMap.isEmpty)
                     Redirect(routes.BusinessPartnersCannotFindAddressController.load())
                   else if (addressListMap.size == 1)
-                    Redirect(routes.BusinessPartnersConfirmUnincorporatedRegisteredAddressController.load())
+                    Redirect(routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load())
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
 
