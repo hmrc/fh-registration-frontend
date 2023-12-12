@@ -66,7 +66,7 @@ class FrontendAppConfig @Inject()(
   lazy val username = getString("credentials.username")
   lazy val password = getString("credentials.password")
 
-  val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+  lazy val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
 
   override def getConfiguration: Configuration = configuration
 
