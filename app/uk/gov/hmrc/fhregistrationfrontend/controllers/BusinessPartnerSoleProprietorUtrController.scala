@@ -33,10 +33,10 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val partnerName = "{{partner name}}"
-  val postAction = routes.BusinessPartnerSoleProprietorUtrController.next()
-  val businessPartnerType = "SoleProprietor"
-  val backLink = "#"
+  val partnerName: String = "{{partner name}}"
+  val postAction: Call = routes.BusinessPartnerSoleProprietorUtrController.next()
+  val businessPartnerType: String = "SoleProprietor"
+  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -66,7 +66,7 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
                 postAction,
                 backLink))
           },
-          businessPartnersUtr => Ok(s"Next page! with UTR: $businessPartnersUtr")
+          businessPartnersUtr => Redirect(routes.BusinessPartnerAddressController.load())
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
