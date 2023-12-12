@@ -3,13 +3,18 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersLtdLiabilityPartnershipControllerISpec
   extends Specifications with TestConfiguration {
 
   val route = routes.BusinessPartnersLtdLiabilityPartnershipController.load().url.drop(6)
+
+  val pageTitle: String = "What is the name of the limited liability partnership?"
+  val pageHeading: String = "What is the name of the limited liability partnership?"
+  val tradingNamePageUrl: String = routes.BusinessPartnerPartnershipTradingNameController.load().url
+  val characterLimitError: String = "There is a problem Limited liability partnership name must be 120 characters or less"
+  val emptyTextError: String = "There is a problem Enter the name of the limited liability partnership"
 
   s"GET $route" should {
     "render the Limited Liability Partnership Name page" in {
@@ -23,15 +28,15 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
         whenReady(result) { res =>
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
-          page.title() must include("What is the name of the limited liability partnership?")
-          page.getElementsByTag("h1").text() must include("What is the name of the limited liability partnership?")
+          page.title() must include(pageTitle)
+          page.getElementsByTag("h1").text() must include(pageHeading)
         }
     }
   }
 
   s"POST $route" when {
     "the limited liability partnership name is entered" should {
-      "return 200 with ltdLiabilityPartnershipName" in {
+      "return 303 with ltdLiabilityPartnershipName" in {
         given
           .commonPrecondition
 
@@ -42,8 +47,8 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
             .post(Map("ltdLiabilityPartnershipName" -> Seq("Partnership Name")))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body mustBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(tradingNamePageUrl)
           }
       }
     }
@@ -62,7 +67,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the name of the limited liability partnership")
+            page.getElementsByClass("govuk-error-summary").text() must include(emptyTextError)
           }
       }
     }
@@ -81,7 +86,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Limited liability partnership name must be 120 characters or less")
+            page.getElementsByClass("govuk-error-summary").text() must include(characterLimitError)
           }
       }
     }

@@ -29,13 +29,17 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
+  override lazy val views: Views = app.injector.instanceOf[Views]
 
-  val mockAppConfig = mock[FrontendAppConfig]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  val controller =
+  val controller: BusinessPartnersLtdLiabilityPartnershipController =
     new BusinessPartnersLtdLiabilityPartnershipController(commonDependencies, views, mockActions, mockAppConfig)(
       mockMcc)
+
+  val pageHeading: String = "Enter the name of the limited liability partnership"
+  val pageTitle: String = "What is the name of the limited liability partnership?"
+  val pageNotFoundTitle: String = "Page not found"
 
   "load" should {
     "Render the Limited Liability Partnership Name page" when {
@@ -47,7 +51,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the name of the limited liability partnership?")
+        page.title() should include(pageTitle)
         reset(mockActions)
       }
     }
@@ -61,7 +65,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
         result.header.status shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        page.title() should include(pageNotFoundTitle)
         reset(mockActions)
       }
     }
@@ -69,7 +73,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "return 303" when {
         "the form has no errors and limited liability partnership name is supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -78,8 +82,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: LtdLiabilityPartnershipName(Partnership Name)"
+          status(result) shouldBe SEE_OTHER
           reset(mockActions)
         }
 
@@ -93,9 +96,8 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
-          page.title() should include("What is the name of the limited liability partnership?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter the name of the limited liability partnership")
+          page.title() should include(pageTitle)
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(pageHeading)
           reset(mockActions)
         }
       }
@@ -110,7 +112,7 @@ class BusinessPartnersLtdLiabilityPartnershipControllerSpec extends ControllerSp
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        page.title() should include(pageNotFoundTitle)
         reset(mockActions)
       }
     }
