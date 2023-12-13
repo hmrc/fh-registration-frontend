@@ -152,8 +152,8 @@ POST        /businessCustomers                                               @uk
 GET         /mainBusinessAddress                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.MainBusinessAddressController.load()
 POST        /mainBusinessAddress                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.MainBusinessAddressController.next()
 
-GET         /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipController.load()
-POST        /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipController.next()
+GET         /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.load()
+POST        /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.next()
 
 GET         /form/:page                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.load(page: String)
 GET         /form/:page/:section                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.FormPageController.loadWithSection(page: String, section: String)

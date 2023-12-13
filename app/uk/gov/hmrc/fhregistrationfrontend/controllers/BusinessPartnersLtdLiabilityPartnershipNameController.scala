@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
+class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,8 +35,9 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
   import actions._
 
   val businessPartnerType = "ltdLiabilityPartnership"
-  val backLink = "#"
-  val postActon = routes.BusinessPartnersLtdLiabilityPartnershipController.next()
+  val backAction: String = routes.BusinessPartnersController.load().url
+  val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
+  val tradingNamePage: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -46,7 +47,7 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
           ltdLiabilityPartnershipNameKey,
           businessPartnerType,
           postActon,
-          backLink))
+          backAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -64,10 +65,10 @@ class BusinessPartnersLtdLiabilityPartnershipController @Inject()(
                 ltdLiabilityPartnershipNameKey,
                 businessPartnerType,
                 postActon,
-                backLink))
+                backAction))
           },
           ltdLiabilityPartnership => {
-            Ok(s"Form submitted, with result: $ltdLiabilityPartnership")
+            Redirect(tradingNamePage)
           }
         )
     } else {
