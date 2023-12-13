@@ -44,7 +44,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersUtrController.load().url
+      routes.BusinessPartnersPartnershipUtrController.load().url
     else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersVatRegistrationNumberController.load().url
     else

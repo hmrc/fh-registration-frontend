@@ -32,7 +32,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
   override lazy val views: Views = app.injector.instanceOf[Views]
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val partnershipUtrUrl: String = routes.BusinessPartnersUtrController.load().url
+  val partnershipUtrUrl: String = routes.BusinessPartnersPartnershipUtrController.load().url
   val partnershipRegisteredAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   val controller =

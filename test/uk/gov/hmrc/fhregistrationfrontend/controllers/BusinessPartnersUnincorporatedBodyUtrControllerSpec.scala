@@ -79,8 +79,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with UTR: 1234567890"
+          status(result) shouldBe SEE_OTHER
           reset(mockActions)
         }
 
@@ -92,8 +91,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with no UTR"
+          status(result) shouldBe SEE_OTHER
           reset(mockActions)
         }
       }

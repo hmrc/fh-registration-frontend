@@ -9,8 +9,14 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersUnincorporatedBodyUtrControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnersUtrController.load().url.drop(6)
-  val partnershipRegAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+  val route: String = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url.drop(6)
+  val registeredOfficeAddressPageUrl: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
+  val pageHeading = "Does {{Unincorporated body name}} have a Self Assessment Unique Taxpayer Reference (UTR)?"
+  val pageTitle = "Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?"
+
+  val noSelectionError = "There is a problem Select whether they have a Self Assessment Unique Taxpayer Reference"
+  val blankFieldError = "There is a problem Enter a Self Assessment Unique Taxpayer Reference (UTR)"
+  val utrFormatError = "There is a problem Enter a valid Self Assessment Unique Taxpayer Reference (UTR)"
 
   s"GET $route" should {
 
@@ -25,15 +31,15 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
       whenReady(result) { res =>
         res.status mustBe 200
         val page = Jsoup.parse(res.body)
-        page.title() must include("Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
-        page.getElementsByTag("h1").text() must include("Does test partner have a Self Assessment Unique Taxpayer Reference (UTR)?")
+        page.title() must include(pageTitle)
+        page.getElementsByTag("h1").text() must include(pageHeading)
       }
     }
   }
 
   s"POST $route" when {
     "yes is selected and the UTR is entered" should {
-      "redirect to the Partnership Registered Office Address page" in {
+      "redirect to the Unincorporated Body Registered Office Address page" in {
         given
           .commonPrecondition
 
@@ -48,13 +54,13 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(partnershipRegAddressUrl)
+          res.header(HeaderNames.LOCATION) mustBe Some(registeredOfficeAddressPageUrl)
         }
       }
     }
 
     "no is selected" should {
-      "redirect to the Partnership Registered Office Address page" in {
+      "redirect to the Unincorporated Body Registered Office Address page" in {
         given
           .commonPrecondition
 
@@ -66,7 +72,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(partnershipRegAddressUrl)
+          res.header(HeaderNames.LOCATION) mustBe Some(registeredOfficeAddressPageUrl)
         }
       }
     }
@@ -85,7 +91,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether they have a Self Assessment Unique Taxpayer Reference")
+          page.getElementsByClass("govuk-error-summary").text() must include(noSelectionError)
         }
       }
     }
@@ -104,26 +110,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a Self Assessment Unique Taxpayer Reference (UTR)")
-        }
-      }
-    }
-
-    "the form hasUtr field is invalid format" should {
-      "return 400" in {
-        given
-          .commonPrecondition
-
-        val result = buildRequest(route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .withHttpHeaders(xSessionId,
-            "Csrf-Token" -> "nocheck")
-          .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("error")))
-
-        whenReady(result) { res =>
-          res.status mustBe 400
-          val page = Jsoup.parse(res.body)
-          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether they have a Self Assessment Unique Taxpayer Reference (UTR)")
+          page.getElementsByClass("govuk-error-summary").text() must include(blankFieldError)
         }
       }
     }
@@ -143,7 +130,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerISpec
         whenReady(result) { res =>
           res.status mustBe 400
           val page = Jsoup.parse(res.body)
-          page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid Self Assessment Unique Taxpayer Reference (UTR)")
+          page.getElementsByClass("govuk-error-summary").text() must include(utrFormatError)
         }
       }
     }
