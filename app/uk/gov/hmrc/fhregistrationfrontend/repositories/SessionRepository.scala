@@ -25,7 +25,7 @@ import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.{Clock, Instant}
+import java.time.{Clock, Instant, ZoneOffset}
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,8 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SessionRepository @Inject()(
   mongoComponent: MongoComponent,
-  appConfig: FrontendAppConfig,
-  clock: Clock
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends PlayMongoRepository[UserAnswers](
       collectionName = "user-answers",
@@ -58,7 +57,7 @@ class SessionRepository @Inject()(
     collection
       .updateOne(
         filter = byId(id),
-        update = Updates.set("lastUpdated", Instant.now(clock)),
+        update = Updates.set("lastUpdated", Instant.now()),
       )
       .toFuture()
       .map(_ => true)

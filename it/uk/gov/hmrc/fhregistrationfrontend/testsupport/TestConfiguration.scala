@@ -10,7 +10,6 @@ import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
-import play.api.inject._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
@@ -19,7 +18,6 @@ import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
 
-import java.time.{Clock, ZoneOffset}
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -77,9 +75,6 @@ trait TestConfiguration
       "cachable.session-cache",
       "address-lookup"
     )))
-    .overrides(
-      bind[Clock].toInstance(Clock.systemDefaultZone().withZone(ZoneOffset.UTC))
-    )
     .build()
         app.injector.instanceOf[HealthController]
 
