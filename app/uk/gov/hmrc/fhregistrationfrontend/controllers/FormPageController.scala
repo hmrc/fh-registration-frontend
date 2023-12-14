@@ -114,7 +114,7 @@ class FormPageController @Inject()(
       Ok(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     }
 
-  val submitButtonValueForm = Form("saveAction" -> nonEmptyText)
+  val submitButtonValueForm: Form[String] = Form("saveAction" -> nonEmptyText)
 
   /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
   private def isSaveForLate(implicit req: Request[_]): Boolean =
