@@ -21,7 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.{Mode, NormalMode}
+import models.{Mode, NormalMode, UserAnswers}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterAddressPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
@@ -37,7 +37,7 @@ class BusinessPartnersEnterAddressController @Inject()(
   val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
-    extends AppController(ds, cc) {
+    extends AppController(ds, cc) with ControllerHelper {
 
   val partnerName: String = "Test User"
   val journeyType: String = "enterAddress"
@@ -83,7 +83,12 @@ class BusinessPartnersEnterAddressController @Inject()(
                   backUrl)))
           },
           bpAddress => {
-            Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual")))
+            val nextPage = routes.BusinessPartnersCheckYourAnswersController.load("individual")
+            sessionCache.get(request.userId).flatMap { optUserAnswers =>
+              val userAnswers = optUserAnswers.getOrElse(UserAnswers(request.userId))
+              val updatedUserAnswers = userAnswers.set(EnterAddressPage(index), bpAddress)
+              updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, EnterAddressPage(index))
+            }
           }
         )
     } else {
