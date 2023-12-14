@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, Mode, NormalMode}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -29,114 +30,116 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-
-  val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val index: Int = 1
 
   val controller =
     new BusinessPartnersEnterAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
-  "load" should {
-    "Render the business partner enter address page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Enter the partner’s address?")
-        reset(mockActions)
-      }
-    }
-
-    "Render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "the new business partner pages are enabled" should {
-      "redirect to the Check Your Answers page" when {
-        "all address fields are populated" in {
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the business partner enter address page" when {
+        "the new business partner pages are enabled" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "enterAddress.line1"    -> "1",
-              "enterAddress.line2"    -> "Old Town",
-              "enterAddress.line3"    -> "Cityville",
-              "enterAddress.postcode" -> "AA1 2YZ"
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/check-your-answers")
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Enter the partner’s address?")
           reset(mockActions)
         }
+      }
 
-        "only mandatory address fields are populated" in {
+      "Render the not found page" when {
+        "the new business partner pages are disabled" in {
           setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "enterAddress.line1" -> "1",
-              "enterAddress.line3" -> "Cityville"
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/check-your-answers")
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
           reset(mockActions)
         }
       }
     }
 
-    "return a 400" when {
-      "mandatory fields are not populated" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(
-            "enterAddress.line1" -> "",
-            "enterAddress.line3" -> ""
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+    s"next when in $mode" should {
+      "the new business partner pages are enabled" should {
+        "redirect to the Check Your Answers page" when {
+          "all address fields are populated" in {
+            setupUserAction()
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "enterAddress.line1"    -> "1",
+                "enterAddress.line2"    -> "Old Town",
+                "enterAddress.line3"    -> "Cityville",
+                "enterAddress.postcode" -> "AA1 2YZ"
+              )
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe BAD_REQUEST
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Enter the partner’s address?")
-        page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-          "You must enter line 1 of the address You must enter the Town or City of the address")
-        reset(mockActions)
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result).get should include("/business-partners/check-your-answers")
+            reset(mockActions)
+          }
+
+          "only mandatory address fields are populated" in {
+            setupUserAction()
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "enterAddress.line1" -> "1",
+                "enterAddress.line3" -> "Cityville"
+              )
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result).get should include("/business-partners/check-your-answers")
+            reset(mockActions)
+          }
+        }
       }
-    }
 
-    "Render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+      "return a 400" when {
+        "mandatory fields are not populated" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "enterAddress.line1" -> "",
+              "enterAddress.line3" -> ""
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
+          status(result) shouldBe BAD_REQUEST
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("Enter the partner’s address?")
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
+            "You must enter line 1 of the address You must enter the Town or City of the address")
+          reset(mockActions)
+        }
+      }
+
+      "Render the not found page" when {
+        "the new business partner pages are disabled" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
+          reset(mockActions)
+        }
       }
     }
   }

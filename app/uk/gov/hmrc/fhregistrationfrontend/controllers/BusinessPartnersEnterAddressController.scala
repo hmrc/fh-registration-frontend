@@ -20,7 +20,6 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import models.{Mode, NormalMode}
 
@@ -37,13 +36,14 @@ class BusinessPartnersEnterAddressController @Inject()(
   val partnerName: String = "Test User"
   val journeyType: String = "enterAddress"
   val backUrl: String = routes.BusinessPartnerAddressController.load().url
-  val postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
 
   import actions._
   def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      Ok(view.business_partners_enter_address(chooseAddressForm, postAction, partnerName, journeyType, backUrl))
+      Ok(view
+        .business_partners_enter_address(chooseAddressForm, postAction(index, mode), partnerName, journeyType, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -57,7 +57,12 @@ class BusinessPartnersEnterAddressController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, backUrl))
+              view.business_partners_enter_address(
+                formWithErrors,
+                postAction(index, mode),
+                partnerName,
+                journeyType,
+                backUrl))
           },
           bpAddress => {
             Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))

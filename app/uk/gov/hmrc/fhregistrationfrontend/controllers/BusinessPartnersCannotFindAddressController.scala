@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -45,7 +46,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 
     val manuallyEnterAddressUrl: String = getUrlFromBusinessType(
       routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
-      routes.BusinessPartnersEnterAddressController.load().url,
+      routes.BusinessPartnersEnterAddressController.load(1, NormalMode).url,
       routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
       routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url,
       config.getRandomBusinessType()
