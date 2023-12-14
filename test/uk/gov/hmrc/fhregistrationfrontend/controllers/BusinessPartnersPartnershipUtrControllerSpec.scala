@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,7 +34,7 @@ class BusinessPartnersUtrControllerSpec extends ControllerSpecWithGuiceApp with 
   val partnershipRegOfficeAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   val controller =
-    new BusinessPartnersUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersPartnershipUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
     "Render the businessPartnersUtr page" when {
