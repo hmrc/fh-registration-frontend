@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, NormalMode}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.mvc.Cookie
@@ -38,6 +39,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
   override lazy val views = app.injector.instanceOf[Views]
   lazy val radioHelper = app.injector.instanceOf[RadioHelper]
   lazy val mockAppConfig = mock[FrontendAppConfig]
+  val index = 1
 
   val controller =
     new BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController(
@@ -46,115 +48,117 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       mockActions,
       mockAppConfig)(mockMcc)
 
-  "load" should {
-    "Render the business partner partner's name page" when {
-      "The business partner v2 pages are enabled" in {
-        setupUserAction()
-
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include(
-          "What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
-        reset(mockActions)
-      }
-    }
-
-    "render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "The business partner v2 pages are enabled" should {
-      "return 200" when {
-        "business type is neither Sole Proprietor or Individual" in {
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the business partner partner's name page" when {
+        "The business partner v2 pages are enabled" in {
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "firstName" -> "first name",
-              "lastName"  -> "last name"
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: PartnerName(first name,last name)"
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include(
+            "What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
+          reset(mockActions)
+        }
+      }
+
+      "render the not found page" when {
+        "the new business partner pages are disabled" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
           reset(mockActions)
         }
       }
     }
 
-    "redirect to Business Partner NINO page" when {
-      "business type is Individual" in {
-        setupUserAction()
+    s"next when in $mode" should {
+      "return 200" when {
+        "The business partner v2 pages are enabled" should {
+          "business type is neither Sole Proprietor or Individual" in {
+            setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "firstName" -> "first name",
+                "lastName"  -> "last name"
+              )
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        val request = FakeRequest()
-          .withCookies(Cookie("businessType", "individual"))
-          .withFormUrlEncodedBody(
-            "firstName" -> "first name",
-            "lastName"  -> "last name"
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
-
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/business-partners/partner-national-insurance-number")
-        reset(mockActions)
+            status(result) shouldBe OK
+            contentAsString(result) shouldBe "Form submitted, with result: PartnerName(first name,last name)"
+            reset(mockActions)
+          }
+        }
       }
-    }
 
-    "redirect to Business Partner Trading Name page" when {
-      "business type is Sole Proprietor" in {
-        setupUserAction()
+      "redirect to Business Partner NINO page" when {
+        "business type is Individual" in {
+          setupUserAction()
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
 
-        val request = FakeRequest()
-          .withCookies(Cookie("businessType", "sole-proprietor"))
-          .withFormUrlEncodedBody(
-            "firstName" -> "first name",
-            "lastName"  -> "last name"
-          )
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "individual"))
+            .withFormUrlEncodedBody(
+              "firstName" -> "first name",
+              "lastName"  -> "last name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/business-partners/partner-trading-name")
-        reset(mockActions)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners/partner-national-insurance-number")
+          reset(mockActions)
+        }
       }
-    }
 
-    "the new business partner pages are disabled" should {
-      "render the not found page" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+      "redirect to Business Partner Trading Name page" when {
+        "business type is Sole Proprietor" in {
+          setupUserAction()
 
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
+
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "sole-proprietor"))
+            .withFormUrlEncodedBody(
+              "firstName" -> "first name",
+              "lastName"  -> "last name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners/partner-trading-name")
+          reset(mockActions)
+        }
+      }
+
+      "the new business partner pages are disabled" should {
+        "render the not found page" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
+          reset(mockActions)
+        }
       }
     }
   }

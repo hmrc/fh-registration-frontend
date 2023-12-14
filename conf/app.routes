@@ -169,8 +169,11 @@ POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.con
 GET         /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.load()
 POST        /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.next()
 
-GET         /business-partners/partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load()
-POST        /business-partners/partner-name                        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
+GET         /business-partners/partner-name/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partner-name/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/partner-name/:index   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partner-name/:index   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
 GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view

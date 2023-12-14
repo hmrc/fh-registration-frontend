@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -36,27 +37,31 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   private def getBusinessType: String = config.getRandomBusinessType()
 
-  val postAction: Call = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next()
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index, mode)
 
   val backUrl: String = routes.BusinessPartnersController.load().url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction, backUrl))
+      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction(index, mode), backUrl))
         .withCookies(Cookie("businessType", getBusinessType))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       form
         .bindFromRequest()
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_individualsAndSoleProprietors_partner_name(formWithErrors, postAction, backUrl))
+              view.business_partners_individualsAndSoleProprietors_partner_name(
+                formWithErrors,
+                postAction(index, mode),
+                backUrl))
           },
           partnerName => {
             request.cookies.get("businessType").map(_.value) match {

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -60,7 +61,7 @@ class BusinessPartnersController @Inject()(
             case "CorporateBody" =>
               Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
             case _ =>
-              Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load())
+              Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(1, NormalMode))
           }
         }
       )

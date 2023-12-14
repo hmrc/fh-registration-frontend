@@ -4,6 +4,7 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
@@ -87,7 +88,10 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "2.13.10")
+  .settings(scalaVersion := "2.13.10",
+    RoutesKeys.routesImport ++= Seq(
+      "models._"
+    ))
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(

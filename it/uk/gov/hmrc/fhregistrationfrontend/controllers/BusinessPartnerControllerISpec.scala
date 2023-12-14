@@ -46,7 +46,7 @@ class BusinessPartnerControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-name")
+            res.header(HeaderNames.LOCATION) mustBe Some("/fhdds/business-partners/partner-name/1")
           }
         }
       }
