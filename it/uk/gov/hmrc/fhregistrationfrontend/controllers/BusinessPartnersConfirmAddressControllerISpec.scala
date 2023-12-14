@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{Mode, NormalMode, CheckMode}
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -9,47 +10,49 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersConfirmAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/confirm-partner-address"
+  def route(mode: Mode): String = routes.BusinessPartnersConfirmAddressController.load(1, mode).url.drop(6)
 
-  s"GET $route" when {
+  List(NormalMode, CheckMode).foreach{ mode =>
+    s"GET $baseUrl${route(mode)}" when {
 
-    "the new business partners flow is enabled" should {
+      "the new business partners flow is enabled" should {
 
-      "render the business partner confirm address page" when {
-        "the user is authenticated" in {
-          given.commonPrecondition
+        "render the business partner confirm address page" when {
+          "the user is authenticated" in {
+            given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .get()
+            WsTestClient.withClient { client =>
+              val result = client.url(baseUrl + route(mode))
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
 
-            whenReady(result) { res =>
-              res.status mustBe 200
-              val page = Jsoup.parse(res.body)
-              page.title() must include("Confirm the partner’s address?")
-              page.getElementsByTag("h1").text() must include("Confirm test business partner’s address")
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Confirm the partner’s address?")
+                page.getElementsByTag("h1").text() must include("Confirm test business partner’s address")
+              }
             }
           }
         }
       }
     }
-  }
 
-  s"POST $route" when {
-    "navigate to the check your answers page" when {
-      "the user is authenticated" in {
-        given.commonPrecondition
+    s"POST ${route(mode)}" when {
+      "navigate to the check your answers page" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
-            .post(Map("" -> Seq.empty))
+          WsTestClient.withClient { client =>
+            val result = client.url(baseUrl + route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck").withFollowRedirects(false)
+              .post(Map("" -> Seq.empty))
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/check-your-answers?partnerType=individual")
+            whenReady(result) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/check-your-answers?partnerType=individual")
+            }
           }
         }
       }

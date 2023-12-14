@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.{Mode, NormalMode}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -44,10 +45,10 @@ class BusinessPartnersConfirmAddressController @Inject()(
   )
 
   val partnerName = "test business partner"
-  val postAction: Call = routes.BusinessPartnersConfirmAddressController.next()
   val backLink = routes.BusinessPartnerAddressController.load().url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
+    val postAction: Call = routes.BusinessPartnersConfirmAddressController.next(index, mode)
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
     } else {
@@ -55,7 +56,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
+  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
     } else {

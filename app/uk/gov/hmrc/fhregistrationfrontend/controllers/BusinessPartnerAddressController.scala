@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import models.NormalMode
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -75,7 +76,8 @@ class BusinessPartnerAddressController @Inject()(
                   if (addressListMap.isEmpty)
                     Redirect(routes.BusinessPartnersCannotFindAddressController.load())
                   else if (addressListMap.size == 1)
-                    Redirect(routes.BusinessPartnersConfirmAddressController.load())
+                    //TODO change the hard coded values when index and mode added to function params
+                    Redirect(routes.BusinessPartnersConfirmAddressController.load(1, NormalMode))
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
                 case Left(AddressLookupErrorResponse(_)) =>

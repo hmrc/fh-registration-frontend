@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, NormalMode}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -37,50 +38,52 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
     new BusinessPartnersConfirmAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
   val backLink = "/fhdds/business-partners/partner-address"
   val enterAddressLink = "/fhdds/business-partners/enter-partner-address"
+  val index = 1
 
-  "load" should {
-    "Render the confirm address page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Confirm the partner’s address?")
-        // should be mocked out when Save4Later changes included
-        page.body.text should include("Confirm test business partner’s address")
-        page.body.text should include("1 Romford Road")
-        page.getElementById("confirm-edit").attr("href") should include(enterAddressLink)
-        page.getElementsByClass("govuk-back-link").attr("href") should include(backLink)
-        reset(mockActions)
-      }
-    }
-
-    "Render the page not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "the new business partner pages are enabled" should {
-      "return 200" when {
-        "the user clicks 'save and continue' button" in {
+      "Render the confirm address page" when {
+        "the new business partner pages are enabled" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("Confirm the partner’s address?")
+          // should be mocked out when Save4Later changes included
+          page.body.text should include("Confirm test business partner’s address")
+          page.body.text should include("1 Romford Road")
+          page.getElementById("confirm-edit").attr("href") should include(enterAddressLink)
+          page.getElementsByClass("govuk-back-link").attr("href") should include(backLink)
+          reset(mockActions)
+        }
+      }
+
+      "Render the page not found page" when {
+        "the new business partner pages are disabled" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          result.header.status shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("Page not found")
+          reset(mockActions)
+        }
+      }
+    }
+
+    s"next when in $mode" should {
+      "return 200" when {
+        "the new business partner pages are enabled and the user clicks 'save and continue' button" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include("/fhdds/business-partners/check-your-answers")
