@@ -90,7 +90,8 @@ trait TestConfiguration
         s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
         s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
-        s"json.encryption.previousKeys" -> List.empty
+        s"json.encryption.previousKeys" -> List.empty,
+        "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration"
       )
     } ++
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
