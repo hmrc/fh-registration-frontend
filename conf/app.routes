@@ -47,11 +47,11 @@ POST        /business-partners/partner-national-insurance-number   @uk.gov.hmrc.
 GET         /business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()
 
-GET         /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: int, mode: Mode = NormalMode)
-POST        /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: int, mode: Mode = NormalMode)
+GET         /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: Int, mode: Mode = NormalMode)
 
-GET         /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: int, mode: Mode = CheckMode)
-POST        /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: int, mode: Mode = CheckMode)
+GET         /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.load()
 POST        /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.next()
