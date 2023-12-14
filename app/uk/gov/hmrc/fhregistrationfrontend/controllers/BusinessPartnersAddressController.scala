@@ -23,6 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
+import models.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import models.NormalMode
 
@@ -40,7 +41,7 @@ class BusinessPartnersAddressController @Inject()(
     extends AppController(ds, cc) {
 
   import actions._
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"
@@ -51,7 +52,7 @@ class BusinessPartnersAddressController @Inject()(
     }
   }
 
-  def next(): Action[AnyContent] = userAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       val partnerName = "Test User"

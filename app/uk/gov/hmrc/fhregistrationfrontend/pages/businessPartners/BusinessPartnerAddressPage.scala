@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.models
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
+import org.joda.convert.ToString
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class BusinessPartner(
-  individualsAndSoleProprietorsPartnerName: Option[PartnerName],
-  secondField: String,
-  enterAddress: BusinessPartnersEnterAddress,
-  businessPartnerAddress: String)
+case class BusinessPartnerAddressPage(index: Int) extends QuestionPage[BusinessPartnerAddressPage] {
 
-object BusinessPartner {
-  implicit val format: Format[BusinessPartner] = Json.format[BusinessPartner]
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ ToString
+
+  override def toString: String = "businessPartnerAddress"
+
 }
