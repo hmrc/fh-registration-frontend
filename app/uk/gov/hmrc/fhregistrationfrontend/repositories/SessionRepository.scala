@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.repositories
 
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import models.UserAnswers
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model._
 import play.api.libs.json.Format
+import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.{Clock, Instant, ZoneOffset}
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -71,7 +71,7 @@ class SessionRepository @Inject()(
 
   def set(answers: UserAnswers): Future[Boolean] = {
 
-    val updatedAnswers = answers copy (lastUpdated = Instant.now(clock))
+    val updatedAnswers = answers copy (lastUpdated = Instant.now())
 
     collection
       .replaceOne(
