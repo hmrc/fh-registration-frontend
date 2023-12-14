@@ -66,27 +66,28 @@ class BusinessPartnersEnterAddressController @Inject()(
     }
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_enter_address(
-                formWithErrors,
-                postAction(index, mode),
-                partnerName,
-                journeyType,
-                backUrl))
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_address(
+                  formWithErrors,
+                  postAction(index, mode),
+                  partnerName,
+                  journeyType,
+                  backUrl)))
           },
           bpAddress => {
-            Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
+            Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual")))
           }
         )
     } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
     }
   }
 }

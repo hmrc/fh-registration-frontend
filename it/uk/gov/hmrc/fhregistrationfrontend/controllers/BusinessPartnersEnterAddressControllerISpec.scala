@@ -6,6 +6,9 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.mvc.Http.HeaderNames
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterAddressPage
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 class BusinessPartnersEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
@@ -19,7 +22,7 @@ class BusinessPartnersEnterAddressControllerISpec
       "the new business partners flow is enabled" should {
 
         "render the business partner enter address page" when {
-          "the user is authenticated" in {
+          "there are no userAnswers" in {
             given
               .commonPrecondition
 
@@ -34,6 +37,87 @@ class BusinessPartnersEnterAddressControllerISpec
                 page.title() must include("Enter the partner’s address?")
                 page.getElementById("page-heading").text() must include("Enter")
                 page.getElementById("page-heading").text() must include("address")
+                val line1Field = page.getElementById("enterAddress.line1")
+                val line2Field = page.getElementById("enterAddress.line2")
+                val line3Field = page.getElementById("enterAddress.line3")
+                val postcodeField = page.getElementById("enterAddress.postcode")
+                line1Field.hasAttr("value") mustBe false
+                line2Field.hasAttr("value") mustBe false
+                line3Field.hasAttr("value") mustBe false
+                postcodeField.hasAttr("value") mustBe false
+              }
+            }
+          }
+        }
+
+        "render the business partner enter address page" when {
+          "there are userAnswers but no form data" in {
+            given
+              .commonPrecondition
+
+            addUserAnswersToSession(emptyUserAnswers)
+
+            WsTestClient.withClient { client =>
+              val result = client.url(baseUrl + route(mode))
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Enter the partner’s address?")
+                page.getElementById("page-heading").text() must include("Enter")
+                page.getElementById("page-heading").text() must include("address")
+                val line1Field = page.getElementById("enterAddress.line1")
+                val line2Field = page.getElementById("enterAddress.line2")
+                val line3Field = page.getElementById("enterAddress.line3")
+                val postcodeField = page.getElementById("enterAddress.postcode")
+                line1Field.hasAttr("value") mustBe false
+                line2Field.hasAttr("value") mustBe false
+                line3Field.hasAttr("value") mustBe false
+                postcodeField.hasAttr("value") mustBe false
+              }
+            }
+          }
+        }
+
+        "render the business partner enter address page with answers" when {
+          "there are userAnswers with page data" in {
+            given
+              .commonPrecondition
+
+            val address = BusinessPartnersEnterAddress(
+              addressLine1 = "23 High Street",
+              addressLine2 = Some("Park View"),
+              addressLine3 = ("Gloucester"),
+              postcode = Some("NE98 1ZZ"))
+
+            val userAnswers = emptyUserAnswers
+              .set[BusinessPartnersEnterAddress](EnterAddressPage(1), address)
+              .success
+              .value
+
+            addUserAnswersToSession(userAnswers)
+
+            WsTestClient.withClient { client =>
+              val result = client.url(baseUrl + route(mode))
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 200
+                val page = Jsoup.parse(res.body)
+                page.title() must include("Enter the partner’s address?")
+                page.getElementById("page-heading").text() must include("Enter")
+                page.getElementById("page-heading").text() must include("address")
+                val line1Field = page.getElementById("enterAddress.line1")
+                val line2Field = page.getElementById("enterAddress.line2")
+                val line3Field = page.getElementById("enterAddress.line3")
+                val postcodeField = page.getElementById("enterAddress.postcode")
+                line1Field.attr("value") must include("23 High Street")
+                line2Field.attr("value") must include("Park View")
+                line3Field.attr("value") must include("Gloucester")
+                postcodeField.attr("value") must include("NE98 1ZZ")
               }
             }
           }
