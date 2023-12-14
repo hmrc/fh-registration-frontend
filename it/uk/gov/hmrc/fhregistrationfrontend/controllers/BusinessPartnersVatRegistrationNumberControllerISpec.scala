@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -46,7 +47,7 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
           }
         }
     }

@@ -17,6 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
+import play.api.data.FormError
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -56,7 +58,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
           },
           vatNumber => {
             vatNumber.value match {
-              case Some(vatNumber) => Redirect(routes.BusinessPartnersAddressController.load())
+              case Some(vatNumber) => Redirect(routes.BusinessPartnersAddressController.load(1, NormalMode))
               case None            => Redirect(routes.BusinessPartnersSoleProprietorUtrController.load())
             }
           }

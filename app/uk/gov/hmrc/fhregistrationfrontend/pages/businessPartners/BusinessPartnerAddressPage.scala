@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import org.joda.convert.ToString
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 
-case class BusinessPartnerAddressPage(index: Int) extends QuestionPage[BusinessPartnerAddressPage] {
+case class BusinessPartnerAddressPage(index: Int) extends QuestionPage[UkAddressLookup] {
 
-  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ ToString
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
   override def toString: String = "businessPartnerAddress"
 

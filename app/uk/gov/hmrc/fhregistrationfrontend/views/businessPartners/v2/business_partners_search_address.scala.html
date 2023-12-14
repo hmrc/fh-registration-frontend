@@ -59,7 +59,7 @@
         ))
     }
 
-    @formHelper(action = BusinessPartnersAddressController.next()){
+    @formHelper(action = BusinessPartnersAddressController.next(1, NormalMode)){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),

@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{CheckMode, Mode, NormalMode}
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -11,9 +12,10 @@ import scala.collection.immutable.Seq
 class BusinessPartnersAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/partner-address"
+  def route(mode: Mode): String = routes.BusinessPartnerAddressController.load(1, mode).url.drop(6)
 
-  s"GET $route" when {
+  List(NormalMode, CheckMode).foreach { mode =>
+  s"GET ${route(mode)}" when {
 
     "the new business partners flow is enabled" should {
 
@@ -23,7 +25,7 @@ class BusinessPartnersAddressControllerISpec
             .commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route)
+            val result = client.url(baseUrl + route(mode))
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -41,13 +43,13 @@ class BusinessPartnersAddressControllerISpec
 
   }
 
-  s"POST $route" when {
+  s"POST ${route(mode)}" when {
     "the postcode is valid, address line provided and addresses are returned from address lookup" should {
       "redirect to choose address" in {
         given
           .commonPreconditionWithMultipleAddressLookup(true)
 
-        val result = buildRequest(route)
+        val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq("1"),
@@ -66,7 +68,7 @@ class BusinessPartnersAddressControllerISpec
           .commonPreconditionWithMultipleAddressLookup(true)
 
 
-        val result = buildRequest(route)
+        val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq.empty,
@@ -84,7 +86,7 @@ class BusinessPartnersAddressControllerISpec
         given
           .commonPreconditionWithMultipleAddressLookup(false)
 
-        val result = buildRequest(route)
+        val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
           "Csrf-Token" -> "nocheck")
           .post(Map("partnerAddressLine" -> Seq.empty,
@@ -104,7 +106,7 @@ class BusinessPartnersAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+          val result = client.url(baseUrl + route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -125,7 +127,7 @@ class BusinessPartnersAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+          val result = client.url(baseUrl + route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("1"),
@@ -146,7 +148,7 @@ class BusinessPartnersAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+          val result = client.url(baseUrl + route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("The lane;"),
@@ -167,7 +169,7 @@ class BusinessPartnersAddressControllerISpec
           .commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+          val result = client.url(baseUrl + route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
             "Csrf-Token" -> "nocheck")
             .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
@@ -181,5 +183,6 @@ class BusinessPartnersAddressControllerISpec
         }
       }
     }
+  }
   }
 }
