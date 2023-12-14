@@ -3,6 +3,8 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.{configureFor, reset, resetAllScenarios}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import models.UserAnswers
+import org.mongodb.scala.bson.BsonDocument
 import org.scalatest.concurrent.{IntegrationPatience, PatienceConfiguration}
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
@@ -12,9 +14,13 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
 
+import java.util.concurrent.TimeUnit
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
 
 trait TestConfiguration
@@ -84,7 +90,8 @@ trait TestConfiguration
         s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
         s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
-        s"json.encryption.previousKeys" -> List.empty
+        s"json.encryption.previousKeys" -> List.empty,
+        "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration"
       )
     } ++
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
@@ -94,7 +101,7 @@ trait TestConfiguration
 
   lazy val ws: WSClient = app.injector.instanceOf[WSClient]
 
-
+  val sessionCache: SessionRepository = app.injector.instanceOf[SessionRepository]
   override def beforeAll() = {
     wireMockServer.stop()
     wireMockServer.start()
@@ -102,6 +109,7 @@ trait TestConfiguration
   }
 
   override def beforeEach() = {
+    Await.result(sessionCache.collection.deleteMany(BsonDocument()).toFuture(),Duration(3,TimeUnit.SECONDS))
     resetAllScenarios()
     reset()
   }
@@ -118,6 +126,16 @@ trait TestConfiguration
       .foreach(println)
     println("===== END =====")
   }
+
+  def emptyUserAnswers: UserAnswers = UserAnswers("some-id")
+  def getUserAnswersFromSession: Option[UserAnswers] = {
+    Await.result(sessionCache.get("some-id"), Duration(3,TimeUnit.SECONDS))
+  }
+
+  def addUserAnswersToSession(userAnswers: UserAnswers): Boolean = {
+    Await.result(sessionCache.set(userAnswers), Duration(3,TimeUnit.SECONDS))
+  }
+
 
   def buildRequest(path: String,
                    followRedirects: Boolean = false): WSRequest = {

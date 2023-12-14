@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -34,9 +35,13 @@ class BusinessPartnerTradingNameController @Inject()(
 
   import actions._
 
+  def backUrl(index: Int = 1, mode: Mode = NormalMode): String =
+    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
+  val postAction: Call = routes.BusinessPartnerTradingNameController.next()
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_partner_name(tradingNameForm, "Test User"))
+      Ok(view.business_partners_has_trading_partner_name(tradingNameForm, "Test User", postAction, backUrl()))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -48,7 +53,8 @@ class BusinessPartnerTradingNameController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_has_trading_partner_name(formWithErrors, "Test User"))
+            BadRequest(
+              view.business_partners_has_trading_partner_name(formWithErrors, "Test User", postAction, backUrl()))
           },
           tradingName => {
             Redirect(routes.BusinessPartnerNinoController.load())
