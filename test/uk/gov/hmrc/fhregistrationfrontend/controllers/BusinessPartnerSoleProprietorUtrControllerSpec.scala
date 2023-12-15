@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -68,7 +68,7 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "return 200" when {
+      "redirect to the Partner Address page" when {
         "the form has no errors and UTR supplied" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -79,8 +79,8 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Next page! with UTR: BusinessPartnersEnterUniqueTaxpayerReference(1234567890)"
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(routes.BusinessPartnerAddressController.load().url)
           reset(mockActions)
         }
       }
