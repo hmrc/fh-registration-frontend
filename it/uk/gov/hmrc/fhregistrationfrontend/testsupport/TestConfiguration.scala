@@ -148,7 +148,7 @@ trait TestConfiguration
 
   def buildRequestFromRoute(route: Call,
                    followRedirects: Boolean = false): WSRequest = {
-    ws.url(route.url)
+    ws.url(s"http://localhost:$port/${route.url}")
       .withFollowRedirects(followRedirects)
   }
 }

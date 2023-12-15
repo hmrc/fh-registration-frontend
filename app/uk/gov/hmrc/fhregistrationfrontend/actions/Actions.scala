@@ -41,7 +41,8 @@ class Actions @Inject()(
   ec: ExecutionContext) {
 
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
-  def dataRetrievalAction = userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
+  def dataRetrievalAction =
+    userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
   def dataRequiredAction =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
       ec)
