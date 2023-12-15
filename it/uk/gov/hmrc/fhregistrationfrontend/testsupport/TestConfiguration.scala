@@ -12,7 +12,7 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest}
-import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
+import play.api.mvc.{Call, CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
@@ -31,6 +31,8 @@ trait TestConfiguration
     with BeforeAndAfterAll {
 
   me: Suite with TestSuite =>
+
+  val newBusinessPartnersFlowEnabled: Boolean = true
 
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
@@ -91,7 +93,8 @@ trait TestConfiguration
         s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty,
-        "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration"
+        "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration",
+        "business-partners-new-enabled" -> s"$newBusinessPartnersFlowEnabled"
       )
     } ++
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
@@ -140,6 +143,12 @@ trait TestConfiguration
   def buildRequest(path: String,
                    followRedirects: Boolean = false): WSRequest = {
     ws.url(s"$baseUrl$path")
+      .withFollowRedirects(followRedirects)
+  }
+
+  def buildRequestFromRoute(route: Call,
+                   followRedirects: Boolean = false): WSRequest = {
+    ws.url(s"http://localhost:$port/${route.url}")
       .withFollowRedirects(followRedirects)
   }
 }

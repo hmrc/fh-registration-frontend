@@ -16,19 +16,22 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import javax.inject.Inject
-import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
+import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
+import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{ExternalUrls, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
-import scala.concurrent.ExecutionContext
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class Actions @Inject()(
   externalUrls: ExternalUrls,
   fhddsConnector: FhddsConnector,
+  sessionCache: SessionRepository,
+  frontendAppConfig: FrontendAppConfig,
   cc: ControllerComponents,
   journeys: Journeys
 )(
@@ -38,6 +41,11 @@ class Actions @Inject()(
   ec: ExecutionContext) {
 
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
+  def dataRetrievalAction =
+    userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
+  def dataRequiredAction =
+    userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
+      ec)
 
   def notAdminUser = userAction andThen new NotAdminUserFilter
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)
@@ -57,4 +65,16 @@ class Actions @Inject()(
 
   def summaryAction =
     userAction andThen journeyAction andThen new SummaryAction
+
+  def newBusinessPartnersFlowEnabledAction: ActionRefiner[UserRequest, UserRequest] =
+    new ActionRefiner[UserRequest, UserRequest] {
+      override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] =
+        if (frontendAppConfig.newBusinessPartnerPagesEnabled) {
+          Future.successful(Right(request))
+        } else {
+          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(request)))
+        }
+
+      override protected def executionContext: ExecutionContext = ec
+    }
 }
