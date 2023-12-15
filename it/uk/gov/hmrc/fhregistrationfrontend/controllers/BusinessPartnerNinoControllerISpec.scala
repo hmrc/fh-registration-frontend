@@ -21,8 +21,7 @@ class BusinessPartnerNinoControllerISpec
         "the user is authenticated" in {
           given.commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(baseUrl + route(mode))
+          val result = buildRequest(route(mode))
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
             whenReady(result) { res =>
@@ -32,7 +31,6 @@ class BusinessPartnerNinoControllerISpec
 
               page.getElementById("page-heading").text must include("Does Test User have a National Insurance number?")
             }
-          }
         }
       }
 
@@ -95,48 +93,44 @@ class BusinessPartnerNinoControllerISpec
           }
         }
       }
-    }
 
-    "neither radio button is selected by the user" should {
-      "return 400" in {
-        given.commonPrecondition
+      "neither radio button is selected by the user" should {
+        "return 400" in {
+          given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route(mode))
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq.empty,
-              "nationalInsuranceNumber_value" -> Seq.empty
-            ))
+          val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "nationalInsuranceNumber_yesNo" -> Seq.empty,
+                "nationalInsuranceNumber_value" -> Seq.empty
+              ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Select whether they have a National Insurance number")
-          }
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.getElementsByClass("govuk-error-summary").text() must include("Select whether they have a National Insurance number")
+            }
         }
       }
-    }
 
-    "yes is selected but no NINO is entered" should {
-      "return 400" in {
-        given.commonPrecondition
+      "yes is selected but no NINO is entered" should {
+        "return 400" in {
+          given.commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route(mode))
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq("true"),
-              "nationalInsuranceNumber_value" -> Seq.empty
-            ))
+          val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "nationalInsuranceNumber_yesNo" -> Seq("true"),
+                "nationalInsuranceNumber_value" -> Seq.empty
+              ))
 
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Enter National Insurance number")
-          }
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.getElementsByClass("govuk-error-summary").text() must include("Enter National Insurance number")
+            }
         }
       }
     }
