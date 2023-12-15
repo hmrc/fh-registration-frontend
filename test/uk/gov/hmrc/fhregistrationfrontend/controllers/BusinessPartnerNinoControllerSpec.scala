@@ -21,13 +21,11 @@ import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
-import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import models.{NormalMode, CheckMode}
 
 class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -36,93 +34,97 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
   override lazy val views = app.injector.instanceOf[Views]
   lazy val radioHelper = app.injector.instanceOf[RadioHelper]
   lazy val mockAppConfig = mock[FrontendAppConfig]
+  val index = 1
 
   val controller =
     new BusinessPartnerNinoController(radioHelper, commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
-  "load" should {
-    "Render the business partner nino page" when {
-      "The business partner v2 pages are enabled" in {
-        setupUserAction()
+  List(NormalMode, CheckMode).foreach { mode =>
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Does the partner have a National Insurance number?")
-        reset(mockActions)
-      }
-    }
-
-    "render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "The business partner v2 pages are enabled" should {
-      "redirect to VAT number page" when {
-        "the Yes radio button is selected and a NINO is entered" in {
+    s"load when in $mode" should {
+      "Render the business partner nino page" when {
+        "The business partner v2 pages are enabled" in {
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "nationalInsuranceNumber_yesNo" -> "true",
-              "nationalInsuranceNumber_value" -> "QQ123456C"
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
-
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Does the partner have a National Insurance number?")
           reset(mockActions)
         }
       }
 
-      "return 400" when {
-        "a radio button is not selected" in {
+      "render the not found page" when {
+        "the new business partner pages are disabled" in {
           setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "nationalInsuranceNumber_yesNo" -> "",
-              "nationalInsuranceNumber_value" -> ""
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe BAD_REQUEST
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
           reset(mockActions)
         }
       }
     }
 
-    "the new business partner pages are disabled" should {
-      "render the not found page" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+    s"next when in $mode" when {
+      "The business partner v2 pages are enabled" should {
+        "redirect to VAT number page" when {
+          "the Yes radio button is selected and a NINO is entered" in {
+            setupUserAction()
 
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
-        reset(mockActions)
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "nationalInsuranceNumber_yesNo" -> "true",
+                "nationalInsuranceNumber_value" -> "QQ123456C"
+              )
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+
+            reset(mockActions)
+          }
+        }
+
+        "return 400" when {
+          "a radio button is not selected" in {
+            setupUserAction()
+
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "nationalInsuranceNumber_yesNo" -> "",
+                "nationalInsuranceNumber_value" -> ""
+              )
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+            status(result) shouldBe BAD_REQUEST
+            reset(mockActions)
+          }
+        }
+      }
+
+      "the new business partner pages are disabled" should {
+        "render the not found page" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe NOT_FOUND
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("Page not found")
+          reset(mockActions)
+        }
       }
     }
   }
