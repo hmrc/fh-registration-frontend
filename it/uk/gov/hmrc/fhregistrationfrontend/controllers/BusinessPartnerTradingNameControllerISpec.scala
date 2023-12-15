@@ -4,11 +4,13 @@ import org.jsoup.Jsoup
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import models._
 
 class BusinessPartnerTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route = routes.BusinessPartnerTradingNameController.load().url.drop(6)
+  val ninoPage = routes.BusinessPartnerNinoController.load(1, NormalMode).url
 
   s"GET $route" when {
 
@@ -49,7 +51,7 @@ class BusinessPartnerTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(ninoPage)
           }
         }
 
@@ -69,7 +71,7 @@ class BusinessPartnerTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(ninoPage)
           }
         }
       }
