@@ -30,14 +30,14 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject()(
-                                                                                    ds: CommonPlayDependencies,
-                                                                                    view: Views,
-                                                                                    actions: Actions,
-                                                                                    config: FrontendAppConfig,
-                                                                                    val sessionCache: SessionRepository)(
-                                                                                    cc: MessagesControllerComponents
-                                                                                  )(implicit val ec: ExecutionContext)
-  extends AppController(ds, cc) with ControllerHelper {
+  ds: CommonPlayDependencies,
+  view: Views,
+  actions: Actions,
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
+  cc: MessagesControllerComponents
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
