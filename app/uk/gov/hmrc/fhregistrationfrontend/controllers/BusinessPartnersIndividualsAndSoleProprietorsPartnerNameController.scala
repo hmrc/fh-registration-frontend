@@ -16,22 +16,28 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{Mode, NormalMode}
+import models.{Mode, NormalMode, UserAnswers}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{partnerNameForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
@@ -42,40 +48,38 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   val backUrl: String = routes.BusinessPartnersController.load().url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_individualsAndSoleProprietors_partner_name(form, postAction(index, mode), backUrl))
-        .withCookies(Cookie("businessType", getBusinessType))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(index))
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+    Ok(view
+      .business_partners_individualsAndSoleProprietors_partner_name(prepopulatedForm, postAction(index, mode), backUrl))
+      .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
               view.business_partners_individualsAndSoleProprietors_partner_name(
                 formWithErrors,
                 postAction(index, mode),
-                backUrl))
-          },
-          partnerName => {
-            request.cookies.get("businessType").map(_.value) match {
-              case Some(businessType) if businessType.equals("individual") =>
-                Redirect(routes.BusinessPartnerNinoController.load())
-              case Some(businessType) if businessType.equals("sole-proprietor") =>
-                Redirect(routes.BusinessPartnerTradingNameController.load())
-              case _ =>
-                Ok(s"Form submitted, with result: $partnerName")
-            }
+                backUrl)))
+        },
+        partnerName => {
+          val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
+            case Some(businessType) if businessType.equals("individual") =>
+              routes.BusinessPartnerNinoController.load()
+            case Some(businessType) if businessType.equals("sole-proprietor") =>
+              routes.BusinessPartnerTradingNameController.load()
+            case _ => routes.BusinessPartnersController.load()
           }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+          val updatedUserAnswers = request.userAnswers.set(page, partnerName)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
   }
 }

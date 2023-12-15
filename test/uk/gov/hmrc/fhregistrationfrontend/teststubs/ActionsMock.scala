@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import akka.stream.Materializer
+import models.UserAnswers
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,13 +25,15 @@ import play.api.mvc._
 import play.api.test.Helpers
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, User}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
+import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -206,6 +209,27 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           request)
         val enrolledUserRequest = new EnrolledUserRequest(registrationNumber, userRequest)
         block(enrolledUserRequest)
+      }
+    }
+
+  def setupDataRequiredAction(userAnswers: UserAnswers): Unit =
+    when(mockActions.dataRequiredAction) thenReturn new ActionBuilder[DataRequiredRequest, AnyContent] {
+      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+
+      override val executionContext = ec
+
+      override def invokeBlock[A](
+        request: Request[A],
+        block: DataRequiredRequest[A] => Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(User),
+          Some(AffinityGroup.Individual),
+          request)
+        val dataRequiredRequest = new DataRequiredRequest(userAnswers, userRequest)
+        block(dataRequiredRequest)
       }
     }
 

@@ -20,7 +20,7 @@ import models.{Mode, UserAnswers}
 import pages.Page
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AnyContent, Call, Request, Result, Results}
-import uk.gov.hmrc.fhregistrationfrontend.actions.UserRequest
+import uk.gov.hmrc.fhregistrationfrontend.actions.{DataRetrievedActionRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -31,7 +31,7 @@ import scala.util.{Failure, Success, Try}
 trait ControllerHelper extends FrontendBaseController with I18nSupport {
 
   val sessionCache: SessionRepository
-  val errorHandler: ErrorHandler
+  implicit val errorHandler: ErrorHandler
   implicit val ec: ExecutionContext
 
   private def updateUserAnswersFailureMessage(page: Page) = s"Failed to add ${page.toString} data to user answers"
@@ -40,7 +40,7 @@ trait ControllerHelper extends FrontendBaseController with I18nSupport {
     s"Failed to set value in session repository while attempting set on ${page.toString}"
 
   def updateUserAnswersAndSaveToCache(updatedAnswers: Try[UserAnswers], nextPage: Call, page: Page)(
-    implicit request: UserRequest[AnyContent]): Future[Result] =
+    implicit request: Request[AnyContent]): Future[Result] =
     updatedAnswers match {
       case Failure(_) =>
         Future.successful(
