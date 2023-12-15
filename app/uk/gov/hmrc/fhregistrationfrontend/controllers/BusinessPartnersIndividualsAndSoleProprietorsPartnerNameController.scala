@@ -30,14 +30,14 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject()(
-  ds: CommonPlayDependencies,
-  view: Views,
-  actions: Actions,
-  config: FrontendAppConfig,
-  val sessionCache: SessionRepository)(
-  cc: MessagesControllerComponents
-)(implicit val ec: ExecutionContext)
-    extends AppController(ds, cc) with ControllerHelper {
+                                                                                    ds: CommonPlayDependencies,
+                                                                                    view: Views,
+                                                                                    actions: Actions,
+                                                                                    config: FrontendAppConfig,
+                                                                                    val sessionCache: SessionRepository)(
+                                                                                    cc: MessagesControllerComponents
+                                                                                  )(implicit val ec: ExecutionContext)
+  extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
@@ -72,7 +72,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
           val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnerNinoController.load()
+              routes.BusinessPartnerNinoController.load(index, mode)
             case Some(businessType) if businessType.equals("sole-proprietor") =>
               routes.BusinessPartnerTradingNameController.load()
             case _ => routes.BusinessPartnersController.load()

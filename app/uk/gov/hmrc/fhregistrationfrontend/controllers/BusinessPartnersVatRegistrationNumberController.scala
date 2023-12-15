@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{vatNumberForm, vatNumberKey}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import models.NormalMode
 
 @Singleton
 class BusinessPartnersVatRegistrationNumberController @Inject()(
@@ -37,7 +38,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 
   //ToDo read this data from the cache after being stored before the redirect
   val partnerName = "test partner"
-  val backUrl = routes.BusinessPartnerNinoController.load().url
+  val backUrl = routes.BusinessPartnerNinoController.load(1, NormalMode).url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
