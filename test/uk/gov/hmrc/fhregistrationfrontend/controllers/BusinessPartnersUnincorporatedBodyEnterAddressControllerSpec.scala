@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersUnincorporatedOfficeAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersUnincorporatedBodyEnterAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,7 +34,7 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerSpec extends Controll
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersUnincorporatedOfficeAddressController(commonDependencies, views, mockActions, mockAppConfig)(
+    new BusinessPartnersUnincorporatedBodyEnterAddressController(commonDependencies, views, mockActions, mockAppConfig)(
       mockMcc)
 
   "load" should {

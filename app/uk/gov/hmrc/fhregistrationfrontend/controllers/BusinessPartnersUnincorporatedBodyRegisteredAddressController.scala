@@ -37,17 +37,12 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
     extends AppController(ds, cc) {
 
   // Todo get this from cache later
-  val postAction: Call = Call(
-    method = "POST",
-    url = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController
-      .next()
-      .url
-  )
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.next()
   val partnerType = "unincorporatedBody"
   val partnerName = "Test Unincorporated Body"
   val unknownPostcode = "AB1 2YX"
   val backAction: String = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url
-  val manualAddressUrl: String = routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
+  val manualAddressUrl: String = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>

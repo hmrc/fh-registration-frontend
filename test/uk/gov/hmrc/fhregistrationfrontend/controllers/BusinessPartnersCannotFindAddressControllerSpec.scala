@@ -38,7 +38,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load().url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
   val enterUnincorpBodyRegOfficeAddressUrl: String =
-    routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url
+    routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url
 
   "load" should {
     "Render the Cannot Find Address page" when {
