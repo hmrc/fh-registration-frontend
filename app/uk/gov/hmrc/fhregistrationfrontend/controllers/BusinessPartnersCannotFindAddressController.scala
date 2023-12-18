@@ -47,7 +47,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
       routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
       routes.BusinessPartnersEnterAddressController.load().url,
       routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
-      routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url,
+      routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url,
       config.getRandomBusinessType()
     )
 

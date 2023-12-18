@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersUnincorporatedOfficeAddressController @Inject()(
+class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,7 +35,7 @@ class BusinessPartnersUnincorporatedOfficeAddressController @Inject()(
   val partnerName = "Test Unincorporated Body"
   val bpAddressForm = chooseAddressForm
   val journeyType = "enterAddress"
-  val postAction = routes.BusinessPartnersUnincorporatedOfficeAddressController.load()
+  val postAction = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
   val backLink = "#"
 
   import actions._
