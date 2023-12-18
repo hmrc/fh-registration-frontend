@@ -3,12 +3,16 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url.drop(6)
+  val checkYouAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load("unincorporated-body").url
+  val pageTitle = "Enter the company’s registered office address?"
+  val pageHeading = "Enter Test Unincorporated Body’s registered office address"
 
   s"GET $route" when {
 
@@ -26,8 +30,8 @@ class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
             whenReady(result) { res =>
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
-              page.title() must include("Enter the company’s registered office address?")
-              page.getElementsByTag("h1").text() must include("Enter Test Unincorporated Body’s registered office address")
+              page.title() must include(pageTitle)
+              page.getElementsByTag("h1").text() must include(pageHeading)
             }
         }
       }
@@ -53,8 +57,9 @@ class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
-              res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 street,Some(Option lane),City name,Some(AB1 2XZ))"
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(checkYouAnswersPage)
+
             }
         }
 
@@ -74,8 +79,8 @@ class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
                 ))
 
               whenReady(result) { res =>
-                res.status mustBe 200
-                res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 Street,None,City name,None)"
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(checkYouAnswersPage)
               }
           }
         }

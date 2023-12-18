@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -33,10 +35,11 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   val partnerName = "Test Unincorporated Body"
-  val bpAddressForm = chooseAddressForm
+  val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
   val journeyType = "enterAddress"
-  val postAction = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
-  val backLink = "#"
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
+  val backLink: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
+  val partnerType = "unincorporated-body"
 
   import actions._
   def load(): Action[AnyContent] = userAction { implicit request =>
@@ -66,7 +69,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
                 backLink))
           },
           bpAddress => {
-            Ok(s"Next page! with form result: ${bpAddress.toString}")
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load(partnerType))
           }
         )
     } else {

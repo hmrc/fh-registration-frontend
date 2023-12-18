@@ -78,7 +78,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressControllerSpec extends Contr
 
         val result = await(csrfAddToken(controller.next())(request))
 
-        status(result) shouldBe OK
+        status(result) shouldBe SEE_OTHER
         reset(mockActions)
       }
 
