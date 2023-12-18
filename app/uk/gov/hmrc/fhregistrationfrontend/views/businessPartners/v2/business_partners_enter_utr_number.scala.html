@@ -42,7 +42,7 @@
     Messages(s"fh.businessPartners.${businessPartnerType}.enter_utr.heading", partnerName)
 }
 
-@layout(title = titlePrefix + title, backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some(backLink)) {
 
     @Html(s"${BusinessPartnersHeader(heading)}")
 
