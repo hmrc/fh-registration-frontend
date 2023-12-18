@@ -76,7 +76,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
               case Some(businessType)
                   if businessType.equals("partnership") || (businessType
                     .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-                Redirect(routes.BusinessPartnersUtrController.load())
+                Redirect(routes.BusinessPartnersPartnershipUtrController.load())
               case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
                 Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
               case Some(unknownBusinessType) =>

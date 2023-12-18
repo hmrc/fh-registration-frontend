@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersHasU
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnersUtrController @Inject()(
+class BusinessPartnersPartnershipUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,8 +35,8 @@ class BusinessPartnersUtrController @Inject()(
 
   val partnerName = "test partner"
   val businessPartnerType = ""
-  val postAction = Call(method = "POST", url = routes.BusinessPartnersUtrController.next().url)
-  val backLink = ""
+  val postAction: Call = routes.BusinessPartnersPartnershipUtrController.next()
+  val backLink: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

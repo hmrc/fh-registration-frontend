@@ -33,11 +33,11 @@ class BusinessPartnersUnincorporatedBodyUtrController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val partnerName = "{{Unincorporated body name}}"
-  val businessPartnerType = "unincorporatedBody"
-  val postAction =
-    Call(method = "POST", url = routes.BusinessPartnersUnincorporatedBodyUtrController.load().url)
-  val backLink = "#"
+  val partnerName: String = "{{Unincorporated body name}}"
+  val businessPartnerType: String = "unincorporatedBody"
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyUtrController.load()
+  val backLink: String = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load().url
+  val registeredAddressPage: Call = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -59,11 +59,7 @@ class BusinessPartnersUnincorporatedBodyUtrController @Inject()(
               view.business_partners_has_utr(formWithErrors, partnerName, businessPartnerType, postAction, backLink))
           },
           businessPartnersUtr => {
-            businessPartnersUtr.value match {
-              case Some(businessPartnersUtr) => Ok(s"Next page! with UTR: $businessPartnersUtr")
-              case None =>
-                Ok(s"Next page! with no UTR")
-            }
+            Redirect(registeredAddressPage)
           }
         )
     } else {

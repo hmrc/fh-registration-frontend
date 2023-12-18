@@ -10,7 +10,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersPartnershipVatNumberController.load().url.drop(6)
-  val partershipSaUtrUrl: String = routes.BusinessPartnersUtrController.load().url
+  val partershipSaUtrUrl: String = routes.BusinessPartnersPartnershipUtrController.load().url
   val partnershipRegAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
 
   s"GET $route" should {

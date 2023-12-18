@@ -45,7 +45,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
   val enterManualAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
 
   val backUrl: String = {
-    if (hasVatNum) routes.BusinessPartnersUtrController.load().url
+    if (hasVatNum) routes.BusinessPartnersPartnershipUtrController.load().url
     else routes.BusinessPartnersCorporateBodyUtrController.load().url
   }
 
