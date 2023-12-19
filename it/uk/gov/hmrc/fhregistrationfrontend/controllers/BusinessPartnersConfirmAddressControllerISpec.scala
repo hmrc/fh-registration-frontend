@@ -19,6 +19,7 @@ class BusinessPartnersConfirmAddressControllerISpec
 
         "render the business partner confirm address page" when {
           "the user is authenticated" in {
+            addUserAnswersToSession(emptyUserAnswers)
             given.commonPrecondition
 
             WsTestClient.withClient { client =>
@@ -36,11 +37,27 @@ class BusinessPartnersConfirmAddressControllerISpec
           }
         }
       }
+
+      "there are no answers in the database" should {
+        "redirect to the start of BusinessPartners journey" in {
+          given.commonPrecondition
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+          }
+        }
+      }
     }
 
     s"POST ${route(mode)}" when {
       "navigate to the check your answers page" when {
-        "the user is authenticated" in {
+        "the user is authenticated and the user answers are present" in {
+          addUserAnswersToSession(emptyUserAnswers)
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
@@ -53,6 +70,23 @@ class BusinessPartnersConfirmAddressControllerISpec
               res.status mustBe 303
               res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/check-your-answers?partnerType=individual")
             }
+          }
+        }
+
+      }
+
+      "there are no answers in the database" should {
+        "redirect to the start of BusinessPartners journey" in {
+          given.commonPrecondition
+
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
           }
         }
       }

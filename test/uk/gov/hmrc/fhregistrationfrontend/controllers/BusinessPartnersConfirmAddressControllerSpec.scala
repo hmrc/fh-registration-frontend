@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -39,13 +39,14 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
   val backLink = "/fhdds/business-partners/partner-address"
   val enterAddressLink = "/fhdds/business-partners/enter-partner-address"
   val index = 1
+  val userAnswers = UserAnswers(testUserId)
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
 
       "Render the confirm address page" when {
         "the new business partner pages are enabled" in {
-          setupUserAction()
+          setupDataRequiredAction(userAnswers)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -61,26 +62,12 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
           reset(mockActions)
         }
       }
-
-      "Render the page not found page" when {
-        "the new business partner pages are disabled" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-          val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
-
-          result.header.status shouldBe NOT_FOUND
-          val page = Jsoup.parse(contentAsString(result))
-          page.title() should include("Page not found")
-          reset(mockActions)
-        }
-      }
     }
 
     s"next when in $mode" should {
       "return 200" when {
         "the new business partner pages are enabled and the user clicks 'save and continue' button" in {
-          setupUserAction()
+          setupDataRequiredAction(userAnswers)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.next(index, mode))(request))

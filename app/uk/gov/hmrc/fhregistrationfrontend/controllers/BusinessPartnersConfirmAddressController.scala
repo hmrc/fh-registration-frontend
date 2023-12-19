@@ -47,20 +47,12 @@ class BusinessPartnersConfirmAddressController @Inject()(
   val partnerName = "test business partner"
   val backLink = routes.BusinessPartnerAddressController.load().url
 
-  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
+  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val postAction: Call = routes.BusinessPartnersConfirmAddressController.next(index, mode)
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+    Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
   }
 
-  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
   }
 }
