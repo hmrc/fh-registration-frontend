@@ -36,7 +36,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
 
   val partnerName = "Test Unincorporated Body"
   val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
-  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
+  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.next()
   val backLink: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
 
   import actions._
