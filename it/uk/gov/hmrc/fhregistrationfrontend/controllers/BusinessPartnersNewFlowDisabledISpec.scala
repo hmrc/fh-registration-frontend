@@ -10,8 +10,14 @@ class BusinessPartnersNewFlowDisabledISpec
   override val newBusinessPartnersFlowEnabled: Boolean = false
 
   val index = 1
-  val normalRoutes = List(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode))
-  val checkRoutes = List(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode))
+  val normalRoutes = List(
+    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode),
+    routes.BusinessPartnersConfirmAddressController.load(index, NormalMode)
+  )
+  val checkRoutes = List(
+    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode),
+    routes.BusinessPartnersConfirmAddressController.load(index, CheckMode)
+  )
 
   (normalRoutes ++ checkRoutes).foreach { route =>
     s"GET $route" when {
