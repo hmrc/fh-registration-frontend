@@ -38,7 +38,6 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
   val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
   val postAction: Call = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
   val backLink: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
-  val partnerType = "unincorporated-body"
 
   import actions._
 
@@ -64,7 +63,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
               view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, backLink))
           },
           bpAddress => {
-            Redirect(routes.BusinessPartnersCheckYourAnswersController.load(partnerType))
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
           }
         )
     } else {

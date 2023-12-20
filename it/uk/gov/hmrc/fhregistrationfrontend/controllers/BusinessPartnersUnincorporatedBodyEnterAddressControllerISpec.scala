@@ -10,7 +10,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url.drop(6)
-  val checkYouAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load("unincorporated-body").url
+  val checkYouAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load().url
   val pageTitle = "Enter the company’s registered office address?"
   val pageHeading = "Enter Test Unincorporated Body’s registered office address"
 

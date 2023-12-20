@@ -33,7 +33,6 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   val partnerName = "Test Corporate Body"
-  val partnerType: String = "corporate-body"
   val postAction: Call = routes.BusinessPartnersCorporateBodyEnterAddressController.next()
   val backLink: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url
 
@@ -60,7 +59,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
               view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, backLink))
           },
           bpAddress => {
-            Redirect(routes.BusinessPartnersCheckYourAnswersController.load(partnerType))
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
           }
         )
     } else {
