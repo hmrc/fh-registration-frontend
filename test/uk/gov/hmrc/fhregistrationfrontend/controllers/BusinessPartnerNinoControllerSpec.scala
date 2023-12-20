@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.{NormalMode, CheckMode}
+import models.{CheckMode, NormalMode}
 
 class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -37,10 +37,14 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
   val index = 1
 
   val controller =
-    new BusinessPartnerNinoController(radioHelper, commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersIndividualsAndSoleProprietorsNinoController(
+      radioHelper,
+      commonDependencies,
+      views,
+      mockActions,
+      mockAppConfig)(mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
-
     s"load when in $mode" should {
       "Render the business partner nino page" when {
         "The business partner v2 pages are enabled" in {
@@ -88,7 +92,8 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
             val result = await(csrfAddToken(controller.next(index, mode))(request))
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+            redirectLocation(result).get should include(
+              routes.BusinessPartnersVatRegistrationNumberController.load().url)
 
             reset(mockActions)
           }

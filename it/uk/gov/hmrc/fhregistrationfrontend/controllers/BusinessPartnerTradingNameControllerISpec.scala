@@ -10,7 +10,7 @@ class BusinessPartnerTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route = routes.BusinessPartnerTradingNameController.load().url.drop(6)
-  val ninoPage = routes.BusinessPartnerNinoController.load(1, NormalMode).url
+  val ninoPage = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
 
   s"GET $route" when {
 

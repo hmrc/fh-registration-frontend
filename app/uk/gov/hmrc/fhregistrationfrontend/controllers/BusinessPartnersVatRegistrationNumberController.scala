@@ -38,7 +38,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 
   //ToDo read this data from the cache after being stored before the redirect
   val partnerName = "test partner"
-  val backUrl = routes.BusinessPartnerNinoController.load(1, NormalMode).url
+  val backUrl = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

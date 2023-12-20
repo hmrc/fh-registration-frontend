@@ -11,7 +11,7 @@ class BusinessPartnerNinoControllerISpec
   extends Specifications with TestConfiguration {
 
   val index = 1
-  def route(mode: Mode) = routes.BusinessPartnerNinoController.load(index, mode).url.drop(6)
+  def route(mode: Mode) = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode).url.drop(6)
 
   List(NormalMode, CheckMode).foreach { mode =>
 

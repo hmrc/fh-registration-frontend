@@ -72,7 +72,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
           val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnerNinoController.load(index, mode)
+              routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
             case Some(businessType) if businessType.equals("sole-proprietor") =>
               routes.BusinessPartnerTradingNameController.load()
             case _ => routes.BusinessPartnersController.load()

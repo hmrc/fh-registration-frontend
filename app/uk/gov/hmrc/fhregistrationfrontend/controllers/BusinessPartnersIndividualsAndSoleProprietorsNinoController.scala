@@ -26,7 +26,7 @@ import models.Mode
 
 import javax.inject.Inject
 
-class BusinessPartnerNinoController @Inject()(
+class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
   radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
   view: Views,
@@ -37,7 +37,8 @@ class BusinessPartnerNinoController @Inject()(
 
   import actions._
 
-  def postAction(index: Int, mode: Mode) = routes.BusinessPartnerNinoController.next(index, mode)
+  def postAction(index: Int, mode: Mode) =
+    routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
