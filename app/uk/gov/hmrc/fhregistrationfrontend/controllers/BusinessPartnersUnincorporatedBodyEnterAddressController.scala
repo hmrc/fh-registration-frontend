@@ -36,18 +36,18 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
 
   val partnerName = "Test Unincorporated Body"
   val bpAddressForm: Form[BusinessPartnersEnterAddress] = chooseAddressForm
-  val journeyType = "enterAddress"
   val postAction: Call = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
   val backLink: String = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url
   val partnerType = "unincorporated-body"
 
   import actions._
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
       Ok(
         view
-          .business_partners_enter_registered_address(bpAddressForm, postAction, partnerName, journeyType, backLink))
+          .business_partners_enter_registered_address(chooseAddressForm, postAction, partnerName, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -61,12 +61,7 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_enter_registered_address(
-                formWithErrors,
-                postAction,
-                partnerName,
-                journeyType,
-                backLink))
+              view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, backLink))
           },
           bpAddress => {
             Redirect(routes.BusinessPartnersCheckYourAnswersController.load(partnerType))
@@ -76,4 +71,5 @@ class BusinessPartnersUnincorporatedBodyEnterAddressController @Inject()(
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
+
 }
