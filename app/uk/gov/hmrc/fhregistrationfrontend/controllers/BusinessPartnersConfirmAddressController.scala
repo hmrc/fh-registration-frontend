@@ -52,7 +52,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
     Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
   }
 
-  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
+  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
     } else {
