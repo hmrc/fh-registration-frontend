@@ -45,54 +45,42 @@ class BusinessPartnersEnterAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
 
   import actions._
-  def load(index: Int, mode: Mode): Action[AnyContent] = userAction.async { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      sessionCache.get(request.userId).map { optUserAnswers =>
-        val formData = optUserAnswers.fold[Option[BusinessPartnersEnterAddress]](None)(_.get(EnterAddressPage(index)))
-        val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
-        Ok(
-          view
-            .business_partners_enter_address(
-              prepopulatedForm,
-              postAction(index, mode),
-              partnerName,
-              journeyType,
-              backUrl
-            )
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(EnterAddressPage(index))
+    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    Ok(
+      view
+        .business_partners_enter_address(
+          prepopulatedForm,
+          postAction(index, mode),
+          partnerName,
+          journeyType,
+          backUrl
         )
-      }
-    } else {
-      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
-    }
+    )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = userAction.async { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache later
-      chooseAddressForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            Future.successful(
-              BadRequest(
-                view.business_partners_enter_address(
-                  formWithErrors,
-                  postAction(index, mode),
-                  partnerName,
-                  journeyType,
-                  backUrl)))
-          },
-          bpAddress => {
-            val nextPage = routes.BusinessPartnersCheckYourAnswersController.load("individual")
-            sessionCache.get(request.userId).flatMap { optUserAnswers =>
-              val userAnswers = optUserAnswers.getOrElse(UserAnswers(request.userId))
-              val updatedUserAnswers = userAnswers.set(EnterAddressPage(index), bpAddress)
-              updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, EnterAddressPage(index))
-            }
-          }
-        )
-    } else {
-      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
-    }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    chooseAddressForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(
+              view.business_partners_enter_address(
+                formWithErrors,
+                postAction(index, mode),
+                partnerName,
+                journeyType,
+                backUrl)))
+        },
+        bpAddress => {
+          val page = EnterAddressPage(index)
+          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load("individual")
+
+          val updatedUserAnswers = request.userAnswers.set(page, bpAddress)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
   }
 }
