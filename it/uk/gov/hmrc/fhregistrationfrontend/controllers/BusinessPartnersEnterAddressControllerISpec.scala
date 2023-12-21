@@ -26,7 +26,7 @@ class BusinessPartnersEnterAddressControllerISpec
     .success
     .value
 
-  val checkYourAnswersPage = routes.BusinessPartnersCheckYourAnswersController.load("individual").url
+  val checkYourAnswersPage = routes.BusinessPartnersCheckYourAnswersController.load().url
 
   List(NormalMode, CheckMode).foreach { mode =>
 

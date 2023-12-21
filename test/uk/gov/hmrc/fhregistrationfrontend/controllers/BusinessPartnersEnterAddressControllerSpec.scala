@@ -42,7 +42,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockSessionCache: SessionRepository = mock[SessionRepository]
   val index: Int = 1
-  val checkYourAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load("individual").url
+  val checkYourAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load().url
 
   val controller =
     new BusinessPartnersEnterAddressController(commonDependencies, views, mockActions, mockAppConfig, mockSessionCache)(

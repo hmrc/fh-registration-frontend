@@ -76,7 +76,7 @@ class BusinessPartnersEnterAddressController @Inject()(
         },
         bpAddress => {
           val page = EnterAddressPage(index)
-          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load("individual")
+          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
           val updatedUserAnswers = request.userAnswers.set(page, bpAddress)
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
