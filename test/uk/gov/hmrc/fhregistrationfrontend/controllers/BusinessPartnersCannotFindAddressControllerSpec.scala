@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -35,7 +36,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   val enterPartnerRegOfficeAddressUrl: String = routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url
-  val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load().url
+  val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load(1, NormalMode).url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
   val enterUnincorpBodyRegOfficeAddressUrl: String =
     routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url

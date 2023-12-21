@@ -23,9 +23,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(viewHelpers: ViewHelpers,
-layout: layout,
-formHelper: FormWithCSRF,
-button: components.button
+    layout: layout,
+    formHelper: FormWithCSRF,
+    button: components.button
 )
 
 @(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, journeyType: String, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
