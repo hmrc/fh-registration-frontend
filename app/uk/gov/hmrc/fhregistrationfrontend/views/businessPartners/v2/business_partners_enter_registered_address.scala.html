@@ -29,7 +29,7 @@
         button: components.button
 )
 
-@(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, journeyType: String, backLink: String = "#")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, backLink: String = "#")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @fieldName = @{s"enterAddress"}
 

@@ -73,7 +73,8 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/fhdds/business-partners/check-your-answers")
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersCheckYourAnswersController.load().url.drop(6))
           reset(mockActions)
         }
       }

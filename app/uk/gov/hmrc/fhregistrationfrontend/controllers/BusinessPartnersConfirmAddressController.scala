@@ -53,6 +53,10 @@ class BusinessPartnersConfirmAddressController @Inject()(
   }
 
   def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    Redirect(routes.BusinessPartnersCheckYourAnswersController.load("individual"))
+    if (config.newBusinessPartnerPagesEnabled) {
+      Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
+    } else {
+      errorHandler.errorResultsPages(Results.NotFound)
+    }
   }
 }

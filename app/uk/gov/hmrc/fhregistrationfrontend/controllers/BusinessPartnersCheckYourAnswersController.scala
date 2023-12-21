@@ -40,15 +40,10 @@ class BusinessPartnersCheckYourAnswersController @Inject()(
 
   // TODO temp solution for it testing - passes data cleaner than using cookies as workaround
   // TODO remove when cache is implemented
-  def load(partnerType: String): Action[AnyContent] = userAction { implicit request =>
+  def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      val summaryRows = getRowsBasedOnPartnerType(partnerType)
-      if (summaryRows.nonEmpty) {
-        Ok(view.business_partners_check_your_answers("#", summaryRows))
-      } else {
-        logger.warn("[BusinessPartnersCheckYourAnswersController][load] - Unable to create CYA summary rows")
-        errorHandler.errorResultsPages(Results.BadRequest)
-      }
+      val summaryRows = getRowsBasedOnPartnerType("individual")
+      Ok(view.business_partners_check_your_answers("#", summaryRows))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
