@@ -54,7 +54,7 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Redirect(routes.BusinessPartnersCheckYourAnswersController.load("corporate-body"))
+      Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

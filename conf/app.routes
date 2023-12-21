@@ -121,8 +121,8 @@ POST        /business-partners/unincorporated-body-registered-office-address    
 GET         /business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.load()
 POST        /business-partners/unincorporated-body-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyUtrController.next()
 
-GET         /form/business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedOfficeAddressController.load()
-POST        /form/business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedOfficeAddressController.next()
+GET         /business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyEnterAddressController.load()
+POST        /business-partners/enter-unincorporated-body-registered-office-address      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyEnterAddressController.next()
 
 GET          /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load()
 POST         /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.next()
@@ -144,7 +144,7 @@ POST         /business-partners/partner-self-assessment-unique-taxpayer-referenc
 
 GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
 
-GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load(partnerType: String)
+GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load()
 POST         /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.next()
 
 
