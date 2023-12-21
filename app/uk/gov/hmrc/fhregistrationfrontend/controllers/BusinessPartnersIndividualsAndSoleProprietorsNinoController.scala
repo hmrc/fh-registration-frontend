@@ -16,14 +16,17 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, Cookie, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import models.Mode
+import models.{Mode, NormalMode, UserAnswers}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsNinoPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
+import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.Inject
 
 class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
@@ -31,47 +34,54 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
-  def postAction(index: Int, mode: Mode) =
+  def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next(index, mode)
+  private def getBusinessType: String = config.getRandomBusinessType()
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      val ninoForm = nationalInsuranceNumberForm
-      val items = radioHelper.conditionalYesNoRadio(ninoForm)
-      Ok(view.business_partners_has_nino(ninoForm, items, postAction(index, mode)))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(IndividualsAndSoleProprietorsNinoPage(index))
+    val prepopulatedForm =
+      formData.map(data => nationalInsuranceNumberForm.fill(data)).getOrElse(nationalInsuranceNumberForm)
+    val items = radioHelper.conditionalYesNoRadio(prepopulatedForm)
+
+    Ok(view.business_partners_has_nino(prepopulatedForm, items, postAction(index, mode)))
+      .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      nationalInsuranceNumberForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            val items = radioHelper.conditionalYesNoRadio(formWithErrors)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    nationalInsuranceNumberForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
+          Future.successful(
             BadRequest(view.business_partners_has_nino(formWithErrors, items, postAction(index, mode)))
-          },
-          nino => {
-            // Todo implement reading from legal entity page
-            val ninoForIndividual = "AB123456C"
-            if (nino.value.contains(ninoForIndividual)) {
-              Redirect(routes.BusinessPartnerAddressController.load())
-            } else {
-              Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
-            }
+          )
+        },
+        nino => {
+          val page = IndividualsAndSoleProprietorsNinoPage(index)
+          val ninoForIndividual = "AB123456C"
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
+
+            case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
+              routes.BusinessPartnerAddressController.load()
+            case Some(businessType) if businessType.equals("individual") =>
+              routes.BusinessPartnersVatRegistrationNumberController.load()
+            case _ => routes.BusinessPartnersController.load()
           }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+
+          val updatedUserAnswers = request.userAnswers.set(page, nino)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
   }
 
 }
