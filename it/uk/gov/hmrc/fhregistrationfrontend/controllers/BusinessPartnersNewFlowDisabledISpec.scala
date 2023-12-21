@@ -18,7 +18,7 @@ class BusinessPartnersNewFlowDisabledISpec
   val checkRoutes = List(
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode),
     routes.BusinessPartnersConfirmAddressController.load(index, CheckMode),
-    routes.BusinessPartnersEnterAddressController.load(index, NormalMode)
+    routes.BusinessPartnersEnterAddressController.load(index, CheckMode)
   )
 
   (normalRoutes ++ checkRoutes).foreach { route =>
