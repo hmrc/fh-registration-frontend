@@ -34,7 +34,8 @@ import org.mockito.ArgumentMatchers.any
 import scala.concurrent.Future
 import play.api.mvc.Cookie
 
-class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
+    extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
