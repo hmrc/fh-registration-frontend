@@ -9,7 +9,7 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersVatRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersVatRegistrationNumberController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersVatRegistrationNumberController.load().url.drop(6)
 
   s"GET $route" should {
 
@@ -63,7 +63,7 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerSoleProprietorUtrController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersSoleProprietorUtrController.load().url)
           }
         }
     }
