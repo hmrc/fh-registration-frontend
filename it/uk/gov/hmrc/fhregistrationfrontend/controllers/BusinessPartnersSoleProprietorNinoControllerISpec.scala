@@ -7,10 +7,10 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.mvc.Http.HeaderNames
 import scala.collection.immutable.Seq
 
-class BusinessPartnerNinoControllerISpec
+class BusinessPartnersSoleProprietorNinoControllerISpec
   extends Specifications with TestConfiguration {
   
-  val route = routes.BusinessPartnerNinoController.load().url.drop(6)
+  val route = routes.BusinessPartnersSoleProprietorNinoController.load().url.drop(6)
 
   s"GET $route" when {
 

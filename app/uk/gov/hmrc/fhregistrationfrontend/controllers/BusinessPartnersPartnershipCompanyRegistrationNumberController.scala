@@ -35,7 +35,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   val businessType: String = "limited-liability-partnership"
   val companyName: String = "Test Partnership"
-  val backLink: String = routes.BusinessPartnerPartnershipTradingNameController.load().url
+  val backLink: String = routes.BusinessPartnersPartnershipTradingNameController.load().url
   val postAction: Call = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
