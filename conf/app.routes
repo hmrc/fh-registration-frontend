@@ -53,8 +53,8 @@ POST        /business-partners/enter-partner-address/:index              @uk.gov
 GET         /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.load()
-POST        /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterRegistrationOfficeAddress.next()
+GET         /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.load()
+POST        /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.next()
 
 GET         /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
 POST        /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()

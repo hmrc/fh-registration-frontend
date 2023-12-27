@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnersEnterRegistrationOfficeAddress @Inject()(
+class BusinessPartnersPartnershipEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,7 +35,7 @@ class BusinessPartnersEnterRegistrationOfficeAddress @Inject()(
 
   val partnerName = "Test User"
   val journeyType = "enterRegisteredOfficeAddress"
-  val postAction = routes.BusinessPartnersEnterRegistrationOfficeAddress.load()
+  val postAction = routes.BusinessPartnerPartnershipRegisteredAddressController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
