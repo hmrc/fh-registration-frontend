@@ -35,7 +35,7 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
 
   val partnerName = "Test User"
   val journeyType = "enterRegisteredOfficeAddress"
-  val postAction = routes.BusinessPartnersPartnershipRegisteredAddressController.load()
+  val postAction: Call = routes.BusinessPartnersPartnershipEnterAddressController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
