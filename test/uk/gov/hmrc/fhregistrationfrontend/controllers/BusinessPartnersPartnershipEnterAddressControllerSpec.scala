@@ -20,12 +20,12 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -34,10 +34,11 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnerSoleProprietorUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersPartnershipEnterAddressController(commonDependencies, views, mockActions, mockAppConfig)(
+      mockMcc)
 
   "load" should {
-    "Render the SoleProprietor Utr page" when {
+    "Render the business partner enter address page" when {
       "the new business partner pages are enabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -46,21 +47,21 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+        page.title should include("Enter the partnership’s registered office address?")
         reset(mockActions)
       }
     }
 
-    "Render the Not found page" when {
+    "Render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        page.title should include("Page not found")
         reset(mockActions)
       }
     }
@@ -68,36 +69,30 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
 
   "next" when {
     "the new business partner pages are enabled" should {
-      "redirect to the Partner Address page" when {
-        "the form has no errors and UTR supplied" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              ("uniqueTaxpayerReference_yesNo", "true"),
-              ("uniqueTaxpayerReference_value", "1234567890"))
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+      "return 200" when {
+        setupUserAction()
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"))
+        val result = await(csrfAddToken(controller.load())(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load().url)
-          reset(mockActions)
-        }
+        status(result) shouldBe OK
+        val page = Jsoup.parse(contentAsString(result))
+        page.title should include("Enter the partnership’s registered office address?")
+        reset(mockActions)
       }
     }
 
-    "Render the Not found page" when {
+    "Render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-          .withFormUrlEncodedBody(("chosenAddress", "1"))
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = await(csrfAddToken(controller.load())(request))
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        page.title should include("Page not found")
         reset(mockActions)
       }
     }
