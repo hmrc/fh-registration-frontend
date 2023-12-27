@@ -16,15 +16,17 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
 
-class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
+class BusinessPartnersSoleProprietorNinoController @Inject()(
+  radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -34,14 +36,13 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
 
   import actions._
 
-  val companyName = "Shelby unincorporated"
-  val businessType = "unincorporatedBody"
-  val backUrl = routes.BusinessPartnersUnincorporatedBodyNameController.load().url
-  val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
+  val postAction = routes.BusinessPartnersSoleProprietorNinoController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_name(tradingNameForm, businessType, companyName, postAction, backUrl))
+      val ninoForm = nationalInsuranceNumberForm
+      val items = radioHelper.conditionalYesNoRadio(ninoForm)
+      Ok(view.business_partners_has_nino(ninoForm, items, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -49,16 +50,21 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm
+      nationalInsuranceNumberForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_has_trading_name(formWithErrors, businessType, companyName, postAction, backUrl))
+            val items = radioHelper.conditionalYesNoRadio(formWithErrors)
+            BadRequest(view.business_partners_has_nino(formWithErrors, items, postAction))
           },
-          tradingName => {
-            //TODO: save trading name data to cache
-            Redirect(routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load())
+          nino => {
+            // Todo implement reading from legal entity page
+            val ninoForIndividual = "AB123456C"
+            if (nino.value.contains(ninoForIndividual)) {
+              Redirect(routes.BusinessPartnersAddressController.load())
+            } else {
+              Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
+            }
           }
         )
     } else {

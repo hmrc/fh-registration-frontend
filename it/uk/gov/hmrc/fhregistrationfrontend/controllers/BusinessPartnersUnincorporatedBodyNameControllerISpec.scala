@@ -10,7 +10,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersUnincorporatedBodyNameController.load().url.drop(6)
-  val unincorpBodyTradingNameUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
+  val unincorpBodyTradingNameUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
   s"GET $route" should {
     "render the Unincorporated Body Name page" in {
