@@ -11,7 +11,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
   val route: String = routes.BusinessPartnersPartnershipVatNumberController.load().url.drop(6)
   val partershipSaUtrUrl: String = routes.BusinessPartnersPartnershipUtrController.load().url
-  val partnershipRegAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+  val partnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
 
   s"GET $route" should {
 

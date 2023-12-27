@@ -30,7 +30,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
-class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -38,7 +38,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockAddressService: AddressService = mock[AddressService]
   val controller =
-    new BusinessPartnerPartnershipRegisteredAddressController(
+    new BusinessPartnersPartnershipRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,

@@ -64,8 +64,8 @@ POST        /business-partners/confirm-partner-address/:index              @uk.g
 GET         /change-business-partners/confirm-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-business-partners/confirm-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersConfirmAddressController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.load()
-POST        /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipRegisteredAddressController.next()
+GET         /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.load()
+POST        /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.next()
 
 GET         /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.load()
 POST        /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.next()

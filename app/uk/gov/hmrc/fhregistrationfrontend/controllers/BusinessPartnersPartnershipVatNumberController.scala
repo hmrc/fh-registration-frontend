@@ -78,7 +78,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
                     .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
                 Redirect(routes.BusinessPartnersPartnershipUtrController.load())
               case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-                Redirect(routes.BusinessPartnerPartnershipRegisteredAddressController.load())
+                Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load())
               case Some(unknownBusinessType) =>
                 logger.warn(
                   s"[BusinessPartnersPartnershipVatNumberController][next]: Unexpected error, $unknownBusinessType retrieved")
