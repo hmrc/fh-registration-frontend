@@ -46,7 +46,7 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipRegisteredAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
           }
         }
     }

@@ -67,8 +67,8 @@ POST        /change-business-partners/confirm-partner-address/:index            
 GET         /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.load()
 POST        /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.next()
 
-GET         /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.load()
-POST        /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerTradingNameController.next()
+GET         /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.load()
+POST        /business-partners/partner-trading-name                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.next()
 
 GET         /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.load()
 POST        /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerPartnershipTradingNameController.next()

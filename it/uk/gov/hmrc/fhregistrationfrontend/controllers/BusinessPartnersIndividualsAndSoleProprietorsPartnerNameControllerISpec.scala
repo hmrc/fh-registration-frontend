@@ -122,7 +122,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
               whenReady(result) { res =>
                 res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerTradingNameController.load().url)
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersTradingNameController.load().url)
                 val userAnswers = getUserAnswersFromSession.get
                 val pageData = userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(1))
                 pageData mustBe Some(PartnerName("Coca", "Cola"))

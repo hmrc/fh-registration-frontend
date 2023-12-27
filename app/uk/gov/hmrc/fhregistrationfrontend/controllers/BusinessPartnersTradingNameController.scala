@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerTradingNameController @Inject()(
+class BusinessPartnersTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -37,7 +37,7 @@ class BusinessPartnerTradingNameController @Inject()(
 
   def backUrl(index: Int = 1, mode: Mode = NormalMode): String =
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
-  val postAction: Call = routes.BusinessPartnerTradingNameController.next()
+  val postAction: Call = routes.BusinessPartnersTradingNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
