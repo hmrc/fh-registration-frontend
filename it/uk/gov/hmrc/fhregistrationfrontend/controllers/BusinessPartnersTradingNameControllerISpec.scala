@@ -5,10 +5,10 @@ import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerTradingNameControllerISpec
+class BusinessPartnersTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnerTradingNameController.load().url.drop(6)
+  val route = routes.BusinessPartnersTradingNameController.load().url.drop(6)
 
   s"GET $route" when {
 

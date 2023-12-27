@@ -66,7 +66,7 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
                 postAction,
                 backLink))
           },
-          businessPartnersUtr => Redirect(routes.BusinessPartnerAddressController.load())
+          businessPartnersUtr => Redirect(routes.BusinessPartnersAddressController.load())
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

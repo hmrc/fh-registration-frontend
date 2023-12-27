@@ -37,8 +37,8 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     val backLinkAndButtonUrl: String = getUrlFromBusinessType(
-      routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
-      routes.BusinessPartnerAddressController.load().url,
+      routes.BusinessPartnersPartnershipRegisteredAddressController.load().url,
+      routes.BusinessPartnersAddressController.load().url,
       routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url,
       routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url,
       config.getRandomBusinessType()

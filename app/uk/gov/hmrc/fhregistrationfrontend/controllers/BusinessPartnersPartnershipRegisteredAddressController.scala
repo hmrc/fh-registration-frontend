@@ -27,7 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
+class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -55,7 +55,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
   val journey = "partnership"
   val postAction: Call = Call(
     method = "POST",
-    url = routes.BusinessPartnerPartnershipRegisteredAddressController
+    url = routes.BusinessPartnersPartnershipRegisteredAddressController
       .next()
       .url
   )
@@ -99,7 +99,7 @@ class BusinessPartnerPartnershipRegisteredAddressController @Inject()(
           bpAddress => {
             addressService
               .addressLookup(
-                routes.BusinessPartnerPartnershipRegisteredAddressController.load().path(),
+                routes.BusinessPartnersPartnershipRegisteredAddressController.load().path(),
                 bpAddress.postcode,
                 bpAddress.addressLine
               )

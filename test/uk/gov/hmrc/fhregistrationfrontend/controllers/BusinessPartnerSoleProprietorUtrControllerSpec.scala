@@ -80,7 +80,7 @@ class BusinessPartnerSoleProprietorUtrControllerSpec extends ControllerSpecWithG
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnerAddressController.load().url)
+          redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load().url)
           reset(mockActions)
         }
       }

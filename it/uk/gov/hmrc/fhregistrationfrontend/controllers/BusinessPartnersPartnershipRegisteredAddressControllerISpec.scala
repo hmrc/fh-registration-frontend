@@ -6,10 +6,10 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.mvc.Http.HeaderNames
 
-class BusinessPartnerPartnershipRegisteredAddressControllerISpec
+class BusinessPartnersPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url.drop(6)
   val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url

@@ -61,7 +61,7 @@ class BusinessPartnerNinoController @Inject()(
             // Todo implement reading from legal entity page
             val ninoForIndividual = "AB123456C"
             if (nino.value.contains(ninoForIndividual)) {
-              Redirect(routes.BusinessPartnerAddressController.load())
+              Redirect(routes.BusinessPartnersAddressController.load())
             } else {
               Redirect(routes.BusinessPartnersVatRegistrationNumberController.load())
             }
