@@ -59,7 +59,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
       .next()
       .url
   )
-  val enterManualAddressUrl: String = routes.BusinessPartnerPartnershipRegisteredAddressController.load().url
+  val enterManualAddressUrl: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

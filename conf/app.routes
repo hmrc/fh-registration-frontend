@@ -139,8 +139,8 @@ POST         /business-partners/partnership-name                                
 GET          /business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load()
 POST         /business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.next()
 
-GET          /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerSoleProprietorUtrController.load()
-POST         /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerSoleProprietorUtrController.next()
+GET          /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.load()
+POST         /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.next()
 
 GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
 

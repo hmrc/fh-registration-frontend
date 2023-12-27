@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnte
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 @Singleton
-class BusinessPartnerSoleProprietorUtrController @Inject()(
+class BusinessPartnersSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -34,7 +34,7 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
   import actions._
 
   val partnerName: String = "{{partner name}}"
-  val postAction: Call = routes.BusinessPartnerSoleProprietorUtrController.next()
+  val postAction: Call = routes.BusinessPartnersSoleProprietorUtrController.next()
   val businessPartnerType: String = "SoleProprietor"
   val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
 
