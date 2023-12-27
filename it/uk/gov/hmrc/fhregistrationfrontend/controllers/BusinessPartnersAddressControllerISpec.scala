@@ -8,7 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 
 import scala.collection.immutable.Seq
 
-class BusinessPartnerAddressControllerISpec
+class BusinessPartnersAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route = "/business-partners/partner-address"

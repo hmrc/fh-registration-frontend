@@ -29,7 +29,7 @@ import models.NormalMode
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessPartnerAddressController @Inject()(
+class BusinessPartnersAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -66,7 +66,7 @@ class BusinessPartnerAddressController @Inject()(
           bpAddress => {
             addressService
               .addressLookup(
-                routes.BusinessPartnerAddressController.load().path(),
+                routes.BusinessPartnersAddressController.load().path(),
                 bpAddress.postcode,
                 bpAddress.addressLine
               )

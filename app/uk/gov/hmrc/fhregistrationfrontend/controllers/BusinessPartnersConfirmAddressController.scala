@@ -45,7 +45,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
   )
 
   val partnerName = "test business partner"
-  val backLink = routes.BusinessPartnerAddressController.load().url
+  val backLink = routes.BusinessPartnersAddressController.load().url
 
   def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val postAction: Call = routes.BusinessPartnersConfirmAddressController.next(index, mode)

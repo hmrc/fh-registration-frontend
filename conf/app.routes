@@ -32,8 +32,8 @@ GET         /business-partners                                          @uk.gov.
 POST        /business-partners                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersController.next()
 
 
-GET         /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.load()
-POST        /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnerAddressController.next()
+GET         /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.load()
+POST        /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.next()
 
 GET         /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load()
 POST        /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next()

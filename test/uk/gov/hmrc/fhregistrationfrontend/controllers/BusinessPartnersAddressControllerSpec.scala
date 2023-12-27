@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 
 import scala.concurrent.Future
 
-class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -45,7 +45,7 @@ class BusinessPartnerAddressControllerSpec extends ControllerSpecWithGuiceApp wi
   val mockAddressService = mock[AddressService]
 
   val controller =
-    new BusinessPartnerAddressController(commonDependencies, views, mockActions, mockAppConfig, mockAddressService)(
+    new BusinessPartnersAddressController(commonDependencies, views, mockActions, mockAppConfig, mockAddressService)(
       mockMcc)
 
   "load" should {

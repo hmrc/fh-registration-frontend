@@ -50,7 +50,7 @@ class BusinessPartnerNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerAddressController.load().url)
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
             }
           }
         }
