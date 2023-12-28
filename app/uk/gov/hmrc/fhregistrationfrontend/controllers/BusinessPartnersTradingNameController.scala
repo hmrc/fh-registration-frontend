@@ -57,7 +57,7 @@ class BusinessPartnersTradingNameController @Inject()(
               view.business_partners_has_trading_partner_name(formWithErrors, "Test User", postAction, backUrl()))
           },
           tradingName => {
-            Redirect(routes.BusinessPartnersSoleProprietorNinoController.load())
+            Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load())
           }
         )
     } else {

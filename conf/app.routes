@@ -41,8 +41,8 @@ POST        /business-partners/partnership-self-assessment-unique-taxpayer-refer
 GET         /business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
 POST        /business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
 
-GET         /business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorNinoController.load()
-POST        /business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorNinoController.next()
+GET         /business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load()
+POST        /business-partners/partner-national-insurance-number   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next()
 
 GET         /business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load()
 POST        /business-partners/choose-address                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next()

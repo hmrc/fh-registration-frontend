@@ -25,8 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
-    extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -35,11 +34,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPARTNERS(
-      commonDependencies,
-      views,
-      mockActions,
-      mockAppConfig)(mockMcc)
+    new BusinessPartnersSoleProprietorUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
     "Render the SoleProprietor Utr page" when {

@@ -29,7 +29,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
 
-class BusinessPartnersSoleProprietorNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
+    extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -38,7 +39,7 @@ class BusinessPartnersSoleProprietorNinoControllerSpec extends ControllerSpecWit
   lazy val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new BusinessPartnersSoleProprietorNinoController(
+    new BusinessPartnersIndividualsAndSoleProprietorsNinoController(
       radioHelper,
       commonDependencies,
       views,
