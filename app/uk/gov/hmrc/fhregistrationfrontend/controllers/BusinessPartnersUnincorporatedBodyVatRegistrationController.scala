@@ -37,7 +37,7 @@ class BusinessPartnersUnincorporatedBodyVatRegistrationController @Inject()(
   val partnerName: String = "test unincorporatedBody"
   val businessPartnerType: String = "unincorporatedBody"
   val postAction: Call = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()
-  val backUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
+  val backUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

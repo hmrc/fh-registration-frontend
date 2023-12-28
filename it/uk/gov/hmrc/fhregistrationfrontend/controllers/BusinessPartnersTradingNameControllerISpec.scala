@@ -49,7 +49,7 @@ class BusinessPartnersTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load().url)
           }
         }
 
@@ -69,7 +69,7 @@ class BusinessPartnersTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerNinoController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load().url)
           }
         }
       }

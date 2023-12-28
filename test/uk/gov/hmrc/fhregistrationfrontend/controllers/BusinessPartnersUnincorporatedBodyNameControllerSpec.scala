@@ -33,7 +33,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val controller =
     new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
-  val unincorpoBodyTradingNameUrl: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url
+  val unincorpoBodyTradingNameUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
   "load" should {
     "Render the Unincorporated Body Name page" when {

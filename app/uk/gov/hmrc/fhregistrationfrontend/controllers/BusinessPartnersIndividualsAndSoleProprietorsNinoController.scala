@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
 import javax.inject.Inject
 
-class BusinessPartnerNinoController @Inject()(
+class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
   radioHelper: RadioHelper,
   ds: CommonPlayDependencies,
   view: Views,
@@ -36,7 +36,7 @@ class BusinessPartnerNinoController @Inject()(
 
   import actions._
 
-  val postAction = routes.BusinessPartnerNinoController.next()
+  val postAction = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

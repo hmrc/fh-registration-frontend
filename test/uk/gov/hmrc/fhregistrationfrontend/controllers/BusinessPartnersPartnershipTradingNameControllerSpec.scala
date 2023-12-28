@@ -26,7 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -36,7 +36,7 @@ class BusinessPartnerPartnershipTradingNameControllerSpec extends ControllerSpec
   val pageTitle = "Does the partnership use a trading name that is different from its registered name?"
 
   val controller =
-    new BusinessPartnerPartnershipTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersPartnershipTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   val partnershipVatNumberUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
   val partnershipCompanyRegNumUrl: String =
