@@ -1,47 +1,92 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models._
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.mvc.Http.HeaderNames
-import scala.collection.immutable.Seq
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.NationalInsuranceNumber
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsNinoPage
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
   extends Specifications with TestConfiguration {
-  
-  val route = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load().url.drop(6)
 
-  s"GET $route" when {
+  val index = 1
+  val nino = NationalInsuranceNumber(hasValue = true, Some("AB123456C"))
+  val userAnswersWithPageData: UserAnswers = emptyUserAnswers
+    .set[NationalInsuranceNumber](IndividualsAndSoleProprietorsNinoPage(1), nino)
+    .success
+    .value
+  def route(mode: Mode): String = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode).url.drop(6)
 
-    "render the business partner national insurance number page" when {
-      "the user is authenticated" in {
-        given.commonPrecondition
+  List(NormalMode, CheckMode).foreach { mode =>
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
+    s"GET ${route(mode)}" when {
+      "render the business partner national insurance number page with no prepopulated answers" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+          addUserAnswersToSession(emptyUserAnswers)
+
+          val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
             res.status mustBe 200
             val page = Jsoup.parse(res.body)
-            page.title must include("Does the partner have a National Insurance number?")
 
+            val ninoField = page.getElementById("nationalInsuranceNumber_value")
+            ninoField.attr("value") mustBe ""
+            page.title must include("Does the partner have a National Insurance number?")
             page.getElementById("page-heading").text must include("Does Test User have a National Insurance number?")
+          }
+        }
+      }
+
+      "render the business partner national insurance number page with prepopulated answers" when {
+        "the user is authenticated" in {
+          given.commonPrecondition
+          addUserAnswersToSession(userAnswersWithPageData)
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+
+            val ninoField = page.getElementById("nationalInsuranceNumber_value")
+            ninoField.attr("value") mustBe "AB123456C"
+            page.title must include("Does the partner have a National Insurance number?")
+            page.getElementById("page-heading").text must include("Does Test User have a National Insurance number?")
+          }
+        }
+      }
+
+      "there are no user answers in the database" should {
+        "redirect to the start of BusinessPartners" in {
+          given.commonPrecondition
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
           }
         }
       }
     }
 
-  }
+    s"POST ${route(mode)}" when {
+      Map("override" -> userAnswersWithPageData, "add" -> emptyUserAnswers).foreach { case (uaAction, userAnswers) =>
 
-  s"POST $route" when {
-    "the Yes radio button is selected and a valid NINO is provided (for Individual)" should {
-      "redirect to the VAT number page" in {
-          given.commonPrecondition
+        s"redirect to Business Partner NINO page and $uaAction userAnswers" when {
+          "business type is Individual and the form is filled out correctly: (hasNino == true && value == AB123456C)" in {
+            given.commonPrecondition
+            addUserAnswersToSession(userAnswers)
 
-          val result = buildRequest(route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie), DefaultWSCookie("businessType", "individual"))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
                 "nationalInsuranceNumber_yesNo" -> Seq("true"),
@@ -51,91 +96,94 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
             whenReady(result) { res =>
               res.status mustBe 303
               res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get(IndividualsAndSoleProprietorsNinoPage(1))
+              pageData mustBe Some(NationalInsuranceNumber(hasValue = true, Some("AB123456C")))
             }
           }
-        }
 
-        "the Yes radio button is selected and a valid NINO is provided (for Sole Proprietor)" should {
-          "redirect to the VAT number page" in {
+          "business type is Individual and the form is filled out correctly: (hasNino == false)" in {
             given.commonPrecondition
+            addUserAnswersToSession(userAnswers)
 
-            val result = buildRequest(route)
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie), DefaultWSCookie("businessType", "individual"))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "nationalInsuranceNumber_yesNo" -> Seq("true"),
-                "nationalInsuranceNumber_value" -> Seq("QQ456789C")
+                "nationalInsuranceNumber_yesNo" -> Seq("false"),
+                "nationalInsuranceNumber_value" -> Seq("")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 303
               res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get(IndividualsAndSoleProprietorsNinoPage(1))
+              pageData mustBe Some(NationalInsuranceNumber(hasValue = false, None))
             }
+
           }
         }
 
-        "the No radio button is selected" should {
-          "redirect to the VAT number page" in {
+        s"return a BadRequest and $uaAction userAnswers" when {
+          "the business type is Individual and neither radio button is selected by the user" in {
             given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
 
-            val result = buildRequest(route)
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-                .post(Map(
-                  "nationalInsuranceNumber_yesNo" -> Seq("false"),
-                  "nationalInsuranceNumber_value" -> Seq.empty
-                ))
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie), DefaultWSCookie("businessType", "individual"))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "nationalInsuranceNumber_yesNo" -> Seq.empty,
+                "nationalInsuranceNumber_value" -> Seq.empty
+              ))
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.getElementsByClass("govuk-error-summary").text() must include("Select whether they have a National Insurance number")
+            }
+          }
+
+          "the business type is Individual and yes is selected but no NINO is entered" in {
+            given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
+
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie), DefaultWSCookie("businessType", "individual"))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "nationalInsuranceNumber_yesNo" -> Seq("true"),
+                "nationalInsuranceNumber_value" -> Seq.empty
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.getElementsByClass("govuk-error-summary").text() must include("Enter National Insurance number")
+            }
+          }
+
+          "the business type is Individual and yes is selected but NINO is invalid" in {
+            given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
+
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie), DefaultWSCookie("businessType", "individual"))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map(
+                "nationalInsuranceNumber_yesNo" -> Seq("true"),
+                "nationalInsuranceNumber_value" -> Seq("OOPS")
+              ))
+
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid National Insurance number")
             }
           }
         }
       }
-
-    "neither radio button is selected by the user" should {
-      "return 400" in {
-        given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq.empty,
-              "nationalInsuranceNumber_value" -> Seq.empty
-            ))
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Select whether they have a National Insurance number")
-          }
-        }
-      }
     }
-
-    "yes is selected but no NINO is entered" should {
-      "return 400" in {
-        given.commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "nationalInsuranceNumber_yesNo" -> Seq("true"),
-              "nationalInsuranceNumber_value" -> Seq.empty
-            ))
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("Enter National Insurance number")
-          }
-        }
-      }
-    }
-
+  }
 }
