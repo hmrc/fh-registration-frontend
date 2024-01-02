@@ -74,7 +74,7 @@ class BusinessPartnersAddressController @Inject()(
                 case Right(addressListMap) =>
                   //ToDo store the addressListMap in save4Later
                   if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
                   else if (addressListMap.size == 1)
                     //TODO change the hard coded values when index and mode added to function params
                     Redirect(routes.BusinessPartnersConfirmAddressController.load(1, NormalMode))

@@ -1,25 +1,27 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{NormalMode, CheckMode, Mode}
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersCannotFindAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnersCannotFindAddressController.load().url.drop(6)
+  def route(mode: Mode): String = routes.BusinessPartnersCannotFindAddressController.load(1, mode).url.drop(6)
 
-  s"GET $route" when {
+  List(NormalMode, CheckMode).foreach { mode =>
 
-    "the new business partners flow is enabled" should {
+    s"GET $baseUrl${route(mode)}" when {
 
-      "render the Business Partners Cannot Find Address page" when {
-        "the user is authenticated" in {
-          given
-            .commonPrecondition
+      "the new business partners flow is enabled" should {
 
-          val result = buildRequest(route)
+        "render the Business Partners Cannot Find Address page" when {
+          "the user is authenticated" in {
+            given
+              .commonPrecondition
+
+            val result = buildRequest(route(mode))
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
@@ -28,6 +30,7 @@ class BusinessPartnersCannotFindAddressControllerISpec
               val page = Jsoup.parse(res.body)
               page.title() must include("We cannot find any addresses for HR33 7GP")
             }
+          }
         }
       }
     }

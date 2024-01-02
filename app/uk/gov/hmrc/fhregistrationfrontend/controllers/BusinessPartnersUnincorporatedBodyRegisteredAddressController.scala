@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
@@ -89,7 +90,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
               .map {
                 case Right(addressListMap) =>
                   if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load())
                   else

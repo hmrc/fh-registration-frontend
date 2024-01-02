@@ -142,7 +142,9 @@ POST         /business-partners/confirm-corporate-body-registered-office-address
 GET          /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.load()
 POST         /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.next()
 
-GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load()
+GET          /business-partners/cannot-find-address                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load(index: Int, mode: Mode = NormalMode)
+
+GET          /change-business-partners/cannot-find-address                              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load(index: Int, mode: Mode = CheckMode)
 
 GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load()
 POST         /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.next()
