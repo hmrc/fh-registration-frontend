@@ -34,6 +34,7 @@ val compile = Seq(
   "org.mindrot"                  % "jbcrypt"                          % "0.4",
   "com.eclipsesource"           %% "play-json-schema-validator"       % "0.9.5",
   "uk.gov.hmrc.mongo"           %% s"hmrc-mongo-$playVersion"         % hmrcMongoVersion,
+  "uk.gov.hmrc"                 %% s"crypto-json-$playVersion"         % "7.3.0",
 
   compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full
