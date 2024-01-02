@@ -138,7 +138,10 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/partner-national-insurance-number")
+          redirectLocation(result).get should
+            include(
+              routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode).url.drop(6)
+            )
           reset(mockActions)
         }
       }
