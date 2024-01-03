@@ -17,22 +17,28 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.ChooseAddressPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import models.{Mode, NormalMode}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersChooseAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   private def getBusinessType: String = config.getRandomBusinessType()
@@ -43,42 +49,45 @@ class BusinessPartnersChooseAddressController @Inject()(
     else "#"
   }
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      val form = chooseAddressForm
-      //ToDo read this data from the cache after being stored before the redirect
-      val addressList = testAddressData
-      Ok(view.business_partners_choose_address(form, addressList, backUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersChooseAddressController.next(index, mode)
+
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(ChooseAddressPage(index))
+    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    Ok(
+      view.business_partners_choose_address(
+        prepopulatedForm,
+        postAction(index, mode),
+        testAddressData,
+        backUrl
+      )
+    )
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      val addressList = testAddressData
-      chooseAddressForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            BadRequest(view.business_partners_choose_address(formWithErrors, testAddressData, backUrl))
-          },
-          addressKey => {
-            // TODO save the selected address to cache
-            addressList.get(addressKey.chosenAddress) match {
-              case Some(address) =>
-                Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
-              case None =>
-                val formWithError =
-                  chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
-                BadRequest(view.business_partners_choose_address(formWithError, testAddressData, backUrl))
-            }
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    chooseAddressForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(
+              view.business_partners_choose_address(
+                formWithErrors,
+                postAction(index, mode),
+                testAddressData,
+                backUrl
+              )
+            )
+          )
+        },
+        addressKey => {
+          val page = ChooseAddressPage(index)
+          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+
+          val updatedUserAnswers = request.userAnswers.set(page, addressKey)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
   }
 
   //ToDo remove when addressData stored in database

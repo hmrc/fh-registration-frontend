@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -24,6 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import play.api.data.FormError
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -101,7 +103,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load())
                   else
-                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+                    Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
 
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm

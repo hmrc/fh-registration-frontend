@@ -79,7 +79,7 @@ class BusinessPartnersAddressController @Inject()(
                     //TODO change the hard coded values when index and mode added to function params
                     Redirect(routes.BusinessPartnersConfirmAddressController.load(1, NormalMode))
                   else
-                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+                    Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
