@@ -5,13 +5,15 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import models.NormalMode
 
 import scala.collection.immutable.Seq
 
 class BusinessPartnersAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = "/business-partners/partner-address"
+  val route: String = routes.BusinessPartnersAddressController.load().url.drop(6)
+  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url
 
   s"GET $route" when {
 
@@ -55,7 +57,7 @@ class BusinessPartnersAddressControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(chooseAddressUrl)
         }
       }
     }
@@ -74,7 +76,7 @@ class BusinessPartnersAddressControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/choose-address")
+          res.header(HeaderNames.LOCATION) mustBe Some(chooseAddressUrl)
         }
       }
     }
