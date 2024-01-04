@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -48,7 +49,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
       mockAddressService
     )(scala.concurrent.ExecutionContext.Implicits.global, mockMcc)
 
-  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
+  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url
   val confirmRegOfficeAddressUrl: String =
     routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load().url
   val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url

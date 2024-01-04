@@ -5,42 +5,68 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.ChooseAddressPage
+import models.{CheckMode, Mode, NormalMode}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 import scala.collection.immutable.Seq
 
 class BusinessPartnersChooseAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route = routes.BusinessPartnersChooseAddressController.load().url.drop(6)
+  def route(mode: Mode): String = routes.BusinessPartnersChooseAddressController.load(1, mode).url.drop(6)
 
-  s"GET $route" should {
+  val chosenAddress = ChooseAddress("1 Romford Road, Wellington, Telford, TF1 4ER")
+
+  val userAnswersWithPageData = emptyUserAnswers
+    .set[ChooseAddress](ChooseAddressPage(1), chosenAddress)
+    .success
+    .value
+
+  List(NormalMode, CheckMode).foreach { mode =>
+
+    s"GET ${route(mode)}" should {
 
       "render the choose address page" in {
         given
           .commonPrecondition
 
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .get()
+        addUserAnswersToSession(emptyUserAnswers)
 
+        val result = buildRequest(route(mode))
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 200
+          val page = Jsoup.parse(res.body)
+          page.title() must include("Choose address")
+        }
+      }
+
+      "there are no user answers in the database" should {
+        "redirect to the start of BusinessPartners" in {
+          given.commonPrecondition
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title() must include("Choose address")
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
           }
         }
       }
     }
 
-  s"POST $route" when {
-    "the form has no errors" should {
-      //Todo this will change when navigation is implemented
-      "redirect the user to the Check Your Answers page" in {
-        given.commonPrecondition
+    s"POST ${route(mode)}" when {
+      "redirect the user to the Check Your Answers page" when {
+        "the form has no errors" in {
+          given.commonPrecondition
 
-          val result = buildRequest(route)
+          addUserAnswersToSession(userAnswersWithPageData)
+
+          val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map(
@@ -50,71 +76,6 @@ class BusinessPartnersChooseAddressControllerISpec
           whenReady(result) { res =>
             res.status mustBe 303
             res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
-          }
-      }
-    }
-
-    "no address in selected" should {
-      //Todo this will change when navigation is implemented
-      "return 400" in {
-        given
-          .commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("chosenAddress" -> Seq.empty))
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
-          }
-        }
-      }
-    }
-
-    "the form is invalid format" should {
-      //Todo this will change when navigation is implemented
-      "return 400" in {
-        given
-          .commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("chosenAddress" -> Seq("xyz")))
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
-          }
-        }
-      }
-    }
-
-    "the address key is out of range" should {
-      //Todo this will change when navigation is implemented
-      "return 400" in {
-        given
-          .commonPrecondition
-
-        WsTestClient.withClient { client =>
-          val result = client.url(baseUrl + route)
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("chosenAddress" -> Seq("100")))
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select an address")
           }
         }
       }

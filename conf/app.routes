@@ -50,8 +50,8 @@ POST        /change-business-partners/partner-national-insurance-number/:index  
 GET         /business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next(index: Int, mode: Mode = NormalMode)
 
-GET         /change-business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load(index: Int, mode: Mode = NormalMode)
-POST        /change-business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next(index: Int, mode: Mode = NormalMode)
+GET         /change-business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/choose-address/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersChooseAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: Int, mode: Mode = NormalMode)

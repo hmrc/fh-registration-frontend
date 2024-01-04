@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -27,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
@@ -108,7 +110,8 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
             val result = await(csrfAddToken(controller.next())(request))
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include(routes.BusinessPartnersChooseAddressController.load().url)
+            redirectLocation(result).get should include(
+              routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url)
             reset(mockActions)
           }
         }
