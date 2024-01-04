@@ -52,19 +52,15 @@ class BusinessPartnersCannotFindAddressController @Inject()(
       config.getRandomBusinessType()
     )
 
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view.business_partners_cannot_find_address(
-          "HR33 7GP",
-          partnerName,
-          backAction = backLinkAndButtonUrl,
-          manuallyEnterAddressUrl = manuallyEnterAddressUrl,
-          buttonUrl = backLinkAndButtonUrl
-        )
+    Ok(
+      view.business_partners_cannot_find_address(
+        "HR33 7GP",
+        partnerName,
+        backAction = backLinkAndButtonUrl,
+        manuallyEnterAddressUrl = manuallyEnterAddressUrl,
+        buttonUrl = backLinkAndButtonUrl
       )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+    )
   }
 
   def getUrlFromBusinessType(url1: String, url2: String, url3: String, url4: String, partnerType: String): String =
