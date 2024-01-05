@@ -26,6 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import models.NormalMode
 
 class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
@@ -102,7 +103,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
                 case Right(addressListMap) =>
                   // ToDo store the addressListMap in cache
                   if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load())
                   else
