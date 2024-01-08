@@ -17,52 +17,74 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.NormalMode
+import models.{Mode, NormalMode}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerVatRegistrationNumberPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersVatRegistrationNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   //ToDo read this data from the cache after being stored before the redirect
-  val partnerName = "test partner"
+  val partnerName: String = "test partner"
   val backUrl: String = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersVatRegistrationNumberController.next(index, mode)
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_enter_vat_registration(vatNumberForm, partnerName, backUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(PartnerVatRegistrationNumberPage(index))
+    val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
+    Ok(
+      view.business_partners_enter_vat_registration(
+        prepopulatedForm,
+        postAction(index, mode),
+        partnerName,
+        backUrl
+      )
+    )
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      vatNumberForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            BadRequest(view.business_partners_enter_vat_registration(formWithErrors, partnerName, backUrl))
-          },
-          vatNumber => {
-            vatNumber.value match {
-              case Some(vatNumber) => Redirect(routes.BusinessPartnersAddressController.load())
-              case None            => Redirect(routes.BusinessPartnersSoleProprietorUtrController.load())
-            }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    vatNumberForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(
+              view.business_partners_enter_vat_registration(
+                formWithErrors,
+                postAction(index, mode),
+                partnerName,
+                backUrl
+              )
+            )
+          )
+        },
+        vatNumber => {
+          val page = PartnerVatRegistrationNumberPage(index)
+          val nextPage = vatNumber.value match {
+            case Some(vatNumber) => routes.BusinessPartnersAddressController.load()
+            case None            => routes.BusinessPartnersSoleProprietorUtrController.load()
           }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+
+          val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
   }
 }

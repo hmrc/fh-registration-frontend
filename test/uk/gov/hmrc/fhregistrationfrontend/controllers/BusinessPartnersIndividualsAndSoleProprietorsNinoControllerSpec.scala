@@ -39,10 +39,11 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val radioHelper = app.injector.instanceOf[RadioHelper]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
-  val mockSessionCache = mock[SessionRepository]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val radioHelper: RadioHelper = app.injector.instanceOf[RadioHelper]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val mockSessionCache: SessionRepository = mock[SessionRepository]
+  val vatRegNumPage: String = routes.BusinessPartnersVatRegistrationNumberController.load(1, NormalMode).url
   val index = 1
 
   val controller =
@@ -128,7 +129,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+          redirectLocation(result).get should include(vatRegNumPage)
           reset(mockActions)
         }
       }

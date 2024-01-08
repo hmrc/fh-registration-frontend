@@ -38,8 +38,11 @@ POST        /business-partners/partner-address                     @uk.gov.hmrc.
 GET         /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load()
 POST        /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next()
 
-GET         /business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load()
-POST        /business-partners/partner-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next()
+GET         /business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersVatRegistrationNumberController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partner-national-insurance-number/:index   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/partner-national-insurance-number/:index   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next(index: Int, mode: Mode = NormalMode)

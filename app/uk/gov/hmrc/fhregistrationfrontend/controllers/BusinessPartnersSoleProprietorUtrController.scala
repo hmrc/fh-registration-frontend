@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -36,7 +37,7 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
   val partnerName: String = "{{partner name}}"
   val postAction: Call = routes.BusinessPartnersSoleProprietorUtrController.next()
   val businessPartnerType: String = "SoleProprietor"
-  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
+  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load(1, NormalMode).url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
