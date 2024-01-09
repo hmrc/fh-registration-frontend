@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -35,7 +36,7 @@ class BusinessPartnersPartnershipNameController @Inject()(
 
   val journeyType = "partnership"
   val postAction: Call = routes.BusinessPartnersPartnershipNameController.next()
-  val backAction: String = routes.BusinessPartnersController.load().url
+  val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
   val tradingNamePage: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>

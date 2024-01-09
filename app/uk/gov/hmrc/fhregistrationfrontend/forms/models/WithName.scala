@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
-
-object BusinessPartnerTypeForm {
-
-  val businessPartnerTypeKey = "businessPartnersType"
-
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
-
+class WithName(string: String) {
+  override val toString: String = string
 }

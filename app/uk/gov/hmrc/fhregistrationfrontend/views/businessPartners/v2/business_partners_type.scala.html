@@ -31,7 +31,7 @@
       formHelper: FormWithCSRF,
       viewHelpers: ViewHelpers)
 
-@(form: Form[BusinessPartnerType.Value], addressList: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnerType.Value], postAction: Call, backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
 <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -46,17 +46,11 @@ messages("fh.business_partners.title")
 }
 
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some(ContactPersonController.load().url)) {
-@viewHelpers.form(action = BusinessPartnersController.next(), Symbol("novalidate") -> "novalidate") {
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some(backUrl)) {
+@viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
 
   @if(form.errors.nonEmpty) {
-    @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-      Seq(ErrorLink(
-        href = Some(s"#${form.errors.head.key}"),
-        content = Text(messages(s"fh.businessPartnersType.${form.errors.head.message}",""))
-    ))
-    ,
-      title = Text(messages("fh.generic.error"))))
+    @viewHelpers.govukErrorSummary(ErrorSummaryViewModel(form))
   }
 
     @Html(BusinessPartnersHeader(title))
@@ -64,60 +58,19 @@ messages("fh.business_partners.title")
 <p class="govuk-body">@messages("fh.business_partners.intro")</p>
 
     @viewHelpers.govukDetails(Details(
-summary = Text(messages("fh.business_partners.entity")),
-content = Text(messages("fh.business_partners.entity_intro"))))
+        summary = Text(messages("fh.business_partners.entity")),
+        content = Text(messages("fh.business_partners.entity_intro"))
+    ))
 
-  @viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-        describedBy = Some("Business Partners"),
-      legend = Some(Legend(
-        content = HtmlContent(Html(s"${BusinessPartnersSecondaryHeader(messages("fh.business_partners.entity_type.label"))}")),
-        classes = "govuk-fieldset__legend--l",
-        isPageHeading = true
-      ))
-    )),
-    idPrefix = Some(businessPartnerTypeKey),
-    name = businessPartnerTypeKey,
-    errorMessage = form.errors.headOption.map{ e =>
-        ErrorMessage(
-            content = Text(messages(s"fh.businessPartnersType.${e.message}",""))
-        )
-    },
-    hint = None,
-    items = Seq(
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.individual.label")),
-            value = Some(Messages("fh.business_partners.entity_type.individual.value")),
-        ),
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.sole_proprietor.label")),
-            value = Some(Messages("fh.business_partners.entity_type.sole_proprietor.value")),
-        ),
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.partnership.label")),
-            value = Some(Messages("fh.business_partners.entity_type.partnership.value")),
-        ),
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.limited_liability_partnership.label")),
-            value = Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value")),
-        ),
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.corporate_body.label")),
-            value = Some(Messages("fh.business_partners.entity_type.corporate_body.value")),
-        ),
-        RadioItem(
-            id = Some(s"${businessPartnerTypeKey}"),
-            content = Text(messages("fh.business_partners.entity_type.unincorporated_body.label")),
-            value = Some(Messages("fh.business_partners.entity_type.unincorporated_body.value")),
-        )
+@viewHelpers.govUkRadios(
+    RadiosViewModel(
+        field = form("businessPartnersType"),
+        legend = LegendViewModel(messages("fh.business_partners.entity_type.label")
+        ).withCssClass("govuk-fieldset__legend--m"),
+        items = BusinessPartnerType.options,
+        noErrorRequired = false
     )
-
-))
+)
 
 @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
 @SaveForLater()

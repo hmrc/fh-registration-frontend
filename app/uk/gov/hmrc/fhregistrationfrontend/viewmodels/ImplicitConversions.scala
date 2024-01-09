@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package viewmodels
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.Key
 
-object BusinessPartnerTypeForm {
+import scala.language.implicitConversions
 
-  val businessPartnerTypeKey = "businessPartnersType"
+object implicits extends ImplicitConversions
 
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
+trait ImplicitConversions {
 
+  implicit def stringToText(string: String)(implicit messages: Messages): Text =
+    Text(messages(string))
+
+  implicit def stringToKey(string: String)(implicit messages: Messages): Key =
+    Key(content = Text(messages(string)))
 }

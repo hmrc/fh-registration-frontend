@@ -63,7 +63,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
         "The business partner v2 pages are enabled and there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -82,7 +82,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
             .set[PartnerName](IndividualsAndSoleProprietorsPartnerNamePage(1), partnerName)
             .success
             .value
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -102,7 +102,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
         "The business partner v2 pages are enabled" should {
           "business type is neither Sole Proprietor or Individual" in {
             val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers)
+            setupDataRequiredAction(userAnswers, mode)
             when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
             when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
             val request = FakeRequest()
@@ -123,7 +123,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to Business Partner NINO page" when {
         "business type is Individual" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -146,7 +146,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to Business Partner Trading Name page" when {
         "business type is Sole Proprietor" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))

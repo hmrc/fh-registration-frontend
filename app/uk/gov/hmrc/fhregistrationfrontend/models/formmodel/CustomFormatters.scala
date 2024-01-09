@@ -66,14 +66,23 @@ object CustomFormatters {
   }
 
   def enumFormat[E <: Enumeration](`enum`: E): Formatter[E#Value] = new Formatter[E#Value] {
-    def bind(key: String, data: Map[String, String]) =
+    def bind(key: String, data: Map[String, String]) = {
+      println("*************************")
+      println(data)
+      println(key)
       play.api.data.format.Formats.stringFormat.bind(key, data).flatMap { s =>
+        println("**********HHHH")
+        println(s)
         scala.util.control.Exception
           .allCatch[E#Value]
           .either(`enum`.withName(s))
           .left
-          .map(e => Seq(FormError(key, "error.invalid", Nil)))
+          .map(e => {
+            println(e.getMessage)
+            Seq(FormError(key, "error.invalid", Nil))
+          })
       }
+    }
 
     def unbind(key: String, value: E#Value) = Map(key -> value.toString)
   }

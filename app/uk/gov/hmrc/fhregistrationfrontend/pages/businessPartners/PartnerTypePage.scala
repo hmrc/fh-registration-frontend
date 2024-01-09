@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName}
 
-object BusinessPartnerTypeForm {
+case class PartnerTypePage(index: Int) extends QuestionPage[BusinessPartnerType.Value] {
 
-  val businessPartnerTypeKey = "businessPartnersType"
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
-
+  override def toString: String = "partnerType"
 }

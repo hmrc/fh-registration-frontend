@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package viewmodels
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+sealed trait LabelSize
 
-object BusinessPartnerTypeForm {
-
-  val businessPartnerTypeKey = "businessPartnersType"
-
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
-
+object LabelSize {
+  case object ExtraLarge extends WithCssClass("govuk-label--xl") with LabelSize
+  case object Large extends WithCssClass("govuk-label--l") with LabelSize
+  case object Medium extends WithCssClass("govuk-label--m") with LabelSize
+  case object Small extends WithCssClass("govuk-label--s") with LabelSize
 }

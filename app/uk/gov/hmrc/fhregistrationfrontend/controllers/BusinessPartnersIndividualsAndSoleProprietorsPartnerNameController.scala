@@ -46,17 +46,21 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index, mode)
 
-  val backUrl: String = routes.BusinessPartnersController.load().url
+  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(view
-      .business_partners_individualsAndSoleProprietors_partner_name(prepopulatedForm, postAction(index, mode), backUrl))
+    Ok(
+      view
+        .business_partners_individualsAndSoleProprietors_partner_name(
+          prepopulatedForm,
+          postAction(index, mode),
+          backUrl(index, mode)))
       .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
@@ -66,7 +70,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
               view.business_partners_individualsAndSoleProprietors_partner_name(
                 formWithErrors,
                 postAction(index, mode),
-                backUrl)))
+                backUrl(index, mode))))
         },
         partnerName => {
           val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
@@ -75,7 +79,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
               routes.BusinessPartnerNinoController.load()
             case Some(businessType) if businessType.equals("sole-proprietor") =>
               routes.BusinessPartnerTradingNameController.load()
-            case _ => routes.BusinessPartnersController.load()
+            case _ => routes.BusinessPartnersController.load(index, mode)
           }
           val updatedUserAnswers = request.userAnswers.set(page, partnerName)
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)

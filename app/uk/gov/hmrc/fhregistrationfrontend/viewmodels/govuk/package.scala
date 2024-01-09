@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package viewmodels
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+package object govuk {
 
-object BusinessPartnerTypeForm {
-
-  val businessPartnerTypeKey = "businessPartnersType"
-
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
-
+  object all
+      extends ImplicitConversions with BackLinkFluency with ButtonFluency with CheckboxFluency with DateFluency
+      with ErrorMessageFluency with ErrorSummaryFluency with FieldsetFluency with HintFluency with InputFluency
+      with LabelFluency with RadiosFluency with SummaryListFluency with TagFluency with TextAreaFluency
 }

@@ -46,7 +46,7 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
 
       "Render the confirm address page" when {
         "the new business partner pages are enabled" in {
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -67,7 +67,7 @@ class BusinessPartnersConfirmAddressControllerSpec extends ControllerSpecWithGui
     s"next when in $mode" should {
       "return 200" when {
         "the new business partner pages are enabled and the user clicks 'save and continue' button" in {
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.next(index, mode))(request))

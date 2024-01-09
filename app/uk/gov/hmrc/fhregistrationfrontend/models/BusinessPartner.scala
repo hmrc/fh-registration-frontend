@@ -17,9 +17,11 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import play.api.libs.json.{Format, Json}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
 
 case class BusinessPartner(
+  partnerType: BusinessPartnerTypes,
   individualsAndSoleProprietorsPartnerName: Option[PartnerName],
   secondField: String,
   thirdField: String,

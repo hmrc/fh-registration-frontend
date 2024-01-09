@@ -11,10 +11,12 @@ class BusinessPartnersNewFlowDisabledISpec
 
   val index = 1
   val normalRoutes = List(
+    routes.BusinessPartnersController.load(index, NormalMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode),
     routes.BusinessPartnersConfirmAddressController.load(index, NormalMode)
   )
   val checkRoutes = List(
+    routes.BusinessPartnersController.load(index, CheckMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode),
     routes.BusinessPartnersConfirmAddressController.load(index, CheckMode)
   )

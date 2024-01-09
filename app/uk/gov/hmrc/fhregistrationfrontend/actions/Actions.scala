@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
@@ -43,9 +44,11 @@ class Actions @Inject()(
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
   def dataRetrievalAction =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
-  def dataRequiredAction =
+  def dataRequiredAction(index: Int, mode: Mode) =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
-      ec)
+      ec,
+      index,
+      mode)
 
   def notAdminUser = userAction andThen new NotAdminUserFilter
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)

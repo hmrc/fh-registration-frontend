@@ -72,7 +72,7 @@ lazy val scoverageSettings = {
         |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
         |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
         |""".stripMargin,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*javascript.*;.*models.*;.*Routes.*;.*testonly.*;.*controllers.AdminPageController.*;" +
+    ScoverageKeys.coverageExcludedFiles := "<empty>;.*javascript.*;.*models.*;.*Routes.*;.*viewmodels.*;.*testonly.*;.*controllers.AdminPageController.*;" +
       ".*controllers.AuthenticationController.*",
     ScoverageKeys.coverageMinimumStmtTotal := 80.00,
     ScoverageKeys.coverageFailOnMinimum := true,
@@ -101,7 +101,8 @@ lazy val microservice = Project(appName, file("."))
     Compile / scalafmtOnCompile := true,
     Test / scalafmtOnCompile := true,
     TwirlKeys.templateImports ++= Seq(
-      "uk.gov.hmrc.fhregistrationfrontend.views.html._"
+      "uk.gov.hmrc.fhregistrationfrontend.views.html._",
+      "viewmodels.govuk.all._"
     )
   )
   .configs(IntegrationTest)

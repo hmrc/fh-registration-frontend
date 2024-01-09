@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package viewmodels
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import play.api.data.Field
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
 
-object BusinessPartnerTypeForm {
+trait ErrorMessageAwareness {
 
-  val businessPartnerTypeKey = "businessPartnersType"
-
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
-  )
-
+  def errorMessage(field: Field)(implicit messages: Messages): Option[ErrorMessage] =
+    field.error
+      .map { err =>
+        ErrorMessage(content = HtmlContent(messages(err.message, err.args: _*)))
+      }
 }

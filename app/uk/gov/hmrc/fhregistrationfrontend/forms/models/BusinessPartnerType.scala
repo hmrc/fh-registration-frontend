@@ -16,8 +16,30 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.i18n.Messages
+import play.api.libs.json.{Format, Reads, Writes}
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
+
+import java.beans.Introspector
+
 object BusinessPartnerType extends Enumeration {
   type BusinessPartnerTypes = Value
 
   val Individual, SoleProprietor, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody = Value
+
+  val partnerTypes: Seq[BusinessPartnerType.Value] =
+    Seq(Individual, SoleProprietor, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody)
+
+  def options(implicit messages: Messages): Seq[RadioItem] = partnerTypes.zipWithIndex.map {
+    case (value, index) =>
+      RadioItem(
+        content = Text(messages(s"fh.business_partners.entity_type.${Introspector.decapitalize(value.toString)}.label")),
+        value = Some(value.toString),
+        id = Some(s"value_$index")
+      )
+  }
+
+  implicit val format: Format[BusinessPartnerType.Value] =
+    Format[BusinessPartnerType.Value](Reads.enumNameReads(BusinessPartnerType), Writes.enumNameWrites)
 }
