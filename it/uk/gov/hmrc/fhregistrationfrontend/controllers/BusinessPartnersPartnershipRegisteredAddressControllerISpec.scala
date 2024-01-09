@@ -13,7 +13,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerISpec
   val route: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url.drop(6)
   val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url
-  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode).url
 
   s"GET $route" when {
 

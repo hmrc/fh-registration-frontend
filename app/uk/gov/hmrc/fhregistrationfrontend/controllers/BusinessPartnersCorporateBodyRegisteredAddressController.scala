@@ -99,7 +99,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
                 case Right(addressListMap) =>
                   // ToDo store the addressListMap in cache
                   if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load())
                   else

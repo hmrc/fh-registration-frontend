@@ -48,7 +48,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url
   val confirmPartnershipRegAddressUrl: String =
     routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
-  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode).url
 
   "load" should {
     "Render the business partner address page" when {

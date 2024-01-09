@@ -48,7 +48,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
     mockAppConfig,
     mockAddressService)(mockMcc)
 
-  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode).url
 
   "load" should {
     "Render the business partner address page" when {
