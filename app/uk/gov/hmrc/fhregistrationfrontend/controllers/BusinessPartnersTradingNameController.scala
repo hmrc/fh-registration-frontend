@@ -16,53 +16,64 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{Mode, NormalMode}
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorsTradingNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
-  def backUrl(index: Int = 1, mode: Mode = NormalMode): String =
+  def backUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
-  val postAction: Call = routes.BusinessPartnersTradingNameController.next()
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersTradingNameController.next(index, mode)
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_partner_name(tradingNameForm, "Test User", postAction, backUrl()))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))
+    val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
+    Ok(
+      view.business_partners_has_trading_partner_name(
+        prepopulatedForm,
+        "Test User",
+        postAction(index, mode),
+        backUrl(index, mode)))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    tradingNameForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
-              view.business_partners_has_trading_partner_name(formWithErrors, "Test User", postAction, backUrl()))
-          },
-          tradingName => {
-            Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode))
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+              view.business_partners_has_trading_partner_name(
+                formWithErrors,
+                "Test User",
+                postAction(index, mode),
+                backUrl(index, mode))))
+        },
+        tradingName => {
+          val updatedUserAnswers = request.userAnswers.set(SoleProprietorsTradingNamePage(index), tradingName)
+          val nextPage = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorsTradingNamePage(index))
+        }
+      )
   }
 
 }

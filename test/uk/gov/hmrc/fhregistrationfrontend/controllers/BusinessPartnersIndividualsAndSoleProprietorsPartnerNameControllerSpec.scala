@@ -98,25 +98,23 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
     }
 
     s"next when in $mode" should {
-      "return 200" when {
-        "The business partner v2 pages are enabled" should {
-          "business type is neither Sole Proprietor or Individual" in {
-            val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers)
-            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-            when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-            val request = FakeRequest()
-              .withFormUrlEncodedBody(
-                "firstName" -> "first name",
-                "lastName"  -> "last name"
-              )
-              .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+      "redirect to the business partners" when {
+        "business type is neither Sole Proprietor or Individual" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "firstName" -> "first name",
+              "lastName"  -> "last name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include("/business-partners")
-            reset(mockActions)
-          }
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners")
+          reset(mockActions)
         }
       }
 
@@ -164,7 +162,8 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/partner-trading-name")
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersTradingNameController.load(index, mode).url)
           reset(mockActions)
         }
       }

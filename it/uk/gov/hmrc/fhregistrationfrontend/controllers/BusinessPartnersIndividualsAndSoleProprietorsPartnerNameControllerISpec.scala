@@ -38,6 +38,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
               val page = Jsoup.parse(res.body)
               page.title must include("What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
               val firstNameField = page.getElementById("firstName")
+              print(Console.YELLOW + firstNameField.hasAttr("value") + Console.RESET)
               firstNameField.hasAttr("value") mustBe false
               val lastNameField = page.getElementById("lastName")
               lastNameField.hasAttr("value") mustBe false
@@ -122,7 +123,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
               whenReady(result) { res =>
                 res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersTradingNameController.load().url)
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersTradingNameController.load(1, mode).url)
                 val userAnswers = getUserAnswersFromSession.get
                 val pageData = userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(1))
                 pageData mustBe Some(PartnerName("Coca", "Cola"))
