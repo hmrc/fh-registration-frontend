@@ -21,10 +21,12 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.ChooseAddressPage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ChooseAddress}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.AddressPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import models.{Mode, NormalMode}
+import play.api.data.Form
+import scalaz.Digit._2
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,8 +54,13 @@ class BusinessPartnersChooseAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersChooseAddressController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val formData = request.userAnswers.get(ChooseAddressPage(index))
-    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    val formData = request.userAnswers.get(AddressPage(index))
+    val prepopulatedForm =
+      formData
+        .flatMap { data =>
+          testAddressData.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
+        }
+        .getOrElse(chooseAddressForm)
     Ok(
       view.business_partners_choose_address(
         prepopulatedForm,
@@ -81,10 +88,10 @@ class BusinessPartnersChooseAddressController @Inject()(
           )
         },
         addressKey => {
-          val page = ChooseAddressPage(index)
+          val page = AddressPage(index)
           val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
-          val updatedUserAnswers = request.userAnswers.set(page, addressKey)
+          val updatedUserAnswers = request.userAnswers.set(page, testAddressData.head._2)
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
         }
       )

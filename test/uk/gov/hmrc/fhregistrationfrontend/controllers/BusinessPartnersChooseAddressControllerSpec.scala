@@ -29,7 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.ChooseAddressPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.AddressPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 import scala.concurrent.Future

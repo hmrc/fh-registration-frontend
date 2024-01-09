@@ -5,9 +5,9 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.ChooseAddressPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.AddressPage
 import models.{CheckMode, Mode, NormalMode}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ChooseAddress, Address}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 import scala.collection.immutable.Seq
@@ -17,10 +17,18 @@ class BusinessPartnersChooseAddressControllerISpec
 
   def route(mode: Mode): String = routes.BusinessPartnersChooseAddressController.load(1, mode).url.drop(6)
 
-  val chosenAddress = ChooseAddress("1 Romford Road, Wellington, Telford, TF1 4ER")
+  val address = Address(
+    addressLine1 = "1 Romford Road",
+    addressLine2 = Some("Wellington"),
+    addressLine3 = Some("Telford"),
+    addressLine4 = None,
+    postcode = "TF1 4ER",
+    countryCode = None,
+    lookupId = None
+  )
 
   val userAnswersWithPageData = emptyUserAnswers
-    .set[ChooseAddress](ChooseAddressPage(1), chosenAddress)
+    .set[Address](AddressPage(1), address)
     .success
     .value
 
