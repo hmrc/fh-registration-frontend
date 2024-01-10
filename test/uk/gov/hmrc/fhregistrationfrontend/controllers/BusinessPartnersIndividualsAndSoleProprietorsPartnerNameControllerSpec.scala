@@ -163,7 +163,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            routes.BusinessPartnersTradingNameController.load(index, mode).url)
+            routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode).url)
           reset(mockActions)
         }
       }

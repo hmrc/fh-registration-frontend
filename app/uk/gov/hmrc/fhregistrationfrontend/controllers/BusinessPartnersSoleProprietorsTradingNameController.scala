@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessPartnersTradingNameController @Inject()(
+class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -42,7 +42,8 @@ class BusinessPartnersTradingNameController @Inject()(
 
   def backUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
-  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersTradingNameController.next(index, mode)
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersSoleProprietorsTradingNameController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))

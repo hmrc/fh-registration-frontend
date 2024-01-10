@@ -70,10 +70,10 @@ POST        /change-business-partners/confirm-partner-address/:index            
 GET         /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.load()
 POST        /business-partners/partnership-registered-office-address               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipRegisteredAddressController.next()
 
-GET         /business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.load(index: Int, mode: Mode = NormalMode)
-POST        /business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.next(index: Int, mode: Mode = NormalMode)
-GET         /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.load(index: Int, mode: Mode = CheckMode)
-POST        /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersTradingNameController.next(index: Int, mode: Mode = CheckMode)
+GET         /business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.next(index: Int, mode: Mode = NormalMode)
+GET         /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.load()
 POST        /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.next()

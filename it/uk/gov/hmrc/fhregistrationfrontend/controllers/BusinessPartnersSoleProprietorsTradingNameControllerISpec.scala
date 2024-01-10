@@ -10,14 +10,14 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{has
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorsTradingNamePage
 
-class BusinessPartnersTradingNameControllerISpec
+class BusinessPartnersSoleProprietorsTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
   def ninoPage(mode: Mode) = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, mode).url
   val noTradingName = TradingName(false, None)
   val tradingName = TradingName(true, Some("trading name"))
 
-  def route(mode: Mode) = routes.BusinessPartnersTradingNameController.load(1, mode).url.drop(6)
+  def route(mode: Mode) = routes.BusinessPartnersSoleProprietorsTradingNameController.load(1, mode).url.drop(6)
 
   def userAnswersWithPageData(formAnswers: TradingName) = emptyUserAnswers
     .set[TradingName](SoleProprietorsTradingNamePage(1), formAnswers)
@@ -66,6 +66,24 @@ class BusinessPartnersTradingNameControllerISpec
             }
           }
 
+          "there are user answers trading name is given" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(userAnswersWithPageData(tradingName))
+
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+
+            whenReady(result) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include("Does the partner’s business use a trading name that is different from its registered name?")
+              page.getElementsByTag("h1").text must include("Does Test User’s business use a trading name that is different from its registered name?")
+              val tradingNameValueField = page.getElementById("tradingName_value")
+              tradingNameValueField.attr("value") mustBe "trading name"
+            }
+          }
+
         }
 
         "redirect the user to the start of the BusinessPartners journey" when {
@@ -89,9 +107,9 @@ class BusinessPartnersTradingNameControllerISpec
         Map(
           "override" -> List(userAnswersWithPageData(noTradingName), userAnswersWithPageData(tradingName)),
           "add" -> List(emptyUserAnswers)
-        ).foreach { case (uaAction, userAnswers) =>
-          userAnswers.zipWithIndex.foreach { answers =>
-            s"redirect to the Business Partners National Insurance Number page and $uaAction userAnswers ${answers._2}" when {
+        ).foreach { case (userAnswersAction, userAnswers) =>
+          userAnswers.zipWithIndex.foreach { answers: (UserAnswers, Int) =>
+            s"redirect to the Business Partners National Insurance Number page and $userAnswersAction userAnswers ${answers._2}" when {
               "the user selects yes and gives a trading name" in {
                 given.commonPrecondition
 

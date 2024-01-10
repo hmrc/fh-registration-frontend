@@ -76,7 +76,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
             case Some(businessType) if businessType.equals("individual") =>
               routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
             case Some(businessType) if businessType.equals("sole-proprietor") =>
-              routes.BusinessPartnersTradingNameController.load(index, mode)
+              routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
             case _ => routes.BusinessPartnersController.load()
           }
           val updatedUserAnswers = request.userAnswers.set(page, partnerName)

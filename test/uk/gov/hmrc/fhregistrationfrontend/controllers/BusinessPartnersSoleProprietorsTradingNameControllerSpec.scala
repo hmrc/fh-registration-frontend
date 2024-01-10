@@ -33,7 +33,7 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 import scala.concurrent.Future
 
-class BusinessPartnersTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -43,8 +43,12 @@ class BusinessPartnersTradingNameControllerSpec extends ControllerSpecWithGuiceA
   val index = 1
 
   val controller =
-    new BusinessPartnersTradingNameController(commonDependencies, views, mockActions, mockAppConfig, mockSession)(
-      mockMcc)
+    new BusinessPartnersSoleProprietorsTradingNameController(
+      commonDependencies,
+      views,
+      mockActions,
+      mockAppConfig,
+      mockSession)(mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
