@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.models
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnersEnterAddress, PartnerName, TradingName}
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 
-case class BusinessPartner(
-  individualsAndSoleProprietorsPartnerName: Option[PartnerName],
-  secondField: String,
-  enterAddress: BusinessPartnersEnterAddress,
-  soleProprietorsTradingName: Option[TradingName])
+case class SoleProprietorsTradingNamePage(index: Int) extends QuestionPage[TradingName] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-object BusinessPartner {
-  implicit val format: Format[BusinessPartner] = Json.format[BusinessPartner]
+  override def toString: String = "soleProprietorsTradingName"
 }
