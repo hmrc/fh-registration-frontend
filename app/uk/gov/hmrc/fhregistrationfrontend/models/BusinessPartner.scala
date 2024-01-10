@@ -23,7 +23,7 @@ case class BusinessPartner(
   individualsAndSoleProprietorsPartnerName: Option[PartnerName],
   secondField: String,
   enterAddress: BusinessPartnersEnterAddress,
-  tradingName: Option[TradingName])
+  soleProprietorsTradingName: Option[TradingName])
 
 object BusinessPartner {
   implicit val format: Format[BusinessPartner] = Json.format[BusinessPartner]

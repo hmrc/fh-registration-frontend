@@ -38,7 +38,6 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
               val page = Jsoup.parse(res.body)
               page.title must include("What is the name of the partner? - Business partners - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
               val firstNameField = page.getElementById("firstName")
-              print(Console.YELLOW + firstNameField.hasAttr("value") + Console.RESET)
               firstNameField.hasAttr("value") mustBe false
               val lastNameField = page.getElementById("lastName")
               lastNameField.hasAttr("value") mustBe false
