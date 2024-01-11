@@ -116,7 +116,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load().url)
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersVatRegistrationNumberController.load(1, NormalMode).url)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get(IndividualsAndSoleProprietorsNinoPage(1))
               pageData mustBe Some(NationalInsuranceNumber(hasValue = false, None))
