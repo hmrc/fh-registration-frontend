@@ -107,6 +107,24 @@ class BusinessPartnersAddressControllerISpec
         }
       }
 
+      "the postcode is valid and matches what is stored in UserAnswers" should {
+        "redirect to choose address" in {
+          given.commonPrecondition
+          addUserAnswersToSession(userAnswersWithPageData)
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
+            "Csrf-Token" -> "nocheck")
+            .post(Map("partnerAddressLine" -> Seq.empty,
+              "partnerPostcode" -> Seq("SW1A 2AA")))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+          }
+        }
+      }
+
       "the postcode is valid and a single address is returned from address lookup" should {
         "redirect to confirm address" in {
           given.commonPreconditionWithSingleAddressLookup(true)
@@ -220,7 +238,7 @@ class BusinessPartnersAddressControllerISpec
             val result = buildRequest(route(mode))
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).withHttpHeaders(xSessionId,
               "Csrf-Token" -> "nocheck")
-              .post(Map("partnerAddressLine" -> Seq("qwertyuiopasdfghjklzxcvbnmqwkydvkdsgvisudgfkjsdvkjsdcjkdh"),
+              .post(Map("partnerAddressLine" -> Seq("this Address Line is too long this Address Line is too long"),
                 "partnerPostcode" -> Seq("AB1 2YZ")))
 
             whenReady(result) { res =>

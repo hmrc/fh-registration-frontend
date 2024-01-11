@@ -16,18 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.Mode
 import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{postcodeKey, businessPartnersAddressForm => form}
-import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.{Mode, NormalMode}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,18 +67,20 @@ class BusinessPartnersAddressController @Inject()(
         },
         bpAddress => {
           val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
-          val postcode = getUserAnswers.map(data => data.postcode).getOrElse("")
+          val postcode = getUserAnswers.map(data => (data.postcode)).getOrElse("")
+          val lookupResultAnswers = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-          val addressLookupCall = if (postcode == bpAddress.postcode) {
-            Future(Right(bpAddress.lookupResult))
-          } else {
-            addressService
-              .addressLookup(
-                routes.BusinessPartnersAddressController.load(index, mode).path(),
-                bpAddress.postcode,
-                bpAddress.addressLine
-              )
-          }
+          val addressLookupCall: Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
+            if (postcode.equals(bpAddress.postcode)) {
+              Future(Right(lookupResultAnswers))
+            } else {
+              addressService
+                .addressLookup(
+                  routes.BusinessPartnersAddressController.load(index, mode).path(),
+                  bpAddress.postcode,
+                  bpAddress.addressLine
+                )
+            }
 
           addressLookupCall
             .flatMap {
@@ -90,7 +92,8 @@ class BusinessPartnersAddressController @Inject()(
                   case _ => routes.BusinessPartnersChooseAddressController.load()
                 }
 
-                val lookupResult = UkAddressLookup(bpAddress.addressLine, bpAddress.postcode, addressListMap)
+                val lookupResult: UkAddressLookup =
+                  UkAddressLookup(bpAddress.addressLine, bpAddress.postcode, addressListMap)
                 val updatedUserAnswers = request.userAnswers.set(page, lookupResult)
                 updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
 
