@@ -16,20 +16,19 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.{Mode, NormalMode, UserAnswers}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterAddressPage
+import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorsTradingNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessPartnersEnterAddressController @Inject()(
+class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -39,48 +38,43 @@ class BusinessPartnersEnterAddressController @Inject()(
 )(implicit val ec: ExecutionContext)
     extends AppController(ds, cc) with ControllerHelper {
 
-  val partnerName: String = "Test User"
-  val journeyType: String = "enterAddress"
-  val backUrl: String = routes.BusinessPartnersAddressController.load().url
-  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
-
   import actions._
+
+  def backUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersSoleProprietorsTradingNameController.next(index, mode)
+
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(EnterAddressPage(index))
-    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))
+    val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
     Ok(
-      view
-        .business_partners_enter_address(
-          prepopulatedForm,
-          postAction(index, mode),
-          partnerName,
-          journeyType,
-          backUrl
-        )
-    )
+      view.business_partners_has_trading_partner_name(
+        prepopulatedForm,
+        "Test User",
+        postAction(index, mode),
+        backUrl(index, mode)))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    chooseAddressForm
+    tradingNameForm
       .bindFromRequest()
       .fold(
         formWithErrors => {
           Future.successful(
             BadRequest(
-              view.business_partners_enter_address(
+              view.business_partners_has_trading_partner_name(
                 formWithErrors,
+                "Test User",
                 postAction(index, mode),
-                partnerName,
-                journeyType,
-                backUrl)))
+                backUrl(index, mode))))
         },
-        bpAddress => {
-          val page = EnterAddressPage(index)
-          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
-
-          val updatedUserAnswers = request.userAnswers.set(page, bpAddress)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        tradingName => {
+          val updatedUserAnswers = request.userAnswers.set(SoleProprietorsTradingNamePage(index), tradingName)
+          val nextPage = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorsTradingNamePage(index))
         }
       )
   }
+
 }

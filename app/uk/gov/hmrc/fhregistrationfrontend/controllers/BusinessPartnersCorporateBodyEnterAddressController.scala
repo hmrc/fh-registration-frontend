@@ -33,7 +33,6 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
 
   val partnerName = "Test Corporate Body"
-  val partnerType: String = "corporate-body"
   val postAction: Call = routes.BusinessPartnersCorporateBodyEnterAddressController.next()
   val backLink: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url
 
@@ -41,8 +40,9 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      Ok(view
-        .business_partners_enter_registered_address(chooseAddressForm, postAction, partnerName, partnerType, backLink))
+      Ok(
+        view
+          .business_partners_enter_registered_address(chooseAddressForm, postAction, partnerName, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -56,15 +56,10 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_enter_registered_address(
-                formWithErrors,
-                postAction,
-                partnerName,
-                partnerType,
-                backLink))
+              view.business_partners_enter_registered_address(formWithErrors, postAction, partnerName, backLink))
           },
           bpAddress => {
-            Redirect(routes.BusinessPartnersCheckYourAnswersController.load(partnerType))
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
           }
         )
     } else {

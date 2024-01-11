@@ -68,7 +68,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
                 backUrl))
           },
           unincorporatedBodyName => {
-            Redirect(routes.BusinessPartnerUnincorporatedBodyTradingNameController.load())
+            Redirect(routes.BusinessPartnersUnincorporatedBodyTradingNameController.load())
           }
         )
     } else {

@@ -3,12 +3,18 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
+class BusinessPartnersUnincorporatedBodyEnterAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  "GET /form/business-partners/enter-unincorporated-body-registered-office-address" when {
+  val route: String = routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url.drop(6)
+  val checkYouAnswersPage: String = routes.BusinessPartnersCheckYourAnswersController.load().url
+  val pageTitle = "Enter the company’s registered office address?"
+  val pageHeading = "Enter Test Unincorporated Body’s registered office address"
+
+  s"GET $route" when {
 
     "the new business partners flow is enabled" should {
 
@@ -17,24 +23,22 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
+            val result = buildRequest(route)
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .get()
 
             whenReady(result) { res =>
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
-              page.title() must include("Enter the company’s registered office address?")
-              page.getElementsByTag("h1").text() must include("Enter Test Unincorporated Body’s registered office address")
+              page.title() must include(pageTitle)
+              page.getElementsByTag("h1").text() must include(pageHeading)
             }
-          }
         }
       }
     }
   }
 
-  "POST /form/business-partners/enter-unincorporated-body-registered-office-address" when {
+  s"POST $route" when {
 
     "the new business partners flow is enabled" should {
       "redirect when form is filled out correctly with all fields populated" when {
@@ -42,9 +46,8 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
           given
             .commonPrecondition
 
-          WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
                 "enterAddress.line1" -> Seq("1 street"),
@@ -54,10 +57,10 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
               ))
 
             whenReady(result) { res =>
-              res.status mustBe 200
-              res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 street,Some(Option lane),City name,Some(AB1 2XZ))"
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(checkYouAnswersPage)
+
             }
-          }
         }
 
         "redirect when form is filled out correctly with only mandatory fields populated" when {
@@ -65,9 +68,8 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
             given
               .commonPrecondition
 
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route)
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
                   "enterAddress.line1" -> Seq("1 Street"),
@@ -77,10 +79,9 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
                 ))
 
               whenReady(result) { res =>
-                res.status mustBe 200
-                res.body mustBe "Next page! with form result: BusinessPartnersEnterAddress(1 Street,None,City name,None)"
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(checkYouAnswersPage)
               }
-            }
           }
         }
 
@@ -89,9 +90,8 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
             given
               .commonPrecondition
 
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route)
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
                   "enterAddress.line1" -> Seq.empty,
@@ -106,16 +106,14 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
                 page.getElementsByTag("h1").text() must include("Enter Test Unincorporated Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("You must enter line 1 of the address")
               }
-            }
           }
 
           "address line 3 (town) is missing" in {
             given
               .commonPrecondition
 
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route)
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
                   "enterAddress.line1" -> Seq("1 street"),
@@ -130,16 +128,14 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
                 page.getElementsByTag("h1").text() must include("Enter Test Unincorporated Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("You must enter the Town or City of the address")
               }
-            }
           }
 
           "Postcode is incorrectly formatted" in {
             given
               .commonPrecondition
 
-            WsTestClient.withClient { client =>
-              val result = client.url(s"$baseUrl/form/business-partners/enter-unincorporated-body-registered-office-address")
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            val result = buildRequest(route)
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
                 .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
                 .post(Map(
                   "enterAddress.line1" -> Seq("1 street"),
@@ -154,7 +150,6 @@ class BusinessPartnersUnincorporatedOfficeAddressControllerISpec
                 page.getElementsByTag("h1").text() must include("Enter Test Unincorporated Body’s registered office address")
                 page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter a valid postcode")
               }
-            }
           }
         }
       }

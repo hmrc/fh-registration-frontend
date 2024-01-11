@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -30,7 +31,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
-class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -38,7 +39,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockAddressService: AddressService = mock[AddressService]
   val controller =
-    new BusinessPartnerPartnershipRegisteredAddressController(
+    new BusinessPartnersPartnershipRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
@@ -47,7 +48,7 @@ class BusinessPartnerPartnershipRegisteredAddressControllerSpec extends Controll
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val confirmPartnershipRegAddressUrl: String =
     routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
-  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode).url
 
   "load" should {
     "Render the business partner address page" when {

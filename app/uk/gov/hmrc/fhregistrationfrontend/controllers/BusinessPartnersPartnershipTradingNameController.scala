@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerPartnershipTradingNameController @Inject()(
+class BusinessPartnersPartnershipTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -42,7 +42,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
     else "#"
   }
   val businessType = "partnership"
-  val postAction = routes.BusinessPartnerPartnershipTradingNameController.next()
+  val postAction = routes.BusinessPartnersPartnershipTradingNameController.next()
   val partner = "Test User"
 
   private def getBusinessType: String = config.getRandomBusinessType
@@ -76,7 +76,7 @@ class BusinessPartnerPartnershipTradingNameController @Inject()(
               case Some(unexpectedBusinessType) =>
                 logger.warn(
                   s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unexpectedBusinessType refreshing the page ")
-                Redirect(routes.BusinessPartnerPartnershipTradingNameController.load().url).discardingCookies()
+                Redirect(routes.BusinessPartnersPartnershipTradingNameController.load().url).discardingCookies()
               case _ =>
                 logger.error(
                   s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")

@@ -68,7 +68,7 @@ class BusinessPartnersConfirmAddressControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(s"/fhdds/business-partners/check-your-answers?partnerType=individual")
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
             }
           }
         }

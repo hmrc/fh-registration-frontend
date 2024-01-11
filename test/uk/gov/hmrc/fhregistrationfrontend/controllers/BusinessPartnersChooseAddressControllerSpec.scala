@@ -79,7 +79,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(BusinessPartnersCheckYourAnswersController.load("individual").url)
+          redirectLocation(result) shouldBe Some(BusinessPartnersCheckYourAnswersController.load().url)
           reset(mockActions)
         }
       }

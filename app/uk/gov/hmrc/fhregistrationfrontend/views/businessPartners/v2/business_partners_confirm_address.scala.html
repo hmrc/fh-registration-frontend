@@ -24,6 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.{routes => controllerRoutes}
+@import models.{Mode, NormalMode}
 
 @this(layout: layout,
         formHelper: FormWithCSRF,
@@ -52,7 +53,7 @@
         }</p>
 
         <p class="govuk-body">
-            <a class="govuk-link" id="confirm-edit" href=@{controllerRoutes.BusinessPartnersEnterAddressController.load().url}>
+            <a class="govuk-link" id="confirm-edit" href=@{controllerRoutes.BusinessPartnersEnterAddressController.load(1, NormalMode).url}>
                 @messages("fh.businessPartners.confirmAddress.edit")
             </a>
         </p>

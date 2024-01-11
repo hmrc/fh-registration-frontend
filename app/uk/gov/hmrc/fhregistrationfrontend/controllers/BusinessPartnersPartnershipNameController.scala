@@ -37,7 +37,7 @@ class BusinessPartnersPartnershipNameController @Inject()(
   val journeyType = "partnership"
   val postAction: Call = routes.BusinessPartnersPartnershipNameController.next()
   val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
-  val tradingNamePage: Call = routes.BusinessPartnerPartnershipTradingNameController.load()
+  val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

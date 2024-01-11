@@ -21,8 +21,8 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{partnerNameForm => form}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsPartnerNamePage, PartnerTypePage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -74,11 +74,11 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
         },
         partnerName => {
           val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
-          val nextPage = request.cookies.get("businessType").map(_.value) match {
-            case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnerNinoController.load()
-            case Some(businessType) if businessType.equals("sole-proprietor") =>
-              routes.BusinessPartnerTradingNameController.load()
+          val nextPage = request.userAnswers.get(PartnerTypePage(index)) match {
+            case Some(businessType) if businessType.equals(BusinessPartnerType.Individual) =>
+              routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
+            case Some(businessType) if businessType.equals(BusinessPartnerType.SoleProprietor) =>
+              routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
             case _ => routes.BusinessPartnersController.load(index, mode)
           }
           val updatedUserAnswers = request.userAnswers.set(page, partnerName)

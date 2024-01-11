@@ -6,10 +6,10 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerUnincorporatedBodyTradingNameControllerISpec
+class BusinessPartnersUnincorporatedBodyTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnerUnincorporatedBodyTradingNameController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url.drop(6)
   val unincorpBodyVatRegNumUrl: String = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load().url
 
   s"GET $route" when {

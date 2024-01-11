@@ -18,7 +18,12 @@ package models
 
 import play.api.libs.json._
 import queries.{Gettable, Settable}
+import uk.gov.hmrc.crypto.EncryptedValue
+import uk.gov.hmrc.fhregistrationfrontend.models.ModelEncryption
+import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import uk.gov.hmrc.crypto.json.CryptoFormats
 
 import java.time.Instant
 import scala.util.{Failure, Success, Try}
@@ -65,27 +70,31 @@ final case class UserAnswers(
 
 object UserAnswers {
 
-  val reads: Reads[UserAnswers] = {
+  object MongoFormats {
+    implicit val cryptEncryptedValueFormats: Format[EncryptedValue] = CryptoFormats.encryptedValueFormat
 
-    import play.api.libs.functional.syntax._
+    import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
-    (
-      (__ \ "_id").read[String] and
-        (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoJavatimeFormats.instantFormat)
-    )(UserAnswers.apply _)
+    def reads()(implicit encryption: Encryption): Reads[UserAnswers] =
+      (
+        (__ \ "_id").read[String] and
+          (__ \ "data").read[EncryptedValue] and
+          (__ \ "lastUpdated").read[Instant]
+      )(ModelEncryption.decryptUserAnswers _)
+
+    def writes(implicit encryption: Encryption): OWrites[UserAnswers] = new OWrites[UserAnswers] {
+      override def writes(userAnswers: UserAnswers): JsObject = {
+        val encryptedValue: (String, EncryptedValue, Instant) = {
+          ModelEncryption.encryptUserAnswers(userAnswers)
+        }
+        Json.obj(
+          "id"          -> encryptedValue._1,
+          "data"        -> encryptedValue._2,
+          "lastUpdated" -> encryptedValue._3
+        )
+      }
+    }
+
+    def format(implicit encryption: Encryption): OFormat[UserAnswers] = OFormat(reads, writes)
   }
-
-  val writes: OWrites[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "_id").write[String] and
-        (__ \ "data").write[JsObject] and
-        (__ \ "lastUpdated").write(MongoJavatimeFormats.instantFormat)
-    )(unlift(UserAnswers.unapply))
-  }
-
-  implicit val format: OFormat[UserAnswers] = OFormat(reads, writes)
 }

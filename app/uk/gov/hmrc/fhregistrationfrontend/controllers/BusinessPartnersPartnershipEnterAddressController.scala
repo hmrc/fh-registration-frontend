@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import com.google.inject.{Inject, Singleton}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnersEnterUtrForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-@Singleton
-class BusinessPartnerSoleProprietorUtrController @Inject()(
+import javax.inject.Inject
+
+class BusinessPartnersPartnershipEnterAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -33,20 +33,14 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val partnerName: String = "{{partner name}}"
-  val postAction: Call = routes.BusinessPartnerSoleProprietorUtrController.next()
-  val businessPartnerType: String = "SoleProprietor"
-  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
+  val partnerName = "Test User"
+  val journeyType = "enterRegisteredOfficeAddress"
+  val postAction: Call = routes.BusinessPartnersPartnershipEnterAddressController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view.business_partners_enter_utr_number(
-          businessPartnersEnterUtrForm,
-          partnerName,
-          businessPartnerType,
-          postAction,
-          backLink))
+      // Todo get this from cache later
+      Ok(view.business_partners_enter_address(chooseAddressForm, postAction, partnerName, journeyType, "#"))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,22 +48,20 @@ class BusinessPartnerSoleProprietorUtrController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersEnterUtrForm
+      // Todo get this from cache later
+      chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_enter_utr_number(
-                formWithErrors,
-                partnerName,
-                businessPartnerType,
-                postAction,
-                backLink))
+            BadRequest(view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, "#"))
           },
-          businessPartnersUtr => Redirect(routes.BusinessPartnerAddressController.load())
+          bpAddress => {
+            Ok(s"Next page! with form result: ${bpAddress.toString}")
+          }
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
+
 }

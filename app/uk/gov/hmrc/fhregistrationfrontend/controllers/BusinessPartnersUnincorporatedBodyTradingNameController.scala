@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -25,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessPartnerTradingNameController @Inject()(
+class BusinessPartnersUnincorporatedBodyTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -35,13 +34,14 @@ class BusinessPartnerTradingNameController @Inject()(
 
   import actions._
 
-  def backUrl(index: Int = 1, mode: Mode = NormalMode): String =
-    routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode).url
-  val postAction: Call = routes.BusinessPartnerTradingNameController.next()
+  val companyName = "Shelby unincorporated"
+  val businessType = "unincorporatedBody"
+  val backUrl = routes.BusinessPartnersUnincorporatedBodyNameController.load().url
+  val postAction = routes.BusinessPartnersUnincorporatedBodyTradingNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_partner_name(tradingNameForm, "Test User", postAction, backUrl()))
+      Ok(view.business_partners_has_trading_name(tradingNameForm, businessType, companyName, postAction, backUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -54,10 +54,11 @@ class BusinessPartnerTradingNameController @Inject()(
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_has_trading_partner_name(formWithErrors, "Test User", postAction, backUrl()))
+              view.business_partners_has_trading_name(formWithErrors, businessType, companyName, postAction, backUrl))
           },
           tradingName => {
-            Redirect(routes.BusinessPartnerNinoController.load())
+            //TODO: save trading name data to cache
+            Redirect(routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load())
           }
         )
     } else {

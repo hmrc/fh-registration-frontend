@@ -16,32 +16,37 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import com.google.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnersEnterUtrForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-import javax.inject.Inject
-
-class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
+@Singleton
+class BusinessPartnersSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
-
   import actions._
 
-  val companyName = "Shelby unincorporated"
-  val businessType = "unincorporatedBody"
-  val backUrl = routes.BusinessPartnersUnincorporatedBodyNameController.load().url
-  val postAction = routes.BusinessPartnerUnincorporatedBodyTradingNameController.next()
+  val partnerName: String = "{{partner name}}"
+  val postAction: Call = routes.BusinessPartnersSoleProprietorUtrController.next()
+  val businessPartnerType: String = "SoleProprietor"
+  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_name(tradingNameForm, businessType, companyName, postAction, backUrl))
+      Ok(
+        view.business_partners_enter_utr_number(
+          businessPartnersEnterUtrForm,
+          partnerName,
+          businessPartnerType,
+          postAction,
+          backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -49,21 +54,22 @@ class BusinessPartnerUnincorporatedBodyTradingNameController @Inject()(
 
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm
+      businessPartnersEnterUtrForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
             BadRequest(
-              view.business_partners_has_trading_name(formWithErrors, businessType, companyName, postAction, backUrl))
+              view.business_partners_enter_utr_number(
+                formWithErrors,
+                partnerName,
+                businessPartnerType,
+                postAction,
+                backLink))
           },
-          tradingName => {
-            //TODO: save trading name data to cache
-            Redirect(routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load())
-          }
+          businessPartnersUtr => Redirect(routes.BusinessPartnersAddressController.load())
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
 }

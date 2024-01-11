@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2.BusinessPartnersHeader
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+@import models.{Mode, NormalMode}
 
 @this(layout: layout,
         viewHelpers: ViewHelpers,
@@ -58,7 +59,7 @@
         ))
     }
 
-    @formHelper(action = BusinessPartnerAddressController.next()){
+    @formHelper(action = BusinessPartnersAddressController.next()){
         @textInput(
             form = businessPartnersAddressForm,
             legendContent = messages("fh.business_partners_address.caption"),
@@ -76,7 +77,7 @@
         )
 
         <p class="govuk-body">
-            <a href="@BusinessPartnersEnterAddressController.load()" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
+            <a href="@BusinessPartnersEnterAddressController.load(1, NormalMode)" class="govuk-link">@messages("fh.business_partners_address.manually_enter")</a>
         </p>
 
         @viewHelpers.govukButton(Button(content = Text(messages("fh.business.partners.find.address.button")), inputType = Some("submit")))

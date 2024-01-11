@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.{Mode, NormalMode}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -34,36 +35,32 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 
   val partnerName = "Test User"
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
+  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = userAction { implicit request =>
     val backLinkAndButtonUrl: String = getUrlFromBusinessType(
-      routes.BusinessPartnerPartnershipRegisteredAddressController.load().url,
-      routes.BusinessPartnerAddressController.load().url,
+      routes.BusinessPartnersPartnershipRegisteredAddressController.load().url,
+      routes.BusinessPartnersAddressController.load().url,
       routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url,
       routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load().url,
       config.getRandomBusinessType()
     )
 
     val manuallyEnterAddressUrl: String = getUrlFromBusinessType(
-      routes.BusinessPartnersEnterRegistrationOfficeAddress.load().url,
-      routes.BusinessPartnersEnterAddressController.load().url,
+      routes.BusinessPartnersPartnershipEnterAddressController.load().url,
+      routes.BusinessPartnersEnterAddressController.load(1, NormalMode).url,
       routes.BusinessPartnersCorporateBodyEnterAddressController.load().url,
-      routes.BusinessPartnersUnincorporatedOfficeAddressController.load().url,
+      routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url,
       config.getRandomBusinessType()
     )
 
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view.business_partners_cannot_find_address(
-          "HR33 7GP",
-          partnerName,
-          backAction = backLinkAndButtonUrl,
-          manuallyEnterAddressUrl = manuallyEnterAddressUrl,
-          buttonUrl = backLinkAndButtonUrl
-        )
+    Ok(
+      view.business_partners_cannot_find_address(
+        "HR33 7GP",
+        partnerName,
+        backAction = backLinkAndButtonUrl,
+        manuallyEnterAddressUrl = manuallyEnterAddressUrl,
+        buttonUrl = backLinkAndButtonUrl
       )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+    )
   }
 
   def getUrlFromBusinessType(url1: String, url2: String, url3: String, url4: String, partnerType: String): String =

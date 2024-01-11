@@ -9,7 +9,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersSoleProprietorUtrControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnerSoleProprietorUtrController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersSoleProprietorUtrController.load().url.drop(6)
 
   s"GET $route" should {
 
@@ -44,7 +44,7 @@ class BusinessPartnersSoleProprietorUtrControllerISpec
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnerAddressController.load().url)
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
         }
       }
     }

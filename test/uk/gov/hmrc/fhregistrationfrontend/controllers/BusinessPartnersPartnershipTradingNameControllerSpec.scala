@@ -19,39 +19,43 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
-import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
-  override lazy val views = app.injector.instanceOf[Views]
-  lazy val radioHelper = app.injector.instanceOf[RadioHelper]
-  lazy val mockAppConfig = mock[FrontendAppConfig]
+  override lazy val views: Views = app.injector.instanceOf[Views]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+
+  val pageTitle = "Does the partnership use a trading name that is different from its registered name?"
 
   val controller =
-    new BusinessPartnerNinoController(radioHelper, commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersPartnershipTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+
+  val partnershipVatNumberUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+  val partnershipCompanyRegNumUrl: String =
+    routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
 
   "load" should {
-    "Render the business partner nino page" when {
+    "Render the business partner trading name page" when {
       "The business partner v2 pages are enabled" in {
         setupUserAction()
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Does the partner have a National Insurance number?")
+        page.title should include(pageTitle)
         reset(mockActions)
       }
     }
@@ -60,6 +64,8 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
@@ -73,42 +79,65 @@ class BusinessPartnerNinoControllerSpec extends ControllerSpecWithGuiceApp with 
 
   "next" when {
     "The business partner v2 pages are enabled" should {
-      "redirect to VAT number page" when {
-        "the Yes radio button is selected and a NINO is entered" in {
+      "redirect to the partnership vat number page" when {
+        "the businessType/legal entity of the partnership is a 'partnership'" in {
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           val request = FakeRequest()
+            .withCookies(Cookie("businessType", "partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
-              "nationalInsuranceNumber_yesNo" -> "true",
-              "nationalInsuranceNumber_value" -> "QQ123456C"
+              "tradingName_yesNo" -> "true",
+              "tradingName_value" -> "new trading name"
             )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersVatRegistrationNumberController.load().url)
-
+          redirectLocation(result).get should include(partnershipVatNumberUrl)
           reset(mockActions)
         }
       }
 
-      "return 400" when {
-        "a radio button is not selected" in {
+      "redirect to the partnership reg number page" when {
+        "the businessType/legal entity of the partnership is a 'limited liability partnership'" in {
           setupUserAction()
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           val request = FakeRequest()
+            .withCookies(Cookie("businessType", "limited-liability-partnership")) //TODO [DLS-7603] - temp save4later solution
             .withFormUrlEncodedBody(
-              "nationalInsuranceNumber_yesNo" -> "",
-              "nationalInsuranceNumber_value" -> ""
+              "tradingName_yesNo" -> "true",
+              "tradingName_value" -> "new trading name"
             )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
-          status(result) shouldBe BAD_REQUEST
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(partnershipCompanyRegNumUrl)
           reset(mockActions)
         }
+      }
+
+      "return 400 when the form contains errors" in {
+        setupUserAction()
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            "tradingName_yesNo" -> "",
+            "tradingName_value" -> ""
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next())(request))
+
+        status(result) shouldBe BAD_REQUEST
+        val page = Jsoup.parse(contentAsString(result))
+        page.title should include(pageTitle)
+        reset(mockActions)
       }
     }
 

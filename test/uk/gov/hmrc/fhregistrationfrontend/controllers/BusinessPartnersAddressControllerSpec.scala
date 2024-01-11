@@ -18,43 +18,52 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
 
-class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+import scala.concurrent.Future
+
+class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
-  override lazy val views: Views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val unincorpBodyVatRegNumUrl: String = routes.BusinessPartnersUnincorporatedBodyVatRegistrationController.load().url
+  implicit val hc = HeaderCarrier()
+
+  override lazy val views = app.injector.instanceOf[Views]
+
+  val mockAppConfig = mock[FrontendAppConfig]
+
+  val mockAddressService = mock[AddressService]
 
   val controller =
-    new BusinessPartnerUnincorporatedBodyTradingNameController(commonDependencies, views, mockActions, mockAppConfig)(
+    new BusinessPartnersAddressController(commonDependencies, views, mockActions, mockAppConfig, mockAddressService)(
       mockMcc)
 
   "load" should {
-    "Render the unincorporated body trading name page" when {
-      "The business partner v2 pages are enabled" in {
+    "Render the business partner address page" when {
+      "the new business partner pages are enabled" in {
         setupUserAction()
-
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load())(request))
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include(
-          "Does the unincorporated body use a trading name that is different from its registered name?")
+        page.title should include("What is the partner’s address?")
         reset(mockActions)
       }
     }
 
-    "render the not found page" when {
+    "Render the not found page" when {
       "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
@@ -70,72 +79,88 @@ class BusinessPartnerUnincorporatedBodyTradingNameControllerSpec extends Control
   }
 
   "next" when {
-    "The business partner v2 pages are enabled" should {
-      "redirect to the 'does the unincorporated body have a uk vat reg number' page" when {
-        "the user clicks yes, supplies a trading name and submits" in {
+    "the new business partner pages are enabled" should {
+      "redirect to choose address" when {
+        "the form has no errors, postcode is entered and address found" in {
           setupUserAction()
-
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(
+            mockAddressService
+              .addressLookup(any(), any(), any())(any()))
+            .thenReturn(
+              Future.successful(
+                Right(
+                  Map(
+                    "123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")),
+                    "234" -> Address("77 test lane", None, None, None, "SW1A 2AA", None, Some("234")))
+                )
+              ))
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "tradingName_yesNo" -> "true",
-              "tradingName_value" -> "Blue peter unincorporated"
-            )
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", ""))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
-          reset(mockActions)
-        }
-
-        "the user clicks no and submits" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "tradingName_yesNo" -> "false",
-              "tradingName_value" -> ""
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
-
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
+          redirectLocation(result).get should include("/business-partners/choose-address")
           reset(mockActions)
         }
       }
 
       "return 400" when {
-        "no option is selected" in {
+        "the form has no errors, postcode is entered and address lookup returns an error" in {
           setupUserAction()
-
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(
+            mockAddressService
+              .addressLookup(any(), any(), any())(any()))
+            .thenReturn(
+              Future.successful(
+                Left(AddressLookupErrorResponse(new BadRequestException("unknown")))
+              ))
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "tradingName_yesNo" -> "",
-              "tradingName_value" -> ""
-            )
+            .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
             .withMethod("POST")
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe BAD_REQUEST
-          reset(mockActions)
+        }
+
+        "the postcode is missing in form" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerAddressLine", "44"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe BAD_REQUEST
+        }
+
+        "the postcode is an invalid format" in {
+          setupUserAction()
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(("partnerPostcode", "invalid"), ("partnerAddressLine", "44"))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next())(request))
+
+          status(result) shouldBe BAD_REQUEST
         }
       }
     }
 
-    "the new business partner pages are disabled" should {
-      "render the not found page" in {
+    "Render the Not found page" when {
+      "the new business partner pages are disabled" in {
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
+          .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
+          .withMethod("POST")
         val result = await(csrfAddToken(controller.next())(request))
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
-        page.title should include("Page not found")
+        page.title() should include("Page not found")
         reset(mockActions)
       }
     }

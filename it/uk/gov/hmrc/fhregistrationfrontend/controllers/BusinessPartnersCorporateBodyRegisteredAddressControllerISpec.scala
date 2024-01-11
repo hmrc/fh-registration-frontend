@@ -1,18 +1,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnerCorporateBodyRegisteredAddressControllerISpec
+class BusinessPartnersCorporateBodyRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersCorporateBodyRegisteredAddressController.load().url.drop(6)
   val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load().url
   val corpBodyConfirmRegAddressUrl: String = routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load().url
-  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load().url
+  val cannotFindAddressUrl: String = routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode).url
 
   s"GET $route" when {
 

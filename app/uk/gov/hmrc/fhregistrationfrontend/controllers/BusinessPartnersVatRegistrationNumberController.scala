@@ -17,13 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.data.FormError
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{vatNumberForm, vatNumberKey}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import models.NormalMode
 
 @Singleton
 class BusinessPartnersVatRegistrationNumberController @Inject()(
@@ -37,7 +36,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
 
   //ToDo read this data from the cache after being stored before the redirect
   val partnerName = "test partner"
-  val backUrl = routes.BusinessPartnerNinoController.load().url
+  val backUrl: String = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -57,8 +56,8 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
           },
           vatNumber => {
             vatNumber.value match {
-              case Some(vatNumber) => Redirect(routes.BusinessPartnerAddressController.load())
-              case None            => Redirect(routes.BusinessPartnerSoleProprietorUtrController.load())
+              case Some(vatNumber) => Redirect(routes.BusinessPartnersAddressController.load())
+              case None            => Redirect(routes.BusinessPartnersSoleProprietorUtrController.load())
             }
           }
         )

@@ -12,7 +12,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerISpec
 
   val pageTitle: String = "What is the name of the limited liability partnership?"
   val pageHeading: String = "What is the name of the limited liability partnership?"
-  val tradingNamePageUrl: String = routes.BusinessPartnerPartnershipTradingNameController.load().url
+  val tradingNamePageUrl: String = routes.BusinessPartnersPartnershipTradingNameController.load().url
   val characterLimitError: String = "There is a problem Limited liability partnership name must be 120 characters or less"
   val emptyTextError: String = "There is a problem Enter the name of the limited liability partnership"
 

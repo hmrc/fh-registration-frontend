@@ -10,7 +10,7 @@ class BusinessPartnerCorporateBodyConfirmRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load().url.drop(6)
-  val checkYourAnswersUrl: String = routes.BusinessPartnersCheckYourAnswersController.load("corporate-body").url
+  val checkYourAnswersUrl: String = routes.BusinessPartnersCheckYourAnswersController.load().url
 
   s"GET $route" when {
 

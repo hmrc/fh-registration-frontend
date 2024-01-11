@@ -17,19 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import models.NormalMode
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import models.NormalMode
 
-class BusinessPartnerAddressController @Inject()(
+class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -38,14 +37,37 @@ class BusinessPartnerAddressController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) {
-
   import actions._
+
+  // Todo get this from cache later
+
+  private def getBusinessType: String = config.getRandomBusinessType
+
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnersPartnershipUtrController.load().url
+    else if (getBusinessType == "limited-liability-partnership")
+      routes.BusinessPartnersVatRegistrationNumberController.load().url
+    else
+      "#"
+  }
+
+  val partnerName = "Test User"
+  val journey = "partnership"
+  val postAction: Call = routes.BusinessPartnersPartnershipRegisteredAddressController.next()
+  val enterManualAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
+
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache later
-      val partnerName = "Test User"
-      val bpAddressForm = businessPartnersAddressForm
-      Ok(view.business_partners_search_address(bpAddressForm, partnerName))
+      Ok(
+        view
+          .business_partners_registered_address(
+            businessPartnersAddressForm,
+            partnerName,
+            backUrl,
+            postAction,
+            journey,
+            enterManualAddressUrl))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -53,38 +75,52 @@ class BusinessPartnerAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      // Todo get this from cache later
-      val partnerName = "Test User"
       businessPartnersAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
             Future.successful(
-              BadRequest(view.business_partners_search_address(formWithErrors, partnerName))
+              BadRequest(
+                view.business_partners_registered_address(
+                  formWithErrors,
+                  partnerName,
+                  backUrl,
+                  postAction,
+                  journey,
+                  enterManualAddressUrl
+                )
+              )
             )
           },
           bpAddress => {
             addressService
               .addressLookup(
-                routes.BusinessPartnerAddressController.load().path(),
+                routes.BusinessPartnersPartnershipRegisteredAddressController.load().path(),
                 bpAddress.postcode,
                 bpAddress.addressLine
               )
               .map {
                 case Right(addressListMap) =>
-                  //ToDo store the addressListMap in save4Later
+                  // ToDo store the addressListMap in cache
                   if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load())
+                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
                   else if (addressListMap.size == 1)
-                    //TODO change the hard coded values when index and mode added to function params
-                    Redirect(routes.BusinessPartnersConfirmAddressController.load(1, NormalMode))
+                    Redirect(routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load())
                   else
                     Redirect(routes.BusinessPartnersChooseAddressController.load())
                 case Left(AddressLookupErrorResponse(_)) =>
                   val formWithErrors = businessPartnersAddressForm
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
-                  BadRequest(view.business_partners_search_address(formWithErrors, partnerName))
+                  BadRequest(
+                    view.business_partners_registered_address(
+                      formWithErrors,
+                      partnerName,
+                      backUrl,
+                      postAction,
+                      journey,
+                      enterManualAddressUrl
+                    ))
                 case _ => errorHandler.errorResultsPages(Results.InternalServerError)
               }
           }
