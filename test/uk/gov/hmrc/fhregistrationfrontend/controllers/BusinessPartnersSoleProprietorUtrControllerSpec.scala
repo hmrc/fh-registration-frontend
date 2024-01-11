@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -80,7 +81,7 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
           val result = await(csrfAddToken(controller.next())(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load().url)
+          redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
           reset(mockActions)
         }
       }

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -66,7 +67,7 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
                 postAction,
                 backLink))
           },
-          businessPartnersUtr => Redirect(routes.BusinessPartnersAddressController.load())
+          businessPartnersUtr => Redirect(routes.BusinessPartnersAddressController.load(1, NormalMode))
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

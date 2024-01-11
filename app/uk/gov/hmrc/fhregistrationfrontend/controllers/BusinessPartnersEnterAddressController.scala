@@ -41,7 +41,7 @@ class BusinessPartnersEnterAddressController @Inject()(
 
   val partnerName: String = "Test User"
   val journeyType: String = "enterAddress"
-  val backUrl: String = routes.BusinessPartnersAddressController.load().url
+  val backUrl: String = routes.BusinessPartnersAddressController.load(1, NormalMode).url
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
 
   import actions._

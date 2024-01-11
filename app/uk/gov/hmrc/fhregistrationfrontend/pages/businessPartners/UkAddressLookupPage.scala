@@ -18,12 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 
-case class FindAddressPage(index: Int) extends QuestionPage[Address] {
+case class UkAddressLookupPage(index: Int) extends QuestionPage[UkAddressLookup] {
 
   override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  override def toString: String = "FindAddress"
-
+  override def toString: String = "ukAddressLookup"
 }

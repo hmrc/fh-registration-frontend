@@ -27,7 +27,7 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLoca
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, PartnerName, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
@@ -56,6 +56,8 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       mockActions,
       mockAppConfig,
       mockSessionCache)(mockMcc)
+
+  def seedUkAddressLookup(result: UkAddressLookup): Unit = result
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
