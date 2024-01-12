@@ -17,105 +17,85 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.Future
 
 class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
+  val mockSessionCache = mock[SessionRepository]
+  val index = 1
   val controller =
-    new BusinessPartnersPartnershipNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersPartnershipNameController(commonDependencies, views, mockActions, mockSessionCache)(mockMcc)
+
   val PartnershipNameTitle = "What is the name of the partnership? - Business partners"
   val pageNotFoundTitle = "Page not found"
 
-  "load" should {
-    "Render the business partner partnership name page" when {
-      "The business partner v2 pages are enabled" in {
-        setupUserAction()
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the business partner partnership name page" when {
+        "there is useranswer but no page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include(PartnershipNameTitle)
-        reset(mockActions)
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include(PartnershipNameTitle)
+          reset(mockActions)
+        }
+
+        "there are userAnswers with page data" in {
+          val partnerName = "test"
+          val userAnswers = UserAnswers(testUserId)
+            .set[String](PartnershipNamePage(1), partnerName)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include(PartnershipNameTitle)
+          reset(mockActions)
+        }
       }
     }
 
-    "render the not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include(pageNotFoundTitle)
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" should {
-    "The business partner v2 pages are enabled" should {
-      "return 303" when {
-        "the form has no errors and the partnership name name is supplied" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+    s"next when in $mode" should {
+      "redirect to the trading name page and save the answer to database" when {
+        "the user answers doesn't contain page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(
               "partnershipName" -> "Partnership name goes here"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners/partnership-trading-name")
           reset(mockActions)
         }
-      }
-
-      "return 400" when {
-        "a partnership name isn't entered" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "partnershipName" -> ""
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
-
-          status(result) shouldBe BAD_REQUEST
-          reset(mockActions)
-        }
-      }
-    }
-
-    "the new business partner pages are disabled" should {
-      "render the not found page" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title should include(pageNotFoundTitle)
-        reset(mockActions)
       }
     }
   }

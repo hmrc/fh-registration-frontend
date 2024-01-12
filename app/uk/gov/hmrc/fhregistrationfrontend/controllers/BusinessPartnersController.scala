@@ -55,7 +55,7 @@ class BusinessPartnersController @Inject()(
             case "UnincorporatedBody" =>
               Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
             case "Partnership" =>
-              Redirect(routes.BusinessPartnersPartnershipNameController.load())
+              Redirect(routes.BusinessPartnersPartnershipNameController.load(1, NormalMode))
             case "LimitedLiabilityPartnership" =>
               Redirect(routes.BusinessPartnersLtdLiabilityPartnershipNameController.load())
             case "CorporateBody" =>

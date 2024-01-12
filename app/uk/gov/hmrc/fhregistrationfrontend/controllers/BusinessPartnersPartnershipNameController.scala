@@ -17,50 +17,63 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnershipNameForm.{partnershipNameForm, partnershipNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
-  val journeyType = "partnership"
-  val postAction: Call = routes.BusinessPartnersPartnershipNameController.next()
-  val backAction: String = routes.BusinessPartnersController.load().url
-  val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
+  lazy val journeyType = "partnership"
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
+  lazy val backAction: String = routes.BusinessPartnersController.load().url
+  lazy val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey, backAction))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  lazy val form = partnershipNameForm
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(PartnershipNamePage(index))
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+    Ok(
+      view
+        .business_partners_name(journeyType, postAction(index, mode), prepopulatedForm, partnershipNameKey, backAction))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      partnershipNameForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    partnershipNameForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
-              view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey, backAction))
-          },
-          partnership => {
-            Redirect(tradingNamePage)
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+              view.business_partners_name(
+                journeyType,
+                postAction(index, mode),
+                formWithErrors,
+                partnershipNameKey,
+                backAction
+              )
+            )
+          )
+        },
+        partnership => {
+          val page = PartnershipNamePage(index)
+          val updatedUserAnswers = request.userAnswers.set(page, partnership)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage, page)
+        }
+      )
   }
 }
