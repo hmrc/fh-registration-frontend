@@ -89,7 +89,7 @@ class BusinessPartnersAddressController @Inject()(
                 val nextPage = addressListMap.size match {
                   case 0 => routes.BusinessPartnersCannotFindAddressController.load(index, mode)
                   case 1 => routes.BusinessPartnersConfirmAddressController.load(index, mode)
-                  case _ => routes.BusinessPartnersChooseAddressController.load()
+                  case _ => routes.BusinessPartnersChooseAddressController.load(index, mode)
                 }
 
                 val lookupResult: UkAddressLookup =

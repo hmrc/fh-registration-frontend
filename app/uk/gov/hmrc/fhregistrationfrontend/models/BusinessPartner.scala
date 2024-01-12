@@ -24,7 +24,7 @@ case class BusinessPartner(
   individualsAndSoleProprietorsNino: Option[NationalInsuranceNumber],
   forthField: String,
   Address: Address,
-  soleProprietorsTradingName: Option[TradingName])
+  soleProprietorsTradingName: Option[TradingName],
   ukAddressLookup: UkAddressLookup,
   enterAddress: BusinessPartnersEnterAddress)
 

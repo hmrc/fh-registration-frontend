@@ -14,7 +14,6 @@ import play.mvc.Http.HeaderNames
 class BusinessPartnersAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val chooseAddressUrl: String = routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url
   def route(mode: Mode): String = routes.BusinessPartnersAddressController.load(1, mode).url.drop(6)
 
   val index = 1
@@ -87,7 +86,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(chooseAddressUrl)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }
@@ -105,7 +104,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }
@@ -123,7 +122,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }
