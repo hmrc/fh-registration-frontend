@@ -17,16 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ChooseAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
-import models.{Mode, NormalMode}
-import play.api.data.Form
-import scalaz.Digit._2
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,8 +54,6 @@ class BusinessPartnersChooseAddressController @Inject()(
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
-    // If list length is less than or equal to 1 Redirect to AddressController.load()
-    // Else pass address list to choose address view
 
     val formData = request.userAnswers.get(AddressPage(index))
     val prepopulatedForm =
@@ -66,6 +62,7 @@ class BusinessPartnersChooseAddressController @Inject()(
           cachedAddressList.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
         }
         .getOrElse(chooseAddressForm)
+
     Ok(
       view.business_partners_choose_address(
         prepopulatedForm,
@@ -79,8 +76,18 @@ class BusinessPartnersChooseAddressController @Inject()(
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+    // If list length is less than or equal to 1 Redirect to AddressController.load()
+    // Else pass address list to choose address view
 
-    chooseAddressForm
+    val formData = request.userAnswers.get(AddressPage(index))
+    val prepopulatedForm =
+      formData
+        .flatMap { data =>
+          cachedAddressList.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
+        }
+        .getOrElse(chooseAddressForm)
+
+    prepopulatedForm
       .bindFromRequest()
       .fold(
         formWithErrors => {
@@ -99,38 +106,9 @@ class BusinessPartnersChooseAddressController @Inject()(
           val page = AddressPage(index)
           val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
-          val updatedUserAnswers = request.userAnswers.set(page, testAddressData.head._2)
-          // creates a 500 error when testAddressData is replaced with cached data not sure why
-          // val updatedUserAnswers = request.userAnswers.set(page, cachedAddressData.head._2)
+          val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
         }
       )
   }
-
-  //ToDo remove when addressData stored in database
-  private val testAddressData: Map[String, Address] = {
-    val address1 = Address(
-      addressLine1 = "1 Romford Road",
-      addressLine2 = Some("Wellington"),
-      addressLine3 = Some("Telford"),
-      addressLine4 = None,
-      postcode = "TF1 4ER",
-      countryCode = None,
-      lookupId = None
-    )
-
-    val address2 = address1.copy(addressLine1 = "2 Romford Road")
-    val address3 = address1.copy(addressLine1 = "3 Romford Road")
-    val address4 = address1.copy(addressLine1 = "2 Romford Road")
-    val address5 = address1.copy(addressLine1 = "5 Romford Road")
-
-    Map(
-      "1" -> address1,
-      "2" -> address2,
-      "3" -> address3,
-      "4" -> address4,
-      "5" -> address5
-    )
-  }
-
 }

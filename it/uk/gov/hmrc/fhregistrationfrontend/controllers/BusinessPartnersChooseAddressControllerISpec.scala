@@ -1,17 +1,15 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.jsoup.Jsoup
-import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
-import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ChooseAddress, UkAddressLookup}
+import org.jsoup.Jsoup
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import play.api.libs.ws.DefaultWSCookie
+import play.mvc.Http.HeaderNames
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersChooseAddressControllerISpec
-  extends Specifications with TestConfiguration {
+class BusinessPartnersChooseAddressControllerISpec extends Specifications with TestConfiguration {
 
   def route(mode: Mode): String = routes.BusinessPartnersChooseAddressController.load(1, mode).url.drop(6)
 
@@ -31,39 +29,27 @@ class BusinessPartnersChooseAddressControllerISpec
     val address4 = address1.copy(addressLine1 = "2 Romford Road")
     val address5 = address1.copy(addressLine1 = "5 Romford Road")
 
-    Map(
-      "1" -> address1,
-      "2" -> address2,
-      "3" -> address3,
-      "4" -> address4,
-      "5" -> address5
-    )
+    Map("1" -> address1, "2" -> address2, "3" -> address3, "4" -> address4, "5" -> address5)
   }
 
-  val cachedUkAddressLookup: UkAddressLookup = UkAddressLookup(
-    Some("1 Romford Road"),
-    "TF1 4ER",
-    testAddressData
-  )
-  def createCachedukAddressLookup(answers: UkAddressLookup): UserAnswers =
-    emptyUserAnswers
-      .set[UkAddressLookup](UkAddressLookupPage(1), answers)
-      .success
-      .value
-
-  val userAnswersWithPageData: UserAnswers = emptyUserAnswers
-    .set[Address](AddressPage(1), testAddressData.head._2)
+  val seedCacheWithUKAddressLookup: UserAnswers = emptyUserAnswers
+    .set[UkAddressLookup](
+      UkAddressLookupPage(1),
+      UkAddressLookup(
+        Some("1 Romford Road"),
+        "TF1 4ER",
+        testAddressData
+      ))
     .success
     .value
 
-  List(NormalMode, CheckMode).foreach { mode =>
+  // here we need userAnswersWithPageData w the choosen result from user
 
+  List(NormalMode, CheckMode).foreach { mode =>
     s"GET ${route(mode)}" should {
       "render the choose address page" in {
         given.commonPrecondition
-        val userAnswers = createCachedukAddressLookup(cachedUkAddressLookup)
-        addUserAnswersToSession(userAnswers)
-        addUserAnswersToSession(emptyUserAnswers)
+        addUserAnswersToSession(seedCacheWithUKAddressLookup)
 
         val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -81,7 +67,8 @@ class BusinessPartnersChooseAddressControllerISpec
           given.commonPrecondition
 
           val result = buildRequest(route(mode))
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 303
@@ -95,9 +82,7 @@ class BusinessPartnersChooseAddressControllerISpec
       "redirect the user to the Check Your Answers page" when {
         "the form has no errors" in {
           given.commonPrecondition
-          val userAnswers = createCachedukAddressLookup(cachedUkAddressLookup)
-          addUserAnswersToSession(userAnswers)
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(seedCacheWithUKAddressLookup)
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -107,6 +92,8 @@ class BusinessPartnersChooseAddressControllerISpec
             ))
 
           whenReady(result) { res =>
+            println(Console.MAGENTA + "THIS IS THE RESULT: " + res + Console.RESET)
+
             res.status mustBe 303
             res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
           }
