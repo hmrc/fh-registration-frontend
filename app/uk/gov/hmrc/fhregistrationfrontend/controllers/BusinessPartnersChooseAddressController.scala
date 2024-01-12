@@ -56,52 +56,59 @@ class BusinessPartnersChooseAddressController @Inject()(
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-    val formData = request.userAnswers.get(AddressPage(index))
-    val prepopulatedForm =
-      formData
-        .flatMap { data =>
-          cachedAddressList.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
-        }
-        .getOrElse(chooseAddressForm)
+    if (cachedAddressList.size <= 1) Redirect(routes.BusinessPartnersAddressController.load(index, mode))
+    else {
+      val formData = request.userAnswers.get(AddressPage(index))
+      val prepopulatedForm =
+        formData
+          .flatMap { data =>
+            cachedAddressList
+              .find(_._2 == data)
+              .map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
+          }
+          .getOrElse(chooseAddressForm)
 
-    Ok(
-      view.business_partners_choose_address(
-        prepopulatedForm,
-        postAction(index, mode),
-        cachedAddressList,
-        backUrl
+      Ok(
+        view.business_partners_choose_address(
+          prepopulatedForm,
+          postAction(index, mode),
+          cachedAddressList,
+          backUrl
+        )
       )
-    )
+    }
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
-    // If list length is less than or equal to 1 Redirect to AddressController.load()
-    // Else pass address list to choose address view
 
-    chooseAddressForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_choose_address(
-                formWithErrors,
-                postAction(index, mode),
-                cachedAddressList,
-                backUrl
+    if (cachedAddressList.size <= 1)
+      Future.successful(Redirect(routes.BusinessPartnersAddressController.load(index, mode)))
+    else {
+      chooseAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_choose_address(
+                  formWithErrors,
+                  postAction(index, mode),
+                  cachedAddressList,
+                  backUrl
+                )
               )
             )
-          )
-        },
-        addressKey => {
-          val page = AddressPage(index)
-          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+          },
+          addressKey => {
+            val page = AddressPage(index)
+            val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
-          val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList(addressKey.chosenAddress))
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList(addressKey.chosenAddress))
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+          }
+        )
+    }
   }
 }

@@ -86,6 +86,50 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           reset(mockActions)
         }
       }
+
+      "Redirect to the Business Partners Address page" when {
+        "addressList cache returns an empty address list" in {
+          val cachedUkAddressLookup = UkAddressLookup(
+            Some("44 test lane"),
+            "SW1A 2AA",
+            Map.empty
+          )
+
+          val userAnswers = createUserAnswers(cachedUkAddressLookup)
+          setupDataRequiredAction(userAnswers)
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, mode).url)
+          reset(mockActions)
+        }
+
+        "addressList cache returns a single address" in {
+          val cachedUkAddressLookup = UkAddressLookup(
+            Some("44 test lane"),
+            "SW1A 2AA",
+            Map(
+              "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)
+            )
+          )
+
+          val userAnswers = createUserAnswers(cachedUkAddressLookup)
+          setupDataRequiredAction(userAnswers)
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, mode).url)
+          reset(mockActions)
+        }
+      }
     }
 
     s"next when in $mode" should {
@@ -142,6 +186,56 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           status(result) shouldBe BAD_REQUEST
           reset(mockActions)
         }
+      }
+    }
+
+    "Redirect to the Business Partners Address page" when {
+      "addressList cache returns an empty address" in {
+        val cachedUkAddressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map.empty
+        )
+
+        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        setupDataRequiredAction(userAnswers)
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest()
+          .withFormUrlEncodedBody("chosenAddress" -> "1")
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
+        reset(mockActions)
+      }
+
+      "addressList cache returns a single address" in {
+        val cachedUkAddressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map(
+            "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)
+          )
+        )
+
+        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        setupDataRequiredAction(userAnswers)
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest()
+          .withFormUrlEncodedBody("chosenAddress" -> "1")
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
+        reset(mockActions)
       }
     }
 
