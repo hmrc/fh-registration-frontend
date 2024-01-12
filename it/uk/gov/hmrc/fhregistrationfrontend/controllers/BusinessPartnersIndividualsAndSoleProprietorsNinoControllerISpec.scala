@@ -13,7 +13,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
   extends Specifications with TestConfiguration {
 
   val index = 1
-  val nino = NationalInsuranceNumber(hasValue = true, Some("AB123456C"))
+  val nino: NationalInsuranceNumber = NationalInsuranceNumber(hasValue = true, Some("AB123456C"))
   val userAnswersWithPageData: UserAnswers = emptyUserAnswers
     .set[NationalInsuranceNumber](IndividualsAndSoleProprietorsNinoPage(1), nino)
     .success
@@ -95,7 +95,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load().url)
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get(IndividualsAndSoleProprietorsNinoPage(1))
               pageData mustBe Some(NationalInsuranceNumber(hasValue = true, Some("AB123456C")))
