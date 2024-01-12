@@ -53,7 +53,7 @@ class BusinessPartnersChooseAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersChooseAddressController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
     if (cachedAddressList.size <= 1) Redirect(routes.BusinessPartnersAddressController.load(index, mode))
@@ -80,7 +80,7 @@ class BusinessPartnersChooseAddressController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
     if (cachedAddressList.size <= 1)

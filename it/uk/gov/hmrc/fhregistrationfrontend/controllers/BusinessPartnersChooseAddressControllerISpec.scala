@@ -13,6 +13,8 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
   def route(mode: Mode): String = routes.BusinessPartnersChooseAddressController.load(1, mode).url.drop(6)
 
+  val index: Int = 1
+
   private val testAddressData: Map[String, Address] = {
     val address1 = Address(
       addressLine1 = "1 Romford Road",
@@ -39,6 +41,36 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
         Some("1 Romford Road"),
         "TF1 4ER",
         testAddressData
+      ))
+    .success
+    .value
+
+  val seedCacheWithSingleUKAddress: UserAnswers = emptyUserAnswers
+    .set[UkAddressLookup](
+      UkAddressLookupPage(1),
+      UkAddressLookup(
+        Some("1 Romford Road"),
+        "TF1 4ER",
+        Map("1" -> Address(
+          addressLine1 = "1 Romford Road",
+          addressLine2 = Some("Wellington"),
+          addressLine3 = Some("Telford"),
+          addressLine4 = None,
+          postcode = "TF1 4ER",
+          countryCode = None,
+          lookupId = None
+        ))
+      ))
+    .success
+    .value
+
+  val seedCacheWithEmptyUKAddressList: UserAnswers = emptyUserAnswers
+    .set[UkAddressLookup](
+      UkAddressLookupPage(1),
+      UkAddressLookup(
+        Some("1 Romford Road"),
+        "TF1 4ER",
+        Map.empty
       ))
     .success
     .value
@@ -111,6 +143,42 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
           whenReady(result) { res =>
             res.status mustBe 303
             res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
+          }
+        }
+      }
+
+      "redirect the user to the Business Partners Address page" when {
+        "addressList cache contains no addresses" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithEmptyUKAddressList)
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "chosenAddress" -> Seq("1")
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
+          }
+        }
+
+        "addressList cache contains a single addresses" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithSingleUKAddress)
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "chosenAddress" -> Seq("2")
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
           }
         }
       }
