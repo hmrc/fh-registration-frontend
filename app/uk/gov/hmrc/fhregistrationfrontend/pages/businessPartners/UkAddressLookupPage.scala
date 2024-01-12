@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.libs.json.Json
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
 
-case class UkAddressLookup(
-  addressLine: Option[String],
-  postcode: String,
-  lookupResult: Map[String, Address] = Map.empty)
+case class UkAddressLookupPage(index: Int) extends QuestionPage[UkAddressLookup] {
 
-object UkAddressLookup {
-  implicit val format = Json.format[UkAddressLookup]
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
+
+  override def toString: String = "ukAddressLookup"
 }

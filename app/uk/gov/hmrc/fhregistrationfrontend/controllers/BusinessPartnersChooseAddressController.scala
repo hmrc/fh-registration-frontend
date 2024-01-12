@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ChooseAddress}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.AddressPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import models.{Mode, NormalMode}
 import play.api.data.Form
@@ -54,24 +54,32 @@ class BusinessPartnersChooseAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersChooseAddressController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+    // If list length is less than or equal to 1 Redirect to AddressController.load()
+    // Else pass address list to choose address view
+
     val formData = request.userAnswers.get(AddressPage(index))
     val prepopulatedForm =
       formData
         .flatMap { data =>
-          testAddressData.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
+          cachedAddressList.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
         }
         .getOrElse(chooseAddressForm)
     Ok(
       view.business_partners_choose_address(
         prepopulatedForm,
         postAction(index, mode),
-        testAddressData,
+        cachedAddressList,
         backUrl
       )
     )
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index)) // pull address list from user answers
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
     chooseAddressForm
       .bindFromRequest()
       .fold(
@@ -81,7 +89,7 @@ class BusinessPartnersChooseAddressController @Inject()(
               view.business_partners_choose_address(
                 formWithErrors,
                 postAction(index, mode),
-                testAddressData,
+                cachedAddressList,
                 backUrl
               )
             )
@@ -92,6 +100,8 @@ class BusinessPartnersChooseAddressController @Inject()(
           val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
           val updatedUserAnswers = request.userAnswers.set(page, testAddressData.head._2)
+          // creates a 500 error when testAddressData is replaced with cached data not sure why
+          // val updatedUserAnswers = request.userAnswers.set(page, cachedAddressData.head._2)
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
         }
       )

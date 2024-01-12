@@ -28,8 +28,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.AddressPage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ChooseAddress, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 import scala.concurrent.Future
@@ -51,11 +51,28 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
     mockAppConfig,
     mockSessionCache)(mockMcc)
 
+  def createUserAnswers(answers: UkAddressLookup): UserAnswers =
+    UserAnswers(testUserId)
+      .set[UkAddressLookup](UkAddressLookupPage(1), answers)
+      .success
+      .value
+
+  val emptyUserAnswers: UserAnswers = UserAnswers(testUserId)
+
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
       "Render the choose address page" when {
         "the new business partner pages are enabled" in {
-          val userAnswers = UserAnswers(testUserId)
+          val cachedUkAddressLookup = UkAddressLookup(
+            Some("44 test lane"),
+            "SW1A 2AA",
+            Map(
+              "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+              "2" -> Address("77 test lane", None, None, None, "SW1A 2AA", None, None)
+            )
+          )
+
+          val userAnswers = createUserAnswers(cachedUkAddressLookup)
           setupDataRequiredAction(userAnswers)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -73,26 +90,60 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
 
     s"next when in $mode" should {
       "redirect to the Check Your Answers page" when {
-        "the new business partner pages are enabled" when {
-          "the form has no errors and the address is found" in {
-            val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers)
+        "the form has no errors and the address is found" in {
+          val cachedUkAddressLookup = UkAddressLookup(
+            Some("44 test lane"),
+            "SW1A 2AA",
+            Map(
+              "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+              "2" -> Address("77 test lane", None, None, None, "SW1A 2AA", None, None)
+            )
+          )
 
-            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-            when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+          val userAnswers = createUserAnswers(cachedUkAddressLookup)
+          setupDataRequiredAction(userAnswers)
 
-            val request = FakeRequest()
-              .withFormUrlEncodedBody("chosenAddress" -> "1")
-              .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(BusinessPartnersCheckYourAnswersController.load().url)
-            reset(mockActions)
-          }
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("chosenAddress" -> "1")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
+          reset(mockActions)
         }
       }
 
+      "return a bad request" when {
+        "the user does not select a value" in {
+          val cachedUkAddressLookup = UkAddressLookup(
+            Some("44 test lane"),
+            "SW1A 2AA",
+            Map(
+              "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+              "2" -> Address("77 test lane", None, None, None, "SW1A 2AA", None, None)
+            )
+          )
+
+          val userAnswers = createUserAnswers(cachedUkAddressLookup)
+          setupDataRequiredAction(userAnswers)
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+          val request = FakeRequest()
+            .withFormUrlEncodedBody("chosenAddress" -> "")
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe BAD_REQUEST
+          reset(mockActions)
+        }
+      }
     }
+
   }
 }
