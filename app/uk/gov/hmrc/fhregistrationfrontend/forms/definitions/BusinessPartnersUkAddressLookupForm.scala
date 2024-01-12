@@ -21,7 +21,7 @@ import play.api.data.Forms.{ignored, mapping, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{addressLine, postcode}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
 
-object BusinessPartnersAddressForm {
+object BusinessPartnersUkAddressLookupForm {
 
   val addressLineKey = "partnerAddressLine"
   val postcodeKey = "partnerPostcode"
@@ -34,7 +34,7 @@ object BusinessPartnersAddressForm {
   val addressLookupMapping: (String, Mapping[Map[String, Address]]) =
     addressLookupKey -> ignored(Map.empty[String, Address])
 
-  val businessPartnersAddressForm: Form[UkAddressLookup] = Form(
+  val businessPartnersUkAddressLookupForm: Form[UkAddressLookup] = Form(
     mapping(addressLineMapping, postcodeMapping, addressLookupMapping)(UkAddressLookup.apply)(UkAddressLookup.unapply)
   )
 

@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{postcodeKey, businessPartnersAddressForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUkAddressLookupForm.{postcodeKey, businessPartnersUkAddressLookupForm => form}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository

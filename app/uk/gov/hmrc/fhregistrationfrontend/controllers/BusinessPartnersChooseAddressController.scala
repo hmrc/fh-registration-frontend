@@ -79,15 +79,7 @@ class BusinessPartnersChooseAddressController @Inject()(
     // If list length is less than or equal to 1 Redirect to AddressController.load()
     // Else pass address list to choose address view
 
-    val formData = request.userAnswers.get(AddressPage(index))
-    val prepopulatedForm =
-      formData
-        .flatMap { data =>
-          cachedAddressList.find(_._2 == data).map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
-        }
-        .getOrElse(chooseAddressForm)
-
-    prepopulatedForm
+    chooseAddressForm
       .bindFromRequest()
       .fold(
         formWithErrors => {

@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUkAddressLookupForm.{businessPartnersUkAddressLookupForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import play.api.data.FormError
 
@@ -57,7 +57,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
       Ok(
         view
           .business_partners_registered_address(
-            businessPartnersAddressForm,
+            businessPartnersUkAddressLookupForm,
             corporateBody,
             backUrl,
             postAction,
@@ -71,7 +71,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm
+      businessPartnersUkAddressLookupForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
@@ -106,7 +106,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressController @Inject()(
                     Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
 
                 case Left(AddressLookupErrorResponse(_)) =>
-                  val formWithErrors = businessPartnersAddressForm
+                  val formWithErrors = businessPartnersUkAddressLookupForm
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
                   BadRequest(
