@@ -31,9 +31,11 @@ GET         /address-lookup                                             @uk.gov.
 GET         /business-partners                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersController.load()
 POST        /business-partners                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersController.next()
 
+GET         /business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.next(index: Int, mode: Mode = NormalMode)
 
-GET         /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.load()
-POST        /business-partners/partner-address                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.next()
+GET         /change-business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load()
 POST        /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next()

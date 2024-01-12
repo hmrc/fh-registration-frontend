@@ -17,15 +17,16 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnersEnterAddress, ChooseAddress, NationalInsuranceNumber, PartnerName, TradingName}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, BusinessPartnersEnterAddress, NationalInsuranceNumber, PartnerName, TradingName, UkAddressLookup}
 
 case class BusinessPartner(
   individualsAndSoleProprietorsPartnerName: Option[PartnerName],
   individualsAndSoleProprietorsNino: Option[NationalInsuranceNumber],
-  enterAddress: BusinessPartnersEnterAddress,
   forthField: String,
   Address: Address,
   soleProprietorsTradingName: Option[TradingName])
+  ukAddressLookup: UkAddressLookup,
+  enterAddress: BusinessPartnersEnterAddress)
 
 object BusinessPartner {
   implicit val format: Format[BusinessPartner] = Json.format[BusinessPartner]

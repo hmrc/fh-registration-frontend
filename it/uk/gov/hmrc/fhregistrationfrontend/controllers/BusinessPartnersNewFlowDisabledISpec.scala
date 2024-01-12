@@ -16,7 +16,8 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersEnterAddressController.load(index, NormalMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, NormalMode),
     routes.BusinessPartnersChooseAddressController.load(index, NormalMode),
-    routes.BusinessPartnersCannotFindAddressController.load(index, NormalMode)
+    routes.BusinessPartnersCannotFindAddressController.load(index, NormalMode),
+    routes.BusinessPartnersAddressController.load(index, NormalMode)
   )
 
   val checkRoutes = List(
@@ -25,7 +26,8 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersEnterAddressController.load(index, CheckMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, CheckMode),
     routes.BusinessPartnersChooseAddressController.load(index, CheckMode),
-    routes.BusinessPartnersCannotFindAddressController.load(index, CheckMode)
+    routes.BusinessPartnersCannotFindAddressController.load(index, CheckMode),
+    routes.BusinessPartnersAddressController.load(index, CheckMode)
   )
 
   (normalRoutes ++ checkRoutes).foreach { route =>
