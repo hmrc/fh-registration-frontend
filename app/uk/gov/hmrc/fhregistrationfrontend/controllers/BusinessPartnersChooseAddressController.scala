@@ -27,6 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, U
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
+import java.lang.System.console
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -98,7 +99,7 @@ class BusinessPartnersChooseAddressController @Inject()(
           val page = AddressPage(index)
           val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
-          val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
+          val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList(addressKey.chosenAddress))
           updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
         }
       )

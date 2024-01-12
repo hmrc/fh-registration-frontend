@@ -80,7 +80,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
     s"POST ${route(mode)}" when {
       "redirect the user to the Check Your Answers page" when {
-        "the form has no errors" in {
+        "the form has no errors and the first value is selected" in {
           given.commonPrecondition
           addUserAnswersToSession(seedCacheWithUKAddressLookup)
 
@@ -92,8 +92,23 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
             ))
 
           whenReady(result) { res =>
-            println(Console.MAGENTA + "THIS IS THE RESULT: " + res + Console.RESET)
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
+          }
+        }
 
+        "the form has no errors and the second value is selected" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithUKAddressLookup)
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "chosenAddress" -> Seq("2")
+            ))
+
+          whenReady(result) { res =>
             res.status mustBe 303
             res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
           }
