@@ -21,6 +21,7 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{PartnershipTradingNamePage => page}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -52,16 +53,15 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   private def getBusinessType: String = config.getRandomBusinessType
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view
-          .business_partners_has_trading_name(tradingNameForm, businessType, partner, postAction(index, mode), backUrl))
-        .withCookies(Cookie("businessType", getBusinessType))
-        .bakeCookies() // TODO [DLS-7603] - temp save4later solution
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(page(index))
+    val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
+
+    Ok(
+      view
+        .business_partners_has_trading_name(prepopulatedForm, businessType, partner, postAction(index, mode), backUrl))
+      .withCookies(Cookie("businessType", getBusinessType))
+      .bakeCookies() // TODO [DLS-7603] - temp save4later solution
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
@@ -79,23 +79,19 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
                 backUrl)))
         },
         tradingName => {
-          Future.successful(
-            request.cookies.get("businessType").map(_.value) match {
-              case Some(businessType) if businessType.equals("partnership") =>
-                Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
-              case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-                Redirect(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load())
-              case Some(unexpectedBusinessType) =>
-                logger.warn(
-                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unexpectedBusinessType refreshing the page ")
-                Redirect(routes.BusinessPartnersPartnershipTradingNameController.load(1, NormalMode).url)
-                  .discardingCookies()
-              case _ =>
-                logger.error(
-                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
-                errorHandler.errorResultsPages(Results.InternalServerError)
-            }
-          )
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
+            case Some(businessType) if businessType.equals("partnership") =>
+              routes.BusinessPartnersPartnershipVatNumberController.load()
+            case Some(businessType) if businessType.equals("limited-liability-partnership") =>
+              routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
+            case _ =>
+              logger.warn(
+                s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
+              routes.BusinessPartnersController.load()
+          }
+
+          val updatedUserAnswers = request.userAnswers.set(page(index), tradingName)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page(index))
         }
       ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   }
