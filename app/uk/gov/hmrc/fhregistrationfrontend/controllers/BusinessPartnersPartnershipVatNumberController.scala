@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
@@ -44,7 +45,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipTradingNameController.load().url
+      routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
     else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
     else
