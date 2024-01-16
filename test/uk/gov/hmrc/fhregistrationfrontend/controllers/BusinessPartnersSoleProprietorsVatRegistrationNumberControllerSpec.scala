@@ -43,9 +43,6 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
   val mockSessionCache: SessionRepository = mock[SessionRepository]
   val index: Int = 1
 
-  val partnerAddressPage: String = routes.BusinessPartnersAddressController.load(index, NormalMode).url
-  val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
-
   val controller =
     new BusinessPartnersSoleProprietorsVatRegistrationNumberController(
       commonDependencies,
@@ -56,6 +53,9 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
     )(mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
+    val partnerAddressPage: String = routes.BusinessPartnersAddressController.load(index, mode).url
+    val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
+
     s"load when in $mode" should {
       "Render the businessPartnersVatRegistrationNumber page" when {
         "there is no page data" in {
