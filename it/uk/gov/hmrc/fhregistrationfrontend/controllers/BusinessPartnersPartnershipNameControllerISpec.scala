@@ -1,6 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+<<<<<<< HEAD
 import models.{CheckMode, Mode, NormalMode}
+=======
+import models.NormalMode
+>>>>>>> b447e243 (update tests)
 import org.jsoup.Jsoup
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
@@ -18,7 +22,7 @@ class BusinessPartnersPartnershipNameControllerISpec
   val pageTitle: String = "What is the name of the partnership? - Business partners"
   val emptyTextError: String = "Enter a partnership name"
   val characterLimitError: String = "Partnership name must be 120 characters or less"
-  val tradingNamePageUrl: String = routes.BusinessPartnersPartnershipTradingNameController.load().url
+  val tradingNamePageUrl: String = routes.BusinessPartnersPartnershipTradingNameController.load(1, NormalMode).url
   val userAnswersWithPageData = emptyUserAnswers
     .set[String](PartnershipNamePage(1), "partnershipName")
     .success

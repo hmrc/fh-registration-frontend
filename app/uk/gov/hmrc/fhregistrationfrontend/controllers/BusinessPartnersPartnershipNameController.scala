@@ -17,7 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.Mode
+import models.{Mode, NormalMode}
+import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnershipNameForm.{partnershipNameForm, partnershipNameKey}
@@ -41,8 +42,8 @@ class BusinessPartnersPartnershipNameController @Inject()(
   lazy val journeyType = "partnership"
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
   lazy val backAction: String = routes.BusinessPartnersController.load().url
-  lazy val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
-  lazy val form = partnershipNameForm
+  lazy val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load(1, NormalMode)
+  lazy val form: Form[String] = partnershipNameForm
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(PartnershipNamePage(index))
