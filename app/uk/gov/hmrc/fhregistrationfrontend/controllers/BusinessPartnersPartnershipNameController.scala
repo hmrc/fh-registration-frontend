@@ -42,8 +42,8 @@ class BusinessPartnersPartnershipNameController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
   lazy val backAction: String = routes.BusinessPartnersController.load().url
   lazy val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
-
   lazy val form = partnershipNameForm
+
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(PartnershipNamePage(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
@@ -53,7 +53,7 @@ class BusinessPartnersPartnershipNameController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    partnershipNameForm
+    form
       .bindFromRequest()
       .fold(
         formWithErrors => {
