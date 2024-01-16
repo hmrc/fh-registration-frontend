@@ -23,13 +23,13 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import models.{Mode, NormalMode}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerVatRegistrationNumberPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BusinessPartnersVatRegistrationNumberController @Inject()(
+class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -43,10 +43,10 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
   val partnerName: String = "test partner"
   val backUrl: String = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
   def postAction(index: Int, mode: Mode): Call =
-    routes.BusinessPartnersVatRegistrationNumberController.next(index, mode)
+    routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val formData = request.userAnswers.get(PartnerVatRegistrationNumberPage(index))
+    val formData = request.userAnswers.get(EnterVatNumberPage(index))
     val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
     Ok(
       view.business_partners_enter_vat_registration(
@@ -75,7 +75,7 @@ class BusinessPartnersVatRegistrationNumberController @Inject()(
           )
         },
         vatNumber => {
-          val page = PartnerVatRegistrationNumberPage(index)
+          val page = EnterVatNumberPage(index)
           val nextPage = vatNumber.value match {
             case Some(vatNumber) => routes.BusinessPartnersAddressController.load(1, NormalMode)
             case None            => routes.BusinessPartnersSoleProprietorUtrController.load()

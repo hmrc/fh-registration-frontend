@@ -43,7 +43,8 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
   lazy val radioHelper: RadioHelper = app.injector.instanceOf[RadioHelper]
   lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockSessionCache: SessionRepository = mock[SessionRepository]
-  val vatRegNumPage: String = routes.BusinessPartnersVatRegistrationNumberController.load(1, NormalMode).url
+  val vatRegNumPage: String =
+    routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode).url
   val index = 1
 
   val controller =

@@ -20,7 +20,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 
-case class PartnerVatRegistrationNumberPage(index: Int) extends QuestionPage[VatNumber] {
+case class EnterVatNumberPage(index: Int) extends QuestionPage[VatNumber] {
   override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
   override def toString: String = "vatNumber"

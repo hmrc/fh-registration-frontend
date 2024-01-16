@@ -74,7 +74,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
             case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
               routes.BusinessPartnersAddressController.load(index, mode)
             case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnersVatRegistrationNumberController.load(1, NormalMode)
+              routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
             case _ => routes.BusinessPartnersController.load()
           }
 

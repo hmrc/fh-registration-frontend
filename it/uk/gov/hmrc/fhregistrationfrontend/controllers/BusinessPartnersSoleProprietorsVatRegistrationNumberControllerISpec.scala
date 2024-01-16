@@ -6,16 +6,16 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerVatRegistrationNumberPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersVatRegistrationNumberControllerISpec
+class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
 
-  def route(mode: Mode): String = routes.BusinessPartnersVatRegistrationNumberController.load(1, mode).url.drop(6)
+  def route(mode: Mode): String = routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, mode).url.drop(6)
 
   def userAnswersWithPageData(formAnswers: VatNumber) = emptyUserAnswers
-    .set[VatNumber](PartnerVatRegistrationNumberPage(1), formAnswers)
+    .set[VatNumber](EnterVatNumberPage(1), formAnswers)
     .success
     .value
 
