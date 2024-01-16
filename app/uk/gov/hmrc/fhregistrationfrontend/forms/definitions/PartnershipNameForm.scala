@@ -17,17 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.partnershipName
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnershipNameModel
 
 object PartnershipNameForm {
 
   val partnershipNameKey = "partnershipName"
 
-  val partnershipNameForm = Form(
-    mapping(
-      partnershipNameKey -> partnershipName
-    )(PartnershipNameModel.apply)(PartnershipNameModel.unapply)
+  val partnershipNameForm: Form[String] = Form(
+    partnershipNameKey -> partnershipName
   )
 }

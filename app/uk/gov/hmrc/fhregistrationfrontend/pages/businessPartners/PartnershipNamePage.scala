@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.models
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.libs.json.Json
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 
-case class PartnershipNameModel(value: String)
+case class PartnershipNamePage(index: Int) extends QuestionPage[String] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-object PartnershipNameModel {
-  implicit val format = Json.format[PartnershipNameModel]
+  override def toString: String = "partnershipName"
 }

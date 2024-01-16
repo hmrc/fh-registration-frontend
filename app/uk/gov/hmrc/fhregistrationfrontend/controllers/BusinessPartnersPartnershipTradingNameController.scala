@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -36,7 +37,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   val backUrl: String = {
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipNameController.load().url
+      routes.BusinessPartnersPartnershipNameController.load(1, NormalMode).url
     else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url
     else "#"

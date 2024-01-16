@@ -24,7 +24,8 @@ case class BusinessPartner(
   individualsAndSoleProprietorsNino: Option[NationalInsuranceNumber],
   soleProprietorsTradingName: Option[TradingName],
   ukAddressLookup: UkAddressLookup,
-  enterAddress: BusinessPartnersEnterAddress)
+  enterAddress: BusinessPartnersEnterAddress,
+  partnershipName: Option[String])
 
 object BusinessPartner {
   implicit val format: Format[BusinessPartner] = Json.format[BusinessPartner]
