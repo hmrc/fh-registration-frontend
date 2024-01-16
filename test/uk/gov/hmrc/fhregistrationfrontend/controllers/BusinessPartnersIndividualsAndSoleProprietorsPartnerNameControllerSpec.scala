@@ -21,20 +21,17 @@ import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
-import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, PartnerName, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{PartnerName, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import uk.gov.hmrc.fhregistrationfrontend.views.{Mode, Views}
-import org.scalatest.TryValues
-import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
 import scala.concurrent.Future
 
