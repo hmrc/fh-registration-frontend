@@ -69,12 +69,14 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
                 backUrl)))
         },
         partnerName => {
+          //TODO once business partner page (first page in journey) has been added can remove the cookie implementation
+          //TODO then pull the answer from request for the page navigation
           val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType) if businessType.equals("individual") =>
               routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
             case Some(businessType) if businessType.equals("sole-proprietor") =>
-              routes.BusinessPartnersTradingNameController.load()
+              routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
             case _ => routes.BusinessPartnersController.load()
           }
           val updatedUserAnswers = request.userAnswers.set(page, partnerName)

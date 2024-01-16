@@ -16,24 +16,26 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, optional}
+import play.api.data.{Form, Mapping}
+import play.api.data.Forms.{ignored, mapping, optional}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{addressLine, postcode}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.UkAddressLookup
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
 
 object BusinessPartnersAddressForm {
 
   val addressLineKey = "partnerAddressLine"
   val postcodeKey = "partnerPostcode"
+  val addressLookupKey = "addresses"
 
-  val addressLineMapping = addressLineKey -> optional(addressLine)
-  val postcodeMapping = postcodeKey       -> postcode
+  val addressLineMapping: (String, Mapping[Option[String]]) =
+    addressLineKey -> optional(addressLine)
+  val postcodeMapping: (String, Mapping[String]) =
+    postcodeKey -> postcode
+  val addressLookupMapping: (String, Mapping[Map[String, Address]]) =
+    addressLookupKey -> ignored(Map.empty[String, Address])
 
-  val businessPartnersAddressForm = Form(
-    mapping(
-      addressLineMapping,
-      postcodeMapping
-    )(UkAddressLookup.apply)(UkAddressLookup.unapply)
+  val businessPartnersAddressForm: Form[UkAddressLookup] = Form(
+    mapping(addressLineMapping, postcodeMapping, addressLookupMapping)(UkAddressLookup.apply)(UkAddressLookup.unapply)
   )
 
 }

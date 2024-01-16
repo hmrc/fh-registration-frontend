@@ -27,7 +27,7 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLoca
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, PartnerName, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
@@ -56,6 +56,8 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       mockActions,
       mockAppConfig,
       mockSessionCache)(mockMcc)
+
+  def seedUkAddressLookup(result: UkAddressLookup): Unit = result
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
@@ -98,25 +100,23 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
     }
 
     s"next when in $mode" should {
-      "return 200" when {
-        "The business partner v2 pages are enabled" should {
-          "business type is neither Sole Proprietor or Individual" in {
-            val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers)
-            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-            when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-            val request = FakeRequest()
-              .withFormUrlEncodedBody(
-                "firstName" -> "first name",
-                "lastName"  -> "last name"
-              )
-              .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+      "redirect to the business partners" when {
+        "business type is neither Sole Proprietor or Individual" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "firstName" -> "first name",
+              "lastName"  -> "last name"
+            )
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include("/business-partners")
-            reset(mockActions)
-          }
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include("/business-partners")
+          reset(mockActions)
         }
       }
 
@@ -164,7 +164,8 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/partner-trading-name")
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode).url)
           reset(mockActions)
         }
       }
