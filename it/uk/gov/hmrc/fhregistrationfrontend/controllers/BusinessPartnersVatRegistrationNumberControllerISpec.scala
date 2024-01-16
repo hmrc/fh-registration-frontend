@@ -22,7 +22,7 @@ class BusinessPartnersVatRegistrationNumberControllerISpec
   val withVatRegNum = VatNumber(true, Some("123456789"))
   val withoutVatRegNum = VatNumber(false, None)
 
-  val addressPage: String = routes.BusinessPartnersAddressController.load().url
+  val addressPage: String = routes.BusinessPartnersAddressController.load(1, NormalMode).url
   val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
   val businessPartnersPage: String = routes.BusinessPartnersController.load().url
 

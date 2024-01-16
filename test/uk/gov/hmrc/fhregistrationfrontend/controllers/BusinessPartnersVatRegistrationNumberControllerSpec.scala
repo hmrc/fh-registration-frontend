@@ -42,7 +42,7 @@ class BusinessPartnersVatRegistrationNumberControllerSpec extends ControllerSpec
   val mockSessionCache: SessionRepository = mock[SessionRepository]
   val index: Int = 1
 
-  val partnerAddressPage: String = routes.BusinessPartnersAddressController.load().url
+  val partnerAddressPage: String = routes.BusinessPartnersAddressController.load(index, NormalMode).url
   val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
 
   val controller =
