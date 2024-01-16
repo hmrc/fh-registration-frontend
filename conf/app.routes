@@ -86,8 +86,11 @@ POST        /change-business-partners/partner-trading-name/:index               
 GET         /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.load()
 POST        /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.next()
 
-GET         /business-partners/partnership-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.load()
-POST        /business-partners/partnership-vat-registration-number                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.next()
+GET         /business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/confirm-partnership-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load()
 POST        /business-partners/confirm-partnership-registered-office-address       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next()

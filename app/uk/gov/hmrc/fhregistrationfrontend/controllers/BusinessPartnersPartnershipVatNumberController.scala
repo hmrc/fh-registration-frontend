@@ -32,80 +32,80 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipVatNumberController @Inject()(
-                                                                ds: CommonPlayDependencies,
-                                                                view: Views,
-                                                                actions: Actions,
-                                                                config: FrontendAppConfig,
-                                                                val sessionCache: SessionRepository)(
-                                                                cc: MessagesControllerComponents
-                                                              )(implicit val ec: ExecutionContext)
-  extends AppController(ds, cc) with ControllerHelper {
+  ds: CommonPlayDependencies,
+  view: Views,
+  actions: Actions,
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
+  cc: MessagesControllerComponents
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
-    import actions._
+  import actions._
 
-    val form: Form[VatNumber] = vatNumberForm
-    val partnerName: String = "Test Partner"
-    val businessPartnerType: String = "partnership"
+  val form: Form[VatNumber] = vatNumberForm
+  val partnerName: String = "Test Partner"
+  val businessPartnerType: String = "partnership"
 
-    def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipVatNumberController.next(index, mode)
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipVatNumberController.next(index, mode)
 
-    def getBusinessType: String = config.getRandomBusinessType()
+  def getBusinessType: String = config.getRandomBusinessType()
 
-    val backUrl: String = {
-        if (getBusinessType == "partnership")
-            routes.BusinessPartnersPartnershipTradingNameController.load().url
-        else if (getBusinessType == "limited-liability-partnership")
-            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
-        else
-            "#"
-    }
+  val backUrl: String = {
+    if (getBusinessType == "partnership")
+      routes.BusinessPartnersPartnershipTradingNameController.load().url
+    else if (getBusinessType == "limited-liability-partnership")
+      routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+    else
+      "#"
+  }
 
-    def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-        val formData = request.userAnswers.get(PartnershipVatNumberPage(index))
-        val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(PartnershipVatNumberPage(index))
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-        Ok(
-            view.business_partners_has_vat_number(
-                prepopulatedForm,
+    Ok(
+      view.business_partners_has_vat_number(
+        prepopulatedForm,
+        businessPartnerType,
+        partnerName,
+        postAction(index, mode),
+        backUrl
+      )
+    ).withCookies(Cookie("businessType", getBusinessType))
+  }
+
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(
+              view.business_partners_has_vat_number(
+                formWithErrors,
                 businessPartnerType,
                 partnerName,
                 postAction(index, mode),
                 backUrl
+              )
             )
-        ).withCookies(Cookie("businessType", getBusinessType))
-    }
-
-    def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-              formWithErrors => {
-                  Future.successful(
-                      BadRequest(
-                          view.business_partners_has_vat_number(
-                              formWithErrors,
-                              businessPartnerType,
-                              partnerName,
-                              postAction(index, mode),
-                              backUrl
-                          )
-                      )
-                  )
-              },
-              vatNumber => {
-                  val page = PartnershipVatNumberPage(index)
-                  val nextPage = request.cookies.get("businessType").map(_.value) match {
-                      case Some(businessType)
-                          if businessType.equals("partnership") || (businessType
-                            .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-                          routes.BusinessPartnersPartnershipUtrController.load()
-                      case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-                          routes.BusinessPartnersPartnershipRegisteredAddressController.load()
-                  }
-
-                  val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
-                  updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-              }
           )
-    }
+        },
+        vatNumber => {
+          val page = PartnershipVatNumberPage(index)
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
+            case Some(businessType)
+                if businessType.equals("partnership") || (businessType
+                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
+              routes.BusinessPartnersPartnershipUtrController.load()
+            case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
+              routes.BusinessPartnersPartnershipRegisteredAddressController.load()
+          }
+
+          val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+        }
+      )
+  }
 }

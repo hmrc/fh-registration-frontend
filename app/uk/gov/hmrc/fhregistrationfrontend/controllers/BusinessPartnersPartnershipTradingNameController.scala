@@ -71,7 +71,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
             //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache
             request.cookies.get("businessType").map(_.value) match {
               case Some(businessType) if businessType.equals("partnership") =>
-                Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
+                Redirect(routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode))
               case Some(businessType) if businessType.equals("limited-liability-partnership") =>
                 Redirect(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load())
               case Some(unexpectedBusinessType) =>
