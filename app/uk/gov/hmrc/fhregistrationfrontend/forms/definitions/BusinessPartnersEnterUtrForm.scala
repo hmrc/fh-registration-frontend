@@ -18,9 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{uniqueTaxpayerReferenceNumber, yesOrNo}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterUniqueTaxpayerReference
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.uniqueTaxpayerReferenceNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
 
 object BusinessPartnersEnterUtrForm {
 
@@ -31,6 +30,6 @@ object BusinessPartnersEnterUtrForm {
   val businessPartnersEnterUtrForm = Form(
     mapping(
       businessPartnerUtrMapping
-    )(BusinessPartnersEnterUniqueTaxpayerReference.apply)(BusinessPartnersEnterUniqueTaxpayerReference.unapply)
+    )(Utr.apply)(Utr.unapply)
   )
 }

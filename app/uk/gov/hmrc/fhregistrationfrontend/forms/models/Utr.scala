@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class BusinessPartnersEnterUniqueTaxpayerReference(
-  value: String
+case class Utr(
+  utr: String
 )
 
-object BusinessPartnersEnterUniqueTaxpayerReference {
-  implicit val format = Json.format[BusinessPartnersEnterUniqueTaxpayerReference]
+object Utr {
+  implicit val format = Json.format[Utr]
+  implicit val writes: Writes[Utr] = Json.writes
+  implicit val reads: Reads[Utr] = Json.reads
 }

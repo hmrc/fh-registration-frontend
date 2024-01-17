@@ -23,12 +23,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterUniqueTaxpayerReference
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnerUtrKey
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessPartnersUtrForm: Form[BusinessPartnersEnterUniqueTaxpayerReference], partnerName: String, businessPartnerType: String, postAction: Call, backLink: String )(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(businessPartnersUtrForm: Form[Utr], partnerName: String, businessPartnerType: String, postAction: Call, backLink: String )(implicit request: Request[_], messages: Messages, config: AppConfig)
 
 @titlePrefix = @{
     if (businessPartnersUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""

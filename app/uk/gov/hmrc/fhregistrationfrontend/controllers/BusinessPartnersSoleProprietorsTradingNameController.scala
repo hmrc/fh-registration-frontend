@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorsTradingNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
@@ -32,7 +31,6 @@ class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig,
   val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)

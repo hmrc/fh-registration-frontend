@@ -24,12 +24,14 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import uk.gov.hmrc.crypto.json.CryptoFormats
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
 
 import java.time.Instant
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
   id: String,
+  utr: Option[Utr] = None,
   data: JsObject = Json.obj(),
   lastUpdated: Instant = Instant.now
 ) {
