@@ -75,8 +75,6 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
     .success
     .value
 
-  // here we need userAnswersWithPageData w the choosen result from user
-
   List(NormalMode, CheckMode).foreach { mode =>
     s"GET ${route(mode)}" should {
       "render the choose address page" in {
@@ -91,11 +89,13 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
           res.status mustBe 200
           val page = Jsoup.parse(res.body)
           page.title() must include("Choose address")
+          val addressesListed = page.getElementsByClass("govuk-radios__label").text()
+          addressesListed must include("1 Romford Road, Wellington, Telford, TF1 4ER")
         }
       }
 
-      "there are no user answers in the database" should {
-        "redirect to the start of BusinessPartners" in {
+      "redirect to the start of BusinessPartners" when {
+        "there are no user answers in the database" in {
           given.commonPrecondition
 
           val result = buildRequest(route(mode))
@@ -110,7 +110,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
       }
     }
 
-    s"POST ${route(mode)}" when {
+    s"POST ${route(mode)}" should {
       "redirect the user to the Check Your Answers page" when {
         "the form has no errors and the first value is selected" in {
           given.commonPrecondition
