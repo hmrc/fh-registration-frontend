@@ -6,6 +6,8 @@ import play.api.libs.ws.DefaultWSCookie
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import models.NormalMode
+import scala.collection.immutable.Seq
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.mvc.Http.HeaderNames
 
@@ -84,7 +86,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }
@@ -102,7 +104,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }
@@ -120,7 +122,7 @@ class BusinessPartnersAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersChooseAddressController.load(index, mode).url)
           }
         }
       }

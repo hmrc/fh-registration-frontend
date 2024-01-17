@@ -110,7 +110,8 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
             val result = await(csrfAddToken(controller.next())(request))
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result).get should include(routes.BusinessPartnersChooseAddressController.load().url)
+            redirectLocation(result).get should include(
+              routes.BusinessPartnersChooseAddressController.load(1, NormalMode).url)
             reset(mockActions)
           }
         }

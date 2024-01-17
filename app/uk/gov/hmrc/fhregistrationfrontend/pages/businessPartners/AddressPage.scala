@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.data.Forms.{mapping, nonEmptyText}
-import play.api.data.{Form, Mapping}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
-object BusinessPartnersChooseAddressForm {
+case class AddressPage(index: Int) extends QuestionPage[Address] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  val chooseAddressKey = "chosenAddress"
-
-  val chooseAddressMapping: Mapping[ChooseAddress] = mapping(
-    chooseAddressKey -> nonEmptyText
-  )(ChooseAddress.apply)(ChooseAddress.unapply)
-
-  val chooseAddressForm = Form(chooseAddressMapping)
-
+  override def toString: String = "address"
 }

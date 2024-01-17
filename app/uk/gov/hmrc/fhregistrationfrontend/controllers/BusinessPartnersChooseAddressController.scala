@@ -17,22 +17,29 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.data.FormError
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.ChooseAddress
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import java.lang.System.console
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersChooseAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   private def getBusinessType: String = config.getRandomBusinessType()
@@ -43,68 +50,65 @@ class BusinessPartnersChooseAddressController @Inject()(
     else "#"
   }
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      val form = chooseAddressForm
-      //ToDo read this data from the cache after being stored before the redirect
-      val addressList = testAddressData
-      Ok(view.business_partners_choose_address(form, addressList, backUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersChooseAddressController.next(index, mode)
+
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
+    if (cachedAddressList.size <= 1) Redirect(routes.BusinessPartnersAddressController.load(index, mode))
+    else {
+      val formData = request.userAnswers.get(AddressPage(index))
+      val prepopulatedForm =
+        formData
+          .flatMap { data =>
+            cachedAddressList
+              .find(_._2 == data)
+              .map(addressPair => chooseAddressForm.fill(ChooseAddress(addressPair._1)))
+          }
+          .getOrElse(chooseAddressForm)
+
+      Ok(
+        view.business_partners_choose_address(
+          prepopulatedForm,
+          postAction(index, mode),
+          cachedAddressList,
+          backUrl
+        )
+      )
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      val addressList = testAddressData
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
+    if (cachedAddressList.size <= 1)
+      Future.successful(Redirect(routes.BusinessPartnersAddressController.load(index, mode)))
+    else {
       chooseAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_choose_address(formWithErrors, testAddressData, backUrl))
+            Future.successful(
+              BadRequest(
+                view.business_partners_choose_address(
+                  formWithErrors,
+                  postAction(index, mode),
+                  cachedAddressList,
+                  backUrl
+                )
+              )
+            )
           },
           addressKey => {
-            // TODO save the selected address to cache
-            addressList.get(addressKey.chosenAddress) match {
-              case Some(address) =>
-                Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
-              case None =>
-                val formWithError =
-                  chooseAddressForm.withError(FormError("chosenAddress", "error.required"))
-                BadRequest(view.business_partners_choose_address(formWithError, testAddressData, backUrl))
-            }
+            val page = AddressPage(index)
+            val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+
+            val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList(addressKey.chosenAddress))
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
           }
         )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
     }
   }
-
-  //ToDo remove when addressData stored in database
-  private val testAddressData: Map[String, Address] = {
-    val address1 = Address(
-      addressLine1 = "1 Romford Road",
-      addressLine2 = Some("Wellington"),
-      addressLine3 = Some("Telford"),
-      addressLine4 = None,
-      postcode = "TF1 4ER",
-      countryCode = None,
-      lookupId = None
-    )
-
-    val address2 = address1.copy(addressLine1 = "2 Romford Road")
-    val address3 = address1.copy(addressLine1 = "3 Romford Road")
-    val address4 = address1.copy(addressLine1 = "2 Romford Road")
-    val address5 = address1.copy(addressLine1 = "5 Romford Road")
-
-    Map(
-      "1" -> address1,
-      "2" -> address2,
-      "3" -> address3,
-      "4" -> address4,
-      "5" -> address5
-    )
-  }
-
 }

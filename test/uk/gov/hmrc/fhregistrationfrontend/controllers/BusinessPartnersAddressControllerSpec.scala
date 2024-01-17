@@ -120,7 +120,8 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersChooseAddressController.load().url.drop(6))
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersChooseAddressController.load(index, mode).url.drop(6))
           reset(mockActions)
         }
 
