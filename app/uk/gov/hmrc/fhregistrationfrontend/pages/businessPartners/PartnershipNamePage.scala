@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.partnershipName
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
 
-object PartnershipNameForm {
+case class PartnershipNamePage(index: Int) extends QuestionPage[String] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  val partnershipNameKey = "partnershipName"
-
-  val partnershipNameForm: Form[String] = Form(
-    partnershipNameKey -> partnershipName
-  )
+  override def toString: String = "partnershipName"
 }

@@ -54,7 +54,7 @@
             id = formKey,
             name = formKey,
             classes = "govuk-label--l",
-            value = Some(s"${form(formKey).value.getOrElse("")}"),
+            value = form(formKey).value,
             errorMessage = form(formKey).error.map { e =>
                 ErrorMessage(
                     content = Text(Messages(s"fh.businessPartners.${e.key}.${e.message}")),
