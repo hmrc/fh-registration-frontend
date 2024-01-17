@@ -36,7 +36,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-  val mockSessionCache = mock[SessionRepository]
+  val mockSessionCache: SessionRepository = mock[SessionRepository]
   val index = 1
   val controller =
     new BusinessPartnersPartnershipNameController(commonDependencies, views, mockActions, mockSessionCache)(mockMcc)
@@ -93,7 +93,8 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners/partnership-trading-name")
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersPartnershipTradingNameController.load(1, mode).url.drop(6))
           reset(mockActions)
         }
       }
