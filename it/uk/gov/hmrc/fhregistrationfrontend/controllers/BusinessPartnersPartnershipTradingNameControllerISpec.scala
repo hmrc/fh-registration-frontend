@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -10,7 +11,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersPartnershipTradingNameController.load().url.drop(6)
-  val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+  val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
   val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
 
   s"GET $route" when {
