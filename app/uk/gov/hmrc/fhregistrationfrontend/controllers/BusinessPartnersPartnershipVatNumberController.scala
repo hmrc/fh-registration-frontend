@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipVatNumberPage
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -61,7 +61,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   }
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val formData = request.userAnswers.get(PartnershipVatNumberPage(index))
+    val formData = request.userAnswers.get(EnterVatNumberPage(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
     Ok(
@@ -93,7 +93,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
           )
         },
         vatNumber => {
-          val page = PartnershipVatNumberPage(index)
+          val page = EnterVatNumberPage(index)
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType)
                 if businessType.equals("partnership") || (businessType
