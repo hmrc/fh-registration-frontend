@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnersEnterAddress, NationalInsuranceNumber, PartnerName, TradingName, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnersEnterAddress, NationalInsuranceNumber, PartnerName, TradingName, UkAddressLookup, VatNumber}
 
 case class BusinessPartner(
   individualsAndSoleProprietorsPartnerName: Option[PartnerName],
@@ -25,6 +25,7 @@ case class BusinessPartner(
   soleProprietorsTradingName: Option[TradingName],
   ukAddressLookup: UkAddressLookup,
   enterAddress: BusinessPartnersEnterAddress,
+  enterVatNumber: Option[VatNumber],
   partnershipName: Option[String])
 
 object BusinessPartner {

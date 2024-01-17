@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import models.Mode
+import models.{Mode, NormalMode}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsNinoPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
@@ -74,7 +74,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
             case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
               routes.BusinessPartnersAddressController.load(index, mode)
             case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnersVatRegistrationNumberController.load()
+              routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
             case _ => routes.BusinessPartnersController.load()
           }
 
