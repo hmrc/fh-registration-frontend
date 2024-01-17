@@ -17,7 +17,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
   def route(mode: Mode) = routes.BusinessPartnersPartnershipTradingNameController.load(1, mode).url.drop(6)
 
-  def userAnswersWithPageData(formAnswers: TradingName) =
+  def userAnswersWithPageData(formAnswers: TradingName): UserAnswers =
     emptyUserAnswers
       .set[TradingName](PartnershipTradingNamePage(1), formAnswers)
       .success

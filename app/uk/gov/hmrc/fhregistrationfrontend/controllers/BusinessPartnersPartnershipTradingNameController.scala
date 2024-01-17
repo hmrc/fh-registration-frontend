@@ -20,7 +20,7 @@ import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{tradingNameForm => form}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{PartnershipTradingNamePage => page}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -47,7 +47,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
     else "#"
   }
   val businessType = "partnership"
-  def postAction(index: Int, mode: Mode): Call =
+  lazy val postAction: (Int, Mode) => Call = (index, mode) =>
     routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
   val partner = "Test User"
 
@@ -55,7 +55,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(page(index))
-    val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
     Ok(
       view
@@ -65,7 +65,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    tradingNameForm
+    form
       .bindFromRequest()
       .fold(
         formWithErrors => {
