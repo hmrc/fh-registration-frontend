@@ -11,8 +11,8 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 
 class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
   extends Specifications with TestConfiguration {
-
-    def route(mode: Mode): String = routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, mode).url.drop(6)
+    val index: Int = 1
+    def route(mode: Mode): String = routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url.drop(6)
 
     def userAnswersWithPageData(formAnswers: VatNumber) = emptyUserAnswers
       .set[VatNumber](EnterVatNumberPage(1), formAnswers)
@@ -24,8 +24,9 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
 
     List(NormalMode, CheckMode).foreach { mode =>
 
-        val addressPage: String = routes.BusinessPartnersAddressController.load(1, mode).url
-        val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
+
+        val addressPage: String = routes.BusinessPartnersAddressController.load(index, mode).url
+        val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load(index, mode).url
         val businessPartnersPage: String = routes.BusinessPartnersController.load().url
 
         s"GET ${route(mode)}" when {
