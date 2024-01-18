@@ -54,7 +54,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
 
   List(NormalMode, CheckMode).foreach { mode =>
     val partnerAddressPage: String = routes.BusinessPartnersAddressController.load(index, mode).url
-    val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load().url
+    val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load(index, mode).url
 
     s"load when in $mode" should {
       "Render the businessPartnersVatRegistrationNumber page" when {

@@ -46,7 +46,7 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
     routes.BusinessPartnersSoleProprietorUtrController.next(index: Int, mode: Mode)
   val businessPartnerType: String = "SoleProprietor"
   def backUrl(index: Int, mode: Mode): String =
-    routes.BusinessPartnersVatRegistrationNumberController.load().url
+    routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {

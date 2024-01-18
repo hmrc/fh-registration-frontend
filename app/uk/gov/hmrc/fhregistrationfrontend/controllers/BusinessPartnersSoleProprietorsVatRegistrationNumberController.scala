@@ -78,7 +78,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
           val page = EnterVatNumberPage(index)
           val nextPage = vatNumber.value match {
             case Some(vatNumber) => routes.BusinessPartnersAddressController.load(1, mode)
-            case None            => routes.BusinessPartnersSoleProprietorUtrController.load()
+            case None            => routes.BusinessPartnersSoleProprietorUtrController.load(index, mode)
           }
 
           val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
