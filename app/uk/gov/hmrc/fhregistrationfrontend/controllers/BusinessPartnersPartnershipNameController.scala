@@ -42,12 +42,13 @@ class BusinessPartnersPartnershipNameController @Inject()(
   lazy val journeyType = "partnership"
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
   lazy val backAction: String = routes.BusinessPartnersController.load().url
-  lazy val tradingNamePage: (Int, Mode) => Call = (index, mode) =>
+  def tradingNamePage(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
   lazy val form: Form[String] = partnershipNameForm
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val formData = request.userAnswers.get(PartnershipNamePage(index))
+    val currentPage = PartnershipNamePage(index)
+    val formData = request.userAnswers.get(currentPage)
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
     Ok(
       view
@@ -72,9 +73,9 @@ class BusinessPartnersPartnershipNameController @Inject()(
           )
         },
         partnership => {
-          val page = PartnershipNamePage(index)
-          val updatedUserAnswers = request.userAnswers.set(page, partnership)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), page)
+          val currentPage = PartnershipNamePage(index)
+          val updatedUserAnswers = request.userAnswers.set(currentPage, partnership)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
         }
       )
   }

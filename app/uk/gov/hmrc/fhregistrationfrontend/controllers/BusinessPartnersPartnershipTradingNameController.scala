@@ -47,14 +47,14 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
     else "#"
   }
   val businessType = "partnership"
-  lazy val postAction: (Int, Mode) => Call = (index, mode) =>
-    routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
+  def postAction(index: Int, mode: Mode) = routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
   val partner = "Test User"
 
   private def getBusinessType: String = config.getRandomBusinessType
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val formData = request.userAnswers.get(page(index))
+    val currentPage = page(index)
+    val formData = request.userAnswers.get(currentPage)
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
     Ok(
@@ -90,8 +90,9 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
               routes.BusinessPartnersController.load()
           }
 
-          val updatedUserAnswers = request.userAnswers.set(page(index), tradingName)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page(index))
+          val currentPage = page(index)
+          val updatedUserAnswers = request.userAnswers.set(currentPage, tradingName)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
         }
       ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   }
