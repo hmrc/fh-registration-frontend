@@ -20,6 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import models.UserAnswers
 import models.{CheckMode, NormalMode}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
@@ -32,6 +33,8 @@ import play.api.mvc.Cookie
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+
+import scala.concurrent.Future
 
 class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -113,6 +116,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
@@ -135,6 +139,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "partnership"))
@@ -156,6 +161,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -176,6 +182,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -199,6 +206,8 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(
@@ -222,6 +231,8 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(
