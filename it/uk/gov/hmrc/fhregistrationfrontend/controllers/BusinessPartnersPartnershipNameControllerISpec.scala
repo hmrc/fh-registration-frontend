@@ -6,8 +6,7 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsPartnerNamePage, PartnershipNamePage}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipNamePage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersPartnershipNameControllerISpec
@@ -18,7 +17,7 @@ class BusinessPartnersPartnershipNameControllerISpec
   val pageTitle: String = "What is the name of the partnership? - Business partners"
   val emptyTextError: String = "Enter a partnership name"
   val characterLimitError: String = "Partnership name must be 120 characters or less"
-  val tradingNamePageUrl: String = routes.BusinessPartnersPartnershipTradingNameController.load().url
+  val tradingNamePageUrl: String = routes.BusinessPartnersPartnershipTradingNameController.load(1, NormalMode).url
   val userAnswersWithPageData = emptyUserAnswers
     .set[String](PartnershipNamePage(1), "partnershipName")
     .success
@@ -88,7 +87,6 @@ class BusinessPartnersPartnershipNameControllerISpec
         Map("override" -> userAnswersWithPageData, "add" -> emptyUserAnswers).foreach { case (uaAction, userAnswers) =>
           s"redirect to trading name page and $uaAction userAnswers" in {
             given.commonPrecondition
-
             addUserAnswersToSession(userAnswers)
 
             val result = buildRequest(route(mode))
@@ -101,7 +99,7 @@ class BusinessPartnersPartnershipNameControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipTradingNameController.load().url)
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersPartnershipTradingNameController.load(1, mode).url)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get(PartnershipNamePage(1))
               pageData mustBe Some("test")

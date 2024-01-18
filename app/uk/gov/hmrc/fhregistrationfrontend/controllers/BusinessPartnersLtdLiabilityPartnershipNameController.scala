@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -37,7 +38,6 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   val businessPartnerType = "ltdLiabilityPartnership"
   val backAction: String = routes.BusinessPartnersController.load().url
   val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
-  val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -68,7 +68,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
                 backAction))
           },
           ltdLiabilityPartnership => {
-            Redirect(tradingNamePage)
+            Redirect(routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode))
           }
         )
     } else {
