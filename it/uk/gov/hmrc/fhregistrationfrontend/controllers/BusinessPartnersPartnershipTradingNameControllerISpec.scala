@@ -134,7 +134,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
                   whenReady(result) { res =>
                     res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl(index, mode))
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
                     val userAnswers = getUserAnswersFromSession.get
                     val pageData = userAnswers.get(PartnershipTradingNamePage(1))
                     pageData mustBe Some(TradingName(hasValue = true, Some("Blue Peter")))
@@ -162,7 +162,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
                   whenReady(result) { res =>
                     res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl(index, mode))
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
                     val userAnswers = getUserAnswersFromSession.get
                     val pageData = userAnswers.get(PartnershipTradingNamePage(1))
                     pageData mustBe Some(TradingName(hasValue = false, None))
@@ -192,7 +192,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
                   whenReady(result) { res =>
                     res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl(index, mode))
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
                     val userAnswers = getUserAnswersFromSession.get
                     val pageData = userAnswers.get(PartnershipTradingNamePage(1))
                     pageData mustBe Some(TradingName(hasValue = true, Some("Blue Peter")))
@@ -220,7 +220,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
                   whenReady(result) { res =>
                     res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl(index, mode))
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
                     val userAnswers = getUserAnswersFromSession.get
                     val pageData = userAnswers.get(PartnershipTradingNamePage(1))
                     pageData mustBe Some(TradingName(hasValue = false, None))
@@ -251,7 +251,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersUrl(index, mode))
+              res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get(PartnershipTradingNamePage(1))
               pageData mustBe Some(TradingName(hasValue = false, None))
