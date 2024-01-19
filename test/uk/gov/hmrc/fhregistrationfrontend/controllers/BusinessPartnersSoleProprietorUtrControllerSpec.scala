@@ -64,7 +64,6 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
         }
 
         "user answers supplied" in {
-          val utr = Utr("123456789")
           val userAnswers =
             UserAnswers(testUserId).set[Utr](SoleProprietorUtrPage(index), Utr("1234567890")).success.value
           setupDataRequiredAction(userAnswers)
