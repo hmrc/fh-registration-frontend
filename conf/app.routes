@@ -157,8 +157,10 @@ POST         /business-partners/change-partnership-name/:index            @uk.go
 GET          /business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load()
 POST         /business-partners/confirm-corporate-body-registered-office-address   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.next()
 
-GET          /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.load()
-POST         /business-partners/partner-self-assessment-unique-taxpayer-reference       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.next()
+GET          /business-partners/partner-self-assessment-unique-taxpayer-reference/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.load(index: Int, mode: Mode = NormalMode)
+POST         /business-partners/partner-self-assessment-unique-taxpayer-reference/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.next(index: Int, mode: Mode = NormalMode)
+GET          /change-business-partners/partner-self-assessment-unique-taxpayer-reference/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.load(index: Int, mode: Mode = CheckMode)
+POST         /change-business-partners/partner-self-assessment-unique-taxpayer-reference/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorUtrController.next(index: Int, mode: Mode = CheckMode)
 
 GET          /business-partners/cannot-find-address/:index                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCannotFindAddressController.load(index: Int, mode: Mode = NormalMode)
 

@@ -43,12 +43,8 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
   val index = 1
 
   val controller =
-    new BusinessPartnersSoleProprietorsTradingNameController(
-      commonDependencies,
-      views,
-      mockActions,
-      mockAppConfig,
-      mockSession)(mockMcc)
+    new BusinessPartnersSoleProprietorsTradingNameController(commonDependencies, views, mockActions, mockSession)(
+      mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
@@ -57,7 +53,6 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
 
