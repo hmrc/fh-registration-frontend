@@ -102,7 +102,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
     }
 
     s"POST ${route(mode)}" when {
-      val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+      val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
       val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
       val businessPartnersUrl: String = routes.BusinessPartnersController.load().url
 
