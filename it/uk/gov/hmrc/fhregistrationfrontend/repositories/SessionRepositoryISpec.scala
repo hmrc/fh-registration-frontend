@@ -46,7 +46,7 @@ class SessionRepositoryISpec
 
   ".set" - {
     "must set the last updated time on the supplied user answers to `now`, and save them" in {
-      val userAnswersBefore = UserAnswers("id", None, Json.obj("foo" -> "bar"),Instant.ofEpochSecond(1))
+      val userAnswersBefore = UserAnswers("id", Json.obj("foo" -> "bar"),Instant.ofEpochSecond(1))
       val timeBeforeTest = Instant.now()
       val setResult     = await(repository.set(userAnswersBefore))
       val updatedRecord = await(repository.get(userAnswersBefore.id)).get

@@ -31,7 +31,6 @@ import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
   id: String,
-  utr: Option[Utr] = None,
   data: JsObject = Json.obj(),
   lastUpdated: Instant = Instant.now
 ) {

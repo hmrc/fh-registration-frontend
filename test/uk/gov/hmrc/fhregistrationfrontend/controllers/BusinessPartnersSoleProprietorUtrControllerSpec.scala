@@ -21,9 +21,12 @@ import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorUtrPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -41,63 +44,78 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
   val index = 1
 
   val controller =
-    new BusinessPartnersSoleProprietorUtrController(commonDependencies, views, mockActions, mockAppConfig, mockSession)(
-      mockMcc)
+    new BusinessPartnersSoleProprietorUtrController(commonDependencies, views, mockActions, mockSession)(mockMcc)
 
-  "load" should {
-    "Render the SoleProprietor Utr page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(index = 1, mode = NormalMode))(request))
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the SoleProprietor Utr page" when {
+        "no user answers supplied" in {
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
-        reset(mockActions)
-      }
-    }
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
 
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(index = 1, mode = NormalMode))(request))
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    List(NormalMode, CheckMode).foreach { mode =>
-      "data required action approves all required information is present" should {
-        "redirect to the Partner Address page" when {
-          s"the form has no errors and UTR supplied in $mode" in {
-            val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers)
-
-            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-            when(mockSession.set(any())).thenReturn(Future.successful(true))
-            val request = FakeRequest()
-              .withFormUrlEncodedBody(
-                ("uniqueTaxpayerReference_yesNo", "true"),
-                ("uniqueTaxpayerReference_value", "1234567890"))
-              .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index = index, mode = mode))(request))
-
-            status(result) shouldBe SEE_OTHER
-
-            redirectLocation(result).get should include(
-              routes.BusinessPartnersAddressController.load(index = index, mode = mode).url)
-            reset(mockActions)
-          }
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+          reset(mockActions)
         }
+
+        "user answers supplied" in {
+          val utr = Utr("123456789")
+          val userAnswers =
+            UserAnswers(testUserId).set[Utr](SoleProprietorUtrPage(index), Utr("1234567890")).success.value
+          setupDataRequiredAction(userAnswers)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+          reset(mockActions)
+        }
+      }
+    }
+
+    s"next when in $mode" when {
+      "redirect to the Partner Address page" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers)
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSession.set(any())).thenReturn(Future.successful(true))
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            ("uniqueTaxpayerReference_yesNo", "true"),
+            ("uniqueTaxpayerReference_value", "1234567890"))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe SEE_OTHER
+
+        redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load(index, mode).url)
+        reset(mockActions)
+      }
+
+      "return 400 when supplied with empty form data" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers)
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSession.set(any())).thenReturn(Future.successful(true))
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            "uniqueTaxpayerReference_yesNo" -> "",
+            "uniqueTaxpayerReference_value" -> ""
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe BAD_REQUEST
+        reset(mockActions)
       }
     }
   }

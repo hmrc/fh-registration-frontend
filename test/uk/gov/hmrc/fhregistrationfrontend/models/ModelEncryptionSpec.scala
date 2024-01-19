@@ -30,7 +30,7 @@ class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {
 
   "encryptUserAnswers" should {
     "encrypt userAnswers" in {
-      val userAnswers = UserAnswers("id", None, Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+      val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
 
       val result = ModelEncryption.encryptUserAnswers(userAnswers)
       result._1 mustBe userAnswers.id
@@ -40,7 +40,7 @@ class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {
   }
   "decryptUserAnswers" should {
     "decrypt userAnswers in tuple form" in {
-      val userAnswers = UserAnswers("id", None, Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+      val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
 
       val result = ModelEncryption.decryptUserAnswers(
         userAnswers.id,

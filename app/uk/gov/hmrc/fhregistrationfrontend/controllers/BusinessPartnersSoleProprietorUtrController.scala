@@ -33,7 +33,6 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig,
   val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
@@ -48,18 +47,17 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
   def backUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view.business_partners_enter_utr_number(
-          businessPartnersEnterUtrForm,
-          partnerName,
-          businessPartnerType,
-          postAction(index, mode),
-          backUrl(index, mode)))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(SoleProprietorUtrPage(index))
+    val prepopulatedForm =
+      formData.map(data => businessPartnersEnterUtrForm.fill(data)).getOrElse(businessPartnersEnterUtrForm)
+    Ok(
+      view.business_partners_enter_utr_number(
+        prepopulatedForm,
+        partnerName,
+        businessPartnerType,
+        postAction(index, mode),
+        backUrl(index, mode)))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
@@ -78,9 +76,9 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
             ))
         },
         value => {
-          val updatedUserAnswers = request.userAnswers.copy(utr = Some(value))
+          val updatedUserAnswers = request.userAnswers.set(SoleProprietorUtrPage(index), value)
           val nextPage = routes.BusinessPartnersAddressController.load(index, mode)
-          updateUserAnswersAndSaveToCache(Try(updatedUserAnswers), nextPage, SoleProprietorUtrPage(index))
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorUtrPage(index))
         }
       )
   }
