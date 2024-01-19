@@ -62,7 +62,6 @@ class SessionRepositoryISpec
 
     "correctly encrypt the records data" in {
       val userAnswersBefore = UserAnswers("id",
-        None,
         Json.obj("foo" -> "bar"),
         Instant.ofEpochSecond(1))
       val setResult = await(repository.set(userAnswersBefore))
@@ -82,7 +81,7 @@ class SessionRepositoryISpec
     "when there is a record for this id" - {
 
       "must update the lastUpdated time and get the record" in {
-        val userAnswersBefore = UserAnswers("id", None, Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+        val userAnswersBefore = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
         await(repository.set(userAnswersBefore))
 
         val timeBeforeTest = Instant.now()
@@ -109,7 +108,7 @@ class SessionRepositoryISpec
   ".clear" - {
 
     "must remove a record" in {
-      val userAnswersBefore = UserAnswers("id", None, Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+      val userAnswersBefore = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
       repository.set(userAnswersBefore).futureValue
 
       val result = repository.clear(userAnswersBefore.id).futureValue
@@ -130,7 +129,7 @@ class SessionRepositoryISpec
     "when there is a record for this id" - {
 
       "must update its lastUpdated to `now` and return true" in {
-        val userAnswersBefore = UserAnswers("id", None, Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+        val userAnswersBefore = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
         await(repository.set(userAnswersBefore))
         val timeBeforeTest = Instant.now()
         val result = await(repository.keepAlive(userAnswersBefore.id))
