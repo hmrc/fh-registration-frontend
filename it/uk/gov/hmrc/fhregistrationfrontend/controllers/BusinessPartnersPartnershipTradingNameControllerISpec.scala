@@ -1,175 +1,317 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipTradingNamePage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersPartnershipTradingNameControllerISpec
-  extends Specifications with TestConfiguration {
+class BusinessPartnersPartnershipTradingNameControllerISpec extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnersPartnershipTradingNameController.load().url.drop(6)
-  val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
-  val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+  val noTradingName = TradingName(false, None)
+  val tradingName = TradingName(true, Some("trading name"))
+  val index = 1
 
-  s"GET $route" when {
+  def route(mode: Mode) = routes.BusinessPartnersPartnershipTradingNameController.load(1, mode).url.drop(6)
 
-    "render the business partner partnership trading name page" when {
-      "the user is authenticated" in {
-        given.commonPrecondition
+  def userAnswersWithPageData(formAnswers: TradingName): UserAnswers =
+    emptyUserAnswers
+      .set[TradingName](PartnershipTradingNamePage(1), formAnswers)
+      .success
+      .value
 
-        val result = buildRequest(route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
-
-        whenReady(result) { res =>
-          res.status mustBe 200
-          val page = Jsoup.parse(res.body)
-          page.title must include("Does the partnership use a trading name that is different from its registered name?")
-          page.getElementsByTag("h1").text must include("Does Test User use a trading name that is different from its registered name?")
-        }
-      }
-    }
-
-  }
-
-  s"POST $route" when {
-    "no radio option is selected by the user" should {
-      "return 400" in {
-        given.commonPrecondition
-
-        val result = buildRequest(route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq.empty,
-            "tradingName_value" -> Seq.empty
-          ))
-
-        whenReady(result) { res =>
-          res.status mustBe 400
-          val page = Jsoup.parse(res.body)
-          page.title must include("Does the partnership use a trading name that is different from its registered name?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
-        }
-      }
-    }
-
-
-    "yes is selected but no trading name is entered" should {
-      "return 400" in {
-        given.commonPrecondition
-
-        val result = buildRequest(route)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq("true"),
-            "tradingName_value" -> Seq.empty
-          ))
-
-        whenReady(result) { res =>
-          res.status mustBe 400
-          val page = Jsoup.parse(res.body)
-          page.title must include("Does the partnership use a trading name that is different from its registered name?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
-        }
-      }
-    }
-
-
-    "the businessType/legal entity of the partnership is a 'partnership'" when {
-      "the user selects no" should {
-        "redirect to the partnership name page" in {
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"GET ${route(mode)}" when {
+      "render the business partner partnership trading name page" when {
+        "the are no userAnswers in the database" in {
           given.commonPrecondition
+          addUserAnswersToSession(emptyUserAnswers)
 
-          val result = buildRequest(route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "partnership")
-            )
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq("false"),
-              "tradingName_value" -> Seq.empty
-            ))
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title must include(
+              "Does the partnership use a trading name that is different from its registered name?")
+            page.getElementsByTag("h1").text must include(
+              "Does Test User use a trading name that is different from its registered name?")
           }
         }
-      }
 
-      "the user selects yes and enters a trading name" should {
-        "redirect to the partnership name page" in {
+        "userAnswers are stored in database (No trading name)" in {
           given.commonPrecondition
+          addUserAnswersToSession(userAnswersWithPageData(noTradingName))
 
-          val result = buildRequest(route)
-            .addCookies(
-              DefaultWSCookie("mdtp", authAndSessionCookie),
-              DefaultWSCookie("businessType", "partnership")
-            )
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq("true"),
-              "tradingName_value" -> Seq("Shelby Company Limited")
-            ))
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title must include(
+              "Does the partnership use a trading name that is different from its registered name?")
+            page.getElementsByTag("h1").text must include(
+              "Does Test User use a trading name that is different from its registered name?")
+            val tradingNameValueField = page.getElementById("tradingName_value")
+            tradingNameValueField.hasAttr("value") mustBe false
+          }
+        }
+
+        "userAnswers are stored in database (yes with trading name)" in {
+          given.commonPrecondition
+          addUserAnswersToSession(userAnswersWithPageData(tradingName))
+
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+
+          whenReady(result) { res =>
+            res.status mustBe 200
+            val page = Jsoup.parse(res.body)
+            page.title must include(
+              "Does the partnership use a trading name that is different from its registered name?")
+            page.getElementsByTag("h1").text must include(
+              "Does Test User use a trading name that is different from its registered name?")
+            val tradingNameValueField = page.getElementById("tradingName_value")
+            tradingNameValueField.attr("value") mustBe "trading name"
+          }
+        }
+      }
+
+      "redirect the user to the start of the BusinessPartners journey" when {
+        "there is no user answers in the database" in {
+          given.commonPrecondition
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
           }
         }
       }
     }
 
-    "the businessType/legal entity of the partnership is a 'limited liability partnership'" when {
-      "the user selects no" should {
-      "redirect to the partnership name page" in {
-        given.commonPrecondition
+    s"POST ${route(mode)}" when {
+      val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+      val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+      val businessPartnersUrl: String = routes.BusinessPartnersController.load().url
 
-        val result = buildRequest(route)
-          .addCookies(
-            DefaultWSCookie("mdtp", authAndSessionCookie),
-            DefaultWSCookie("businessType", "limited-liability-partnership")
-          )
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq("false"),
-            "tradingName_value" -> Seq.empty
-          ))
+      "form with no errors" should {
+        Map(
+          "override" -> List(userAnswersWithPageData(noTradingName), userAnswersWithPageData(tradingName)),
+          "add"      -> List(emptyUserAnswers)
+        ).foreach {
+          case (userAnswersAction, userAnswers) =>
+            userAnswers.zipWithIndex.foreach { answers: (UserAnswers, Int) =>
+              s"redirect to the Business Partners Partnership Vat Registration number page and $userAnswersAction userAnswers ${answers._2}" when {
+                "businessType is partnership, the user selects yes and gives a trading name" in {
+                  given.commonPrecondition
+                  addUserAnswersToSession(answers._1)
 
-        whenReady(result) { res =>
-          res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
+                  val result = buildRequest(route(mode))
+                    .addCookies(
+                      DefaultWSCookie("mdtp", authAndSessionCookie),
+                      DefaultWSCookie("businessType", "partnership")
+                    )
+                    .withHttpHeaders(
+                      xSessionId,
+                      "Csrf-Token" -> "nocheck"
+                    )
+                    .post(
+                      Map(
+                        "tradingName_yesNo" -> Seq("true"),
+                        "tradingName_value" -> Seq("Blue Peter")
+                      ))
+
+                  whenReady(result) { res =>
+                    res.status mustBe 303
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
+                    val userAnswers = getUserAnswersFromSession.get
+                    val pageData = userAnswers.get(PartnershipTradingNamePage(1))
+                    pageData mustBe Some(TradingName(hasValue = true, Some("Blue Peter")))
+                  }
+                }
+
+                "businessType is partnership, the user selects no and gives no trading name" in {
+                  given.commonPrecondition
+                  addUserAnswersToSession(answers._1)
+
+                  val result = buildRequest(route(mode))
+                    .addCookies(
+                      DefaultWSCookie("mdtp", authAndSessionCookie),
+                      DefaultWSCookie("businessType", "partnership")
+                    )
+                    .withHttpHeaders(
+                      xSessionId,
+                      "Csrf-Token" -> "nocheck"
+                    )
+                    .post(
+                      Map(
+                        "tradingName_yesNo" -> Seq("false"),
+                        "tradingName_value" -> Seq("")
+                      ))
+
+                  whenReady(result) { res =>
+                    res.status mustBe 303
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipVatRegNumUrl)
+                    val userAnswers = getUserAnswersFromSession.get
+                    val pageData = userAnswers.get(PartnershipTradingNamePage(1))
+                    pageData mustBe Some(TradingName(hasValue = false, None))
+                  }
+                }
+              }
+
+              s"redirect to the Business Partners Partnership Company Registration number page and $userAnswersAction userAnswers ${answers._2}" when {
+                "businessType is partnership, the user selects yes and gives a trading name" in {
+                  given.commonPrecondition
+                  addUserAnswersToSession(answers._1)
+
+                  val result = buildRequest(route(mode))
+                    .addCookies(
+                      DefaultWSCookie("mdtp", authAndSessionCookie),
+                      DefaultWSCookie("businessType", "limited-liability-partnership")
+                    )
+                    .withHttpHeaders(
+                      xSessionId,
+                      "Csrf-Token" -> "nocheck"
+                    )
+                    .post(
+                      Map(
+                        "tradingName_yesNo" -> Seq("true"),
+                        "tradingName_value" -> Seq("Blue Peter")
+                      ))
+
+                  whenReady(result) { res =>
+                    res.status mustBe 303
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
+                    val userAnswers = getUserAnswersFromSession.get
+                    val pageData = userAnswers.get(PartnershipTradingNamePage(1))
+                    pageData mustBe Some(TradingName(hasValue = true, Some("Blue Peter")))
+                  }
+                }
+
+                "businessType is partnership, the user selects no and gives no trading name" in {
+                  given.commonPrecondition
+                  addUserAnswersToSession(answers._1)
+
+                  val result = buildRequest(route(mode))
+                    .addCookies(
+                      DefaultWSCookie("mdtp", authAndSessionCookie),
+                      DefaultWSCookie("businessType", "limited-liability-partnership")
+                    )
+                    .withHttpHeaders(
+                      xSessionId,
+                      "Csrf-Token" -> "nocheck"
+                    )
+                    .post(
+                      Map(
+                        "tradingName_yesNo" -> Seq("false"),
+                        "tradingName_value" -> Seq("")
+                      ))
+
+                  whenReady(result) { res =>
+                    res.status mustBe 303
+                    res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
+                    val userAnswers = getUserAnswersFromSession.get
+                    val pageData = userAnswers.get(PartnershipTradingNamePage(1))
+                    pageData mustBe Some(TradingName(hasValue = false, None))
+                  }
+                }
+              }
+            }
         }
-      }
-    }
-      
-      "the user selects yes and enters a trading name" should {
-      "redirect to the partnership name page" in {
-        given.commonPrecondition
 
-        val result = buildRequest(route)
-          .addCookies(
-            DefaultWSCookie("mdtp", authAndSessionCookie),
-            DefaultWSCookie("businessType", "limited-liability-partnership")
-          )
-          .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-          .post(Map(
-            "tradingName_yesNo" -> Seq("true"),
-            "tradingName_value" -> Seq("Shelby Company Limited")
-          ))
+        s"redirect to the start of Business Partners journey" when {
+          "businessType is neither partnership or LLP" in {
+            given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
 
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(partnershipCompanyRegNumUrl)
+            val result = buildRequest(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie),
+              )
+              .withHttpHeaders(
+                xSessionId,
+                "Csrf-Token" -> "nocheck"
+              )
+              .post(
+                Map(
+                  "tradingName_yesNo" -> Seq("false"),
+                  "tradingName_value" -> Seq("")
+                ))
+
+            whenReady(result) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get(PartnershipTradingNamePage(1))
+              pageData mustBe Some(TradingName(hasValue = false, None))
+            }
           }
         }
+      }
+
+      "form with errors" should {
+        "return 400 bad request " when {
+          "no radio option is selected by the user" in {
+            given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
+
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(
+                Map(
+                  "tradingName_yesNo" -> Seq.empty,
+                  "tradingName_value" -> Seq.empty
+                ))
+
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.title must include(
+                "Does the partnership use a trading name that is different from its registered name?")
+              page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include(
+                "Select whether the business has a different trading name")
+            }
+          }
+
+          "yes radio option is selected by the user but no trading name supplied" in {
+            given.commonPrecondition
+            addUserAnswersToSession(emptyUserAnswers)
+
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(
+                Map(
+                  "tradingName_yesNo" -> Seq("true"),
+                  "tradingName_value" -> Seq.empty
+                ))
+
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.title must include(
+                "Does the partnership use a trading name that is different from its registered name?")
+              page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include(
+                "Enter the trading name")
+            }
+          }
+
+        }
+
       }
     }
   }
-
 }

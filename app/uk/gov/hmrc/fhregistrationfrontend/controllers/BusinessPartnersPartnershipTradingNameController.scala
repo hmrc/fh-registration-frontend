@@ -16,22 +16,26 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.{tradingNameForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{PartnershipTradingNamePage => page}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersPartnershipTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig)(val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
@@ -43,52 +47,54 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
     else "#"
   }
   val businessType = "partnership"
-  val postAction = routes.BusinessPartnersPartnershipTradingNameController.next()
+  def postAction(index: Int, mode: Mode) = routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
   val partner = "Test User"
 
   private def getBusinessType: String = config.getRandomBusinessType
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_has_trading_name(tradingNameForm, businessType, partner, postAction, backUrl))
-        .withCookies(Cookie("businessType", getBusinessType))
-        .bakeCookies() // TODO [DLS-7603] - temp save4later solution
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val currentPage = page(index)
+    val formData = request.userAnswers.get(currentPage)
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+
+    Ok(
+      view
+        .business_partners_has_trading_name(prepopulatedForm, businessType, partner, postAction(index, mode), backUrl))
+      .withCookies(Cookie("businessType", getBusinessType))
+      .bakeCookies() // TODO [DLS-7603] - temp save4later solution
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      tradingNameForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
-              view.business_partners_has_trading_name(formWithErrors, businessType, partner, postAction, backUrl))
-          },
-          tradingName => {
-            //TODO [DLS-7603] - Todo cache tradingName data and fetch type of legal entity for the partner from save4later cache
-            request.cookies.get("businessType").map(_.value) match {
-              case Some(businessType) if businessType.equals("partnership") =>
-                Redirect(routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode))
-              case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-                Redirect(routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load())
-              case Some(unexpectedBusinessType) =>
-                logger.warn(
-                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, $unexpectedBusinessType refreshing the page ")
-                Redirect(routes.BusinessPartnersPartnershipTradingNameController.load().url).discardingCookies()
-              case _ =>
-                logger.error(
-                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unknown exception, returning $INTERNAL_SERVER_ERROR")
-                errorHandler.errorResultsPages(Results.InternalServerError)
-            }
+              view.business_partners_has_trading_name(
+                formWithErrors,
+                businessType,
+                partner,
+                postAction(index, mode),
+                backUrl)))
+        },
+        tradingName => {
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
+            case Some(businessType) if businessType.equals("partnership") =>
+              routes.BusinessPartnersPartnershipVatNumberController.load()
+            case Some(businessType) if businessType.equals("limited-liability-partnership") =>
+              routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
+            case _ =>
+              logger.warn(
+                s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
+              routes.BusinessPartnersController.load()
           }
-        ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
-    } else {
-      errorHandler
-        .errorResultsPages(Results.NotFound) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
-    }
+
+          val currentPage = page(index)
+          val updatedUserAnswers = request.userAnswers.set(currentPage, tradingName)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+        }
+      ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   }
 
 }

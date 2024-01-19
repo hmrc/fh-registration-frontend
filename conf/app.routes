@@ -83,8 +83,11 @@ POST        /business-partners/partner-trading-name/:index                @uk.go
 GET         /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-business-partners/partner-trading-name/:index                @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsTradingNameController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.load()
-POST        /business-partners/partnership-trading-name                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.next()
+GET         /business-partners/partnership-trading-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partnership-trading-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/partnership-trading-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partnership-trading-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipTradingNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/partnership-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipVatNumberController.next(index: Int, mode: Mode = NormalMode)
