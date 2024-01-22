@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.enterAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import models.{Mode, NormalMode, UserAnswers}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
@@ -47,7 +47,7 @@ class BusinessPartnersEnterAddressController @Inject()(
   import actions._
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(EnterAddressPage(index))
-    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    val prepopulatedForm = formData.map(data => enterAddressForm.fill(data)).getOrElse(enterAddressForm)
     Ok(
       view
         .business_partners_enter_address(
@@ -61,7 +61,7 @@ class BusinessPartnersEnterAddressController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    chooseAddressForm
+    enterAddressForm
       .bindFromRequest()
       .fold(
         formWithErrors => {
