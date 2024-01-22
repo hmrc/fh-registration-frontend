@@ -33,7 +33,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             "render the partnership-vat-registration-number page" when {
                 "there are user answers but no form data" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(emptyUserAnswers)
 
                     val result = buildRequest(route(mode))
@@ -52,7 +51,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                 "there are user answers but no VAT Reg Num is provided" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(userAnswersWithPageData(withoutVatRegNum))
 
                     val result = buildRequest(route(mode))
@@ -73,7 +71,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                 "there are user answers and VAT Reg Num is provided" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(userAnswersWithPageData(withVatRegNum))
 
                     val result = buildRequest(route(mode))
@@ -120,7 +117,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
                     s"redirect to the correct page and $userAnswersAction userAnswers ${answers._2}" when {
                         "Yes is selected and Vat Number supplied, and legal entity type is Partnership" in {
                             given.commonPrecondition
-
                             addUserAnswersToSession(answers._1)
 
                             val result = buildRequest(route(mode))
@@ -143,7 +139,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                         "No is selected, and legal entity type is Partnership" in {
                             given.commonPrecondition
-
                             addUserAnswersToSession(answers._1)
 
                             val result = buildRequest(route(mode))
@@ -162,7 +157,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                         "Yes is selected and Vat Number supplied, and legal entity type is Limited Liability Partnership" in {
                             given.commonPrecondition
-
                             addUserAnswersToSession(emptyUserAnswers)
 
                             val result = buildRequest(route(mode))
@@ -184,7 +178,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                         "No is selected, and legal entity type is Limited Liability Partnership" in {
                             given.commonPrecondition
-
                             addUserAnswersToSession(emptyUserAnswers)
 
                             val result = buildRequest(route(mode))
@@ -226,7 +219,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
             "Return 400" when {
                 "Radio button option not selected" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(emptyUserAnswers)
 
                     val result = buildRequest(route(mode))
@@ -247,7 +239,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                 "Yes is selected but VAT Number not supplied" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(emptyUserAnswers)
 
                     val result = buildRequest(route(mode))
@@ -268,7 +259,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                 "the form hasVat field is invalid format" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(emptyUserAnswers)
 
                     val result = buildRequest(route(mode))
@@ -289,7 +279,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                 "the vatnumber field is invalid format" in {
                     given.commonPrecondition
-
                     addUserAnswersToSession(emptyUserAnswers)
 
                     val result = buildRequest(route(mode))
