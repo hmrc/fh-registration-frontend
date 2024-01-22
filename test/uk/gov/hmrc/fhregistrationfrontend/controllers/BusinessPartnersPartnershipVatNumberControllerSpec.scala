@@ -66,7 +66,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           setupDataRequiredAction(userAnswers)
 
           setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
           val request = FakeRequest()
@@ -93,7 +92,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           setupDataRequiredAction(userAnswers)
 
           setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
           val request = FakeRequest()
@@ -114,7 +112,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -137,7 +134,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -159,7 +155,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -180,7 +175,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -204,7 +198,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -229,7 +222,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 

@@ -66,6 +66,8 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
                         page.getElementsByTag("h1").text() must include("Does Test Partner have a UK VAT registration number?")
                         val vatRegistrationNumberField = page.getElementById("vatNumber_value")
                         vatRegistrationNumberField.hasAttr("value") mustBe false
+                        val noRadioButton = page.getElementById("vatNumber_yesNo-2")
+                        noRadioButton.hasAttr("checked") mustBe true
                     }
                 }
 
