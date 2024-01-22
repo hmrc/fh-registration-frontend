@@ -42,7 +42,6 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
     new BusinessPartnersPartnershipNameController(commonDependencies, views, mockActions, mockSessionCache)(mockMcc)
 
   val PartnershipNameTitle = "What is the name of the partnership? - Business partners"
-  val pageNotFoundTitle = "Page not found"
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
