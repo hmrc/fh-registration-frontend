@@ -63,7 +63,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
                 .business_partners_enter_crn(formWithErrors, companyName, businessType, postAction, backLink))
           },
           regNumber => {
-            Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
+            Redirect(routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode))
           }
         )
     } else {

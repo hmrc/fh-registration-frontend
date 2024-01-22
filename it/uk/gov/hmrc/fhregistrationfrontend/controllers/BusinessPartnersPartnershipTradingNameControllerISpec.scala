@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
@@ -101,7 +102,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
     }
 
     s"POST ${route(mode)}" when {
-      val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+      val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
       val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
       val businessPartnersUrl: String = routes.BusinessPartnersController.load().url
 

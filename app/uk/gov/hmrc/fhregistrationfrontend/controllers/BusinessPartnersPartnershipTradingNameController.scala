@@ -81,7 +81,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
         tradingName => {
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType) if businessType.equals("partnership") =>
-              routes.BusinessPartnersPartnershipVatNumberController.load()
+              routes.BusinessPartnersPartnershipVatNumberController.load(index, mode)
             case Some(businessType) if businessType.equals("limited-liability-partnership") =>
               routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
             case _ =>
