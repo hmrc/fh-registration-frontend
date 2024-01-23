@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -9,7 +10,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersUnincorporatedBodyNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnersUnincorporatedBodyNameController.load().url.drop(6)
+  val route: String = routes.BusinessPartnersUnincorporatedBodyNameController.load(index = 1, NormalMode).url.drop(6)
   val unincorpBodyTradingNameUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
   s"GET $route" should {
