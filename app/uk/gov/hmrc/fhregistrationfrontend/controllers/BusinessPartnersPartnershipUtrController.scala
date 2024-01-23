@@ -39,7 +39,7 @@ class BusinessPartnersPartnershipUtrController @Inject()(
   val partnerName = "test partner"
   val businessPartnerType = ""
   val postAction: Call = routes.BusinessPartnersPartnershipUtrController.next(1, NormalMode)
-  val backLink: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+  val backLink: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(page(index))

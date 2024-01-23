@@ -55,7 +55,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
     )(mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
-    val partnershipUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load().url
+    val partnershipUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load(index, mode).url
     val partnershipRegisteredAddressPage: String =
       routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
 

@@ -33,14 +33,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipVatNumberController @Inject()(
-                                                                ds: CommonPlayDependencies,
-                                                                view: Views,
-                                                                actions: Actions,
-                                                                config: FrontendAppConfig,
-                                                                val sessionCache: SessionRepository)(
-                                                                cc: MessagesControllerComponents
-                                                              )(implicit val ec: ExecutionContext)
-  extends AppController(ds, cc) with ControllerHelper {
+  ds: CommonPlayDependencies,
+  view: Views,
+  actions: Actions,
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
+  cc: MessagesControllerComponents
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
@@ -97,8 +97,8 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
           val page = EnterVatNumberPage(index)
           val nextPage = request.cookies.get("businessType").map(_.value) match {
             case Some(businessType)
-              if businessType.equals("partnership") || (businessType
-                .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
+                if businessType.equals("partnership") || (businessType
+                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
               routes.BusinessPartnersPartnershipUtrController.load(1, mode)
             case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
               routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
