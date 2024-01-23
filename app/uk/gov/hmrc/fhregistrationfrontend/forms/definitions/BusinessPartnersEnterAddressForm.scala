@@ -36,6 +36,6 @@ object BusinessPartnersEnterAddressForm {
     s"$enterAddressKey.postcode" -> optional(postcode)
   )(BusinessPartnersEnterAddress.apply)(BusinessPartnersEnterAddress.unapply)
 
-  val chooseAddressForm = Form(enterAddressMapping)
+  val enterAddressForm = Form(enterAddressMapping)
 
 }

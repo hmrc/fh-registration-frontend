@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.enterAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
       // Todo get this from cache later
       Ok(
         view
-          .business_partners_enter_registered_address(chooseAddressForm, postAction, partnerName, backLink))
+          .business_partners_enter_registered_address(enterAddressForm, postAction, partnerName, backLink))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -51,7 +51,7 @@ class BusinessPartnersCorporateBodyEnterAddressController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      chooseAddressForm
+      enterAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
