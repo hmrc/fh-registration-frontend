@@ -64,7 +64,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
       "Render the business partner address page" when {
-        "the new business partner pages are enabled and there are no user answers for the page" in {
+        "there are no user answers" in {
           setupDataRequiredAction(emptyUserAnswers)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -78,7 +78,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           reset(mockActions)
         }
 
-        "the new business partner pages are enabled and there are user answers for the page" in {
+        "there are user answers" in {
           val userAnswers = createUserAnswers(UkAddressLookup(Some("44 test lane"), "SW1A 2AA"))
           setupDataRequiredAction(userAnswers)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
