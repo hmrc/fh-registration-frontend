@@ -28,7 +28,7 @@ object BusinessPartnerUnincorporatedBodyHelper {
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerLegalEntity")),
-          Messages("fh.business_partners.entity_type.unincorporated_body.label"),
+          Messages("fh.business_partners.entity_type.unincorporatedBody.label"),
           None,
           GroupRow.Member
         ),

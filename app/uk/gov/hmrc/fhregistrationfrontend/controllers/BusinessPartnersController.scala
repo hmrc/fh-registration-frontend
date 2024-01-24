@@ -48,9 +48,6 @@ class BusinessPartnersController @Inject()(
     val optPreviousSelectedAnswers = {
       request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
     }
-    println("*********************************")
-    println(request.optUserAnswers)
-    println(optPreviousSelectedAnswers)
     val prepopulatedForm = optPreviousSelectedAnswers match {
       case Some(data) => businessPartnerTypeForm.fill(data)
       case None       => businessPartnerTypeForm
@@ -59,7 +56,6 @@ class BusinessPartnersController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction.async { implicit request =>
-    println(request.body)
     businessPartnerTypeForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(
@@ -67,9 +63,6 @@ class BusinessPartnersController @Inject()(
         )
       },
       businessType => {
-
-        println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        println(businessType)
         val nextUrl = businessType match {
           case BusinessPartnerType.UnincorporatedBody =>
             routes.BusinessPartnersUnincorporatedBodyNameController.load()

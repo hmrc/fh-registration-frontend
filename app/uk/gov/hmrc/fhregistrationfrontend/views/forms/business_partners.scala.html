@@ -120,9 +120,9 @@
             Some(Messages("fh.business_partners.entity_type.individual.value"))
           ),
           RadioParams(
-            Messages("fh.business_partners.entity_type.sole_proprietor.value"),
-            Messages("fh.business_partners.entity_type.sole_proprietor.label"),
-            Some(Messages("fh.business_partners.entity_type.sole_proprietor.value"))
+            Messages("fh.business_partners.entity_type.soleProprietor.value"),
+            Messages("fh.business_partners.entity_type.soleProprietor.label"),
+            Some(Messages("fh.business_partners.entity_type.soleProprietor.value"))
           ),
           RadioParams(
             Messages("fh.business_partners.entity_type.partnership.value"),
@@ -130,19 +130,19 @@
             Some(Messages("fh.business_partners.entity_type.partnership.value"))
           ),
           RadioParams(
-            Messages("fh.business_partners.entity_type.limited_liability_partnership.value"),
-            Messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
-            Some(Messages("fh.business_partners.entity_type.limited_liability_partnership.value"))
+            Messages("fh.business_partners.entity_type.limitedLiabilityPartnership.value"),
+            Messages("fh.business_partners.entity_type.limitedLiabilityPartnership.label"),
+            Some(Messages("fh.business_partners.entity_type.limitedLiabilityPartnership.value"))
           ),
           RadioParams(
-            Messages("fh.business_partners.entity_type.corporate_body.value"),
-            Messages("fh.business_partners.entity_type.corporate_body.label"),
-            Some(Messages("fh.business_partners.entity_type.corporate_body.value"))
+            Messages("fh.business_partners.entity_type.corporateBody.value"),
+            Messages("fh.business_partners.entity_type.corporateBody.label"),
+            Some(Messages("fh.business_partners.entity_type.corporateBody.value"))
           ),
           RadioParams(
-            Messages("fh.business_partners.entity_type.unincorporated_body.value"),
-            Messages("fh.business_partners.entity_type.unincorporated_body.label"),
-            Some(Messages("fh.business_partners.entity_type.unincorporated_body.value"))
+            Messages("fh.business_partners.entity_type.unincorporatedBody.value"),
+            Messages("fh.business_partners.entity_type.unincorporatedBody.label"),
+            Some(Messages("fh.business_partners.entity_type.unincorporatedBody.value"))
           )
         )
       )
@@ -152,7 +152,7 @@
       @business_partners_individual(businessPartnerForm)
     </div>
 
-    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.sole_proprietor.value")">
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.soleProprietor.value")">
       @business_partners_sole_proprietor(businessPartnerForm)
     </div>
 
@@ -160,15 +160,15 @@
       @business_partners_partnership(businessPartnerForm)
     </div>
 
-    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.limited_liability_partnership.value")">
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.limitedLiabilityPartnership.value")">
       @business_partners_liability_partnership(businessPartnerForm)
     </div>
 
-    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.corporate_body.value")">
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.corporateBody.value")">
       @business_partners_corporate_body(businessPartnerForm)
     </div>
 
-    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporated_body.value")">
+    <div class="form-group panel js-hidden" id="@Messages("fh.business_partners.entity_type.unincorporatedBody.value")">
       @business_partners_unincorporated_body(businessPartnerForm)
     </div>
 

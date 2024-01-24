@@ -28,7 +28,7 @@ object LLPSummaryHelper {
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(messages("fh.businessPartners.summary.businessType.label")),
-          messages("fh.business_partners.entity_type.limited_liability_partnership.label"),
+          messages("fh.business_partners.entity_type.limitedLiabilityPartnership.label"),
           None,
           GroupRow.Member
         ),

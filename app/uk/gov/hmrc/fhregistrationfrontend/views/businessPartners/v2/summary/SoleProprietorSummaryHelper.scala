@@ -28,7 +28,7 @@ object SoleProprietorSummaryHelper {
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(messages("fh.businessPartners.summary.businessType.label")),
-          messages("fh.business_partners.entity_type.sole_proprietor.label"),
+          messages("fh.business_partners.entity_type.soleProprietor.label"),
           None,
           GroupRow.Member
         ),
