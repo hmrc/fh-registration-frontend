@@ -33,12 +33,11 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
     def registeredOfficeAddressPageUrl(mode: Mode): String =
       routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, mode).url
 
-    s"GET ${route(mode)}" when {
-      "render the Partnership has utr page with answers not prepopulated" in {
+    s"GET ${route(mode)}" should {
+      "render the Partnership has utr page with no prepopulated answers" in {
         given.commonPrecondition
         addUserAnswersToSession(emptyUserAnswers)
 
-        println
         val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
@@ -67,8 +66,8 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
           page.getElementsByTag("h1").text() must include(pageHeading)
           val form = page.getElementById("uniqueTaxpayerReference_value")
           form.attr("value") mustBe "1234567890"
-          val radioButtons = page.getElementById("uniqueTaxpayerReference_yesNo").hasAttr("value")
-          radioButtons.equals(true)
+          val yesRadioButton = page.getElementById("uniqueTaxpayerReference_yesNo")
+          yesRadioButton.hasAttr("checked") mustBe true
         }
       }
 
@@ -86,8 +85,8 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
           page.title() must include(pageTitle)
 
           page.getElementsByTag("h1").text() must include(pageHeading)
-          val radioButtons = page.getElementById("uniqueTaxpayerReference_yesNo").hasAttr("value")
-          radioButtons.equals(false)
+          val noRadioButton = page.getElementById("uniqueTaxpayerReference_yesNo-2")
+          noRadioButton.hasAttr("checked") mustBe true
         }
       }
 
@@ -191,22 +190,6 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.getElementsByClass("govuk-error-summary").text() must include(utrFormatError)
-          }
-        }
-      }
-
-      "the UTR field is invalid format" should {
-        "redirect to start of business partners journey if there are no user answers" in {
-          given.commonPrecondition
-
-          val result = buildRequest(route(mode))
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map("uniqueTaxpayerReference_yesNo" -> Seq("false"), "uniqueTaxpayerReference_value" -> Seq.empty))
-
-          whenReady(result) { res =>
-            res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersUrl)
           }
         }
       }

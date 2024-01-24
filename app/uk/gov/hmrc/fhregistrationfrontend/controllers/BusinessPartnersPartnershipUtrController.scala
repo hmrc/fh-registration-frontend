@@ -39,14 +39,21 @@ class BusinessPartnersPartnershipUtrController @Inject()(
   val partnerName = "test partner"
   val businessPartnerType = ""
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipUtrController.next(index, mode)
-  val backLink: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
+  def backLink(index: Int, mode: Mode): String =
+    routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val formData = request.userAnswers.get(page(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(view
-      .business_partners_has_utr(prepopulatedForm, partnerName, businessPartnerType, postAction(index, mode), backLink))
+    Ok(
+      view
+        .business_partners_has_utr(
+          prepopulatedForm,
+          partnerName,
+          businessPartnerType,
+          postAction(index, mode),
+          backLink(index, mode)))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
@@ -61,7 +68,7 @@ class BusinessPartnersPartnershipUtrController @Inject()(
                 partnerName,
                 businessPartnerType,
                 postAction(index, mode),
-                backLink)))
+                backLink(index, mode))))
         },
         businessPartnersUtr => {
           val pageToCache = page(index)

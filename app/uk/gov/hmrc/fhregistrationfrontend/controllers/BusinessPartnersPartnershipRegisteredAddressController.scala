@@ -50,7 +50,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
 
   def backUrl(index: Int, mode: Mode): String =
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipUtrController.load(1, NormalMode).url
+      routes.BusinessPartnersPartnershipUtrController.load(index, mode).url
     else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
     else
