@@ -17,13 +17,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorUtrPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.Future
 
 class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -32,72 +40,80 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
   override lazy val views = app.injector.instanceOf[Views]
 
   val mockAppConfig = mock[FrontendAppConfig]
+  lazy val mockSession = mock[SessionRepository]
+  val index = 1
 
   val controller =
-    new BusinessPartnersSoleProprietorUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersSoleProprietorUtrController(commonDependencies, views, mockActions, mockSession)(mockMcc)
 
-  "load" should {
-    "Render the SoleProprietor Utr page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the SoleProprietor Utr page" when {
+        "no user answers supplied" in {
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
-        reset(mockActions)
-      }
-    }
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
 
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "the new business partner pages are enabled" should {
-      "redirect to the Partner Address page" when {
-        "the form has no errors and UTR supplied" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              ("uniqueTaxpayerReference_yesNo", "true"),
-              ("uniqueTaxpayerReference_value", "1234567890"))
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load().url)
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
+          reset(mockActions)
+        }
+
+        "user answers supplied" in {
+          val userAnswers =
+            UserAnswers(testUserId).set[Utr](SoleProprietorUtrPage(index), Utr("1234567890")).success.value
+          setupDataRequiredAction(userAnswers)
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("What is the partner’s Corporation Tax Unique Taxpayer Reference (UTR)?")
           reset(mockActions)
         }
       }
     }
 
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-          .withFormUrlEncodedBody(("chosenAddress", "1"))
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+    s"next when in $mode" when {
+      "redirect to the Partner Address page" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers)
 
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSession.set(any())).thenReturn(Future.successful(true))
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            ("uniqueTaxpayerReference_yesNo", "true"),
+            ("uniqueTaxpayerReference_value", "1234567890"))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe SEE_OTHER
+
+        redirectLocation(result).get should include(routes.BusinessPartnersAddressController.load(index, mode).url)
+        reset(mockActions)
+      }
+
+      "return 400 when supplied with empty form data" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers)
+
+        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+        when(mockSession.set(any())).thenReturn(Future.successful(true))
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            "uniqueTaxpayerReference_yesNo" -> "",
+            "uniqueTaxpayerReference_value" -> ""
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+        status(result) shouldBe BAD_REQUEST
         reset(mockActions)
       }
     }

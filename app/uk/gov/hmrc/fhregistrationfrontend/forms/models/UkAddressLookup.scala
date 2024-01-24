@@ -18,7 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-case class UkAddressLookup(addressLine: Option[String], postcode: String)
+case class UkAddressLookup(
+  addressLine: Option[String],
+  postcode: String,
+  lookupResult: Map[String, Address] = Map.empty)
 
 object UkAddressLookup {
   implicit val format = Json.format[UkAddressLookup]

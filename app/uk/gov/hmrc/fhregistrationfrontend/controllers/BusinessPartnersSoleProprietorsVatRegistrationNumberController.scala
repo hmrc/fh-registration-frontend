@@ -17,22 +17,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.Mode
-import models.NormalMode
-import play.api.data.Form
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.vatNumberForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import models.{Mode, NormalMode}
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BusinessPartnersPartnershipVatNumberController @Inject()(
+class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -41,53 +38,37 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
     extends AppController(ds, cc) with ControllerHelper {
-
   import actions._
 
-  val form: Form[VatNumber] = vatNumberForm
-  val partnerName: String = "Test Partner"
-  val businessPartnerType: String = "partnership"
-
-  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipVatNumberController.next(index, mode)
-
-  def getBusinessType: String = config.getRandomBusinessType()
-
-  val backUrl: String = {
-    if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
-    else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
-    else
-      "#"
-  }
+  val partnerName: String = "test partner"
+  val backUrl: String = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, NormalMode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.next(index, mode)
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(EnterVatNumberPage(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-
+    val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
     Ok(
-      view.business_partners_has_vat_number(
+      view.business_partners_enter_vat_registration(
         prepopulatedForm,
-        businessPartnerType,
-        partnerName,
         postAction(index, mode),
+        partnerName,
         backUrl
       )
-    ).withCookies(Cookie("businessType", getBusinessType))
+    )
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
+    vatNumberForm
       .bindFromRequest()
       .fold(
         formWithErrors => {
           Future.successful(
             BadRequest(
-              view.business_partners_has_vat_number(
+              view.business_partners_enter_vat_registration(
                 formWithErrors,
-                businessPartnerType,
-                partnerName,
                 postAction(index, mode),
+                partnerName,
                 backUrl
               )
             )
@@ -95,13 +76,9 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
         },
         vatNumber => {
           val page = EnterVatNumberPage(index)
-          val nextPage = request.cookies.get("businessType").map(_.value) match {
-            case Some(businessType)
-                if businessType.equals("partnership") || (businessType
-                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-              routes.BusinessPartnersPartnershipUtrController.load()
-            case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-              routes.BusinessPartnersPartnershipRegisteredAddressController.load()
+          val nextPage = vatNumber.value match {
+            case Some(vatNumber) => routes.BusinessPartnersAddressController.load(1, mode)
+            case None            => routes.BusinessPartnersSoleProprietorUtrController.load(index, mode)
           }
 
           val updatedUserAnswers = request.userAnswers.set(page, vatNumber)

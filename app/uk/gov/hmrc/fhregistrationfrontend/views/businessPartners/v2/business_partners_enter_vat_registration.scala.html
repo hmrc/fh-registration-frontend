@@ -26,9 +26,11 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.views.businessPartners.v2._
 
-@this(layout: layout, viewHelpers: ViewHelpers)
+@this(layout: layout,
+    formHelper: FormWithCSRF,
+    viewHelpers: ViewHelpers)
 
-@(vatNumberForm: Form[VatNumber], partnerName: String, backLink: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(vatNumberForm: Form[VatNumber], postAction: Call, partnerName: String, backLink: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 
 @titlePrefix = @{
@@ -70,7 +72,7 @@
 
 @layout(title = titlePrefix + title, backUrl = Some(backLink)) {
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.BusinessPartnersVatRegistrationNumberController.next()) {
+    @formHelper(action = postAction){
 
         @if(vatNumberForm.errors.nonEmpty) {
 

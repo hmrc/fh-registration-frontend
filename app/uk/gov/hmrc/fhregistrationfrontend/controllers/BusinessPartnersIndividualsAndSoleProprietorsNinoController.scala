@@ -22,9 +22,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.NationalInsuranceNumberForm.nationalInsuranceNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
-import models.Mode
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsNinoPage, PartnerTypePage}
+import models.{Mode, NormalMode}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsNinoPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,6 +53,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
     val items = radioHelper.conditionalYesNoRadio(prepopulatedForm)
 
     Ok(view.business_partners_has_nino(prepopulatedForm, items, postAction(index, mode)))
+      .withCookies(Cookie("businessType", getBusinessType))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
@@ -69,13 +69,12 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
         nino => {
           val page = IndividualsAndSoleProprietorsNinoPage(index)
           val ninoForIndividual = "AB123456C"
-          val nextPage = request.userAnswers.get(PartnerTypePage(index)) match {
+          val nextPage = request.cookies.get("businessType").map(_.value) match {
 
-            case Some(businessType)
-                if businessType.equals(BusinessPartnerType.Individual) && nino.value.contains(ninoForIndividual) =>
-              routes.BusinessPartnersAddressController.load()
-            case Some(businessType) if businessType.equals(BusinessPartnerType.Individual) =>
-              routes.BusinessPartnersVatRegistrationNumberController.load()
+            case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
+              routes.BusinessPartnersAddressController.load(index, mode)
+            case Some(businessType) if businessType.equals("individual") =>
+              routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
             case _ => routes.BusinessPartnersController.load(index, mode)
           }
 

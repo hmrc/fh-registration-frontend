@@ -40,6 +40,7 @@ class BusinessPartnersUnincorporatedBodyUtrController @Inject()(
   val registeredAddressPage: Call = routes.BusinessPartnersUnincorporatedBodyRegisteredAddressController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
+    println("***********HERE***************")
     if (config.newBusinessPartnerPagesEnabled) {
       //Todo get partnerName from cache
       Ok(view.business_partners_has_utr(businessPartnerUtrForm, partnerName, businessPartnerType, postAction, backLink))

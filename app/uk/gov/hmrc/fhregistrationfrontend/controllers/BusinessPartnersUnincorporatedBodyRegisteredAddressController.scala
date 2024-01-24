@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUkAddressLookupForm.{businessPartnersUkAddressLookupForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -50,7 +50,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
     if (config.newBusinessPartnerPagesEnabled) {
       Ok(
         view.business_partners_registered_address(
-          businessPartnersAddressForm,
+          businessPartnersUkAddressLookupForm,
           partnerName,
           backAction,
           postAction,
@@ -64,7 +64,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm
+      businessPartnersUkAddressLookupForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
@@ -94,10 +94,10 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressController @Inject()(
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load())
                   else
-                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+                    Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
 
                 case Left(AddressLookupErrorResponse(_)) =>
-                  val formWithErrors = businessPartnersAddressForm
+                  val formWithErrors = businessPartnersUkAddressLookupForm
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
                   BadRequest(

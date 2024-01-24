@@ -17,26 +17,24 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.UserAnswers
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import play.api.mvc.Cookie
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.EnterVatNumberPage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.Future
 
-class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
+class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
+    extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -46,7 +44,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
   val index: Int = 1
 
   val controller =
-    new BusinessPartnersPartnershipVatNumberController(
+    new BusinessPartnersSoleProprietorsVatRegistrationNumberController(
       commonDependencies,
       views,
       mockActions,
@@ -55,26 +53,23 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
     )(mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
-    val partnershipUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load().url
-    val partnershipRegisteredAddressPage: String =
-      routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
+    val partnerAddressPage: String = routes.BusinessPartnersAddressController.load(index, mode).url
+    val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load(index, mode).url
 
     s"load when in $mode" should {
-      "Render the businessPartnersPartnershipVatNumber page" when {
+      "Render the businessPartnersVatRegistrationNumber page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
           setupUserAction()
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
-
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("Does the partner have a UK VAT registration number?")
-          page.getElementById("vatNumber_value").hasAttr("value") mustBe false
           reset(mockActions)
         }
 
@@ -83,7 +78,6 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             true,
             Some("123456789")
           )
-
           val userAnswers = UserAnswers(testUserId)
             .set[VatNumber](EnterVatNumberPage(1), vatRegistrationNumber)
             .success
@@ -92,31 +86,28 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           setupDataRequiredAction(userAnswers)
 
           setupUserAction()
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
-
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("Does the partner have a UK VAT registration number?")
-          page.getElementById("vatNumber_value").attr("value") mustBe "123456789"
           reset(mockActions)
         }
       }
     }
 
     s"next when in $mode" should {
-      "redirect to the Partnership SA UTR page" when {
-        "Yes is selected and Vat Number supplied, and legal entity type is Partnership" in {
+      "redirect to the correct page" when {
+        "the form has no errors, yes is selected and vatnumber supplied" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-            .withCookies(Cookie("businessType", "partnership"))
             .withFormUrlEncodedBody(
               ("vatNumber_yesNo", "true"),
               ("vatNumber_value", "123456789")
@@ -126,107 +117,38 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
+          redirectLocation(result).get should include(partnerAddressPage)
           reset(mockActions)
         }
 
-        "No is selected, and legal entity type is Partnership" in {
+        "the form has no errors and no is selected" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-            .withCookies(Cookie("businessType", "partnership"))
-            .withFormUrlEncodedBody(
-              ("vatNumber_yesNo", "false")
-            )
-            .withMethod("POST")
-
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
-
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
-          reset(mockActions)
-        }
-
-        "No is selected, and legal entity type is Limited Liability Partnership" in {
-          val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
-
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
-          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-
-          val request = FakeRequest()
-            .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
             .withMethod("POST")
 
           val result = await(csrfAddToken(controller.next(index, mode))(request))
+
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipUtrPage)
+          redirectLocation(result).get should include(selfAssessmentUtrPage)
           reset(mockActions)
         }
       }
 
-      "redirect to the Partnership Registered Office Address page" when {
-        "Yes is selected and Vat Number supplied, and legal entity type is Limited Liability Partnership" in {
+      "return an error" when {
+        "no checkbox option is selected" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers)
 
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-            .withCookies(Cookie("businessType", "limited-liability-partnership"))
-            .withFormUrlEncodedBody(
-              ("vatNumber_yesNo", "true"),
-              ("vatNumber_value", "123456789")
-            )
-            .withMethod("POST")
-
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipRegisteredAddressPage)
-          reset(mockActions)
-        }
-      }
-
-      "Return the correct error" when {
-        "the user selects yes but doesn't enter a VAT number" in {
-          val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
-
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
-          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-
-          val request = FakeRequest()
-            .withCookies(Cookie("businessType", "limited-liability-partnership"))
-            .withFormUrlEncodedBody(
-              ("vatNumber_yesNo", "true"),
-              ("vatNumber_value", "")
-            )
-            .withMethod("POST")
-
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
-          status(result) shouldBe BAD_REQUEST
-          val page = Jsoup.parse(contentAsString(result))
-          page.title() should include("Does the partner have a UK VAT registration number?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter the VAT registration number")
-          reset(mockActions)
-        }
-
-        "the user doesn't select an option" in {
-          val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
-
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
-          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-
-          val request = FakeRequest()
-            .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(
               ("vatNumber_yesNo", ""),
               ("vatNumber_value", "")
@@ -234,11 +156,34 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             .withMethod("POST")
 
           val result = await(csrfAddToken(controller.next(index, mode))(request))
+
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
-          page.title() should include("Does the partner have a UK VAT registration number?")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
             "Select whether the business has a VAT registration number")
+          reset(mockActions)
+        }
+
+        "Yes option is selected but no VAT Number is entered" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers)
+
+          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              ("vatNumber_yesNo", "true"),
+              ("vatNumber_value", "")
+            )
+            .withMethod("POST")
+
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+          status(result) shouldBe BAD_REQUEST
+          val page = Jsoup.parse(contentAsString(result))
+          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
+            "Enter the VAT registration number")
           reset(mockActions)
         }
       }

@@ -16,60 +16,70 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import com.google.inject.{Inject, Singleton}
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterUtrForm.businessPartnersEnterUtrForm
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.SoleProprietorUtrPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-@Singleton
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
+
 class BusinessPartnersSoleProprietorUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
+
   import actions._
 
   val partnerName: String = "{{partner name}}"
-  val postAction: Call = routes.BusinessPartnersSoleProprietorUtrController.next()
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersSoleProprietorUtrController.next(index: Int, mode: Mode)
   val businessPartnerType: String = "SoleProprietor"
-  val backLink: String = routes.BusinessPartnersVatRegistrationNumberController.load().url
+  def backUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view.business_partners_enter_utr_number(
-          businessPartnersEnterUtrForm,
-          partnerName,
-          businessPartnerType,
-          postAction,
-          backLink))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
+    val formData = request.userAnswers.get(SoleProprietorUtrPage(index))
+    val prepopulatedForm =
+      formData.map(data => businessPartnersEnterUtrForm.fill(data)).getOrElse(businessPartnersEnterUtrForm)
+    Ok(
+      view.business_partners_enter_utr_number(
+        prepopulatedForm,
+        partnerName,
+        businessPartnerType,
+        postAction(index, mode),
+        backUrl(index, mode)))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersEnterUtrForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
+    businessPartnersEnterUtrForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
               view.business_partners_enter_utr_number(
                 formWithErrors,
                 partnerName,
                 businessPartnerType,
-                postAction,
-                backLink))
-          },
-          businessPartnersUtr => Redirect(routes.BusinessPartnersAddressController.load())
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+                postAction(index, mode),
+                backUrl(index, mode))
+            ))
+        },
+        value => {
+          val updatedUserAnswers = request.userAnswers.set(SoleProprietorUtrPage(index), value)
+          val nextPage = routes.BusinessPartnersAddressController.load(index, mode)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorUtrPage(index))
+        }
+      )
   }
 }

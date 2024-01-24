@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.{Form, Mapping}
 import play.api.data.Forms.{mapping, nonEmptyText}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
+import play.api.data.{Form, Mapping}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 object BusinessPartnersChooseAddressForm {

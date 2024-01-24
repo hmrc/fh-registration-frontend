@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.enterAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
@@ -33,14 +33,23 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
 ) extends AppController(ds, cc) {
   import actions._
 
-  val partnerName = "Test User"
-  val journeyType = "enterRegisteredOfficeAddress"
+  val partnerName: String = "Test User"
+  val journeyType: String = "enterRegisteredOfficeAddress"
+  val backLink: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
   val postAction: Call = routes.BusinessPartnersPartnershipEnterAddressController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      Ok(view.business_partners_enter_address(chooseAddressForm, postAction, partnerName, journeyType, "#"))
+      Ok(
+        view.business_partners_enter_address(
+          enterAddressForm,
+          postAction,
+          partnerName,
+          journeyType,
+          backLink
+        )
+      )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }
@@ -49,14 +58,22 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
   def next(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
       // Todo get this from cache later
-      chooseAddressForm
+      enterAddressForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_enter_address(formWithErrors, postAction, partnerName, journeyType, "#"))
+            BadRequest(
+              view.business_partners_enter_address(
+                formWithErrors,
+                postAction,
+                partnerName,
+                journeyType,
+                backLink
+              )
+            )
           },
           bpAddress => {
-            Ok(s"Next page! with form result: ${bpAddress.toString}")
+            Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
           }
         )
     } else {

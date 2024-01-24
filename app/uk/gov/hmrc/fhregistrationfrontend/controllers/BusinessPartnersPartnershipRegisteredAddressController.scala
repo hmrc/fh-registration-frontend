@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.connectors.AddressLookupErrorResponse
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersAddressForm.{businessPartnersAddressForm, postcodeKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUkAddressLookupForm.{businessPartnersUkAddressLookupForm, postcodeKey}
 import uk.gov.hmrc.fhregistrationfrontend.services.AddressService
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import models.NormalMode
@@ -47,7 +49,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
     if (getBusinessType == "partnership")
       routes.BusinessPartnersPartnershipUtrController.load().url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersVatRegistrationNumberController.load().url
+      routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode).url
     else
       "#"
   }
@@ -62,7 +64,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
       Ok(
         view
           .business_partners_registered_address(
-            businessPartnersAddressForm,
+            businessPartnersUkAddressLookupForm,
             partnerName,
             backUrl,
             postAction,
@@ -75,7 +77,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
 
   def next(): Action[AnyContent] = userAction.async { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersAddressForm
+      businessPartnersUkAddressLookupForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
@@ -107,9 +109,9 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
                   else if (addressListMap.size == 1)
                     Redirect(routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load())
                   else
-                    Redirect(routes.BusinessPartnersChooseAddressController.load())
+                    Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
                 case Left(AddressLookupErrorResponse(_)) =>
-                  val formWithErrors = businessPartnersAddressForm
+                  val formWithErrors = businessPartnersUkAddressLookupForm
                     .fill(bpAddress)
                     .withError(FormError(postcodeKey, "address.lookup.error"))
                   BadRequest(

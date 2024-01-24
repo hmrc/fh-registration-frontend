@@ -17,51 +17,72 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.NormalMode
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.data.Form
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnershipNameForm.{partnershipNameForm, partnershipNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnershipNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
-  val journeyType = "partnership"
-  val postAction: Call = routes.BusinessPartnersPartnershipNameController.next()
-  val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
-  val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
+  lazy val journeyType = "partnership"
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
+  def backAction(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+  def tradingNamePage(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
+  lazy val form: Form[String] = partnershipNameForm
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, partnershipNameForm, partnershipNameKey, backAction))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
+    val currentPage = PartnershipNamePage(index)
+    val formData = request.userAnswers.get(currentPage)
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+    Ok(
+      view
+        .business_partners_name(
+          journeyType,
+          postAction(index, mode),
+          prepopulatedForm,
+          partnershipNameKey,
+          backAction(index, mode)
+        ))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      partnershipNameForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
-              view.business_partners_name(journeyType, postAction, formWithErrors, partnershipNameKey, backAction))
-          },
-          partnership => {
-            Redirect(tradingNamePage)
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+              view.business_partners_name(
+                journeyType,
+                postAction(index, mode),
+                formWithErrors,
+                partnershipNameKey,
+                backAction(index, mode)
+              )
+            )
+          )
+        },
+        partnership => {
+          val currentPage = PartnershipNamePage(index)
+          val updatedUserAnswers = request.userAnswers.set(currentPage, partnership)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
+        }
+      )
   }
 }

@@ -38,7 +38,6 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   val businessPartnerType = "ltdLiabilityPartnership"
   val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
   val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
-  val tradingNamePage: Call = routes.BusinessPartnersPartnershipTradingNameController.load()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
@@ -69,7 +68,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
                 backAction))
           },
           ltdLiabilityPartnership => {
-            Redirect(tradingNamePage)
+            Redirect(routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode))
           }
         )
     } else {

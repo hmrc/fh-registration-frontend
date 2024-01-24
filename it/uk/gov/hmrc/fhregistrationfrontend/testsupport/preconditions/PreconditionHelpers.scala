@@ -19,8 +19,6 @@ trait PreconditionHelpers {
       .audit.writesAuditOrMerged()
       .user.isAuthorised()
       .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
       .fhddsBackend.hasNoEnrolmentProgress()
       .addressLookup.lookupAddress(isSuccess)
   }
@@ -30,8 +28,6 @@ trait PreconditionHelpers {
       .audit.writesAuditOrMerged()
       .user.isAuthorised()
       .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
       .fhddsBackend.hasNoEnrolmentProgress()
       .addressLookup.lookupSingleAddress(isSuccess)
   }
@@ -41,8 +37,6 @@ trait PreconditionHelpers {
       .audit.writesAuditOrMerged()
       .user.isAuthorised()
       .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
       .fhddsBackend.hasNoEnrolmentProgress()
       .addressLookup.lookupNoAddress(isSuccess)
   }

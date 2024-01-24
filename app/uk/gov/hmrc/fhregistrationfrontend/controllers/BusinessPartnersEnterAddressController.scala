@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.chooseAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersEnterAddressForm.enterAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import models.{Mode, NormalMode, UserAnswers}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnersEnterAddress
@@ -41,13 +41,13 @@ class BusinessPartnersEnterAddressController @Inject()(
 
   val partnerName: String = "Test User"
   val journeyType: String = "enterAddress"
-  val backUrl: String = routes.BusinessPartnersAddressController.load().url
+  val backUrl: String = routes.BusinessPartnersAddressController.load(1, NormalMode).url
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
 
   import actions._
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(EnterAddressPage(index))
-    val prepopulatedForm = formData.map(data => chooseAddressForm.fill(data)).getOrElse(chooseAddressForm)
+    val prepopulatedForm = formData.map(data => enterAddressForm.fill(data)).getOrElse(enterAddressForm)
     Ok(
       view
         .business_partners_enter_address(
@@ -61,7 +61,7 @@ class BusinessPartnersEnterAddressController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    chooseAddressForm
+    enterAddressForm
       .bindFromRequest()
       .fold(
         formWithErrors => {

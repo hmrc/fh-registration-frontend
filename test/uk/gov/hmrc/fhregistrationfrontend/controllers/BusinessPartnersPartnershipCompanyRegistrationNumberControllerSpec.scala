@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.mvc.Cookie
@@ -41,7 +42,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
       mockActions,
       mockAppConfig)(mockMcc)
 
-  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load().url
+  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
 
   "load" should {
     "Render the Company Registration page" when {

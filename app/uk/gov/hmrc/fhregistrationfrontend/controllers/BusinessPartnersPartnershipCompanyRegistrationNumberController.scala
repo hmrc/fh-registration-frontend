@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -35,7 +36,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   val businessType: String = "limited-liability-partnership"
   val companyName: String = "Test Partnership"
-  val backLink: String = routes.BusinessPartnersPartnershipTradingNameController.load().url
+  val backLink: String = routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
   val postAction: Call = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>
@@ -62,7 +63,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
                 .business_partners_enter_crn(formWithErrors, companyName, businessType, postAction, backLink))
           },
           regNumber => {
-            Redirect(routes.BusinessPartnersPartnershipVatNumberController.load())
+            Redirect(routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode))
           }
         )
     } else {
