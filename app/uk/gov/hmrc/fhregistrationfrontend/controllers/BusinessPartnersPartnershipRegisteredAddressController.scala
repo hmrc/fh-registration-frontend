@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.Mode
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -50,7 +50,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
 
   def backUrl(index: Int, mode: Mode): String =
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipUtrController.load().url
+      routes.BusinessPartnersPartnershipUtrController.load(1, NormalMode).url
     else if (getBusinessType == "limited-liability-partnership")
       routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
     else

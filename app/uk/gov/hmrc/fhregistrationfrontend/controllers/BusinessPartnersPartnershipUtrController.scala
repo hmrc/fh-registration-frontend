@@ -17,53 +17,59 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.NormalMode
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import models.{Mode, NormalMode}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersHasUtrForm.businessPartnerUtrForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersHasUtrForm.{businessPartnerUtrForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{PartnershipHasUtrPage => page}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipUtrController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
-  cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+  val sessionCache: SessionRepository)(cc: MessagesControllerComponents)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   val partnerName = "test partner"
   val businessPartnerType = ""
-  val postAction: Call = routes.BusinessPartnersPartnershipUtrController.next()
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipUtrController.next(index, mode)
   val backLink: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      Ok(view.business_partners_has_utr(businessPartnerUtrForm, partnerName, businessPartnerType, postAction, backLink))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(page(index))
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+
+    Ok(view
+      .business_partners_has_utr(prepopulatedForm, partnerName, businessPartnerType, postAction(index, mode), backLink))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      businessPartnerUtrForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
-              view.business_partners_has_utr(formWithErrors, partnerName, businessPartnerType, postAction, backLink))
-          },
-          businessPartnersUtr => {
-            Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode))
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+              view.business_partners_has_utr(
+                formWithErrors,
+                partnerName,
+                businessPartnerType,
+                postAction(index, mode),
+                backLink)))
+        },
+        businessPartnersUtr => {
+          val pageToCache = page(index)
+          val nextPage = routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
+
+          val updatedUserAnswers = request.userAnswers.set(pageToCache, businessPartnersUtr)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, pageToCache)
+        }
+      )
   }
 }
