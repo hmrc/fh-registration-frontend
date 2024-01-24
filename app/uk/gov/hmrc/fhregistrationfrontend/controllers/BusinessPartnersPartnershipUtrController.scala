@@ -59,7 +59,7 @@ class BusinessPartnersPartnershipUtrController @Inject()(
               view.business_partners_has_utr(formWithErrors, partnerName, businessPartnerType, postAction, backLink))
           },
           businessPartnersUtr => {
-            Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load())
+            Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode))
           }
         )
     } else {
