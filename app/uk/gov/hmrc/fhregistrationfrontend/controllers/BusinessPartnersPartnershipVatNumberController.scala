@@ -101,7 +101,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
                   .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
               routes.BusinessPartnersPartnershipUtrController.load()
             case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-              routes.BusinessPartnersPartnershipRegisteredAddressController.load()
+              routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
           }
 
           val updatedUserAnswers = request.userAnswers.set(page, vatNumber)

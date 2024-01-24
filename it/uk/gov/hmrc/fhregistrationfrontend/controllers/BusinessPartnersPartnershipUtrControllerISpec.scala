@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -10,7 +11,7 @@ class BusinessPartnersPartnershipUtrControllerISpec
   extends Specifications with TestConfiguration {
 
   val route: String = routes.BusinessPartnersPartnershipUtrController.load().url.drop(6)
-  val registeredOfficeAddressPageUrl: String = "/fhdds/business-partners/partnership-registered-office-address"
+  val registeredOfficeAddressPageUrl: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode).url
   val pageHeading = "Does test partner have a Self Assessment Unique Taxpayer Reference (UTR)?"
   val pageTitle = "Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?"
 

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, Mode, NormalMode}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
@@ -31,7 +32,9 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
 
   override lazy val views: Views = app.injector.instanceOf[Views]
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val partnershipRegOfficeAddressUrl: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
+  val index = 1
+  val partnershipRegOfficeAddressUrl: String =
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode).url
 
   val controller =
     new BusinessPartnersPartnershipUtrController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)

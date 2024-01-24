@@ -57,7 +57,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
   List(NormalMode, CheckMode).foreach { mode =>
     val partnershipUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load().url
     val partnershipRegisteredAddressPage: String =
-      routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
+      routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
 
     s"load when in $mode" should {
       "Render the businessPartnersPartnershipVatNumber page" when {
