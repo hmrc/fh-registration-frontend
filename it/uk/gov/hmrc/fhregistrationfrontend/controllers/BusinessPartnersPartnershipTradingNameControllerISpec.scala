@@ -103,7 +103,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
     s"POST ${route(mode)}" when {
       val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
-      val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+      val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode).url
       val businessPartnersUrl: String = routes.BusinessPartnersController.load().url
 
       "form with no errors" should {
