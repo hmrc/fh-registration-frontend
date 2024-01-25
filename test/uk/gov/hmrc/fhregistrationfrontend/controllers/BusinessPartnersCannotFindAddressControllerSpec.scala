@@ -35,7 +35,8 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val controller =
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
-  val enterPartnerRegOfficeAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
+  val enterPartnerRegOfficeAddressUrl: String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(1, NormalMode).url
   val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load(1, NormalMode).url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
   val enterUnincorpBodyRegOfficeAddressUrl: String =
