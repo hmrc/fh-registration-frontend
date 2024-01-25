@@ -17,57 +17,66 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.NormalMode
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm._
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyRegistrationNumberForm.{companyRegistrationNumberForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{CompanyRegistrationNumberPage => page}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
+
   import actions._
 
   val businessType: String = "limited-liability-partnership"
   val companyName: String = "Test Partnership"
-  val backLink: String = routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
-  val postAction: Call = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
+  def backLink(index: Int, mode: Mode): String = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index, mode)
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      Ok(
-        view
-          .business_partners_enter_crn(companyRegistrationNumberForm, companyName, businessType, postAction, backLink))
-        .withCookies(Cookie("businessType", businessType))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val formData = request.userAnswers.get(page(index))
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+
+    Ok(
+      view
+        .business_partners_enter_crn(prepopulatedForm, companyName, businessType, postAction(index, mode), backLink(index, mode)))
+      .withCookies(Cookie("businessType", businessType))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      //ToDo read this data from the cache after being stored before the redirect
-      companyRegistrationNumberForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
             BadRequest(
               view
-                .business_partners_enter_crn(formWithErrors, companyName, businessType, postAction, backLink))
-          },
-          regNumber => {
-            Redirect(routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode))
-          }
-        )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+                .business_partners_enter_crn(
+                  formWithErrors,
+                  companyName,
+                  businessType,
+                  postAction(index, mode),
+                  backLink(index, mode)))
+          )
+        },
+        regNumber => {
+          val currentPage = page(index)
+          val nextPage = routes.BusinessPartnersPartnershipVatNumberController.load(1, mode)
+          val updatedUserAnswers = request.userAnswers.set(currentPage, regNumber)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+        }
+      )
   }
 }
