@@ -99,7 +99,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
             case Some(businessType)
                 if businessType.equals("partnership") || (businessType
                   .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-              routes.BusinessPartnersPartnershipUtrController.load()
+              routes.BusinessPartnersPartnershipUtrController.load(index, mode)
             case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
               routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
           }

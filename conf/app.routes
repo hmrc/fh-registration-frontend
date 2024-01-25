@@ -37,8 +37,11 @@ POST        /business-partners/partner-address/:index                     @uk.go
 GET         /change-business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-business-partners/partner-address/:index                     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersAddressController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load()
-POST        /business-partners/partnership-self-assessment-unique-taxpayer-reference     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next()
+GET         /business-partners/partnership-self-assessment-unique-taxpayer-reference/:index     @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/partnership-self-assessment-unique-taxpayer-reference/:index   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/partnership-self-assessment-unique-taxpayer-reference/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/partnership-self-assessment-unique-taxpayer-reference/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipUtrController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/partner-vat-registration-number/:index                 @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersSoleProprietorsVatRegistrationNumberController.next(index: Int, mode: Mode = NormalMode)
