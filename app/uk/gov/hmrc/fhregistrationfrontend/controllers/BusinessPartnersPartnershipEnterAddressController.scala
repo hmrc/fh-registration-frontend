@@ -45,8 +45,6 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
   val journeyType: String = "enterRegisteredOfficeAddress"
 
   val backLink: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode).url
-  val postAction: Call = routes.BusinessPartnersPartnershipEnterAddressController.next()
-
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipEnterAddressController.next(index, mode)
 
