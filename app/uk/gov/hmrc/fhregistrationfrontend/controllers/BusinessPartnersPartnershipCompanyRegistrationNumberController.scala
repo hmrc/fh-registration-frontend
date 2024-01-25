@@ -41,7 +41,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   val businessType: String = "limited-liability-partnership"
   val companyName: String = "Test Partnership"
-  val backLink: String = routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
+  def backLink(index: Int, mode: Mode): String = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode).url
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index, mode)
 
@@ -51,7 +51,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
     Ok(
       view
-        .business_partners_enter_crn(prepopulatedForm, companyName, businessType, postAction(index, mode), backLink))
+        .business_partners_enter_crn(prepopulatedForm, companyName, businessType, postAction(index, mode), backLink(index, mode)))
       .withCookies(Cookie("businessType", businessType))
   }
 
@@ -68,7 +68,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
                   companyName,
                   businessType,
                   postAction(index, mode),
-                  backLink))
+                  backLink(index, mode)))
           )
         },
         regNumber => {

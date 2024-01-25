@@ -22,8 +22,8 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerISpec
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"GET ${route(mode)}" when {
-      "render the partnership-company-registration-number page with " when {
-        "there are useranswers but no form data" in {
+      "render the partnership-company-registration-number page" when {
+        "there are user answers but no form data" in {
           given.commonPrecondition
           addUserAnswersToSession(emptyUserAnswers)
 
