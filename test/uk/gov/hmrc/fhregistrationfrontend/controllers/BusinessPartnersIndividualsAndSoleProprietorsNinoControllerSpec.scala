@@ -62,7 +62,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
 
         "The business partner v2 pages are enabled and there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -80,7 +80,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
             .set[NationalInsuranceNumber](IndividualsAndSoleProprietorsNinoPage(1), nino)
             .success
             .value
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -98,7 +98,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
 
       "business type is neither Sole Proprietor or Individual" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, mode)
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
         val request = FakeRequest()
@@ -110,14 +110,19 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
         val result = await(csrfAddToken(controller.next(index, mode))(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get should include("/business-partners")
+        val expectedLocation = if (mode == NormalMode) {
+          "/business-partners/1"
+        } else {
+          "/change-business-partners/1"
+        }
+        redirectLocation(result).get should include(expectedLocation)
         reset(mockActions)
       }
 
       "redirect to VAT number page" when {
         "the Yes radio button is selected and a NINO is entered" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -138,7 +143,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
       "return 400" when {
         "a radio button is not selected" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
