@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
-import play.api.data.FormError
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -28,108 +27,119 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import models.NormalMode
+import play.api.data.FormError
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
   config: FrontendAppConfig,
-  addressService: AddressService)(
+  addressService: AddressService,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   // Todo get this from cache later
 
-  private def getBusinessType: String = config.getRandomBusinessType
+  private def getBusinessType: String = config.getRandomBusinessType()
 
-  val backUrl: String = {
+  def backUrl(index: Int, mode: Mode): String =
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipUtrController.load().url
+      routes.BusinessPartnersPartnershipUtrController.load(index, mode).url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode).url
+      routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
     else
       "#"
-  }
 
   val partnerName = "Test User"
   val journey = "partnership"
-  val postAction: Call = routes.BusinessPartnersPartnershipRegisteredAddressController.next()
-  val enterManualAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersPartnershipRegisteredAddressController.next(index, mode)
+  def enterManualAddressUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load().url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(
-        view
-          .business_partners_registered_address(
-            businessPartnersUkAddressLookupForm,
-            partnerName,
-            backUrl,
-            postAction,
-            journey,
-            enterManualAddressUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
+    val formData: Option[UkAddressLookup] = request.userAnswers.get(UkAddressLookupPage(index))
+    val prepopulatedForm = formData
+      .map(addressData => businessPartnersUkAddressLookupForm.fill(addressData))
+      .getOrElse(businessPartnersUkAddressLookupForm)
+    Ok(
+      view.business_partners_registered_address(
+        prepopulatedForm,
+        partnerName,
+        backUrl(index, mode),
+        postAction(index, mode),
+        journey,
+        enterManualAddressUrl(index, mode)
+      )
+    )
   }
 
-  def next(): Action[AnyContent] = userAction.async { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnersUkAddressLookupForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-            Future.successful(
-              BadRequest(
-                view.business_partners_registered_address(
-                  formWithErrors,
-                  partnerName,
-                  backUrl,
-                  postAction,
-                  journey,
-                  enterManualAddressUrl
-                )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
+    businessPartnersUkAddressLookupForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(
+              view.business_partners_registered_address(
+                formWithErrors,
+                partnerName,
+                backUrl(index, mode),
+                postAction(index, mode),
+                journey,
+                enterManualAddressUrl(index, mode)
               )
             )
-          },
-          bpAddress => {
-            addressService
-              .addressLookup(
-                routes.BusinessPartnersPartnershipRegisteredAddressController.load().path(),
-                bpAddress.postcode,
-                bpAddress.addressLine
-              )
-              .map {
-                case Right(addressListMap) =>
-                  // ToDo store the addressListMap in cache
-                  if (addressListMap.isEmpty)
-                    Redirect(routes.BusinessPartnersCannotFindAddressController.load(1, NormalMode))
-                  else if (addressListMap.size == 1)
-                    Redirect(routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load())
-                  else
-                    Redirect(routes.BusinessPartnersChooseAddressController.load(1, NormalMode))
-                case Left(AddressLookupErrorResponse(_)) =>
-                  val formWithErrors = businessPartnersUkAddressLookupForm
-                    .fill(bpAddress)
-                    .withError(FormError(postcodeKey, "address.lookup.error"))
-                  BadRequest(
-                    view.business_partners_registered_address(
-                      formWithErrors,
-                      partnerName,
-                      backUrl,
-                      postAction,
-                      journey,
-                      enterManualAddressUrl
-                    ))
-                case _ => errorHandler.errorResultsPages(Results.InternalServerError)
-              }
-          }
-        )
-    } else {
-      Future.successful(errorHandler.errorResultsPages(Results.NotFound))
-    }
+          )
+        },
+        bpAddress => {
+          val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+          val postcode = getUserAnswers.map(data => data.postcode).getOrElse("")
+          val lookupResultAnswers = getUserAnswers.map(data => data.lookupResult).getOrElse(Map.empty)
+
+          val addressLookupCall: Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
+            if (postcode.equals(bpAddress.postcode)) {
+              Future(Right(lookupResultAnswers))
+            } else {
+              addressService
+                .addressLookup(
+                  routes.BusinessPartnersAddressController.load(index, mode).path(),
+                  bpAddress.postcode,
+                  bpAddress.addressLine
+                )
+            }
+
+          addressLookupCall
+            .flatMap {
+              case Right(addressListMap) =>
+                val page = UkAddressLookupPage(index)
+                val nextPage = addressListMap.size match {
+                  case 0 => routes.BusinessPartnersCannotFindAddressController.load(index, mode)
+                  case 1 => routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load()
+                  case _ => routes.BusinessPartnersChooseAddressController.load(index, mode)
+                }
+
+                val lookupResult: UkAddressLookup =
+                  UkAddressLookup(bpAddress.addressLine, bpAddress.postcode, addressListMap)
+                val updatedUserAnswers = request.userAnswers.set(page, lookupResult)
+                updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+
+              case Left(AddressLookupErrorResponse(_)) =>
+                val formWithErrors = businessPartnersUkAddressLookupForm
+                  .fill(bpAddress)
+                  .withError(FormError(postcodeKey, "address.lookup.error"))
+                Future.successful(BadRequest(
+                  view.business_partners_search_address(formWithErrors, partnerName, postAction(index, mode))))
+              case _ => Future.successful(errorHandler.errorResultsPages(Results.InternalServerError))
+            }
+        }
+      )
   }
 
 }

@@ -49,7 +49,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
           val (backLinkAndButtonUrl, manuallyEnterAddressUrl): (Call, Call) = partnerType match {
             case (Partnership | LimitedLiabilityPartnership) =>
               (
-                routes.BusinessPartnersPartnershipRegisteredAddressController.load(),
+                routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode),
                 routes.BusinessPartnersPartnershipEnterAddressController.load())
             case (Individual | SoleProprietor) =>
               (
@@ -75,4 +75,11 @@ class BusinessPartnersCannotFindAddressController @Inject()(
           )
         }
   }
+
+  def getUrlFromBusinessType(url1: String, url2: String, url3: String, url4: String, partnerType: String): String =
+    if (partnerType == "partnership" || partnerType == "limited-liability-partnership") url1
+    else if (partnerType == "individual" || partnerType == "sole-proprietor") url2
+    else if (partnerType == "corporateBody") url3
+    else if (partnerType == "unincorporated-body") url4
+    else "#"
 }

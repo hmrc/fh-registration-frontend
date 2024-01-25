@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -35,7 +36,7 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
 
   val partnerName: String = "Test User"
   val journeyType: String = "enterRegisteredOfficeAddress"
-  val backLink: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
+  val backLink: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode).url
   val postAction: Call = routes.BusinessPartnersPartnershipEnterAddressController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>

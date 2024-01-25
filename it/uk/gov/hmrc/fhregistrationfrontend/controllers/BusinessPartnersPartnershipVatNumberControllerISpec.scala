@@ -24,8 +24,8 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
     List(NormalMode, CheckMode).foreach { mode =>
 
-        val partershipSaUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load().url
-        val partnershipRegAddressPage: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load().url
+        val partershipSaUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load(1, mode).url
+        val partnershipRegAddressPage: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, mode).url
         val businessPartnersPage: String = routes.BusinessPartnersController.load(1, mode).url
 
         s"GET ${route(mode)}" when {
