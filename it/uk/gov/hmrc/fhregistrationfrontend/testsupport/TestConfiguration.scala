@@ -20,6 +20,9 @@ import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
@@ -160,4 +163,41 @@ trait TestConfiguration
   }
 
   val startCall = routes.Application.main()
+
+  val multipleAddresses: Map[String, Address] = {
+    val address1 = Address(
+      addressLine1 = "1 Romford Road",
+      addressLine2 = Some("Wellington"),
+      addressLine3 = Some("Telford"),
+      addressLine4 = None,
+      postcode = "TF1 4ER",
+      countryCode = None,
+      lookupId = None
+    )
+    val address2 = address1.copy(addressLine1 = "2 Romford Road")
+
+    Map("1" -> address1, "2" -> address2)
+  }
+
+  val singleAddress: Map[String, Address] =
+    Map("1" -> Address(
+      addressLine1 = "1 Romford Road",
+      addressLine2 = Some("Wellington"),
+      addressLine3 = Some("Telford"),
+      addressLine4 = None,
+      postcode = "TF1 4ER",
+      countryCode = None,
+      lookupId = None)
+    )
+
+  def seedCacheWithUKAddressLookup(addressList: Map[String, Address]): UserAnswers = emptyUserAnswers
+    .set[UkAddressLookup](
+      UkAddressLookupPage(1),
+      UkAddressLookup(
+        Some("1 Romford Road"),
+        "TF1 4ER",
+        addressList
+      ))
+    .success
+    .value
 }

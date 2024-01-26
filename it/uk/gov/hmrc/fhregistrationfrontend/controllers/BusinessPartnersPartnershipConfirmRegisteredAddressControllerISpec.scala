@@ -1,23 +1,24 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
-import play.api.test.WsTestClient
+import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersPartnershipConfirmRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
-  val route: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url.drop(6)
+  val index = 1
+  val route: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index).url.drop(6)
+  val registeredAddressPageUrl: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode).url
+  val checkYourAnswersPageUrl: String = routes.BusinessPartnersCheckYourAnswersController.load().url
 
   s"GET $route" when {
-
-    "the new business partners flow is enabled" should {
-
       "render the business partner confirm address page" when {
-        "the user is authenticated" in {
-          given
-            .commonPrecondition
+        "when UkAddressLookup contains a single address" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(singleAddress))
 
           val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -28,18 +29,63 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerISpec
             val page = Jsoup.parse(res.body)
             page.title() must include("Confirm the partnership’s registered office address?")
             page.getElementsByClass("govuk-heading-l").text() must include("Confirm the company’s registered office address")
+            page.getElementsByClass("govuk-body-m").text() must include("1 Romford Road")
           }
+        }
+      }
+
+    "redirect to the Registered Address page" when {
+      "when UkAddressLookup contains multiple addresses" in {
+        given.commonPrecondition
+        addUserAnswersToSession(seedCacheWithUKAddressLookup(multipleAddresses))
+
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(registeredAddressPageUrl)
+        }
+      }
+
+      "when UkAddressLookup contains an empty address list" in {
+        given.commonPrecondition
+        addUserAnswersToSession(seedCacheWithUKAddressLookup(Map.empty))
+
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(registeredAddressPageUrl)
+        }
+      }
+    }
+
+    "redirect to the start of BusinessPartners" when {
+      "there are no user answers in the database" in {
+        given.commonPrecondition
+
+        val result = buildRequest(route)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 303
+          res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
         }
       }
     }
   }
 
   s"POST $route" when {
-
     "the user clicks save and continue" should {
-      "return 200" when {
-        "the user is authenticated" in {
+      "Redirect to the CYA page" when {
+        "UkAddressLookup has a single Addreee" in {
           given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(singleAddress))
 
           val result = buildRequest(route)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -49,8 +95,44 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerISpec
             ))
 
           whenReady(result) { res =>
-            res.status mustBe 200
-            res.body must include("Form submitted, with result:")
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(checkYourAnswersPageUrl)
+          }
+        }
+      }
+
+      "redirect to the Registered Address page" when {
+        "UkAddressLookup has multiple Addresses" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(multipleAddresses))
+
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "mock" -> Seq("true"),
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(registeredAddressPageUrl)
+          }
+        }
+
+        "when UkAddressLookup contains an empty address list" in {
+          given.commonPrecondition
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(Map.empty))
+
+          val result = buildRequest(route)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "mock" -> Seq("true"),
+            ))
+
+          whenReady(result) { res =>
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(registeredAddressPageUrl)
           }
         }
       }

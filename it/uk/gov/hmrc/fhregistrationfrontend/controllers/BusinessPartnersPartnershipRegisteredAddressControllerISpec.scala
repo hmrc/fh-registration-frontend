@@ -13,7 +13,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerISpec
   extends Specifications with TestConfiguration {
 
   lazy val index = 1
-  val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url
+  val confirmPartnershipRegAddressUrl: String = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index).url
   def chooseAddressUrl(mode: Mode): String = routes.BusinessPartnersChooseAddressController.load(1, mode).url
   def cannotFindAddressUrl(mode: Mode): String = routes.BusinessPartnersCannotFindAddressController.load(1, mode).url
   val userAnswersWithPageData: UserAnswers = emptyUserAnswers

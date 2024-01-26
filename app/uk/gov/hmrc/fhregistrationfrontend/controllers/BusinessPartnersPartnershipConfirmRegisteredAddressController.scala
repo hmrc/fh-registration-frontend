@@ -17,47 +17,68 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig,
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
-  val postAction: Call = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next()
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index)
+  val journey = "partnership"
+  val backLink = "#"
+  val companyName = "company"
+  val editAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "company", "partnership", postAction, "#", "#"))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
+    if (cachedAddressList.isEmpty || cachedAddressList.size > 1)
+      Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
+    else {
+      val addressToConfirm = cachedAddressList.head._2
+      Ok(
+        view
+          .business_partners_confirm_registered_address(
+            addressToConfirm,
+            companyName,
+            journey,
+            postAction(index, mode),
+            backLink,
+            editAddressUrl))
     }
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(s"Form submitted, with result:")
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
+    if (cachedAddressList.isEmpty || cachedAddressList.size > 1) {
+      Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
     } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+      val page = AddressPage(index)
+      val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+      val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
+
+      updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
     }
   }
-
-  val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
-    addressLine4 = None,
-    postcode = "TF1 4ER",
-    countryCode = None,
-    lookupId = None
-  )
 }

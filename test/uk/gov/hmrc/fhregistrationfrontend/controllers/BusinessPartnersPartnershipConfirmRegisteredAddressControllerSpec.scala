@@ -17,13 +17,22 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.Future
 
 class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
@@ -33,88 +42,141 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
   override lazy val views: Views = app.injector.instanceOf[Views]
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val mockSessionCache: SessionRepository = mock[SessionRepository]
 
   val controller =
     new BusinessPartnersPartnershipConfirmRegisteredAddressController(
       commonDependencies,
       views,
       mockActions,
-      mockAppConfig)(mockMcc)
+      mockAppConfig,
+      mockSessionCache)(mockMcc)
 
   val pageTitle: String = "Confirm the partnership’s registered office address?"
+  val enterAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
+  val registeredAddressPage: Call = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode)
+
+  def createUserAnswers(answers: UkAddressLookup): UserAnswers =
+    UserAnswers(testUserId)
+      .set[UkAddressLookup](UkAddressLookupPage(1), answers)
+      .success
+      .value
 
   "load" should {
     "Render the confirm address page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+      "a single address is found in user answers" in {
+        val addressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)))
+        val userAnswers = createUserAnswers(addressLookup)
+        setupDataRequiredAction(userAnswers)
+
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
-        // should be mocked out when Save4Later changes included
         page.title() should include(pageTitle)
         page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
-        page.body.text should include("1 Romford Road")
-        page.getElementById("confirm-edit").attr("href") should include("#")
+        page.body.text should include("44 test lane")
+        page.getElementById("confirm-edit").attr("href") should include(enterAddressUrl)
         reset(mockActions)
       }
     }
 
-    "return 200" when {
-      "the form has no errors and the address is found" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+    "Redirect to Registered Address Page" when {
+      "address lookup address list is empty" in {
+        val addressLookup = UkAddressLookup(Some("44 test lane"), "SW1A 2AA", Map.empty)
+        val userAnswers = createUserAnswers(addressLookup)
+        setupDataRequiredAction(userAnswers)
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include(pageTitle)
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
         reset(mockActions)
       }
-    }
 
-    "Render the page not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+      "address lookup address list contains more than one address" in {
+        val addressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map(
+            "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+            "2" -> Address("45 test lane", None, None, None, "SW1A 2AB", None, None))
+        )
+        val userAnswers = createUserAnswers(addressLookup)
+        setupDataRequiredAction(userAnswers)
+
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
 
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
         reset(mockActions)
       }
     }
   }
 
   "next" should {
-    "return 200" when {
+    "Redirect to Check your answers page" when {
       "the use clicks save and continue" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val addressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)))
+        val userAnswers = createUserAnswers(addressLookup)
+        setupDataRequiredAction(userAnswers)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        status(result) shouldBe OK
-        contentAsString(result) shouldBe "Form submitted, with result:"
+        val request = FakeRequest()
+        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
+
+        status(result) shouldBe SEE_OTHER
         reset(mockActions)
       }
     }
+    "Redirect to the Business Partners Address page" when {
+      "addressList contains no addresses" in {
+        val cachedUkAddressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map.empty
+        )
 
-    "Render the page not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
+        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        setupDataRequiredAction(userAnswers)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
 
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
+        reset(mockActions)
+      }
+
+      "addressList cache contains a multiple addresses" in {
+        val cachedUkAddressLookup = UkAddressLookup(
+          Some("44 test lane"),
+          "SW1A 2AA",
+          Map(
+            "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+            "2" -> Address("45 test lane", None, None, None, "SW1A 2AB", None, None))
+        )
+        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        setupDataRequiredAction(userAnswers)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest()
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
         reset(mockActions)
       }
     }
