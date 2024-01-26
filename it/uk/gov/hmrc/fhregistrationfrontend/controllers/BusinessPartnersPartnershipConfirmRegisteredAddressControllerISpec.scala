@@ -1,6 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames

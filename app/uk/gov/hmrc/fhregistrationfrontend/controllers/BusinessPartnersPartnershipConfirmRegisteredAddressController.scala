@@ -21,7 +21,6 @@ import models.Mode
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersChooseAddressForm.chooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
@@ -51,9 +50,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-    if (cachedAddressList.isEmpty || cachedAddressList.size > 1)
-      Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
-    else {
+    if (cachedAddressList.size == 1) {
       val addressToConfirm = cachedAddressList.head._2
       Ok(
         view
@@ -65,20 +62,21 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
             backLink,
             editAddressUrl))
     }
+    else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-    if (cachedAddressList.isEmpty || cachedAddressList.size > 1) {
-      Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
-    } else {
+    if (cachedAddressList.size == 1) {
       val page = AddressPage(index)
       val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
       val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
 
       updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+    } else {
+      Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
     }
   }
 }

@@ -43,6 +43,18 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockSessionCache: SessionRepository = mock[SessionRepository]
+  val emptyUkAddressLookup = UkAddressLookup(Some("44 test lane"), "SW1A 2AA", Map.empty)
+  val singleUkAddressLookup = UkAddressLookup(
+    Some("44 test lane"),
+    "SW1A 2AA",
+    Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)))
+  val multipleAddressLookup = UkAddressLookup(
+    Some("44 test lane"),
+    "SW1A 2AA",
+    Map(
+      "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
+      "2" -> Address("45 test lane", None, None, None, "SW1A 2AB", None, None))
+  )
 
   val controller =
     new BusinessPartnersPartnershipConfirmRegisteredAddressController(
@@ -65,11 +77,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
   "load" should {
     "Render the confirm address page" when {
       "a single address is found in user answers" in {
-        val addressLookup = UkAddressLookup(
-          Some("44 test lane"),
-          "SW1A 2AA",
-          Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)))
-        val userAnswers = createUserAnswers(addressLookup)
+        val userAnswers = createUserAnswers(singleUkAddressLookup)
         setupDataRequiredAction(userAnswers)
 
         val request = FakeRequest()
@@ -87,8 +95,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
     "Redirect to Registered Address Page" when {
       "address lookup address list is empty" in {
-        val addressLookup = UkAddressLookup(Some("44 test lane"), "SW1A 2AA", Map.empty)
-        val userAnswers = createUserAnswers(addressLookup)
+        val userAnswers = createUserAnswers(emptyUkAddressLookup)
         setupDataRequiredAction(userAnswers)
 
         val request = FakeRequest()
@@ -100,14 +107,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
       }
 
       "address lookup address list contains more than one address" in {
-        val addressLookup = UkAddressLookup(
-          Some("44 test lane"),
-          "SW1A 2AA",
-          Map(
-            "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
-            "2" -> Address("45 test lane", None, None, None, "SW1A 2AB", None, None))
-        )
-        val userAnswers = createUserAnswers(addressLookup)
+        val userAnswers = createUserAnswers(emptyUkAddressLookup)
         setupDataRequiredAction(userAnswers)
 
         val request = FakeRequest()
@@ -123,11 +123,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
   "next" should {
     "Redirect to Check your answers page" when {
       "the use clicks save and continue" in {
-        val addressLookup = UkAddressLookup(
-          Some("44 test lane"),
-          "SW1A 2AA",
-          Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None)))
-        val userAnswers = createUserAnswers(addressLookup)
+        val userAnswers = createUserAnswers(singleUkAddressLookup)
         setupDataRequiredAction(userAnswers)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -140,13 +136,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     }
     "Redirect to the Business Partners Address page" when {
       "addressList contains no addresses" in {
-        val cachedUkAddressLookup = UkAddressLookup(
-          Some("44 test lane"),
-          "SW1A 2AA",
-          Map.empty
-        )
-
-        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        val userAnswers = createUserAnswers(emptyUkAddressLookup)
         setupDataRequiredAction(userAnswers)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -160,14 +150,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
       }
 
       "addressList cache contains a multiple addresses" in {
-        val cachedUkAddressLookup = UkAddressLookup(
-          Some("44 test lane"),
-          "SW1A 2AA",
-          Map(
-            "1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None),
-            "2" -> Address("45 test lane", None, None, None, "SW1A 2AB", None, None))
-        )
-        val userAnswers = createUserAnswers(cachedUkAddressLookup)
+        val userAnswers = createUserAnswers(multipleAddressLookup)
         setupDataRequiredAction(userAnswers)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
