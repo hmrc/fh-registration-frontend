@@ -59,8 +59,11 @@ POST        /business-partners/enter-partner-address/:index              @uk.gov
 GET         /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-business-partners/enter-partner-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersEnterAddressController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.load()
-POST        /business-partners/enter-partnership-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.next()
+GET         /business-partners/enter-partnership-registered-office-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/enter-partnership-registered-office-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.next(index: Int, mode: Mode = NormalMode)
+
+GET         /change-business-partners/enter-partnership-registered-office-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/enter-partnership-registered-office-address/:index              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipEnterAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.load()
 POST        /business-partners/unincorporated-body-vat-registration-number              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyVatRegistrationController.next()
@@ -108,8 +111,10 @@ POST        /business-partners/corporate-body-registered-office-address         
 GET         /business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load()
 POST        /business-partners/company-registration-number                         @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.next()
 
-GET         /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
-POST        /business-partners/partnership-company-registration-number                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.next()
+GET         /business-partners/partnership-company-registration-number/:index                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index: Int, mode: Mode = NormalMode)
+GET         /business-partners/change-partnership-company-registration-number/:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index: Int, mode: Mode = CheckMode)
+POST        /business-partners/partnership-company-registration-number/:index                  @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/change-partnership-company-registration-number/:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyTradingNameController.load()
 POST        /business-partners/unincorporated-body-trading-name                    @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyTradingNameController.next()

@@ -11,6 +11,7 @@ class BusinessPartnersNewFlowDisabledISpec
 
   val index = 1
   val normalRoutes = List(
+    routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, NormalMode),
     routes.BusinessPartnersController.load(index, NormalMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode),
@@ -23,13 +24,15 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipNameController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipTradingNameController.load(index, NormalMode),
+    routes.BusinessPartnersPartnershipVatNumberController.load(index, NormalMode),
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, NormalMode),
     routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, NormalMode),
-    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode),
-    routes.BusinessPartnersPartnershipVatNumberController.load(index, NormalMode)
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode)
   )
 
   val checkRoutes = List(
     routes.BusinessPartnersController.load(index, CheckMode),
+    routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, CheckMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode),
     routes.BusinessPartnersConfirmAddressController.load(index, CheckMode),
@@ -41,9 +44,10 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipNameController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipTradingNameController.load(index, CheckMode),
+    routes.BusinessPartnersPartnershipVatNumberController.load(index, CheckMode),
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, CheckMode),
     routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, CheckMode),
-    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, CheckMode),
-    routes.BusinessPartnersPartnershipVatNumberController.load(index, CheckMode)
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, CheckMode)
   )
 
   (normalRoutes ++ checkRoutes).foreach { route =>

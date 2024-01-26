@@ -52,14 +52,13 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
 
   def getBusinessType: String = config.getRandomBusinessType()
 
-  val backUrl: String = {
+  def backUrl(index: Int, mode: Mode): String =
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode).url
+      routes.BusinessPartnersPartnershipTradingNameController.load(index, mode).url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url
+      routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode).url
     else
       "#"
-  }
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(EnterVatNumberPage(index))
@@ -71,7 +70,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
         businessPartnerType,
         partnerName,
         postAction(index, mode),
-        backUrl
+        backUrl(index, mode)
       )
     ).withCookies(Cookie("businessType", getBusinessType))
   }
@@ -88,7 +87,7 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
                 businessPartnerType,
                 partnerName,
                 postAction(index, mode),
-                backUrl
+                backUrl(index, mode)
               )
             )
           )

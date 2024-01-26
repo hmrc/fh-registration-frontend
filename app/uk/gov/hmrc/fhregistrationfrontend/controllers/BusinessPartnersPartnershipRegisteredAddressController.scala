@@ -61,7 +61,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipRegisteredAddressController.next(index, mode)
   def enterManualAddressUrl(index: Int, mode: Mode): String =
-    routes.BusinessPartnersPartnershipEnterAddressController.load().url
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData: Option[UkAddressLookup] = request.userAnswers.get(UkAddressLookupPage(index))

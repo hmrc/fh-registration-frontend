@@ -83,7 +83,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
             case Some(businessType) if businessType.equals("partnership") =>
               routes.BusinessPartnersPartnershipVatNumberController.load(index, mode)
             case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-              routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load()
+              routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode)
             case _ =>
               logger.warn(
                 s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")

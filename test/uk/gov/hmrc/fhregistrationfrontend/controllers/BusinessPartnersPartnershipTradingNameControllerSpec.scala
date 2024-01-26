@@ -132,7 +132,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load().url)
+            routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode).url)
           reset(mockActions)
         }
       }

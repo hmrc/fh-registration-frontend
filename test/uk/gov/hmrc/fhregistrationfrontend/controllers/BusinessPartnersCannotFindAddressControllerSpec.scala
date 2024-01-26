@@ -38,7 +38,8 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val controller =
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
-  val enterPartnerRegOfficeAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
+  def enterPartnerRegOfficeAddressUrl(mode: Mode): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
   def enterPartnerAddressUrl(mode: Mode): String = routes.BusinessPartnersEnterAddressController.load(1, mode).url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
   val enterUnincorpBodyRegOfficeAddressUrl: String =
@@ -63,7 +64,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("We cannot find any addresses for HR33 7GP")
           // should be mocked out when Save4Later changes included
-          page.getElementById("enter-manually").attr("href") should include(enterPartnerRegOfficeAddressUrl)
+          page.getElementById("enter-manually").attr("href") should include(enterPartnerRegOfficeAddressUrl(mode))
           reset(mockActions)
         }
 

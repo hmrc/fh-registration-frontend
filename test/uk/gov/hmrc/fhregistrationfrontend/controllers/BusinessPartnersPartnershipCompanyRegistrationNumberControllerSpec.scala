@@ -17,15 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.NormalMode
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
+import org.mockito.ArgumentMatchers.any
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CompanyRegistrationNumberPage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import scala.concurrent.Future
 
 class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
@@ -33,84 +38,83 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  lazy val mockSessionCache: SessionRepository = mock[SessionRepository]
 
   val controller =
     new BusinessPartnersPartnershipCompanyRegistrationNumberController(
       commonDependencies,
       views,
       mockActions,
-      mockAppConfig)(mockMcc)
+      mockSessionCache)(mockMcc)
+  val index = 1
 
-  val partnershipVatNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(1, NormalMode).url
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the Company Registration page" when {
+        "there is no page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers, mode)
 
-  "load" should {
-    "Render the Company Registration page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "limited-liability-partnership"))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("What is the partnership’s company registration number?")
+          reset(mockActions)
+        }
 
-        val request = FakeRequest()
-          .withCookies(Cookie("businessType", "limited-liability-partnership"))
-        val result = await(csrfAddToken(controller.load())(request))
+        "there is page data" in {
+          val crn = CompanyRegistrationNumber("01234567", None)
+          val userAnswers = UserAnswers(testUserId)
+            .set[CompanyRegistrationNumber](CompanyRegistrationNumberPage(index), crn)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the partnership’s company registration number?")
-        reset(mockActions)
+          val request = FakeRequest()
+            .withCookies(Cookie("businessType", "limited-liability-partnership"))
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("What is the partnership’s company registration number?")
+          reset(mockActions)
+        }
       }
     }
 
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-
-        val request = FakeRequest()
-          .withCookies(Cookie("businessType", "limited-liability-partnership"))
-        val result = await(csrfAddToken(controller.load())(request))
-
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "the new business partner pages are enabled" should {
+    s"next when in $mode" should {
       "redirect to the Partnership VAT Reg Number page" when {
         "the form has no errors and companyRegistrationNumber supplied" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(("companyRegistrationNumber", "01234567"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(partnershipVatNumUrl)
+          redirectLocation(result).get should include(
+            routes.BusinessPartnersPartnershipVatNumberController.load(1, mode).url)
           reset(mockActions)
         }
       }
 
-      "display the correct error" when {
+      "return a BadRequest" when {
         "the user doesn't enter a company registration number" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(("companyRegistrationNumber", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -119,24 +123,6 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
             "Enter the company registration number")
           reset(mockActions)
         }
-      }
-    }
-
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-
-        val request = FakeRequest()
-          .withMethod("POST")
-          .withCookies(Cookie("businessType", "limited-liability-partnership"))
-        val result = await(csrfAddToken(controller.next())(request))
-
-        status(result) shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
       }
     }
   }

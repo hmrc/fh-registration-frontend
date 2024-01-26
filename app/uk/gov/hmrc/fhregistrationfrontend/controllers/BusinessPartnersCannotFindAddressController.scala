@@ -50,7 +50,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
             case (Partnership | LimitedLiabilityPartnership) =>
               (
                 routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode),
-                routes.BusinessPartnersPartnershipEnterAddressController.load())
+                routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode))
             case (Individual | SoleProprietor) =>
               (
                 routes.BusinessPartnersAddressController.load(index, mode),
