@@ -79,7 +79,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     "Render the confirm address page" when {
       "a single address is found in user answers" in {
         val userAnswers = createUserAnswers(singleUkAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
@@ -97,7 +97,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     "Redirect to Registered Address Page" when {
       "address lookup address list is empty" in {
         val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
@@ -109,7 +109,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
       "address lookup address list contains more than one address" in {
         val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
 
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
@@ -125,7 +125,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     "Redirect to Check your answers page" when {
       "the use clicks save and continue" in {
         val userAnswers = createUserAnswers(singleUkAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest()
@@ -140,7 +140,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
     "Redirect to the Business Partners Address page" when {
       "addressList contains no addresses" in {
         val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest()
@@ -154,7 +154,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
       "addressList cache contains a multiple addresses" in {
         val userAnswers = createUserAnswers(multipleAddressLookup)
-        setupDataRequiredAction(userAnswers)
+        setupDataRequiredAction(userAnswers, NormalMode)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest()
