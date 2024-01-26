@@ -16,58 +16,77 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnerTypeForm.businessPartnerTypeForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
-  cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+  val sessionCache: SessionRepository,
+  cc: MessagesControllerComponents)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_type(businessPartnerTypeForm, "Test User"))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
+  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersController.next(index, mode)
+  val backUrl: String = routes.ContactPersonController.load().url
+
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction { implicit request =>
+    val optPreviousSelectedAnswers = {
+      request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
     }
+    val prepopulatedForm = optPreviousSelectedAnswers match {
+      case Some(data) => businessPartnerTypeForm().fill(data)
+      case None       => businessPartnerTypeForm()
+    }
+    Ok(view.business_partners_type(prepopulatedForm, "first", postAction(index, mode), backUrl))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      businessPartnerTypeForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(view.business_partners_type(formWithErrors, "Test User"))
-        },
-        businessType => {
-          businessType.toString match {
-            case "UnincorporatedBody" =>
-              Redirect(routes.BusinessPartnersUnincorporatedBodyNameController.load())
-            case "Partnership" =>
-              Redirect(routes.BusinessPartnersPartnershipNameController.load(1, NormalMode))
-            case "LimitedLiabilityPartnership" =>
-              Redirect(routes.BusinessPartnersLtdLiabilityPartnershipNameController.load())
-            case "CorporateBody" =>
-              Redirect(routes.BusinessPartnersCorporateBodyCompanyNameController.load())
-            case _ =>
-              Redirect(routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(1, NormalMode))
-          }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction.async { implicit request =>
+    businessPartnerTypeForm().bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(
+          BadRequest(view.business_partners_type(formWithErrors, "first", postAction(index, mode), backUrl))
+        )
+      },
+      businessType => {
+        val nextUrl = businessType match {
+          case BusinessPartnerType.UnincorporatedBody =>
+            routes.BusinessPartnersUnincorporatedBodyNameController.load()
+          case BusinessPartnerType.Partnership =>
+            routes.BusinessPartnersPartnershipNameController.load(index, NormalMode)
+          case BusinessPartnerType.LimitedLiabilityPartnership =>
+            routes.BusinessPartnersLtdLiabilityPartnershipNameController.load()
+          case BusinessPartnerType.CorporateBody =>
+            routes.BusinessPartnersCorporateBodyCompanyNameController.load()
+          case _ =>
+            routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode)
         }
-      )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+        val optPreviousSelectedAnswers =
+          request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
+        optPreviousSelectedAnswers match {
+          case Some(answer) if answer == businessType && mode == CheckMode =>
+            Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load()))
+          case Some(answer) if answer == businessType =>
+            Future.successful(Redirect(nextUrl))
+          case _ =>
+            val newUserAnswers = UserAnswers(request.userId).set(PartnerTypePage(index), businessType)
+            updateUserAnswersAndSaveToCache(newUserAnswers, nextUrl, PartnerTypePage(index))
+        }
+      }
+    )
   }
-
 }

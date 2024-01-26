@@ -22,10 +22,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 
 object BusinessPartnerTypeForm {
 
-  val businessPartnerTypeKey = "businessType"
+  val businessPartnerTypeKey = "businessPartnersType"
+  val requiredErrorKey = s"fh.businessPartnersType.error.required"
 
-  def businessPartnerTypeForm = Form(
-    businessPartnerTypeKey -> enum(BusinessPartnerType)
+  def businessPartnerTypeForm(partnerNumber: String = "first") = Form(
+    businessPartnerTypeKey -> enum(BusinessPartnerType, requiredErrorKey, Seq(partnerNumber))
   )
 
 }

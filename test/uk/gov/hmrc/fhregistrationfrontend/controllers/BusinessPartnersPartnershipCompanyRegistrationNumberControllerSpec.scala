@@ -53,7 +53,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
       "Render the Company Registration page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -71,7 +71,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
             .set[CompanyRegistrationNumber](CompanyRegistrationNumberPage(index), crn)
             .success
             .value
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
@@ -89,7 +89,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
       "redirect to the Partnership VAT Reg Number page" when {
         "the form has no errors and companyRegistrationNumber supplied" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -108,7 +108,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
       "return a BadRequest" when {
         "the user doesn't enter a company registration number" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))

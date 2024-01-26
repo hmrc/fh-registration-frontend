@@ -46,7 +46,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
     routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next(index, mode)
   private def getBusinessType: String = config.getRandomBusinessType()
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(IndividualsAndSoleProprietorsNinoPage(index))
     val prepopulatedForm =
       formData.map(data => nationalInsuranceNumberForm.fill(data)).getOrElse(nationalInsuranceNumberForm)
@@ -56,7 +56,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
       .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     nationalInsuranceNumberForm
       .bindFromRequest()
       .fold(
@@ -75,7 +75,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
               routes.BusinessPartnersAddressController.load(index, mode)
             case Some(businessType) if businessType.equals("individual") =>
               routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
-            case _ => routes.BusinessPartnersController.load()
+            case _ => routes.BusinessPartnersController.load(index, mode)
           }
 
           val updatedUserAnswers = request.userAnswers.set(page, nino)

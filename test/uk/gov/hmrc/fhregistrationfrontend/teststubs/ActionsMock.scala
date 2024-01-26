@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import akka.stream.Materializer
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -212,8 +212,8 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       }
     }
 
-  def setupDataRequiredAction(userAnswers: UserAnswers): Unit =
-    when(mockActions.dataRequiredAction) thenReturn new ActionBuilder[DataRequiredRequest, AnyContent] {
+  def setupDataRequiredAction(userAnswers: UserAnswers, mode: Mode): Unit =
+    when(mockActions.dataRequiredAction(1, mode)) thenReturn new ActionBuilder[DataRequiredRequest, AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
 
       override val executionContext = ec
@@ -230,6 +230,27 @@ trait ActionsMock extends MockitoSugar with UserTestData {
           request)
         val dataRequiredRequest = new DataRequiredRequest(userAnswers, userRequest)
         block(dataRequiredRequest)
+      }
+    }
+
+  def setupDataRetrievedAction(userAnswers: Option[UserAnswers]): Unit =
+    when(mockActions.dataRetrievalAction) thenReturn new ActionBuilder[DataRetrievedActionRequest, AnyContent] {
+      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+
+      override val executionContext = ec
+
+      override def invokeBlock[A](
+        request: Request[A],
+        block: DataRetrievedActionRequest[A] => Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(User),
+          Some(AffinityGroup.Individual),
+          request)
+        val dataRetrievedRequest = new DataRetrievedActionRequest(userRequest, userAnswers)
+        block(dataRetrievedRequest)
       }
     }
 

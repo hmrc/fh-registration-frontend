@@ -47,7 +47,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
       "Render the businessPartnersUtr page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -64,7 +64,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
             .set[HasUniqueTaxpayerReference](PartnershipHasUtrPage(1), hasUtr)
             .success
             .value
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -84,7 +84,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
       "redirect to the Partnership Registered Office Address page" when {
         "the form has no errors, yes is selected and UTR supplied" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -101,7 +101,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
 
         "the form has no errors and no is selected" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()

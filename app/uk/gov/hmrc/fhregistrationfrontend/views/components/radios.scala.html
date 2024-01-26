@@ -27,7 +27,6 @@
     optLegendCaption: Option[String] = None,
     hint: Option[Html] = None,
     classes: String = "",
-    legendClasses: String = "",
     inline: Boolean = false
 )(implicit messages: Messages, request: Request[_], appConfig: AppConfig)
 
@@ -47,7 +46,7 @@
         legend = Some(Legend(
             content = HtmlContent(legend),
             isPageHeading = false,
-            classes = if(legendClasses.nonEmpty) legendClasses else "govuk-fieldset__legend--xl"
+            classes = "govuk-fieldset__legend--xl"
         ))
     )),
     hint = hint.map { hint => Hint(content = HtmlContent(hint))},

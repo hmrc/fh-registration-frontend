@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
@@ -30,7 +30,7 @@ class DataRequiredRequest[A](
   def userId: String = request.userId
 }
 
-class DataRequiredAction(val executionContext: ExecutionContext)
+class DataRequiredAction(val executionContext: ExecutionContext, index: Int, mode: Mode)
     extends ActionRefiner[DataRetrievedActionRequest, DataRequiredRequest] with FrontendAction {
 
   override protected def refine[A](
@@ -42,7 +42,7 @@ class DataRequiredAction(val executionContext: ExecutionContext)
           Right(new DataRequiredRequest[A](userAnswers, r.request))
         case None =>
           logger.error(s"Not found: user answers")
-          Left(Redirect(routes.BusinessPartnersController.load()))
+          Left(Redirect(routes.BusinessPartnersController.load(index, mode)))
       }
     }
   }

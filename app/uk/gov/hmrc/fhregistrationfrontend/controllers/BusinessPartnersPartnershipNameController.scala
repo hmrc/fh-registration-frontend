@@ -41,21 +41,27 @@ class BusinessPartnersPartnershipNameController @Inject()(
 
   lazy val journeyType = "partnership"
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersPartnershipNameController.next(index, mode)
-  lazy val backAction: String = routes.BusinessPartnersController.load().url
+  def backAction(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
   def tradingNamePage(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
   lazy val form: Form[String] = partnershipNameForm
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val currentPage = PartnershipNamePage(index)
     val formData = request.userAnswers.get(currentPage)
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
     Ok(
       view
-        .business_partners_name(journeyType, postAction(index, mode), prepopulatedForm, partnershipNameKey, backAction))
+        .business_partners_name(
+          journeyType,
+          postAction(index, mode),
+          prepopulatedForm,
+          partnershipNameKey,
+          backAction(index, mode)
+        ))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
@@ -67,7 +73,7 @@ class BusinessPartnersPartnershipNameController @Inject()(
                 postAction(index, mode),
                 formWithErrors,
                 partnershipNameKey,
-                backAction
+                backAction(index, mode)
               )
             )
           )

@@ -1,6 +1,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
@@ -27,7 +26,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         val partershipSaUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load(1, mode).url
         val partnershipRegAddressPage: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, mode).url
-        val businessPartnersPage: String = routes.BusinessPartnersController.load().url
+        val businessPartnersPage: String = routes.BusinessPartnersController.load(1, mode).url
 
         s"GET ${route(mode)}" when {
 

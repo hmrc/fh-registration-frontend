@@ -42,7 +42,7 @@ class BusinessPartnersPartnershipUtrController @Inject()(
   def backLink(index: Int, mode: Mode): String =
     routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(page(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
@@ -56,7 +56,7 @@ class BusinessPartnersPartnershipUtrController @Inject()(
           backLink(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     form
       .bindFromRequest()
       .fold(

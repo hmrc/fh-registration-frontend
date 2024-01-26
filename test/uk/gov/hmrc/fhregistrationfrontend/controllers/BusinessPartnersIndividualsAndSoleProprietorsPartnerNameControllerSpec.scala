@@ -26,8 +26,8 @@ import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{PartnerName, UkAddressLookup}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName, UkAddressLookup}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsPartnerNamePage, PartnerTypePage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -62,7 +62,10 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
         "The business partner v2 pages are enabled and there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+            .set(PartnerTypePage(index), BusinessPartnerType.Individual)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -78,10 +81,13 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
         "The business partner v2 pages are enabled and there are userAnswers with page data" in {
           val partnerName = PartnerName("test", "user")
           val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.Individual)
+            .success
+            .value
             .set[PartnerName](IndividualsAndSoleProprietorsPartnerNamePage(1), partnerName)
             .success
             .value
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -100,7 +106,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to the business partners" when {
         "business type is neither Sole Proprietor or Individual" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -112,7 +118,12 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include("/business-partners")
+          val expectedLocation = if (mode == NormalMode) {
+            "/business-partners/1"
+          } else {
+            "/change-business-partners/1"
+          }
+          redirectLocation(result).get should include(expectedLocation)
           reset(mockActions)
         }
       }
@@ -120,13 +131,15 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to Business Partner NINO page" when {
         "business type is Individual" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+            .set(PartnerTypePage(index), BusinessPartnerType.Individual)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-            .withCookies(Cookie("businessType", "individual"))
             .withFormUrlEncodedBody(
               "firstName" -> "first name",
               "lastName"  -> "last name"
@@ -146,13 +159,15 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to Business Partner Trading Name page" when {
         "business type is Sole Proprietor" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+            .set(PartnerTypePage(index), BusinessPartnerType.SoleProprietor)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-            .withCookies(Cookie("businessType", "sole-proprietor"))
             .withFormUrlEncodedBody(
               "firstName" -> "first name",
               "lastName"  -> "last name"

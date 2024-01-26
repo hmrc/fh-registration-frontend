@@ -45,7 +45,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(EnterVatNumberPage(index))
     val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
     Ok(
@@ -58,7 +58,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
     )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     vatNumberForm
       .bindFromRequest()
       .fold(

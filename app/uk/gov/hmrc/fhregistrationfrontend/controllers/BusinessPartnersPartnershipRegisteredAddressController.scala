@@ -63,7 +63,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
   def enterManualAddressUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData: Option[UkAddressLookup] = request.userAnswers.get(UkAddressLookupPage(index))
     val prepopulatedForm = formData
       .map(addressData => businessPartnersUkAddressLookupForm.fill(addressData))
@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
     )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     businessPartnersUkAddressLookupForm
       .bindFromRequest()
       .fold(

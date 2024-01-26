@@ -52,7 +52,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   private def getBusinessType: String = config.getRandomBusinessType
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val currentPage = page(index)
     val formData = request.userAnswers.get(currentPage)
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
@@ -64,7 +64,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
       .bakeCookies() // TODO [DLS-7603] - temp save4later solution
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
@@ -87,7 +87,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
             case _ =>
               logger.warn(
                 s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
-              routes.BusinessPartnersController.load()
+              routes.BusinessPartnersController.load(index, mode)
           }
 
           val currentPage = page(index)

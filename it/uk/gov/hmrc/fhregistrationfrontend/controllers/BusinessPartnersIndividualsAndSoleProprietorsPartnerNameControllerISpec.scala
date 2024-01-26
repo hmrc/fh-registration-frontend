@@ -6,8 +6,8 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{firstNameKey, lastNameKey}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.IndividualsAndSoleProprietorsPartnerNamePage
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsPartnerNamePage, PartnerTypePage}
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class
@@ -16,7 +16,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
   def route(mode: Mode) = routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(1, mode).url.drop(6)
 
   val partnerName = PartnerName("test", "user")
-  val userAnswersWithPageData = emptyUserAnswers
+  val userAnswersWithPageData = userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual)
     .set[PartnerName](IndividualsAndSoleProprietorsPartnerNamePage(1), partnerName)
     .success
     .value
@@ -28,7 +28,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
           "there are useranswers but no form data" in {
             given.commonPrecondition
 
-           addUserAnswersToSession(emptyUserAnswers)
+           addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
             val result = buildRequest(route(mode))
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
@@ -74,43 +74,42 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
           }
         }
       }
     }
 
     s"POST ${route(mode)}" when {
-      "the business type is Individual and the form is filled out correctly" should {
-        Map("override" -> userAnswersWithPageData, "add" -> emptyUserAnswers).foreach { case (uaAction, userAnswers) =>
-          s"redirect to Business Partner NINO page and $uaAction userAnswers" when {
-            "business type is Individual and the form is filled out correctly" in {
-              given.commonPrecondition
+      Map("override" -> userAnswersWithPageData, "add" -> userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual)).foreach { case (uaAction, userAnswers) =>
+        s"redirect to Business Partner NINO page and $uaAction userAnswers" when {
+              "business type is Individual and the form is filled out correctly" in {
+                given.commonPrecondition
 
-              addUserAnswersToSession(userAnswers)
+                addUserAnswersToSession(userAnswers)
 
-              val result = buildRequest(route(mode))
-                .addCookies(
-                  DefaultWSCookie("mdtp", authAndSessionCookie),
-                  DefaultWSCookie("businessType", "individual")
-                )
-                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-                .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
+                val result = buildRequest(route(mode))
+                  .addCookies(
+                    DefaultWSCookie("mdtp", authAndSessionCookie)
+                  )
+                  .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+                  .post(Map(firstNameKey -> Seq("Coca"), lastNameKey -> Seq("Cola")))
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, mode).url)
-                val userAnswers = getUserAnswersFromSession.get
-                val pageData = userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(1))
-                pageData mustBe Some(PartnerName("Coca", "Cola"))
+                whenReady(result) { res =>
+                  res.status mustBe 303
+                  res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(1, mode).url)
+                  val userAnswers = getUserAnswersFromSession.get
+                  val pageData = userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(1))
+                  pageData mustBe Some(PartnerName("Coca", "Cola"))
+                }
               }
             }
-          }
 
           s"redirect to Business Partner Trading Name page and $uaAction userAnswers" when {
             "business type is Sole Proprietor and the form is filled out correctly" in {
               given.commonPrecondition
-              addUserAnswersToSession(emptyUserAnswers)
+              val ua = userAnswers.set(PartnerTypePage(1), BusinessPartnerType.SoleProprietor).success.value
+              addUserAnswersToSession(ua)
 
               val result = buildRequest(route(mode))
                 .addCookies(
@@ -130,11 +129,11 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
             }
           }
         }
-      }
 
       "business type is neither Individual or Sole Proprietor" should {
         "redirect to start of business details" in {
           given.commonPrecondition
+          val ua = emptyUserAnswers.set(PartnerTypePage(1), BusinessPartnerType.Partnership).success.value
 
           addUserAnswersToSession(emptyUserAnswers)
 
@@ -148,7 +147,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
           }
         }
       }
@@ -156,7 +155,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
       "return 400" when {
         "the form fields are left blank" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -173,7 +172,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         "fields contain invalid characters" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -190,7 +189,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         "the first name field is left blank" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -207,7 +206,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         "the last name field is left blank" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -224,7 +223,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         "the first name field contains invalid characters" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -241,7 +240,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
         "the last name field contains invalid characters" in {
           given.commonPrecondition
-          addUserAnswersToSession(emptyUserAnswers)
+          addUserAnswersToSession(userAnswersWithBusinessPartnerType(BusinessPartnerType.Individual))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -270,7 +269,7 @@ BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
           }
         }
       }

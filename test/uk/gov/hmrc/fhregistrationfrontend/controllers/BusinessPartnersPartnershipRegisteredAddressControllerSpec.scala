@@ -65,7 +65,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
     s"load when in $mode" should {
       "Render the business partner address page" when {
         "there are no user answers" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
 
         "there are user answers" in {
           val userAnswers = createUserAnswers(UkAddressLookup(Some("44 test lane"), "SW1A 2AA"))
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -97,7 +97,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
     s"next when in $mode" should {
       "redirect to the Choose Address page" when {
         "multiple addresses are found" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
             Future.successful(
@@ -127,7 +127,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
 
       "redirect to the Confirm Address page" when {
         "a single address is found" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
             Future.successful(
@@ -161,7 +161,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
                 Some("44 test lane"),
                 "SW1A 2AA",
                 Map("1" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, None))))
-            setupDataRequiredAction(userAnswers)
+            setupDataRequiredAction(userAnswers, mode)
             when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
             when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -181,7 +181,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
       "redirect to the Cannot Find Address page" when {
         "no addresses are found" in {
           val userAnswers = createUserAnswers(UkAddressLookup(Some("44 test lane"), "SW1A 2AA"))
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
             Future.successful(Right(Map.empty))
@@ -203,7 +203,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
 
       "return 400" when {
         "the form has no errors, postcode is entered and address lookup returns an error" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -224,7 +224,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
         }
 
         "the postcode is missing in the form" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -245,7 +245,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
         }
 
         "the postcode is an invalid format" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -266,7 +266,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
         }
 
         "address line is invalid (contains too many characters)" in {
-          setupDataRequiredAction(emptyUserAnswers)
+          setupDataRequiredAction(emptyUserAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)

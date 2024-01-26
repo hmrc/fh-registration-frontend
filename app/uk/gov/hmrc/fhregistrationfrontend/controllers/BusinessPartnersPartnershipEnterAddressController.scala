@@ -48,7 +48,7 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipEnterAddressController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(EnterAddressPage(index))
     val prepopulatedForm = formData.map(data => enterAddressForm.fill(data)).getOrElse(enterAddressForm)
 
@@ -63,7 +63,7 @@ class BusinessPartnersPartnershipEnterAddressController @Inject()(
     )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     enterAddressForm
       .bindFromRequest()
       .fold(

@@ -95,7 +95,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(index, mode).url)
           }
         }
       }
@@ -104,7 +104,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
     s"POST ${route(mode)}" when {
       val partnershipVatRegNumUrl: String = routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
       val partnershipCompanyRegNumUrl: String = routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode).url
-      val businessPartnersUrl: String = routes.BusinessPartnersController.load().url
+      val businessPartnersUrl: String = routes.BusinessPartnersController.load(index, mode).url
 
       "form with no errors" should {
         Map(

@@ -47,7 +47,7 @@ class BusinessPartnersAddressController @Inject()(
     routes.BusinessPartnersAddressController.next(index, mode)
 
   import actions._
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val partnerName = "Test User"
     val formData = request.userAnswers.get(UkAddressLookupPage(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
@@ -55,7 +55,7 @@ class BusinessPartnersAddressController @Inject()(
     Ok(view.business_partners_search_address(prepopulatedForm, partnerName, postAction(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     val partnerName = "Test User"
     form
       .bindFromRequest()

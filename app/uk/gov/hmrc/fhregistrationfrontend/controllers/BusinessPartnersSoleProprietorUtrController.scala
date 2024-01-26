@@ -47,7 +47,7 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
   def backUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(SoleProprietorUtrPage(index))
     val prepopulatedForm =
       formData.map(data => businessPartnersEnterUtrForm.fill(data)).getOrElse(businessPartnersEnterUtrForm)
@@ -60,7 +60,7 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
         backUrl(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     businessPartnersEnterUtrForm
       .bindFromRequest()
       .fold(

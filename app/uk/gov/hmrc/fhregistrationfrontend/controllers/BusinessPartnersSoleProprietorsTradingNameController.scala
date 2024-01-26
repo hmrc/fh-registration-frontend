@@ -43,7 +43,7 @@ class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersSoleProprietorsTradingNameController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))
     val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
     Ok(
@@ -54,7 +54,7 @@ class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
         backUrl(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     tradingNameForm
       .bindFromRequest()
       .fold(

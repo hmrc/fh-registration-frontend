@@ -36,7 +36,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   import actions._
 
   val businessPartnerType = "ltdLiabilityPartnership"
-  val backAction: String = routes.BusinessPartnersController.load().url
+  val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
   val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>

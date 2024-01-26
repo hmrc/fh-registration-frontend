@@ -58,8 +58,6 @@ class BusinessPartnersPartnershipNameControllerISpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title must include(pageTitle)
-              println("UUUUUUUUUUU")
-              println(page)
               page.getElementsByTag("h1").text must include(pageHeading)
               val partnershipName = page.getElementById("partnershipName")
               partnershipName.attr("value") mustBe "partnershipName"
@@ -76,7 +74,7 @@ class BusinessPartnersPartnershipNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
           }
         }
       }
@@ -161,7 +159,7 @@ class BusinessPartnersPartnershipNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
           }
         }
       }

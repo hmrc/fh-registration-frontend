@@ -17,12 +17,15 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -35,38 +38,24 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
   val controller =
     new BusinessPartnersCannotFindAddressController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
-  val enterPartnerRegOfficeAddressUrl: String =
-    routes.BusinessPartnersPartnershipEnterAddressController.load(1, NormalMode).url
-  val enterPartnerAddressUrl: String = routes.BusinessPartnersEnterAddressController.load(1, NormalMode).url
+  def enterPartnerRegOfficeAddressUrl(mode: Mode): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
+  def enterPartnerAddressUrl(mode: Mode): String = routes.BusinessPartnersEnterAddressController.load(1, mode).url
   val enterCorpBodyRegOfficeAddressUrl: String = routes.BusinessPartnersCorporateBodyEnterAddressController.load().url
   val enterUnincorpBodyRegOfficeAddressUrl: String =
     routes.BusinessPartnersUnincorporatedBodyEnterAddressController.load().url
   val index = 1
+  val emptyUA = UserAnswers("some-id")
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
       "Render the Cannot Find Address page" when {
-        "the new business partner pages are enabled" in {
-          setupUserAction()
-
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
-
-          val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
-
-          status(result) shouldBe OK
-          val page = Jsoup.parse(contentAsString(result))
-          page.title() should include("We cannot find any addresses for HR33 7GP")
-          // should be mocked out when Save4Later changes included
-          page.getElementById("enter-manually").attr("href") should include(enterPartnerRegOfficeAddressUrl)
-          reset(mockActions)
-        }
-
-        "the businessType returned is a limited-liability-partnership" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
+        "the user answers contain businessType limited-liability-partnership" in {
+          val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.LimitedLiabilityPartnership)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -75,14 +64,16 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("We cannot find any addresses for HR33 7GP")
           // should be mocked out when Save4Later changes included
-          page.getElementById("enter-manually").attr("href") should include(enterPartnerRegOfficeAddressUrl)
+          page.getElementById("enter-manually").attr("href") should include(enterPartnerRegOfficeAddressUrl(mode))
           reset(mockActions)
         }
 
         "the businessType returned is a sole-proprietor" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("sole-proprietor")
+          val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.SoleProprietor)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -91,14 +82,16 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("We cannot find any addresses for HR33 7GP")
           // should be mocked out when Save4Later changes included
-          page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressUrl)
+          page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressUrl(mode))
           reset(mockActions)
         }
 
         "the businessType returned is a individual" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("individual")
+          val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.Individual)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -107,14 +100,16 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("We cannot find any addresses for HR33 7GP")
           // should be mocked out when Save4Later changes included
-          page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressUrl)
+          page.getElementById("enter-manually").attr("href") should include(enterPartnerAddressUrl(mode))
           reset(mockActions)
         }
 
         "the businessType returned is a corporateBody" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("corporateBody")
+          val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.CorporateBody)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -128,9 +123,11 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
         }
 
         "the businessType returned is a unincorporated-body" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAppConfig.getRandomBusinessType()).thenReturn("unincorporated-body")
+          val userAnswers = UserAnswers(testUserId)
+            .set(PartnerTypePage(index), BusinessPartnerType.UnincorporatedBody)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))

@@ -104,7 +104,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load().url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(index, mode).url)
           }
         }
       }

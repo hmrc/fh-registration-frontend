@@ -778,8 +778,8 @@ fh.business_partners.entity_intro=A legal entity is an individual, company or ot
 
 fh.business_partners.add_a_partner=Partner {0}
 fh.businessPartners.each.title=Partner {0}
-fh.business_partners.entity_type.label=What type of legal entity is this partner?
-fh.businessPartnersType.error.required=Select the type of legal entity for the partner {0}
+fh.business_partners.entity_type.label=What type of legal entity is the {0} partner?
+fh.businessPartnersType.error.required=Select the type of legal entity for the {0} partner
 
 fh.business_partners_address.title=What is the partner’s address?
 fh.business_partners_address.heading=What is {0}’s address?
@@ -792,16 +792,16 @@ fh.business_partners_address.manually_enter=Enter address manually
 
 fh.business_partners.entity_type.individual.value=Individual
 fh.business_partners.entity_type.individual.label=Individual
-fh.business_partners.entity_type.sole_proprietor.value=SoleProprietor
-fh.business_partners.entity_type.sole_proprietor.label=Sole Proprietor
+fh.business_partners.entity_type.soleProprietor.value=SoleProprietor
+fh.business_partners.entity_type.soleProprietor.label=Sole Proprietor
 fh.business_partners.entity_type.partnership.value=Partnership
 fh.business_partners.entity_type.partnership.label=Partnership
-fh.business_partners.entity_type.limited_liability_partnership.value=LimitedLiabilityPartnership
-fh.business_partners.entity_type.limited_liability_partnership.label=Limited Liability Partnership
-fh.business_partners.entity_type.corporate_body.value=CorporateBody
-fh.business_partners.entity_type.corporate_body.label=Corporate Body
-fh.business_partners.entity_type.unincorporated_body.value=UnincorporatedBody
-fh.business_partners.entity_type.unincorporated_body.label=Unincorporated Body
+fh.business_partners.entity_type.limitedLiabilityPartnership.value=LimitedLiabilityPartnership
+fh.business_partners.entity_type.limitedLiabilityPartnership.label=Limited Liability Partnership
+fh.business_partners.entity_type.corporateBody.value=CorporateBody
+fh.business_partners.entity_type.corporateBody.label=Corporate Body
+fh.business_partners.entity_type.unincorporatedBody.value=UnincorporatedBody
+fh.business_partners.entity_type.unincorporatedBody.label=Unincorporated Body
 
 fh.business_partners.enter.title=Enter partner details
 fh.business_partners.enter.partner_address=Tell us the address of this partner

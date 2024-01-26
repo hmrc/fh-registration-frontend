@@ -32,7 +32,7 @@ class BusinessPartnersPartnershipEnterAddressControllerISpec
 
   List(NormalMode, CheckMode).foreach { mode =>
 
-    val businessPartnersPage: String = routes.BusinessPartnersController.load().url
+    val businessPartnersPage: String = routes.BusinessPartnersController.load(1, mode).url
 
     s"GET ${route(mode)}" when {
 

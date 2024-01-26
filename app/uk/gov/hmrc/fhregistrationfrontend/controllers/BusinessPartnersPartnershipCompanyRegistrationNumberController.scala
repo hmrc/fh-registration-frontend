@@ -41,21 +41,27 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
 
   val businessType: String = "limited-liability-partnership"
   val companyName: String = "Test Partnership"
-  def backLink(index: Int, mode: Mode): String = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode).url
+  def backLink(index: Int, mode: Mode): String =
+    routes.BusinessPartnersPartnershipTradingNameController.load(index, mode).url
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val formData = request.userAnswers.get(page(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
     Ok(
       view
-        .business_partners_enter_crn(prepopulatedForm, companyName, businessType, postAction(index, mode), backLink(index, mode)))
+        .business_partners_enter_crn(
+          prepopulatedForm,
+          companyName,
+          businessType,
+          postAction(index, mode),
+          backLink(index, mode)))
       .withCookies(Cookie("businessType", businessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     form
       .bindFromRequest()
       .fold(

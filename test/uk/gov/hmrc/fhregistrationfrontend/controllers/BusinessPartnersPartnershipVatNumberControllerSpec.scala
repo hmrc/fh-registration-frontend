@@ -63,7 +63,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "Render the businessPartnersPartnershipVatNumber page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           setupUserAction()
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
@@ -89,7 +89,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             .success
             .value
 
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           setupUserAction()
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
@@ -110,7 +110,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "redirect to the Partnership SA UTR page" when {
         "Yes is selected and Vat Number supplied, and legal entity type is Partnership" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -132,7 +132,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
         "No is selected, and legal entity type is Partnership" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -153,7 +153,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
         "No is selected, and legal entity type is Limited Liability Partnership" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -173,7 +173,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "redirect to the Partnership Registered Office Address page" when {
         "Yes is selected and Vat Number supplied, and legal entity type is Limited Liability Partnership" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -196,7 +196,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
       "Return the correct error" when {
         "the user selects yes but doesn't enter a VAT number" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -220,7 +220,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
 
         "the user doesn't select an option" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers)
+          setupDataRequiredAction(userAnswers, mode)
 
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
