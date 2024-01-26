@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.codahale.metrics.SharedMetricRegistries
 import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
@@ -31,6 +32,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RadioHelper
 
+import scala.concurrent.Future
+
 class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
@@ -40,6 +43,19 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
   lazy val mockAppConfig = mock[FrontendAppConfig]
   val mockSessionCache = mock[SessionRepository]
   val index = 1
+
+  def expectedRedirectLocationForPartnerType(partnerType: BusinessPartnerType.Value): String =
+    partnerType match {
+      case BusinessPartnerType.UnincorporatedBody => routes.BusinessPartnersUnincorporatedBodyNameController.load().url
+      case BusinessPartnerType.Partnership =>
+        routes.BusinessPartnersPartnershipNameController.load(index, NormalMode).url
+      case BusinessPartnerType.LimitedLiabilityPartnership =>
+        routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url
+      case BusinessPartnerType.CorporateBody =>
+        routes.BusinessPartnersCorporateBodyCompanyNameController.load().url
+      case _ =>
+        routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode).url
+    }
 
   val controller =
     new BusinessPartnersController(commonDependencies, views, mockActions, mockSessionCache, mockMcc)(ec)
@@ -78,96 +94,84 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
         }
       }
 
-//  s"next in $mode" when {
-//    "The business partner v2 pages are enabled" should {
-//      "return 303" when {
-//        "User selects Individual and submits" in {
-//          setupUserAction()
-//
-//          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-//          val request = FakeRequest()
-//            .withFormUrlEncodedBody("businessType" -> "Individual")
-//            .withMethod("POST")
-//          val result = await(csrfAddToken(controller.next())(request))
-//
-//          status(result) shouldBe SEE_OTHER
-//          reset(mockActions)
-//        }
-//      }
-//
-//      "return 303" when {
-//        "User selects Partnership and submits" in {
-//          setupUserAction()
-//
-//          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-//          val request = FakeRequest()
-//            .withFormUrlEncodedBody("businessType" -> "Partnership")
-//            .withMethod("POST")
-//          val result = await(csrfAddToken(controller.next())(request))
-//
-//          status(result) shouldBe SEE_OTHER
-//          reset(mockActions)
-//        }
-//      }
-//
-//      "return 303" when {
-//        "User selects LimitedLiabilityPartnership and submits" in {
-//          setupUserAction()
-//
-//          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-//          val request = FakeRequest()
-//            .withFormUrlEncodedBody("businessType" -> "LimitedLiabilityPartnership")
-//            .withMethod("POST")
-//          val result = await(csrfAddToken(controller.next())(request))
-//
-//          status(result) shouldBe SEE_OTHER
-//          reset(mockActions)
-//        }
-//      }
-//
-//      "return 303" when {
-//        "User selects UnincorporatedBody and submits" in {
-//          setupUserAction()
-//
-//          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-//          val request = FakeRequest()
-//            .withFormUrlEncodedBody("businessType" -> "UnincorporatedBody")
-//            .withMethod("POST")
-//          val result = await(csrfAddToken(controller.next())(request))
-//
-//          status(result) shouldBe SEE_OTHER
-//          reset(mockActions)
-//        }
-//      }
-//
-//      "return 400" when {
-//        "a radio button is not selected" in {
-//          setupUserAction()
-//
-//          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-//          val request = FakeRequest()
-//            .withFormUrlEncodedBody()
-//            .withMethod("POST")
-//          val result = await(csrfAddToken(controller.next())(request))
-//
-//          status(result) shouldBe BAD_REQUEST
-//          reset(mockActions)
-//        }
-//      }
-//    }
-//
-//    "the new business partner pages are disabled" should {
-//      "render the not found page" in {
-//        setupUserAction()
-//        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-//        val request = FakeRequest()
-//        val result = await(csrfAddToken(controller.next())(request))
-//
-//        status(result) shouldBe NOT_FOUND
-//        val page = Jsoup.parse(contentAsString(result))
-//        page.title should include("Page not found")
-//        reset(mockActions)
-//      }
-//    }
+      s"next in $mode" when {
+        BusinessPartnerType.partnerTypes.foreach { partnerType =>
+          s"the user selects $partnerType" should {
+            val expectedUrl = expectedRedirectLocationForPartnerType(partnerType)
+            s"redirect to $expectedUrl" when {
+              "the useranswers doesn't contain page data" in {
+                setupDataRetrievedAction(None)
+                when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+                val request = FakeRequest()
+                  .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
+                  .withMethod("POST")
+                val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+                status(result) shouldBe SEE_OTHER
+                redirectLocation(result) shouldBe Some(expectedUrl)
+                reset(mockActions)
+              }
+              BusinessPartnerType.partnerTypes.filterNot(_ == partnerType).foreach { savedPartnerType =>
+                s"the user answers contains partnerType $savedPartnerType" in {
+                  val userAnswers = UserAnswers(testUserId)
+                    .set(PartnerTypePage(index), savedPartnerType)
+                    .success
+                    .value
+                  setupDataRetrievedAction(Some(userAnswers))
+                  when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+                  val request = FakeRequest()
+                    .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
+                    .withMethod("POST")
+                  val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+                  status(result) shouldBe SEE_OTHER
+                  redirectLocation(result) shouldBe Some(expectedUrl)
+                  reset(mockActions)
+                }
+              }
+            }
+            val noChangeExpectedUrl = if (mode == CheckMode) {
+              routes.BusinessPartnersCheckYourAnswersController.load().url
+            } else {
+              expectedUrl
+            }
+
+            s"redirect to $noChangeExpectedUrl" when {
+              s"the user answers contains partnerType $partnerType" in {
+                val userAnswers = UserAnswers(testUserId)
+                  .set(PartnerTypePage(index), partnerType)
+                  .success
+                  .value
+                setupDataRetrievedAction(Some(userAnswers))
+
+                val request = FakeRequest()
+                  .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
+                  .withMethod("POST")
+                val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+                status(result) shouldBe SEE_OTHER
+                redirectLocation(result) shouldBe Some(noChangeExpectedUrl)
+                reset(mockActions)
+              }
+            }
+          }
+        }
+
+        "return 400" when {
+          "a radio button is not selected" in {
+            setupDataRetrievedAction(None)
+
+            val request = FakeRequest()
+              .withFormUrlEncodedBody()
+              .withMethod("POST")
+            val result = await(csrfAddToken(controller.next(index, mode))(request))
+
+            status(result) shouldBe BAD_REQUEST
+            reset(mockActions)
+          }
+        }
+      }
   }
 }

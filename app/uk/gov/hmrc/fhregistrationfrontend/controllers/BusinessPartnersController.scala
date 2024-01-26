@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
@@ -49,17 +49,17 @@ class BusinessPartnersController @Inject()(
       request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
     }
     val prepopulatedForm = optPreviousSelectedAnswers match {
-      case Some(data) => businessPartnerTypeForm.fill(data)
-      case None       => businessPartnerTypeForm
+      case Some(data) => businessPartnerTypeForm().fill(data)
+      case None       => businessPartnerTypeForm()
     }
-    Ok(view.business_partners_type(prepopulatedForm, postAction(index, mode), backUrl))
+    Ok(view.business_partners_type(prepopulatedForm, "first", postAction(index, mode), backUrl))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction.async { implicit request =>
-    businessPartnerTypeForm.bindFromRequest.fold(
+    businessPartnerTypeForm().bindFromRequest.fold(
       formWithErrors => {
         Future.successful(
-          BadRequest(view.business_partners_type(formWithErrors, postAction(index, mode), backUrl))
+          BadRequest(view.business_partners_type(formWithErrors, "first", postAction(index, mode), backUrl))
         )
       },
       businessType => {
@@ -67,18 +67,21 @@ class BusinessPartnersController @Inject()(
           case BusinessPartnerType.UnincorporatedBody =>
             routes.BusinessPartnersUnincorporatedBodyNameController.load()
           case BusinessPartnerType.Partnership =>
-            routes.BusinessPartnersPartnershipNameController.load(index, mode)
+            routes.BusinessPartnersPartnershipNameController.load(index, NormalMode)
           case BusinessPartnerType.LimitedLiabilityPartnership =>
             routes.BusinessPartnersLtdLiabilityPartnershipNameController.load()
           case BusinessPartnerType.CorporateBody =>
             routes.BusinessPartnersCorporateBodyCompanyNameController.load()
           case _ =>
-            routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, mode)
+            routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode)
         }
         val optPreviousSelectedAnswers =
           request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
         optPreviousSelectedAnswers match {
-          case Some(answer) if answer == businessType => Future.successful(Redirect(nextUrl))
+          case Some(answer) if answer == businessType && mode == CheckMode =>
+            Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load()))
+          case Some(answer) if answer == businessType =>
+            Future.successful(Redirect(nextUrl))
           case _ =>
             val newUserAnswers = UserAnswers(request.userId).set(PartnerTypePage(index), businessType)
             updateUserAnswersAndSaveToCache(newUserAnswers, nextUrl, PartnerTypePage(index))

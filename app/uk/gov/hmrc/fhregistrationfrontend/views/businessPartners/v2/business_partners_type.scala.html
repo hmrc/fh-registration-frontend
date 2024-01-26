@@ -31,7 +31,7 @@
       formHelper: FormWithCSRF,
       viewHelpers: ViewHelpers)
 
-@(form: Form[BusinessPartnerType.Value], postAction: Call, backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnerType.Value], partnerNumber: String, postAction: Call, backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
 <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -65,7 +65,7 @@ messages("fh.business_partners.title")
 @viewHelpers.govUkRadios(
     RadiosViewModel(
         field = form("businessPartnersType"),
-        legend = LegendViewModel(messages("fh.business_partners.entity_type.label")
+        legend = LegendViewModel(messages("fh.business_partners.entity_type.label", partnerNumber)
         ).withCssClass("govuk-fieldset__legend--m"),
         items = BusinessPartnerType.options,
         noErrorRequired = false

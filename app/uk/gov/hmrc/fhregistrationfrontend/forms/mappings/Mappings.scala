@@ -192,7 +192,10 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
 
   def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
-  def `enum`[E <: Enumeration](`enum`: E): Mapping[E#Value] = of(enumFormat(`enum`))
+  def `enum`[E <: Enumeration](
+    `enum`: E,
+    requiredErrorKey: String = "error.required",
+    args: Seq[String] = Nil): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
