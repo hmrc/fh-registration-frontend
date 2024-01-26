@@ -17,13 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.Mode
+import models.{Mode, NormalMode}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,7 +31,6 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig,
   val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
@@ -41,10 +39,11 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
 
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index)
+  def editAddressUrl(index: Int): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, NormalMode).url
   val journey = "partnership"
   val backLink = "#"
   val companyName = "company"
-  val editAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
@@ -60,9 +59,8 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
             journey,
             postAction(index, mode),
             backLink,
-            editAddressUrl))
-    }
-    else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
+            editAddressUrl(index)))
+    } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>

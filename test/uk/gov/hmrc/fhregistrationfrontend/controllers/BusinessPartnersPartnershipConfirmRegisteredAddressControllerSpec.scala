@@ -61,12 +61,13 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
       commonDependencies,
       views,
       mockActions,
-      mockAppConfig,
       mockSessionCache)(mockMcc)
 
   val pageTitle: String = "Confirm the partnership’s registered office address?"
-  val enterAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load().url
-  val registeredAddressPage: Call = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode)
+  val enterAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load(1, NormalMode).url
+  val registeredAddressPage: String =
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode).url
+  val checkYourAnswersPage = routes.BusinessPartnersCheckYourAnswersController.load().url
 
   def createUserAnswers(answers: UkAddressLookup): UserAnswers =
     UserAnswers(testUserId)
@@ -102,7 +103,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
+        redirectLocation(result) shouldBe Some(registeredAddressPage)
         reset(mockActions)
       }
 
@@ -114,7 +115,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
+        redirectLocation(result) shouldBe Some(registeredAddressPage)
         reset(mockActions)
       }
     }
@@ -131,9 +132,11 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
 
         status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(checkYourAnswersPage)
         reset(mockActions)
       }
     }
+
     "Redirect to the Business Partners Address page" when {
       "addressList contains no addresses" in {
         val userAnswers = createUserAnswers(emptyUkAddressLookup)
@@ -145,7 +148,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
+        redirectLocation(result) shouldBe Some(registeredAddressPage)
         reset(mockActions)
       }
 
@@ -159,7 +162,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
         val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, NormalMode).url)
+        redirectLocation(result) shouldBe Some(registeredAddressPage)
         reset(mockActions)
       }
     }
