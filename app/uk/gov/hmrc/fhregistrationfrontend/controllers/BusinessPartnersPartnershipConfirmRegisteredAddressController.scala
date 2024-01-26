@@ -45,7 +45,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   val backLink = "#"
   val companyName = "company"
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
@@ -63,7 +63,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
     } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
     val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
     val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
