@@ -137,8 +137,10 @@ POST         /business-partners/confirm-unincorporated-body-registered-office-ad
 GET          /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load()
 POST         /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next()
 
-GET          /business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load()
-POST         /business-partners/company-name                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.next()
+GET          /business-partners/company-name/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load(index: Int, mode: Mode = NormalMode)
+GET          /business-partners/change-company-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load(index: Int, mode: Mode = CheckMode)
+POST         /business-partners/company-name/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.next(index: Int, mode: Mode = NormalMode)
+POST         /business-partners/change-company-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET          /business-partners/partnership-name/:index                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipNameController.load(index: Int, mode: Mode = NormalMode)
 GET          /business-partners/change-partnership-name/:index            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipNameController.load(index: Int, mode: Mode = CheckMode)

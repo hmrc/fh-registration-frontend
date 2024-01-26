@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -36,7 +37,7 @@ class BusinessPartnersCorporateBodyTradingNameController @Inject()(
 
   val businessType = "corporateBody"
   val companyName = "Shelby Limited"
-  val backLink = routes.BusinessPartnersCorporateBodyCompanyNameController.load().url
+  val backLink = routes.BusinessPartnersCorporateBodyCompanyNameController.load(1, NormalMode).url
 
   def load(): Action[AnyContent] = userAction { implicit request =>
     if (config.newBusinessPartnerPagesEnabled) {
