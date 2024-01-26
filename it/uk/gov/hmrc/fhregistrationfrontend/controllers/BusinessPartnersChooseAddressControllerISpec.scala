@@ -1,12 +1,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode}
 import org.jsoup.Jsoup
-import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.libs.ws.DefaultWSCookie
 import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class BusinessPartnersChooseAddressControllerISpec extends Specifications with TestConfiguration {
@@ -15,71 +12,11 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
   val index: Int = 1
 
-  private val testAddressData: Map[String, Address] = {
-    val address1 = Address(
-      addressLine1 = "1 Romford Road",
-      addressLine2 = Some("Wellington"),
-      addressLine3 = Some("Telford"),
-      addressLine4 = None,
-      postcode = "TF1 4ER",
-      countryCode = None,
-      lookupId = None
-    )
-
-    val address2 = address1.copy(addressLine1 = "2 Romford Road")
-    val address3 = address1.copy(addressLine1 = "3 Romford Road")
-    val address4 = address1.copy(addressLine1 = "2 Romford Road")
-    val address5 = address1.copy(addressLine1 = "5 Romford Road")
-
-    Map("1" -> address1, "2" -> address2, "3" -> address3, "4" -> address4, "5" -> address5)
-  }
-
-  val seedCacheWithUKAddressLookup: UserAnswers = emptyUserAnswers
-    .set[UkAddressLookup](
-      UkAddressLookupPage(1),
-      UkAddressLookup(
-        Some("1 Romford Road"),
-        "TF1 4ER",
-        testAddressData
-      ))
-    .success
-    .value
-
-  val seedCacheWithSingleUKAddress: UserAnswers = emptyUserAnswers
-    .set[UkAddressLookup](
-      UkAddressLookupPage(1),
-      UkAddressLookup(
-        Some("1 Romford Road"),
-        "TF1 4ER",
-        Map("1" -> Address(
-          addressLine1 = "1 Romford Road",
-          addressLine2 = Some("Wellington"),
-          addressLine3 = Some("Telford"),
-          addressLine4 = None,
-          postcode = "TF1 4ER",
-          countryCode = None,
-          lookupId = None
-        ))
-      ))
-    .success
-    .value
-
-  val seedCacheWithEmptyUKAddressList: UserAnswers = emptyUserAnswers
-    .set[UkAddressLookup](
-      UkAddressLookupPage(1),
-      UkAddressLookup(
-        Some("1 Romford Road"),
-        "TF1 4ER",
-        Map.empty
-      ))
-    .success
-    .value
-
   List(NormalMode, CheckMode).foreach { mode =>
     s"GET ${route(mode)}" should {
       "render the choose address page" in {
         given.commonPrecondition
-        addUserAnswersToSession(seedCacheWithUKAddressLookup)
+        addUserAnswersToSession(seedCacheWithUKAddressLookup(multipleAddresses))
 
         val result = buildRequest(route(mode))
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -114,7 +51,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
       "redirect the user to the Check Your Answers page" when {
         "the form has no errors and the first value is selected" in {
           given.commonPrecondition
-          addUserAnswersToSession(seedCacheWithUKAddressLookup)
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(multipleAddresses))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -131,7 +68,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
         "the form has no errors and the second value is selected" in {
           given.commonPrecondition
-          addUserAnswersToSession(seedCacheWithUKAddressLookup)
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(multipleAddresses))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -150,7 +87,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
       "redirect the user to the Business Partners Address page" when {
         "addressList cache contains no addresses" in {
           given.commonPrecondition
-          addUserAnswersToSession(seedCacheWithEmptyUKAddressList)
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(Map.empty))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -167,7 +104,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
         "addressList cache contains a single addresses" in {
           given.commonPrecondition
-          addUserAnswersToSession(seedCacheWithSingleUKAddress)
+          addUserAnswersToSession(seedCacheWithUKAddressLookup(singleAddress))
 
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))

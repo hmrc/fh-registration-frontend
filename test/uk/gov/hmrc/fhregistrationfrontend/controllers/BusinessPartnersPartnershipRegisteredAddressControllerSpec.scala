@@ -149,7 +149,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url)
+            routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index).url)
           reset(mockActions)
         }
 
@@ -171,7 +171,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(
-              routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load().url)
+              routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index).url)
             reset(mockActions)
           }
         }
