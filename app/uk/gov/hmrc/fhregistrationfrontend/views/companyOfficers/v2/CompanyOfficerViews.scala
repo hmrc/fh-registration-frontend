@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.teststubs
+package uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2
 
-import models.UserAnswers
-import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
+import uk.gov.hmrc.fhregistrationfrontend.views.html.companyOfficers.v2._
 
-trait UserTestData {
-  val testUserId = "Int-uid"
-  val ggEmail = "gg@test.com"
-  val registrationNumber = "XZFH00000123456"
-  val adminRole = User
-  val assistantRole = Assistant
-  val userAffinityGroup = AffinityGroup.Individual
-  val emptyUserAnswers = UserAnswers(testUserId)
+import javax.inject.{Inject, Singleton}
 
-}
+@Singleton
+class CompanyOfficerViews @Inject()(
+  val checkYourAnswers: CompanyOfficersCYA
+)

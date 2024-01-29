@@ -16,22 +16,21 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.util
 
-import java.nio.charset.Charset
-
 import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import org.scalatest.wordspec.AnyWordSpecLike
+
+import java.nio.charset.Charset
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.language.implicitConversions
-import scala.language.postfixOps
+import scala.language.{implicitConversions, postfixOps}
 
 trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues with GuiceOneAppPerSuite {
 
