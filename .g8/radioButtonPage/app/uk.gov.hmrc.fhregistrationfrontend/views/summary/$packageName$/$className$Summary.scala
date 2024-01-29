@@ -12,16 +12,20 @@ import uk.gov.hmrc.fhregistrationfrontend.viewmodels.implicits._
 
 object $className$Summary  {
 
-  def row($className$;format="decap": $classname$)(implicit messages: Messages): SummaryListRow =
+  def row(answer: $className$)(implicit messages: Messages): SummaryListRow =
 
-    val value = HtmlFormat.escape(answer.$fieldName$).toString + "<br/>" + HtmlFormat.escape(answer.$fieldName2$).toString
-    SummaryListRowViewModel(
-      key     = "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel",
-      value   = ValueViewModel(HtmlContent(value)),
-      actions = Seq(
-        ActionItemViewModel("link.change", routes.$className$Controller.onPageLoad(CheckMode).url)
-          .withVisuallyHiddenText(messages("$packageName$.$className;format="decap"$.change.hidden"))
-      )
+  val value = ValueViewModel(
+    HtmlContent(
+      HtmlFormat.escape(messages(s"$packageName$.$className;format="decap"$.\$answer"))
     )
-    }
+  )
+
+  SummaryListRowViewModel(
+    key     = "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel",
+    value   = ValueViewModel(HtmlContent(value)),
+    actions = Seq(
+      ActionItemViewModel("link.change", routes.$className$Controller.onPageLoad(CheckMode).url)
+        .withVisuallyHiddenText(messages("$packageName$.$className;format="decap"$.change.hidden"))
+    )
+  )
 }
