@@ -12,6 +12,6 @@ class $className$FormProvider @Inject() extends Mappings {
   val requiredErrorKey = "fh.$packageName$.$className;format="decap"$.error.required"
   def apply(): Form[$className$] =
     Form(
-      key -> enum[CompanyOfficerType](requiredErrorKey)
+      key -> enum(CompanyOfficerType, requiredErrorKey)
     )($className$.apply)($className$.unapply)
 }
