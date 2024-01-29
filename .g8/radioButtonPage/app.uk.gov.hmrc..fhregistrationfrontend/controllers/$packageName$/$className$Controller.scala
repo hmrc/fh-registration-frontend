@@ -1,7 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
 import uk.gov.hmrc.fhregistrationfrontend.controllers.{CommonPlayDependencies, ControllerHelper}
-import play.api.mvc._
+import play.api.mvc.Action
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$FormProvider
 import models.Mode
@@ -23,10 +23,10 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
 
   import actions._
 
-  val form = formProvider()
+  val form: Form[$className$FormProvider] = formProvider()
 
   def postAction(index: Int, mode: Mode): Call =
-    routes.$className$Controller.next(index, mode)
+    routes.$className$Controller.onSubmit(index, mode)
 
   //TODO: Update backUrl so it is the previous page of the section
   def backUrl(index: Int, mode: Mode): String = "#"
