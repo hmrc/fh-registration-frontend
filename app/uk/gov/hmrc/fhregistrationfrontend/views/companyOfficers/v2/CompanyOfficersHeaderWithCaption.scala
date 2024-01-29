@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.teststubs
+package uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2
 
-import models.UserAnswers
-import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
+import play.api.i18n.Messages
 
-trait UserTestData {
-  val testUserId = "Int-uid"
-  val ggEmail = "gg@test.com"
-  val registrationNumber = "XZFH00000123456"
-  val adminRole = User
-  val assistantRole = Assistant
-  val userAffinityGroup = AffinityGroup.Individual
-  val emptyUserAnswers = UserAnswers(testUserId)
+object CompanyOfficersHeaderWithCaption {
 
+  def apply(title: String)(implicit messages: Messages) =
+    s"""<header>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l hmrc-caption-l">
+          <span class="govuk-visually-hidden">${messages("fh.companyOfficers.screen-reader.section")}</span>
+          ${messages("fh.companyOfficers.caption")}</span>
+        $title
+      </h1>
+    </header>"""
 }
