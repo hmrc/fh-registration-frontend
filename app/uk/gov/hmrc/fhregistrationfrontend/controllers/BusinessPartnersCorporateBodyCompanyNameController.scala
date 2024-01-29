@@ -42,37 +42,49 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
   val journeyType = "corporateBody"
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersCorporateBodyCompanyNameController.next(index, mode)
-  val backUrl: String = routes.BusinessPartnersController.load().url
+  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
   def tradingNamePage(index: Int, mode: Mode): Call =
     routes.BusinessPartnersCorporateBodyTradingNameController.load()
   lazy val form: Form[String] = companyNameForm
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
     val currentPage = CompanyNamePage(index)
     val formData = request.userAnswers.get(currentPage)
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
     Ok(
       view
-        .business_partners_name(journeyType, postAction(index, mode), prepopulatedForm, companyNameKey, backUrl))
-
+        .business_partners_name(
+          journeyType,
+          postAction(index, mode),
+          prepopulatedForm,
+          companyNameKey,
+          backUrl(index, mode)
+        ))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    companyNameForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view
-                .business_partners_name(journeyType, postAction(index, mode), formWithErrors, companyNameKey, backUrl))
-          )
-        },
-        companyName => {
-          val currentPage = CompanyNamePage(index)
-          val updatedUserAnswers = request.userAnswers.set(currentPage, companyName)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
-        }
-      )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index: Int, mode: Mode).async {
+    implicit request =>
+      companyNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view
+                  .business_partners_name(
+                    journeyType,
+                    postAction(index, mode),
+                    formWithErrors,
+                    companyNameKey,
+                    backUrl(index, mode))
+              )
+            )
+          },
+          companyName => {
+            val currentPage = CompanyNamePage(index)
+            val updatedUserAnswers = request.userAnswers.set(currentPage, companyName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
+          }
+        )
   }
 }
