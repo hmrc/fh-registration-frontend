@@ -1,0 +1,57 @@
+@import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$._
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
+@this(
+    layout: layout,
+    viewHelpers: ViewHelpers)
+)
+@(form: Form[_], postAction: Call, backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@pageScripts = {
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@titlePrefix = @{
+    if (form.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
+}
+
+@title = @{
+    messages("fh.$packageName$.$className;format="decap"$.title")
+}
+
+@heading = @{
+    messages("fh.$packageName$.$className;format="decap"$.heading")
+}
+
+@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some(backUrl)) {
+
+    @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
+
+        @if(form.errors.nonEmpty) {
+            @viewHelpers.govukErrorSummary(ErrorSummaryViewModel(form))
+        }
+
+        @Html(CompanyOfficersHeaderWithCaption(heading))
+
+        @viewHelpers.govukRadios(
+            RadiosViewModel(
+                field  = form("value"),
+                legend = LegendViewModel(messages("$packageName$.$className;format="decap"$.heading")).asPageHeading(),
+                items  = $className$.options,
+                noErrorRequired = false
+            )
+        )
+
+        @viewHelpers.govukButton(
+            ButtonViewModel(messages("button.save.continue"))
+        )
+        @SaveForLater()
+    }
+}
