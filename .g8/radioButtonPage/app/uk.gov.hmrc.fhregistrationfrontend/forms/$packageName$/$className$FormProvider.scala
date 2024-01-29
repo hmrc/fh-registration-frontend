@@ -9,7 +9,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 class $className$FormProvider @Inject() extends Mappings {
 
   val key = $className$;format="decap"$
-  val requiredErrorKey = s"$fh.$className$;format="decap"$.error.required"
+  val requiredErrorKey = "fh.$packageName$.$className;format="decap"$.error.required"
   def apply(): Form[$className$] =
     Form(
       key -> enum[CompanyOfficerType](requiredErrorKey)
