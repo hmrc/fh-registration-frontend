@@ -12,7 +12,6 @@ import uk.gov.hmrc.fhregistrationfrontend.viewmodels.implicits._
 
 
 object $className$Summary  {
-
   def row(answers: UserAnswers)(implicit messages: Messages): SummaryListRow =
     answers.get($className$Page).map {
       answer =>
@@ -28,7 +27,7 @@ object $className$Summary  {
     value   = ValueViewModel(HtmlContent(value)),
     actions = Seq(
       ActionItemViewModel("link.change", routes.$className$Controller.onPageLoad(CheckMode).url)
-        .withVisuallyHiddenText(messages("$packageName$.$className;format="decap"$.change.hidden"))
+        .withVisuallyHiddenText(messages("fh.$packageName$.$className;format="decap"$.change.hidden"))
     )
   )
 }

@@ -31,14 +31,13 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
   //TODO: Update backUrl so it is the previous page of the section
   def backUrl(index: Int, mode: Mode): String = "#"
 
-
   def onPageLoad(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) {
-  implicit request =>
-    val formData = request.userAnswers.get($className$Controller(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+    implicit request =>
+      val formData = request.userAnswers.get($className$Controller(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
       Ok(view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
-  }
+    }
 
   def onSubmit(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async {
     implicit request =>
@@ -52,6 +51,6 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
           //Todo: update startCall so it is the nextPage call
           updateUserAnswersAndSaveToCache(updatedAnswers, startCall, page)
         }
-      )
+     )
   }
 }
