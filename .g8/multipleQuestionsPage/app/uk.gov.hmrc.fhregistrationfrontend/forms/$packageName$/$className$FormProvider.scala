@@ -1,11 +1,11 @@
-package forms.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
-import models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 
 class $className$FormProvider @Inject() extends Mappings {
 

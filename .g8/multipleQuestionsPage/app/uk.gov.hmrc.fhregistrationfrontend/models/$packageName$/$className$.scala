@@ -1,4 +1,4 @@
-package models.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.models.$packageName$
 
 import play.api.libs.json._
 
