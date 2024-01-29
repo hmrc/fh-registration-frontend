@@ -13,13 +13,15 @@ import uk.gov.hmrc.fhregistrationfrontend.viewmodels.implicits._
 
 object $className$Summary  {
 
-  def row(answer: $className$)(implicit messages: Messages): SummaryListRow =
+  def row(answers: UserAnswers)(implicit messages: Messages): SummaryListRow =
+    answers.get($className$Page).map {
+      answer =>
 
-  def value = ValueViewModel(
-    HtmlContent(
-      HtmlFormat.escape(messages(s"$packageName$.$className;format="decap"$.\$answer"))
-    )
-  )
+        val value = ValueViewModel(
+          HtmlContent(
+            HtmlFormat.escape(messages(s"$packageName$.$className;format="decap"$.\$answer"))
+          )
+        )
 
   SummaryListRowViewModel(
     key     = "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel",
