@@ -53,7 +53,6 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
       mockAppConfig,
       mockAddressService,
       mockSessionCache)(mockMcc)
-  val emptyUserAnswers: UserAnswers = UserAnswers(testUserId)
 
   def createUserAnswers(answers: UkAddressLookup): UserAnswers =
     UserAnswers(testUserId)

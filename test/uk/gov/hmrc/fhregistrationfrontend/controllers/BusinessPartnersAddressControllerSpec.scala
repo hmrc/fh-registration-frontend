@@ -64,7 +64,6 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
       .set[UkAddressLookup](UkAddressLookupPage(1), answers)
       .success
       .value
-  val emptyUserAnswers: UserAnswers = UserAnswers(testUserId)
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {

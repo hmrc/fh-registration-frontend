@@ -1180,3 +1180,8 @@ home.admin.page.title=  FHDDS Admin Page
 home.admin.retrieve.submission.button= Get Pending Submissions
 home.admin.submisson.page.header= Pending Submissions
 home.admin.submisson.page.title=  Pending Submissions
+
+#Company Officers
+fh.companyOfficers.caption = Company officers
+fh.companyOfficers.summary.title = Check your answers
+fh.companyOfficers.screen-reader.section = this is for:

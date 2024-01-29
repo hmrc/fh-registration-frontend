@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.util
 
 import java.nio.charset.Charset
-
 import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.OptionValues
@@ -29,6 +28,10 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Pa
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress, TradingName, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import org.scalatest.wordspec.AnyWordSpecLike
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.test.FakeRequest
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 import scala.language.postfixOps
