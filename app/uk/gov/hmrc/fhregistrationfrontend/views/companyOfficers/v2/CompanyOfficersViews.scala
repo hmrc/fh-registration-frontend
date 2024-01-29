@@ -21,6 +21,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.html.companyOfficers.v2._
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CompanyOfficerViews @Inject()(
+class CompanyOfficersViews @Inject()(
   val checkYourAnswers: CompanyOfficersCYA
 )

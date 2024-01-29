@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.companyOfficers
 
 import com.google.inject.Inject
-import models.{Mode, NormalMode}
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -33,12 +33,11 @@ class CompanyOfficerCYAController @Inject()(
     extends AppController(ds, cc) with SummaryListFluency {
 
   import actions._
-
-  def load(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>
+  `def load(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>
     val summaryList = SummaryListViewModel(
       rows = Seq.empty
     )
-    Ok(view.companyOfficerViews.checkYourAnswers("#", summaryList, routes.CompanyOfficerCYAController.next(index)))
+    Ok(view.companyOfficersViews.checkYourAnswers("#", summaryList, routes.CompanyOfficerCYAController.next(index)))
   }
 
   def next(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>

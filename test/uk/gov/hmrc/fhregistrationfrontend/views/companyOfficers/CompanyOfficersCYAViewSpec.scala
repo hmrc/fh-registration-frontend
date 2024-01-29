@@ -28,7 +28,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, Summ
 
 class CompanyOfficersCYAViewSpec extends ViewSpecHelper {
 
-  val cyaView: CompanyOfficersCYA = views.companyOfficerViews.checkYourAnswers
+  val cyaView: CompanyOfficersCYA = views.companyOfficersViews.checkYourAnswers
 
   object Selectors {
     val POST_HEADER_CAPTION = "govuk-body"
