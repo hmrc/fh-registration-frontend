@@ -1,15 +1,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
-import controllers.ControllerHelper
+import uk.gov.hmrc.fhregistrationfrontend.controllers.{CommonPlayDependencies, ControllerHelper}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$FormProvider
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.Mode
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
-import uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
