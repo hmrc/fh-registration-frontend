@@ -12,6 +12,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.Controllers
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$FormProvider
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.CommonPlayDependencies
 
 class $className$Controller @Inject()(
                                        ds: CommonPlayDependencies,
@@ -39,7 +40,7 @@ class $className$Controller @Inject()(
     val formData = request.userAnswers.get($className$Controller(index))
     val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-      Ok(view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode))))
+      Ok(view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
   }
 
   def onSubmit(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async {

@@ -4,7 +4,7 @@ import models.$packageName$.$className$
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 
-case object $className$Page(index: Int) extends QuestionPage[$className$] {
+case class $className$Page(index: Int) extends QuestionPage[$className$] {
 
   override def path: JsPath = JsPath \ "$packageName$" \ index.toString \ toString
 

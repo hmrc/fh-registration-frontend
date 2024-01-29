@@ -10,11 +10,12 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import uk.gov.hmrc.fhregistrationfrontend.viewmodels.govuk.summarylist._
 import uk.gov.hmrc.fhregistrationfrontend.viewmodels.implicits._
 
+
 object $className$Summary  {
 
   def row(answer: $className$)(implicit messages: Messages): SummaryListRow =
 
-  val value = ValueViewModel(
+  def value = ValueViewModel(
     HtmlContent(
       HtmlFormat.escape(messages(s"$packageName$.$className;format="decap"$.\$answer"))
     )
