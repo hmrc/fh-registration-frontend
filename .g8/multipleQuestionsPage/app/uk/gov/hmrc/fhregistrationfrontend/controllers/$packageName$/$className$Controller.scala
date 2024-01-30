@@ -7,18 +7,19 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form.fo
 import models.Mode
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.$className$View
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class $className$Controller @Inject()(ds: CommonPlayDependencies,
-                                      view: Views,
+                                      $className;format="decap"$View: $className$View,
                                       actions: Actions,
                                       val sessionCache: SessionRepository,
                                       cc: MessagesControllerComponents)
                                      (implicit val ec: ExecutionContext)
-  extends ControllerHelper {
+  extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
   def postAction(index: Int, mode: Mode): Call =
@@ -43,7 +44,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(
-            view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode))
+            view.$packageName$Views.$className;format="decap"$(formWithErrors, postAction(index, mode), backUrl(index, mode))
           )),
 
         value => {
