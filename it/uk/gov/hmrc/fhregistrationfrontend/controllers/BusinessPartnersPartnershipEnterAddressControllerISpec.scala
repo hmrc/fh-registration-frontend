@@ -32,8 +32,6 @@ class BusinessPartnersPartnershipEnterAddressControllerISpec
 
   List(NormalMode, CheckMode).foreach { mode =>
 
-    val businessPartnersPage: String = routes.BusinessPartnersController.load(1, mode).url
-
     s"GET ${route(mode)}" when {
 
       "Render the Business Partners Enter the Partnership's Registered Office Address page" when {
@@ -81,7 +79,7 @@ class BusinessPartnersPartnershipEnterAddressControllerISpec
       }
 
       "There are no user answers in the database" should {
-        "redirect to the start of Business Partners" in {
+        "redirect to the start" in {
           given.commonPrecondition
 
           val result = buildRequest(route(mode))
@@ -89,7 +87,7 @@ class BusinessPartnersPartnershipEnterAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersPage)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }

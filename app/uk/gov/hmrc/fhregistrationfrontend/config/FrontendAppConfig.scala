@@ -33,6 +33,7 @@ trait AppConfig {
   def getConfiguration: Configuration
 
   val newBusinessPartnerPagesEnabled: Boolean
+  val newCompanyOfficersPagesEnabled: Boolean
 }
 
 @Singleton
@@ -71,6 +72,8 @@ class FrontendAppConfig @Inject()(
   override def getConfiguration: Configuration = configuration
 
   override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
+
+  override lazy val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =

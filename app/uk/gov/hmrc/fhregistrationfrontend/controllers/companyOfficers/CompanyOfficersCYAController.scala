@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.{AppController, CommonPlay
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import viewmodels.govuk.SummaryListFluency
 
-class CompanyOfficerCYAController @Inject()(
+class CompanyOfficersCYAController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -34,14 +34,14 @@ class CompanyOfficerCYAController @Inject()(
 
   import actions._
 
-  def load(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>
+  def load(index: Int): Action[AnyContent] = dataRequiredActionBusinessPartners(index, NormalMode) { implicit request =>
     val summaryList = SummaryListViewModel(
       rows = Seq.empty
     )
-    Ok(view.companyOfficersCYAView("#", summaryList, routes.CompanyOfficerCYAController.next(index)))
+    Ok(view.companyOfficersCYAView("#", summaryList, routes.CompanyOfficersCYAController.next(index)))
   }
 
-  def next(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>
+  def next(index: Int): Action[AnyContent] = dataRequiredActionBusinessPartners(index, NormalMode) { implicit request =>
     Ok(s"Form submitted, with result:")
   }
 }

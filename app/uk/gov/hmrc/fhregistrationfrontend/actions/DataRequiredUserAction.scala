@@ -42,7 +42,7 @@ class DataRequiredAction(val executionContext: ExecutionContext, index: Int, mod
           Right(new DataRequiredRequest[A](userAnswers, r.request))
         case None =>
           logger.error(s"Not found: user answers")
-          Left(Redirect(routes.BusinessPartnersController.load(index, mode)))
+          Left(Redirect(routes.Application.main()))
       }
     }
   }

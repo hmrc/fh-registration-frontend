@@ -1,362 +1,255 @@
 package controllers.$packageName$
 
-import controllers.ControllerITTestHelper
-import models.SelectChange.$packageName;format="cap"$
-import models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.{convertToAnyMustWrapper, include}
-import pages.$packageName$.$className$Page
+import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
 import play.api.http.HeaderNames
 import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.controllers._
 
-class $className$ControllerISpec extends ControllerITTestHelper {
+class $className$ControllerISpec extends Specifications with TestConfiguration {
 
-  val normalRoutePath = "/$url$"
-  val checkRoutePath = "/change-$url$"
+  def route(mode: Mode): Call = $packageName$.routes.$className$Controller.onPageLoad(1, mode)
 
-  val $className;format="decap"$JsObject = Json.toJson($packageName$$className$).as[JsObject].value
-  val $className;format="decap"$Map: collection.Map[String, String] = {
-    $className;format="decap"$JsObject.map { case (fName, fValue) => fName -> fValue.as[String] }
-  }
 
-  val userAnswers = emptyUserAnswersFor$packageName;format="cap"$.set($className$Page, $packageName$$className$).success.value
+  val $className;format="decap"$ = $className$("test1", "test2")
 
-  "GET " + normalRoutePath - {
-    "when the userAnswers contains no data" - {
-      "should return OK and render the $className$ page with no data populated" in {
-        given
-          .commonPrecondition
+  val userAnswersWithPageData = emptyUserAnswers
+    .set[$className$]($className$Page(1), $className;format="decap"$)
+    .success
+    .value
 
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + normalRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val inputFields = page.getElementsByClass("govuk-form-group")
-            inputFields.size() mustBe 2
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-              inputFields.get(index).text() mustBe Messages("$packageName$.$className;format="decap"$." + fieldName)
-              inputFields.get(index).getElementById(fieldName).hasAttr("value") mustBe false
-            }
-          }
-        }
-      }
-    }
-
-    s"when the userAnswers contains data for the page" - {
-      s"should return OK and render the page with fields populated" in {
-        given
-          .commonPrecondition
-
-        setAnswers(userAnswers)
-
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + normalRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val inputFields = page.getElementsByClass("govuk-form-group")
-            inputFields.size() mustBe 2
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, fieldValue), index) =>
-              inputFields.get(index).text() mustBe Messages("$packageName$.$className;format="decap"$." + fieldName)
-              inputFields.get(index).getElementById(fieldName).hasAttr("value") mustBe true
-              inputFields.get(index).getElementById(fieldName).attr("value") mustBe fieldValue
-            }
-          }
-        }
-      }
-    }
-    testUnauthorisedUser($packageName$BaseUrl + normalRoutePath)
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + normalRoutePath)
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + normalRoutePath)
-  }
-
-  "GET " + checkRoutePath - {
-    "when the userAnswers contains no data" - {
-      "should return OK and render the $className$ page with no data populated" in {
-        given
-          .commonPrecondition
-
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + checkRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val inputFields = page.getElementsByClass("govuk-form-group")
-            inputFields.size() mustBe 2
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-              inputFields.get(index).text() mustBe Messages("$packageName$.$className;format="decap"$." + fieldName)
-              inputFields.get(index).getElementById(fieldName).hasAttr("value") mustBe false
-            }
-          }
-        }
-      }
-    }
-
-    s"when the userAnswers contains data for the page" - {
-      s"should return OK and render the page with fields populated" in {
-        given
-          .commonPrecondition
-
-        setAnswers(userAnswers)
-
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + checkRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val inputFields = page.getElementsByClass("govuk-form-group")
-            inputFields.size() mustBe 2
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, fieldValue), index) =>
-              inputFields.get(index).text() mustBe Messages("$packageName$.$className;format="decap"$." + fieldName)
-              inputFields.get(index).getElementById(fieldName).hasAttr("value") mustBe true
-              inputFields.get(index).getElementById(fieldName).attr("value") mustBe fieldValue
-            }
-          }
-        }
-      }
-    }
-    testUnauthorisedUser($packageName$BaseUrl + checkRoutePath)
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + checkRoutePath)
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + checkRoutePath)
-  }
-
-  s"POST " + normalRoutePath - {
-    "when the user populates answers all questions" - {
-      "should update the session with the new values and redirect to the index controller" - {
-        "when the session contains no data for page" in {
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"GET ${route(mode)}" when {
+      "the userAnswers contains no data" - {
+        "should return OK and render the $className$ page with no data populated" in {
           given
             .commonPrecondition
 
-          setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
+          addUserAnswersToSession(emptyUserAnswers)
+
           WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + normalRoutePath, Json.toJson($packageName$$className$Diff)
-            )
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some($nextPage$.url)
-              val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-              dataStoredForPage.nonEmpty mustBe true
-              dataStoredForPage.get mustBe $packageName$$className$Diff
-            }
-          }
-        }
-
-        "when the session already contains data for page" in {
-          given
-            .commonPrecondition
-
-          setAnswers(userAnswers)
-          WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + normalRoutePath, Json.toJson($packageName$$className$Diff)
-            )
-
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some($nextPage$.url)
-              val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-              dataStoredForPage.nonEmpty mustBe true
-              dataStoredForPage.get mustBe $packageName$$className$Diff
+            whenReady(result1) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include($title$)
+              val inputFields = page.getElementsByClass("govuk-form-group")
+              inputFields.size() mustBe 2
+              inputFields.get(0).text() mustBe $className;format="decap"$.$field1Name$
+              inputFields.get(0).getElementById($field1Name$).hasAttr("value") mustBe false
+              inputFields.get(1).text() mustBe $className;format = "decap"$.$field2Name$
+              inputFields.get(1).getElementById($field2Name$).hasAttr("value") mustBe false
             }
           }
         }
       }
-    }
 
-    "should return 400 with required error" - {
-      "when no questions are answered" in {
-        given
-          .commonPrecondition
+      "the userAnswers contains no data" - {
+        "should return OK and render the $className$ page with no data populated" in {
+          given
+            .commonPrecondition
 
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-        WsTestClient.withClient { client =>
-          val result = createClientRequestPOST(
-            client, $packageName$BaseUrl + normalRoutePath, Json.toJson($className$("", ""))
-          )
+          addUserAnswersToSession(userAnswersWithPageData)
+
+          WsTestClient.withClient { client =>
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+
+            whenReady(result1) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include($title$)
+              val inputFields = page.getElementsByClass("govuk-form-group")
+              inputFields.size() mustBe 2
+              inputFields.get(0).text() mustBe $className;format ="decap"$.$field1Name$
+              inputFields.get(0).getElementById("$field1Name$").hasAttr("value") mustBe true
+              inputFields.get(0).getElementById("$field1Name$").attr("value") mustBe "test1"
+              inputFields.get(1).text() mustBe $className;format="decap"$.$field2Name$
+              inputFields.get(1).getElementById("$field2Name$").hasAttr("value") mustBe true
+              inputFields.get(1).getElementById("$field2Name$").attr("value") mustBe "test2"
+            }
+          }
+        }
+      }
+
+      "there is no user answers in the database" should {
+        "redirect to the start" in {
+          given.commonPrecondition
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-              .first().getElementsByTag("li")
-            errorSummaryList.size() mustBe $className;format="decap"$Map.size
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-              val errorSummary = errorSummaryList.get(index)
-              errorSummary
-                .select("a")
-                .attr("href") mustBe "#" + fieldName
-              errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error." + fieldName + ".required")
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
+          }
+        }
+      }
+    }
+
+    s"POST ${route(mode)}" when {
+      "the user populates answers all questions" should {
+        val expectedUrl = if (mode == CheckMode) {
+          $packageName;
+          format = "cap" $CYAController
+          .load(index)
+        } else {
+          $nextPage$
+        }
+        s"update the user answers with the new values and redirect to $expectedUrl" when {
+          "the user answers contain no page data" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(emptyUserAnswers)
+            WsTestClient.withClient { client =>
+              val result1 = buildRequestFromRoute(route(mode))
+                .addCookies(
+                  DefaultWSCookie("mdtp", authAndSessionCookie)
+                )
+                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+                .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
+
+              whenReady(result1) { res =>
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
+                val userAnswers = getUserAnswersFromSession.get
+                val pageData = userAnswers.get($className$Page(1))
+                pageData mustBe Some($className$("Coca", "Cola"))
+              }
+            }
+          }
+        }
+
+        s"override the user answers with the new values and redirect to $expectedUrl" when {
+          "the user answers contains page data" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(userAnswersWithPageData)
+            WsTestClient.withClient { client =>
+              val result1 = buildRequestFromRoute(route(mode))
+                .addCookies(
+                  DefaultWSCookie("mdtp", authAndSessionCookie)
+                )
+                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+                .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
+
+              whenReady(result1) { res =>
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
+                val userAnswers = getUserAnswersFromSession.get
+                val pageData = userAnswers.get($className$Page(1))
+                pageData mustBe Some($className$("Coca", "Cola"))
+              }
             }
           }
         }
       }
-      $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-        "when no answer is given for field" + fieldName in {
-          given
-            .commonPrecondition
 
-          setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-          val invalidJson = $className;format="decap"$Map.foldLeft(Json.obj()) { case (current, (fn, fv)) =>
-            val fieldValue = if (fn == fieldName) {
-              ""
-            } else {
-              fn
-            }
-            current ++ Json.obj(fn -> fieldValue)
-          }
+      "should return 400 with required error" - {
+        "when no questions are answered" in {
+          given.commonPrecondition
+
+          addUserAnswersToSession(emptyUserAnswers)
           WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + normalRoutePath, invalidJson
-            )
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("")))
+
 
             whenReady(result) { res =>
               res.status mustBe 400
               val page = Jsoup.parse(res.body)
-              page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
+              page.title must include("Error: $title$")
               val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-                .first()
-              errorSummaryList
+                .first().getElementsByTag("li")
+              errorSummaryList.size() mustBe 2
+              val errorSummary1 = errorSummaryList.get(0)
+              errorSummary1
                 .select("a")
-                .attr("href") mustBe "#" + fieldName
-              errorSummaryList.text() mustBe Messages("$packageName$.$className;format="decap"$.error." + fieldName + ".required")
-            }
-          }
-        }
-      }
-    }
-
-    testUnauthorisedUser($packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-  }
-
-  s"POST " + checkRoutePath - {
-    "when the user populates answers all questions" - {
-      "should update the session with the new values and redirect to the index controller" - {
-        "when the session contains no data for page" in {
-          given
-            .commonPrecondition
-
-          setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-          WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + checkRoutePath, Json.toJson($packageName$$className$Diff)
-            )
-
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.$packageName;format="cap"$CYAController.onPageLoad.url)
-              val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-              dataStoredForPage.nonEmpty mustBe true
-              dataStoredForPage.get mustBe $packageName$$className$Diff
-            }
-          }
-        }
-
-        "when the session already contains data for page" in {
-          given
-            .commonPrecondition
-
-          setAnswers(userAnswers)
-          WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + checkRoutePath, Json.toJson($packageName$$className$Diff)
-            )
-
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.$packageName;format="cap"$CYAController.onPageLoad.url)
-              val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-              dataStoredForPage.nonEmpty mustBe true
-              dataStoredForPage.get mustBe $packageName$$className$Diff
-            }
-          }
-        }
-      }
-    }
-
-    "should return 400 with required error" - {
-      "when no questions are answered" in {
-        given
-          .commonPrecondition
-
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-        WsTestClient.withClient { client =>
-          val result = createClientRequestPOST(
-            client, $packageName$BaseUrl + checkRoutePath, Json.toJson($className$("", ""))
-          )
-
-          whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-              .first().getElementsByTag("li")
-            errorSummaryList.size() mustBe $className;format="decap"$Map.size
-            $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-              val errorSummary = errorSummaryList.get(index)
+                .attr("href") mustBe "#$field1Name$"
+              errorSummary.text() mustBe Messages("$packageName$.$className;format="
+              decap"$.error." + "$field1Name$" + ".required"
+              )
+              val errorSummary2 = errorSummaryList.get(1)
               errorSummary
                 .select("a")
-                .attr("href") mustBe "#" + fieldName
-              errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error." + fieldName + ".required")
+                .attr("href") mustBe "#$field2Name$"
+              errorSummary.text() mustBe Messages("$packageName$.$className;format="
+              decap"$.error." + "$field2Name$" + ".required"
+              )
             }
           }
         }
-      }
-      $className;format="decap"$Map.zipWithIndex.foreach { case ((fieldName, _), index) =>
-        "when no answer is given for field" + fieldName in {
-          given
-            .commonPrecondition
+        "when no answer is given for $field1Name$" in {
+          given.commonPrecondition
 
-          setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-          val invalidJson = $className;format="decap"$Map.foldLeft(Json.obj()) { case (current, (fn, fv)) =>
-            val fieldValue = if (fn == fieldName) {
-              ""
-            } else {
-              fn
-            }
-            current ++ Json.obj(fn -> fieldValue)
-          }
+          addUserAnswersToSession(emptyUserAnswers)
           WsTestClient.withClient { client =>
-            val result = createClientRequestPOST(
-              client, $packageName$BaseUrl + checkRoutePath, invalidJson
-            )
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("cola")))
+
 
             whenReady(result) { res =>
               res.status mustBe 400
               val page = Jsoup.parse(res.body)
-              page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
+              page.title must include("Error: $title$")
               val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-                .first()
-              errorSummaryList
+                .first().getElementsByTag("li")
+              errorSummaryList.size() mustBe 1
+              val errorSummary1 = errorSummaryList.get(0)
+              errorSummary1
                 .select("a")
-                .attr("href") mustBe "#" + fieldName
-              errorSummaryList.text() mustBe Messages("$packageName$.$className;format="decap"$.error." + fieldName + ".required")
+                .attr("href") mustBe "#$field1Name$"
+              errorSummary.text() mustBe Messages("$packageName$.$className;format="
+              decap"$.error." + "$field1Name$" + ".required"
+              )
+            }
+          }
+        }
+        "when no answer is given for $field1Name$" in {
+          given.commonPrecondition
+
+          addUserAnswersToSession(emptyUserAnswers)
+          WsTestClient.withClient { client =>
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("cola")))
+
+
+            whenReady(result) { res =>
+              res.status mustBe 400
+              val page = Jsoup.parse(res.body)
+              page.title must include("Error: $title$")
+              val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
+                .first().getElementsByTag("li")
+              errorSummaryList.size() mustBe 1
+              val errorSummary1 = errorSummaryList.get(0)
+              errorSummary1
+                .select("a")
+                .attr("href") mustBe "#$field2Name$"
+              errorSummary.text() mustBe Messages("$packageName$.$className;format="
+              decap"$.error." + "$field2Name$" + ".required"
+              )
             }
           }
         }
       }
     }
-
-    testUnauthorisedUser($packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))  }
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))  }
+  }
 }

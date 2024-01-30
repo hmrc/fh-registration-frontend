@@ -39,7 +39,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
 
   val partnerName = "Test User"
 
-  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction(index, mode) {
+  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
     implicit request =>
       request.userAnswers
         .get(PartnerTypePage(index))

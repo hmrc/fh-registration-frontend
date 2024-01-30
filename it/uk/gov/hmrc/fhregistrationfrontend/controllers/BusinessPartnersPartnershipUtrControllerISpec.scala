@@ -12,7 +12,6 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with TestConfiguration {
 
   val route: Mode => String = mode => routes.BusinessPartnersPartnershipUtrController.load(1, mode).url.drop(6)
-  def businessPartnersUrl(mode: Mode): String = routes.BusinessPartnersController.load(1, mode).url
   val pageHeading = "Does test partner have a Self Assessment Unique Taxpayer Reference (UTR)?"
   val pageTitle = "Does the partner have a Self Assessment Unique Taxpayer Reference (UTR)?"
 
@@ -90,7 +89,7 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
         }
       }
 
-      "redirect to start of business partners journey if there are no user answers" in {
+      "redirect to start of the journey if there are no user answers" in {
         given.commonPrecondition
 
         val result = buildRequest(route(mode))
@@ -99,7 +98,7 @@ class BusinessPartnersPartnershipUtrControllerISpec extends Specifications with 
 
         whenReady(result) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersUrl(mode))
+          res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
         }
       }
     }

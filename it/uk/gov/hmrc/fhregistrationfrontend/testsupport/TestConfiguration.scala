@@ -26,6 +26,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 trait TestConfiguration
   extends GuiceOneServerPerSuite
     with IntegrationPatience
@@ -157,4 +158,6 @@ trait TestConfiguration
     ws.url(s"http://localhost:$port${route.url}")
       .withFollowRedirects(followRedirects)
   }
+
+  val startCall = routes.Application.main()
 }
