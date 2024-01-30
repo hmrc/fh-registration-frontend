@@ -58,8 +58,6 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
               page.title must include(pageTitle)
-              println("UUUUUUUUUUU")
-              println(page)
               page.getElementsByTag("h1").text must include(pageHeading)
               val companyName = page.getElementById("companyName")
               companyName.attr("value") mustBe "companyName"
