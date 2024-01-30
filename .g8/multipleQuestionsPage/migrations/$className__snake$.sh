@@ -27,9 +27,9 @@ echo "fh.$packageName$.$className;format="decap"$.$field1Name$.change.hidden = $
 echo "fh.$packageName$.$className;format="decap"$.$field2Name$.change.hidden = $field2Value$" >> ../conf/messages
 
 echo "Adding to Views"
-awk '/class CompanyOfficerViews @Inject()(/ {\
+awk '/class $packageName;format="cap"$Views @Inject()(/ {\
     print;\
-    print "    case $className$Page => _ => $nextPage$";\
-    next }1' ../app/uk/gov/hmrc/fhregistrationfrontend/views.$packageName$.v2.$packageName;format="cap"$Views.scala > tmp && mv tmp ../app/uk/gov/hmrc/fhregistrationfrontend/views.$packageName$.v2.$packageName;format="cap"$Views.scala
+    print "    val $className;format="decap"$View: $className$View,";\
+    next }1' ../app/uk/gov/hmrc/fhregistrationfrontend/views/$packageName$/v2/$packageName;format="cap"$Views.scala > tmp && mv tmp ../app/uk/gov/hmrc/fhregistrationfrontend/views/$packageName$/v2/$packageName;format="cap"$Views.scala
 
 echo "Migration $className;format="snake"$ completed"

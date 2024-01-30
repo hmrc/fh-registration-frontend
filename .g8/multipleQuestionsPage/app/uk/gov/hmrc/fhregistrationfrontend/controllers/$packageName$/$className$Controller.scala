@@ -3,7 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 import uk.gov.hmrc.fhregistrationfrontend.controllers.{CommonPlayDependencies, ControllerHelper}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$FormProvider
+import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form.form
 import models.Mode
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
@@ -15,18 +15,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class $className$Controller @Inject()(ds: CommonPlayDependencies,
                                       view: Views,
                                       actions: Actions,
-                                      formProvider: $className$FormProvider,
                                       val sessionCache: SessionRepository,
                                       cc: MessagesControllerComponents)
                                      (implicit val ec: ExecutionContext)
   extends ControllerHelper {
 
   import actions._
-
-  val form = formProvider()
-
   def postAction(index: Int, mode: Mode): Call =
-    routes.$className$Controller.next(index, mode)
+    routes.$className$Controller.onSubmit(index, mode)
 
   //Todo populate with the back url when available
   def backUrl(index: Int, mode: Mode): String = "#"
@@ -48,12 +44,12 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
         formWithErrors =>
           Future.successful(BadRequest(
             view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode))
-          ),
+          )),
 
         value => {
-          val updatedAnswers = request.userAnswers.set($className$Page(index), value)
+          val updatedUserAnswers = request.userAnswers.set($className$Page(index), value)
           //Todo update startCall so it is the nextPage Call
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, startCall, page)
+          updateUserAnswersAndSaveToCache(updatedUserAnswers, startCall, $className$Page(index))
         }
       )
   }

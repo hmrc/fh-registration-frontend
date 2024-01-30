@@ -36,7 +36,7 @@ messages("fh.$packageName$.$className;format="decap"$.title")
     @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form))
+            @viewHelpers.govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
         @Html(CompanyOfficersHeaderWithCaption(heading))

@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import org.apache.commons.lang3.StringUtils
 import play.api.data.Forms._
-import play.api.data.Mapping
+import play.api.data.{FieldMapping, Mapping}
 import play.api.data.validation._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOfConstraint
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
@@ -200,6 +200,8 @@ object Mappings {
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
 
+  def string(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
+    of(stringFormatter(errorKey, args))
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
     "yesNo" -> of(yesOrNoFormatter),
     "value" -> optional(wrapped)
