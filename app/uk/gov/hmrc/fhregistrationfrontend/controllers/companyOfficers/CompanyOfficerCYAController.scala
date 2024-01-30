@@ -38,7 +38,7 @@ class CompanyOfficerCYAController @Inject()(
     val summaryList = SummaryListViewModel(
       rows = Seq.empty
     )
-    Ok(view.companyOfficersViews.checkYourAnswers("#", summaryList, routes.CompanyOfficerCYAController.next(index)))
+    Ok(view.companyOfficersCYAView("#", summaryList, routes.CompanyOfficerCYAController.next(index)))
   }
 
   def next(index: Int): Action[AnyContent] = dataRequiredAction(index, NormalMode) { implicit request =>
