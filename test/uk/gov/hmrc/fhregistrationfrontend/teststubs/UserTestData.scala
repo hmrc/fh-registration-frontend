@@ -18,6 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import models.UserAnswers
 import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 
 trait UserTestData {
   val testUserId = "Int-uid"
@@ -27,5 +28,8 @@ trait UserTestData {
   val assistantRole = Assistant
   val userAffinityGroup = AffinityGroup.Individual
   val emptyUserAnswers = UserAnswers(testUserId)
+
+  val startCall = routes.Application.main()
+
 
 }

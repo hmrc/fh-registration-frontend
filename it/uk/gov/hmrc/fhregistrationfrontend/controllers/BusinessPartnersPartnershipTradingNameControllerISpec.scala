@@ -86,7 +86,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
         }
       }
 
-      "redirect the user to the start of the BusinessPartners journey" when {
+      "redirect the user to the start of the journey" when {
         "there is no user answers in the database" in {
           given.commonPrecondition
           val result = buildRequest(route(mode))
@@ -95,7 +95,7 @@ class BusinessPartnersPartnershipTradingNameControllerISpec extends Specificatio
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(index, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }

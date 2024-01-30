@@ -96,7 +96,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
                 }
 
                 s"There are no user answers in the database in $mode" should {
-                    "redirect to the start of the Business Partners journey" in {
+                    "redirect to the start of the journey" in {
                         given.commonPrecondition
 
                         val result = buildRequest(route(mode))
@@ -109,7 +109,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
 
                         whenReady(result) { res =>
                             res.status mustBe 303
-                            res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersPage)
+                            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
                         }
                     }
                 }
@@ -159,7 +159,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
                         }
 
                         "There are no user answers in the database" should {
-                            "redirect to the start of the Business Partners journey" in {
+                            "redirect to the start of the journey" in {
                                 given.commonPrecondition
 
                                 val result = buildRequest(route(mode))
@@ -172,7 +172,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
 
                                 whenReady(result) { res =>
                                     res.status mustBe 303
-                                    res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersPage)
+                                    res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
                                 }
                             }
                         }
