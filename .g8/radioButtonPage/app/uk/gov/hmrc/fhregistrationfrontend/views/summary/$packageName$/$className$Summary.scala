@@ -11,32 +11,17 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
 
 object $className$Summary {
-  def row(index: Int, answers: UserAnswers)(implicit messages: Messages): SummaryListRow = {
-    answers.get($className$Page).map {
-      answer =>
+  def row(index: Int, answer: $className$)(implicit messages: Messages): SummaryListRow = {
+    val value = HtmlFormat.escape(messages(s"fh.$packageName$.$className;format="decap"$.$answer")).toString
 
-        val value = ValueViewModel(
-          HtmlContent(
-            answers.map {
-                answer => HtmlFormat.escape(messages(s"$packageName$.$className;format="decap"$.\$answer")).toString
-              }
-              .mkString(",<br>")
-          )
-        )
-
-      SummaryListRowViewModel(
-        key = "fh.$packageName$.$className;format="
-      decap"$.checkYourAnswersLabel"
-      ,
-      value = ValueViewModel(HtmlContent(value))
-      ,
+    SummaryListRowViewModel(
+      key = "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel",
+      value = ValueViewModel(HtmlContent(value)),
       actions = Seq(
         ActionItemViewModel("link.change", routes.$className$Controller.onPageLoad(index, CheckMode).url)
-          .withVisuallyHiddenText(messages("fh.$packageName$.$className;format="
-      decap"$.change.hidden"
-      ) )
+          .withVisuallyHiddenText(messages("fh.$packageName$.$className;format="decap"$.change.hidden"))
       )
-      )
-    }
+    )
+
   }
 }
