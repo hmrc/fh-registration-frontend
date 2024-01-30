@@ -63,8 +63,24 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
               companyName.attr("value") mustBe "companyName"
             }
           }
+
+          "there is no user answers in the database" should {
+            "redirect to the start of BusinessPartners" in {
+              given.commonPrecondition
+
+              val result = buildRequest(route(mode))
+                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+                .get()
+
+              whenReady(result) { res =>
+                res.status mustBe 303
+                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+              }
+            }
+          }
         }
       }
+    }
 
       s"POST ${route(mode)}" when {
         "the form is filled out correctly" should {
@@ -98,43 +114,42 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
             addUserAnswersToSession(emptyUserAnswers)
 
             val result = buildRequest(route(mode))
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "companyName" -> Seq("")
-              ))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "companyName" -> Seq("")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 400
-              val page = Jsoup.parse(res.body)
-              page.title must include(pageTitle)
-              page.getElementsByTag("h1").text() must include(pageHeading)
-              page.getElementById("companyName-error").text() must include(emptyTextError)
-            }
+          whenReady(result) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.title must include(pageTitle)
+            page.getElementsByTag("h1").text() must include(pageHeading)
+            page.getElementById("companyName-error").text() must include(emptyTextError)
           }
         }
+      }
 
-        "User enters over 140 characters" should {
-          "return 400" in {
-            given.commonPrecondition
-            addUserAnswersToSession(emptyUserAnswers)
+      "User enters over 140 characters" should {
+        "return 400" in {
+          given.commonPrecondition
+          addUserAnswersToSession(emptyUserAnswers)
 
-            val result = buildRequest(route(mode))
-              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
-                  "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
-                  "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
-              ))
+          val result = buildRequest(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map(
+              "companyName" -> Seq("ghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgf" +
+                "hghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfg" +
+                "dhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhghfgdhdgfhfgfhs")
+            ))
 
-            whenReady(result) { res =>
-              res.status mustBe 400
-              val page = Jsoup.parse(res.body)
-              page.title must include(pageTitle)
-              page.getElementsByTag("h1").text() must include(pageHeading)
-              page.getElementById("companyName-error").text() must include(characterLimitError)
-            }
+          whenReady(result) { res =>
+            res.status mustBe 400
+             val page = Jsoup.parse(res.body)
+            page.title must include(pageTitle)
+            page.getElementsByTag("h1").text() must include(pageHeading)
+            page.getElementById("companyName-error").text() must include(characterLimitError)
           }
         }
       }

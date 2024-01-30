@@ -22,6 +22,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -63,7 +64,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
         }
 
         "there are userAnswers with page data" in {
-          val companyName = "test"
+          val companyName = "trading name"
           val userAnswers = UserAnswers(testUserId)
             .set[String](CompanyNamePage(1), companyName)
             .success
@@ -76,6 +77,8 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
           page.title should include(CorporateBodyCompanyName)
+          val tradingNameValueField = page.getElementById("companyName")
+          tradingNameValueField.attr("value") mustBe "trading name"
           reset(mockActions)
         }
       }
