@@ -57,8 +57,6 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
       .success
       .value
 
-  val emptyUserAnswers: UserAnswers = UserAnswers(testUserId)
-
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
       "Render the choose address page" when {
