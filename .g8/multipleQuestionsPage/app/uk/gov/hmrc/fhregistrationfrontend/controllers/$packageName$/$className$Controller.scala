@@ -1,13 +1,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
-import uk.gov.hmrc.fhregistrationfrontend.controllers.{CommonPlayDependencies, ControllerHelper}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.{AppController, CommonPlayDependencies, ControllerHelper}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form.form
 import models.Mode
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
-import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.$className$View
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,7 +35,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
       val formData = request.userAnswers.get($className$Page(index))
       val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-      Ok(view.$packageName$Views.$className;format="decap"$(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
+      Ok($className;format="decap"$View(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
   }
 
   def onSubmit(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async {
@@ -44,7 +44,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(
-            view.$packageName$Views.$className;format="decap"$(formWithErrors, postAction(index, mode), backUrl(index, mode))
+            $className;format="decap"$View(formWithErrors, postAction(index, mode), backUrl(index, mode))
           )),
 
         value => {
