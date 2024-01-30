@@ -6,7 +6,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 
-class $className$FormProvider @Inject() extends Mappings {
+object $className$FormProvider {
 
   val key = $className;format="decap"$
   val requiredErrorKey = "fh.$packageName$.$className;format="decap"$.error.required"

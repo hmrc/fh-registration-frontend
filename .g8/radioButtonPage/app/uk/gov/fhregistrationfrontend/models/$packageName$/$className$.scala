@@ -1,10 +1,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.$packageName$
 
 import play.api.i18n.Messages
-import models.{Enumerable, WithName}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Enumerable
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-
+import viewmodels.WithName
 sealed trait $className$
 
 object $className$ extends Enumerable.Implicits {
