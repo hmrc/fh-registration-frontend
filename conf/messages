@@ -11,6 +11,7 @@ button.accept.send=Accept and send application
 button.finishAndSignOut=Finish and sign out
 link.signout=Sign out
 link.cancel=Cancel
+link.change = Change
 link.businessTaxAccount=Business tax account home
 link.goBackToSummary=Go back to summary
 link.saveForLater=Save and come back later

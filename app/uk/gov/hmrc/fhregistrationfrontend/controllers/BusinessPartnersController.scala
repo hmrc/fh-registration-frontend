@@ -19,10 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnerTypeForm.businessPartnerTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views

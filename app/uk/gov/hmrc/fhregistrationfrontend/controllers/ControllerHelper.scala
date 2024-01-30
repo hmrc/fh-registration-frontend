@@ -35,7 +35,6 @@ trait ControllerHelper extends FrontendBaseController with I18nSupport {
   implicit val ec: ExecutionContext
 
   val startCall = routes.Application.main()
-
   private def updateUserAnswersFailureMessage(page: Page) = s"Failed to add ${page.toString} data to user answers"
 
   private def sessionRepo500ErrorMessage(page: Page): String =
