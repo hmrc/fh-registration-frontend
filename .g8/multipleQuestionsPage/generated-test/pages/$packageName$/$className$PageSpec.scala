@@ -1,16 +1,18 @@
-package pages.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$
 
-import models.$packageName$.$className$
-import pages.behaviours.PageBehaviours
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.pages.behaviours.PageBehaviours
 
 class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" - {
 
-    beRetrievable[$className$]($className$Page)
+    val pageData = $className$("test1", "test2")
 
-    beSettable[$className$]($className$Page)
+    beRetrievable[$className$]($className$Page, pageData)
 
-    beRemovable[$className$]($className$Page)
+    beSettable[$className$]($className$Page, pageData)
+
+    beRemovable[$className$]($className$Page, pageData)
   }
 }

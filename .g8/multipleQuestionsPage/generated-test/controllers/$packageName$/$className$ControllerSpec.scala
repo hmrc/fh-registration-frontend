@@ -1,4 +1,4 @@
-package controllers.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
 import com.codahale.metrics.SharedMetricRegistries
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -62,14 +62,20 @@ class $className$ControllerSpec extends extends ControllerSpecWithGuiceApp with 
     }
 
     s"onSubmit when in $mode" should {
-      "redirect to the trading name page and save the answer to database" when {
+      val expectedUrl = if (mode == CheckMode) {
+          $packageName;format="cap"$CYAController.load(index)
+        } else {
+          $nextPage$
+        }
+      s"redirect to $expectedUrl and save the answer to database" when {
         "the user answers doesn't contain page data" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(
-              "partnershipName" -> "Partnership name goes here"
+              "$field1Name$" -> "name1",
+              "$field2Name$" -> "name2"
             )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.onSubmit(index, mode))(request))

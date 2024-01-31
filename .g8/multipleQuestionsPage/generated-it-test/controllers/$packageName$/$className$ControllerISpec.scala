@@ -1,4 +1,4 @@
-package controllers.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
@@ -96,9 +96,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
     s"POST ${route(mode)}" when {
       "the user populates answers all questions" should {
         val expectedUrl = if (mode == CheckMode) {
-          $packageName;
-          format = "cap" $CYAController
-          .load(index)
+          $packageName;format="cap"$CYAController.load(index)
         } else {
           $nextPage$
         }
