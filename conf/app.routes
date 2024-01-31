@@ -97,6 +97,8 @@ POST        /change-business-partners/partnership-vat-registration-number/:index
 
 GET         /business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index: Int, mode: Mode = NormalMode)
+GET         /change-business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/corporate-body-vat-registration-number        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.load()
 POST        /business-partners/corporate-body-vat-registration-number          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.next()

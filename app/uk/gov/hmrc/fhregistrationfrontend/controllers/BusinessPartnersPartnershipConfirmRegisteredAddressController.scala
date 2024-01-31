@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.{Mode, NormalMode}
+import models.Mode
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
@@ -38,9 +38,9 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   import actions._
 
   def postAction(index: Int, mode: Mode): Call =
-    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index)
-  def editAddressUrl(index: Int): String =
-    routes.BusinessPartnersPartnershipEnterAddressController.load(index, NormalMode).url
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index, mode)
+  def editAddressUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
   val journey = "partnership"
   val backLink = "#"
   val companyName = "company"
@@ -59,7 +59,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
             journey,
             postAction(index, mode),
             backLink,
-            editAddressUrl(index)))
+            editAddressUrl(index, mode)))
     } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
