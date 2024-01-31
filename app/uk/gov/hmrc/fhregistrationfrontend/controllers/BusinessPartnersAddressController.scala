@@ -47,66 +47,68 @@ class BusinessPartnersAddressController @Inject()(
     routes.BusinessPartnersAddressController.next(index, mode)
 
   import actions._
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val partnerName = "Test User"
-    val formData = request.userAnswers.get(UkAddressLookupPage(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val partnerName = "Test User"
+      val formData = request.userAnswers.get(UkAddressLookupPage(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(view.business_partners_search_address(prepopulatedForm, partnerName, postAction(index, mode)))
+      Ok(view.business_partners_search_address(prepopulatedForm, partnerName, postAction(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    val partnerName = "Test User"
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(view.business_partners_search_address(formWithErrors, partnerName, postAction(index, mode)))
-          )
-        },
-        bpAddress => {
-          val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
-          val postcode = getUserAnswers.map(data => (data.postcode)).getOrElse("")
-          val lookupResultAnswers = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      val partnerName = "Test User"
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(view.business_partners_search_address(formWithErrors, partnerName, postAction(index, mode)))
+            )
+          },
+          bpAddress => {
+            val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+            val postcode = getUserAnswers.map(data => (data.postcode)).getOrElse("")
+            val lookupResultAnswers = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-          val addressLookupCall: Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
-            if (postcode.equals(bpAddress.postcode)) {
-              Future(Right(lookupResultAnswers))
-            } else {
-              addressService
-                .addressLookup(
-                  routes.BusinessPartnersAddressController.load(index, mode).path(),
-                  bpAddress.postcode,
-                  bpAddress.addressLine
-                )
-            }
+            val addressLookupCall: Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
+              if (postcode.equals(bpAddress.postcode)) {
+                Future(Right(lookupResultAnswers))
+              } else {
+                addressService
+                  .addressLookup(
+                    routes.BusinessPartnersAddressController.load(index, mode).path(),
+                    bpAddress.postcode,
+                    bpAddress.addressLine
+                  )
+              }
 
-          addressLookupCall
-            .flatMap {
-              case Right(addressListMap) =>
-                val page = UkAddressLookupPage(index)
-                val nextPage = addressListMap.size match {
-                  case 0 => routes.BusinessPartnersCannotFindAddressController.load(index, mode)
-                  case 1 => routes.BusinessPartnersConfirmAddressController.load(index, mode)
-                  case _ => routes.BusinessPartnersChooseAddressController.load(index, mode)
-                }
+            addressLookupCall
+              .flatMap {
+                case Right(addressListMap) =>
+                  val page = UkAddressLookupPage(index)
+                  val nextPage = addressListMap.size match {
+                    case 0 => routes.BusinessPartnersCannotFindAddressController.load(index, mode)
+                    case 1 => routes.BusinessPartnersConfirmAddressController.load(index, mode)
+                    case _ => routes.BusinessPartnersChooseAddressController.load(index, mode)
+                  }
 
-                val lookupResult: UkAddressLookup =
-                  UkAddressLookup(bpAddress.addressLine, bpAddress.postcode, addressListMap)
-                val updatedUserAnswers = request.userAnswers.set(page, lookupResult)
-                updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+                  val lookupResult: UkAddressLookup =
+                    UkAddressLookup(bpAddress.addressLine, bpAddress.postcode, addressListMap)
+                  val updatedUserAnswers = request.userAnswers.set(page, lookupResult)
+                  updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
 
-              case Left(AddressLookupErrorResponse(_)) =>
-                val formWithErrors = form
-                  .fill(bpAddress)
-                  .withError(FormError(postcodeKey, "address.lookup.error"))
-                Future.successful(BadRequest(
-                  view.business_partners_search_address(formWithErrors, partnerName, postAction(index, mode))))
-              case _ => Future.successful(errorHandler.errorResultsPages(Results.InternalServerError))
-            }
-        }
-      )
+                case Left(AddressLookupErrorResponse(_)) =>
+                  val formWithErrors = form
+                    .fill(bpAddress)
+                    .withError(FormError(postcodeKey, "address.lookup.error"))
+                  Future.successful(BadRequest(
+                    view.business_partners_search_address(formWithErrors, partnerName, postAction(index, mode))))
+                case _ => Future.successful(errorHandler.errorResultsPages(Results.InternalServerError))
+              }
+          }
+        )
   }
 
 }

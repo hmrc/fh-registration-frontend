@@ -45,42 +45,44 @@ class BusinessPartnersEnterAddressController @Inject()(
   def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersEnterAddressController.next(index, mode)
 
   import actions._
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(EnterAddressPage(index))
-    val prepopulatedForm = formData.map(data => enterAddressForm.fill(data)).getOrElse(enterAddressForm)
-    Ok(
-      view
-        .business_partners_enter_address(
-          prepopulatedForm,
-          postAction(index, mode),
-          partnerName,
-          journeyType,
-          backUrl
-        )
-    )
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(EnterAddressPage(index))
+      val prepopulatedForm = formData.map(data => enterAddressForm.fill(data)).getOrElse(enterAddressForm)
+      Ok(
+        view
+          .business_partners_enter_address(
+            prepopulatedForm,
+            postAction(index, mode),
+            partnerName,
+            journeyType,
+            backUrl
+          )
+      )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    enterAddressForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_enter_address(
-                formWithErrors,
-                postAction(index, mode),
-                partnerName,
-                journeyType,
-                backUrl)))
-        },
-        bpAddress => {
-          val page = EnterAddressPage(index)
-          val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      enterAddressForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_address(
+                  formWithErrors,
+                  postAction(index, mode),
+                  partnerName,
+                  journeyType,
+                  backUrl)))
+          },
+          bpAddress => {
+            val page = EnterAddressPage(index)
+            val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
 
-          val updatedUserAnswers = request.userAnswers.set(page, bpAddress)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(page, bpAddress)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+          }
+        )
   }
 }

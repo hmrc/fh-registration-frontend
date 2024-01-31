@@ -45,45 +45,47 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(EnterVatNumberPage(index))
-    val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
-    Ok(
-      view.business_partners_enter_vat_registration(
-        prepopulatedForm,
-        postAction(index, mode),
-        partnerName,
-        backUrl
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(EnterVatNumberPage(index))
+      val prepopulatedForm = formData.map(data => vatNumberForm.fill(data)).getOrElse(vatNumberForm)
+      Ok(
+        view.business_partners_enter_vat_registration(
+          prepopulatedForm,
+          postAction(index, mode),
+          partnerName,
+          backUrl
+        )
       )
-    )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    vatNumberForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_enter_vat_registration(
-                formWithErrors,
-                postAction(index, mode),
-                partnerName,
-                backUrl
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      vatNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_vat_registration(
+                  formWithErrors,
+                  postAction(index, mode),
+                  partnerName,
+                  backUrl
+                )
               )
             )
-          )
-        },
-        vatNumber => {
-          val page = EnterVatNumberPage(index)
-          val nextPage = vatNumber.value match {
-            case Some(vatNumber) => routes.BusinessPartnersAddressController.load(1, mode)
-            case None            => routes.BusinessPartnersSoleProprietorUtrController.load(index, mode)
-          }
+          },
+          vatNumber => {
+            val page = EnterVatNumberPage(index)
+            val nextPage = vatNumber.value match {
+              case Some(vatNumber) => routes.BusinessPartnersAddressController.load(1, mode)
+              case None            => routes.BusinessPartnersSoleProprietorUtrController.load(index, mode)
+            }
 
-          val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+          }
+        )
   }
 }

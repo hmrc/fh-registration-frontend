@@ -94,7 +94,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
         }
       }
 
-      "redirect to the start of BusinessPartners" when {
+      "redirect to the start" when {
         "there are no user answers in the database" in {
           given.commonPrecondition
 
@@ -104,7 +104,7 @@ class BusinessPartnersChooseAddressControllerISpec extends Specifications with T
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(index, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }

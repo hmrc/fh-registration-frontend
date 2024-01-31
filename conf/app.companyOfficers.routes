@@ -1,2 +1,2 @@
-GET          /check-your-answers/:index                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.companyOfficers.CompanyOfficerCYAController.load(index: Int)
-POST         /check-your-answers/:index                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.companyOfficers.CompanyOfficerCYAController.next(index: Int)
+GET          /check-your-answers/:index                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.companyOfficers.CompanyOfficersCYAController.load(index: Int)
+POST         /check-your-answers/:index                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.companyOfficers.CompanyOfficersCYAController.next(index: Int)

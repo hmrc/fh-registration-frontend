@@ -46,43 +46,45 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(page(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(page(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(
-      view
-        .business_partners_enter_crn(
-          prepopulatedForm,
-          companyName,
-          businessType,
-          postAction(index, mode),
-          backLink(index, mode)))
-      .withCookies(Cookie("businessType", businessType))
+      Ok(
+        view
+          .business_partners_enter_crn(
+            prepopulatedForm,
+            companyName,
+            businessType,
+            postAction(index, mode),
+            backLink(index, mode)))
+        .withCookies(Cookie("businessType", businessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view
-                .business_partners_enter_crn(
-                  formWithErrors,
-                  companyName,
-                  businessType,
-                  postAction(index, mode),
-                  backLink(index, mode)))
-          )
-        },
-        regNumber => {
-          val currentPage = page(index)
-          val nextPage = routes.BusinessPartnersPartnershipVatNumberController.load(1, mode)
-          val updatedUserAnswers = request.userAnswers.set(currentPage, regNumber)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
-        }
-      )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view
+                  .business_partners_enter_crn(
+                    formWithErrors,
+                    companyName,
+                    businessType,
+                    postAction(index, mode),
+                    backLink(index, mode)))
+            )
+          },
+          regNumber => {
+            val currentPage = page(index)
+            val nextPage = routes.BusinessPartnersPartnershipVatNumberController.load(1, mode)
+            val updatedUserAnswers = request.userAnswers.set(currentPage, regNumber)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+          }
+        )
   }
 }

@@ -43,36 +43,38 @@ class BusinessPartnersSoleProprietorsTradingNameController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersSoleProprietorsTradingNameController.next(index, mode)
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))
-    val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
-    Ok(
-      view.business_partners_has_trading_partner_name(
-        prepopulatedForm,
-        "Test User",
-        postAction(index, mode),
-        backUrl(index, mode)))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(SoleProprietorsTradingNamePage(index))
+      val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
+      Ok(
+        view.business_partners_has_trading_partner_name(
+          prepopulatedForm,
+          "Test User",
+          postAction(index, mode),
+          backUrl(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    tradingNameForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_has_trading_partner_name(
-                formWithErrors,
-                "Test User",
-                postAction(index, mode),
-                backUrl(index, mode))))
-        },
-        tradingName => {
-          val updatedUserAnswers = request.userAnswers.set(SoleProprietorsTradingNamePage(index), tradingName)
-          val nextPage = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorsTradingNamePage(index))
-        }
-      )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      tradingNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_has_trading_partner_name(
+                  formWithErrors,
+                  "Test User",
+                  postAction(index, mode),
+                  backUrl(index, mode))))
+          },
+          tradingName => {
+            val updatedUserAnswers = request.userAnswers.set(SoleProprietorsTradingNamePage(index), tradingName)
+            val nextPage = routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorsTradingNamePage(index))
+          }
+        )
   }
 
 }

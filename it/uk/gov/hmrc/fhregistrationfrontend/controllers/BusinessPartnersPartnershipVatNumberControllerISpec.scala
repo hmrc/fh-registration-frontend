@@ -26,7 +26,6 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
         val partershipSaUtrPage: String = routes.BusinessPartnersPartnershipUtrController.load(1, mode).url
         val partnershipRegAddressPage: String = routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, mode).url
-        val businessPartnersPage: String = routes.BusinessPartnersController.load(1, mode).url
 
         s"GET ${route(mode)}" when {
 
@@ -101,7 +100,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                         whenReady(result) { res =>
                             res.status mustBe 303
-                            res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersPage)
+                            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
                         }
                     }
                 }
@@ -208,7 +207,7 @@ class BusinessPartnersPartnershipVatNumberControllerISpec
 
                                 whenReady(result) { res =>
                                     res.status mustBe 303
-                                    res.header(HeaderNames.LOCATION) mustBe Some(businessPartnersPage)
+                                    res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
                                 }
                             }
                         }

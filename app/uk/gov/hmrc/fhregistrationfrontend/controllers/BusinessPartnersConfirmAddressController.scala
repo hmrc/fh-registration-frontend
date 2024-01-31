@@ -47,13 +47,13 @@ class BusinessPartnersConfirmAddressController @Inject()(
   val partnerName = "test business partner"
   val backLink: String = routes.BusinessPartnersAddressController.load(1, NormalMode).url
 
-  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction(index, mode) {
+  def load(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
     implicit request =>
       val postAction: Call = routes.BusinessPartnersConfirmAddressController.next(index, mode)
       Ok(view.business_partners_confirm_partner_address(address, partnerName, postAction, backLink))
   }
 
-  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredAction(index, mode) {
+  def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
     implicit request =>
       Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
   }
