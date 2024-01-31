@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -64,106 +64,110 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
       mockSessionCache)(mockMcc)
 
   val pageTitle: String = "Confirm the partnership’s registered office address?"
-  val enterAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load(1, NormalMode).url
-  val registeredAddressPage: String =
-    routes.BusinessPartnersPartnershipRegisteredAddressController.load(1, NormalMode).url
   val checkYourAnswersPage = routes.BusinessPartnersCheckYourAnswersController.load().url
 
+  val index = 1
   def createUserAnswers(answers: UkAddressLookup): UserAnswers =
     UserAnswers(testUserId)
       .set[UkAddressLookup](UkAddressLookupPage(1), answers)
       .success
       .value
 
-  "load" should {
-    "Render the confirm address page" when {
-      "a single address is found in user answers" in {
-        val userAnswers = createUserAnswers(singleUkAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
+  List(NormalMode, CheckMode).foreach { mode =>
+    val registeredAddressPage: String =
+      routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
+    val enterAddressUrl: String = routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
 
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
+    s"load when in $mode" should {
+      "Render the confirm address page" when {
+        "a single address is found in user answers" in {
+          val userAnswers = createUserAnswers(singleUkAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include(pageTitle)
-        page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
-        page.body.text should include("44 test lane")
-        page.getElementById("confirm-edit").attr("href") should include(enterAddressUrl)
-        reset(mockActions)
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include(pageTitle)
+          page.getElementsByTag("h1").text should include("Confirm the company’s registered office address")
+          page.body.text should include("44 test lane")
+          page.getElementById("confirm-edit").attr("href") should include(enterAddressUrl)
+          reset(mockActions)
+        }
+      }
+
+      "Redirect to Registered Address Page" when {
+        "address lookup address list is empty" in {
+          val userAnswers = createUserAnswers(emptyUkAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(registeredAddressPage)
+          reset(mockActions)
+        }
+
+        "address lookup address list contains more than one address" in {
+          val userAnswers = createUserAnswers(multipleAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(index, mode))(request))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(registeredAddressPage)
+          reset(mockActions)
+        }
       }
     }
 
-    "Redirect to Registered Address Page" when {
-      "address lookup address list is empty" in {
-        val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
+    s"next when in $mode" should {
+      "Redirect to Check your answers page" when {
+        "the use clicks save and continue" in {
+          val userAnswers = createUserAnswers(singleUkAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(registeredAddressPage)
-        reset(mockActions)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(checkYourAnswersPage)
+          reset(mockActions)
+        }
       }
 
-      "address lookup address list contains more than one address" in {
-        val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
+      "Redirect to the Business Partners Address page" when {
+        "addressList contains no addresses" in {
+          val userAnswers = createUserAnswers(emptyUkAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(1, NormalMode))(request))
+          val request = FakeRequest()
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(registeredAddressPage)
-        reset(mockActions)
-      }
-    }
-  }
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(registeredAddressPage)
+          reset(mockActions)
+        }
 
-  "next" should {
-    "Redirect to Check your answers page" when {
-      "the use clicks save and continue" in {
-        val userAnswers = createUserAnswers(singleUkAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
-        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+        "addressList cache contains a multiple addresses" in {
+          val userAnswers = createUserAnswers(multipleAddressLookup)
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
+          val request = FakeRequest()
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.next(index, mode))(request))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(checkYourAnswersPage)
-        reset(mockActions)
-      }
-    }
-
-    "Redirect to the Business Partners Address page" when {
-      "addressList contains no addresses" in {
-        val userAnswers = createUserAnswers(emptyUkAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
-        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-
-        val request = FakeRequest()
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
-
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(registeredAddressPage)
-        reset(mockActions)
-      }
-
-      "addressList cache contains a multiple addresses" in {
-        val userAnswers = createUserAnswers(multipleAddressLookup)
-        setupDataRequiredAction(userAnswers, NormalMode)
-        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
-
-        val request = FakeRequest()
-          .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(1, NormalMode))(request))
-
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(registeredAddressPage)
-        reset(mockActions)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(registeredAddressPage)
+          reset(mockActions)
+        }
       }
     }
   }
