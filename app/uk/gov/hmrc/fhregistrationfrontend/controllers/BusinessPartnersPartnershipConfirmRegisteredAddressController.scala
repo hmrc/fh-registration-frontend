@@ -42,7 +42,8 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   def editAddressUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
   val journey = "partnership"
-  val backLink = "#"
+  def backLink(index: Int, mode: Mode) =
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
   val companyName = "company"
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
@@ -58,7 +59,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
             companyName,
             journey,
             postAction(index, mode),
-            backLink,
+            backLink(index, mode),
             editAddressUrl(index, mode)))
     } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
