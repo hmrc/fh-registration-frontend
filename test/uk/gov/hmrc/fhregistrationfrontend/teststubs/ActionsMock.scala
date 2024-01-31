@@ -213,7 +213,9 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     }
 
   def setupDataRequiredAction(userAnswers: UserAnswers, mode: Mode): Unit =
-    when(mockActions.dataRequiredAction(1, mode)) thenReturn new ActionBuilder[DataRequiredRequest, AnyContent] {
+    when(mockActions.dataRequiredActionBusinessPartners(1, mode)) thenReturn new ActionBuilder[
+      DataRequiredRequest,
+      AnyContent] {
       override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
 
       override val executionContext = ec

@@ -64,14 +64,14 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerISpec
       }
 
       "there are no user answers in the database" should {
-        "redirect to the start of BusinessPartners" in {
+        "redirect to the start" in {
           given.commonPrecondition
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(index, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }

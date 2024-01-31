@@ -46,42 +46,44 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
     routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.next(index, mode)
   private def getBusinessType: String = config.getRandomBusinessType()
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(IndividualsAndSoleProprietorsNinoPage(index))
-    val prepopulatedForm =
-      formData.map(data => nationalInsuranceNumberForm.fill(data)).getOrElse(nationalInsuranceNumberForm)
-    val items = radioHelper.conditionalYesNoRadio(prepopulatedForm)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(IndividualsAndSoleProprietorsNinoPage(index))
+      val prepopulatedForm =
+        formData.map(data => nationalInsuranceNumberForm.fill(data)).getOrElse(nationalInsuranceNumberForm)
+      val items = radioHelper.conditionalYesNoRadio(prepopulatedForm)
 
-    Ok(view.business_partners_has_nino(prepopulatedForm, items, postAction(index, mode)))
-      .withCookies(Cookie("businessType", getBusinessType))
+      Ok(view.business_partners_has_nino(prepopulatedForm, items, postAction(index, mode)))
+        .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    nationalInsuranceNumberForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          val items = radioHelper.conditionalYesNoRadio(formWithErrors)
-          Future.successful(
-            BadRequest(view.business_partners_has_nino(formWithErrors, items, postAction(index, mode)))
-          )
-        },
-        nino => {
-          val page = IndividualsAndSoleProprietorsNinoPage(index)
-          val ninoForIndividual = "AB123456C"
-          val nextPage = request.cookies.get("businessType").map(_.value) match {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      nationalInsuranceNumberForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            val items = radioHelper.conditionalYesNoRadio(formWithErrors)
+            Future.successful(
+              BadRequest(view.business_partners_has_nino(formWithErrors, items, postAction(index, mode)))
+            )
+          },
+          nino => {
+            val page = IndividualsAndSoleProprietorsNinoPage(index)
+            val ninoForIndividual = "AB123456C"
+            val nextPage = request.cookies.get("businessType").map(_.value) match {
 
-            case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
-              routes.BusinessPartnersAddressController.load(index, mode)
-            case Some(businessType) if businessType.equals("individual") =>
-              routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
-            case _ => routes.BusinessPartnersController.load(index, mode)
+              case Some(businessType) if businessType.equals("individual") && nino.value.contains(ninoForIndividual) =>
+                routes.BusinessPartnersAddressController.load(index, mode)
+              case Some(businessType) if businessType.equals("individual") =>
+                routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(1, NormalMode)
+              case _ => routes.BusinessPartnersController.load(index, mode)
+            }
+
+            val updatedUserAnswers = request.userAnswers.set(page, nino)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
           }
-
-          val updatedUserAnswers = request.userAnswers.set(page, nino)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+        )
   }
 
 }

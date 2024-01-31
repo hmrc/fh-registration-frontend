@@ -46,43 +46,45 @@ class BusinessPartnersPartnershipNameController @Inject()(
     routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
   lazy val form: Form[String] = partnershipNameForm
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val currentPage = PartnershipNamePage(index)
-    val formData = request.userAnswers.get(currentPage)
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(
-      view
-        .business_partners_name(
-          journeyType,
-          postAction(index, mode),
-          prepopulatedForm,
-          partnershipNameKey,
-          backAction(index, mode)
-        ))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val currentPage = PartnershipNamePage(index)
+      val formData = request.userAnswers.get(currentPage)
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+      Ok(
+        view
+          .business_partners_name(
+            journeyType,
+            postAction(index, mode),
+            prepopulatedForm,
+            partnershipNameKey,
+            backAction(index, mode)
+          ))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_name(
-                journeyType,
-                postAction(index, mode),
-                formWithErrors,
-                partnershipNameKey,
-                backAction(index, mode)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_name(
+                  journeyType,
+                  postAction(index, mode),
+                  formWithErrors,
+                  partnershipNameKey,
+                  backAction(index, mode)
+                )
               )
             )
-          )
-        },
-        partnership => {
-          val currentPage = PartnershipNamePage(index)
-          val updatedUserAnswers = request.userAnswers.set(currentPage, partnership)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
-        }
-      )
+          },
+          partnership => {
+            val currentPage = PartnershipNamePage(index)
+            val updatedUserAnswers = request.userAnswers.set(currentPage, partnership)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
+          }
+        )
   }
 }

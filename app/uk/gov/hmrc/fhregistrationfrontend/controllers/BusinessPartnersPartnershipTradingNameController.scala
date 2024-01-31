@@ -52,49 +52,50 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   private def getBusinessType: String = config.getRandomBusinessType
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val currentPage = page(index)
-    val formData = request.userAnswers.get(currentPage)
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val currentPage = page(index)
+      val formData = request.userAnswers.get(currentPage)
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(
-      view
+      Ok(view
         .business_partners_has_trading_name(prepopulatedForm, businessType, partner, postAction(index, mode), backUrl))
-      .withCookies(Cookie("businessType", getBusinessType))
-      .bakeCookies() // TODO [DLS-7603] - temp save4later solution
+        .withCookies(Cookie("businessType", getBusinessType))
+        .bakeCookies() // TODO [DLS-7603] - temp save4later solution
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_has_trading_name(
-                formWithErrors,
-                businessType,
-                partner,
-                postAction(index, mode),
-                backUrl)))
-        },
-        tradingName => {
-          val nextPage = request.cookies.get("businessType").map(_.value) match {
-            case Some(businessType) if businessType.equals("partnership") =>
-              routes.BusinessPartnersPartnershipVatNumberController.load(index, mode)
-            case Some(businessType) if businessType.equals("limited-liability-partnership") =>
-              routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode)
-            case _ =>
-              logger.warn(
-                s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
-              routes.BusinessPartnersController.load(index, mode)
-          }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_has_trading_name(
+                  formWithErrors,
+                  businessType,
+                  partner,
+                  postAction(index, mode),
+                  backUrl)))
+          },
+          tradingName => {
+            val nextPage = request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType) if businessType.equals("partnership") =>
+                routes.BusinessPartnersPartnershipVatNumberController.load(index, mode)
+              case Some(businessType) if businessType.equals("limited-liability-partnership") =>
+                routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, mode)
+              case _ =>
+                logger.warn(
+                  s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
+                routes.BusinessPartnersController.load(index, mode)
+            }
 
-          val currentPage = page(index)
-          val updatedUserAnswers = request.userAnswers.set(currentPage, tradingName)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
-        }
-      ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
+            val currentPage = page(index)
+            val updatedUserAnswers = request.userAnswers.set(currentPage, tradingName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+          }
+        ) // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   }
 
 }

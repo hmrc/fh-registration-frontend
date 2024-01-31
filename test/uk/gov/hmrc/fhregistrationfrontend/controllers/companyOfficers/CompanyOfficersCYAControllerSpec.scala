@@ -36,7 +36,7 @@ class CompanyOfficersCYAControllerSpec extends ControllerSpecWithGuiceApp with A
   val mockAppConfig = mock[FrontendAppConfig]
 
   val controller =
-    new CompanyOfficerCYAController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new CompanyOfficersCYAController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
 
   "load" should {
     "Render the Company Officers Check Your Answers page" when {

@@ -60,52 +60,54 @@ class BusinessPartnersPartnershipVatNumberController @Inject()(
     else
       "#"
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(EnterVatNumberPage(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(EnterVatNumberPage(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(
-      view.business_partners_has_vat_number(
-        prepopulatedForm,
-        businessPartnerType,
-        partnerName,
-        postAction(index, mode),
-        backUrl(index, mode)
-      )
-    ).withCookies(Cookie("businessType", getBusinessType))
+      Ok(
+        view.business_partners_has_vat_number(
+          prepopulatedForm,
+          businessPartnerType,
+          partnerName,
+          postAction(index, mode),
+          backUrl(index, mode)
+        )
+      ).withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_has_vat_number(
-                formWithErrors,
-                businessPartnerType,
-                partnerName,
-                postAction(index, mode),
-                backUrl(index, mode)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_has_vat_number(
+                  formWithErrors,
+                  businessPartnerType,
+                  partnerName,
+                  postAction(index, mode),
+                  backUrl(index, mode)
+                )
               )
             )
-          )
-        },
-        vatNumber => {
-          val page = EnterVatNumberPage(index)
-          val nextPage = request.cookies.get("businessType").map(_.value) match {
-            case Some(businessType)
-                if businessType.equals("partnership") || (businessType
-                  .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
-              routes.BusinessPartnersPartnershipUtrController.load(index, mode)
-            case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
-              routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
-          }
+          },
+          vatNumber => {
+            val page = EnterVatNumberPage(index)
+            val nextPage = request.cookies.get("businessType").map(_.value) match {
+              case Some(businessType)
+                  if businessType.equals("partnership") || (businessType
+                    .equals("limited-liability-partnership") && vatNumber.value.isEmpty) =>
+                routes.BusinessPartnersPartnershipUtrController.load(index, mode)
+              case Some(businessType) if businessType.equals("limited-liability-partnership") && vatNumber.hasValue =>
+                routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
+            }
 
-          val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(page, vatNumber)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+          }
+        )
   }
 }

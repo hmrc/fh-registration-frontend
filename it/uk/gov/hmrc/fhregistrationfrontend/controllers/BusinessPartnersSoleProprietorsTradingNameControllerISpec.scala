@@ -86,7 +86,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerISpec
 
         }
 
-        "redirect the user to the start of the BusinessPartners journey" when {
+        "redirect the user to the start" when {
           "there is no user answers in the database" in {
             given.commonPrecondition
             val result = buildRequest(route(mode))
@@ -94,7 +94,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+              res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
             }
           }
         }
@@ -207,7 +207,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerISpec
       }
 
       "there is no user answers in the database" should {
-        "redirect to the start of BusinessPartners" in {
+        "redirect to the start" in {
           given.commonPrecondition
           val result = buildRequest(route(mode))
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
@@ -216,7 +216,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }
