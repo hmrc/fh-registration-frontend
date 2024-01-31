@@ -161,9 +161,11 @@ GET          /change-business-partners/cannot-find-address/:index               
 GET          /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.load()
 POST         /business-partners/check-your-answers                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCheckYourAnswersController.next()
 
-GET         /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.load()
-POST        /business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.next()
+GET         /business-partners/limited-liability-partnership-name/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.load(index: Int, mode: Mode = NormalMode)
+POST        /business-partners/limited-liability-partnership-name/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.next(index: Int, mode: Mode = NormalMode)
 
+GET         /change-business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/limited-liability-partnership-name       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersLtdLiabilityPartnershipNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/partner-name/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/partner-name/:index      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index: Int, mode: Mode = NormalMode)
