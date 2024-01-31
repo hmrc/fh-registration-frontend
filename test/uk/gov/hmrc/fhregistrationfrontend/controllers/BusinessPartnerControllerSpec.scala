@@ -52,7 +52,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
       case BusinessPartnerType.LimitedLiabilityPartnership =>
         routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, NormalMode).url
       case BusinessPartnerType.CorporateBody =>
-        routes.BusinessPartnersCorporateBodyCompanyNameController.load().url
+        routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, NormalMode).url
       case _ =>
         routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode).url
     }

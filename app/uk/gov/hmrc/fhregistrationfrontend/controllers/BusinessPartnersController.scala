@@ -69,7 +69,7 @@ class BusinessPartnersController @Inject()(
           case BusinessPartnerType.LimitedLiabilityPartnership =>
             routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, NormalMode)
           case BusinessPartnerType.CorporateBody =>
-            routes.BusinessPartnersCorporateBodyCompanyNameController.load()
+            routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, NormalMode)
           case _ =>
             routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode)
         }
