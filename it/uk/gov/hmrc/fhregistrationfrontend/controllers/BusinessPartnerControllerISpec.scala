@@ -26,7 +26,7 @@ class BusinessPartnerControllerISpec
       case BusinessPartnerType.LimitedLiabilityPartnership =>
         routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url
       case BusinessPartnerType.CorporateBody =>
-        routes.BusinessPartnersCorporateBodyCompanyNameController.load().url
+        routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, NormalMode).url
       case _ =>
         routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode).url
     }

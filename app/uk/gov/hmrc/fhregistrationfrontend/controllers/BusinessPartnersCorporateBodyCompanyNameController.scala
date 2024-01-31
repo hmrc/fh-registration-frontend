@@ -17,50 +17,74 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.NormalMode
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.data.Form
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyNameForm.{companyNameForm, companyNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CompanyNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
   val journeyType = "corporateBody"
-  val postAction = routes.BusinessPartnersCorporateBodyCompanyNameController.next()
-  //ToDo update to pass index and mode once implemented
-  val backUrl: String = routes.BusinessPartnersController.load(1, NormalMode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersCorporateBodyCompanyNameController.next(index, mode)
+  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+  def tradingNamePage(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersCorporateBodyTradingNameController.load()
+  lazy val form: Form[String] = companyNameForm
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_name(journeyType, postAction, companyNameForm, companyNameKey, backUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
+    val currentPage = CompanyNamePage(index)
+    val formData = request.userAnswers.get(currentPage)
+    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+    Ok(
+      view
+        .business_partners_name(
+          journeyType,
+          postAction(index, mode),
+          prepopulatedForm,
+          companyNameKey,
+          backUrl(index, mode)
+        ))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index: Int, mode: Mode).async {
+    implicit request =>
       companyNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(view.business_partners_name(journeyType, postAction, formWithErrors, companyNameKey, backUrl))
+            Future.successful(
+              BadRequest(
+                view
+                  .business_partners_name(
+                    journeyType,
+                    postAction(index, mode),
+                    formWithErrors,
+                    companyNameKey,
+                    backUrl(index, mode))
+              )
+            )
           },
           companyName => {
-            Redirect(routes.BusinessPartnersCorporateBodyTradingNameController.load())
+            val currentPage = CompanyNamePage(index)
+            val updatedUserAnswers = request.userAnswers.set(currentPage, companyName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
           }
         )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
   }
 }

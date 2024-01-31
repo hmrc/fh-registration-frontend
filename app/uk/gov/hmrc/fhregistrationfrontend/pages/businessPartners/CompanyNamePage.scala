@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import play.api.data.Form
-import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{companyName => companyNameValidation}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.companyNameModel
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-object CompanyNameForm {
+case class CompanyNamePage(index: Int) extends QuestionPage[String] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  val companyNameKey = "companyName"
-
-  val companyNameForm: Form[String] = Form(
-    companyNameKey -> companyNameValidation
-  )
+  override def toString: String = "companyName"
 }
