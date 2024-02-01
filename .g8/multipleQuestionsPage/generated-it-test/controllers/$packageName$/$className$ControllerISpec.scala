@@ -45,9 +45,9 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               page.title must include("$title$")
               val inputFields = page.getElementsByClass("govuk-form-group")
               inputFields.size() mustBe 2
-              inputFields.get(0).text() mustBe $field1Value$
+              inputFields.get(0).text() mustBe "$field1Value$"
               inputFields.get(0).getElementById("$field1Name$").hasAttr("value") mustBe false
-              inputFields.get(1).text() mustBe $field2Value$
+              inputFields.get(1).text() mustBe "$field2Value$"
               inputFields.get(1).getElementById("$field2Name$").hasAttr("value") mustBe false
             }
           }
@@ -71,10 +71,10 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               page.title must include("$title$")
               val inputFields = page.getElementsByClass("govuk-form-group")
               inputFields.size() mustBe 2
-              inputFields.get(0).text() mustBe $field1Value$
+              inputFields.get(0).text() mustBe "$field1Value$"
               inputFields.get(0).getElementById("$field1Name$").hasAttr("value") mustBe true
               inputFields.get(0).getElementById("$field1Name$").attr("value") mustBe "test1"
-              inputFields.get(1).text() mustBe $field2Value$
+              inputFields.get(1).text() mustBe "$field2Value$"
               inputFields.get(1).getElementById("$field2Name$").hasAttr("value") mustBe true
               inputFields.get(1).getElementById("$field2Name$").attr("value") mustBe "test2"
             }
