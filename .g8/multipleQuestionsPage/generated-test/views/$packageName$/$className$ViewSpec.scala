@@ -103,12 +103,12 @@ class $className$ViewSpec extends ViewSpecHelper {
     }
 
     "$field1Name$ is empty" should {
-      val fieldWithError = Map("$field1Name$" -> "", "$field2Name" -> "test")
+      val fieldWithError = Map("$field1Name$" -> "", "$field2Name$" -> "test")
       val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, messages(application))
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
-        val titleMessage = Messages("$packageName$.$className;format="decap"$.title")
+        val titleMessage = Messages("fh.$packageName$.$className;format="decap"$.title")
         documentWithErrors.title must include("Error: $title$")
       }
 
@@ -119,7 +119,7 @@ class $className$ViewSpec extends ViewSpecHelper {
         errorSummary
           .select("a")
           .attr("href") mustBe "#$field1Name$"
-        errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error.$field1Name$.required")
+        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.$field1Name$.required")
       }
     }
 
@@ -129,7 +129,7 @@ class $className$ViewSpec extends ViewSpecHelper {
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
-        val titleMessage = Messages("$packageName$.$className;format="
+        val titleMessage = Messages("fh.$packageName$.$className;format="
         decap"$.title"
         )
         documentWithErrors.title must include("Error: $title$")
@@ -142,7 +142,7 @@ class $className$ViewSpec extends ViewSpecHelper {
         errorSummary
           .select("a")
           .attr("href") mustBe "#$field2Name$"
-        errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error.$field2Name$.required")
+        errorSummary.text() mustBe Messages("$fh.packageName$.$className;format="decap"$.error.$field2Name$.required")
       }
     }
 

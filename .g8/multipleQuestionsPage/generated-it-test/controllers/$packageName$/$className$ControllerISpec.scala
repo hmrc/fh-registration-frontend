@@ -54,8 +54,8 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
         }
       }
 
-      "the userAnswers contains no data" should {
-        "return OK and render the $className$ page with no data populated" in {
+      "the userAnswers contains data" should {
+        "return OK and render the $className$ page with data populated" in {
           given
             .commonPrecondition
 
@@ -108,21 +108,19 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
             given.commonPrecondition
 
             addUserAnswersToSession(emptyUserAnswers)
-            WsTestClient.withClient { client =>
-              val result1 = buildRequestFromRoute(route(mode))
-                .addCookies(
-                  DefaultWSCookie("mdtp", authAndSessionCookie)
-                )
-                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-                .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
 
-              whenReady(result1) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
-                val userAnswers = getUserAnswersFromSession.get
-                val pageData = userAnswers.get($className$Page(1))
-                pageData mustBe Some($className$("Coca", "Cola"))
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$("Coca", "Cola"))
             }
           }
         }
@@ -132,21 +130,19 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
             given.commonPrecondition
 
             addUserAnswersToSession(userAnswersWithPageData)
-            WsTestClient.withClient { client =>
-              val result1 = buildRequestFromRoute(route(mode))
-                .addCookies(
-                  DefaultWSCookie("mdtp", authAndSessionCookie)
-                )
-                .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-                .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("$field1Name$" -> Seq("Coca"), "$field2Name$" -> Seq("Cola")))
 
-              whenReady(result1) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
-                val userAnswers = getUserAnswersFromSession.get
-                val pageData = userAnswers.get($className$Page(1))
-                pageData mustBe Some($className$("Coca", "Cola"))
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$("Coca", "Cola"))
             }
           }
         }
@@ -157,92 +153,83 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
           given.commonPrecondition
 
           addUserAnswersToSession(emptyUserAnswers)
-          WsTestClient.withClient { client =>
-            val result1 = buildRequestFromRoute(route(mode))
-              .addCookies(
-                DefaultWSCookie("mdtp", authAndSessionCookie)
-              )
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("")))
+          val result1 = buildRequestFromRoute(route(mode))
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie)
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("")))
 
 
-            whenReady(result1) { res =>
-              res.status mustBe 400
-              val page = Jsoup.parse(res.body)
-              page.title must include("Error: $title$")
-              val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-                .first().getElementsByTag("li")
-              errorSummaryList.size() mustBe 2
-              val errorSummary1 = errorSummaryList.get(0)
-              errorSummary1
-                .select("a")
-                .attr("href") mustBe "#$field1Name$"
-              errorSummary1.text() mustBe "Enter $field1Value$"
-              val errorSummary2 = errorSummaryList.get(1)
-              errorSummary2
-                .select("a")
-                .attr("href") mustBe "#$field2Name$"
-              errorSummary2.text() mustBe "Enter $field2Value$"
-              )
-            }
+          whenReady(result1) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.title must include("Error: $title$")
+            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
+              .first().getElementsByTag("li")
+            errorSummaryList.size() mustBe 2
+            val errorSummary1 = errorSummaryList.get(0)
+            errorSummary1
+              .select("a")
+              .attr("href") mustBe "#$field1Name$"
+            errorSummary1.text() mustBe "Enter $field1Value$"
+            val errorSummary2 = errorSummaryList.get(1)
+            errorSummary2
+              .select("a")
+              .attr("href") mustBe "#$field2Name$"
+            errorSummary2.text() mustBe "Enter $field2Value$"
           }
         }
         "no answer is given for $field1Name$" in {
           given.commonPrecondition
 
           addUserAnswersToSession(emptyUserAnswers)
-          WsTestClient.withClient { client =>
-            val result1 = buildRequestFromRoute(route(mode))
-              .addCookies(
-                DefaultWSCookie("mdtp", authAndSessionCookie)
-              )
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("cola")))
+          val result1 = buildRequestFromRoute(route(mode))
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie)
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("cola")))
 
 
-            whenReady(result1) { res =>
-              res.status mustBe 400
-              val page = Jsoup.parse(res.body)
-              page.title must include("Error: $title$")
-              val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-                .first().getElementsByTag("li")
-              errorSummaryList.size() mustBe 1
-              val errorSummary1 = errorSummaryList.get(0)
-              errorSummary1
-                .select("a")
-                .attr("href") mustBe "#$field1Name$"
-              errorSummary1.text() mustBe "Enter $field1Value$"
-              )
-            }
+          whenReady(result1) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.title must include("Error: $title$")
+            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
+              .first().getElementsByTag("li")
+            errorSummaryList.size() mustBe 1
+            val errorSummary1 = errorSummaryList.get(0)
+            errorSummary1
+              .select("a")
+              .attr("href") mustBe "#$field1Name$"
+            errorSummary1.text() mustBe "Enter $field1Value$"
           }
         }
-        "no answer is given for $field1Name$" in {
+        "no answer is given for $field2Name$" in {
           given.commonPrecondition
 
           addUserAnswersToSession(emptyUserAnswers)
-          WsTestClient.withClient { client =>
-            val result1 = buildRequestFromRoute(route(mode))
-              .addCookies(
-                DefaultWSCookie("mdtp", authAndSessionCookie)
-              )
-              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map("$field1Name$" -> Seq(""), "$field2Name$" -> Seq("cola")))
+          val result1 = buildRequestFromRoute(route(mode))
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie)
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("$field1Name$" -> Seq("test"), "$field2Name$" -> Seq("")))
 
 
-            whenReady(result1) { res =>
-              res.status mustBe 400
-              val page = Jsoup.parse(res.body)
-              page.title must include("Error: $title$")
-              val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
-                .first().getElementsByTag("li")
-              errorSummaryList.size() mustBe 1
-              val errorSummary1 = errorSummaryList.get(0)
-              errorSummary1
-                .select("a")
-                .attr("href") mustBe "#$field2Name$"
-              errorSummary1.text() mustBe "Enter $field2Value$"
-              )
-            }
+          whenReady(result1) { res =>
+            res.status mustBe 400
+            val page = Jsoup.parse(res.body)
+            page.title must include("Error: $title$")
+            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
+              .first().getElementsByTag("li")
+            errorSummaryList.size() mustBe 1
+            val errorSummary1 = errorSummaryList.get(0)
+            errorSummary1
+              .select("a")
+              .attr("href") mustBe "#$field2Name$"
+            errorSummary1.text() mustBe "Enter $field2Value$"
           }
         }
       }
