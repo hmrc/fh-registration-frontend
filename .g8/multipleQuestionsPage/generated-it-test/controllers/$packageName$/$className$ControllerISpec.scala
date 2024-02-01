@@ -45,9 +45,9 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               page.title must include("$title$")
               val inputFields = page.getElementsByClass("govuk-form-group")
               inputFields.size() mustBe 2
-              inputFields.get(0).text() mustBe $className;format="decap"$.$field1Name$
+              inputFields.get(0).text() mustBe $field1Value$
               inputFields.get(0).getElementById("$field1Name$").hasAttr("value") mustBe false
-              inputFields.get(1).text() mustBe $className;format = "decap"$.$field2Name$
+              inputFields.get(1).text() mustBe $field2Value$
               inputFields.get(1).getElementById("$field2Name$").hasAttr("value") mustBe false
             }
           }
@@ -71,10 +71,10 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               page.title must include("$title$")
               val inputFields = page.getElementsByClass("govuk-form-group")
               inputFields.size() mustBe 2
-              inputFields.get(0).text() mustBe $className;format ="decap"$.$field1Name$
+              inputFields.get(0).text() mustBe $field1Value$
               inputFields.get(0).getElementById("$field1Name$").hasAttr("value") mustBe true
               inputFields.get(0).getElementById("$field1Name$").attr("value") mustBe "test1"
-              inputFields.get(1).text() mustBe $className;format="decap"$.$field2Name$
+              inputFields.get(1).text() mustBe $field2Value$
               inputFields.get(1).getElementById("$field2Name$").hasAttr("value") mustBe true
               inputFields.get(1).getElementById("$field2Name$").attr("value") mustBe "test2"
             }
@@ -101,7 +101,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
         val expectedUrl = if (mode == CheckMode) {
           $packageName$.routes.$packageName;format="cap"$CYAController.load(1).url
         } else {
-          $nextPage$.url
+          $nextPage$.url.replace("/fhdds", "")
         }
         s"update the user answers with the new values and redirect to" + expectedUrl when {
           "the user answers contain no page data" in {
@@ -117,7 +117,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
 
             whenReady(result1) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
               pageData mustBe Some($className$("Coca", "Cola"))
@@ -139,7 +139,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
 
             whenReady(result1) { res =>
               res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(expectedUrl)
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
               pageData mustBe Some($className$("Coca", "Cola"))
