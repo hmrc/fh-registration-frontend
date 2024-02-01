@@ -9,18 +9,9 @@ import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 object $className$Form {
 
   val requiredErrorKey = "fh.$packageName$.$className;format="decap"$.error.required"
-  def apply(): Form[$className$] =
+  val form: Form[$className$.Value] =
     Form(
-      "value" -> enumerable[$className$]("$packageName$.$className;format="decap"$.error.required")
+      "value" -> enum($className$, requiredErrorKey)
   )
- def apply() = Form(
-   "value" -> enum($className$, requiredErrorKey)
-  )
-}
 
-
-  def apply(): Form[$className$] =
-    Form(
-      "value" -> enumerable[$className$]("$packageName$.$className;format="decap"$.error.required")
-  )
 }

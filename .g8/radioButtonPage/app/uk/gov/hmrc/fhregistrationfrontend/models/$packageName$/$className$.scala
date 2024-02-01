@@ -1,22 +1,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.$packageName$
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Enumerable
+import play.api.libs.json.{Format, Reads, Writes}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import viewmodels.WithName
-sealed trait $className$Model
 
-object $className$Model extends Enumerable.Implicits {
+object $className$ extends Enumeration {
 
-  case object $option1key;format="Camel"$ extends WithName("$option1key;format="decap"$") with $className$Model
-  case object $option2key;format="Camel"$ extends WithName("$option2key;format="decap"$") with $className$Model
+  val $option1key;format="Camel"$, $option2key;format="Camel"$ = Value
 
-  val values: Seq[$className$Model] = Seq(
+  val typeValues: Seq[$className$] = Seq(
     $option1key;format="Camel"$, $option2key;format="Camel"$
   )
 
-  def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
+  def options(implicit messages: Messages): Seq[RadioItem] = typeValues.zipWithIndex.map {
     case (value, index) =>
       RadioItem(
         content = Text(messages(s"fh.$packageName$.$className;format="decap"$.\${value.toString}")),
@@ -25,6 +22,7 @@ object $className$Model extends Enumerable.Implicits {
       )
   }
 
-  implicit val enumerable: Enumerable[$className$Model] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  implicit val format: Format[$className$.Value] =
+    Format[$className$.Value](Reads.enumNameReads($className$), Writes.enumNameWrites)
+
 }

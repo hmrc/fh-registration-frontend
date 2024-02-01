@@ -15,7 +15,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class $className$Controller @Inject()(ds: CommonPlayDependencies,
                                       $className;format="decap"$View: $className$View,
                                       actions: Actions,
-
                                       val sessionCache: SessionRepository,
                                       cc: MessagesControllerComponents)
                                      (implicit val ec: ExecutionContext)
@@ -31,8 +30,11 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
 
   def onPageLoad(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction$packageName;format = "cap" $ (index, mode) {
     implicit request =>
-      val formData = request.userAnswers.get($className$Page(index))
-      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+
+        val preparedForm = request.userAnswers.get($className$Page(index)) match {
+            case None => form
+            case Some(value) => form.fill(value)
+        }
 
       Ok($className;format="decap"$View(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
     }
@@ -48,8 +50,13 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
 
         value => {
           val updatedAnswers = request.userAnswers.set($className$Page(index), value)
-          //Todo: update startCall so it is the nextPage call
-          updateUserAnswersAndSaveToCache(updatedAnswers, startCall, $className$Page(index))
+          //Todo update nextPage when doing navigation
+          val nextPage = if(mode == CheckMode) {
+            $packageName;format="cap"$CYAController.load(index)
+          } else {
+            $nextPage$
+          }
+          updateUserAnswersAndSaveToCache(updatedAnswers, nextPage, $className$Page(index))
         }
      )
   }
