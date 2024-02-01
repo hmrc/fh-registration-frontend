@@ -238,23 +238,4 @@ object Mappings {
     (value.isDefined, value)
   }
 
-  protected def enumerable[A](
-                               requiredKey: String = "error.required",
-                               invalidKey: String = "error.invalid",
-                               args: Seq[String] = Seq.empty)(implicit ev: Enumerable[A]): FieldMapping[A] =
-    of(enumerableFormatter[A](requiredKey, invalidKey, args))
-
-  private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String, args: Seq[String] = Seq.empty)(
-    implicit ev: Enumerable[A]): Formatter[A] =
-    new Formatter[A] {
-      private val baseFormatter = stringFormatter(requiredKey, args)
-
-      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], A] =
-        baseFormatter.bind(key, data).flatMap { str =>
-          ev.withName(str)
-            .map(Right.apply)
-            .getOrElse(Left(Seq(FormError(key, invalidKey, args))))
-        }
-
-    }
 }

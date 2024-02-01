@@ -9,7 +9,7 @@ object $className$ extends Enumeration {
 
   val $option1key;format="Camel"$, $option2key;format="Camel"$ = Value
 
-  val typeValues: Seq[$className$] = Seq(
+  val typeValues: Seq[$className$.Value] = Seq(
     $option1key;format="Camel"$, $option2key;format="Camel"$
   )
 

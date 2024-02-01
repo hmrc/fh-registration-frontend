@@ -1,7 +1,5 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$
 
-import javax.inject.Inject
-
 import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$

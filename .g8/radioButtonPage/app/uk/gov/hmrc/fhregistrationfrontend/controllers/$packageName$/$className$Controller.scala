@@ -36,7 +36,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
             case Some(value) => form.fill(value)
         }
 
-      Ok($className;format="decap"$View(prepopulatedForm, postAction(index, mode), backUrl(index, mode)))
+      Ok($className;format="decap"$View(preparedForm, postAction(index, mode), backUrl(index, mode)))
     }
 
   def onSubmit(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction$packageName;format = "cap" $ (index, mode).async {
@@ -50,13 +50,8 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
 
         value => {
           val updatedAnswers = request.userAnswers.set($className$Page(index), value)
-          //Todo update nextPage when doing navigation
-          val nextPage = if(mode == CheckMode) {
-            $packageName;format="cap"$CYAController.load(index)
-          } else {
-            $nextPage$
-          }
-          updateUserAnswersAndSaveToCache(updatedAnswers, nextPage, $className$Page(index))
+          //Todo update startCall when doing navigation
+          updateUserAnswersAndSaveToCache(updatedAnswers, startCall, $className$Page(index))
         }
      )
   }
