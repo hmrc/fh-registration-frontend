@@ -31,5 +31,4 @@ trait UserTestData {
 
   val startCall = routes.Application.main()
 
-
 }
