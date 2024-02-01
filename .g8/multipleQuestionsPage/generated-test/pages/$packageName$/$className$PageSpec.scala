@@ -5,14 +5,14 @@ import uk.gov.hmrc.fhregistrationfrontend.pages.behaviours.PageBehaviours
 
 class $className$PageSpec extends PageBehaviours {
 
-  "$className$Page" - {
+  "$className$Page" when {
 
     val pageData = $className$("test1", "test2")
 
-    beRetrievable[$className$]($className$Page, pageData)
+    beRetrievable[$className$]($className$Page(1), pageData)
 
-    beSettable[$className$]($className$Page, pageData)
+    beSettable[$className$]($className$Page(1), pageData)
 
-    beRemovable[$className$]($className$Page, pageData)
+    beRemovable[$className$]($className$Page(1), pageData)
   }
 }

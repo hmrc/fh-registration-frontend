@@ -21,11 +21,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
 import models.{CheckMode, NormalMode}
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import play.api.i18n.Messages
-import play.api.mvc.Request
+import play.api.mvc.{Call, Request}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.fhregistrationfrontend.views.ViewSpecHelper
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 
 
@@ -34,6 +35,7 @@ class $className$ViewSpec extends ViewSpecHelper {
   val view = app.injector.instanceOf[$className$View]
   val form = $className$Form.form
   implicit val request: Request[_] = FakeRequest()
+  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   val backLink = "http://test.com"
   val call = Call("GET", "/foo")
@@ -122,7 +124,7 @@ class $className$ViewSpec extends ViewSpecHelper {
     }
 
     "$field2Name$ is empty" should {
-      val fieldWithError = Map("$field1Name$" -> "test", "$field2Name" -> "")
+      val fieldWithError = Map("$field1Name$" -> "test", "$field2Name$" -> "")
       val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, messages(application))
       val documentWithErrors = doc(htmlWithErrors)
 

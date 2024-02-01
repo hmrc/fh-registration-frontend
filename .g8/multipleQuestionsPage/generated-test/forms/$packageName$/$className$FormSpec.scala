@@ -1,6 +1,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$
 
-import play.api.data.FormError
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.util.Random
 
 class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
@@ -22,8 +24,8 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
 
     "reject the form" when {
       val errorPath = "$packageName$.$className;format="decap"$.error."
-      def requiredKey(fieldName: String) = errorPath + s"$fieldName.required"
-      val lengthKey(fieldName: String) = errorPath + s"$fieldName.length"
+      def requiredKey(fieldName: String) = errorPath + fieldName + ".required"
+      def lengthKey(fieldName: String) = errorPath + fieldName + ".length"
       "$field1Name$ exceeds the maxLength" in {
         val fieldExceedingMaxLength: String = Random.nextString($field1MaxLength$ + 1)
         val invalidData = Map(
@@ -32,7 +34,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
         )
         formDataHasErrors(
           invalidData,
-          List($field1Name$ -> lengthKey("$field1Name$"))
+          List("$field1Name$" -> lengthKey("$field1Name$"))
         )
       }
 
@@ -43,7 +45,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
         )
         formDataHasErrors(
           invalidData,
-          List($field1Name$ -> requiredKey("$field1Name$"))
+          List("$field1Name$" -> requiredKey("$field1Name$"))
         )
       }
 
@@ -56,7 +58,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
 
         formDataHasErrors(
           invalidData,
-          List($field2Name$ -> lengthKey("$field2Name$"))
+          List("$field2Name$" -> lengthKey("$field2Name$"))
         )
       }
 
@@ -67,7 +69,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
         )
         formDataHasErrors(
           invalidData,
-          List($field2Name$ -> requiredKey("$field2Name$"))
+          List("$field2Name$" -> requiredKey("$field2Name$"))
         )
       }
 
@@ -80,8 +82,8 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
         )
         formDataHasErrors(
           invalidData,
-          List($field1Name$ -> lengthKey("$field1Name$"),
-            $field2Name$ -> lengthKey("$field2Name$"))
+          List("$field1Name$" -> lengthKey("$field1Name$"),
+            "$field2Name$" -> lengthKey("$field2Name$"))
         )
       }
 
@@ -93,8 +95,8 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
 
         formDataHasErrors(
           invalidData,
-          List($field1Name$ -> requiredKey("$field1Name$"),
-            $field2Name$ -> requiredKey("$field2Name$"))
+          List("$field1Name$" -> requiredKey("$field1Name$"),
+            "$field2Name$" -> requiredKey("$field2Name$"))
         )
       }
     }

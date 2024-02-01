@@ -51,7 +51,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
           val updatedUserAnswers = request.userAnswers.set($className$Page(index), value)
           //Todo update nextPage when doing navigation
           val nextPage = if(mode == CheckMode) {
-            $packageName;format="cap"$CYAController.load(index)
+            routes.$packageName;format="cap"$CYAController.load(index)
           } else {
             $nextPage$
           }
