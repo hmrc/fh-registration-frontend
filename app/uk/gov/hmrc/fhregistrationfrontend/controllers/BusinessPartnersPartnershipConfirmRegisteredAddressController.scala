@@ -17,47 +17,67 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import models.Mode
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{AddressPage, UkAddressLookupPage}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
   import actions._
 
-  val postAction: Call = routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next()
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index, mode)
+  def editAddressUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersPartnershipEnterAddressController.load(index, mode).url
+  val journey = "partnership"
+  def backLink(index: Int, mode: Mode) =
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
+  val companyName = "company"
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(view.business_partners_confirm_registered_address(address, "company", "partnership", postAction, "#", "#"))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+      val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+
+      if (cachedAddressList.size == 1) {
+        val addressToConfirm = cachedAddressList.head._2
+        Ok(
+          view
+            .business_partners_confirm_registered_address(
+              addressToConfirm,
+              companyName,
+              journey,
+              postAction(index, mode),
+              backLink(index, mode),
+              editAddressUrl(index, mode)))
+      } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      Ok(s"Form submitted, with result:")
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
-  }
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+      val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-  val address: Address = Address(
-    addressLine1 = "1 Romford Road",
-    addressLine2 = Some("Wellington"),
-    addressLine3 = Some("Telford"),
-    addressLine4 = None,
-    postcode = "TF1 4ER",
-    countryCode = None,
-    lookupId = None
-  )
+      if (cachedAddressList.size == 1) {
+        val page = AddressPage(index)
+        val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+        val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
+
+        updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+      } else {
+        Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
+      }
+  }
 }
