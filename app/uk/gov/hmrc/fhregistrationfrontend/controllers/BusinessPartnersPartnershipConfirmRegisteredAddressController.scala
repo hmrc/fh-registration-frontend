@@ -46,36 +46,38 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressController @Inject()(
     routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode).url
   val companyName = "company"
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
-    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+      val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-    if (cachedAddressList.size == 1) {
-      val addressToConfirm = cachedAddressList.head._2
-      Ok(
-        view
-          .business_partners_confirm_registered_address(
-            addressToConfirm,
-            companyName,
-            journey,
-            postAction(index, mode),
-            backLink(index, mode),
-            editAddressUrl(index, mode)))
-    } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
+      if (cachedAddressList.size == 1) {
+        val addressToConfirm = cachedAddressList.head._2
+        Ok(
+          view
+            .business_partners_confirm_registered_address(
+              addressToConfirm,
+              companyName,
+              journey,
+              postAction(index, mode),
+              backLink(index, mode),
+              editAddressUrl(index, mode)))
+      } else Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
-    val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      val getUserAnswers = request.userAnswers.get(UkAddressLookupPage(index))
+      val cachedAddressList = getUserAnswers.map(data => (data.lookupResult)).getOrElse(Map.empty)
 
-    if (cachedAddressList.size == 1) {
-      val page = AddressPage(index)
-      val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
-      val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
+      if (cachedAddressList.size == 1) {
+        val page = AddressPage(index)
+        val nextPage = routes.BusinessPartnersCheckYourAnswersController.load()
+        val updatedUserAnswers = request.userAnswers.set(page, cachedAddressList.head._2)
 
-      updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-    } else {
-      Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
-    }
+        updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
+      } else {
+        Future.successful(Redirect(routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)))
+      }
   }
 }
