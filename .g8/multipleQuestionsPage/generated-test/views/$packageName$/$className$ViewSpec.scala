@@ -18,9 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.views.$packageName$
 
 import uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$.routes
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
-import models.{CheckMode, NormalMode}
+import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
-import play.api.i18n.Messages
 import play.api.mvc.{Call, Request}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
@@ -34,8 +33,8 @@ class $className$ViewSpec extends ViewSpecHelper {
 
   val view = app.injector.instanceOf[$className$View]
   val form = $className$Form.form
-  implicit val request: Request[_] = FakeRequest()
-  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+//  implicit val request: Request[_] = FakeRequest()
+//  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   val backLink = "http://test.com"
   val call = Call("GET", "/foo")
@@ -55,10 +54,10 @@ class $className$ViewSpec extends ViewSpecHelper {
   $className;format="Camel"$JsObject.map { case (fName, fValue) => fName -> fValue.toString }
 
   "View" when {
+    val html = view(form, call, backLink)(request, Messages, appConfig)
+    val document = doc(html)
+    val questionItems = document.getElementsByClass(Selectors.formGroup)
     "the form is valid" should {
-      val html = view(form, NormalMode)(request, messages(application))
-      val document = doc(html)
-      val questionItems = document.getElementsByClass(Selectors.formGroup)
       "contain the expected title" in {
         document.title() must include("$title$")
       }
@@ -77,7 +76,6 @@ class $className$ViewSpec extends ViewSpecHelper {
         questionItem
           .getElementsByClass(Selectors.label)
           .text() mustBe "$field1Name$"
-        )
       }
 
       "include the $field2Name$ field" in {
@@ -86,7 +84,6 @@ class $className$ViewSpec extends ViewSpecHelper {
         questionItem
           .getElementsByClass(Selectors.label)
           .text() mustBe "$field2Name$"
-        )
       }
 
       "contain the correct button" in {
@@ -94,7 +91,7 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
 
       "contains a form with the correct action" in {
-        val htmlAllSelected = view(form.fill($className;format="Camel"$), call, backLink)(request, messages(application))
+        val htmlAllSelected = view(form.fill($className;format="Camel"$), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
         documentAllSelected.select(Selectors.form)
@@ -104,7 +101,7 @@ class $className$ViewSpec extends ViewSpecHelper {
 
     "$field1Name$ is empty" should {
       val fieldWithError = Map("$field1Name$" -> "", "$field2Name$" -> "test")
-      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, messages(application))
+      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
@@ -125,13 +122,10 @@ class $className$ViewSpec extends ViewSpecHelper {
 
     "$field2Name$ is empty" should {
       val fieldWithError = Map("$field1Name$" -> "test", "$field2Name$" -> "")
-      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, messages(application))
+      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
-        val titleMessage = Messages("fh.$packageName$.$className;format="
-        decap"$.title"
-        )
         documentWithErrors.title must include("Error: $title$")
       }
 

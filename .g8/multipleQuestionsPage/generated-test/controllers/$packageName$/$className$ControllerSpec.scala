@@ -65,9 +65,9 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
 
     s"onSubmit when in" + mode should {
       val expectedUrl = if (mode == CheckMode) {
-        routes.$packageName;format="cap"$CYAController.load(index)
+        routes.$packageName;format="cap"$CYAController.load(index).url
         } else {
-          $nextPage$
+          $nextPage$.url.replace("/fhdds", "")
         }
       "save the answer to database and redirect to " + expectedUrl when {
         "the user answers doesn't contain page data" in {

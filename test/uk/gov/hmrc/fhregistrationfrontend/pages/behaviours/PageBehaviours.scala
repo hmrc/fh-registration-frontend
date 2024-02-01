@@ -18,14 +18,14 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.behaviours
 
 import models.UserAnswers
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.must.Matchers
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues, TryValues}
 import pages.QuestionPage
 import play.api.libs.json._
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-trait PageBehaviours extends UnitSpec with ScalaFutures with BeforeAndAfterEach with Matchers with OptionValues with TryValues {
+trait PageBehaviours
+    extends UnitSpec with ScalaFutures with BeforeAndAfterEach with Matchers with OptionValues with TryValues {
 
   class BeRetrievable[A] {
     def apply(page: QuestionPage[A], value: A)(implicit formatter: Format[A]): Unit = {
@@ -41,7 +41,9 @@ trait PageBehaviours extends UnitSpec with ScalaFutures with BeforeAndAfterEach 
       "the user answers contains page data" should {
         "return the value" in {
           val userAnswers = UserAnswers("testId")
-            .set[A](page, value).success.value
+            .set[A](page, value)
+            .success
+            .value
 
           userAnswers.get[A](page) shouldBe Some(value)
         }
@@ -50,29 +52,30 @@ trait PageBehaviours extends UnitSpec with ScalaFutures with BeforeAndAfterEach 
   }
 
   class BeSettable[A] {
-    def apply(page: QuestionPage[A], value: A)(implicit formatter: Format[A]): Unit = {
+    def apply(page: QuestionPage[A], value: A)(implicit formatter: Format[A]): Unit =
       "must be able to be set on UserAnswers" in {
         val userAnswers = UserAnswers("testId")
-          .set[A](page, value).success.value
+          .set[A](page, value)
+          .success
+          .value
 
         userAnswers.get[A](page) shouldBe Some(value)
       }
-    }
   }
 
   class BeRemovable[A] {
-    def apply(page: QuestionPage[A], value: A)(implicit formatter: Format[A]): Unit = {
-
+    def apply(page: QuestionPage[A], value: A)(implicit formatter: Format[A]): Unit =
       "must be able to be removed from UserAnswers" in {
         val userAnswers = UserAnswers("testId")
-          .set[A](page, value).success.value
+          .set[A](page, value)
+          .success
+          .value
 
         userAnswers.get[A](page) shouldBe Some(value)
 
         val updatedAnswers = userAnswers.remove(page).success.value
         updatedAnswers.get(page) shouldBe empty
       }
-    }
   }
 
   def beRetrievable[A]: BeRetrievable[A] = new BeRetrievable[A]

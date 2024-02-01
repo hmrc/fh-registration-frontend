@@ -19,11 +19,11 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
       val data = dataFromValidForm(validData)
 
       data.$field1Name$ shouldBe "test1"
-      data.$field1Name$ shouldBe "test2"
+      data.$field2Name$ shouldBe "test2"
     }
 
     "reject the form" when {
-      val errorPath = "$packageName$.$className;format="decap"$.error."
+      val errorPath = "fh.$packageName$.$className;format="decap"$.error."
       def requiredKey(fieldName: String) = errorPath + fieldName + ".required"
       def lengthKey(fieldName: String) = errorPath + fieldName + ".length"
       "$field1Name$ exceeds the maxLength" in {
