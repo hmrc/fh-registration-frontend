@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
-@import uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2._
+@import uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2.CompanyOfficersHeaderWithCaption
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @this(
@@ -40,8 +40,8 @@
         @viewHelpers.govUkRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("$packageName$.$className;format="decap"$.heading")).asPageHeading(),
-                items  = $className$.options,
+                legend = LegendViewModel(messages("fh.$packageName$.$className;format="decap"$.heading")).asPageHeading(),
+                items  = $className$Model.options,
                 noErrorRequired = false
             )
         )

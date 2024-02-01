@@ -1,6 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$
 
-import models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 
