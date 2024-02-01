@@ -142,7 +142,7 @@ class $className$ViewSpec extends ViewSpecHelper {
         errorSummary
           .select("a")
           .attr("href") mustBe "#$field2Name$"
-        errorSummary.text() mustBe Messages("$fh.packageName$.$className;format="decap"$.error.$field2Name$.required")
+        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.$field2Name$.required")
       }
     }
 
