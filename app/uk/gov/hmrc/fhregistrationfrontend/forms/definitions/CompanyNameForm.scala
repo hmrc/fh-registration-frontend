@@ -25,9 +25,7 @@ object CompanyNameForm {
 
   val companyNameKey = "companyName"
 
-  val companyNameForm = Form(
-    mapping(
-      companyNameKey -> companyNameValidation
-    )(companyNameModel.apply)(companyNameModel.unapply)
+  val companyNameForm: Form[String] = Form(
+    companyNameKey -> companyNameValidation
   )
 }

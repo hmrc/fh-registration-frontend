@@ -42,41 +42,43 @@ class BusinessPartnersPartnershipUtrController @Inject()(
   def backLink(index: Int, mode: Mode): String =
     routes.BusinessPartnersPartnershipVatNumberController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(page(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(page(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-    Ok(
-      view
-        .business_partners_has_utr(
-          prepopulatedForm,
-          partnerName,
-          businessPartnerType,
-          postAction(index, mode),
-          backLink(index, mode)))
+      Ok(
+        view
+          .business_partners_has_utr(
+            prepopulatedForm,
+            partnerName,
+            businessPartnerType,
+            postAction(index, mode),
+            backLink(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_has_utr(
-                formWithErrors,
-                partnerName,
-                businessPartnerType,
-                postAction(index, mode),
-                backLink(index, mode))))
-        },
-        businessPartnersUtr => {
-          val pageToCache = page(index)
-          val nextPage = routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_has_utr(
+                  formWithErrors,
+                  partnerName,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backLink(index, mode))))
+          },
+          businessPartnersUtr => {
+            val pageToCache = page(index)
+            val nextPage = routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, mode)
 
-          val updatedUserAnswers = request.userAnswers.set(pageToCache, businessPartnersUtr)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, pageToCache)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(pageToCache, businessPartnersUtr)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, pageToCache)
+          }
+        )
   }
 }

@@ -48,42 +48,44 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
 
   def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(
-      view
-        .business_partners_individualsAndSoleProprietors_partner_name(
-          prepopulatedForm,
-          postAction(index, mode),
-          backUrl(index, mode)))
-      .withCookies(Cookie("businessType", getBusinessType))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(IndividualsAndSoleProprietorsPartnerNamePage(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+      Ok(
+        view
+          .business_partners_individualsAndSoleProprietors_partner_name(
+            prepopulatedForm,
+            postAction(index, mode),
+            backUrl(index, mode)))
+        .withCookies(Cookie("businessType", getBusinessType))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_individualsAndSoleProprietors_partner_name(
-                formWithErrors,
-                postAction(index, mode),
-                backUrl(index, mode))))
-        },
-        partnerName => {
-          val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
-          val nextPage = request.userAnswers.get(PartnerTypePage(index)) match {
-            case Some(businessType) if businessType.equals(BusinessPartnerType.Individual) =>
-              routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
-            case Some(businessType) if businessType.equals(BusinessPartnerType.SoleProprietor) =>
-              routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
-            case _ => routes.BusinessPartnersController.load(index, mode)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_individualsAndSoleProprietors_partner_name(
+                  formWithErrors,
+                  postAction(index, mode),
+                  backUrl(index, mode))))
+          },
+          partnerName => {
+            val page = IndividualsAndSoleProprietorsPartnerNamePage(index)
+            val nextPage = request.userAnswers.get(PartnerTypePage(index)) match {
+              case Some(businessType) if businessType.equals(BusinessPartnerType.Individual) =>
+                routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
+              case Some(businessType) if businessType.equals(BusinessPartnerType.SoleProprietor) =>
+                routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
+              case _ => routes.BusinessPartnersController.load(index, mode)
+            }
+            val updatedUserAnswers = request.userAnswers.set(page, partnerName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
           }
-          val updatedUserAnswers = request.userAnswers.set(page, partnerName)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)
-        }
-      )
+        )
   }
 }

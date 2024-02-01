@@ -44,7 +44,13 @@ class Actions @Inject()(
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
   def dataRetrievalAction =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
-  def dataRequiredAction(index: Int, mode: Mode) =
+
+  def dataRequiredActionCompanyOfficers(index: Int, mode: Mode) =
+    userAction andThen newCompanyOfficersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
+      ec,
+      index,
+      mode)
+  def dataRequiredActionBusinessPartners(index: Int, mode: Mode) =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
       ec,
       index,
@@ -73,6 +79,18 @@ class Actions @Inject()(
     new ActionRefiner[UserRequest, UserRequest] {
       override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] =
         if (frontendAppConfig.newBusinessPartnerPagesEnabled) {
+          Future.successful(Right(request))
+        } else {
+          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(request)))
+        }
+
+      override protected def executionContext: ExecutionContext = ec
+    }
+
+  def newCompanyOfficersFlowEnabledAction: ActionRefiner[UserRequest, UserRequest] =
+    new ActionRefiner[UserRequest, UserRequest] {
+      override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] =
+        if (frontendAppConfig.newCompanyOfficersPagesEnabled) {
           Future.successful(Right(request))
         } else {
           Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(request)))

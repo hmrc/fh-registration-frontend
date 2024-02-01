@@ -39,7 +39,7 @@ class BusinessPartnersConfirmAddressControllerISpec
       }
 
       "there are no answers in the database" should {
-        "redirect to the start of BusinessPartners journey" in {
+        "redirect to the start" in {
           given.commonPrecondition
 
           val result = buildRequest(route(mode))
@@ -48,7 +48,7 @@ class BusinessPartnersConfirmAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }
@@ -76,7 +76,7 @@ class BusinessPartnersConfirmAddressControllerISpec
       }
 
       "there are no answers in the database" should {
-        "redirect to the start of BusinessPartners journey" in {
+        "redirect to the start" in {
           given.commonPrecondition
 
 
@@ -86,7 +86,7 @@ class BusinessPartnersConfirmAddressControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(startCall.url)
           }
         }
       }

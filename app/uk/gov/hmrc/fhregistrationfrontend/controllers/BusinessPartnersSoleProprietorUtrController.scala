@@ -47,39 +47,41 @@ class BusinessPartnersSoleProprietorUtrController @Inject()(
   def backUrl(index: Int, mode: Mode): String =
     routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController.load(index, mode).url
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(SoleProprietorUtrPage(index))
-    val prepopulatedForm =
-      formData.map(data => businessPartnersEnterUtrForm.fill(data)).getOrElse(businessPartnersEnterUtrForm)
-    Ok(
-      view.business_partners_enter_utr_number(
-        prepopulatedForm,
-        partnerName,
-        businessPartnerType,
-        postAction(index, mode),
-        backUrl(index, mode)))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(SoleProprietorUtrPage(index))
+      val prepopulatedForm =
+        formData.map(data => businessPartnersEnterUtrForm.fill(data)).getOrElse(businessPartnersEnterUtrForm)
+      Ok(
+        view.business_partners_enter_utr_number(
+          prepopulatedForm,
+          partnerName,
+          businessPartnerType,
+          postAction(index, mode),
+          backUrl(index, mode)))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    businessPartnersEnterUtrForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_enter_utr_number(
-                formWithErrors,
-                partnerName,
-                businessPartnerType,
-                postAction(index, mode),
-                backUrl(index, mode))
-            ))
-        },
-        value => {
-          val updatedUserAnswers = request.userAnswers.set(SoleProprietorUtrPage(index), value)
-          val nextPage = routes.BusinessPartnersAddressController.load(index, mode)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorUtrPage(index))
-        }
-      )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      businessPartnersEnterUtrForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_utr_number(
+                  formWithErrors,
+                  partnerName,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backUrl(index, mode))
+              ))
+          },
+          value => {
+            val updatedUserAnswers = request.userAnswers.set(SoleProprietorUtrPage(index), value)
+            val nextPage = routes.BusinessPartnersAddressController.load(index, mode)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, SoleProprietorUtrPage(index))
+          }
+        )
   }
 }
