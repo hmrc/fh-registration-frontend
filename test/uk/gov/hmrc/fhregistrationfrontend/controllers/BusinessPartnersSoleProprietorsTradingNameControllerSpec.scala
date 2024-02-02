@@ -51,7 +51,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
       "Render the business partner trading name page" when {
         "no user answers supplied" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -69,7 +69,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
             .set[TradingName](SoleProprietorsTradingNamePage(index), tradingName)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -86,7 +86,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
     s"next when in $mode" should {
       "redirect to the Business Partners National Insurance Number page" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockSession.set(any())).thenReturn(Future.successful(true))
@@ -106,7 +106,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
 
       "return 400 when supplied with empty form data" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockSession.set(any())).thenReturn(Future.successful(true))

@@ -63,27 +63,29 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
 
       "have the expected heading" in {
-        document.getElementsByClass(Selectors.heading).text() mustEqual "$heading$"
+        //Todo update expected header so caption rather than packag
+        val expectedHeader = "this is for: $packageName$ $heading$"
+        document.getElementsByClass(Selectors.heading).text() mustEqual expectedHeader
       }
 
       "contain 2 questions" in {
         questionItems.size() mustBe 2
       }
 
-      "include the $field1Name$ field" in {
+      "include the $field1Value$ field" in {
         val questionItem = questionItems
           .get(0)
         questionItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$field1Name$"
+          .text() mustBe "$field1Value$"
       }
 
-      "include the $field2Name$ field" in {
+      "include the $field2Value$ field" in {
         val questionItem = questionItems
           .get(1)
         questionItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$field2Name$"
+          .text() mustBe "$field2Value$"
       }
 
       "contain the correct button" in {
@@ -109,7 +111,7 @@ class $className$ViewSpec extends ViewSpecHelper {
         documentWithErrors.title must include("Error: $title$")
       }
 
-      "have a title containing error" in {
+      "have a error summary" in {
         val errorSummary = documentWithErrors
           .getElementsByClass(Selectors.errorSummaryList)
           .first()
@@ -129,7 +131,7 @@ class $className$ViewSpec extends ViewSpecHelper {
         documentWithErrors.title must include("Error: $title$")
       }
 
-      "have a title containing error" in {
+      "have a error summary" in {
         val errorSummary = documentWithErrors
           .getElementsByClass(Selectors.errorSummaryList)
           .first()

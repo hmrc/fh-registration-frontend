@@ -55,7 +55,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
             .set(PartnerTypePage(index), BusinessPartnerType.LimitedLiabilityPartnership)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -73,7 +73,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
             .set(PartnerTypePage(index), BusinessPartnerType.SoleProprietor)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -91,7 +91,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
             .set(PartnerTypePage(index), BusinessPartnerType.Individual)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -109,7 +109,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
             .set(PartnerTypePage(index), BusinessPartnerType.CorporateBody)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -127,7 +127,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
             .set(PartnerTypePage(index), BusinessPartnerType.UnincorporatedBody)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))

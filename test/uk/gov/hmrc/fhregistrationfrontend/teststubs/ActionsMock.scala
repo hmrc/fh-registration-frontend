@@ -212,7 +212,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       }
     }
 
-  def setupDataRequiredAction(userAnswers: UserAnswers, mode: Mode): Unit =
+  def setupDataRequiredActionBusinessPartners(userAnswers: UserAnswers, mode: Mode): Unit =
     when(mockActions.dataRequiredActionBusinessPartners(1, mode)) thenReturn new ActionBuilder[
       DataRequiredRequest,
       AnyContent] {
@@ -223,6 +223,29 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       override def invokeBlock[A](
         request: Request[A],
         block: DataRequiredRequest[A] => Future[Result]): Future[Result] = {
+        val userRequest = new UserRequest(
+          testUserId,
+          Some(ggEmail),
+          Some(registrationNumber),
+          Some(User),
+          Some(AffinityGroup.Individual),
+          request)
+        val dataRequiredRequest = new DataRequiredRequest(userAnswers, userRequest)
+        block(dataRequiredRequest)
+      }
+    }
+
+  def setupDataRequiredActionCompanyOfficers(userAnswers: UserAnswers, mode: Mode): Unit =
+    when(mockActions.dataRequiredActionCompanyOfficers(1, mode)) thenReturn new ActionBuilder[
+      DataRequiredRequest,
+      AnyContent] {
+      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+
+      override val executionContext = ec
+
+      override def invokeBlock[A](
+                                   request: Request[A],
+                                   block: DataRequiredRequest[A] => Future[Result]): Future[Result] = {
         val userRequest = new UserRequest(
           testUserId,
           Some(ggEmail),
