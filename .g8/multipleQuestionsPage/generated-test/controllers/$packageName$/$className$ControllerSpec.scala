@@ -33,7 +33,7 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
       "Render the $className;format="decap"$ page" when {
         "there is useranswer but no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction$packageName;format="camel"$(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
@@ -50,7 +50,7 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
             .set[$className$]($className$Page(1), data)
             .success
             .value
-          setupDataRequiredAction$packageName;format="camel"$(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
@@ -72,7 +72,7 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
       "save the answer to database and redirect to " + expectedUrl when {
         "the user answers doesn't contain page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction$packageName;format="camel"$(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(
