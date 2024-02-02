@@ -46,44 +46,46 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
     routes.BusinessPartnersLtdLiabilityPartnershipNameController.next(index, mode)
   lazy val form: Form[LtdLiabilityPartnershipName] = ltdLiabilityPartnershipNameForm
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val formData = request.userAnswers.get(LimitedLiabilityPartnershipNamePage(index))
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(
-      view.business_partners_enter_company_name(
-        prepopulatedForm,
-        ltdLiabilityPartnershipNameKey,
-        businessPartnerType,
-        postAction(index, mode),
-        backAction(index, mode)
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(LimitedLiabilityPartnershipNamePage(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+      Ok(
+        view.business_partners_enter_company_name(
+          prepopulatedForm,
+          ltdLiabilityPartnershipNameKey,
+          businessPartnerType,
+          postAction(index, mode),
+          backAction(index, mode)
+        )
       )
-    )
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode).async { implicit request =>
-    ltdLiabilityPartnershipNameForm
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_enter_company_name(
-                formWithErrors,
-                ltdLiabilityPartnershipNameKey,
-                businessPartnerType,
-                postAction(index, mode),
-                backAction(index, mode)
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      ltdLiabilityPartnershipNameForm
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_company_name(
+                  formWithErrors,
+                  ltdLiabilityPartnershipNameKey,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backAction(index, mode)
+                )
               )
             )
-          )
-        },
-        ltdLiabilityPartnership => {
-          val currentPage = LimitedLiabilityPartnershipNamePage(index)
-          val nextPage = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
+          },
+          ltdLiabilityPartnership => {
+            val currentPage = LimitedLiabilityPartnershipNamePage(index)
+            val nextPage = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
 
-          val updatedUserAnswers = request.userAnswers.set(currentPage, ltdLiabilityPartnership)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
-        }
-      )
+            val updatedUserAnswers = request.userAnswers.set(currentPage, ltdLiabilityPartnership)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+          }
+        )
   }
 }

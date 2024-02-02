@@ -66,7 +66,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerISpec
         }
       }
 
-      "redirect to the start of Business Partners" when {
+      "redirect to the start of the FHDDS journey" when {
         "there are no userAnswers in the database" in {
           given.commonPrecondition
           val result = buildRequest(route(mode))
@@ -74,7 +74,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerISpec
 
           whenReady(result) { res =>
             res.status mustBe 303
-            res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
           }
         }
       }
