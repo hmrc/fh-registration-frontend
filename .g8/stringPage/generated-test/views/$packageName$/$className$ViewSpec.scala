@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package views.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.views.$packageName$
 
-import controllers.$packageName$.routes
-import forms.$packageName$.$className$FormProvider
-import models.{CheckMode, NormalMode}
-import play.api.i18n.Messages
-import play.api.mvc.Request
-import play.api.test.FakeRequest
-import views.html.$packageName$.$className$View
-import views.ViewSpecHelper
+import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
+import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import play.api.mvc.Call
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
+import uk.gov.hmrc.fhregistrationfrontend.views.ViewSpecHelper
+
 
 
 class $className$ViewSpec extends ViewSpecHelper {
 
-  val view = application.injector.instanceOf[$className$View]
-  val formProvider = new $className$FormProvider
-  val form = formProvider.apply()
-  implicit val request: Request[_] = FakeRequest()
+  val view = app.injector.instanceOf[$className$View]
+  val form = $className$Form.form
+
+  val backLink = "http://test.com"
+  val call = Call("GET", "/foo")
 
   object Selectors {
     val formGroup = "govuk-form-group"
@@ -41,48 +40,50 @@ class $className$ViewSpec extends ViewSpecHelper {
     val form = "form"
   }
 
-  "View" - {
-    val html = view(form, NormalMode)(request, messages(application))
+  val $className;format="Camel"$ = "testing123"
+  "View" when {
+    val html = view(form, call, backLink)(request, Messages, appConfig)
     val document = doc(html)
     val formGroup = document.getElementsByClass(Selectors.formGroup)
-    "should contain the expected title" in {
-      document.title() must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-    }
+    "the form is valid" should {
+      "contain the expected title" in {
+        document.title() must include("$title$")
+      }
 
-    "should contain a text input field" in {
-      formGroup.size() mustBe 1
-      formGroup.get(0).getElementsByClass(Selectors.labelAsHeading)
-        .text() mustBe Messages("$packageName$.$className;format="decap"$.heading")
-    }
+      "have the expected heading" in {
+        //Todo update expected header so caption rather than packag
+        val expectedHeader = "this is for: $packageName$ $heading$"
+        document.getElementsByClass(Selectors.labelAsHeading).text() mustEqual expectedHeader
+      }
 
-    "contain the correct button" - {
-      document.getElementsByClass(Selectors.button).text() mustBe Messages("site.continue")
-    }
+      "should contain a text input field" in {
+        formGroup.size() mustBe 1
+        formGroup.get(0).getElementsByClass(Selectors.labelAsHeading)
+          .text() mustBe Messages("$packageName$.$className;format="decap"$.heading"
+        )
+      }
 
-    "contains a form with the correct action" - {
-      "when in CheckMode" in {
-        val htmlAllSelected = view(form.fill("testing"), CheckMode)(request, messages(application))
+      "contain the correct button" in {
+        document.getElementsByClass(Selectors.button).text() mustBe "Save and continue"
+      }
+
+      "contains a form with the correct action" in {
+        val htmlAllSelected = view(form.fill($className;format="Camel"$), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
         documentAllSelected.select(Selectors.form)
-          .attr("action") mustEqual routes.$className$Controller.onSubmit(CheckMode).url
-      }
-
-      "when in NormalMode" in {
-        val htmlAllSelected = view(form.fill("testing"), NormalMode)(request, messages(application))
-        val documentAllSelected = doc(htmlAllSelected)
-
-        documentAllSelected.select(Selectors.form)
-          .attr("action") mustEqual routes.$className$Controller.onSubmit(NormalMode).url
+          .attr("action") mustEqual call.url
       }
     }
 
-    "when a form error exists" - {
-      val htmlWithErrors = view(form.bind(Map("value" -> "")), NormalMode)(request, messages(application))
+    "form errors exist" should {
+      val fieldWithError = Map("value" -> "")
+      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
-      "should have a title containing error" in {
-        val titleMessage = Messages("$packageName$.$className;format="decap"$.title")
-        documentWithErrors.title must include("Error: " + titleMessage)
+
+      "have a title containing error" in {
+        val titleMessage = Messages("fh.$packageName$.$className;format="decap"$.title")
+        documentWithErrors.title must include("Error: $title$")
       }
 
       "contains a message that links to field with error" in {
@@ -92,11 +93,12 @@ class $className$ViewSpec extends ViewSpecHelper {
         errorSummary
           .select("a")
           .attr("href") mustBe "#value"
-        errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error.required")
+        errorSummary.text() mustBe Messages("Enter $className;format="decap"$"
+        )
       }
     }
 
-    testBackLink(document)
+    testBackLink(document, backLink)
     validateTimeoutDialog(document)
     validateTechnicalHelpLinkPresent(document)
     validateAccessibilityStatementLinkPresent(document)

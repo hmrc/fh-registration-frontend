@@ -244,8 +244,8 @@ trait ActionsMock extends MockitoSugar with UserTestData {
       override val executionContext = ec
 
       override def invokeBlock[A](
-                                   request: Request[A],
-                                   block: DataRequiredRequest[A] => Future[Result]): Future[Result] = {
+        request: Request[A],
+        block: DataRequiredRequest[A] => Future[Result]): Future[Result] = {
         val userRequest = new UserRequest(
           testUserId,
           Some(ggEmail),
