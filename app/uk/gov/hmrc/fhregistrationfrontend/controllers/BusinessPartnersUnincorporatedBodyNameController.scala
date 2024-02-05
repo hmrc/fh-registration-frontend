@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -46,41 +46,43 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
     routes.BusinessPartnersUnincorporatedBodyNameController.next(index, mode)
   val businessPartnerType = "unincorporatedBody"
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction { implicit request =>
-    val currentPage = page(index)
-    val formData = request.userAnswers.get(currentPage)
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(
-      view.business_partners_enter_company_name(
-        prepopulatedForm,
-        unincorporatedBodyNameKey,
-        businessPartnerType,
-        postAction(index, mode),
-        backUrl))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val currentPage = page(index)
+      val formData = request.userAnswers.get(currentPage)
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+      Ok(
+        view.business_partners_enter_company_name(
+          prepopulatedForm,
+          unincorporatedBodyNameKey,
+          businessPartnerType,
+          postAction(index, mode),
+          backUrl))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction.async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => {
-          Future.successful(
-            BadRequest(
-              view.business_partners_enter_company_name(
-                formWithErrors,
-                unincorporatedBodyNameKey,
-                businessPartnerType,
-                postAction(index, mode),
-                backUrl))
-          )
-        },
-        unincorporatedBodyName => {
-          val currentPage = page(index)
-          val nextPage = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load()
-          val updatedUserAnswers = request.userAnswers.set(currentPage, unincorporatedBodyName)
-          updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
-        }
-      )
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_company_name(
+                  formWithErrors,
+                  unincorporatedBodyNameKey,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backUrl))
+            )
+          },
+          unincorporatedBodyName => {
+            val currentPage = page(index)
+            val nextPage = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load()
+            val updatedUserAnswers = request.userAnswers.set(currentPage, unincorporatedBodyName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
+          }
+        )
   }
 
 }

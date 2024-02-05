@@ -20,7 +20,7 @@ class BusinessPartnerControllerISpec
 
   def expectedRedirectLocationForPartnerType(partnerType: BusinessPartnerType.Value): String = {
     partnerType match {
-      case BusinessPartnerType.UnincorporatedBody => routes.BusinessPartnersUnincorporatedBodyNameController.load().url
+      case BusinessPartnerType.UnincorporatedBody => routes.BusinessPartnersUnincorporatedBodyNameController.load(1, NormalMode).url
       case BusinessPartnerType.Partnership =>
         routes.BusinessPartnersPartnershipNameController.load(index, NormalMode).url
       case BusinessPartnerType.LimitedLiabilityPartnership =>
