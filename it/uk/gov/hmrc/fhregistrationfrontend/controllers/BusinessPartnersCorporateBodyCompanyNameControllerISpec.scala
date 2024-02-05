@@ -13,12 +13,12 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   extends Specifications with TestConfiguration {
 
+  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode = NormalMode).url
   def route(mode: Mode): String = routes.BusinessPartnersCorporateBodyCompanyNameController.load(1, mode).url.drop(6)
   val pageHeading: String = "What is the company name?"
   val pageTitle: String = "What is the company name? - Business partners"
   val emptyTextError: String = "Enter a company name"
   val characterLimitError: String = "Company name must be 140 characters or less"
-  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load().url
   val userAnswersWithPageData = userAnswersWithBusinessPartnerType(BusinessPartnerType.CorporateBody)
     .set[String](CompanyNamePage(1), "companyName")
     .success
