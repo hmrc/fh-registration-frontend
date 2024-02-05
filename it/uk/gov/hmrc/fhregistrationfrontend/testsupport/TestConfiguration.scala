@@ -40,6 +40,7 @@ trait TestConfiguration
   me: Suite with TestSuite =>
 
   val newBusinessPartnersFlowEnabled: Boolean = true
+  val newCompanyOfficersFlowEnabled: Boolean = true
 
   val wiremockHost: String = "localhost"
   val wiremockPort: Int = Port.randomAvailable
@@ -101,7 +102,8 @@ trait TestConfiguration
         s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
         s"json.encryption.previousKeys" -> List.empty,
         "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration",
-        "business-partners-new-enabled" -> s"$newBusinessPartnersFlowEnabled"
+        "business-partners-new-enabled" -> s"$newBusinessPartnersFlowEnabled",
+        "company-officers-new-enabled" -> s"$newCompanyOfficersFlowEnabled"
       )
     } ++
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
