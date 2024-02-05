@@ -39,13 +39,12 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
 
   import actions._
 
-  val backUrl: String = {
+  def backUrl(index: Int, mode: Mode): String =
     if (getBusinessType == "partnership")
-      routes.BusinessPartnersPartnershipNameController.load(1, NormalMode).url
+      routes.BusinessPartnersPartnershipNameController.load(index, mode).url
     else if (getBusinessType == "limited-liability-partnership")
-      routes.BusinessPartnersLtdLiabilityPartnershipNameController.load().url
+      routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, mode).url
     else "#"
-  }
   val businessType = "partnership"
   def postAction(index: Int, mode: Mode) = routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
   val partner = "Test User"
@@ -58,8 +57,14 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
       val formData = request.userAnswers.get(currentPage)
       val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
 
-      Ok(view
-        .business_partners_has_trading_name(prepopulatedForm, businessType, partner, postAction(index, mode), backUrl))
+      Ok(
+        view
+          .business_partners_has_trading_name(
+            prepopulatedForm,
+            businessType,
+            partner,
+            postAction(index, mode),
+            backUrl(index, mode)))
         .withCookies(Cookie("businessType", getBusinessType))
         .bakeCookies() // TODO [DLS-7603] - temp save4later solution
   }
@@ -77,7 +82,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
                   businessType,
                   partner,
                   postAction(index, mode),
-                  backUrl)))
+                  backUrl(index, mode))))
           },
           tradingName => {
             val nextPage = request.cookies.get("businessType").map(_.value) match {
