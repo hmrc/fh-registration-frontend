@@ -13,7 +13,6 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   extends Specifications with TestConfiguration {
 
-  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode = NormalMode).url
   def route(mode: Mode): String = routes.BusinessPartnersCorporateBodyCompanyNameController.load(1, mode).url.drop(6)
   val pageHeading: String = "What is the company name?"
   val pageTitle: String = "What is the company name? - Business partners"
@@ -25,6 +24,8 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
     .value
 
   List(NormalMode, CheckMode).foreach { mode =>
+    val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode = mode).url
+
     s"GET ${route(mode)}" when {
       "when the user is authenticated" should {
         "render the business partners corporate body company name page with answers not prepopulated" when {
