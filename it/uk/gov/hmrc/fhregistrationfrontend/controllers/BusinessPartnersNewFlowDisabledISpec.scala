@@ -12,6 +12,7 @@ class BusinessPartnersNewFlowDisabledISpec
   val index = 1
   val normalRoutes = List(
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, NormalMode),
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, NormalMode),
     routes.BusinessPartnersController.load(index, NormalMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode),
@@ -27,10 +28,12 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersPartnershipVatNumberController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipEnterAddressController.load(index, NormalMode),
     routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, NormalMode),
-    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode)
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, NormalMode),
+    routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, NormalMode)
   )
 
   val checkRoutes = List(
+    routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index, CheckMode),
     routes.BusinessPartnersController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, CheckMode),
@@ -47,7 +50,8 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersPartnershipVatNumberController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipEnterAddressController.load(index, CheckMode),
     routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, CheckMode),
-    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, CheckMode)
+    routes.BusinessPartnersPartnershipRegisteredAddressController.load(index, CheckMode),
+    routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, CheckMode)
   )
 
   (normalRoutes ++ checkRoutes).foreach { route =>

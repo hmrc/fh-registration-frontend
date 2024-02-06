@@ -123,7 +123,7 @@ class BusinessPartnersPartnershipRegisteredAddressController @Inject()(
                   val page = UkAddressLookupPage(index)
                   val nextPage = addressListMap.size match {
                     case 0 => routes.BusinessPartnersCannotFindAddressController.load(index, mode)
-                    case 1 => routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load()
+                    case 1 => routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index, mode)
                     case _ => routes.BusinessPartnersChooseAddressController.load(index, mode)
                   }
 

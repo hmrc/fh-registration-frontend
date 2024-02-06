@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.fhregistrationfrontend.teststubs
+package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
-import models.UserAnswers
-import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
-import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 
-trait UserTestData {
-  val testUserId = "Int-uid"
-  val ggEmail = "gg@test.com"
-  val registrationNumber = "XZFH00000123456"
-  val adminRole = User
-  val assistantRole = Assistant
-  val userAffinityGroup = AffinityGroup.Individual
-  val emptyUserAnswers = UserAnswers(testUserId)
+case class CorporateBodyTradingNamePage(index: Int) extends QuestionPage[TradingName] {
+  override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
 
-  val startCall = routes.Application.main()
-
+  override def toString: String = "corporateBodyTradingName"
 }

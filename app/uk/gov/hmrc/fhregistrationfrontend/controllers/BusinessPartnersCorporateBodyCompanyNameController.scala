@@ -44,26 +44,27 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
     routes.BusinessPartnersCorporateBodyCompanyNameController.next(index, mode)
   def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
   def tradingNamePage(index: Int, mode: Mode): Call =
-    routes.BusinessPartnersCorporateBodyTradingNameController.load()
+    routes.BusinessPartnersCorporateBodyTradingNameController.load(index, mode)
   lazy val form: Form[String] = companyNameForm
 
-  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index, mode) { implicit request =>
-    val currentPage = CompanyNamePage(index)
-    val formData = request.userAnswers.get(currentPage)
-    val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
-    Ok(
-      view
-        .business_partners_name(
-          journeyType,
-          postAction(index, mode),
-          prepopulatedForm,
-          companyNameKey,
-          backUrl(index, mode)
-        ))
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val currentPage = CompanyNamePage(index)
+      val formData = request.userAnswers.get(currentPage)
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
+      Ok(
+        view
+          .business_partners_name(
+            journeyType,
+            postAction(index, mode),
+            prepopulatedForm,
+            companyNameKey,
+            backUrl(index, mode)
+          ))
   }
 
-  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredAction(index: Int, mode: Mode).async {
-    implicit request =>
+  def next(index: Int, mode: Mode): Action[AnyContent] =
+    dataRequiredActionBusinessPartners(index: Int, mode: Mode).async { implicit request =>
       companyNameForm
         .bindFromRequest()
         .fold(
@@ -86,5 +87,5 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
             updateUserAnswersAndSaveToCache(updatedUserAnswers, tradingNamePage(index, mode), currentPage)
           }
         )
-  }
+    }
 }

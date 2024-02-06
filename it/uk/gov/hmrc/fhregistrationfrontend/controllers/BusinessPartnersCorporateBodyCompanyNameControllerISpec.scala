@@ -6,6 +6,7 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CompanyNamePage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
@@ -17,13 +18,14 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   val pageTitle: String = "What is the company name? - Business partners"
   val emptyTextError: String = "Enter a company name"
   val characterLimitError: String = "Company name must be 140 characters or less"
-  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load().url
-  val userAnswersWithPageData = emptyUserAnswers
+  val userAnswersWithPageData = userAnswersWithBusinessPartnerType(BusinessPartnerType.CorporateBody)
     .set[String](CompanyNamePage(1), "companyName")
     .success
     .value
 
   List(NormalMode, CheckMode).foreach { mode =>
+    val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode = mode).url
+
     s"GET ${route(mode)}" when {
       "when the user is authenticated" should {
         "render the business partners corporate body company name page with answers not prepopulated" when {
@@ -63,19 +65,19 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
               companyName.attr("value") mustBe "companyName"
             }
           }
+        }
 
-          "there is no user answers in the database" should {
-            "redirect to the start of BusinessPartners" in {
-              given.commonPrecondition
+        "redirect to the start of the FHDDS journey" when {
+          "there are no user answers" in {
+            given.commonPrecondition
 
-              val result = buildRequest(route(mode))
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-                .get()
+            val result = buildRequest(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+              .get()
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.BusinessPartnersController.load(1, mode).url)
-              }
+            whenReady(result) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
             }
           }
         }
