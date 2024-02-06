@@ -16,64 +16,80 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.{Mode, NormalMode}
+import play.api.data.Form
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.LtdLiabilityPartnershipNameForm.{ltdLiabilityPartnershipNameForm, ltdLiabilityPartnershipNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.LtdLiabilityPartnershipName
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.LimitedLiabilityPartnershipNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
-  val businessPartnerType = "ltdLiabilityPartnership"
-  val backAction: String = routes.BusinessPartnersController.load(1, NormalMode).url
-  val postActon: Call = routes.BusinessPartnersLtdLiabilityPartnershipNameController.next()
+  val businessPartnerType: String = "ltdLiabilityPartnership"
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
+  def backAction(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersLtdLiabilityPartnershipNameController.next(index, mode)
+
+  lazy val form: Form[LtdLiabilityPartnershipName] = ltdLiabilityPartnershipNameForm
+
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(LimitedLiabilityPartnershipNamePage(index))
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
       Ok(
         view.business_partners_enter_company_name(
-          ltdLiabilityPartnershipNameForm,
+          prepopulatedForm,
           ltdLiabilityPartnershipNameKey,
           businessPartnerType,
-          postActon,
-          backAction))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+          postAction(index, mode),
+          backAction(index, mode)
+        )
+      )
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
       ltdLiabilityPartnershipNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_enter_company_name(
-                formWithErrors,
-                ltdLiabilityPartnershipNameKey,
-                businessPartnerType,
-                postActon,
-                backAction))
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_company_name(
+                  formWithErrors,
+                  ltdLiabilityPartnershipNameKey,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backAction(index, mode)
+                )
+              )
+            )
           },
           ltdLiabilityPartnership => {
-            Redirect(routes.BusinessPartnersPartnershipTradingNameController.load(index = 1, NormalMode))
+            val currentPage = LimitedLiabilityPartnershipNamePage(index)
+            val nextPage = routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
+
+            val updatedUserAnswers = request.userAnswers.set(currentPage, ltdLiabilityPartnership)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
           }
         )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
   }
-
 }

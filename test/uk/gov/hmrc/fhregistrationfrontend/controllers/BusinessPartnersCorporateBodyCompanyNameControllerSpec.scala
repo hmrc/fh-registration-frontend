@@ -42,7 +42,6 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
   val index = 1
 
   val CorporateBodyCompanyName = "What is the company name? - Business partners"
-
   val controller =
     new BusinessPartnersCorporateBodyCompanyNameController(commonDependencies, views, mockActions, mockSessionCache)(
       mockMcc)
@@ -100,7 +99,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
-            routes.BusinessPartnersCorporateBodyTradingNameController.load().url.drop(6))
+            routes.BusinessPartnersCorporateBodyTradingNameController.load(index, mode).url.drop(6))
           reset(mockActions)
         }
       }

@@ -68,7 +68,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
       }
 
       "Render the business partner trading name page with page data" in {
-        val tradingName = TradingName(true, Some("partner trading name"))
+        val tradingName = TradingName(hasValue = true, Some("partner trading name"))
         val userAnswers = UserAnswers(testUserId)
           .set[TradingName](PartnershipTradingNamePage(index), tradingName)
           .success

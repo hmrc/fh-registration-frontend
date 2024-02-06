@@ -16,57 +16,72 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.TradingNameForm.tradingNameForm
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CorporateBodyTradingNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersCorporateBodyTradingNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
-  import actions._
+  import actions.dataRequiredActionBusinessPartners
 
   val businessType = "corporateBody"
   val companyName = "Shelby Limited"
-  val backLink = routes.BusinessPartnersCorporateBodyCompanyNameController.load(1, NormalMode).url
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersCorporateBodyTradingNameController.next(index, mode)
+  def backUrl(index: Int, mode: Mode): String =
+    routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, mode).url
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      val postAction: Call = routes.BusinessPartnersCorporateBodyTradingNameController.next()
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val formData = request.userAnswers.get(CorporateBodyTradingNamePage(index))
+      val prepopulatedForm = formData.map(data => tradingNameForm.fill(data)).getOrElse(tradingNameForm)
+
       Ok(
         view
-          .business_partners_has_trading_name(tradingNameForm, businessType, companyName, postAction, backLink))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+          .business_partners_has_trading_name(
+            prepopulatedForm,
+            businessType,
+            companyName,
+            postAction(index, mode),
+            backUrl(index, mode)
+          ))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      lazy val postAction: Call = routes.BusinessPartnersCorporateBodyTradingNameController.next()
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
       tradingNameForm
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_has_trading_name(formWithErrors, businessType, companyName, postAction, backLink))
+            Future.successful(
+              BadRequest(
+                view.business_partners_has_trading_name(
+                  formWithErrors,
+                  businessType,
+                  companyName,
+                  postAction(index, mode),
+                  backUrl(index, mode))
+              )
+            )
           },
           tradingName => {
-            Redirect(routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load())
+            val updatedUserAnswers = request.userAnswers.set(CorporateBodyTradingNamePage(index), tradingName)
+            val nextPage = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load()
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, CorporateBodyTradingNamePage(index))
           }
         )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
   }
-
 }
