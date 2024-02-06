@@ -41,7 +41,7 @@ class CompanyOfficersCYAControllerSpec extends ControllerSpecWithGuiceApp with A
   "load" should {
     "Render the Company Officers Check Your Answers page" when {
       "user answers exist" in {
-        setupDataRequiredActionBusinessPartners(emptyUserAnswers, NormalMode)
+        setupDataRequiredActionCompanyOfficers(emptyUserAnswers, NormalMode)
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
         val result = await(csrfAddToken(controller.load(1))(request))
@@ -58,7 +58,7 @@ class CompanyOfficersCYAControllerSpec extends ControllerSpecWithGuiceApp with A
     "the new Business Partner pages are enabled" should {
       "return 200" when {
         "the use clicks save and continue" in {
-          setupDataRequiredActionBusinessPartners(emptyUserAnswers, NormalMode)
+          setupDataRequiredActionCompanyOfficers(emptyUserAnswers, NormalMode)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.next(1))(request))
 

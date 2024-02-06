@@ -17,18 +17,18 @@ echo "" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.title = $title$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.heading = $heading$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel = $checkYourAnswersLabel$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages.en
-echo "fh.$packageName$.$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages.en
-echo "fh.$packageName$.$className;format="decap"$.change.hidden = $className$" >> ../conf/messages.en
+echo "fh.$packageName$.$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.change.hidden = $className$" >> ../conf/messages
 
 awk '/val normalRoutes/ {\
     print;\
-    print "    routes.$className$Controller.load(index, NormalMode),";\
+    print "    routes.$className$Controller.onPageLoad(index, NormalMode),";\
     next }1' ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala > tmp && mv tmp ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala
 
 awk '/val checkRoutes/ {\
     print;\
-    print "    routes.$className$Controller.load(index, CheckMode),";\
+    print "    routes.$className$Controller.onPageLoad(index, CheckMode),";\
     next }1' ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala > tmp && mv tmp ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala
 
 echo "Migration $className;format="snake"$ completed"

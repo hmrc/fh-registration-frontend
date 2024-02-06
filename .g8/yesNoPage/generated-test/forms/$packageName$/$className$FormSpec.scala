@@ -4,33 +4,33 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.util.Random
 
-class $className$FormSpec extends UnitSpec with FormSpecsHelper[String] {
+class $className$FormSpec extends UnitSpec with FormSpecsHelper[Boolean] {
 
   val form = $className$Form.form
 
   "$className$Form" should {
-    val validData = Map(
-      "value" -> "test1"
-    )
+    "accept valid form" when {
+      "true" in {
+        val validData = Map(
+          "value" -> "true"
+        )
+        val data = dataFromValidForm(validData)
 
-    "accept valid form" in {
-      val data = dataFromValidForm(validData)
+        data shouldBe true
+      }
 
-      data shouldBe "test1"
+      "false" in {
+        val validData = Map(
+          "value" -> "false"
+        )
+        val data = dataFromValidForm(validData)
+
+        data shouldBe false
+      }
     }
 
     "reject the form" when {
       val requiredKey = "fh.$packageName$.$className;format="decap"$.error.required"
-      val lengthKey = "fh.$packageName$.$className;format="decap"$.error.length"
-      "value exceeds the maxLength" in {
-        val fieldExceedingMaxLength: String = Random.nextString($maxLength$ + 1)
-        val invalidData = Map(
-          "value" -> fieldExceedingMaxLength)
-        formDataHasErrors(
-          invalidData,
-          List("value" -> lengthKey)
-        )
-      }
 
       "value is empty" in {
         val invalidData = Map(
