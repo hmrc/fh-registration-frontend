@@ -9,23 +9,20 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CorporateBodyTradingNamePage
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessPartnersCorporateBodyTradingNameControllerISpec
-  extends Specifications with TestConfiguration {
+class BusinessPartnersCorporateBodyTradingNameControllerISpec extends Specifications with TestConfiguration {
 
   val noTradingName: TradingName = TradingName(false, None)
   val tradingName: TradingName = TradingName(true, Some("trading name"))
   val index = 1
 
-  def route(mode: Mode): String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode).url.drop(6)
-
-  val companyRegNumUrl: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
+  def route(mode: Mode): String =
+    routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode).url.drop(6)
 
   def userAnswersWithPageData(formAnswers: TradingName): UserAnswers =
     emptyUserAnswers
-    .set[TradingName](CorporateBodyTradingNamePage(1), formAnswers)
-    .success
-    .value
-
+      .set[TradingName](CorporateBodyTradingNamePage(1), formAnswers)
+      .success
+      .value
 
   List(NormalMode, CheckMode).foreach { mode =>
     s"GET ${route(mode)}" when {
@@ -36,7 +33,8 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
           addUserAnswersToSession(emptyUserAnswers)
 
           val result = buildRequest(route(mode))
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 200
@@ -105,7 +103,8 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
     }
 
     s"POST ${route(mode)}" when {
-      val businessPartnerCorporateBodyRegistrationNumber: String = routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
+      val businessPartnerCorporateBodyRegistrationNumber: String =
+        routes.BusinessPartnersCorporateBodyCompanyRegistrationNumberController.load().url
 
       "form with no errors" should {
         Map(
@@ -114,8 +113,8 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
         ).foreach {
           case (userAnswersAction, userAnswers) =>
             userAnswers.zipWithIndex.foreach { answers: (UserAnswers, Int) =>
-              s"redirect to the Business Partners Partnership Vat Registration number page and $userAnswersAction userAnswers ${answers._2}" when {
-                "businessType is partnership, the user selects yes and gives a trading name" in {
+              s"redirect to the Business Partners CorporateBody Company Registration Number page and $userAnswersAction userAnswers ${answers._2}" when {
+                "the user selects yes and gives a trading name" in {
                   given.commonPrecondition
                   addUserAnswersToSession(answers._1)
 
@@ -143,72 +142,13 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
                   }
                 }
 
-                "businessType is partnership, the user selects no and gives no trading name" in {
+                "the user selects no and gives no trading name" in {
                   given.commonPrecondition
                   addUserAnswersToSession(answers._1)
 
                   val result = buildRequest(route(mode))
                     .addCookies(
-                      DefaultWSCookie("mdtp", authAndSessionCookie),
-                      DefaultWSCookie("businessType", "partnership")
-                    )
-                    .withHttpHeaders(
-                      xSessionId,
-                      "Csrf-Token" -> "nocheck"
-                    )
-                    .post(
-                      Map(
-                        "tradingName_yesNo" -> Seq("false"),
-                        "tradingName_value" -> Seq("")
-                      ))
-
-                  whenReady(result) { res =>
-                    res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(businessPartnerCorporateBodyRegistrationNumber)
-                    val userAnswers = getUserAnswersFromSession.get
-                    val pageData = userAnswers.get(CorporateBodyTradingNamePage(1))
-                    pageData mustBe Some(TradingName(hasValue = false, None))
-                  }
-                }
-              }
-
-              s"redirect to the Business Partners Partnership Company Registration number page and $userAnswersAction userAnswers ${answers._2}" when {
-                "businessType is partnership, the user selects yes and gives a trading name" in {
-                  given.commonPrecondition
-                  addUserAnswersToSession(answers._1)
-
-                  val result = buildRequest(route(mode))
-                    .addCookies(
-                      DefaultWSCookie("mdtp", authAndSessionCookie),
-                      DefaultWSCookie("businessType", "limited-liability-partnership")
-                    )
-                    .withHttpHeaders(
-                      xSessionId,
-                      "Csrf-Token" -> "nocheck"
-                    )
-                    .post(
-                      Map(
-                        "tradingName_yesNo" -> Seq("true"),
-                        "tradingName_value" -> Seq("Blue Peter")
-                      ))
-
-                  whenReady(result) { res =>
-                    res.status mustBe 303
-                    res.header(HeaderNames.LOCATION) mustBe Some(businessPartnerCorporateBodyRegistrationNumber)
-                    val userAnswers = getUserAnswersFromSession.get
-                    val pageData = userAnswers.get(CorporateBodyTradingNamePage(1))
-                    pageData mustBe Some(TradingName(hasValue = true, Some("Blue Peter")))
-                  }
-                }
-
-                "businessType is partnership, the user selects no and gives no trading name" in {
-                  given.commonPrecondition
-                  addUserAnswersToSession(answers._1)
-
-                  val result = buildRequest(route(mode))
-                    .addCookies(
-                      DefaultWSCookie("mdtp", authAndSessionCookie),
-                      DefaultWSCookie("businessType", "limited-liability-partnership")
+                      DefaultWSCookie("mdtp", authAndSessionCookie)
                     )
                     .withHttpHeaders(
                       xSessionId,
@@ -230,40 +170,11 @@ class BusinessPartnersCorporateBodyTradingNameControllerISpec
                 }
               }
             }
-        }
-
-        s"redirect to the start of Business Partners journey" when {
-          "businessType is neither partnership or LLP" in {
-            given.commonPrecondition
-            addUserAnswersToSession(emptyUserAnswers)
-
-            val result = buildRequest(route(mode))
-              .addCookies(
-                DefaultWSCookie("mdtp", authAndSessionCookie),
-              )
-              .withHttpHeaders(
-                xSessionId,
-                "Csrf-Token" -> "nocheck"
-              )
-              .post(
-                Map(
-                  "tradingName_yesNo" -> Seq("false"),
-                  "tradingName_value" -> Seq("")
-                ))
-
-            whenReady(result) { res =>
-              res.status mustBe 303
-              res.header(HeaderNames.LOCATION) mustBe Some(businessPartnerCorporateBodyRegistrationNumber)
-              val userAnswers = getUserAnswersFromSession.get
-              val pageData = userAnswers.get(CorporateBodyTradingNamePage(1))
-              pageData mustBe Some(TradingName(hasValue = false, None))
-            }
-          }
         }
       }
 
       "form with errors" should {
-        "return 400 bad request " when {
+        "return a 400 bad request" when {
           "no radio option is selected by the user" in {
             given.commonPrecondition
             addUserAnswersToSession(emptyUserAnswers)

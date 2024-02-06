@@ -98,8 +98,8 @@ POST        /change-business-partners/partnership-vat-registration-number/:index
 GET         /business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index: Int, mode: Mode = NormalMode)
 
-GET         /business-partners/change-confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index: Int, mode: Mode = CheckMode)
-POST        /business-partners/change-confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index: Int, mode: Mode = CheckMode)
+GET         /change-business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/confirm-partnership-registered-office-address/:index       @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersPartnershipConfirmRegisteredAddressController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/corporate-body-vat-registration-number        @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.load()
 POST        /business-partners/corporate-body-vat-registration-number          @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyVatNumberController.next()
@@ -109,8 +109,8 @@ POST        /business-partners/corporate-body-corporation-tax-unique-taxpayer-re
 
 GET         /business-partners/corporate-body-trading-name                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.load(index: Int, mode: Mode = NormalMode)
 POST        /business-partners/corporate-body-trading-name                      @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.next(index: Int, mode: Mode = NormalMode)
-GET         /business-partners/change-corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.load(index: Int, mode: Mode = CheckMode)
-POST        /business-partners/change-corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.next(index: Int, mode: Mode = CheckMode)
+GET         /change-business-partners/corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-business-partners/corporate-body-trading-name               @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyTradingNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET         /business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyRegisteredAddressController.load()
 POST        /business-partners/corporate-body-registered-office-address            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyRegisteredAddressController.next()

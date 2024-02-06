@@ -17,14 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.TradingName
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.CorporateBodyTradingNamePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
@@ -38,7 +37,6 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
   SharedMetricRegistries.clear()
 
   override lazy val views: Views = app.injector.instanceOf[Views]
-  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   lazy val mockSession = mock[SessionRepository]
   val index = 1
 
@@ -50,7 +48,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
   List(NormalMode, CheckMode).foreach { mode =>
     s"load when in $mode" should {
       "Render the corporate body trading name page" when {
-        "no user answers supplied" in {
+        "without page data" in {
           val userAnswers = UserAnswers(testUserId)
           setupDataRequiredAction(userAnswers, mode)
 
@@ -64,30 +62,14 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
           reset(mockActions)
         }
 
-        "user answers supplied yes with trading name" in {
-          val userAnswers =
-            UserAnswers(testUserId)
-              .set[TradingName](CorporateBodyTradingNamePage(index), TradingName(hasValue = true, Some("test")))
-              .success
-              .value
+        "with page data" in {
+          val tradingName = TradingName(hasValue = true, Some("partner trading name"))
+          val userAnswers = UserAnswers(testUserId)
+            .set[TradingName](CorporateBodyTradingNamePage(index), tradingName)
+            .success
+            .value
           setupDataRequiredAction(userAnswers, mode)
-          val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
 
-          status(result) shouldBe OK
-          val page = Jsoup.parse(contentAsString(result))
-          page.title should include(
-            "Does the corporate body use a trading name that is different from its registered name? - Business partners")
-          reset(mockActions)
-        }
-
-        "user answers supplied no without trading name" in {
-          val userAnswers =
-            UserAnswers(testUserId)
-              .set[TradingName](CorporateBodyTradingNamePage(index), TradingName(hasValue = false, None))
-              .success
-              .value
-          setupDataRequiredAction(userAnswers, mode)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
 
