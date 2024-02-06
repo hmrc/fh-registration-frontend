@@ -41,12 +41,8 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
   val mockSessionCache: SessionRepository = mock[SessionRepository]
   val controller =
-    new BusinessPartnersUnincorporatedBodyNameController(
-      commonDependencies,
-      views,
-      mockActions,
-      mockAppConfig,
-      mockSessionCache)(mockMcc)
+    new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockSessionCache)(
+      mockMcc)
   val unincorpoBodyTradingNameUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
   List(NormalMode, CheckMode).foreach { mode =>
