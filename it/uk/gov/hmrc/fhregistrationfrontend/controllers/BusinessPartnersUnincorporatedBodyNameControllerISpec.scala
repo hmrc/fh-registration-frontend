@@ -58,7 +58,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerISpec
         }
       }
 
-      "redirect the user to the start of the BusinessPartners journey" when {
+      "redirect the user to the start of the FHDDS journey" when {
         "there is no user answers in the database" in {
           given.commonPrecondition
           val result = buildRequest(route(mode))

@@ -138,10 +138,10 @@ POST        /business-partners/enter-unincorporated-body-registered-office-addre
 GET          /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.load()
 POST         /business-partners/confirm-unincorporated-body-registered-office-address              @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressController.next()
 
-GET          /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load(index: Int, mode: Mode = NormalMode)
-POST         /business-partners/unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next(index: Int, mode: Mode = NormalMode)
-GET          /business-partners/change-unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load(index: Int, mode: Mode = CheckMode)
-POST         /business-partners/change-unincorporated-body-name           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next(index: Int, mode: Mode = CheckMode)
+GET          /business-partners/unincorporated-body-name:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load(index: Int, mode: Mode = NormalMode)
+POST         /business-partners/unincorporated-body-name:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next(index: Int, mode: Mode = NormalMode)
+GET          /business-partners/change-unincorporated-body-name:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.load(index: Int, mode: Mode = CheckMode)
+POST         /business-partners/change-unincorporated-body-name:index           @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersUnincorporatedBodyNameController.next(index: Int, mode: Mode = CheckMode)
 
 GET          /business-partners/company-name/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load(index: Int, mode: Mode = NormalMode)
 GET          /business-partners/change-company-name/:index                            @uk.gov.hmrc.fhregistrationfrontend.controllers.BusinessPartnersCorporateBodyCompanyNameController.load(index: Int, mode: Mode = CheckMode)

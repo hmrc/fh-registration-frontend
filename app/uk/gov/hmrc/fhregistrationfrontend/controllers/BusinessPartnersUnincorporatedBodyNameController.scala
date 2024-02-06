@@ -32,7 +32,6 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig,
   val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
@@ -40,7 +39,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
 
   import actions._
 
-  val backUrl: String = routes.BusinessPartnersController.load(1, NormalMode).url
+  def backUrl: String = routes.BusinessPartnersController.load(1, NormalMode).url
 
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersUnincorporatedBodyNameController.next(index, mode)
