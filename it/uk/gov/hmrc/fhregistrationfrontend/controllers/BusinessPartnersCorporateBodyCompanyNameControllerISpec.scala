@@ -18,13 +18,14 @@ class BusinessPartnersCorporateBodyCompanyNameControllerISpec
   val pageTitle: String = "What is the company name? - Business partners"
   val emptyTextError: String = "Enter a company name"
   val characterLimitError: String = "Company name must be 140 characters or less"
-  val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load().url
   val userAnswersWithPageData = userAnswersWithBusinessPartnerType(BusinessPartnerType.CorporateBody)
     .set[String](CompanyNamePage(1), "companyName")
     .success
     .value
 
   List(NormalMode, CheckMode).foreach { mode =>
+    val corpBodyTradingNameUrl: String = routes.BusinessPartnersCorporateBodyTradingNameController.load(index = 1, mode = mode).url
+
     s"GET ${route(mode)}" when {
       "when the user is authenticated" should {
         "render the business partners corporate body company name page with answers not prepopulated" when {
