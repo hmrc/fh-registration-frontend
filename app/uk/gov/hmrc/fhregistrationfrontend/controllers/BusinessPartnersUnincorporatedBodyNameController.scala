@@ -39,7 +39,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
 
   import actions._
 
-  def backUrl: String = routes.BusinessPartnersController.load(1, NormalMode).url
+  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
 
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersUnincorporatedBodyNameController.next(index, mode)
@@ -56,7 +56,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
           unincorporatedBodyNameKey,
           businessPartnerType,
           postAction(index, mode),
-          backUrl))
+          backUrl(index, mode)))
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
@@ -72,7 +72,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
                   unincorporatedBodyNameKey,
                   businessPartnerType,
                   postAction(index, mode),
-                  backUrl))
+                  backUrl(index, mode)))
             )
           },
           unincorporatedBodyName => {
