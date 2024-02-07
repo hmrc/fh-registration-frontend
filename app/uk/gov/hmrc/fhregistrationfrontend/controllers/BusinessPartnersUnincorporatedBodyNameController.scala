@@ -16,64 +16,72 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.NormalMode
+import models.{Mode, NormalMode}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.{unincorporatedBodyNameForm, unincorporatedBodyNameKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersUnincorporatedBodyNameForm.{unincorporatedBodyNameKey, unincorporatedBodyNameForm => form}
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{UnincorporatedBodyNamePage => page}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessPartnersUnincorporatedBodyNameController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  val sessionCache: SessionRepository)(
   cc: MessagesControllerComponents
-) extends AppController(ds, cc) {
+)(implicit val ec: ExecutionContext)
+    extends AppController(ds, cc) with ControllerHelper {
 
   import actions._
 
-  val backUrl: String = routes.BusinessPartnersController.load(1, NormalMode).url
-  val postAction: Call = routes.BusinessPartnersUnincorporatedBodyNameController.next()
+  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+
+  def postAction(index: Int, mode: Mode): Call =
+    routes.BusinessPartnersUnincorporatedBodyNameController.next(index, mode)
   val businessPartnerType = "unincorporatedBody"
 
-  def load(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
+  def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
+    implicit request =>
+      val currentPage = page(index)
+      val formData = request.userAnswers.get(currentPage)
+      val prepopulatedForm = formData.map(data => form.fill(data)).getOrElse(form)
       Ok(
         view.business_partners_enter_company_name(
-          unincorporatedBodyNameForm,
+          prepopulatedForm,
           unincorporatedBodyNameKey,
           businessPartnerType,
-          postAction,
-          backUrl))
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
+          postAction(index, mode),
+          backUrl(index, mode)))
   }
 
-  def next(): Action[AnyContent] = userAction { implicit request =>
-    if (config.newBusinessPartnerPagesEnabled) {
-      unincorporatedBodyNameForm
+  def next(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode).async {
+    implicit request =>
+      form
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            BadRequest(
-              view.business_partners_enter_company_name(
-                formWithErrors,
-                unincorporatedBodyNameKey,
-                businessPartnerType,
-                postAction,
-                backUrl))
+            Future.successful(
+              BadRequest(
+                view.business_partners_enter_company_name(
+                  formWithErrors,
+                  unincorporatedBodyNameKey,
+                  businessPartnerType,
+                  postAction(index, mode),
+                  backUrl(index, mode)))
+            )
           },
           unincorporatedBodyName => {
-            Redirect(routes.BusinessPartnersUnincorporatedBodyTradingNameController.load())
+            val currentPage = page(index)
+            val nextPage = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load()
+            val updatedUserAnswers = request.userAnswers.set(currentPage, unincorporatedBodyName)
+            updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, currentPage)
           }
         )
-    } else {
-      errorHandler.errorResultsPages(Results.NotFound)
-    }
   }
 
 }

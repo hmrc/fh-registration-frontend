@@ -17,13 +17,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.UnincorporatedBodyName
+import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UnincorporatedBodyNamePage
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+
+import scala.concurrent.Future
 
 class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -31,86 +39,82 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
 
   override lazy val views: Views = app.injector.instanceOf[Views]
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  val mockSessionCache: SessionRepository = mock[SessionRepository]
   val controller =
-    new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockAppConfig)(mockMcc)
+    new BusinessPartnersUnincorporatedBodyNameController(commonDependencies, views, mockActions, mockSessionCache)(
+      mockMcc)
   val unincorpoBodyTradingNameUrl: String = routes.BusinessPartnersUnincorporatedBodyTradingNameController.load().url
 
-  "load" should {
-    "Render the Unincorporated Body Name page" when {
-      "the new business partner pages are enabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"load when in $mode" should {
+      "Render the Unincorporated Body Name page" when {
+        "there is no page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        status(result) shouldBe OK
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("What is the unincorporated body name?")
-        reset(mockActions)
-      }
-    }
-
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
-
-        result.header.status shouldBe NOT_FOUND
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
-        reset(mockActions)
-      }
-    }
-  }
-
-  "next" when {
-    "the new business partner pages are enabled" should {
-      "redirect to the Unincorporated Body Trading Name page" when {
-        "the form has no errors and unincorporated body name is supplied" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              ("unincorporatedBodyName_value", "Test Body")
-            )
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = await(csrfAddToken(controller.load(1, mode))(request))
 
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(unincorpoBodyTradingNameUrl)
-          reset(mockActions)
-        }
-
-        "the user doesn't enter a unincorporated body name" in {
-          setupUserAction()
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(("unincorporatedBodyName_value", ""))
-            .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
-
-          status(result) shouldBe BAD_REQUEST
+          status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("What is the unincorporated body name?")
-          page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter an unincorporated body name")
+          reset(mockActions)
+        }
+
+        "there is page data" in {
+          val unincorporatedBodyName = UnincorporatedBodyName("unincorporated body name")
+          val userAnswers = UserAnswers(testUserId)
+            .set[UnincorporatedBodyName](UnincorporatedBodyNamePage(1), unincorporatedBodyName)
+            .success
+            .value
+          setupDataRequiredAction(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.load(1, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title() should include("What is the unincorporated body name?")
           reset(mockActions)
         }
       }
     }
 
-    "Render the Not found page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest().withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+    s"next when in $mode" should {
+      "redirect to the Unincorporated Body Trading Name page" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers, mode)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
-        status(result) shouldBe NOT_FOUND
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(
+            ("unincorporatedBodyName_value", "Test Body")
+          )
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(1, mode))(request))
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should include(unincorpoBodyTradingNameUrl)
+        reset(mockActions)
+      }
+
+      "the user doesn't enter a unincorporated body name" in {
+        val userAnswers = UserAnswers(testUserId)
+        setupDataRequiredAction(userAnswers, mode)
+        when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest()
+          .withFormUrlEncodedBody(("unincorporatedBodyName_value", ""))
+          .withMethod("POST")
+        val result = await(csrfAddToken(controller.next(1, mode))(request))
+
+        status(result) shouldBe BAD_REQUEST
         val page = Jsoup.parse(contentAsString(result))
-        page.title() should include("Page not found")
+        page.title() should include("What is the unincorporated body name?")
+        page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
+          "Enter an unincorporated body name")
         reset(mockActions)
       }
     }
