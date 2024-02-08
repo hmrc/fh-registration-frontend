@@ -17,7 +17,8 @@ echo "" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.title = $title$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.heading = $heading$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel = $checkYourAnswersLabel$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.error.required = Select yes if $className;format="decap"$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.change.hidden = $className$" >> ../conf/messages
 
 awk '/val normalRoutes/ {\
