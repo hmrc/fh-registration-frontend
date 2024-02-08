@@ -63,7 +63,7 @@ class BusinessPartnersController @Inject()(
       businessType => {
         val nextUrl = businessType match {
           case BusinessPartnerType.UnincorporatedBody =>
-            routes.BusinessPartnersUnincorporatedBodyNameController.load()
+            routes.BusinessPartnersUnincorporatedBodyNameController.load(index, NormalMode)
           case BusinessPartnerType.Partnership =>
             routes.BusinessPartnersPartnershipNameController.load(index, NormalMode)
           case BusinessPartnerType.LimitedLiabilityPartnership =>

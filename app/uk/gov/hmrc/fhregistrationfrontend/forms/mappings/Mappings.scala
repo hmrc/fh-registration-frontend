@@ -37,7 +37,7 @@ object Mappings {
 
   def skippingOnePrefix[T](mapping: Mapping[T]) = new SkippingOnePrefixMapping(mapping)
 
-  def yesOrNo = of(yesOrNoFormatter)
+  def yesOrNo(errorKey: String = "error.required") = of(yesOrNoFormatter(errorKey))
 
   def address: Mapping[Address] =
     mapping(
@@ -220,7 +220,7 @@ object Mappings {
     of(stringFormatter(errorKey, args))
 
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
-    "yesNo" -> of(yesOrNoFormatter),
+    "yesNo" -> of(yesOrNoFormatter("error.required")),
     "value" -> optional(wrapped)
   )
 

@@ -34,14 +34,14 @@ class CompanyOfficersCYAController @Inject()(
 
   import actions._
 
-  def load(index: Int): Action[AnyContent] = dataRequiredActionBusinessPartners(index, NormalMode) { implicit request =>
+  def load(index: Int): Action[AnyContent] = dataRequiredActionCompanyOfficers(index, NormalMode) { implicit request =>
     val summaryList = SummaryListViewModel(
       rows = Seq.empty
     )
     Ok(view.companyOfficersCYAView("#", summaryList, routes.CompanyOfficersCYAController.next(index)))
   }
 
-  def next(index: Int): Action[AnyContent] = dataRequiredActionBusinessPartners(index, NormalMode) { implicit request =>
+  def next(index: Int): Action[AnyContent] = dataRequiredActionCompanyOfficers(index, NormalMode) { implicit request =>
     Ok(s"Form submitted, with result:")
   }
 }

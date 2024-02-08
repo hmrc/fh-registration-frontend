@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import models.NormalMode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
@@ -36,7 +37,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameController @Inject()(
 
   val companyName = "Shelby unincorporated"
   val businessType = "unincorporatedBody"
-  val backUrl = routes.BusinessPartnersUnincorporatedBodyNameController.load().url
+  val backUrl = routes.BusinessPartnersUnincorporatedBodyNameController.load(1, NormalMode).url
   val postAction = routes.BusinessPartnersUnincorporatedBodyTradingNameController.next()
 
   def load(): Action[AnyContent] = userAction { implicit request =>

@@ -27,7 +27,7 @@ object BusinessPartnersHasUtrForm {
   val hasBusinessPartnerUtrKey = "uniqueTaxpayerReference_yesNo"
   val businessPartnerUtrKey = "uniqueTaxpayerReference_value"
 
-  private val hasBusinessPartnerUtrMapping = hasBusinessPartnerUtrKey -> yesOrNo
+  private val hasBusinessPartnerUtrMapping = hasBusinessPartnerUtrKey -> yesOrNo()
   private val businessPartnerUtrMapping = businessPartnerUtrKey ->
     (uniqueTaxpayerReferenceNumber onlyWhen (hasBusinessPartnerUtrMapping is true))
 

@@ -71,7 +71,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -94,7 +94,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -116,7 +116,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -143,7 +143,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -168,7 +168,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -193,7 +193,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -221,7 +221,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           )
 
           val userAnswers = createUserAnswers(cachedUkAddressLookup)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))

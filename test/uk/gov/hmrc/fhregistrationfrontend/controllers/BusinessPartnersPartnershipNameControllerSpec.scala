@@ -49,7 +49,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
       "Render the business partner partnership name page" when {
         "there is useranswer but no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -66,7 +66,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
             .set[String](PartnershipNamePage(1), partnerName)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -83,7 +83,7 @@ class BusinessPartnersPartnershipNameControllerSpec extends ControllerSpecWithGu
       "redirect to the trading name page and save the answer to database" when {
         "the user answers doesn't contain page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(

@@ -53,7 +53,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
     s"load when in $mode" should {
       "Render the business partner trading name page with no page data" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
@@ -73,7 +73,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
           .set[TradingName](PartnershipTradingNamePage(index), tradingName)
           .success
           .value
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
@@ -92,7 +92,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
       "redirect to the partnership vat number page" when {
         "the businessType/legal entity of the partnership is a 'partnership'" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -116,7 +116,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
       "redirect to the partnership reg number page" when {
         "the businessType/legal entity of the partnership is a 'limited liability partnership'" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -140,7 +140,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
       "redirect to the business partners page" when {
         "the businessType/legal entity of the partnership is a neither 'partnership' or 'limited liability partnership'" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType()).thenReturn("individual")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -161,7 +161,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
       }
 
       "return 400 when the form contains errors" in {
-        setupDataRequiredAction(UserAnswers(testUserId), mode)
+        setupDataRequiredActionBusinessPartners(UserAnswers(testUserId), mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockAppConfig.getRandomBusinessType()).thenReturn("limited-liability-partnership")
