@@ -1,9 +1,9 @@
-package pages.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$
 
-import models.$packageName$.$className$
-import pages.behaviours.PageBehaviours
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.pages.behaviours.PageBehaviours
 
-class $className$Spec extends PageBehaviours {
+class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" - {
 

@@ -1,188 +1,89 @@
-package controllers.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
-import base.SpecBase
-import forms.$packageName$.$className$FormProvider
-import models.NormalMode
-import models.$packageName$.$className$
-import models.SelectChange.$packageName;format="cap"$
-import navigation._
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.$packageName$.$className$Page
-import play.api.inject.bind
-import play.api.mvc.Call
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import services.SessionService
-import views.html.$packageName$.$className$View
-import errors.SessionDatabaseInsertError
+import com.codahale.metrics.SharedMetricRegistries
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation}
+import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
+import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$.$className$Controller
+import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
+
 import scala.concurrent.Future
-import utilities.GenericLogger
-class $className$ControllerSpec extends SpecBase with MockitoSugar {
+class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
-  def onwardRoute = Call("GET", "/foo")
+  SharedMetricRegistries.clear()
 
-  lazy val $className;
-  format = "decap" $Route: String = routes.$className$Controller.onPageLoad(NormalMode).url
+  val mockSessionCache: SessionRepository = mock[SessionRepository]
+  val index = 1
+  val $className;format="decap"$View: $className$View = app.injector.instanceOf[$className$View]
+  val controller =
+    new $className$Controller(commonDependencies, $className;format="decap"$View, mockActions, mockSessionCache, mockMcc)
 
-  val formProvider = new $className$FormProvider()
-  val form = formProvider()
+  List(NormalMode, CheckMode).foreach { mode =>
+    "onPageLoad when in " + mode should {
+      "Render the $className;format="decap"$ page" when {
+        "there are userAnswers but no page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
-  "$className$ Controller" - {
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
 
-    "must return OK and the correct view for a GET" in {
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("$title$")
+          reset(mockActions)
+        }
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswersFor$packageName;
-      format = "cap" $
-      ) ).build()
+        "there are userAnswers with page data" in {
+          val data = $className$("test1", "test2")
+          val userAnswers = UserAnswers(testUserId)
+            .set[$className$]($className$Page(1), data)
+            .success
+            .value
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
-      running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
-        )
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
 
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[$className$View]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("$title$")
+          reset(mockActions)
+        }
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswersFor$packageName;
-      format = "cap" $
-      .set($className$Page, $className$.values.head).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
-        )
-
-        val view = application.injector.instanceOf[$className$View]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill($className$.values.head), NormalMode)(request, messages(application)).toString
+    s"onSubmit when in " + mode should {
+      val expectedUrl = if (mode == CheckMode) {
+        routes.$packageName;format="cap"$CYAController.load(index).url
+      } else {
+        $nextPage$.url.replace("/fhdds", "")
       }
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-
-      val mockSessionService = mock[SessionService]
-
-      when(mockSessionService.set(any())) thenReturn Future.successful(Right(true))
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswersFor$packageName;
-      format = "cap" $
-      ) )
-      .overrides(
-        bind[NavigatorFor$packageName;
-      format = "cap" $
-      ].toInstance(new FakeNavigatorFor$packageName;
-      format = "cap" $ (onwardRoute)
-      ),
-      bind[SessionService].toInstance(mockSessionService)
-      )
-      .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, $className;
-        format = "decap" $Route
-        )
-        .withFormUrlEncodedBody(("value", $className$.values.head.toString))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswersFor$packageName;
-      format = "cap" $
-      ) ).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, $className;
-        format = "decap" $Route
-        )
-        .withFormUrlEncodedBody(("value", "invalid value"))
-
-        val boundForm = form.bind(Map("value" -> "invalid value"))
-
-        val view = application.injector.instanceOf[$className$View]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
-      }
-    }
-
-    testInvalidJourneyType($packageName;format="cap"$, $className;format="decap"$Route)
-    testNoUserAnswersError($className;format="decap"$Route)
-
-    "must fail if the setting of userAnswers fails" in {
-
-      val application = applicationBuilder(userAnswers = Some(userDetailsWithSetMethodsReturningFailure($packageName;format="cap"$))).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, $className;
-        format = "decap" $Route
-        )
-        .withFormUrlEncodedBody(("value", $className$.values.head.toString))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual INTERNAL_SERVER_ERROR
-        val page = Jsoup.parse(contentAsString(result))
-        page.title() mustBe "Sorry, we are experiencing technical difficulties - 500 - Soft Drinks Industry Levy - GOV.UK"
-      }
-    }
-    "should log an error message when internal server error is returned when user answers are not set in session repository" in {
-      val mockSessionService = mock[SessionService]
-
-      when(mockSessionService.set(any())) thenReturn Future.successful(Left(SessionDatabaseInsertError))
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswersFor$packageName;format="cap"$))
-          .overrides(
-            bind[NavigatorFor$packageName;format="cap"$].toInstance(new FakeNavigatorFor$packageName;format = "cap" $ (onwardRoute)),
-            bind[SessionService].toInstance(mockSessionService)
-          )
-          .build()
-
-      running(application) {
-        withCaptureOfLoggingFrom(application.injector.instanceOf[GenericLogger].logger) { events =>
-          running(application) {
-            val request = FakeRequest(POST, $className;
-            format = "decap" $Route
+      "save the answer to database and redirect to " + expectedUrl when {
+        "the user answers doesn't contain page data" in {
+          val userAnswers = UserAnswers(testUserId)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
+          when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
+          val request = FakeRequest()
+            .withFormUrlEncodedBody(
+              "value" -> $className$.values.head.toString
             )
-            .withFormUrlEncodedBody(("value", $className$.values.head.toString))
+            .withMethod("POST")
+          val result = await(csrfAddToken(controller.onSubmit(index, mode))(request))
 
-            await(route(application, request).value)
-            events.collectFirst {
-              case event =>
-                event.getLevel.levelStr mustBe "ERROR"
-                event.getMessage mustEqual "Failed to set value in session repository while attempting set on $className;format="
-                decap"$"
-            }.getOrElse(fail("No logging captured"))
-          }
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result).get should include(expectedUrl)
+          reset(mockActions)
         }
       }
     }

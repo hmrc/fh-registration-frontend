@@ -1,4 +1,4 @@
-package models.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.models.$packageName$
 
 import models.{Enumerable, WithName}
 import org.scalacheck.Arbitrary.arbitrary
@@ -11,39 +11,14 @@ import play.api.libs.json.{JsError, JsString, Json}
 
 class $className$Spec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "$className$" - {
+  "$className$Page" when {
 
-    "must deserialise valid values" in {
+    val pageData = $className$.values.map(_.toString)
 
-      val gen = Gen.oneOf($className$.values.toSeq)
+    beRetrievable[$className$]($className$Page(1), pageData)
 
-      forAll(gen) {
-        $className;format="decap"$ =>
+    beSettable[$className$]($className$Page(1), pageData)
 
-          JsString($className;format="decap"$.toString).validate[$className$].asOpt.value mustEqual $className;format="decap"$
-      }
-    }
-
-    "must fail to deserialise invalid values" in {
-
-      val gen = arbitrary[String] suchThat (!$className$.values.map(_.toString).contains(_))
-
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[$className$] mustEqual JsError("error.invalid")
-      }
-    }
-
-    "must serialise" in {
-
-      val gen = Gen.oneOf($className$.values.toSeq)
-
-      forAll(gen) {
-        $className;format="decap"$ =>
-
-          Json.toJson($className;format="decap"$) mustEqual JsString($className;format="decap"$.toString)
-      }
-    }
+    beRemovable[$className$]($className$Page(1), pageData)
   }
 }

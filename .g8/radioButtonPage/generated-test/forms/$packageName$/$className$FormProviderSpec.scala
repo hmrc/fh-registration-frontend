@@ -1,29 +1,38 @@
-package forms.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$
 
-import forms.behaviours.OptionFieldBehaviours
-import models.$packageName$.$className$
-import play.api.data.FormError
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
+import scala.util.Random
 
-class $className$FormProviderSpec extends OptionFieldBehaviours {
+class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
 
-  val form = new $className$FormProvider()()
+  val form = $className$Form.form
 
-  ".value" - {
-
-    val fieldName = "value"
-    val requiredKey = "$packageName$.$className;format="decap"$.error.required"
-
-    behave like optionsField[$className$](
-      form,
-      fieldName,
-      validValues  = $className$.values,
-      invalidError = FormError(fieldName, "error.invalid")
+  "$className$Form" should {
+    val validData = Map(
+      "value" -> "option1"
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    "accept valid form" in {
+      val data = dataFromValidForm(validData)
+
+      data.value shouldBe "option1"
+    }
+
+    "reject the form" when {
+      val errorPath = "fh.$packageName$.$className;format="decap"$.error."
+      def requiredKey(fieldName: String) = errorPath + fieldName + ".required"
+
+      "value is empty" in {
+        val invalidData = Map(
+          "value" -> ""
+        )
+        formDataHasErrors(
+          invalidData,
+          List("value" -> requiredKey("value"))
+        )
+      }
+    }
   }
 }
