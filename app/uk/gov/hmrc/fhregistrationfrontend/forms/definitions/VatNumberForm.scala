@@ -27,7 +27,7 @@ object VatNumberForm {
   val hasVatNumberKey = "vatNumber_yesNo"
   val vatNumberKey = "vatNumber_value"
 
-  private val hasVatNumberMapping = hasVatNumberKey -> yesOrNo
+  private val hasVatNumberMapping = hasVatNumberKey -> yesOrNo()
   private val vatNumberMapping = vatNumberKey       -> (vatRegistrationNumber onlyWhen (hasVatNumberMapping is true))
 
   val vatNumberForm = Form(

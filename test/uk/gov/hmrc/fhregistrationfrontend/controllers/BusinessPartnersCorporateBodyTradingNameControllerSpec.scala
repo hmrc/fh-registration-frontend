@@ -50,7 +50,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
       "Render the corporate body trading name page" when {
         "without page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -68,7 +68,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
             .set[TradingName](CorporateBodyTradingNamePage(index), tradingName)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -86,7 +86,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
       "Redirects to Corporate Body Company Registration Number page" when {
         "the user clicks yes and supplies an updated trading name" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockSession.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -104,7 +104,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
 
         "the user clicks no and submits form" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockSession.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -123,7 +123,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
 
       "return 400 when supplied with empty form data" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockSession.set(any())).thenReturn(Future.successful(true))
         val request = FakeRequest()

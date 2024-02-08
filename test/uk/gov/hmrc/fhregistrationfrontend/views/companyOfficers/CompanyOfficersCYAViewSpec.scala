@@ -40,8 +40,6 @@ class CompanyOfficersCYAViewSpec extends ViewSpecHelper {
     val form = "form"
   }
 
-  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-  lazy val request = FakeRequest()
   val summaryList: SummaryList =
     SummaryList(
       Seq(

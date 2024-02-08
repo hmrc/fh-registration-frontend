@@ -52,7 +52,7 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
         "no user answers supplied" in {
 
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -66,7 +66,7 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
         "user answers supplied" in {
           val userAnswers =
             UserAnswers(testUserId).set[Utr](SoleProprietorUtrPage(index), Utr("1234567890")).success.value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -82,7 +82,7 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
     s"next when in $mode" when {
       "redirect to the Partner Address page" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockSession.set(any())).thenReturn(Future.successful(true))
@@ -101,7 +101,7 @@ class BusinessPartnersSoleProprietorUtrControllerSpec extends ControllerSpecWith
 
       "return 400 when supplied with empty form data" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         when(mockSession.set(any())).thenReturn(Future.successful(true))

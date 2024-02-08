@@ -28,7 +28,7 @@ object EmailVerificationForm {
   val defaultEmailKey = "defaultEmail"
   val alternativeEmailKey = "alternativeEmail"
 
-  private val usingDefaultEmailMapping = emailOptionKey     -> yesOrNo
+  private val usingDefaultEmailMapping = emailOptionKey     -> yesOrNo()
   private val defaultEmailMapping = defaultEmailKey         -> (email onlyWhen (usingDefaultEmailMapping is true))
   private val alternativeEmailMapping = alternativeEmailKey -> (email onlyWhen (usingDefaultEmailMapping is false))
 

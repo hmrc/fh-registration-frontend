@@ -43,9 +43,9 @@ object CompanyOfficersForm {
 
   val companyOfficersKey = "companyOfficers"
 
-  val hasNinoMapping = hasNationalInsuranceNumberKey  -> yesOrNo
+  val hasNinoMapping = hasNationalInsuranceNumberKey  -> yesOrNo()
   val ninoMapping = nationalInsuranceNumberKey        -> (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
-  val hasPassportNumberMapping = hasPassportNumberKey -> (yesOrNo onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
+  val hasPassportNumberMapping = hasPassportNumberKey -> (yesOrNo() onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
   val passportNumberMapping = passportNumberKey       -> (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
   val nationalIdMapping = nationalIDKey               -> (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey))
 
@@ -64,7 +64,7 @@ object CompanyOfficersForm {
     roleKey -> oneOf(roles)
   )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
 
-  val hasVatMapping = hasVatKey -> yesOrNo
+  val hasVatMapping = hasVatKey -> yesOrNo()
 
   val companyOfficerCompanyMapping = mapping(
     companyNameKey -> companyName,

@@ -1,15 +1,31 @@
-package pages.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$
 
-import pages.behaviours.PageBehaviours
+import uk.gov.hmrc.fhregistrationfrontend.pages.behaviours.PageBehaviours
 
 class $className$PageSpec extends PageBehaviours {
 
-  "$className$Page" - {
+  "$className$Page" when {
 
-    beRetrievable[Boolean]($className$Page)
+    "true selected" should {
 
-    beSettable[Boolean]($className$Page)
+      val pageData = true
 
-    beRemovable[Boolean]($className$Page)
+      beRetrievable[Boolean]($className$Page(1), pageData)
+
+      beSettable[Boolean]($className$Page(1), pageData)
+
+      beRemovable[Boolean]($className$Page(1), pageData)
+    }
+
+    "false selected" should {
+
+      val pageData = false
+
+      beRetrievable[Boolean]($className$Page(1), pageData)
+
+      beSettable[Boolean]($className$Page(1), pageData)
+
+      beRemovable[Boolean]($className$Page(1), pageData)
+    }
   }
 }

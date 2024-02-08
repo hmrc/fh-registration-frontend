@@ -58,7 +58,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
       "Render the business partner enter address page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -86,7 +86,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
             .success
             .value
 
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -107,7 +107,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
       "redirect to the Check Your Answers page" when {
         "only mandatory fields are populated" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -125,7 +125,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
 
         "all fields are populated" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -148,7 +148,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
       "return a 400 error" when {
         "mandatory fields are not populated" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
