@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import models.{Mode, NormalMode, UserAnswers}
+import models.Mode
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
+import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.PartnerNameForm.{partnerNameForm => form}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.{IndividualsAndSoleProprietorsPartnerNamePage, PartnerTypePage}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.views.Views

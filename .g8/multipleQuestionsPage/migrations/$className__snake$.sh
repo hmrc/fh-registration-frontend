@@ -14,6 +14,7 @@ echo "POST       /change-$url$/:index                  uk.gov.hmrc.fhregistratio
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages
+
 echo "fh.$packageName$.$className;format="decap"$.title = $title$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.heading = $heading$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.$field1Name$ = $field1Value$" >> ../conf/messages
