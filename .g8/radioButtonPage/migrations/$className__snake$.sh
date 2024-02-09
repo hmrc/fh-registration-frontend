@@ -19,10 +19,10 @@ echo "fh.$packageName$.$className;format="decap"$.heading = $heading$" >> ../con
 echo "fh.$packageName$.$className;format="decap"$.checkYourAnswersLabel = $checkYourAnswersLabel$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.error.required = Select $title;format="decap"$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.change.hidden = $className$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.$option1key;format="decap"$.value = $option1key$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.$option1key;format="decap"$.label = $option1msg$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.$option2key;format="decap"$.value = $option2key$" >> ../conf/messages
-echo "fh.$packageName$.$className;format="decap"$.$option2key;format="decap"$.label = $option2msg$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.$option1key;format="lowerCase"$.value = $option1key$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.$option1key;format="lowerCase"$.label = $option1msg$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.$option2key;format="lowerCase"$.value = $option2key$" >> ../conf/messages
+echo "fh.$packageName$.$className;format="decap"$.$option2key;format="lowerCase"$.label = $option2msg$" >> ../conf/messages
 
 awk '/val normalRoutes/ {\
     print;\
