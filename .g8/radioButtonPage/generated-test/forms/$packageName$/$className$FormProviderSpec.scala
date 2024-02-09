@@ -5,24 +5,31 @@ import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import scala.util.Random
 
-class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
+class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$.Value] {
 
-  val form = $className$Form.form
+  val form: Form[$className$.Value] = $className$Form.form
 
   "$className$Form" should {
     val validData = Map(
-      "value" -> "option1"
+      "value" -> option1key,
+      "value" -> option2key
     )
 
-    "accept valid form" in {
+    s"accept valid form for $className$.option1key" in {
       val data = dataFromValidForm(validData)
 
-      data.value shouldBe "option1"
+      data.value shouldBe $className$.option1key
+    }
+
+    s"accept valid form for $className$.option2key" in {
+      val data = dataFromValidForm(validData)
+
+      data.value shouldBe $className$.option2key
     }
 
     "reject the form" when {
       val errorPath = "fh.$packageName$.$className;format="decap"$.error."
-      def requiredKey(fieldName: String) = errorPath + fieldName + ".required"
+      def requiredKey = errorPath + "required"
 
       "value is empty" in {
         val invalidData = Map(
@@ -30,7 +37,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$] {
         )
         formDataHasErrors(
           invalidData,
-          List("value" -> requiredKey("value"))
+          List("value" -> requiredKey)
         )
       }
     }

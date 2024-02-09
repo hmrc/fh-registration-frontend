@@ -18,6 +18,7 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$.$className$C
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 
 import scala.concurrent.Future
+
 class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
@@ -44,10 +45,27 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
           reset(mockActions)
         }
 
-        "there are userAnswers with page data" in {
-          val data = $className$("test1", "test2")
+        s"there are userAnswers with page data for ${$className$.values.head}" in {
+          val dataOption = $className$.values.head
           val userAnswers = UserAnswers(testUserId)
-            .set[$className$]($className$Page(1), data)
+            .set($className$Page(index), dataOption)
+            .success
+            .value
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
+
+          val request = FakeRequest()
+          val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
+
+          status(result) shouldBe OK
+          val page = Jsoup.parse(contentAsString(result))
+          page.title should include("$title$")
+          reset(mockActions)
+        }
+
+        s"there are userAnswers with page data for ${$className$.values.last}" in {
+          val dataOption = $className$.values.last
+          val userAnswers = UserAnswers(testUserId)
+            .set($className$Page(index), dataOption)
             .success
             .value
           setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)

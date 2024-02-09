@@ -31,27 +31,29 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 class $className$ViewSpec extends ViewSpecHelper {
 
-  val view = app.injector.instanceOf[$className$View]
-  val form = $className$Form.form
-//  implicit val request: Request[_] = FakeRequest()
-//  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  val view: $className$View = app.injector.instanceOf[$className$View]
+  val form: Form[$className$.Value] = $className$Form.form
 
   val backLink = "http://test.com"
-  val call = Call("GET", "/foo")
+  val call: Call = Call("GET", "/foo")
 
   object Selectors {
     val heading = "govuk-heading-l"
     val formGroup = "govuk-form-group"
     val label = "govuk-label"
+    val radios = "govuk-radios"
+    val radiosInput = "govuk-radios__input"
+    val radiosItems = "govuk-radios__item"
+    val radiosLabels = "govuk-label govuk-radios__label"
     val errorSummaryList = "govuk-list govuk-error-summary__list"
     val button = "govuk-button"
     val form = "form"
   }
+  val $option1key$ = $className$.$Option1key$
+  val $option2key$ = $className$.$Option2key$
+  val $option1key$JsObject = Json.toJson($className;format="Camel"$).as[JsObject].value
+  val $option1key$$Map: collection.Map[String, String] =
 
-  val $className;format="Camel"$ = $className$("1", "2")
-  val $className;format="Camel"$JsObject = Json.toJson($className;format="Camel"$).as[JsObject].value
-  val $className;format="Camel"$Map: collection.Map[String, String] =
-  $className;format="Camel"$JsObject.map { case (fName, fValue) => fName -> fValue.toString }
 
   "View" when {
     val html = view(form, call, backLink)(request, Messages, appConfig)
@@ -101,9 +103,46 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
     }
 
-    "$field1Name$ is empty" should {
-      val fieldWithError = Map("$field1Name$" -> "", "$field2Name$" -> "test")
-      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
+    $className$.values.foreach { radio =>
+      val html1 = view(form.fill(radio), call, backLink)(request, Messages, appConfig)
+      val document1 = doc(html1)
+
+      s"when the form is preoccupied with " + radio.toString + "selected and has no errors" in {
+        "should have radioButtons" in {
+          val radioButtons = document1.getElementsByClass(Selectors.radiosItems)
+          $className$.values.zipWithIndex.foreach { case (radio1, index) =>
+            if (radio1.toString == radio.toString) {
+              s"that has the option to select" + radio1.toString + " and is checked" in {
+                val radioButtons1 = radioButtons
+                  .get(index)
+                radioButtons1
+                  .getElementsByClass(Selectors.radiosLabels)
+                  .text() mustBe Messages("fh.companyOfficers.$packageName$.$className;format="decap"$." + radio1.toString)
+                val input = radioButtons1
+                  .getElementsByClass(Selectors.radiosInput)
+                input.attr("value") mustBe radio1.toString
+                input.hasAttr("checked") mustBe true
+              }
+            } else {
+              s"that has the option to select " + radio1.toString + " and is unchecked" in {
+                val radiobuttons1 = radioButtons
+                  .get(index)
+                radiobuttons1
+                  .getElementsByClass(Selectors.radiosLabels)
+                  .text() mustBe Messages("fh.$packageName$.$className;format="decap"$." + radio1.toString)
+                val input = radiobuttons1
+                  .getElementsByClass(Selectors.radiosInput)
+                input.attr("value") mustBe radio1.toString
+                input.hasAttr("checked") mustBe false
+              }
+            }
+          }
+        }
+      }
+    }
+
+    "value is empty" should {
+      val htmlWithErrors = view(form.bind(Map("value" -> "")), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
@@ -117,28 +156,8 @@ class $className$ViewSpec extends ViewSpecHelper {
           .first()
         errorSummary
           .select("a")
-          .attr("href") mustBe "#$field1Name$"
+          .attr("href") mustBe "#$field1Value$"
         errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.$field1Name$.required")
-      }
-    }
-
-    "$field2Name$ is empty" should {
-      val fieldWithError = Map("$field1Name$" -> "test", "$field2Name$" -> "")
-      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
-      val documentWithErrors = doc(htmlWithErrors)
-
-      "have a title containing error" in {
-        documentWithErrors.title must include("Error: $title$")
-      }
-
-      "have a error summary" in {
-        val errorSummary = documentWithErrors
-          .getElementsByClass(Selectors.errorSummaryList)
-          .first()
-        errorSummary
-          .select("a")
-          .attr("href") mustBe "#$field2Name$"
-        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.$field2Name$.required")
       }
     }
 
