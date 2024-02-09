@@ -155,7 +155,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(firstNameKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$firstNameKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -175,7 +175,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(lastNameKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$lastNameKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -193,7 +193,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(jobTitleKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$jobTitleKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -213,7 +213,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(telephoneKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$telephoneKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
