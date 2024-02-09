@@ -27,7 +27,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerISpec
 
         val addressPage: String = routes.BusinessPartnersAddressController.load(index, mode).url
         val selfAssessmentUtrPage: String = routes.BusinessPartnersSoleProprietorUtrController.load(index, mode).url
-        val businessPartnersPage: String = routes.BusinessPartnersController.load(index, mode).url
+        val businessPartnersPage: String = routes.PartnerTypeController.load(index, mode).url
 
         s"GET ${route(mode)}" when {
 

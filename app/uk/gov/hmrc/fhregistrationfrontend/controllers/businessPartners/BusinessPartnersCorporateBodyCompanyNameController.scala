@@ -43,7 +43,7 @@ class BusinessPartnersCorporateBodyCompanyNameController @Inject()(
   val journeyType = "corporateBody"
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersCorporateBodyCompanyNameController.next(index, mode)
-  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+  def backUrl(index: Int, mode: Mode): String = routes.PartnerTypeController.load(index, mode).url
   def tradingNamePage(index: Int, mode: Mode): Call =
     routes.BusinessPartnersCorporateBodyTradingNameController.load(index, mode)
   lazy val form: Form[String] = companyNameForm

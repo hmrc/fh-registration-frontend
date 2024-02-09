@@ -39,7 +39,7 @@ class BusinessPartnersUnincorporatedBodyNameController @Inject()(
 
   import actions._
 
-  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+  def backUrl(index: Int, mode: Mode): String = routes.PartnerTypeController.load(index, mode).url
 
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersUnincorporatedBodyNameController.next(index, mode)

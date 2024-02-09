@@ -149,7 +149,7 @@ POST        /partner-name/:index                             @uk.gov.hmrc.fhregi
 GET         /change-partner-name/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index: Int, mode: Mode = CheckMode)
 POST        /change-partner-name/:index                      @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index: Int, mode: Mode = CheckMode)
 
-GET         /partner-type/:index                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersController.load(index: Int, mode: Mode = NormalMode)
-POST        /partner-type/:index                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersController.next(index: Int, mode: Mode = NormalMode)
-GET         /change-partner-type/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersController.load(index: Int, mode: Mode = CheckMode)
-POST        /change-partner-type/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.BusinessPartnersController.next(index: Int, mode: Mode = CheckMode)
+GET         /partner-type/:index                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.PartnerTypeController.load(index: Int, mode: Mode = NormalMode)
+POST        /partner-type/:index                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.PartnerTypeController.next(index: Int, mode: Mode = NormalMode)
+GET         /change-partner-type/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.PartnerTypeController.load(index: Int, mode: Mode = CheckMode)
+POST        /change-partner-type/:index                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.businessPartners.PartnerTypeController.next(index: Int, mode: Mode = CheckMode)

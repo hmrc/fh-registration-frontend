@@ -47,7 +47,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.next(index, mode)
 
-  def backUrl(index: Int, mode: Mode): String = routes.BusinessPartnersController.load(index, mode).url
+  def backUrl(index: Int, mode: Mode): String = routes.PartnerTypeController.load(index, mode).url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
     implicit request =>
@@ -82,7 +82,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController @Inject
                 routes.BusinessPartnersIndividualsAndSoleProprietorsNinoController.load(index, mode)
               case Some(businessType) if businessType.equals(BusinessPartnerType.SoleProprietor) =>
                 routes.BusinessPartnersSoleProprietorsTradingNameController.load(index, mode)
-              case _ => routes.BusinessPartnersController.load(index, mode)
+              case _ => routes.PartnerTypeController.load(index, mode)
             }
             val updatedUserAnswers = request.userAnswers.set(page, partnerName)
             updateUserAnswersAndSaveToCache(updatedUserAnswers, nextPage, page)

@@ -44,7 +44,7 @@ class BusinessPartnersPartnershipNameController @Inject()(
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipNameController.next(index, mode)
   def backAction(index: Int, mode: Mode): String =
-    routes.BusinessPartnersController.load(index, mode).url
+    routes.PartnerTypeController.load(index, mode).url
   def tradingNamePage(index: Int, mode: Mode): Call =
     routes.BusinessPartnersPartnershipTradingNameController.load(index, mode)
   lazy val form: Form[String] = partnershipNameForm

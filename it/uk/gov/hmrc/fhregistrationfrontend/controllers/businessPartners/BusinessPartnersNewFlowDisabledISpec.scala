@@ -14,7 +14,7 @@ class BusinessPartnersNewFlowDisabledISpec
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index, NormalMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, NormalMode),
-    routes.BusinessPartnersController.load(index, NormalMode),
+    routes.PartnerTypeController.load(index, NormalMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, NormalMode),
     routes.BusinessPartnersConfirmAddressController.load(index, NormalMode),
     routes.BusinessPartnersEnterAddressController.load(index, NormalMode),
@@ -35,7 +35,7 @@ class BusinessPartnersNewFlowDisabledISpec
 
   val checkRoutes = List(
     routes.BusinessPartnersPartnershipConfirmRegisteredAddressController.load(index, CheckMode),
-    routes.BusinessPartnersController.load(index, CheckMode),
+    routes.PartnerTypeController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipCompanyRegistrationNumberController.load(index, CheckMode),
     routes.BusinessPartnersPartnershipUtrController.load(index, CheckMode),
     routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController.load(index, CheckMode),

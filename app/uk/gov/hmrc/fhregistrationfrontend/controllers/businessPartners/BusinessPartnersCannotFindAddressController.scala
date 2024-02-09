@@ -44,7 +44,7 @@ class BusinessPartnersCannotFindAddressController @Inject()(
       request.userAnswers
         .get(PartnerTypePage(index))
         .fold[Result](
-          Redirect(routes.BusinessPartnersController.load(index, mode))
+          Redirect(routes.PartnerTypeController.load(index, mode))
         ) { partnerType =>
           val (backLinkAndButtonUrl, manuallyEnterAddressUrl): (Call, Call) = partnerType match {
             case (Partnership | LimitedLiabilityPartnership) =>

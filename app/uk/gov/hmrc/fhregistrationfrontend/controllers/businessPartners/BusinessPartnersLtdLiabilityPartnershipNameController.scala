@@ -44,7 +44,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameController @Inject()(
   val businessPartnerType: String = "ltdLiabilityPartnership"
 
   def backAction(index: Int, mode: Mode): String =
-    routes.BusinessPartnersController.load(index, mode).url
+    routes.PartnerTypeController.load(index, mode).url
 
   def postAction(index: Int, mode: Mode): Call =
     routes.BusinessPartnersLtdLiabilityPartnershipNameController.next(index, mode)

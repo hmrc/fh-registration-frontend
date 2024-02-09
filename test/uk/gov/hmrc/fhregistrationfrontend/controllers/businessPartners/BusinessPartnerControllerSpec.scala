@@ -60,7 +60,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
     }
 
   val controller =
-    new BusinessPartnersController(commonDependencies, views, mockActions, mockSessionCache, mockMcc)(ec)
+    new PartnerTypeController(commonDependencies, views, mockActions, mockSessionCache, mockMcc)(ec)
 
   List(NormalMode, CheckMode).foreach {
     case mode =>

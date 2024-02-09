@@ -156,7 +156,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
           val result = await(csrfAddToken(controller.next(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(routes.BusinessPartnersController.load(index, mode).url)
+          redirectLocation(result).get should include(routes.PartnerTypeController.load(index, mode).url)
           reset(mockActions)
         }
       }

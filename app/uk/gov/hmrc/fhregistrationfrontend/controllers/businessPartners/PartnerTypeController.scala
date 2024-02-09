@@ -30,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BusinessPartnersController @Inject()(
+class PartnerTypeController @Inject()(
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
@@ -40,7 +40,7 @@ class BusinessPartnersController @Inject()(
 
   import actions._
 
-  def postAction(index: Int, mode: Mode): Call = routes.BusinessPartnersController.next(index, mode)
+  def postAction(index: Int, mode: Mode): Call = routes.PartnerTypeController.next(index, mode)
   val backUrl: String = ContactPersonController.load().url
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction { implicit request =>

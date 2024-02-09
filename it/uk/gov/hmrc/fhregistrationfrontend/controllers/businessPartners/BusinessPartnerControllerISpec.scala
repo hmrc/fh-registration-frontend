@@ -34,7 +34,7 @@ class BusinessPartnerControllerISpec
 
 
   modes.foreach { mode =>
-    val route = routes.BusinessPartnersController.load(1, mode)
+    val route = routes.PartnerTypeController.load(1, mode)
     s"GET ${route.url}" should {
       "render the business partners page" that {
         "has the no items selected" when {

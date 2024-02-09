@@ -79,7 +79,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoController @Inject()(
               case Some(businessType) if businessType.equals("individual") =>
                 routes.BusinessPartnersSoleProprietorsVatRegistrationNumberController
                   .load(1, NormalMode)
-              case _ => routes.BusinessPartnersController.load(index, mode)
+              case _ => routes.PartnerTypeController.load(index, mode)
             }
 
             val updatedUserAnswers = request.userAnswers.set(page, nino)

@@ -95,7 +95,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
               case _ =>
                 logger.warn(
                   s"[BusinessPartnerPartnershipTradingNameController][next]: Unexpected error, redirecting to start of journey")
-                routes.BusinessPartnersController.load(index, mode)
+                routes.PartnerTypeController.load(index, mode)
             }
 
             val currentPage = page(index)
