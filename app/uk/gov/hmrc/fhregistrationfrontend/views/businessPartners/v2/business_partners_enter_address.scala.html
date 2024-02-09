@@ -74,7 +74,7 @@
                 errorMessage = form(s"$fieldName.line1").error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.business.partners.$fieldName.line1.${e.message}")),
-                        visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+                        visuallyHiddenText = Some(Messages("generic.errorPrefix"))
                     )
                 }
             )
@@ -95,7 +95,7 @@
                 errorMessage = form(s"$fieldName.line2").error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.business.partners.$fieldName.line2.${e.message}")),
-                        visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+                        visuallyHiddenText = Some(Messages("generic.errorPrefix"))
                     )
                 }
             )
@@ -116,7 +116,7 @@
                 errorMessage = form(s"$fieldName.line3").error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.business.partners.$fieldName.line3.${e.message}")),
-                        visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+                        visuallyHiddenText = Some(Messages("generic.errorPrefix"))
                     )
                 }
             )
@@ -137,7 +137,7 @@
                 errorMessage = form(s"$fieldName.postcode").error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.business.partners.$fieldName.postcode.${e.message}")),
-                        visuallyHiddenText = Some(Messages("fh.generic.errorPrefix.noColon"))
+                        visuallyHiddenText = Some(Messages("generic.errorPrefix"))
                     )
                 }
             )
