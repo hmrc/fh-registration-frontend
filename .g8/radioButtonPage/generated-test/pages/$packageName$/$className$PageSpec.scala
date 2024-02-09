@@ -7,12 +7,19 @@ class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" when {
 
-    val pageData = $className$.Value
+    val pageDataOption1 = $className$.values.head
+    val pageDataOption2 = $className$.values.last
 
-    beRetrievable($className$Page(1), pageData)
+    beRetrievable($className$Page(1), pageDataOption1)
 
-    beSettable($className$Page(1), pageData)
+    beSettable($className$Page(1), pageDataOption1)
 
-    beRemovable($className$Page(1), pageData)
+    beRemovable($className$Page(1), pageDataOption1)
+
+    beRetrievable($className$Page(1), pageDataOption2)
+
+    beSettable($className$Page(1), pageDataOption2)
+
+    beRemovable($className$Page(1), pageDataOption2)
   }
 }
