@@ -13,10 +13,10 @@ object $className$Form {
 
    val form: Form[$className$] = Form(
      mapping(
-      "$field1Name$" -> string("$packageName$.$className;format="decap"$.error.$field1Name$.required")
-        .verifying(maxLength($field1MaxLength$, "$packageName$.$className;format="decap"$.error.$field1Name$.length")),
-      "$field2Name$" -> string("$packageName$.$className;format="decap"$.error.$field2Name$.required")
-        .verifying(maxLength($field2MaxLength$, "$packageName$.$className;format="decap"$.error.$field2Name$.length"))
+      "$field1Name$" -> string("fh.$packageName$.$className;format="decap"$.error.$field1Name$.required")
+        .verifying(maxLength($field1MaxLength$, "fh.$packageName$.$className;format="decap"$.error.$field1Name$.length")),
+      "$field2Name$" -> string("fh.$packageName$.$className;format="decap"$.error.$field2Name$.required")
+        .verifying(maxLength($field2MaxLength$, "fh.$packageName$.$className;format="decap"$.error.$field2Name$.length"))
     )($className$.apply)($className$.unapply)
    )
  }

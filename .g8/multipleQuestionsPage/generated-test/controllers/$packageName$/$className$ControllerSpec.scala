@@ -1,4 +1,4 @@
-package controllers.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
 import com.codahale.metrics.SharedMetricRegistries
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -11,12 +11,14 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLoca
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
-import uk.gov.hmrc.fhregistrationfrontend.views.$packageName$.v2.$className$View
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$.$className$Controller
+import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 
 import scala.concurrent.Future
-class $className$ControllerSpec extends extends ControllerSpecWithGuiceApp with ActionsMock {
+class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock {
 
   SharedMetricRegistries.clear()
 
@@ -27,56 +29,61 @@ class $className$ControllerSpec extends extends ControllerSpecWithGuiceApp with 
     new $className$Controller(commonDependencies, $className;format="decap"$View, mockActions, mockSessionCache, mockMcc)
 
   List(NormalMode, CheckMode).foreach { mode =>
-    s"onPageLoad when in $mode" should {
+    "onPageLoad when in" + mode should {
       "Render the $className;format="decap"$ page" when {
         "there is useranswer but no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
-          page.title should include($title$)
+          page.title should include("$title$")
           reset(mockActions)
         }
 
         "there are userAnswers with page data" in {
-          val partnerName = "test"
+          val data = $className$("test1", "test2")
           val userAnswers = UserAnswers(testUserId)
-            .set[String](PartnershipNamePage(1), partnerName)
+            .set[$className$]($className$Page(1), data)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.onPageLoad(index, mode))(request))
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
-          page.title should include($title$)
+          page.title should include("$title$")
           reset(mockActions)
         }
       }
     }
 
-    s"onSubmit when in $mode" should {
-      "redirect to the trading name page and save the answer to database" when {
+    s"onSubmit when in" + mode should {
+      val expectedUrl = if (mode == CheckMode) {
+        routes.$packageName;format="cap"$CYAController.load(index).url
+        } else {
+          $nextPage$.url.replace("/fhdds", "")
+        }
+      "save the answer to database and redirect to " + expectedUrl when {
         "the user answers doesn't contain page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredAction$packageName;format="cap"$(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(
-              "partnershipName" -> "Partnership name goes here"
+              "$field1Name$" -> "name1",
+              "$field2Name$" -> "name2"
             )
             .withMethod("POST")
           val result = await(csrfAddToken(controller.onSubmit(index, mode))(request))
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result).get should include(
-            routes.BusinessPartnersPartnershipTradingNameController.load(1, mode).url.drop(6))
+          redirectLocation(result).get should include(expectedUrl)
           reset(mockActions)
         }
       }

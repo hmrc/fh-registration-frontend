@@ -50,7 +50,7 @@ case class RepeatingPage[T](
   val form: Form[(T, Boolean)] = Form(
     tuple(
       ElementKey -> skippingOnePrefix(mapping),
-      AddMoreKey -> yesOrNo
+      AddMoreKey -> yesOrNo()
     )
   )
 

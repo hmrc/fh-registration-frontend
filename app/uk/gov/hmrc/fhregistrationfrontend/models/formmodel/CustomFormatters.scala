@@ -21,12 +21,12 @@ import play.api.data.format.Formatter
 
 object CustomFormatters {
 
-  val yesOrNoFormatter: Formatter[Boolean] = new Formatter[Boolean] {
+  def yesOrNoFormatter(errorKey: String): Formatter[Boolean] = new Formatter[Boolean] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
       Right(data.getOrElse(key, "")).flatMap {
         case "true"  => Right(true)
         case "false" => Right(false)
-        case _       => Left(Seq(FormError(key, "error.required")))
+        case _       => Left(Seq(FormError(key, errorKey)))
       }
 
     override def unbind(key: String, value: Boolean) = Map(key -> value.toString)

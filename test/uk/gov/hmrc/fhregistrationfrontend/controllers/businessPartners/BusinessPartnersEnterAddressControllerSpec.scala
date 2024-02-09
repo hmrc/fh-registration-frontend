@@ -53,7 +53,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
       "Render the business partner enter address page" when {
         "the new business partner pages are enabled and there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -76,7 +76,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
             .set[BusinessPartnersEnterAddress](EnterAddressPage(1), address)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
@@ -104,7 +104,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
         "the new business partner pages are enabled" should {
           "all address fields are populated" in {
             val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers, mode)
+            setupDataRequiredActionBusinessPartners(userAnswers, mode)
             when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
             when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
             val request = FakeRequest()
@@ -124,7 +124,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
 
           "only mandatory address fields are populated" in {
             val userAnswers = UserAnswers(testUserId)
-            setupDataRequiredAction(userAnswers, mode)
+            setupDataRequiredActionBusinessPartners(userAnswers, mode)
             when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
             when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -146,7 +146,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
       "return a 400" when {
         "mandatory fields are not populated" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 

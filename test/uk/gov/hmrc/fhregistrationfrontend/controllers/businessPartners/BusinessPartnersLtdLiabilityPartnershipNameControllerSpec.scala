@@ -64,7 +64,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
     s"load when in $mode" should {
       "Render the Limited Liability Partnership Name page" when {
         "there are useranswers but no page data" in {
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -77,7 +77,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
         }
 
         "there are useranswers with page data" in {
-          setupDataRequiredAction(userAnswersWithPageData, mode)
+          setupDataRequiredActionBusinessPartners(userAnswersWithPageData, mode)
 
           val request = FakeRequest()
           val result = await(csrfAddToken(controller.load(index, mode))(request))
@@ -94,7 +94,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
     s"next when in $mode" should {
       "redirect to the Trading Name page" when {
         "the form has no errors and limited liability partnership name is supplied" in {
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -110,7 +110,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
 
       "return an error" when {
         "the user doesn't enter a limited liability partnership name" in {
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
             .withFormUrlEncodedBody(("ltdLiabilityPartnershipName", ""))

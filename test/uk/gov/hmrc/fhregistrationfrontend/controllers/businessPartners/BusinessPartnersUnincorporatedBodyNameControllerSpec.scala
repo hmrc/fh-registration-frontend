@@ -51,7 +51,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
       "Render the Unincorporated Body Name page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -69,7 +69,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
             .set[UnincorporatedBodyName](UnincorporatedBodyNamePage(1), unincorporatedBodyName)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
@@ -86,7 +86,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
     s"next when in $mode" should {
       "redirect to the Unincorporated Body Trading Name page" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest()
@@ -103,7 +103,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
 
       "the user doesn't enter a unincorporated body name" in {
         val userAnswers = UserAnswers(testUserId)
-        setupDataRequiredAction(userAnswers, mode)
+        setupDataRequiredActionBusinessPartners(userAnswers, mode)
         when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest()

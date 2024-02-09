@@ -66,7 +66,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
             .set(PartnerTypePage(index), BusinessPartnerType.Individual)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -88,7 +88,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
             .set[PartnerName](IndividualsAndSoleProprietorsPartnerNamePage(1), partnerName)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
@@ -107,7 +107,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
       "redirect to the business partners" when {
         "business type is neither Sole Proprietor or Individual" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           val request = FakeRequest()
@@ -135,7 +135,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
             .set(PartnerTypePage(index), BusinessPartnerType.Individual)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("individual")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -163,7 +163,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
             .set(PartnerTypePage(index), BusinessPartnerType.SoleProprietor)
             .success
             .value
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAppConfig.getRandomBusinessType).thenReturn("sole-proprietor")
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))

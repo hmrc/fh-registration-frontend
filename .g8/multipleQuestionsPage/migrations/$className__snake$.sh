@@ -14,6 +14,7 @@ echo "POST       /change-$url$/:index                  uk.gov.hmrc.fhregistratio
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages
+
 echo "fh.$packageName$.$className;format="decap"$.title = $title$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.heading = $heading$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.$field1Name$ = $field1Value$" >> ../conf/messages
@@ -25,5 +26,15 @@ echo "fh.$packageName$.$className;format="decap"$.error.$field1Name$.length = $f
 echo "fh.$packageName$.$className;format="decap"$.error.$field2Name$.length = $field2Value$ must be $field2MaxLength$ characters or less" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.$field1Name$.change.hidden = $field1Value$" >> ../conf/messages
 echo "fh.$packageName$.$className;format="decap"$.$field2Name$.change.hidden = $field2Value$" >> ../conf/messages
+
+awk '/val normalRoutes/ {\
+    print;\
+    print "    routes.$className$Controller.load(index, NormalMode),";\
+    next }1' ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala > tmp && mv tmp ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala
+
+awk '/val checkRoutes/ {\
+    print;\
+    print "    routes.$className$Controller.load(index, CheckMode),";\
+    next }1' ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala > tmp && mv tmp ../it/uk/gov/hmrc/fhregistrationfrontend/controllers/$packageName$/NewFlowDisabledISpec.scala
 
 echo "Migration $className;format="snake"$ completed"

@@ -18,10 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import org.apache.commons.lang3.StringUtils
 import play.api.data.Forms._
-import play.api.data.{FieldMapping, Mapping}
+import play.api.data.format.Formatter
+import play.api.data.{FieldMapping, FormError, Mapping}
 import play.api.data.validation._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOfConstraint
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, Enumerable, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 
 import java.time.LocalDate
@@ -36,7 +37,7 @@ object Mappings {
 
   def skippingOnePrefix[T](mapping: Mapping[T]) = new SkippingOnePrefixMapping(mapping)
 
-  def yesOrNo = of(yesOrNoFormatter)
+  def yesOrNo(errorKey: String = "error.required") = of(yesOrNoFormatter(errorKey))
 
   def address: Mapping[Address] =
     mapping(
@@ -51,33 +52,42 @@ object Mappings {
 
   def postcode: Mapping[String] =
     nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$".r))
+
   def addressLine: Mapping[String] =
     nonEmptyText verifying Constraints.pattern("^[A-Za-z0-9 &!'‘’\"“”(),./\u2014\u2013\u2010\u002d]{1,35}$".r)
+
   def personTitle: Mapping[String] =
     nonEmptyText verifying Constraints.pattern("^[a-zA-Z\u00C0-\u00FF '‘’\u2014\u2013\u2010\u002d]{2,30}$".r)
+
   def roleInOrganization: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z &`\\-\\'^]{1,40}$".r)
 
   def personName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern("^[a-zA-Z\u00C0-\u00FF '‘’\u2014\u2013\u2010\u002d]{1,35}$".r)
+
   def telephone: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9 ()+\u2010\u002d]{1,24}$".r)
+
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
       v
     }) verifying Constraints.pattern("^[a-zA-Z0-9]{8}$".r)
+
   def companyRegistrationNumberFormatted =
     nonEmptyText transform (value => value.trim, { v: String =>
       v
     })
 
   def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
+
   def companyName =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\\u005C\u2014\u2013\u2010\u002d]{1,140}$".r)
+
   def tradingName =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+
   def unincorporatedBodyName =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
@@ -89,16 +99,21 @@ object Mappings {
   def partnershipName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+
   def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
   def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
 
   def withdrwalReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
+
   def deregistrationReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
+
   def nino = of(ninoFormatter())
+
   def nationalIdNumber =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
+
   def passportNumber =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
@@ -192,6 +207,7 @@ object Mappings {
     Try(localDateTime(d)).isSuccess
 
   def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
+
   def `enum`[E <: Enumeration](
     `enum`: E,
     requiredErrorKey: String = "error.required",
@@ -202,8 +218,9 @@ object Mappings {
 
   def string(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
     of(stringFormatter(errorKey, args))
+
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
-    "yesNo" -> of(yesOrNoFormatter),
+    "yesNo" -> of(yesOrNoFormatter("error.required")),
     "value" -> optional(wrapped)
   )
 

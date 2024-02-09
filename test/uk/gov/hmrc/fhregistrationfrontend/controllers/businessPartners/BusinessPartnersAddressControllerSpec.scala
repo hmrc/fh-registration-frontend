@@ -68,7 +68,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
     s"load when in $mode" should {
       "Render the business partner address page" when {
         "The business partner v2 pages are enabled and there is no page data" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
@@ -82,7 +82,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
 
         "The business partner v2 pages are enabled and there are userAnswers with page data" in {
           val userAnswers = createUserAnswers(UkAddressLookup(Some("44 test lane"), "SW1A 2AA"))
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
@@ -99,7 +99,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
     s"next when in $mode" should {
       "redirect to choose address page" when {
         "the form has no errors and multiple addresses are returned from UkAddressLookup" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
             Future.successful(
@@ -127,7 +127,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
 
       "redirect to confirm address page" when {
         "the form has no errors and a single address is returned from UkAddressLookup" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
@@ -153,7 +153,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
 
       "redirect to cannot find address page" when {
         "the form has no errors and an empty address list is returned from UkAddressLookup" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAddressService.addressLookup(any(), any(), any())(any())).thenReturn(
@@ -174,7 +174,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
         "the form has no errors and postcode matches what is saved in Cache" should {
           "Not call Address Lookup" in {
             val userAnswers = createUserAnswers(UkAddressLookup(Some("44 test lane"), "SW1A 2AA"))
-            setupDataRequiredAction(userAnswers, mode)
+            setupDataRequiredActionBusinessPartners(userAnswers, mode)
             when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
             when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -193,7 +193,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
 
       "return 400" when {
         "the form has no errors, postcode is entered and address lookup returns an error" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
 
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -213,7 +213,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
         }
 
         "the postcode is missing in form" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
@@ -226,7 +226,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
         }
 
         "the postcode is an invalid format" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
@@ -238,7 +238,7 @@ class BusinessPartnersAddressControllerSpec extends ControllerSpecWithGuiceApp w
         }
 
         "address line is invalid (contains too many characters)" in {
-          setupDataRequiredAction(emptyUserAnswers, mode)
+          setupDataRequiredActionBusinessPartners(emptyUserAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()

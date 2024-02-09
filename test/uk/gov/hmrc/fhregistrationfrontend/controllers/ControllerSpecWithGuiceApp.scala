@@ -20,14 +20,17 @@ import akka.stream.Materializer
 import models.UserAnswers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRFAddToken
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 trait ControllerSpecWithGuiceApp extends ControllersSpecBase with GuiceOneAppPerSuite with I18nSupport {
 
+  lazy val request: Request[_] = FakeRequest()
+  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
-  val Messages = request2Messages(FakeRequest())
+  val Messages = request2Messages(request)
   implicit val materializer = mock[Materializer]
 
   val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])

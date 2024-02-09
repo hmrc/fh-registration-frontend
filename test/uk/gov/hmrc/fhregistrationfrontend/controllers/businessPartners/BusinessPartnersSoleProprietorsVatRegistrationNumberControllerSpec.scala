@@ -61,7 +61,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
       "Render the businessPartnersVatRegistrationNumber page" when {
         "there is no page data" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -84,7 +84,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
             .success
             .value
 
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
@@ -103,7 +103,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
       "redirect to the correct page" when {
         "the form has no errors, yes is selected and vatnumber supplied" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -124,7 +124,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
 
         "the form has no errors and no is selected" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -144,7 +144,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
       "return an error" when {
         "no checkbox option is selected" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
@@ -167,7 +167,7 @@ class BusinessPartnersSoleProprietorsVatRegistrationNumberControllerSpec
 
         "Yes option is selected but no VAT Number is entered" in {
           val userAnswers = UserAnswers(testUserId)
-          setupDataRequiredAction(userAnswers, mode)
+          setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))

@@ -65,52 +65,52 @@ object BusinessPartnersForm {
 
   val companyRegistrationNumberMapping = companyRegistrationNumberKey -> companyRegistrationNumber
 
-  val hasNinoMapping = hasNationalInsuranceNumberKey -> yesOrNo
+  val hasNinoMapping = hasNationalInsuranceNumberKey -> yesOrNo()
   val ninoMapping = nationalInsuranceNumberKey       -> (nino onlyWhen (hasNinoMapping is true withPrefix businessPartnerIndividualKey))
 
-  val hasNinoSoleProprietorMapping = hasNationalInsuranceNumberKey -> yesOrNo
+  val hasNinoSoleProprietorMapping = hasNationalInsuranceNumberKey -> yesOrNo()
   val ninoSoleProprietorMapping = nationalInsuranceNumberKey       -> (nino onlyWhen (hasNinoSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasTradeNameMapping = hasTradeNameKey -> yesOrNo
+  val hasTradeNameMapping = hasTradeNameKey -> yesOrNo()
   val tradeNameMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasTradeNamePartnershipMapping = hasTradeNameKey -> yesOrNo
+  val hasTradeNamePartnershipMapping = hasTradeNameKey -> yesOrNo()
   val tradeNamePartnershipMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNamePartnershipMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasTradeNameLimitedLiabilityMapping = hasTradeNameKey -> yesOrNo
+  val hasTradeNameLimitedLiabilityMapping = hasTradeNameKey -> yesOrNo()
   val tradeNameLimitedLiabilityMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
 
-  val hasTradeNameCorporateBodyMapping = hasTradeNameKey -> yesOrNo
+  val hasTradeNameCorporateBodyMapping = hasTradeNameKey -> yesOrNo()
   val tradeNameCorporateBodyMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
 
-  val hasTradeNameUnincorporatedBodyMapping = hasTradeNameKey -> yesOrNo
+  val hasTradeNameUnincorporatedBodyMapping = hasTradeNameKey -> yesOrNo()
   val tradeNameUnincorporatedBodyMapping = tradeNameKey       -> (tradingName onlyWhen (hasTradeNameUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
-  val hasVatMapping = hasVatKey       -> yesOrNo
+  val hasVatMapping = hasVatKey       -> yesOrNo()
   val vatMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix businessPartnerSoleProprietorKey))
 
-  val hasVatPartnershipMapping = hasVatKey       -> yesOrNo
+  val hasVatPartnershipMapping = hasVatKey       -> yesOrNo()
   val vatPartnershipMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatPartnershipMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasVatUnincorporatedBodyMapping = hasVatKey       -> yesOrNo
+  val hasVatUnincorporatedBodyMapping = hasVatKey       -> yesOrNo()
   val vatUnincorporatedBodyMapping = vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
-  val hasVatSoleProprietorMapping = hasVatKey                                   -> yesOrNo
+  val hasVatSoleProprietorMapping = hasVatKey                                   -> yesOrNo()
   val vatSoleProprietorMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatSoleProprietorMapping is true withPrefix businessPartnerSoleProprietorKey))
   val uniqueTaxpayerReferenceSoleProprietorMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatSoleProprietorMapping is false withPrefix businessPartnerSoleProprietorKey))
 
-  val hasVatLimitedLiabilityMapping = hasVatKey                                   -> yesOrNo
+  val hasVatLimitedLiabilityMapping = hasVatKey                                   -> yesOrNo()
   val vatLimitedLiabilityMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatLimitedLiabilityMapping is true withPrefix businessPartnerLimitedLiabilityPartnershipKey))
   val uniqueTaxpayerReferenceLimitedLiabilityMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatLimitedLiabilityMapping is false withPrefix businessPartnerLimitedLiabilityPartnershipKey))
 
-  val hasVatCorporateBodyMapping = hasVatKey                                   -> yesOrNo
+  val hasVatCorporateBodyMapping = hasVatKey                                   -> yesOrNo()
   val vatCorporateBodyMapping = vatRegistrationKey                             -> (vatRegistrationNumber onlyWhen (hasVatCorporateBodyMapping is true withPrefix businessPartnerCorporateBodyKey))
   val uniqueTaxpayerReferenceCorporateBodyMapping = uniqueTaxpayerReferenceKey -> (uniqueTaxpayerReferenceNumber onlyWhen (hasVatCorporateBodyMapping is false withPrefix businessPartnerCorporateBodyKey))
 
-  val hasUniqueTaxpayerReferenceMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo
+  val hasUniqueTaxpayerReferenceMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo()
   val uniqueTaxpayerReferenceMapping = uniqueTaxpayerReferenceKey       -> (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceMapping is true withPrefix businessPartnerPartnershipKey))
 
-  val hasUniqueTaxpayerReferenceUnincorporatedBodyMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo
+  val hasUniqueTaxpayerReferenceUnincorporatedBodyMapping = hasUniqueTaxpayerReferenceKey -> yesOrNo()
   val uniqueTaxpayerReferenceUnincorporatedBodyMapping = uniqueTaxpayerReferenceKey       -> (uniqueTaxpayerReferenceNumber onlyWhen (hasUniqueTaxpayerReferenceUnincorporatedBodyMapping is true withPrefix businessPartnerUnincorporatedBodyKey))
 
   val addressMapping = addressKey -> address
