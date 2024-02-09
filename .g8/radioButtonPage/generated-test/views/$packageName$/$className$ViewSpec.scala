@@ -31,11 +31,11 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 class $className$ViewSpec extends ViewSpecHelper {
 
-  val view: [$className$View] = app.injector.instanceOf[$className$View]
+  val view: $className$View = app.injector.instanceOf[$className$View]
   val form: Form[$className$.Value] = $className$Form.form
 
   val backLink = "http://test.com"
-  val call = Call("GET", "/foo")
+  val call: Call = Call("GET", "/foo")
 
   object Selectors {
     val heading = "govuk-heading-l"
@@ -90,7 +90,7 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
 
       "contains a form with the correct action" in {
-        val htmlAllSelected = view(form.fill($className$.$option1key$.), call, backLink)(request, Messages, appConfig)
+        val htmlAllSelected = view(form.fill($className$.$option1key$), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
         documentAllSelected.select(Selectors.form)
@@ -112,7 +112,7 @@ class $className$ViewSpec extends ViewSpecHelper {
                   .get(index)
                 radioButtons1
                   .getElementsByClass(Selectors.radiosLabels)
-                  .text() mustBe Messages("fh.$packageName$.$className$.$option1key$.label")
+                  .text() mustBe Messages("fh.$packageName$.$className;format="decap"$.$option1key;format="decap"$.label")
                 val input = radioButtons1
                   .getElementsByClass(Selectors.radiosInput)
                 input.attr("value") mustBe radio1.toString
@@ -124,8 +124,7 @@ class $className$ViewSpec extends ViewSpecHelper {
                   .get(index)
                 radiobuttons1
                   .getElementsByClass(Selectors.radiosLabels)
-                  .text() mustBe Messages("fh.$packageName$.$className$.$option1key$.label"
-                )
+                  .text() mustBe Messages("fh.$packageName$.$className;format="decap"$.$option1key;format="decap"$.label")
                 val input = radiobuttons1
                   .getElementsByClass(Selectors.radiosInput)
                 input.attr("value") mustBe radio1.toString
