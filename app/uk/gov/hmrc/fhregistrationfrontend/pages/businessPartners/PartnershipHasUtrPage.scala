@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.HasUniqueTaxpayerReference
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.HasUniqueTaxpayerReference
 
 case class PartnershipHasUtrPage(index: Int) extends QuestionPage[HasUniqueTaxpayerReference] {
   override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString
