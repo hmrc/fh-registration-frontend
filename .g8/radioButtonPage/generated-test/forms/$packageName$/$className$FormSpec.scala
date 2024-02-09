@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$
 
+import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.FormSpecsHelper
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
@@ -11,20 +12,20 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$.Valu
 
   "$className$Form" should {
     val validData = Map(
-      "value" -> option1key,
-      "value" -> option2key
+      "value" -> $className$.Value.head.toString,
+      "value" -> $className$.Value.last.toString
     )
 
     s"accept valid form for $className$.option1key" in {
       val data = dataFromValidForm(validData)
 
-      data.value shouldBe $className$.option1key
+      data.value shouldBe $className$.Value.head
     }
 
     s"accept valid form for $className$.option2key" in {
       val data = dataFromValidForm(validData)
 
-      data.value shouldBe $className$.option2key
+      data.value shouldBe $className$.Value.last
     }
 
     "reject the form" when {

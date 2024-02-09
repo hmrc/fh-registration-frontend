@@ -45,7 +45,7 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
           reset(mockActions)
         }
 
-        s"there are userAnswers with page data for ${$className$.values.head}" in {
+        s"there are userAnswers with page data for $className$.values.head" in {
           val dataOption = $className$.values.head
           val userAnswers = UserAnswers(testUserId)
             .set($className$Page(index), dataOption)
@@ -62,7 +62,7 @@ class $className$ControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
           reset(mockActions)
         }
 
-        s"there are userAnswers with page data for ${$className$.values.last}" in {
+        s"there are userAnswers with page data for $className$.values.last" in {
           val dataOption = $className$.values.last
           val userAnswers = UserAnswers(testUserId)
             .set($className$Page(index), dataOption)

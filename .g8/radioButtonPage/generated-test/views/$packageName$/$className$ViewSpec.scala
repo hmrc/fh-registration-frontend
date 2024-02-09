@@ -91,7 +91,7 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
 
       "contains a form with the correct action" in {
-        val htmlAllSelected = view(form.fill($className;format="Camel"$), call, backLink)(request, Messages, appConfig)
+        val htmlAllSelected = view(form.fill($className$.Value.head), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
         documentAllSelected.select(Selectors.form)
