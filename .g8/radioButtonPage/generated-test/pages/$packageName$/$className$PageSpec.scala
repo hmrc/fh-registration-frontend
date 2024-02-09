@@ -9,10 +9,10 @@ class $className$PageSpec extends PageBehaviours {
 
     val pageData = $className$.Value
 
-    beRetrievable[$className$]($className$Page(1), pageData)
+    beRetrievable($className$Page(1), pageData)
 
-    beSettable[$className$]($className$Page(1), pageData)
+    beSettable($className$Page(1), pageData)
 
-    beRemovable[$className$]($className$Page(1), pageData)
+    beRemovable($className$Page(1), pageData)
   }
 }

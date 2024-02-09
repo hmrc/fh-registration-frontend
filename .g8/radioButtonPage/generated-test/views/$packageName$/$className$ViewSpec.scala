@@ -42,6 +42,10 @@ class $className$ViewSpec extends ViewSpecHelper {
     val heading = "govuk-heading-l"
     val formGroup = "govuk-form-group"
     val label = "govuk-label"
+    val radios = "govuk-radios"
+    val radiosInput = "govuk-radios__input"
+    val radiosItems = "govuk-radios__item"
+    val radiosLabels = "govuk-label govuk-radios__label"
     val errorSummaryList = "govuk-list govuk-error-summary__list"
     val button = "govuk-button"
     val form = "form"
@@ -71,20 +75,20 @@ class $className$ViewSpec extends ViewSpecHelper {
         radioItems.size() mustBe 2
       }
 
-      "include the $option1Value$ radio" in {
-        val questionItem = radioItems
+      "include the $className$.Value.head radio" in {
+        val radioItem = radioItems
           .get(0)
-        questionItem
+        radioItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$option1Value$"
+          .text() mustBe "$className$.Value.head.toString"
       }
 
-      "include the $option2Value$ field" in {
-        val questionItem = radioItems
+      "include the $className$.Value.last field" in {
+        val radioItem = radioItems
           .get(1)
-        questionItem
+        radioItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$option2Value$"
+          .text() mustBe "$className$.Value.last.toString"
       }
 
       "contain the correct button" in {
@@ -100,9 +104,46 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
     }
 
+    $className$.values.foreach { radio =>
+      val html1 = view(form.fill(radio), call, backLink)(request, Messages, appConfig)
+      val document1 = doc(html1)
+
+      s"when the form is preoccupied with " + radio.toString + "selected and has no errors" in {
+        "should have radioButtons" in {
+          val radioButtons = document1.getElementsByClass(Selectors.radiosItems)
+          $className$.values.zipWithIndex.foreach { case (radio1, index) =>
+            if (radio1.toString == radio.toString) {
+              s"that has the option to select" + radio1.toString + " and is checked" in {
+                val radioButtons1 = radioButtons
+                  .get(index)
+                radioButtons1
+                  .getElementsByClass(Selectors.radiosLabels)
+                  .text() mustBe Messages("fh.companyOfficers.$packageName$.$className;format="decap"$." + radio1.toString)
+                val input = radioButtons1
+                  .getElementsByClass(Selectors.radiosInput)
+                input.attr("value") mustBe radio1.toString
+                input.hasAttr("checked") mustBe true
+              }
+            } else {
+              s"that has the option to select " + radio1.toString + " and is unchecked" in {
+                val radiobuttons1 = radioButtons
+                  .get(index)
+                radiobuttons1
+                  .getElementsByClass(Selectors.radiosLabels)
+                  .text() mustBe Messages("fh.$packageName$.$className;format="decap"$." + radio1.toString)
+                val input = radiobuttons1
+                  .getElementsByClass(Selectors.radiosInput)
+                input.attr("value") mustBe radio1.toString
+                input.hasAttr("checked") mustBe false
+              }
+            }
+          }
+        }
+      }
+    }
+
     "value is empty" should {
-      val fieldWithError = Map("value" -> "")
-      val htmlWithErrors = view(form.bind(fieldWithError.toMap), call, backLink)(request, Messages, appConfig)
+      val htmlWithErrors = view(form.bind(Map("value" -> "")), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
 
       "have a title containing error" in {
@@ -116,8 +157,8 @@ class $className$ViewSpec extends ViewSpecHelper {
           .first()
         errorSummary
           .select("a")
-          .attr("href") mustBe "#$option1Name$"
-        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.$field1Name$.required")
+          .attr("href") mustBe "#"
+        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.required")
       }
     }
 
