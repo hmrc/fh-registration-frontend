@@ -51,11 +51,6 @@ class $className$ViewSpec extends ViewSpecHelper {
     val form = "form"
   }
 
-  val $className;format="Camel"$ = $className$("1", "2")
-  val $className;format="Camel"$JsObject = Json.toJson($className;format="Camel"$).as[JsObject].value
-  val $className;format="Camel"$Map: collection.Map[String, String] =
-  $className;format="Camel"$JsObject.map { case (fName, fValue) => fName -> fValue.toString }
-
   "View" when {
     val html = view(form, call, backLink)(request, Messages, appConfig)
     val document = doc(html)
