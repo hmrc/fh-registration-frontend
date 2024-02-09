@@ -22,6 +22,7 @@ import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import play.api.mvc.{Call, Request}
 import play.api.test.FakeRequest
+import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.fhregistrationfrontend.views.ViewSpecHelper
@@ -30,10 +31,8 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 class $className$ViewSpec extends ViewSpecHelper {
 
-  val view = app.injector.instanceOf[$className$View]
-  val form = $className$Form.form
-  //  implicit val request: Request[_] = FakeRequest()
-  //  lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  val view: [$className$View] = app.injector.instanceOf[$className$View]
+  val form: Form[$className$.Value] = $className$Form.form
 
   val backLink = "http://test.com"
   val call = Call("GET", "/foo")
@@ -70,20 +69,20 @@ class $className$ViewSpec extends ViewSpecHelper {
         radioItems.size() mustBe 2
       }
 
-      "include the $className$.Value.head radio" in {
+      "include the $className$.$option1key$ radio" in {
         val radioItem = radioItems
           .get(0)
         radioItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$className$.Value.head.toString"
+          .text() mustBe "fh.$packageName$.$className$.$option1key$.label"
       }
 
-      "include the $className$.Value.last field" in {
+      "include the $className$.$option2key$ radio" in {
         val radioItem = radioItems
           .get(1)
         radioItem
           .getElementsByClass(Selectors.label)
-          .text() mustBe "$className$.Value.last.toString"
+          .text() mustBe "fh.$packageName$.$className$.$option2key$.label"
       }
 
       "contain the correct button" in {
@@ -91,7 +90,7 @@ class $className$ViewSpec extends ViewSpecHelper {
       }
 
       "contains a form with the correct action" in {
-        val htmlAllSelected = view(form.fill($className$.Value.head), call, backLink)(request, Messages, appConfig)
+        val htmlAllSelected = view(form.fill($className$.$option1key$.), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
         documentAllSelected.select(Selectors.form)
@@ -113,7 +112,7 @@ class $className$ViewSpec extends ViewSpecHelper {
                   .get(index)
                 radioButtons1
                   .getElementsByClass(Selectors.radiosLabels)
-                  .text() mustBe Messages("fh.companyOfficers.$packageName$.$className;format="decap"$." + radio1.toString)
+                  .text() mustBe Messages("fh.$packageName$.$className$.$option1key$.label")
                 val input = radioButtons1
                   .getElementsByClass(Selectors.radiosInput)
                 input.attr("value") mustBe radio1.toString
@@ -125,7 +124,8 @@ class $className$ViewSpec extends ViewSpecHelper {
                   .get(index)
                 radiobuttons1
                   .getElementsByClass(Selectors.radiosLabels)
-                  .text() mustBe Messages("fh.$packageName$.$className;format="decap"$." + radio1.toString)
+                  .text() mustBe Messages("fh.$packageName$.$className$.$option1key$.label"
+                )
                 val input = radiobuttons1
                   .getElementsByClass(Selectors.radiosInput)
                 input.attr("value") mustBe radio1.toString
