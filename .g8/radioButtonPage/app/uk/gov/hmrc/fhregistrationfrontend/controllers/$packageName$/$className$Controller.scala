@@ -50,8 +50,15 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
 
         value => {
           val updatedAnswers = request.userAnswers.set($className$Page(index), value)
-          //Todo update startCall when doing navigation
-          updateUserAnswersAndSaveToCache(updatedAnswers, startCall, $className$Page(index))
+          //Todo update nextPage when doing navigation
+          val nextPage = if (mode == CheckMode) {
+            routes.$packageName;
+            format = "cap" $CYAController
+            .load(index)
+          } else {
+            $nextPage$
+          }
+          updateUserAnswersAndSaveToCache(updatedAnswers, $nextPage$, $className$Page(index))
         }
      )
   }

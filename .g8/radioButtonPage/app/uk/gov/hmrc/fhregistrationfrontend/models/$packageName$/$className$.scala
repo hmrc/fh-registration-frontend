@@ -15,8 +15,9 @@ object $className$ extends Enumeration {
 
   def options(implicit messages: Messages): Seq[RadioItem] = typeValues.zipWithIndex.map {
     case (value, index) =>
+      val messageKey = "fh.$packageName$.$className;format="decap"$." + value.toString + ".label"
       RadioItem(
-        content = Text(messages(s"fh.$packageName$.$className;format="decap"$.$option1key;format="lowerCase"$.label")),
+        content = Text(messages(messageKey)),
         value   = Some(value.toString),
         id      = Some(s"value_\$index")
       )
