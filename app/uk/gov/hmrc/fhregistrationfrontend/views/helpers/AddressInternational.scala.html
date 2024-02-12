@@ -46,7 +46,7 @@
             formDate(s"$fieldName.Line1").error.map{ e =>
                 ErrorMessage(
                     content = Text(message(s"fh.contact_person.$fieldName.Line1.${e.message}")),
-                    visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
+                    visuallyHiddenText = Some(message("generic.errorPrefix"))
                 )
             }
     ))
@@ -67,7 +67,7 @@
             formDate(s"$fieldName.Line2").error.map{ e =>
                 ErrorMessage(
                     content = Text(message(s"fh.contact_person.$fieldName.Line2.${e.message}")),
-                    visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
+                    visuallyHiddenText = Some(message("generic.errorPrefix"))
                 )
             }
     ))
@@ -87,7 +87,7 @@
             formDate(s"$fieldName.Line3").error.map{ e =>
                 ErrorMessage(
                     content = Text(message(s"fh.contact_person.$fieldName.Line3.${e.message}")),
-                    visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
+                    visuallyHiddenText = Some(message("generic.errorPrefix"))
                 )
             }
     ))
