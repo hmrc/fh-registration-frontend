@@ -41,13 +41,13 @@ object Mappings {
 
   def address: Mapping[Address] =
     mapping(
-      "Line1" -> addressLine,
-      "Line2" -> optional(addressLine),
-      "Line3" -> optional(addressLine),
-      "Line4" -> optional(addressLine),
-      "postcode" -> postcode,
+      "Line1"       -> addressLine,
+      "Line2"       -> optional(addressLine),
+      "Line3"       -> optional(addressLine),
+      "Line4"       -> optional(addressLine),
+      "postcode"    -> postcode,
       "countryCode" -> optional(nonEmptyText),
-      "lookupId" -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
+      "lookupId"    -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
     )(Address.apply)(Address.unapply)
 
   def postcode: Mapping[String] =
@@ -69,12 +69,12 @@ object Mappings {
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber =
-    nonEmptyText transform(value => value.replaceAll("\\s", ""), { v: String =>
+    nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
       v
     }) verifying Constraints.pattern("^[a-zA-Z0-9]{8}$".r)
 
   def companyRegistrationNumberFormatted =
-    nonEmptyText transform(value => value.trim, { v: String =>
+    nonEmptyText transform (value => value.trim, { v: String =>
       v
     })
 
@@ -120,16 +120,16 @@ object Mappings {
 
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
-      "email" -> email,
+      "email"             -> email,
       "emailConfirmation" -> of(emailConfirmationFormat)
     )(AlternativeEmail.apply)(AlternativeEmail.unapply)
 
   def internationalAddress: Mapping[InternationalAddress] =
     mapping(
-      "Line1" -> addressLine,
-      "Line2" -> optional(addressLine),
-      "Line3" -> optional(addressLine),
-      "Line4" -> addressLine,
+      "Line1"       -> addressLine,
+      "Line2"       -> optional(addressLine),
+      "Line3"       -> optional(addressLine),
+      "Line4"       -> addressLine,
       "countryCode" -> nonEmptyText
     )(InternationalAddress.apply)(InternationalAddress.unapply)
 
@@ -146,19 +146,19 @@ object Mappings {
 
   private val allDateValuesEntered: RawFormValues => ValidationResult = {
     case ("", "", "") => invalid("date.empty.error")
-    case ("", "", _) => invalid("day-and-month.missing")
-    case (_, "", "") => invalid("month-and-year.missing")
-    case ("", _, "") => invalid("day-and-year.missing")
-    case ("", _, _) => invalid("day.missing")
-    case (_, "", _) => invalid("month.missing")
-    case (_, _, "") => invalid("year.missing")
-    case _ => Valid
+    case ("", "", _)  => invalid("day-and-month.missing")
+    case (_, "", "")  => invalid("month-and-year.missing")
+    case ("", _, "")  => invalid("day-and-year.missing")
+    case ("", _, _)   => invalid("day.missing")
+    case (_, "", _)   => invalid("month.missing")
+    case (_, _, "")   => invalid("year.missing")
+    case _            => Valid
   }
 
   private val dateIsValid: RawFormValues => ValidationResult = {
-    case (d, m, y) if Try(s"$d$m$y".toInt).isFailure => invalid("date.error.invalid")
+    case (d, m, y) if Try(s"$d$m$y".toInt).isFailure         => invalid("date.error.invalid")
     case (d, m, y) if localDateFromValues(d, m, y).isFailure => invalid("date.error.invalid")
-    case _ => Valid
+    case _                                                   => Valid
   }
 
   private val dateInAllowedRange: RawFormValues => ValidationResult = {
@@ -176,9 +176,9 @@ object Mappings {
 
   def localNew =
     tuple(
-      "day" -> text,
+      "day"   -> text,
       "month" -> text,
-      "year" -> text
+      "year"  -> text
     ).transform({ case (d, m, y) => (d.trim, m.trim, y.trim) }, { v: RawFormValues =>
         v
       })
@@ -192,10 +192,10 @@ object Mappings {
 
   def localDate =
     tuple(
-      "day" -> number(min = 1, max = 31),
+      "day"   -> number(min = 1, max = 31),
       "month" -> number(min = 1, max = 12),
-      "year" -> number(min = 1800, max = 2999)
-    ) verifying("error.invalid", x => localDateTimeConstraint(x)) transform(
+      "year"  -> number(min = 1800, max = 2999)
+    ) verifying ("error.invalid", x => localDateTimeConstraint(x)) transform (
       x => localDateTime(x),
       (d: LocalDate) => (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
     )
@@ -209,12 +209,12 @@ object Mappings {
   def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
 
   def `enum`[E <: Enumeration](
-                                `enum`: E,
-                                requiredErrorKey: String = "error.required",
-                                args: Seq[String] = Nil): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
+    `enum`: E,
+    requiredErrorKey: String = "error.required",
+    args: Seq[String] = Nil): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
-    x(wrapped) verifying("error.invalid", y) transform(z, t)
+    x(wrapped) verifying ("error.invalid", y) transform (z, t)
 
   def string(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
     of(stringFormatter(errorKey, args))
@@ -226,8 +226,8 @@ object Mappings {
 
   private def y[T]: ((Boolean, Option[T])) => Boolean = {
     case (true, Some(_)) => true
-    case (false, None) => true
-    case _ => false
+    case (false, None)   => true
+    case _               => false
   }
 
   private def z[T]: ((Boolean, Option[T])) => Option[T] = {

@@ -64,7 +64,7 @@
                 errorMessage = form(formKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(Messages(s"fh.businessPartners.${e.key}.${e.message}")),
-                        visuallyHiddenText = Some(Messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(Messages("generic.errorPrefix"))
                     )
                 }
             )

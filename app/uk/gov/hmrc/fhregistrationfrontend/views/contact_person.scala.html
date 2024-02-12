@@ -155,7 +155,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(firstNameKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$firstNameKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -175,7 +175,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(lastNameKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$lastNameKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -189,11 +189,12 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                     content = HtmlContent(s"<strong>${messages("fh.contact_person.job_title.label")}</strong>")
                 ),
                 classes = "govuk-!-width-one-half",
+                autocomplete = Some("organization-title"),
                 value = contactPersonForm(jobTitleKey).value,
                 errorMessage = contactPersonForm(jobTitleKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$jobTitleKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
@@ -213,7 +214,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 errorMessage = contactPersonForm(telephoneKey).error.map{ e =>
                     ErrorMessage(
                         content = Text(messages(s"fh.contact_person.$telephoneKey.${e.message}")),
-                        visuallyHiddenText = Some(messages("fh.generic.errorPrefix"))
+                        visuallyHiddenText = Some(messages("generic.errorPrefix"))
                     )
                 }
             ))
