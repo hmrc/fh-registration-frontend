@@ -193,10 +193,11 @@
       name = jobTitleKey,
       label = Label(
         isPageHeading = false,
-        classes = "govuk-body",
-        content = HtmlContent(s"<strong>${messages("fh.contact_person.job_title.label")}</strong>")
+        classes = "govuk-label--s",
+        content = Text(messages("fh.contact_person.job_title.label"))
       ),
       classes = "govuk-!-width-one-half",
+      autocomplete = Some("organization-title"),
       value = contactPersonForm(jobTitleKey).value,
       errorMessage =
         contactPersonForm(jobTitleKey).error.map{ e =>
