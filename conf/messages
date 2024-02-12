@@ -19,6 +19,7 @@ link.back=Back
 link.printSummary=Print a copy of this summary
 printApplication.label=This application was submitted at:
 generic.errorSummary = There is a problem
+generic.errorPrefix = Error
 
 #CONFORM CORRECT BUSINESS
 confirm.legend=Is this the business you want to register?
@@ -31,7 +32,6 @@ panel.signInCorrectAccount=You will need to sign in to the correct business tax 
 # Generic messages
 fh.generic.error=There is a problem
 fh.generic.errorPrefix=Error:
-fh.generic.errorPrefix.noColon=Error
 
 fh.generic.not_found=Page not found
 fh.generic.not_found.label=This page can’t be found

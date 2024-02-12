@@ -58,7 +58,7 @@
     name = countryCodeName,
     errorMessage = if(params.hasErrors) Some(ErrorMessage(
         content = Text(params.error),
-        visuallyHiddenText = Some(message("fh.generic.errorPrefix"))
+        visuallyHiddenText = Some(message("generic.errorPrefix"))
     )) else None,
     classes = "govuk-!-width-three-quarters",
     items = Seq(
