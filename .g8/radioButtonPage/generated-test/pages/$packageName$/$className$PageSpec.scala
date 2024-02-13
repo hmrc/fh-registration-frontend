@@ -9,24 +9,24 @@ class $className$PageSpec extends PageBehaviours {
 
     "$option1key$ selected" should {
 
-      val pageData = $className$.$option1Key$
+      val pageData = $className$.$option1key$
 
-      beRetrievable[$className$]($className$Page(1), pageData)
+      beRetrievable[$className$.Value]($className$Page(1), pageData)
 
-      beSettable[$className$]($className$Page(1), pageData)
+      beSettable[$className$.Value]($className$Page(1), pageData)
 
-      beRemovable[$className$]($className$Page(1), pageData)
+      beRemovable[$className$.Value]($className$Page(1), pageData)
     }
 
     "$option2key$ selected" should {
 
-      val pageData = $className$.$option2Key$
+      val pageData = $className$.$option2key$
 
-      beRetrievable[$className$]($className$Page(1), pageData)
+      beRetrievable[$className$.Value]($className$Page(1), pageData)
 
-      beSettable[$className$]($className$Page(1), pageData)
+      beSettable[$className$.Value]($className$Page(1), pageData)
 
-      beRemovable[$className$]($className$Page(1), pageData)
+      beRemovable[$className$.Value]($className$Page(1), pageData)
     }
   }
 }

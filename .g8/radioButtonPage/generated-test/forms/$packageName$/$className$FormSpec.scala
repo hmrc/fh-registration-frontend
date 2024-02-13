@@ -17,7 +17,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$.Valu
         )
         val data = dataFromValidForm(validData)
 
-        data shouldBe $className$.$option1Key$
+        data shouldBe $className$.$option1key$
       }
 
       "$option2key$ selected" in {
@@ -26,7 +26,7 @@ class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$.Valu
         )
         val data = dataFromValidForm(validData)
 
-        data shouldBe $className$.$option2Key$
+        data shouldBe $className$.$option2key$
       }
     }
 

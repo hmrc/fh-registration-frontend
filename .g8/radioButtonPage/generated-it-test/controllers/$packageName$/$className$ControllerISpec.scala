@@ -4,6 +4,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.{convertToAnyMustWrapper, include}
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import play.api.http.HeaderNames
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.WsTestClient
@@ -17,13 +18,13 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
 
   def route(mode: Mode): Call = $packageName$.routes.$className$Controller.onPageLoad(1, mode)
 
-  val userAnswersWith$option1msg$Selected = emptyUserAnswers
-    .set[Boolean]($className$Page(1), $className$.$option1key$)
+  val userAnswersWith$option1key$Selected = emptyUserAnswers
+    .set[$className$.Value]($className$Page(1), $className$.$option1key$)
     .success
     .value
 
-  val userAnswersWith$option2msg$Selected = emptyUserAnswers
-    .set[Boolean]($className$Page(1), $className$.$option2key$)
+  val userAnswersWith$option2key$Selected = emptyUserAnswers
+    .set[$className$.Value]($className$Page(1), $className$.$option2key$)
     .success
     .value
 
@@ -145,7 +146,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
-              pageData mustBe Some(true)
+              pageData mustBe Some($className.$option1key$$)
             }
           }
         }
@@ -243,7 +244,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
             errorSummary
               .select("a")
               .attr("href") mustBe "#value"
-            errorSummary.text() mustBe "Select $option1msg$ if $className;format="decap"$"
+            errorSummary.text() mustBe "Select $className;format="decap"$"
           }
         }
       }

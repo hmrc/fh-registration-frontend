@@ -99,6 +99,10 @@ class $className$ViewSpec extends ViewSpecHelper {
               val htmlSelected = view(form.fill(selectedRadioItem), call, backLink)(request, Messages, appConfig)
               val documentSelected = doc(htmlSelected)
               val radioButtons = documentSelected.getElementsByClass(Selectors.radios)
+              val radioButton1 = radioButtons
+                .get(0)
+              val radioButton2 = radioButtons
+                .get(1)
               radioButton1
                 .getElementsByClass(Selectors.radioLables)
                 .text() mustBe "$option1msg$"
