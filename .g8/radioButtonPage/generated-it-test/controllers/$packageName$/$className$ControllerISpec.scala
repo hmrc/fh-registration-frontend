@@ -1,7 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.{convertToAnyMustWrapper, include}
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
@@ -18,15 +17,14 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
 
   def route(mode: Mode): Call = $packageName$.routes.$className$Controller.onPageLoad(1, mode)
 
+  val userAnswersWith$option1msg$Selected = emptyUserAnswers
+    .set[Boolean]($className$Page(1), $className$.$option1key$)
+    .success
+    .value
 
-  val $className;
-  format = "decap" $ = $className$("test1", "test2")
-
-  val userAnswersWithPageData = emptyUserAnswers
-    .set[$className$]($className$Page(1), $className;
-  format = "decap" $
-  )
-.success
+  val userAnswersWith$option2msg$Selected = emptyUserAnswers
+    .set[Boolean]($className$Page(1), $className$.$option2key$)
+    .success
     .value
 
   List(NormalMode, CheckMode).foreach { mode =>
@@ -47,47 +45,69 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               val page = Jsoup.parse(res.body)
               page.title must include("$title$")
               val radioInputs = page.getElementsByClass("govuk-radios__input")
-              radioInputs.size() mustBe $className$.values.size
-
-              $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-                radioInputs.get(index1).attr("value") mustBe radio1.toString
-                radioInputs.get(index1).hasAttr("checked") mustBe false
-              }
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe false
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe false
             }
           }
         }
       }
 
-      $className$.values.zipWithIndex.foreach { case (radio, index) =>
-        s"when the userAnswers contains data for the page with " + radio.toString + " selected" should {
-          s"return OK and render the page with " + radio.toString + " radio checked" in {
-            given
-              .commonPrecondition
+      "the userAnswers contains data with $option1msg$ selected" should {
+        "return OK and render the $className$ page with data populated" in {
+          given
+            .commonPrecondition
 
-            addUserAnswersToSession(userAnswersWithPageData)
+          addUserAnswersToSession(userAnswersWith$option1key$Selected)
 
-            WsTestClient.withClient { client =>
-              val result1 = buildRequestFromRoute(route(mode))
-                .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+          WsTestClient.withClient { client =>
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-              whenReady(result1) { res =>
-                res.status mustBe 200
-                val page = Jsoup.parse(res.body)
-                page.title must include("$title$")
-                val radioInputs = page.getElementsByClass("govuk-radios__input")
-                radioInputs.size() mustBe $className$.values.size
-
-                $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-                  radioInputs.get(index1).attr("value") mustBe radio1.toString
-                  radioInputs.get(index1).hasAttr("checked") mustBe index == index1
-                }
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include("$title$")
+              val radioInputs = page.getElementsByClass("govuk-radios__input")
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe true
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe false
             }
           }
         }
       }
 
-      "there are no user answers in the database" should {
+      "the userAnswers contains data with $option2key$ selected" should {
+        "return OK and render the $className$ page with data populated" in {
+          given
+            .commonPrecondition
+
+          addUserAnswersToSession(userAnswersWith$option2key$Selected)
+
+          WsTestClient.withClient { client =>
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+
+            whenReady(result1) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include("$title$")
+              val radioInputs = page.getElementsByClass("govuk-radios__input")
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe false
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe true
+            }
+          }
+        }
+      }
+
+      "there is no user answers in the database" should {
         "redirect to the start" in {
           given.commonPrecondition
           val result = buildRequestFromRoute(route(mode))
@@ -102,14 +122,12 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
     }
 
     s"POST" + route(mode).url when {
-      "the user populates answers all questions" should {
-        val expectedUrl = if (mode == CheckMode) {
-          $packageName$.routes.$packageName;
-          format = "cap" $CYAController
-        .load(1).url
-        } else {
-          $nextPage$.url.replace("/fhdds", "")
-        }
+      val expectedUrl = if (mode == CheckMode) {
+        $packageName$.routes.$packageName;format="cap"$CYAController.load(1).url
+      } else {
+        $nextPage$.url.replace("/fhdds", "")
+      }
+      "the user selects $option1key$" should {
         s"update the user answers with the new values and redirect to" + expectedUrl when {
           "the user answers contain no page data" in {
             given.commonPrecondition
@@ -120,14 +138,14 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
                 DefaultWSCookie("mdtp", authAndSessionCookie)
               )
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map("value" -> radio.toString))
+              .post(Map("value" -> Seq("$option1key$")))
 
-            whenReady(result) { res =>
+            whenReady(result1) { res =>
               res.status mustBe 303
               res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
-              pageData mustBe Some(radio)
+              pageData mustBe Some(true)
             }
           }
         }
@@ -136,26 +154,73 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
           "the user answers contains page data" in {
             given.commonPrecondition
 
-            addUserAnswersToSession(userAnswersWithPageData)
+            addUserAnswersToSession(userAnswersWith$option2key$Selected)
             val result1 = buildRequestFromRoute(route(mode))
               .addCookies(
                 DefaultWSCookie("mdtp", authAndSessionCookie)
               )
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map("value" -> radio.toString))
+              .post(Map("value" -> Seq("$option1key$")))
 
             whenReady(result1) { res =>
               res.status mustBe 303
               res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
-              pageData mustBe Some(radio)
+              pageData mustBe Some($className$.$option1key$)
             }
           }
         }
       }
+
+      "the user selects $option2key$" should {
+        s"update the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contain no page data" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(emptyUserAnswers)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option2key$")))
+
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option2key$)
+            }
+          }
+        }
+
+        s"override the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contains page data" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(userAnswersWith$option1key$Selected)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option2key$")))
+
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option2key$)
+            }
+          }
+        }
+      }
+
       "should return 400 with required error" when {
-        "no questions are answered" in {
+        "the yes or no is not answered" in {
           given.commonPrecondition
 
           addUserAnswersToSession(emptyUserAnswers)
@@ -164,7 +229,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               DefaultWSCookie("mdtp", authAndSessionCookie)
             )
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map("value" -> ""))
+            .post(Map("value" -> Seq("")))
 
 
           whenReady(result1) { res =>
@@ -177,8 +242,8 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
             val errorSummary = errorSummaryList.get(0)
             errorSummary
               .select("a")
-              .attr("href") mustBe "#value_0"
-            errorSummary.text() mustBe "Select an option"
+              .attr("href") mustBe "#value"
+            errorSummary.text() mustBe "Select $option1msg$ if $className;format="decap"$"
           }
         }
       }

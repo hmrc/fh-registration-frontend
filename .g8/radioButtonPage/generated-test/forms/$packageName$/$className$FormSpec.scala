@@ -7,29 +7,32 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class $className$FormSpec extends UnitSpec with FormSpecsHelper[$className$.Value] {
 
-  val form: Form[$className$.Value] = $className$Form.form
+  val form = $className$Form.form
 
   "$className$Form" should {
-    val validData = Map(
-      "value" -> $className$.$option1key$.toString,
-      "value" -> $className$.$option2key$.toString
-    )
+    "accept valid form" when {
+      "$option1key$ selected" in {
+        val validData = Map(
+          "value" -> "$option1key$"
+        )
+        val data = dataFromValidForm(validData)
 
-    s"accept valid form for $className$.$option1key$" in {
-      val data = dataFromValidForm(validData)
+        data shouldBe $className$.$option1Key$
+      }
 
-      data.value shouldBe $className$.$option1key$
-    }
+      "$option2key$ selected" in {
+        val validData = Map(
+          "value" -> "$option2key$"
+        )
+        val data = dataFromValidForm(validData)
 
-    s"accept valid form for $className$.$option2key$" in {
-      val data = dataFromValidForm(validData)
-
-      data.value shouldBe $className$.$option2key$
+        data shouldBe $className$.$option2Key$
+      }
     }
 
     "reject the form" when {
-      val errorPath = "fh.$packageName$.$className;format="decap"$.error."
-      def requiredKey = errorPath + "required"
+      val requiredKey = "fh.$packageName$.$className;format="
+      decap"$.error.required"
 
       "value is empty" in {
         val invalidData = Map(

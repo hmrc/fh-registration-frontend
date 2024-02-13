@@ -4,7 +4,7 @@ import uk.gov.hmrc.fhregistrationfrontend.controllers.{AppController, CommonPlay
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form.form
-import models.Mode
+import models.{CheckMode, Mode}
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
 import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
@@ -58,7 +58,7 @@ class $className$Controller @Inject()(ds: CommonPlayDependencies,
           } else {
             $nextPage$
           }
-          updateUserAnswersAndSaveToCache(updatedAnswers, $nextPage$, $className$Page(index))
+          updateUserAnswersAndSaveToCache(updatedAnswers, nextPage, $className$Page(index))
         }
      )
   }

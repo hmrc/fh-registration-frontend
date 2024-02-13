@@ -7,19 +7,26 @@ class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" when {
 
-    val pageDataOption1 = $className$.values.head
-    val pageDataOption2 = $className$.values.last
+    "$option1key$ selected" should {
 
-    beRetrievable($className$Page(1), pageDataOption1)
+      val pageData = $className$.$option1Key$
 
-    beSettable($className$Page(1), pageDataOption1)
+      beRetrievable[$className$]($className$Page(1), pageData)
 
-    beRemovable($className$Page(1), pageDataOption1)
+      beSettable[$className$]($className$Page(1), pageData)
 
-    beRetrievable($className$Page(1), pageDataOption2)
+      beRemovable[$className$]($className$Page(1), pageData)
+    }
 
-    beSettable($className$Page(1), pageDataOption2)
+    "$option2key$ selected" should {
 
-    beRemovable($className$Page(1), pageDataOption2)
+      val pageData = $className$.$option2Key$
+
+      beRetrievable[$className$]($className$Page(1), pageData)
+
+      beSettable[$className$]($className$Page(1), pageData)
+
+      beRemovable[$className$]($className$Page(1), pageData)
+    }
   }
 }

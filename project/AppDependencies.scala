@@ -5,20 +5,20 @@ object AppDependencies {
   import play.core.PlayVersion
 
   val monocleVersion = "2.1.0"
-  val bootstrapVersion = "8.4.0"
+  val bootstrapVersion = "7.12.0"
   val playVersion = "play-28"
-  val hmrcMongoVersion = "1.7.0"
+  val hmrcMongoVersion = "1.3.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc" %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-    "uk.gov.hmrc" %% "play-frontend-hmrc" % s"7.29.0-$playVersion",
-    "uk.gov.hmrc" %% "govuk-template" % "5.80.0-play-28",
-    "uk.gov.hmrc" %% "play-ui" % "9.12.0-play-28",
-    "uk.gov.hmrc" %% "play-partials" % "8.4.0-play-28",
-    "uk.gov.hmrc" %% "play-hmrc-api" % "7.2.0-play-28",
+    "uk.gov.hmrc" %% "play-frontend-hmrc" % s"7.4.0-$playVersion",
+    "uk.gov.hmrc" %% "govuk-template" % "5.78.0-play-28",
+    "uk.gov.hmrc" %% "play-ui" % "9.11.0-play-28",
+    "uk.gov.hmrc" %% "play-partials" % "8.3.0-play-28",
+    "uk.gov.hmrc" %% "play-hmrc-api" % "7.1.0-play-28",
     "uk.gov.hmrc" %% "http-caching-client" % "10.0.0-play-28",
-    "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.13.0-play-28",
+    "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.12.0-play-28",
     "com.typesafe.play" %% "play-json" % "2.9.4",
     "org.typelevel" %% "cats-core" % "2.9.0",
     "org.typelevel" %% "cats-kernel" % "2.9.0",
@@ -29,7 +29,7 @@ object AppDependencies {
     "org.mindrot" % "jbcrypt" % "0.4",
     "com.eclipsesource" %% "play-json-schema-validator" % "0.9.5",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion" % hmrcMongoVersion,
-    "uk.gov.hmrc" %% s"crypto-json-$playVersion" % "7.6.0",
+    "uk.gov.hmrc" %% s"crypto-json-$playVersion" % "7.3.0",
 
     compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
     "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full
