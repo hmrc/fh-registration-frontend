@@ -146,7 +146,7 @@ class $className$ControllerISpec extends Specifications with TestConfiguration {
               res.header(HeaderNames.LOCATION).get must include(expectedUrl)
               val userAnswers = getUserAnswersFromSession.get
               val pageData = userAnswers.get($className$Page(1))
-              pageData mustBe Some($className.$option1key$)
+              pageData mustBe Some($className$.$option1key$)
             }
           }
         }
