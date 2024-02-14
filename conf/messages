@@ -357,6 +357,7 @@ fh.vat_registration.confirm.label=Does the business have a UK VAT registration n
 fh.vatNumber_yesNo.error.required=Select whether the business has a VAT registration number
 fh.vatNumber.label=VAT registration number
 fh.vatNumber.hintText=For example, 123456789
+fh.vatNumber.guided.hintText=This is 9 numbers, sometimes with ‘GB’ at the start, for example 123456789 or GB123456789. You can find it on your VAT registration certificate.
 fh.vatNumber_value.error.required=Enter the VAT registration number
 fh.vatNumber_value.error.pattern=Enter a valid UK VAT registration number
 

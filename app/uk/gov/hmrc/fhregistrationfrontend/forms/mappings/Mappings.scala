@@ -78,7 +78,10 @@ object Mappings {
       v
     })
 
-  def vatRegistrationNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{9}$".r)
+  def vatRegistrationNumber =
+    nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
+      v
+    }) verifying Constraints.pattern("^[a-zA-Z]{2}[0-9]{9}|[0-9]{9}$".r)
 
   def companyName =
     nonEmptyText verifying Constraints.pattern(

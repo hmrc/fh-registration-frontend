@@ -57,7 +57,7 @@
     yesNoError = Messages("fh.vatNumber_yesNo.error.required"),
     valueLabel = Messages("fh.vatNumber.label"),
     valueError = Messages("fh.businessPartnerPartnership.vat_value." + businessPartnerForm(s"$businessPartnerPartnershipKey.$vatRegistrationKey").error.fold("")(_.message)),
-    valueHintText = Some(Messages("fh.vatNumber.hintText")),
+    valueHintText = Some(Messages("fh.vatNumber.guided.hintText")),
     hasErrors = businessPartnerForm(s"$businessPartnerPartnershipKey.$hasVatKey").hasErrors,
     hasValueError= businessPartnerForm(s"$businessPartnerPartnershipKey.$vatRegistrationKey").hasErrors
   )
