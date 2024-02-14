@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.PartnerName
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.PartnerName
 
 case class IndividualsAndSoleProprietorsPartnerNamePage(index: Int) extends QuestionPage[PartnerName] {
 

@@ -60,7 +60,7 @@ company_officers.yes_no_conditional(companyOfficersForm, s"$companyIdentificatio
 }
 
 @VATinput = @{
-company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.hintText"))
+company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.guided.hintText"))
 }
 
 @compRegNoInput = @{

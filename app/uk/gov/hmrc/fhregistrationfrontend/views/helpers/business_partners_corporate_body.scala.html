@@ -88,6 +88,7 @@
       TextInputParams(
         name = s"$businessPartnerCorporateBodyKey.$vatRegistrationKey",
         label = Messages("fh.vatNumber.label"),
+        hintText = Some(Messages("fh.vatNumber.guided.hintText")),
         value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").value,
         hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").hasErrors,
         error = Messages("fh.businessPartnerCorporateBody.vat_value." + businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").error.fold("")(_.message))

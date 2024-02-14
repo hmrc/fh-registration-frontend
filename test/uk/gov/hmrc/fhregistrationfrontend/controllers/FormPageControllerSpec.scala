@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
 

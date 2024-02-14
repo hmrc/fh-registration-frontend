@@ -17,9 +17,9 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping.data
 
 import java.time.LocalDate
-
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.{Added, Updated}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 
 object PartnershipLargeIntNew {
   def application(changeFlags: ListWithTrackedChanges.Status = Added) =
