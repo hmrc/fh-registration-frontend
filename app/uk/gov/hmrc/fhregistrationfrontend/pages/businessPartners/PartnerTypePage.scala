@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerType, PartnerName}
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType.BusinessPartnerTypes
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.{BusinessPartnerType, PartnerName}
 
 case class PartnerTypePage(index: Int) extends QuestionPage[BusinessPartnerType.Value] {
 

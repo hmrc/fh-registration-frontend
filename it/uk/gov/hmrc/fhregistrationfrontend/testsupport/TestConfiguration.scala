@@ -14,8 +14,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.mvc.{Call, CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType.BusinessPartnerTypes
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType.BusinessPartnerTypes
 import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
@@ -30,6 +29,8 @@ import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
+
 trait TestConfiguration
   extends GuiceOneServerPerSuite
     with IntegrationPatience

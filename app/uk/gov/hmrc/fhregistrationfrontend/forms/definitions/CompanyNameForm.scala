@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{companyName => companyNameValidation}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.companyNameModel
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.CompanyName
 
 object CompanyNameForm {
 

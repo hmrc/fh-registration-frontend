@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import uk.gov.hmrc.crypto.json.CryptoFormats
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.Utr
 
 import java.time.Instant
 import scala.util.{Failure, Success, Try}

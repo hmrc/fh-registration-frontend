@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Utr
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.Utr
 
 case class SoleProprietorUtrPage(index: Int) extends QuestionPage[Utr] {
   override def path: JsPath = JsPath \ "businessPartners" \ index.toString \ toString

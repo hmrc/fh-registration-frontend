@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.businessPartners.BusinessPartnersChooseAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ChooseAddress, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec

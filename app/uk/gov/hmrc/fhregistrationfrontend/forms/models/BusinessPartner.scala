@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartnerType._
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType._
 
 case class BusinessPartner(
   businessPartnerType: BusinessPartnerTypes,
