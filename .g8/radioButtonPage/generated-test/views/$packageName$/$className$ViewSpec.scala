@@ -14,32 +14,35 @@
  * limitations under the License.
  */
 
-package views.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.views.$packageName$
 
-import controllers.$packageName$.routes
-import forms.$packageName$.$className$FormProvider
-import models.{CheckMode, NormalMode}
-import play.api.i18n.Messages
-import play.api.mvc.Request
+import uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$.routes
+import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form
+import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
+import play.api.mvc.{Call, Request}
 import play.api.test.FakeRequest
-import views.html.$packageName$.$className$View
+import play.api.data.Form
+import uk.gov.hmrc.fhregistrationfrontend.views.html.$packageName$.v2.$className$View
+import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.fhregistrationfrontend.views.ViewSpecHelper
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
-import models.$packageName$.$className$
-import views.ViewSpecHelper
+
 class $className$ViewSpec extends ViewSpecHelper {
 
-  val view = application.injector.instanceOf[$className$View]
-  val formProvider = new $className$FormProvider
-  val form = formProvider.apply()
-  implicit val request: Request[_] = FakeRequest()
+  val view: $className$View = app.injector.instanceOf[$className$View]
+  val form: Form[$className$.Value] = $className$Form.form
+
+  val backLink = "http://test.com"
+  val call: Call = Call("GET", "/foo")
 
   object Selectors {
     val heading = "govuk-fieldset__heading"
     val legend = "govuk-fieldset__legend  govuk-fieldset__legend--l"
-    val radios = "govuk-radios"
-    val radiosInput = "govuk-radios__input"
-    val radiosItems = "govuk-radios__item"
-    val radiosLables = "govuk-label govuk-radios__label"
+    val radios = "govuk-radios__item"
+    val radioInput = "govuk-radios__input"
+    val radioLables = "govuk-label govuk-radios__label"
     val body = "govuk-body"
     val errorSummaryTitle = "govuk-error-summary__title"
     val errorSummaryList = "govuk-list govuk-error-summary__list"
@@ -47,127 +50,118 @@ class $className$ViewSpec extends ViewSpecHelper {
     val form = "form"
   }
 
-  "View" - {
-    val html = view(form, NormalMode)(request, messages(application))
+  "View" when {
+    val html = view(form, call, backLink)(request, Messages, appConfig)
     val document = doc(html)
-    "should contain the expected title" in {
-      document.title() must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-    }
+    "the form is valid" should {
+      "contain the expected title" in {
+        document.title() must include("$title$")
+      }
 
-    "should include a legend with the expected heading" in {
-      val legend = document.getElementsByClass(Selectors.legend)
-      legend.size() mustBe 1
-      legend.get(0).getElementsByClass(Selectors.heading).text() mustEqual Messages("$packageName$.$className;format="decap"$" + ".heading")
-    }
+      "have the expected heading" in {
+        //Todo update with capture
+        val expectedHeader = "this is for: $packageName$ testRadios"
+        document.getElementsByClass(Selectors.heading).text() mustEqual expectedHeader
+      }
 
-    "when the form is not preoccupied and has no errors" - {
-
-      "should include the expected radio buttons" - {
-        val radiobuttons = document.getElementsByClass(Selectors.radiosItems)
-
-        "that has 2 items" in {
-          radiobuttons.size() mustBe $className$.values.size
-        }
-        $className$.values.zipWithIndex.foreach { case (radio, index) =>
-          s"that has the " + radio.toString + " to select and is unchecked" in {
-            val radio1 = radiobuttons
-              .get(index)
-            radio1
-              .getElementsByClass(Selectors.radiosLables)
-              .text() mustBe Messages("$packageName$.$className;format="decap"$." + radio.toString)
-            val input = radio1
-              .getElementsByClass(Selectors.radiosInput)
-            input.attr("value") mustBe radio.toString
-            input.hasAttr("checked") mustBe false
+      "have the expected radio buttons" that {
+        "are all unchecked" when {
+          val radioButtons = document.getElementsByClass(Selectors.radios)
+          "the form is empty" in {
+            val radioButton1 = radioButtons
+              .get(0)
+            val radioButton2 = radioButtons
+              .get(1)
+            radioButton1
+              .getElementsByClass(Selectors.radioLables)
+              .text() mustBe "$option1msg$"
+            radioButton2
+              .getElementsByClass(Selectors.radioLables)
+              .text() mustBe "$option2msg$"
+            radioButton1
+              .getElementsByClass(Selectors.radioInput)
+              .attr("value") mustBe "$option1key$"
+            radioButton2
+              .getElementsByClass(Selectors.radioInput)
+              .attr("value") mustBe "$option2key$"
+            radioButton1
+              .getElementsByClass(Selectors.radioInput)
+              .hasAttr("checked") mustBe false
+            radioButton2
+              .getElementsByClass(Selectors.radioInput)
+              .hasAttr("checked") mustBe false
           }
         }
-      }
-    }
 
-    $className$.values.foreach { radio =>
-      val html1 = view(form.fill(radio), NormalMode)(request, messages(application))
-      val document1 = doc(html1)
-
-      s"when the form is preoccupied with " + radio.toString + "selected and has no errors" - {
-        "should have radiobuttons" - {
-          val radiobuttons = document1.getElementsByClass(Selectors.radiosItems)
-          $className$.values.zipWithIndex.foreach { case (radio1, index) =>
-            if (radio1.toString == radio.toString) {
-              s"that has the option to select" + radio1.toString + " and is checked" in {
-                val radiobuttons1 = radiobuttons
-                  .get(index)
-                radiobuttons1
-                  .getElementsByClass(Selectors.radiosLables)
-                  .text() mustBe Messages("$packageName$.$className;format="decap"$." + radio1.toString)
-                val input = radiobuttons1
-                  .getElementsByClass(Selectors.radiosInput)
-                input.attr("value") mustBe radio1.toString
-                input.hasAttr("checked") mustBe true
-              }
-            } else {
-              s"that has the option to select " + radio1.toString + " and is unchecked" in {
-                val radiobuttons1 = radiobuttons
-                  .get(index)
-                radiobuttons1
-                  .getElementsByClass(Selectors.radiosLables)
-                  .text() mustBe Messages("$packageName$.$className;format="decap"$." + radio1.toString)
-                val input = radiobuttons1
-                  .getElementsByClass(Selectors.radiosInput)
-                input.attr("value") mustBe radio1.toString
-                input.hasAttr("checked") mustBe false
-              }
+        $className$.values.foreach { selectedRadioItem =>
+          "has " + selectedRadioItem.toString + "checked" when {
+            "the form is prepopulated with " + selectedRadioItem.toString in {
+              val htmlSelected = view(form.fill(selectedRadioItem), call, backLink)(request, Messages, appConfig)
+              val documentSelected = doc(htmlSelected)
+              val radioButtons = documentSelected.getElementsByClass(Selectors.radios)
+              val radioButton1 = radioButtons
+                .get(0)
+              val radioButton2 = radioButtons
+                .get(1)
+              radioButton1
+                .getElementsByClass(Selectors.radioLables)
+                .text() mustBe "$option1msg$"
+              radioButton2
+                .getElementsByClass(Selectors.radioLables)
+                .text() mustBe "$option2msg$"
+              radioButton1
+                .getElementsByClass(Selectors.radioInput)
+                .attr("value") mustBe "$option1key$"
+              radioButton2
+                .getElementsByClass(Selectors.radioInput)
+                .attr("value") mustBe "$option2key$"
+              radioButton1
+                .getElementsByClass(Selectors.radioInput)
+                .hasAttr("checked") mustBe selectedRadioItem.toString == "$option1key$"
+              radioButton2
+                .getElementsByClass(Selectors.radioInput)
+                .hasAttr("checked") mustBe selectedRadioItem.toString == "$option2key$"
             }
           }
         }
       }
-    }
 
-    "contain the correct button" - {
-      document.getElementsByClass(Selectors.button).text() mustBe Messages("site.continue")
-    }
-
-    "contains a form with the correct action" - {
-      "when in CheckMode" in {
-        val htmlAllSelected = view(form.fill($className$.values.head), CheckMode)(request, messages(application))
-        val documentAllSelected = doc(htmlAllSelected)
-
-        documentAllSelected.select(Selectors.form)
-          .attr("action") mustEqual routes.$className$Controller.onSubmit(CheckMode).url
+      "contain the correct button" in {
+        document.getElementsByClass(Selectors.button).text() mustBe "Save and continue"
       }
 
-      "when in NormalMode" in {
-        val htmlAllSelected = view(form.fill($className$.values.head), NormalMode)(request, messages(application))
+      "contains a form with the correct action" in {
+        val htmlAllSelected = view(form.fill(TestRadios.option1), call, backLink)(request, Messages, appConfig)
         val documentAllSelected = doc(htmlAllSelected)
 
-        documentAllSelected.select(Selectors.form)
-          .attr("action") mustEqual routes.$className$Controller.onSubmit(NormalMode).url
+        documentAllSelected
+          .select(Selectors.form)
+          .attr("action") mustEqual call.url
       }
     }
 
-    "when there are form errors" - {
-      val htmlWithErrors = view(form.bind(Map("value" -> "")), NormalMode)(request, messages(application))
+    "form errors exist" should {
+      val htmlWithErrors = view(form.bind(Map("value" -> "")), call, backLink)(request, Messages, appConfig)
       val documentWithErrors = doc(htmlWithErrors)
 
-      "should have a title containing error" in {
-        val titleMessage = Messages("$packageName$.$className;format="decap"$.title")
-        documentWithErrors.title must include("Error: " + titleMessage)
+      "have a title containing error" in {
+        documentWithErrors.title must include("Error: $title$")
       }
 
-      "contains a message that links to field with error" in {
+      "have a error summary" in {
         val errorSummary = documentWithErrors
           .getElementsByClass(Selectors.errorSummaryList)
           .first()
         errorSummary
           .select("a")
-          .attr("href") mustBe "#value_0"
-        errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$.error.required")
+          .attr("href") mustBe "#value"
+        errorSummary.text() mustBe Messages("fh.$packageName$.$className;format="decap"$.error.required")
       }
     }
 
-    testBackLink(document)
+    testBackLink(document, backLink)
     validateTimeoutDialog(document)
     validateTechnicalHelpLinkPresent(document)
     validateAccessibilityStatementLinkPresent(document)
   }
-
 }
