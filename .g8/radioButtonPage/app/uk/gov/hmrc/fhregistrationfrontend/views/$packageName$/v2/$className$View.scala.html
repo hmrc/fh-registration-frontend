@@ -4,11 +4,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.companyOfficers.v2.CompanyOfficersHeaderWithCaption
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(
     layout: layout,
     viewHelpers: ViewHelpers
-)
+    )
 
 @(form: Form[$className$.Value], postAction: Call, backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -36,12 +37,12 @@
             @viewHelpers.govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @Html(CompanyOfficersHeaderWithCaption(heading))
-
         @viewHelpers.govUkRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("fh.$packageName$.$className;format="decap"$.heading")).asPageHeading(),
+                legend = LegendViewModel(
+                    HtmlContent(Html(CompanyOfficersHeaderWithCaption(heading)))
+                    ).asPageHeading(),
                 items  = $className$.options
             )
         )

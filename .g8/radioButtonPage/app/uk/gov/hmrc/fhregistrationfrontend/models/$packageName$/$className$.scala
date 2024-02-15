@@ -7,16 +7,17 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
 object $className$ extends Enumeration {
 
-  val $option1key;format="Camel"$, $option2key;format="Camel"$ = Value
+  val $option1key$, $option2key$ = Value
 
   val typeValues: Seq[$className$.Value] = Seq(
-    $option1key;format="Camel"$, $option2key;format="Camel"$
+    $option1key$, $option2key$
   )
 
   def options(implicit messages: Messages): Seq[RadioItem] = typeValues.zipWithIndex.map {
     case (value, index) =>
+      val messageKey = "fh.$packageName$.$className;format="decap"$." + value.toString + ".label"
       RadioItem(
-        content = Text(messages(s"fh.$packageName$.$className;format="decap"$.\${value.toString}")),
+        content = Text(messages(messageKey)),
         value   = Some(value.toString),
         id      = Some(s"value_\$index")
       )

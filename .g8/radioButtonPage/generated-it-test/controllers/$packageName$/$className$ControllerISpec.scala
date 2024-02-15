@@ -1,300 +1,253 @@
-package controllers.$packageName$
+package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
-import controllers.ControllerITTestHelper
-import models.SelectChange.$packageName;format="cap"$
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.{convertToAnyMustWrapper, include}
-import pages.$packageName$.$className$Page
+import uk.gov.hmrc.fhregistrationfrontend.pages.$packageName$.$className$Page
+import uk.gov.hmrc.fhregistrationfrontend.models.$packageName$.$className$
 import play.api.http.HeaderNames
-import play.api.i18n.Messages
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.WsTestClient
-import models.$packageName$.$className$
+import uk.gov.hmrc.fhregistrationfrontend.controllers._
+import models.{CheckMode, Mode, NormalMode}
+import play.api.mvc.Call
+import play.api.libs.ws.DefaultWSCookie
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 
-class $className$ControllerISpec extends ControllerITTestHelper {
+class $className$ControllerISpec extends Specifications with TestConfiguration {
 
-  val normalRoutePath = "/$url$"
-  val checkRoutePath = "/change-$url$"
+  def route(mode: Mode): Call = $packageName$.routes.$className$Controller.onPageLoad(1, mode)
 
-  "GET " + normalRoutePath - {
-    "when the userAnswers contains no data" - {
-      "should return OK and render the $className$ page with no data populated" in {
-        given
-          .commonPrecondition
+  val userAnswersWith$option1key$Selected = emptyUserAnswers
+    .set[$className$.Value]($className$Page(1), $className$.$option1key$)
+    .success
+    .value
 
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
+  val userAnswersWith$option2key$Selected = emptyUserAnswers
+    .set[$className$.Value]($className$Page(1), $className$.$option2key$)
+    .success
+    .value
 
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + normalRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val radioInputs = page.getElementsByClass("govuk-radios__input")
-            radioInputs.size() mustBe $className$.values.size
-
-            $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-              radioInputs.get(index1).attr("value") mustBe radio1.toString
-              radioInputs.get(index1).hasAttr("checked") mustBe false
-            }
-          }
-        }
-      }
-    }
-
-    $className$.values.zipWithIndex.foreach { case (radio, index) =>
-      s"when the userAnswers contains data for the page with " + radio.toString + " selected" - {
-        s"should return OK and render the page with " + radio.toString + " radio checked" in {
+  List(NormalMode, CheckMode).foreach { mode =>
+    s"GET" + route(mode).url when {
+      "the userAnswers contains no data" should {
+        "return OK and render the $className$ page with no data populated" in {
           given
             .commonPrecondition
 
-          val userAnswers = emptyUserAnswersFor$packageName;format="cap"$.set($className$Page, radio).success.value
-
-          setAnswers(userAnswers)
+          addUserAnswersToSession(emptyUserAnswers)
 
           WsTestClient.withClient { client =>
-            val result1 = createClientRequestGet(client, $packageName$BaseUrl + normalRoutePath)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
             whenReady(result1) { res =>
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
-              page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
+              page.title must include("$title$")
               val radioInputs = page.getElementsByClass("govuk-radios__input")
-              radioInputs.size() mustBe $className$.values.size
-
-              $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-                radioInputs.get(index1).attr("value") mustBe radio1.toString
-                radioInputs.get(index1).hasAttr("checked") mustBe index == index1
-              }
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe false
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe false
             }
           }
         }
       }
-    }
-    testUnauthorisedUser($packageName$BaseUrl + normalRoutePath)
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + normalRoutePath)
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + normalRoutePath)
-  }
 
-  s"GET " + checkRoutePath - {
-    "when the userAnswers contains no data" - {
-      "should return OK and render the $className$ page with no data populated" in {
-        given
-          .commonPrecondition
-
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-
-        WsTestClient.withClient { client =>
-          val result1 = createClientRequestGet(client, $packageName$BaseUrl + checkRoutePath)
-
-          whenReady(result1) { res =>
-            res.status mustBe 200
-            val page = Jsoup.parse(res.body)
-            page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val radioInputs = page.getElementsByClass("govuk-radios__input")
-            radioInputs.size() mustBe $className$.values.size
-
-            $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-              radioInputs.get(index1).attr("value") mustBe radio1.toString
-              radioInputs.get(index1).hasAttr("checked") mustBe false
-            }
-          }
-        }
-      }
-    }
-
-    $className$.values.zipWithIndex.foreach { case (radio, index) =>
-      s"when the userAnswers contains data for the page with " + radio.toString + " selected" - {
-        s"should return OK and render the page with " + radio.toString + " radio checked" in {
+      "the userAnswers contains data with $option1msg$ selected" should {
+        "return OK and render the $className$ page with data populated" in {
           given
             .commonPrecondition
 
-          val userAnswers = emptyUserAnswersFor$packageName;format="cap"$.set($className$Page, radio).success.value
-
-
-          setAnswers(userAnswers)
+          addUserAnswersToSession(userAnswersWith$option1key$Selected)
 
           WsTestClient.withClient { client =>
-            val result1 = createClientRequestGet(client, $packageName$BaseUrl + checkRoutePath)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
             whenReady(result1) { res =>
               res.status mustBe 200
               val page = Jsoup.parse(res.body)
-              page.title must include(Messages("$packageName$.$className;format="decap"$" + ".title"))
+              page.title must include("$title$")
               val radioInputs = page.getElementsByClass("govuk-radios__input")
-              radioInputs.size() mustBe $className$.values.size
-
-              $className$.values.zipWithIndex.foreach { case (radio1, index1) =>
-                radioInputs.get(index1).attr("value") mustBe radio1.toString
-                radioInputs.get(index1).hasAttr("checked") mustBe index == index1
-              }
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe true
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe false
             }
           }
         }
       }
-    }
-    testUnauthorisedUser($packageName$BaseUrl + checkRoutePath)
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + checkRoutePath)
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + checkRoutePath)
 
-  }
+      "the userAnswers contains data with $option2key$ selected" should {
+        "return OK and render the $className$ page with data populated" in {
+          given
+            .commonPrecondition
 
-  s"POST " + normalRoutePath - {
-    $className$.values.foreach { case radio =>
-      "when the user selects " + radio.toString - {
-        "should update the session with the new value and redirect to the index controller" - {
-          "when the session contains no data for page" in {
-            given
-              .commonPrecondition
+          addUserAnswersToSession(userAnswersWith$option2key$Selected)
 
-            setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-            WsTestClient.withClient { client =>
-              val result = createClientRequestPOST(
-                client, $packageName$BaseUrl + normalRoutePath, Json.obj("value" -> radio)
-              )
+          WsTestClient.withClient { client =>
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some($nextPage$.url)
-                val dataStoredForPage = getAnswers(sdilNumber).fold[Option[$className$]](None)(_.get($className$Page))
-                dataStoredForPage.nonEmpty mustBe true
-                dataStoredForPage.get mustBe radio
-              }
-            }
-          }
-
-          "when the session already contains data for page" in {
-            given
-              .commonPrecondition
-
-            val userAnswers = emptyUserAnswersFor$packageName;format="cap"$.set($className$Page, radio).success.value
-
-            setAnswers(userAnswers)
-            WsTestClient.withClient { client =>
-              val result = createClientRequestPOST(
-                client, $packageName$BaseUrl + normalRoutePath, Json.obj("value" -> radio)
-              )
-
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some($nextPage$.url)
-                val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-                dataStoredForPage.nonEmpty mustBe true
-                dataStoredForPage.get mustBe radio
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 200
+              val page = Jsoup.parse(res.body)
+              page.title must include("$title$")
+              val radioInputs = page.getElementsByClass("govuk-radios__input")
+              radioInputs.size() mustBe 2
+              radioInputs.get(0).attr("value") mustBe "$option1key$"
+              radioInputs.get(0).hasAttr("checked") mustBe false
+              radioInputs.get(1).attr("value") mustBe "$option2key$"
+              radioInputs.get(1).hasAttr("checked") mustBe true
             }
           }
         }
       }
-    }
 
-    "when the user does not select an option" - {
-      "should return 400 with required error" in {
-        given
-          .commonPrecondition
-
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-        WsTestClient.withClient { client =>
-          val result = createClientRequestPOST(
-            client, $packageName$BaseUrl + normalRoutePath, Json.obj("value" -> "")
-          )
+      "there is no user answers in the database" should {
+        "redirect to the start" in {
+          given.commonPrecondition
+          val result = buildRequestFromRoute(route(mode))
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
 
           whenReady(result) { res =>
-            res.status mustBe 400
-            val page = Jsoup.parse(res.body)
-            page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val errorSummary = page.getElementsByClass("govuk-list govuk-error-summary__list")
-              .first()
-            errorSummary
-              .select("a")
-              .attr("href") mustBe "#value_0"
-            errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$" + ".error.required")
+            res.status mustBe 303
+            res.header(HeaderNames.LOCATION) mustBe Some(routes.Application.main().url)
           }
         }
       }
     }
-    testUnauthorisedUser($packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + normalRoutePath, Some(Json.obj("value" -> "true")))
-  }
 
-  s"POST " + checkRoutePath - {
-    $className$.values.foreach { case radio =>
-      "when the user selects " + radio.toString - {
-        "should update the session with the new value and redirect to the checkAnswers controller" - {
-          "when the session contains no data for page" in {
-            given
-              .commonPrecondition
+    s"POST" + route(mode).url when {
+      val expectedUrl = if (mode == CheckMode) {
+        $packageName$.routes.$packageName;format="cap"$CYAController.load(1).url
+      } else {
+        $nextPage$.url.replace("/fhdds", "")
+      }
+      "the user selects $option1key$" should {
+        s"update the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contain no page data" in {
+            given.commonPrecondition
 
-            setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-            WsTestClient.withClient { client =>
-              val result = createClientRequestPOST(
-                client, $packageName$BaseUrl + checkRoutePath, Json.obj("value" -> Json.toJson(radio))
+            addUserAnswersToSession(emptyUserAnswers)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
               )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option1key$")))
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.$packageName;format="cap"$CYAController.onPageLoad.url)
-                val dataStoredForPage = getAnswers(sdilNumber).fold[Option[$className$]](None)(_.get($className$Page))
-                dataStoredForPage.nonEmpty mustBe true
-                dataStoredForPage.get mustBe radio
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option1key$)
             }
           }
+        }
 
-          "when the session already contains data for page" in {
-            given
-              .commonPrecondition
+        s"override the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contains page data" in {
+            given.commonPrecondition
 
-            val userAnswers = emptyUserAnswersFor$packageName;format="cap"$.set($className$Page, radio).success.value
-
-            setAnswers(userAnswers)
-            WsTestClient.withClient { client =>
-              val result = createClientRequestPOST(
-                client, $packageName$BaseUrl + checkRoutePath, Json.obj("value" -> Json.toJson(radio))
+            addUserAnswersToSession(userAnswersWith$option2key$Selected)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
               )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option1key$")))
 
-              whenReady(result) { res =>
-                res.status mustBe 303
-                res.header(HeaderNames.LOCATION) mustBe Some(routes.$packageName;format="cap"$CYAController.onPageLoad.url)
-                val dataStoredForPage = getAnswers(userAnswers.id).fold[Option[$className$]](None)(_.get($className$Page))
-                dataStoredForPage.nonEmpty mustBe true
-                dataStoredForPage.get mustBe radio
-              }
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option1key$)
             }
           }
         }
       }
-    }
 
-    "when the user does not select and option" - {
-      "should return 400 with required error" in {
-        given
-          .commonPrecondition
+      "the user selects $option2key$" should {
+        s"update the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contain no page data" in {
+            given.commonPrecondition
 
-        setAnswers(emptyUserAnswersFor$packageName;format="cap"$)
-        WsTestClient.withClient { client =>
-          val result = createClientRequestPOST(
-            client, $packageName$BaseUrl + checkRoutePath, Json.obj("value" -> "")
-          )
+            addUserAnswersToSession(emptyUserAnswers)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option2key$")))
 
-          whenReady(result) { res =>
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option2key$)
+            }
+          }
+        }
+
+        s"override the user answers with the new values and redirect to" + expectedUrl when {
+          "the user answers contains page data" in {
+            given.commonPrecondition
+
+            addUserAnswersToSession(userAnswersWith$option1key$Selected)
+            val result1 = buildRequestFromRoute(route(mode))
+              .addCookies(
+                DefaultWSCookie("mdtp", authAndSessionCookie)
+              )
+              .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+              .post(Map("value" -> Seq("$option2key$")))
+
+            whenReady(result1) { res =>
+              res.status mustBe 303
+              res.header(HeaderNames.LOCATION).get must include(expectedUrl)
+              val userAnswers = getUserAnswersFromSession.get
+              val pageData = userAnswers.get($className$Page(1))
+              pageData mustBe Some($className$.$option2key$)
+            }
+          }
+        }
+      }
+
+      "should return 400 with required error" when {
+        "the yes or no is not answered" in {
+          given.commonPrecondition
+
+          addUserAnswersToSession(emptyUserAnswers)
+          val result1 = buildRequestFromRoute(route(mode))
+            .addCookies(
+              DefaultWSCookie("mdtp", authAndSessionCookie)
+            )
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("value" -> Seq("")))
+
+
+          whenReady(result1) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.title must include("Error: " + Messages("$packageName$.$className;format="decap"$" + ".title"))
-            val errorSummary = page.getElementsByClass("govuk-list govuk-error-summary__list")
-              .first()
+            page.title must include("Error: $title$")
+            val errorSummaryList = page.getElementsByClass("govuk-list govuk-error-summary__list")
+              .first().getElementsByTag("li")
+            errorSummaryList.size() mustBe 1
+            val errorSummary = errorSummaryList.get(0)
             errorSummary
               .select("a")
-              .attr("href") mustBe "#value_0"
-            errorSummary.text() mustBe Messages("$packageName$.$className;format="decap"$" + ".error.required")
+              .attr("href") mustBe "#value"
+            errorSummary.text() mustBe "Select $className;format="decap"$"
           }
         }
       }
     }
-    testUnauthorisedUser($packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedUserButNoUserAnswers($packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))
-    testAuthenticatedWithUserAnswersForUnsupportedJourneyType($packageName;format="cap"$, $packageName$BaseUrl + checkRoutePath, Some(Json.obj("value" -> "true")))
   }
 }
