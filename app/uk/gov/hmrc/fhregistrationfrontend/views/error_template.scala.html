@@ -15,19 +15,16 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 
 @this(
-govukWrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper
+layout: layout
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@contentHeader = {
-  <h1>@heading</h1>
-}
+@layout(title = pageTitle) {
 
-@mainContent = {
-  <p>@message</p>
+<h1>@heading</h1>
+<p>@message</p>
 }
-
-@govukWrapper(title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)

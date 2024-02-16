@@ -6,19 +6,19 @@ object AppDependencies {
 
   val monocleVersion = "2.1.0"
   val bootstrapVersion = "8.4.0"
-  val playVersion = "play-28"
+  val playVersion = "play-30"
   val hmrcMongoVersion = "1.7.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc" %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-    "uk.gov.hmrc" %% "play-frontend-hmrc" % s"7.29.0-$playVersion",
-    "uk.gov.hmrc" %% "govuk-template" % s"5.80.0-$playVersion",
-    "uk.gov.hmrc" %% "play-ui" % s"9.12.0-$playVersion",
-    "uk.gov.hmrc" %% "play-partials" % s"8.4.0-$playVersion",
-    "uk.gov.hmrc" %% "play-hmrc-api" % s"7.2.0-$playVersion",
-    "uk.gov.hmrc" %% "http-caching-client" % s"10.0.0-$playVersion",
-    "uk.gov.hmrc" %% "play-conditional-form-mapping" % s"1.13.0-$playVersion",
+    "uk.gov.hmrc" %% s"play-frontend-hmrc-$playVersion" % "8.0.0",
+    "uk.gov.hmrc" %% s"govuk-template-$playVersion" % "7.1.0",
+    "uk.gov.hmrc" %% s"play-partials-$playVersion" % "9.1.0",
+    "uk.gov.hmrc" %% s"play-ui-$playVersion" % s"11.0.0",
+    "uk.gov.hmrc" %% s"play-hmrc-api-$playVersion" % "8.0.0",
+    "uk.gov.hmrc" %% s"http-caching-client-$playVersion" % "11.2.0",
+    "uk.gov.hmrc" %% s"play-conditional-form-mapping-$playVersion" % "2.0.0",
     "com.typesafe.play" %% "play-json" % "2.9.4",
     "org.typelevel" %% "cats-core" % "2.9.0",
     "org.typelevel" %% "cats-kernel" % "2.9.0",
@@ -46,7 +46,7 @@ object AppDependencies {
     "org.scalacheck" %% "scalacheck" % "1.17.0" % scope,
     "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % scope,
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
-    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+    "org.playframework" %% "play-test" % PlayVersion.current % scope,
   )
 
   def apply(): Seq[ModuleID] = compile ++ test()

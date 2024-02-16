@@ -15,13 +15,16 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.EnrolmentForm
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
 @this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+layout: layout, viewHelpers: ViewHelpers
 )
 
 @(page: String, section: String, timestamp: Long)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -33,18 +36,9 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
   Messages("fh.delete_confirmation_section.delete", sectionName)
 }
 
-@mainTemplate(title = title, scriptElem = Some(pageScripts)) {
-  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+@layout(title = title, pageScripts = Some(pageScripts), isBrowserBackMimic = true) {
 
-  <p class="js-show">
-    <a id="back" class="back-link print-hidden" href="JavaScript: window.history.go(-1)">
-    @Messages("link.back")
-    </a>
-  </p>
-
-  @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.deleteSection(page, section, timestamp), Symbol("novalidate") -> "novalidate") {
-
-    @helper.CSRF.formField
+    @viewHelpers.form(action = FormPageController.deleteSection(page, section, timestamp), Symbol("novalidate") -> "novalidate") {
 
     <h1>@title</h1>
 

@@ -35,8 +35,8 @@ lazy val scoverageSettings = {
 }
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)
-  .settings(majorVersion := 0)
+  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
+  .settings(majorVersion := 0, libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always)
   .settings(PlayKeys.playDefaultPort := 1118)
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
@@ -68,9 +68,7 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution := false,
     IntegrationTest / scalafmtOnCompile := true)
-  .settings(resolvers ++= Seq(
-    "emueller-bintray" at "https://dl.bintray.com/emueller/maven"
-  ))
+  .settings(resolvers ++= Seq(Resolver.jcenterRepo))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(scalacOptions += "-P:silencer:pathFilters=routes")
   .settings(scalacOptions += "-Wconf:cat=lint-multiarg-infix:silent")
