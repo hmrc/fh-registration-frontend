@@ -49,7 +49,7 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -67,9 +67,9 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
@@ -83,7 +83,7 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result).get should include(routes.BusinessPartnersCheckYourAnswersController.load().url)
@@ -96,9 +96,9 @@ class BusinessPartnersCorporateBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)

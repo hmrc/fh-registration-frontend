@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import akka.stream.Materializer
-import models.UserAnswers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{MessagesControllerComponents, Request}
@@ -31,7 +29,6 @@ trait ControllerSpecWithGuiceApp extends ControllersSpecBase with GuiceOneAppPer
   lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
   val Messages = request2Messages(request)
-  implicit val materializer = mock[Materializer]
 
   val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
   val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]

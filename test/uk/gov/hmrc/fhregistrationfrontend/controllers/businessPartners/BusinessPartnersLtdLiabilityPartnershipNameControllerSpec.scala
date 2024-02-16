@@ -67,7 +67,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -80,7 +80,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
           setupDataRequiredActionBusinessPartners(userAnswersWithPageData, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -100,7 +100,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
           val request = FakeRequest()
             .withFormUrlEncodedBody(("ltdLiabilityPartnershipName", "Partnership Name"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(tradingNamePage)
@@ -115,7 +115,7 @@ class BusinessPartnersLtdLiabilityPartnershipNameControllerSpec extends Controll
           val request = FakeRequest()
             .withFormUrlEncodedBody(("ltdLiabilityPartnershipName", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))

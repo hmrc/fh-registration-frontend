@@ -32,6 +32,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.http.BadRequestException
 
+import scala.concurrent.Future
+
 class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
     extends ControllerSpecWithGuiceApp with ActionsMock {
 
@@ -61,7 +63,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -77,7 +79,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -94,16 +96,16 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any)).thenReturn(
-            Right(
-              Map(
-                "123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")),
-                "234" -> Address("45 test lane", None, None, None, "SW1A 2AA", None, Some("234"))
-              ))
-          )
+            Future(
+              Right(
+                Map(
+                  "123" -> Address("44 test lane", None, None, None, "SW1A 2AA", None, Some("123")),
+                  "234" -> Address("45 test lane", None, None, None, "SW1A 2AA", None, Some("234"))
+                ))))
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YZ"), ("partnerAddressLine", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(chooseAddressUrl)
@@ -116,15 +118,14 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any)).thenReturn(
-            Right(
-              Map(
+            Future(
+              Right(Map(
                 "123" -> Address("44 test lane", None, None, None, "TF1 4ER", None, Some("123")),
-              ))
-          )
+              ))))
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "TF1 4ER"), ("partnerAddressLine", "44 test lane"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(confirmRegOfficeAddressUrl)
@@ -136,11 +137,12 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
         "No match is found for postcode" in {
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          when(mockAddressService.addressLookup(any(), any(), any())(any)).thenReturn(Right(Map.empty[String, Address]))
+          when(mockAddressService.addressLookup(any(), any(), any())(any))
+            .thenReturn(Future(Right(Map.empty[String, Address])))
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YX"), ("partnerAddressLine", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(cannotFindAddressUrl)
@@ -153,11 +155,11 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           when(mockAddressService.addressLookup(any(), any(), any())(any))
-            .thenReturn(Left(AddressLookupErrorResponse(new BadRequestException("unknown"))))
+            .thenReturn(Future(Left(AddressLookupErrorResponse(new BadRequestException("unknown")))))
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "AB1 2YX"), ("partnerAddressLine", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe 400
           val page = Jsoup.parse(contentAsString(result))
@@ -175,7 +177,7 @@ class BusinessPartnersUnincorporatedBodyRegisteredAddressControllerSpec
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe NOT_FOUND
           val page = Jsoup.parse(contentAsString(result))

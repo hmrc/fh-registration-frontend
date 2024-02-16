@@ -43,7 +43,7 @@ class BusinessStatusControllerSpec
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -57,7 +57,7 @@ class BusinessStatusControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -82,7 +82,7 @@ class BusinessStatusControllerSpec
               "proposedStartDate.year"  -> "2020"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result: BusinessStatus(true,Some(2020-01-01))"
@@ -100,7 +100,7 @@ class BusinessStatusControllerSpec
               "isNewFulfilmentBusiness" -> "false"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result: BusinessStatus(false,None)"
@@ -118,7 +118,7 @@ class BusinessStatusControllerSpec
               "isNewFulfilmentBusiness" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -140,7 +140,7 @@ class BusinessStatusControllerSpec
               "proposedStartDate.year"  -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -162,7 +162,7 @@ class BusinessStatusControllerSpec
               "proposedStartDate.year"  -> "ef"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -179,7 +179,7 @@ class BusinessStatusControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

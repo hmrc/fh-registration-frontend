@@ -75,7 +75,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -98,7 +98,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, mode).url)
@@ -120,7 +120,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(1, mode).url)
@@ -150,7 +150,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val request = FakeRequest()
             .withFormUrlEncodedBody("chosenAddress" -> "1")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.BusinessPartnersCheckYourAnswersController.load().url)
@@ -175,7 +175,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val request = FakeRequest()
             .withFormUrlEncodedBody("chosenAddress" -> "1")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
@@ -200,7 +200,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val request = FakeRequest()
             .withFormUrlEncodedBody("chosenAddress" -> "1")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.BusinessPartnersAddressController.load(index, mode).url)
@@ -228,7 +228,7 @@ class BusinessPartnersChooseAddressControllerSpec extends ControllerSpecWithGuic
           val request = FakeRequest()
             .withFormUrlEncodedBody("chosenAddress" -> "")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
           reset(mockActions)

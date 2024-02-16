@@ -85,7 +85,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -103,7 +103,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(registeredAddressPage)
@@ -115,7 +115,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(registeredAddressPage)
@@ -132,7 +132,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(checkYourAnswersPage)
@@ -148,7 +148,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
           val request = FakeRequest()
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(registeredAddressPage)
@@ -162,7 +162,7 @@ class BusinessPartnersPartnershipConfirmRegisteredAddressControllerSpec
 
           val request = FakeRequest()
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(registeredAddressPage)

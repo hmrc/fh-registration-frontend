@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar

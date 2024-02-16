@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, Assistant, User}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, StubbedErrorHandler}
 

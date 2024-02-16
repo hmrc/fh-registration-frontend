@@ -59,7 +59,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -77,7 +77,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
 
           val request = FakeRequest()
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -98,7 +98,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(("companyRegistrationNumber", "01234567"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -116,7 +116,7 @@ class BusinessPartnersPartnershipCompanyRegistrationNumberControllerSpec
             .withCookies(Cookie("businessType", "limited-liability-partnership"))
             .withFormUrlEncodedBody(("companyRegistrationNumber", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))

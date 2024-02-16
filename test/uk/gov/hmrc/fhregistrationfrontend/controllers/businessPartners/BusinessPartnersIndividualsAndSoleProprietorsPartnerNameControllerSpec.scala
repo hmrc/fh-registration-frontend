@@ -70,7 +70,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -92,7 +92,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -116,7 +116,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
               "lastName"  -> "last name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           val expectedLocation = if (mode == NormalMode) {
@@ -146,7 +146,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
               "lastName"  -> "last name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should
@@ -174,7 +174,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsPartnerNameControllerSpec
               "lastName"  -> "last name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(

@@ -16,9 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import java.io.IOException
-
-import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.stubbing.OngoingStubbing
@@ -29,12 +26,12 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{StubbedErrorHandler, StubbedExternalUrls}
 
+import java.io.IOException
 import scala.concurrent.Future
 
 class UserActionSpec extends ActionSpecBase {
 
   val mockAuthConnector = mock[AuthConnector]
-  implicit val materializer = mock[Materializer]
   val mockMessagesControllerComponent = mock[MessagesControllerComponents]
 
   type RetrievalType = Option[String] ~ Option[String] ~ Enrolments ~ Option[CredentialRole] ~ Option[AffinityGroup]
@@ -82,10 +79,10 @@ class UserActionSpec extends ActionSpecBase {
       )
 
       setupAuthConnector(enrolments = enrolments)
-      val r = await(result(action, fakeRequest))
+      val r = result(action, fakeRequest)
 
       status(r) shouldBe OK
-      bodyOf(r) shouldBe "fh.application_error.title"
+      contentAsString(r) shouldBe "fh.application_error.title"
     }
 
     "Redirect to gg if user is not logged in" in {

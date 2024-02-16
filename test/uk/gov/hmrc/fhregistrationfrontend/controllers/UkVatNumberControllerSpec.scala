@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -42,7 +42,7 @@ class UkVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -56,9 +56,9 @@ class UkVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
@@ -75,7 +75,7 @@ class UkVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
           val request = FakeRequest()
             .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", "123456789"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Next page!"
@@ -88,7 +88,7 @@ class UkVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
           val request = FakeRequest()
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Next page!"
@@ -104,7 +104,7 @@ class UkVatNumberControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
         val request = FakeRequest()
           .withFormUrlEncodedBody(("chosenAddress", "1"))
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

@@ -27,6 +27,7 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Country, Address => LookupAddress}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.model.DataEvent

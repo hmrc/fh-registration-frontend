@@ -48,7 +48,7 @@ class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -66,7 +66,7 @@ class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -80,9 +80,9 @@ class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
@@ -96,7 +96,7 @@ class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe OK
         contentAsString(result) shouldBe "Form submitted, with result:"
@@ -109,9 +109,9 @@ class BusinessPartnersUnincorporatedBodyConfirmRegisteredAddressControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)

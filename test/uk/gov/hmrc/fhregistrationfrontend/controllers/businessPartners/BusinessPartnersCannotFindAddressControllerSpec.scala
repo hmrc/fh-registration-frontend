@@ -59,7 +59,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -77,7 +77,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -95,7 +95,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -113,7 +113,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -131,7 +131,7 @@ class BusinessPartnersCannotFindAddressControllerSpec extends ControllerSpecWith
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))

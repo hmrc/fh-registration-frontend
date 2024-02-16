@@ -74,7 +74,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
             setupDataRetrievedAction(Some(userAnswers))
 
             val request = FakeRequest()
-            val result = await(csrfAddToken(controller.load(index, mode))(request))
+            val result = csrfAddToken(controller.load(index, mode))(request)
 
             status(result) shouldBe OK
             val page = Jsoup.parse(contentAsString(result))
@@ -86,7 +86,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
             setupDataRetrievedAction(None)
 
             val request = FakeRequest()
-            val result = await(csrfAddToken(controller.load(index, mode))(request))
+            val result = csrfAddToken(controller.load(index, mode))(request)
 
             status(result) shouldBe OK
             val page = Jsoup.parse(contentAsString(result))
@@ -108,7 +108,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
                 val request = FakeRequest()
                   .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
                   .withMethod("POST")
-                val result = await(csrfAddToken(controller.next(index, mode))(request))
+                val result = csrfAddToken(controller.next(index, mode))(request)
 
                 status(result) shouldBe SEE_OTHER
                 redirectLocation(result) shouldBe Some(expectedUrl)
@@ -126,7 +126,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
                   val request = FakeRequest()
                     .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
                     .withMethod("POST")
-                  val result = await(csrfAddToken(controller.next(index, mode))(request))
+                  val result = csrfAddToken(controller.next(index, mode))(request)
 
                   status(result) shouldBe SEE_OTHER
                   redirectLocation(result) shouldBe Some(expectedUrl)
@@ -151,7 +151,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
                 val request = FakeRequest()
                   .withFormUrlEncodedBody("businessPartnersType" -> partnerType.toString)
                   .withMethod("POST")
-                val result = await(csrfAddToken(controller.next(index, mode))(request))
+                val result = csrfAddToken(controller.next(index, mode))(request)
 
                 status(result) shouldBe SEE_OTHER
                 redirectLocation(result) shouldBe Some(noChangeExpectedUrl)
@@ -168,7 +168,7 @@ class BusinessPartnerControllerSpec extends ControllerSpecWithGuiceApp with Acti
             val request = FakeRequest()
               .withFormUrlEncodedBody()
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+            val result = csrfAddToken(controller.next(index, mode))(request)
 
             status(result) shouldBe BAD_REQUEST
             reset(mockActions)

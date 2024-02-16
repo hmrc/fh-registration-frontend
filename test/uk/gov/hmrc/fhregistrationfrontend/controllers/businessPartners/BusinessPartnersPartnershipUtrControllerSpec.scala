@@ -51,7 +51,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -68,7 +68,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -93,7 +93,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
               ("uniqueTaxpayerReference_yesNo", "true"),
               ("uniqueTaxpayerReference_value", "1234567890"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipRegOfficeAddressUrl)
@@ -108,7 +108,7 @@ class BusinessPartnersPartnershipUtrControllerSpec extends ControllerSpecWithGui
           val request = FakeRequest()
             .withFormUrlEncodedBody("uniqueTaxpayerReference_yesNo" -> "false")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipRegOfficeAddressUrl)

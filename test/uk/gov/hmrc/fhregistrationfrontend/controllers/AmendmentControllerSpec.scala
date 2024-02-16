@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.mockito.Mockito.reset
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.JsValue
 import play.api.test.FakeRequest
@@ -29,19 +30,22 @@ import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterSe
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, FhddsConnectorMocks, InMemoryShortLivedCache}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.Future
+
 class AmendmentControllerSpec
     extends ControllerSpecWithGuiceApp with BeforeAndAfterEach with ActionsMock with FhddsConnectorMocks
     with EmailVerificationConnectorMocks {
 
-  val inMemorySave4Later = new Save4LaterService(new InMemoryShortLivedCache(testUserId))
+  val mockSave4LaterService = mock[Save4LaterService]
+  implicit val hc = HeaderCarrier()
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    inMemorySave4Later.removeUserData(testUserId)(HeaderCarrier())
     reset(
       mockActions,
       mockFhddsConnector,
-      mockEmailVerifcationConnector
+      mockEmailVerifcationConnector,
+      mockSave4LaterService
     )
   }
 
@@ -53,14 +57,14 @@ class AmendmentControllerSpec
     mockMcc,
     mockActions,
     journeys
-  )(inMemorySave4Later, scala.concurrent.ExecutionContext.Implicits.global)
+  )(mockSave4LaterService, ec)
 
   "startAmendment" should {
     "Redirect to summary when an amendment is already in progress" in {
       setupStartAmendmentAction(Some(JourneyType.Amendment))
 
       val request = FakeRequest()
-      val result = await(controller.startAmendment()(request))
+      val result = controller.startAmendment()(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
@@ -70,23 +74,27 @@ class AmendmentControllerSpec
       setupStartAmendmentAction(None)
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", true)
-      implicit val hc = HeaderCarrier()
 
-      val request = FakeRequest()
-      val result = await(controller.startAmendment()(request))
-
-      await(inMemorySave4Later.fetchBusinessRegistrationDetails(testUserId)) shouldBe defined
-      await(inMemorySave4Later.fetchBusinessType(testUserId)) shouldBe Some(BusinessType.CorporateBody.toString)
-      await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe Some("a@w.ro")
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+        .thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+        .thenReturn(Future(Some(BusinessType.CorporateBody)))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any()))
+        .thenReturn(Future.successful(Some("a@w.ro")))
 
       for (page <- journeys.limitedCompanyPages) {
-        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
-        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
       }
 
-      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(
-        JourneyType.Amendment)
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+        .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
+      val request = FakeRequest()
+      val result = controller.startAmendment()(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
     }
@@ -95,14 +103,26 @@ class AmendmentControllerSpec
       setupStartAmendmentAction(None)
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", false)
-      implicit val hc = HeaderCarrier()
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+        .thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+        .thenReturn(Future(Some(BusinessType.CorporateBody)))
+      when(mockSave4LaterService.saveV1ContactEmail(any(), any())(any()))
+        .thenReturn(Future.successful(Some("a@w.ro")))
+
+      for (page <- journeys.limitedCompanyPages) {
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
+      }
+
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+        .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
       val request = FakeRequest()
-      val result = await(controller.startAmendment()(request))
-
-      await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe None
-      await(inMemorySave4Later.fetchV1ContactEmail(testUserId)) shouldBe Some("a@w.ro")
-
+      val result = controller.startAmendment()(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
     }
@@ -113,7 +133,7 @@ class AmendmentControllerSpec
       setupStartVariationAction(Some(JourneyType.Variation))
 
       val request = FakeRequest()
-      val result = await(controller.startVariation()(request))
+      val result = controller.startVariation()(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
@@ -123,23 +143,26 @@ class AmendmentControllerSpec
       setupStartVariationAction(None)
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", true)
-      implicit val hc = HeaderCarrier()
-
-      val request = FakeRequest()
-      val result = await(controller.startVariation()(request))
-
-      await(inMemorySave4Later.fetchBusinessRegistrationDetails(testUserId)) shouldBe defined
-      await(inMemorySave4Later.fetchBusinessType(testUserId)) shouldBe Some(BusinessType.CorporateBody.toString)
-      await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe Some("a@w.ro")
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+        .thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+        .thenReturn(Future(Some(BusinessType.CorporateBody)))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any()))
+        .thenReturn(Future.successful(Some("a@w.ro")))
 
       for (page <- journeys.limitedCompanyPages) {
-        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, page.id)) shouldBe defined
-        await(inMemorySave4Later.fetchData4Later[JsValue](testUserId, Save4LaterKeys.displayKeyForPage(page.id))) shouldBe defined
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(None))
       }
 
-      await(inMemorySave4Later.fetchData4Later[JourneyType](testUserId, Save4LaterKeys.journeyTypeKey)) shouldBe Some(
-        JourneyType.Amendment)
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+        .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
+      val request = FakeRequest()
+      val result = controller.startVariation()(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
     }

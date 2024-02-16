@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.Mockito.reset
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
@@ -45,10 +46,10 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
         )
 
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.summary())(request))
+        val result = csrfAddToken(controller.summary())(request)
 
         status(result) shouldBe OK
-        bodyOf(result) should include(Messages(s"fh.summary.${expectedMode(journeyType)}.title"))
+        contentAsString(result) should include(Messages(s"fh.summary.${expectedMode(journeyType)}.title"))
 
         reset(mockActions)
       }
@@ -68,10 +69,10 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
         )
 
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.summary())(request))
+        val result = csrfAddToken(controller.summary())(request)
 
         status(result) shouldBe OK
-        bodyOf(result) should include(Messages(s"fh.summary.${Mode.Amendment}.title"))
+        contentAsString(result) should include(Messages(s"fh.summary.${Mode.Amendment}.title"))
 
         reset(mockActions)
       }

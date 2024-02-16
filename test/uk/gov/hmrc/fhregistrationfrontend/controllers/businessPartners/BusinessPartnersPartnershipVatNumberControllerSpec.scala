@@ -69,7 +69,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -95,7 +95,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
           when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -123,7 +123,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipUtrPage)
@@ -144,7 +144,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipUtrPage)
@@ -163,7 +163,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipUtrPage)
           reset(mockActions)
@@ -186,7 +186,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(partnershipRegisteredAddressPage)
           reset(mockActions)
@@ -209,7 +209,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("Does the partner have a UK VAT registration number?")
@@ -233,7 +233,7 @@ class BusinessPartnersPartnershipVatNumberControllerSpec extends ControllerSpecW
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.title() should include("Does the partner have a UK VAT registration number?")

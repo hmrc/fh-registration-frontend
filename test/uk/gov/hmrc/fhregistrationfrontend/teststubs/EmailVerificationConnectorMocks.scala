@@ -23,14 +23,17 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
+import scala.concurrent.Future
+
 trait EmailVerificationConnectorMocks extends MockitoSugar {
   this: UnitSpec =>
 
   val mockEmailVerifcationConnector = mock[EmailVerificationConnector]
 
   def setupEmailVerificationConnector(email: String, isVerified: Boolean) = {
-    when(mockEmailVerifcationConnector.isVerified(ArgumentMatchers.eq(email))(any())) thenReturn isVerified
-    when(mockEmailVerifcationConnector.requestVerification(ArgumentMatchers.eq(email), any())(any())) thenReturn isVerified
+    when(mockEmailVerifcationConnector.isVerified(ArgumentMatchers.eq(email))(any())) thenReturn Future(isVerified)
+    when(mockEmailVerifcationConnector.requestVerification(ArgumentMatchers.eq(email), any())(any())) thenReturn Future(
+      isVerified)
   }
 
 }

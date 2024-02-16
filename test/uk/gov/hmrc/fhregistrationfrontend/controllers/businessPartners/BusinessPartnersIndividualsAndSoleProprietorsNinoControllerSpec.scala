@@ -68,7 +68,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -86,7 +86,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
 
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -109,7 +109,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
             "nationalInsuranceNumber_value" -> "QQ123456C"
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(index, mode))(request))
+        val result = csrfAddToken(controller.next(index, mode))(request)
 
         status(result) shouldBe SEE_OTHER
         val expectedLocation = if (mode == NormalMode) {
@@ -134,7 +134,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
               "nationalInsuranceNumber_value" -> "QQ123456C"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(vatRegNumPage)
@@ -155,7 +155,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
               "nationalInsuranceNumber_value" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
           reset(mockActions)

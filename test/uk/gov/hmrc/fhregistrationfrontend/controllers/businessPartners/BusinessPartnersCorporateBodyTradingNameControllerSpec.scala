@@ -53,7 +53,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -71,7 +71,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -95,7 +95,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
               "tradingName_value" -> "Alfie Limited"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(companyRegNumUrl)
@@ -113,7 +113,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
               "tradingName_value" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(companyRegNumUrl)
@@ -132,7 +132,7 @@ class BusinessPartnersCorporateBodyTradingNameControllerSpec extends ControllerS
             "tradeName_value" -> ""
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(index, mode))(request))
+        val result = csrfAddToken(controller.next(index, mode))(request)
 
         status(result) shouldBe BAD_REQUEST
         reset(mockActions)

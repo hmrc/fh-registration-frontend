@@ -55,10 +55,10 @@ class FormPageControllerSpec
       setupPageAction(mainBusinessAddressPage)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.load(mainBusinessAddressPage.id))(request))
+      val result = csrfAddToken(controller.load(mainBusinessAddressPage.id))(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.main_business_address.title"))
+      contentAsString(result) should include(Messages("fh.main_business_address.title"))
     }
   }
 
@@ -67,10 +67,10 @@ class FormPageControllerSpec
       setupPageAction(companyOfficersPage)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.loadWithSection(companyOfficersPage.id, "1"))(request))
+      val result = csrfAddToken(controller.loadWithSection(companyOfficersPage.id, "1"))(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.company_officers.title"))
+      contentAsString(result) should include(Messages("fh.company_officers.title"))
     }
   }
 
@@ -79,11 +79,11 @@ class FormPageControllerSpec
       setupPageAction(mainBusinessAddressPage)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.save(mainBusinessAddressPage.id))(request))
+      val result = csrfAddToken(controller.save(mainBusinessAddressPage.id))(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.generic.errorPrefix"))
-      bodyOf(result) should include(Messages("fh.main_business_address.title"))
+      contentAsString(result) should include(Messages("fh.generic.errorPrefix"))
+      contentAsString(result) should include(Messages("fh.main_business_address.title"))
     }
 
     "Redirect to next page" in {
@@ -94,7 +94,7 @@ class FormPageControllerSpec
         TradingNameForm.hasTradingNameKey -> "true",
         TradingNameForm.tradingNameKey    -> "Dodgy Co"
       )
-      val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
+      val result = csrfAddToken(controller.save(tradingNamePage.id))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/vatNumber")
@@ -118,7 +118,7 @@ class FormPageControllerSpec
       ).map { case (k, v) => s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
 
       val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
-      val result = await(csrfAddToken(controller.save(contactPersonPage.id))(request))
+      val result = csrfAddToken(controller.save(contactPersonPage.id))(request)
       status(result) shouldBe SEE_OTHER
       verify(addressAuditService).auditAddresses(any(), any())(any())
     }
@@ -131,7 +131,7 @@ class FormPageControllerSpec
         TradingNameForm.hasTradingNameKey -> "true",
         TradingNameForm.tradingNameKey    -> "Dodgy Co"
       )
-      val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
+      val result = csrfAddToken(controller.save(tradingNamePage.id))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
@@ -148,7 +148,7 @@ class FormPageControllerSpec
           "saveAction"                      -> "saveForLater"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.save(tradingNamePage.id))(request))
+      val result = csrfAddToken(controller.save(tradingNamePage.id))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/saved")
@@ -165,7 +165,7 @@ class FormPageControllerSpec
         businessPartnerFormData(addMore = false).toSeq: _*
       )
 
-      val result = await(csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request))
+      val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/businessStatus")
@@ -179,7 +179,7 @@ class FormPageControllerSpec
         businessPartnerFormData(addMore = true).toSeq: _*
       )
 
-      val result = await(csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request))
+      val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/businessPartners/2")
@@ -199,8 +199,9 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
 
-      val result = await(
-        csrfAddToken(controller.confirmDeleteSection(businessPartnersPage.id, "1", userLastSavedTime - 1000))(request))
+      val result = csrfAddToken(
+        controller.confirmDeleteSection(businessPartnersPage.id, "1", userLastSavedTime - 1000)
+      )(request)
 
       status(result) shouldBe NOT_FOUND
     }
@@ -220,13 +221,14 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
 
-      val result =
-        await(csrfAddToken(controller.confirmDeleteSection(businessPartnersPage.id, "1", userLastSavedTime))(request))
+      val result = csrfAddToken(
+        controller.confirmDeleteSection(businessPartnersPage.id, "1", userLastSavedTime)
+      )(request)
 
       val expectedSectionName = Messages(s"fh.${businessPartnersPage.id}.each.title", "1")
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.delete_confirmation_section.delete", expectedSectionName))
+      contentAsString(result) should include(Messages("fh.delete_confirmation_section.delete", expectedSectionName))
     }
   }
 
@@ -242,8 +244,9 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
 
-      val result =
-        await(csrfAddToken(controller.deleteSection(businessPartnersPage.id, "1", userLastSavedTime - 1000))(request))
+      val result = csrfAddToken(
+        controller.deleteSection(businessPartnersPage.id, "1", userLastSavedTime - 1000)
+      )(request)
 
       status(result) shouldBe NOT_FOUND
 
@@ -261,8 +264,9 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
 
-      val result =
-        await(csrfAddToken(controller.deleteSection(otherStoragePremises.id, "any", userLastSavedTime))(request))
+      val result = csrfAddToken(
+        controller.deleteSection(otherStoragePremises.id, "any", userLastSavedTime)
+      )(request)
 
       status(result) shouldBe BAD_REQUEST
 
@@ -281,8 +285,9 @@ class FormPageControllerSpec
 
       val request = FakeRequest()
 
-      val result =
-        await(csrfAddToken(controller.deleteSection(businessPartnersPage.id, "1", userLastSavedTime))(request))
+      val result = csrfAddToken(
+        controller.deleteSection(businessPartnersPage.id, "1", userLastSavedTime)
+      )(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/businessStatus")

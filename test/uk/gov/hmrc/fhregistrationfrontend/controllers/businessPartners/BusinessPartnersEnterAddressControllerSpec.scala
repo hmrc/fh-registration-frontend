@@ -58,7 +58,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -81,7 +81,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -115,7 +115,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
                 "enterAddress.postcode" -> "AA1 2YZ"
               )
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+            val result = csrfAddToken(controller.next(index, mode))(request)
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(checkYourAnswersPage)
@@ -134,7 +134,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
                 "enterAddress.line3" -> "Cityville"
               )
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+            val result = csrfAddToken(controller.next(index, mode))(request)
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(checkYourAnswersPage)
@@ -156,7 +156,7 @@ class BusinessPartnersEnterAddressControllerSpec extends ControllerSpecWithGuice
               "enterAddress.line3" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))

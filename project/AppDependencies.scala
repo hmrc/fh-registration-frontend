@@ -12,7 +12,7 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc" %% s"bootstrap-frontend-$playVersion" % bootstrapVersion,
-    "uk.gov.hmrc" %% s"play-frontend-hmrc-$playVersion" % "8.0.0",
+    "uk.gov.hmrc" %% s"play-frontend-hmrc-$playVersion" % "8.5.0",
     "uk.gov.hmrc" %% s"govuk-template-$playVersion" % "7.1.0",
     "uk.gov.hmrc" %% s"play-partials-$playVersion" % "9.1.0",
     "uk.gov.hmrc" %% s"play-ui-$playVersion" % s"11.0.0",
@@ -36,17 +36,13 @@ object AppDependencies {
 
   def test(scope: String = "test,it") = Seq(
     "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapVersion % scope,
-    "org.scalatest" %% "scalatest" % "3.2.15" % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % scope,
-    "com.vladsch.flexmark" % "flexmark-all" % "0.64.6" % scope,
-    "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % scope,
-    "com.github.tomakehurst" % "wiremock-standalone" % "2.27.2" % scope,
+    "org.mockito"            %% "mockito-scala-scalatest"     % "1.17.30" % scope,
     "org.pegdown" % "pegdown" % "1.6.0" % scope,
     "org.jsoup" % "jsoup" % "1.15.4" % scope,
-    "org.scalacheck" %% "scalacheck" % "1.17.0" % scope,
+    "org.scalatestplus"      %% "scalacheck-1-17" % "3.2.17.0" % scope,
     "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % scope,
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
-    "org.playframework" %% "play-test" % PlayVersion.current % scope,
+    "com.github.java-json-tools" % "json-schema-validator" % "2.2.14" % scope
   )
 
   def apply(): Seq[ModuleID] = compile ++ test()

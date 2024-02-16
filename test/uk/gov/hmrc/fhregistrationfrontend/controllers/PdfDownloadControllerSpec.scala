@@ -24,6 +24,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 
 import scala.concurrent.Future
+import play.api.test.Helpers._
 
 class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock with BeforeAndAfterEach {
 
@@ -43,7 +44,7 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
       setupKeyStore(None)
       val request = FakeRequest()
 
-      val result = await(csrfAddToken(controller.downloadPrintable())(request))
+      val result = csrfAddToken(controller.downloadPrintable())(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -55,10 +56,10 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
       setupUserAction()
       setupKeyStore(Some(summary))
 
-      val result = await(csrfAddToken(controller.downloadPrintable())(request))
+      val result = csrfAddToken(controller.downloadPrintable())(request)
 
       status(result) shouldBe OK
-      bodyOf(result) shouldBe expectedSummary
+      contentAsString(result) shouldBe expectedSummary
 
     }
   }

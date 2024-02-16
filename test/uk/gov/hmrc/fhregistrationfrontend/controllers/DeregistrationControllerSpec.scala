@@ -67,18 +67,18 @@ class DeregistrationControllerSpec
 
     "Render reason page" in {
 //      when(mockViews.deregistration_reason) thenReturn uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration_reason
-      val result = await(csrfAddToken(controller.reason).apply(FakeRequest()))
+      val result = csrfAddToken(controller.reason).apply(FakeRequest())
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.deregistration.title"))
+      contentAsString(result) should include(Messages("fh.deregistration.title"))
     }
 
     "Fail on postReason when reason is not given" in {
-      val result = await(csrfAddToken(controller.postReason)(FakeRequest()))
+      val result = csrfAddToken(controller.postReason)(FakeRequest())
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.deregistration.title"))
-      bodyOf(result) should include(Messages("fh.generic.errorPrefix"))
+      contentAsString(result) should include(Messages("fh.deregistration.title"))
+      contentAsString(result) should include(Messages("fh.generic.errorPrefix"))
     }
 
     "Redirect from postReason to confirm when reason is given" in {
@@ -87,7 +87,7 @@ class DeregistrationControllerSpec
           DeregistrationReasonForm.reasonKey -> DeregistrationReasonEnum.NoLongerNeeded.toString
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postReason)(request))
+      val result = csrfAddToken(controller.postReason)(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/deregistration/confirm")
     }
@@ -95,16 +95,16 @@ class DeregistrationControllerSpec
     "Render the confirmation page if all data is given" in {
       val request = FakeRequest()
       setupKeyStoreDeregistrationReason()
-      val result = await(csrfAddToken(controller.confirm)(request))
+      val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.deregistrationConfirm.title"))
+      contentAsString(result) should include(Messages("fh.deregistrationConfirm.title"))
     }
 
     "Fail to render confirmation if reason was not given previously" in {
       setupKeyStoreDeregistrationReason(None)
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.confirm)(request))
+      val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -112,11 +112,11 @@ class DeregistrationControllerSpec
     "Fail on postConfirmation if confirmation is not answered" in {
       setupKeyStoreDeregistrationReason()
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.deregistrationConfirm.title"))
-      bodyOf(result) should include(Messages("fh.generic.errorPrefix"))
+      contentAsString(result) should include(Messages("fh.deregistrationConfirm.title"))
+      contentAsString(result) should include(Messages("fh.generic.errorPrefix"))
     }
 
     "Fail on postConfirmation if reason was not saved" in {
@@ -126,7 +126,7 @@ class DeregistrationControllerSpec
         ConfirmationForm.usingDefaultEmailKey -> "true",
         ConfirmationForm.defaultEmailKey      -> "some@email.com"
       )
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -141,7 +141,7 @@ class DeregistrationControllerSpec
           ConfirmationForm.defaultEmailKey      -> "some@email.com"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe SEE_OTHER
       val s = session(result)
@@ -158,7 +158,7 @@ class DeregistrationControllerSpec
           ConfirmationForm.confirmKey -> "false"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe SEE_OTHER
       session(result)
@@ -168,7 +168,7 @@ class DeregistrationControllerSpec
     "Fail to render the ack page is session does not have the required keys" in {
       setupUserAction()
       val request = FakeRequest().withSession()
-      val result = await(csrfAddToken(controller.acknowledgment)(request))
+      val result = csrfAddToken(controller.acknowledgment)(request)
       status(result) shouldBe NOT_FOUND
     }
 
@@ -178,9 +178,9 @@ class DeregistrationControllerSpec
         controller.EmailSessionKey               -> "some@email.com",
         controller.ProcessingTimestampSessionKey -> System.currentTimeMillis.toString
       )
-      val result = await(csrfAddToken(controller.acknowledgment)(request))
+      val result = csrfAddToken(controller.acknowledgment)(request)
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.ack.deregister"))
+      contentAsString(result) should include(Messages("fh.ack.deregister"))
     }
   }
 

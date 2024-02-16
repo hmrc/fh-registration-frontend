@@ -62,7 +62,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -90,7 +90,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -118,7 +118,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(checkYourAnswersPage)
           reset(mockActions)
@@ -138,7 +138,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(checkYourAnswersPage)
@@ -159,7 +159,7 @@ class BusinessPartnersPartnershipEnterAddressControllerSpec extends ControllerSp
             )
             .withMethod("POST")
 
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(

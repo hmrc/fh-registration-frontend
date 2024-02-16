@@ -16,20 +16,35 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
-import com.eclipsesource.schema._
-import com.eclipsesource.schema.drafts.Version7.schemaTypeReads
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
+import com.github.fge.jsonschema.core.report.{ListReportProvider, LogLevel, ProcessingReport}
+import com.github.fge.jsonschema.main.JsonSchemaFactory
 import play.api.libs.json.Json
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges.NoChange
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubscriptionDisplay, SubscriptionDisplayWrapper}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
+import java.io.InputStream
+import scala.io.Source
+
 class DesToFormSpec extends UnitSpec {
 
-  val schemaAsJson = Json parse getClass.getResourceAsStream("/des/subscription-display.schema.json")
-  val schema = Json.fromJson[SchemaType](schemaAsJson).get
-  val validator = SchemaValidator().validate(schema) _
+  val factory = JsonSchemaFactory
+    .newBuilder()
+    .setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.FATAL))
+    .freeze()
+
+  val stream: InputStream = getClass.getResourceAsStream("/des/subscription-display.schema.json")
+  val file: String = Source.fromInputStream(stream).mkString
+
+  val schemaJson = JsonLoader.fromString(file)
+  val schema = factory.getJsonSchema(schemaJson)
+
+  def validateAgainstSchema(json: JsonNode): ProcessingReport =
+    schema.validate(json, true)
   val service = new DesToFormImpl()
 
   "Des to form" should {
@@ -74,17 +89,10 @@ class DesToFormSpec extends UnitSpec {
 
   def loadDesDataFile(filePath: String): SubscriptionDisplay = {
     val resource = getClass.getResourceAsStream(s"/json/valid/display/$filePath.json")
-    val validationResult = validator(Json parse resource)
-    validationResult.fold(
-      invalid = { errors =>
-        errors
-      },
-      valid = { v =>
-        v
-      }
-    )
-
+    val jsonString = Source.fromInputStream(resource).mkString
+    val jsonNode = JsonLoader.fromString(jsonString)
+    val validationResult = validateAgainstSchema(jsonNode)
     validationResult.isSuccess shouldEqual true
-    validationResult.get.as[SubscriptionDisplayWrapper].subScriptionDisplay
+    Json.parse(jsonString).as[SubscriptionDisplayWrapper].subScriptionDisplay
   }
 }
