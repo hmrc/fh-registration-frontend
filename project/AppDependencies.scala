@@ -28,7 +28,6 @@ object AppDependencies {
     "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion,
     "org.mindrot" % "jbcrypt" % "0.4",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion" % hmrcMongoVersion,
-    "uk.gov.hmrc" %% s"crypto-json-$playVersion" % "7.6.0",
 
     compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.14" cross CrossVersion.full),
     "com.github.ghik" % "silencer-lib" % "1.7.14" % Provided cross CrossVersion.full
