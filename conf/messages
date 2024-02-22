@@ -20,6 +20,7 @@ link.printSummary=Print a copy of this summary
 printApplication.label=This application was submitted at:
 generic.errorSummary = There is a problem
 generic.errorPrefix = Error
+generic.warning = Warning
 
 #CONFORM CORRECT BUSINESS
 confirm.legend=Is this the business you want to register?
