@@ -73,9 +73,10 @@ case class UserAction @Inject()(
           if (retrieveEnrolments.size > 1)
             Future successful Left(errorHandler.applicationError)
           else if (retrieveAffinityGroup.isEmpty) {
+            println("HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             Future successful Left(
               errorHandler
-                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service")))
+                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service.")))
           } else
             Future successful Right(
               new UserRequest(

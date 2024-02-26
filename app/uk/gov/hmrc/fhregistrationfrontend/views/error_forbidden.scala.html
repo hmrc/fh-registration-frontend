@@ -25,10 +25,12 @@ layout: layout
 
 @layout(title = pageTitle) {
     <h1>@heading</h1>
-    <p>@message</p>
-   <p>
-    <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries">
-     @messages("fh.generic.forbidden.link")
-    </a> @messages("fh.generic.forbidden.info2")</p>
+    <div class="govuk-body">
+         <p>@message</p>
+         <p>
+             <a class="govuk-link" href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries">
+                @messages("fh.generic.forbidden.link")</a>
+             @messages("fh.generic.forbidden.info2")</p>
+    </div>
 
 }
