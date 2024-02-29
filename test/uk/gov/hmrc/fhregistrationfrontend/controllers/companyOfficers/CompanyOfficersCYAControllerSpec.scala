@@ -21,7 +21,7 @@ import models.NormalMode
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
@@ -44,7 +44,7 @@ class CompanyOfficersCYAControllerSpec extends ControllerSpecWithGuiceApp with A
         setupDataRequiredActionCompanyOfficers(emptyUserAnswers, NormalMode)
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(1))(request))
+        val result = csrfAddToken(controller.load(1))(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -60,7 +60,7 @@ class CompanyOfficersCYAControllerSpec extends ControllerSpecWithGuiceApp with A
         "the use clicks save and continue" in {
           setupDataRequiredActionCompanyOfficers(emptyUserAnswers, NormalMode)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.next(1))(request))
+          val result = csrfAddToken(controller.next(1))(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result:"

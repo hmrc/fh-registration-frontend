@@ -17,14 +17,16 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import java.io.IOException
-
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{AddressLookupConnector, AddressLookupErrorResponse, AddressLookupSuccessResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address, AddressRecord, Country, RecordSet}
 import uk.gov.hmrc.http.BadRequestException
+
+import scala.concurrent.Future
 
 class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
 
@@ -43,8 +45,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails" in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(
-        new BadRequestException("unkown"))
+      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+        AddressLookupErrorResponse(new BadRequestException("unkown")))
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_REQUEST
@@ -53,8 +55,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails with unknown " in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupErrorResponse(
-        new IOException())
+      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+        AddressLookupErrorResponse(new IOException()))
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_GATEWAY
@@ -73,13 +75,14 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
       )
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn AddressLookupSuccessResponse(response)
+      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+        AddressLookupSuccessResponse(response))
 
       val result = action.apply(FakeRequest())
 
       status(result) shouldBe OK
 
-      jsonBodyOf(result).as[RecordSet] shouldBe response
+      contentAsJson(result).as[RecordSet] shouldBe response
     }
   }
 }

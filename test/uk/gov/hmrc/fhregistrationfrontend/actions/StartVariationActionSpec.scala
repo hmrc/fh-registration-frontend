@@ -27,6 +27,8 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FhddsConnectorMocks, Save4LaterMocks, StubbedErrorHandler}
 
+import scala.concurrent.Future
+
 class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
@@ -81,7 +83,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
 
         val action = new StartVariationAction(fhddsConnector)(
           mockSave4Later,
@@ -105,7 +107,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new StartVariationAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,

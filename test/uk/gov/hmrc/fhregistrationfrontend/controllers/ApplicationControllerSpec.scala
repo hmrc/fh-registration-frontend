@@ -20,8 +20,8 @@ import com.codahale.metrics.SharedMetricRegistries
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
 import uk.gov.hmrc.fhregistrationfrontend.connectors.BusinessCustomerFrontendConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm
@@ -29,7 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.{EnrolmentProgress, FhddsStatus}
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs._
-import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.status
+import uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus
 import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPageParams.StatusParams
 
 import scala.concurrent.Future
@@ -52,7 +52,7 @@ class ApplicationControllerSpec
     )
   }
 
-  val status: status = app.injector.instanceOf[status]
+  val statusView: registrationstatus.status = app.injector.instanceOf[registrationstatus.status]
   val statusParams: StatusParams = app.injector.instanceOf[StatusParams]
 
   val controller = new Application(
@@ -63,9 +63,9 @@ class ApplicationControllerSpec
     mockMcc,
     mockActions,
     views,
-    status,
+    statusView,
     statusParams
-  )(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
+  )(mockSave4Later, ec)
 
   "main" should {
 
@@ -74,7 +74,7 @@ class ApplicationControllerSpec
         setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
         setupUserAction()
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.main)(request))
+        val result = csrfAddToken(controller.main)(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/fhdds/enrolment-progress")
@@ -84,7 +84,7 @@ class ApplicationControllerSpec
         setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
         setupUserAction()
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.main)(request))
+        val result = csrfAddToken(controller.main)(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/fhdds/enrolment-progress")
@@ -97,7 +97,7 @@ class ApplicationControllerSpec
       setupUserAction()
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.main)(request))
+      val result = csrfAddToken(controller.main)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/subscription/status")
@@ -109,10 +109,10 @@ class ApplicationControllerSpec
       setupFhddsEnrolmentProgress(EnrolmentProgress.Pending)
       setupUserAction()
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+      val result = csrfAddToken(controller.enrolmentPending)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages(s"fh.status.received.title"))
+      contentAsString(result) should include(Messages(s"fh.status.received.title"))
     }
 
     "render the enrolment error page" in {
@@ -121,17 +121,17 @@ class ApplicationControllerSpec
       setupFhddsEnrolmentProgress(EnrolmentProgress.Error)
       setupUserAction()
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+      val result = csrfAddToken(controller.enrolmentPending)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.application_error.message"))
+      contentAsString(result) should include(Messages("fh.application_error.message"))
     }
 
     "redirect to the main page" in {
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction()
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.enrolmentPending)(request))
+      val result = csrfAddToken(controller.enrolmentPending)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds")
@@ -154,10 +154,10 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(cacheMap)
       val request = FakeRequest()
 
-      val result = await(csrfAddToken(controller.startOrContinueApplication)(request))
+      val result = csrfAddToken(controller.startOrContinueApplication)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.continue_delete.header"))
+      contentAsString(result) should include(Messages("fh.continue_delete.header"))
 
     }
 
@@ -166,7 +166,7 @@ class ApplicationControllerSpec
       setupUserAction(rNumber = None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.main)(request))
+      val result = csrfAddToken(controller.main)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/start")
@@ -183,7 +183,7 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(cacheMap)
       val request = FakeRequest()
 
-      val result = await(csrfAddToken(controller.startOrContinueApplication)(request))
+      val result = csrfAddToken(controller.startOrContinueApplication)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("http://localhost:9923/business-customer/FHDDS")
@@ -205,7 +205,7 @@ class ApplicationControllerSpec
     "Fail if no answer was given" in {
       setupPreconditions(userLastTimeSaved = Some(System.currentTimeMillis()))
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
+      val result = csrfAddToken(controller.submitDeleteOrContinue)(request)
       status(result) shouldBe BAD_REQUEST
     }
 
@@ -214,7 +214,7 @@ class ApplicationControllerSpec
       val request = FakeRequest().withFormUrlEncodedBody(
         "deleteOrContinue" -> "delete"
       )
-      val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
+      val result = csrfAddToken(controller.submitDeleteOrContinue)(request)
       status(result) shouldBe BAD_REQUEST
     }
 
@@ -226,7 +226,7 @@ class ApplicationControllerSpec
           "deleteOrContinue" -> "continue"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
+      val result = csrfAddToken(controller.submitDeleteOrContinue)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")
@@ -240,10 +240,10 @@ class ApplicationControllerSpec
           "deleteOrContinue" -> "delete"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.submitDeleteOrContinue)(request))
+      val result = csrfAddToken(controller.submitDeleteOrContinue)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.delete_confirmation_page.header"))
+      contentAsString(result) should include(Messages("fh.delete_confirmation_page.header"))
     }
   }
 
@@ -260,7 +260,7 @@ class ApplicationControllerSpec
     "Fail when no userLastTimeSaved is present" in {
       setup(userLastTimeSaved = None)
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.confirmDelete)(request))
+      val result = csrfAddToken(controller.confirmDelete)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -268,10 +268,10 @@ class ApplicationControllerSpec
     "Render the confirm_delete page" in {
       setup(userLastTimeSaved = Some(System.currentTimeMillis()))
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.confirmDelete)(request))
+      val result = csrfAddToken(controller.confirmDelete)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.delete_confirmation_page.header"))
+      contentAsString(result) should include(Messages("fh.delete_confirmation_page.header"))
     }
   }
 
@@ -279,7 +279,7 @@ class ApplicationControllerSpec
     "Redirect to first page" in {
       setupJourneyAction(rNumber = None)
       val request = FakeRequest()
-      val result = await(controller resumeForm request)
+      val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/contactPerson")
@@ -288,7 +288,7 @@ class ApplicationControllerSpec
     "Redirect to last completed page" in {
       setupJourneyAction(rNumber = None, JourneyRequestBuilder.partiallyCompleteJourney)
       val request = FakeRequest()
-      val result = await(controller resumeForm request)
+      val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/mainBusinessAddress")
@@ -297,7 +297,7 @@ class ApplicationControllerSpec
     "Redirect to summary page" in {
       setupJourneyAction(rNumber = None, JourneyRequestBuilder.fullyCompleteJourney())
       val request = FakeRequest()
-      val result = await(controller resumeForm request)
+      val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/summary")
@@ -306,7 +306,7 @@ class ApplicationControllerSpec
     "Redirect to last completed page with section" in {
       setupJourneyAction(rNumber = None, JourneyRequestBuilder.partialJourneyWithSection)
       val request = FakeRequest()
-      val result = await(controller resumeForm request)
+      val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/businessPartners/6")
@@ -319,7 +319,7 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
-      val result = await(controller deleteUserData request)
+      val result = controller deleteUserData request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds")
@@ -332,7 +332,7 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
-      val result = await(controller savedForLater request)
+      val result = controller savedForLater request
 
       status(result) shouldBe NOT_FOUND
     }
@@ -345,10 +345,10 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(cacheMap)
 
       val request = FakeRequest()
-      val result = await(controller savedForLater request)
+      val result = controller savedForLater request
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.has_saved"))
+      contentAsString(result) should include(Messages("fh.has_saved"))
     }
 
   }
@@ -358,7 +358,7 @@ class ApplicationControllerSpec
       setupUserAction()
 
       val request = FakeRequest()
-      val result = await(controller.deleteOrContinue(true)(request))
+      val result = controller.deleteOrContinue(true)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/businessType")
@@ -369,7 +369,7 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 
       val request = FakeRequest()
-      val result = await(controller.deleteOrContinue(false)(request))
+      val result = controller.deleteOrContinue(false)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/businessType")
@@ -383,10 +383,10 @@ class ApplicationControllerSpec
       setupSave4LaterFrom(cacheMap)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.deleteOrContinue(false))(request))
+      val result = csrfAddToken(controller.deleteOrContinue(false))(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.continue_delete.header"))
+      contentAsString(result) should include(Messages("fh.continue_delete.header"))
     }
 
   }
@@ -399,7 +399,7 @@ class ApplicationControllerSpec
         FormTestData.someBpr)
 
       val request = FakeRequest()
-      val result = await(controller continueWithBpr request)
+      val result = controller continueWithBpr request
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/businessType")
@@ -411,10 +411,10 @@ class ApplicationControllerSpec
       setupUserAction()
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.businessType)(request))
+      val result = csrfAddToken(controller.businessType)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.business_type.title"))
+      contentAsString(result) should include(Messages("fh.business_type.title"))
     }
   }
 
@@ -423,10 +423,10 @@ class ApplicationControllerSpec
       setupUserAction()
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.submitBusinessType)(request))
+      val result = csrfAddToken(controller.submitBusinessType)(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.business_type.title"))
+      contentAsString(result) should include(Messages("fh.business_type.title"))
     }
 
     "Redirect to contactEmail" in {
@@ -439,7 +439,7 @@ class ApplicationControllerSpec
         )
         .withMethod("POST")
 
-      val result = await(csrfAddToken(controller.submitBusinessType)(request))
+      val result = csrfAddToken(controller.submitBusinessType)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/contact-email")
@@ -451,7 +451,7 @@ class ApplicationControllerSpec
       setupUserAction()
 
       val request = FakeRequest().withMethod("POST")
-      val result = await(csrfAddToken(controller.startForm)(request))
+      val result = csrfAddToken(controller.startForm)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")
@@ -464,10 +464,10 @@ class ApplicationControllerSpec
       setupFhddsStatus(FhddsStatus.Deregistered)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.checkStatus())(request))
+      val result = csrfAddToken(controller.checkStatus())(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages(s"fh.status.${FhddsStatus.Deregistered.toString}.title"))
+      contentAsString(result) should include(Messages(s"fh.status.${FhddsStatus.Deregistered.toString}.title"))
     }
   }
 }

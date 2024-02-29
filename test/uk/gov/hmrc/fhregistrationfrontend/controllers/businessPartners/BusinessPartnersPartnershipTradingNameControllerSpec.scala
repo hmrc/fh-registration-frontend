@@ -60,7 +60,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
         when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(index, mode))(request))
+        val result = csrfAddToken(controller.load(index, mode))(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -80,7 +80,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
         when(mockAppConfig.getRandomBusinessType()).thenReturn("partnership")
 
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load(index, mode))(request))
+        val result = csrfAddToken(controller.load(index, mode))(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -105,7 +105,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
               "tradingName_value" -> "new trading name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -129,7 +129,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
               "tradingName_value" -> "new trading name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -153,7 +153,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
               "tradingName_value" -> "new trading name"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(routes.PartnerTypeController.load(index, mode).url)
@@ -173,7 +173,7 @@ class BusinessPartnersPartnershipTradingNameControllerSpec extends ControllerSpe
             "tradingName_value" -> ""
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(index, mode))(request))
+        val result = csrfAddToken(controller.next(index, mode))(request)
 
         status(result) shouldBe BAD_REQUEST
         val page = Jsoup.parse(contentAsString(result))

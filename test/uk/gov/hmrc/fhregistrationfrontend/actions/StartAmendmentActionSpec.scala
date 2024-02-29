@@ -27,13 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FhddsConnectorMocks, Save4LaterMocks, StubbedErrorHandler}
 
+import scala.concurrent.Future
+
 class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
-  lazy val action = new StartAmendmentAction(mockFhddsConnector)(
-    mockSave4Later,
-    errorHandler,
-    scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler, ec)
 
   "Start amendment action " should {
     "Fail when no fhdds registration number" in {
@@ -76,7 +75,7 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
 
         val action = new StartAmendmentAction(fhddsConnector)(
           mockSave4Later,
@@ -100,7 +99,7 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Received, Processing)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new StartAmendmentAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,

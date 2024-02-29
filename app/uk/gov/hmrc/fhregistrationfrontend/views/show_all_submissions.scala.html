@@ -17,15 +17,16 @@
 @import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 @import play.api.Configuration
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 
 @this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+layout: layout
 )
 
-@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messagesApi: Messages)
+@(submissionList: List[SubmissionTracking])(implicit request: Request[_], config: AppConfig,  messages: Messages)
 
 
-@mainTemplate(title = Messages("home.admin.submisson.page.title")) {
+@layout(title = messages("home.admin.submisson.page.title")) {
 
     <br/><br/>
 

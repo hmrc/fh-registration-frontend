@@ -19,10 +19,13 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
+
+import scala.concurrent.Future
 
 class NewApplicationActionSpec extends ActionSpecBase {
 
@@ -39,7 +42,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         fhddsStatus <- List(Processing, Received, Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
           StubbedErrorHandler,
           scala.concurrent.ExecutionContext.Implicits.global)
@@ -76,7 +79,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
         fhddsStatus <- List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
           StubbedErrorHandler,
           scala.concurrent.ExecutionContext.Implicits.global)

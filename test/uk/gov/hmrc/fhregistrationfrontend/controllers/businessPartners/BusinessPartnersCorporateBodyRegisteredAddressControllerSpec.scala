@@ -56,7 +56,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -71,7 +71,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -107,7 +107,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
                 ("partnerPostcode", "SW1A 2AA")
               )
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next())(request))
+            val result = csrfAddToken(controller.next())(request)
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(
@@ -138,7 +138,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
               )
               .withMethod("POST")
 
-            val result = await(csrfAddToken(controller.next())(request))
+            val result = csrfAddToken(controller.next())(request)
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(
               routes.BusinessPartnersCorporateBodyConfirmRegisteredAddressController.load().url)
@@ -163,7 +163,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
               )
               .withMethod("POST")
 
-            val result = await(csrfAddToken(controller.next())(request))
+            val result = csrfAddToken(controller.next())(request)
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(cannotFindAddressUrl)
             reset(mockActions)
@@ -188,7 +188,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
                 ("partnerPostcode", "HR33 7GP"),
               )
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next())(request))
+            val result = csrfAddToken(controller.next())(request)
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(cannotFindAddressUrl)
@@ -215,7 +215,7 @@ class BusinessPartnersCorporateBodyRegisteredAddressControllerSpec extends Contr
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe NOT_FOUND
           val page = Jsoup.parse(contentAsString(result))

@@ -43,7 +43,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -57,9 +57,9 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
@@ -76,7 +76,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
           val request = FakeRequest()
             .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", "123456789"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -91,7 +91,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
           val request = FakeRequest()
             .withFormUrlEncodedBody("vatNumber_yesNo" -> "false")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(routes.BusinessPartnersCorporateBodyUtrController.load().url)
@@ -105,7 +105,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
           val request = FakeRequest()
             .withFormUrlEncodedBody(("vatNumber_yesNo", "true"), ("vatNumber_value", ""))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -124,7 +124,7 @@ class BusinessPartnersCorporateBodyVatNumberControllerSpec extends ControllerSpe
         val request = FakeRequest()
           .withFormUrlEncodedBody(("chosenAddress", "1"))
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

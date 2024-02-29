@@ -66,18 +66,18 @@ class WithdrawalControllerSpec
 
     "Render reason page" in {
 
-      val result = await(csrfAddToken(controller.reason).apply(FakeRequest()))
+      val result = csrfAddToken(controller.reason).apply(FakeRequest())
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.withdrawalReason.title"))
+      contentAsString(result) should include(Messages("fh.withdrawalReason.title"))
     }
 
     "Fail on postReason when reason is not given" in {
-      val result = await(csrfAddToken(controller.postReason)(FakeRequest()))
+      val result = csrfAddToken(controller.postReason)(FakeRequest())
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.withdrawalReason.title"))
-      bodyOf(result) should include(Messages("fh.generic.errorPrefix"))
+      contentAsString(result) should include(Messages("fh.withdrawalReason.title"))
+      contentAsString(result) should include(Messages("fh.generic.errorPrefix"))
     }
 
     "Redirect from postReason to confirm when reason is given" in {
@@ -86,7 +86,7 @@ class WithdrawalControllerSpec
           WithdrawalReasonForm.reasonKey -> WithdrawalReasonEnum.AppliedInError.toString
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postReason)(request))
+      val result = csrfAddToken(controller.postReason)(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/withdraw/confirm")
     }
@@ -94,16 +94,16 @@ class WithdrawalControllerSpec
     "Render the confirmation page if all data is given" in {
       val request = FakeRequest()
       setupKeyStoreWithdrawalReason()
-      val result = await(csrfAddToken(controller.confirm)(request))
+      val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.withdrawalConfirm.title"))
+      contentAsString(result) should include(Messages("fh.withdrawalConfirm.title"))
     }
 
     "Fail to render confirmation if reason was not given previously" in {
       setupKeyStoreWithdrawalReason(None)
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.confirm)(request))
+      val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -111,11 +111,11 @@ class WithdrawalControllerSpec
     "Fail on postConfirmation if confirmation is not answered" in {
       setupKeyStoreWithdrawalReason()
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.withdrawalConfirm.title"))
-      bodyOf(result) should include(Messages("fh.generic.errorPrefix"))
+      contentAsString(result) should include(Messages("fh.withdrawalConfirm.title"))
+      contentAsString(result) should include(Messages("fh.generic.errorPrefix"))
     }
 
     "Fail on postConfirmation if reason was not saved" in {
@@ -125,7 +125,7 @@ class WithdrawalControllerSpec
         ConfirmationForm.usingDefaultEmailKey -> "true",
         ConfirmationForm.defaultEmailKey      -> "some@email.com"
       )
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -140,7 +140,7 @@ class WithdrawalControllerSpec
           ConfirmationForm.defaultEmailKey      -> "some@email.com"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe SEE_OTHER
       val s = session(result)
@@ -157,7 +157,7 @@ class WithdrawalControllerSpec
           ConfirmationForm.confirmKey -> "false"
         )
         .withMethod("POST")
-      val result = await(csrfAddToken(controller.postConfirmation)(request))
+      val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe SEE_OTHER
       session(result)
@@ -167,7 +167,7 @@ class WithdrawalControllerSpec
     "Fail to render the ack page is session does not have the required keys" in {
       setupUserAction()
       val request = FakeRequest().withSession()
-      val result = await(csrfAddToken(controller.acknowledgment)(request))
+      val result = csrfAddToken(controller.acknowledgment)(request)
       status(result) shouldBe NOT_FOUND
     }
 
@@ -177,9 +177,9 @@ class WithdrawalControllerSpec
         controller.EmailSessionKey               -> "some@email.com",
         controller.ProcessingTimestampSessionKey -> System.currentTimeMillis.toString
       )
-      val result = await(csrfAddToken(controller.acknowledgment)(request))
+      val result = csrfAddToken(controller.acknowledgment)(request)
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.ack.withdrawal"))
+      contentAsString(result) should include(Messages("fh.ack.withdrawal"))
 
     }
   }

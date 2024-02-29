@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.mockito.Mockito.reset
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm
@@ -25,18 +26,20 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificat
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers._
 
+import scala.concurrent.Future
+
 class EmailVerificationControllerSpec
     extends ControllerSpecWithGuiceApp with EmailVerificationConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
-  val inMemorySave4Later =
-    new Save4LaterService(new InMemoryShortLivedCache(testUserId))(scala.concurrent.ExecutionContext.Implicits.global)
+  val shortLivedCache = new InMemoryShortLivedCache(testUserId)
+  val mockSave4LaterService = mock[Save4LaterService]
   implicit val hc = HeaderCarrier()
   val controller = new EmailVerificationController(
     commonDependencies,
     mockActions,
     mockMcc,
     mockEmailVerifcationConnector,
-    inMemorySave4Later,
+    mockSave4LaterService,
     views)(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
@@ -46,7 +49,7 @@ class EmailVerificationControllerSpec
       mockActions
     )
 
-    inMemorySave4Later.removeUserData(testUserId)
+    mockSave4LaterService.removeUserData(testUserId)
   }
 
   "contactEmail" should {
@@ -54,10 +57,10 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.contactEmail)(request))
+      val result = csrfAddToken(controller.contactEmail)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.label"))
+      contentAsString(result) should include(Messages("fh.emailVerification.label"))
     }
   }
 
@@ -66,10 +69,10 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.forcedContactEmail)(request))
+      val result = csrfAddToken(controller.forcedContactEmail)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.forced.label"))
+      contentAsString(result) should include(Messages("fh.emailVerification.forced.label"))
     }
   }
 
@@ -78,10 +81,10 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.submitContactEmail())(request))
+      val result = csrfAddToken(controller.submitContactEmail())(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.emailVerification.label"))
+      contentAsString(result) should include(Messages("fh.emailVerification.label"))
     }
 
     "Be successful when the new email is already verified" in {
@@ -95,9 +98,10 @@ class EmailVerificationControllerSpec
         )
         .withMethod("POST")
 
-      val result = await(csrfAddToken(controller.submitContactEmail())(request))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
 
-      await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe Some("c@c.co")
+      val result = csrfAddToken(controller.submitContactEmail())(request)
+
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")
     }
@@ -106,6 +110,8 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
       setupEmailVerificationConnector("c@c.co", false)
 
+      when(mockSave4LaterService.savePendingEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
+
       val request = FakeRequest()
         .withFormUrlEncodedBody(
           EmailVerificationForm.emailOptionKey  -> "true",
@@ -113,10 +119,7 @@ class EmailVerificationControllerSpec
         )
         .withMethod("POST")
 
-      val result = await(csrfAddToken(controller.submitContactEmail())(request))
-
-      await(inMemorySave4Later.fetchVerifiedEmail(testUserId)) shouldBe None
-      await(inMemorySave4Later.fetchPendingEmail(testUserId)) shouldBe Some("c@c.co")
+      val result = csrfAddToken(controller.submitContactEmail())(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/email-verification-status")
@@ -128,10 +131,10 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.submitForcedContactEmail())(request))
+      val result = csrfAddToken(controller.submitForcedContactEmail())(request)
 
       status(result) shouldBe BAD_REQUEST
-      bodyOf(result) should include(Messages("fh.emailVerification.forced.label"))
+      contentAsString(result) should include(Messages("fh.emailVerification.forced.label"))
     }
   }
 
@@ -140,17 +143,17 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, pendingEmail = Some(ggEmail))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerificationStatus())(request))
+      val result = csrfAddToken(controller.emailVerificationStatus())(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.pending.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.pending.title"))
     }
 
     "Redirect to resume when the pending email is verified email" in {
       setupEmailVerificationAction(Some(ggEmail), Some(ggEmail))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerificationStatus())(request))
+      val result = csrfAddToken(controller.emailVerificationStatus())(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")
@@ -160,17 +163,17 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(verifiedEmail = Some("c@c.co"), pendingEmail = Some(ggEmail))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerificationStatus())(request))
+      val result = csrfAddToken(controller.emailVerificationStatus())(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.pending.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.pending.title"))
     }
 
     "Redirect to resume when the email is verified" in {
       setupEmailVerificationAction(Some(ggEmail), None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerificationStatus())(request))
+      val result = csrfAddToken(controller.emailVerificationStatus())(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")
@@ -182,27 +185,27 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(verifiedEmail = Some("c@c.co"), None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailEdit)(request))
+      val result = csrfAddToken(controller.emailEdit)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.edit.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.edit.title"))
     }
 
     "Show the edit form page when there is a pending email" in {
       setupEmailVerificationAction(verifiedEmail = None, pendingEmail = Some("c@c.co"))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailEdit)(request))
+      val result = csrfAddToken(controller.emailEdit)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.edit.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.edit.title"))
     }
 
     "Fail when there is no email to edit" in {
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailEdit)(request))
+      val result = csrfAddToken(controller.emailEdit)(request)
 
       status(result) shouldBe BAD_REQUEST
 
@@ -214,27 +217,27 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(verifiedEmail = Some("c@c.co"), None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailChange)(request))
+      val result = csrfAddToken(controller.emailChange)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.edit.start.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.edit.start.title"))
     }
 
     "Show the edit form page when there is a pending email" in {
       setupEmailVerificationAction(verifiedEmail = None, pendingEmail = Some("c@c.co"))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailChange)(request))
+      val result = csrfAddToken(controller.emailChange)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.edit.start.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.edit.start.title"))
     }
 
     "Fail when there is no email to edit" in {
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailChange)(request))
+      val result = csrfAddToken(controller.emailChange)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -245,10 +248,10 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(verifiedEmail = Some("c@c.co"), pendingEmail = None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerified)(request))
+      val result = csrfAddToken(controller.emailVerified)(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.verified.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.verified.title"))
     }
 
     "Failed when no verified email" in {
@@ -256,7 +259,7 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerified)(request))
+      val result = csrfAddToken(controller.emailVerified)(request)
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -265,9 +268,11 @@ class EmailVerificationControllerSpec
   "emailVerify" should {
     "Redirect to email verified and save the email" in {
       setupEmailVerificationAction(None, pendingEmail = Some("c@c.co"))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
+      when(mockSave4LaterService.deletePendingEmail(any())(any())).thenReturn(Future(None))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerify("ACA35F94"))(request))
+      val result = csrfAddToken(controller.emailVerify("ACA35F94"))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/email-verified")
@@ -277,17 +282,17 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, pendingEmail = Some("c@c.co"))
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerify("123"))(request))
+      val result = csrfAddToken(controller.emailVerify("123"))(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages("fh.emailVerification.pending.title"))
+      contentAsString(result) should include(Messages("fh.emailVerification.pending.title"))
     }
 
     "Redirect to resume when no actual pending email" in {
       setupEmailVerificationAction(None, None)
 
       val request = FakeRequest()
-      val result = await(csrfAddToken(controller.emailVerify("123"))(request))
+      val result = csrfAddToken(controller.emailVerify("123"))(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/resume")

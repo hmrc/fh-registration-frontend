@@ -21,6 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks, Save4LaterMocks}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
+import play.api.test.Helpers._
 
 class ReadonlySummaryControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks {
@@ -41,10 +42,10 @@ class ReadonlySummaryControllerSpec
       setupFhddsStatus(FhddsStatus.Approved)
 
       val request = FakeRequest()
-      val result = await(controller.view()(request))
+      val result = controller.view()(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyApplication}.title"))
+      contentAsString(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyApplication}.title"))
     }
 
     "Render the summary for a rejected application" in {
@@ -53,10 +54,10 @@ class ReadonlySummaryControllerSpec
       setupFhddsStatus(FhddsStatus.Revoked)
 
       val request = FakeRequest()
-      val result = await(controller.view()(request))
+      val result = controller.view()(request)
 
       status(result) shouldBe OK
-      bodyOf(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyRegister}.title"))
+      contentAsString(result) should include(Messages(s"fh.summary.${Mode.ReadOnlyRegister}.title"))
     }
   }
 }

@@ -16,24 +16,21 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
-import akka.stream.Materializer
 import models.{Mode, UserAnswers}
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
-import play.api.test.Helpers
+import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.auth.core.{AffinityGroup, CredentialRole, User}
 import uk.gov.hmrc.fhregistrationfrontend.actions._
-import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page._
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyType}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,8 +38,6 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   this: UnitSpec =>
 
   val mockActions = mock[Actions]
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  implicit private val materializer = mock[Materializer]
 
   def setupPageAction(
     page: AnyPage,
@@ -54,7 +49,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   ) = {
 
     val actionBuilder = new ActionBuilder[PageRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: PageRequest[A] => Future[Result]): Future[Result] = {
         val userRequest =
@@ -89,7 +84,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     journeyType: JourneyType = JourneyType.Amendment
   ) =
     when(mockActions.summaryAction) thenReturn new ActionBuilder[SummaryRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: SummaryRequest[A] => Future[Result]): Future[Result] = {
         val userRequest =
@@ -104,7 +99,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupNewApplicationAction(): Unit =
     when(mockActions.newApplicationAction) thenReturn new ActionBuilder[UserRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] = {
         val userRequest =
@@ -115,7 +110,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupStartAmendmentAction(currentJourneyType: Option[JourneyType]): Unit =
     when(mockActions.startAmendmentAction) thenReturn new ActionBuilder[StartUpdateRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](
         request: Request[A],
@@ -134,7 +129,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupStartVariationAction(currentJourneyType: Option[JourneyType]): Unit =
     when(mockActions.startVariationAction) thenReturn new ActionBuilder[StartUpdateRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](
         request: Request[A],
@@ -154,7 +149,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
   def setupEmailVerificationAction(verifiedEmail: Option[String], pendingEmail: Option[String]): Any = {
     val candidateEmail = verifiedEmail orElse pendingEmail orElse Some(ggEmail)
     when(mockActions.emailVerificationAction) thenReturn new ActionBuilder[EmailVerificationRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](
         request: Request[A],
@@ -182,7 +177,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     rNumber: Option[String] = Some(registrationNumber),
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages)) =
     when(mockActions.journeyAction) thenReturn new ActionBuilder[JourneyRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] => Future[Result]): Future[Result] = {
         val userRequest =
@@ -195,7 +190,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupEnrolledUserAction(registrationNumber: String = registrationNumber): Unit =
     when(mockActions.enrolledUserAction) thenReturn new ActionBuilder[EnrolledUserRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](
         request: Request[A],
@@ -216,7 +211,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     when(mockActions.dataRequiredActionBusinessPartners(1, mode)) thenReturn new ActionBuilder[
       DataRequiredRequest,
       AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
 
       override val executionContext = ec
 
@@ -239,7 +234,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     when(mockActions.dataRequiredActionCompanyOfficers(1, mode)) thenReturn new ActionBuilder[
       DataRequiredRequest,
       AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
 
       override val executionContext = ec
 
@@ -260,7 +255,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
 
   def setupDataRetrievedAction(userAnswers: Option[UserAnswers]): Unit =
     when(mockActions.dataRetrievalAction) thenReturn new ActionBuilder[DataRetrievedActionRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
 
       override val executionContext = ec
 
@@ -284,7 +279,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     credentialRole: Option[CredentialRole] = Some(User),
     userAffinityGroup: AffinityGroup = AffinityGroup.Individual) =
     when(mockActions.userAction) thenReturn new ActionBuilder[UserRequest, AnyContent] {
-      override def parser = Helpers.stubPlayBodyParsers.defaultBodyParser
+      override def parser = stubControllerComponents().parsers.defaultBodyParser
       override val executionContext = ec
       override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] = {
         val userRequest =

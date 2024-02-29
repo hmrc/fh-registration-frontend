@@ -75,7 +75,7 @@ case class UserAction @Inject()(
           else if (retrieveAffinityGroup.isEmpty) {
             Future successful Left(
               errorHandler
-                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service")))
+                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service.")))
           } else
             Future successful Right(
               new UserRequest(

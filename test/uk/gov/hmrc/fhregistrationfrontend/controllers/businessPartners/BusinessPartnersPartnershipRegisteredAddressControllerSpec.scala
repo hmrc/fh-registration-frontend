@@ -69,7 +69,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -83,7 +83,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -116,7 +116,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
               ("partnerPostcode", "SW1A 2AA")
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -146,7 +146,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
               ("partnerPostcode", "TF1 4ER")
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -168,7 +168,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
             val request = FakeRequest()
               .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", ""))
               .withMethod("POST")
-            val result = await(csrfAddToken(controller.next(index, mode))(request))
+            val result = csrfAddToken(controller.next(index, mode))(request)
 
             status(result) shouldBe SEE_OTHER
             redirectLocation(result).get should include(
@@ -192,7 +192,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
               ("partnerPostcode", "HR33 7GP"),
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(
@@ -218,7 +218,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "SW1A 2AA"), ("partnerAddressLine", "44"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
         }
@@ -239,7 +239,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerAddressLine", "44"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
         }
@@ -260,7 +260,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
           val request = FakeRequest()
             .withFormUrlEncodedBody(("partnerPostcode", "invalid postcode"), ("partnerAddressLine", "44"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
         }
@@ -284,7 +284,7 @@ class BusinessPartnersPartnershipRegisteredAddressControllerSpec extends Control
               ("partnerAddressLine", "this Address Line is too long this Address Line is too long")
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe BAD_REQUEST
         }

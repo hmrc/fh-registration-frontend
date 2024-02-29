@@ -16,34 +16,46 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.AdminRequest
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.routes.AdminPageController
 
-@this(
-    mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
-)
+@this(layout: layout, viewHelpers: ViewHelpers)
 
-@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messagesProvider: Messages)
+@(form: Form[AdminRequest])(implicit request: Request[_], config: AppConfig, messages: Messages)
 
-@mainTemplate(title = Messages("home.admin.submisson.page.title")) {
+@title = @{messages("home.admin.submisson.page.title")}
+@layout(title = title) {
 
-    @helper.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.admin.routes.AdminPageController.sendAdminRequest(), Symbol("novalidate") -> "novalidate") {
-        @helper.CSRF.formField
+@viewHelpers.form(action = AdminPageController.sendAdminRequest(), Symbol("novalidate") -> "novalidate") {
 
-    <fieldset>
-    <div class="form-field">
-        <input id="userId" name="userId" type="text" value="userId">
+        @if(form.errors.nonEmpty) {
+            @viewHelpers.govukErrorSummary(ErrorSummaryViewModel(form))
+        }
 
-    </div>
+        @viewHelpers.govukInput(
+            InputViewModel(
+                field = form("userId"),
+                label = LabelViewModel("userId")
+            )
+        )
 
-    <div class="form-field">
-        <input id="groupId" name="groupId" type="text" value="groupId">
-    </div>
+        @viewHelpers.govukInput(
+            InputViewModel(
+                field = form("groupId"),
+                label = LabelViewModel("groupId")
+            )
+        )
 
-    <div class="form-field">
-        <input id="registrationNumber" name="registrationNumber" type="text" value="regNo.">
-    </div>
+        @viewHelpers.govukInput(
+            InputViewModel(
+                field = form("registrationNumber"),
+                label = LabelViewModel("registrationNumber")
+            )
+        )
 
-    <button type="submit">Send</button>
-
-    </fieldset>
+        @viewHelpers.govukButton(
+            ButtonViewModel("Send")
+        )
     }
 }

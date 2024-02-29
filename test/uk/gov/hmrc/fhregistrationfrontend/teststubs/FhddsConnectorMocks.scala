@@ -37,10 +37,10 @@ trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
   val mockFhddsConnector = mock[FhddsConnector]
 
   def setupFhddsEnrolmentProgress(enrolmentProgress: EnrolmentProgress) =
-    when(mockFhddsConnector.getEnrolmentProgress(any())) thenReturn enrolmentProgress
+    when(mockFhddsConnector.getEnrolmentProgress(any())) thenReturn Future(enrolmentProgress)
 
   def setupFhddsStatus(fhddsStatus: FhddsStatus, registrationNumber: String = registrationNumber) =
-    when(mockFhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn fhddsStatus
+    when(mockFhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
 
   def setupDesDisplayResult(
     jsonFile: String = "limited-company/fhdds-limited-company-large-uk",

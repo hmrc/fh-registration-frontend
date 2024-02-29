@@ -44,7 +44,7 @@ class EnterOtherStoragePremisesControllerSpec
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -59,7 +59,7 @@ class EnterOtherStoragePremisesControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -84,7 +84,7 @@ class EnterOtherStoragePremisesControllerSpec
               "addMore"                         -> "false"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted with: (StoragePremise(Address(44 Test town,None,None,None,AB1 2YZ,None,None),true),false)"
@@ -97,7 +97,7 @@ class EnterOtherStoragePremisesControllerSpec
           setupUserAction()
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe NOT_FOUND
           val page = Jsoup.parse(contentAsString(result))

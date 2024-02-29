@@ -55,7 +55,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -73,7 +73,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -97,7 +97,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
             "tradingName_value" -> "Blue Peter"
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(index, mode))(request))
+        val result = csrfAddToken(controller.next(index, mode))(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result).get should include(
@@ -117,7 +117,7 @@ class BusinessPartnersSoleProprietorsTradingNameControllerSpec extends Controlle
             "tradingName_value" -> ""
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(index, mode))(request))
+        val result = csrfAddToken(controller.next(index, mode))(request)
 
         status(result) shouldBe BAD_REQUEST
         reset(mockActions)

@@ -55,7 +55,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(1, mode))(request))
+          val result = csrfAddToken(controller.load(1, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -73,7 +73,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
           when(mockSessionCache.set(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(1, mode))(request))
+          val result = csrfAddToken(controller.load(1, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -94,7 +94,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
             ("unincorporatedBodyName_value", "Test Body")
           )
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(1, mode))(request))
+        val result = csrfAddToken(controller.next(1, mode))(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result).get should include(unincorpoBodyTradingNameUrl)
@@ -109,7 +109,7 @@ class BusinessPartnersUnincorporatedBodyNameControllerSpec extends ControllerSpe
         val request = FakeRequest()
           .withFormUrlEncodedBody(("unincorporatedBodyName_value", ""))
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next(1, mode))(request))
+        val result = csrfAddToken(controller.next(1, mode))(request)
 
         status(result) shouldBe BAD_REQUEST
         val page = Jsoup.parse(contentAsString(result))

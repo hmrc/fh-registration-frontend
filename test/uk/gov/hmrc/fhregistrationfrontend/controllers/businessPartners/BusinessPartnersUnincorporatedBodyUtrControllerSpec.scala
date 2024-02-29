@@ -43,7 +43,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -57,9 +57,9 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
-        result.header.status shouldBe NOT_FOUND
+        status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include("Page not found")
         reset(mockActions)
@@ -78,7 +78,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
               ("uniqueTaxpayerReference_yesNo", "true"),
               ("uniqueTaxpayerReference_value", "1234567890"))
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           reset(mockActions)
@@ -90,7 +90,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
           val request = FakeRequest()
             .withFormUrlEncodedBody("uniqueTaxpayerReference_yesNo" -> "false")
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           reset(mockActions)
@@ -105,7 +105,7 @@ class BusinessPartnersUnincorporatedBodyUtrControllerSpec extends ControllerSpec
         val request = FakeRequest()
           .withFormUrlEncodedBody(("chosenAddress", "1"))
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

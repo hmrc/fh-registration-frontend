@@ -53,7 +53,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -70,7 +70,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
           setupDataRequiredActionBusinessPartners(userAnswers, mode)
 
           val request = FakeRequest()
-          val result = await(csrfAddToken(controller.load(index, mode))(request))
+          val result = csrfAddToken(controller.load(index, mode))(request)
 
           status(result) shouldBe OK
           val page = Jsoup.parse(contentAsString(result))
@@ -94,7 +94,7 @@ class BusinessPartnersCorporateBodyCompanyNameControllerSpec extends ControllerS
               "companyName" -> "Company name goes here"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next(index, mode))(request))
+          val result = csrfAddToken(controller.next(index, mode))(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result).get should include(

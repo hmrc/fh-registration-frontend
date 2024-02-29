@@ -45,7 +45,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -60,7 +60,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -83,7 +83,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
               "tradingName_value" -> "Blue peter unincorporated"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
@@ -100,7 +100,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
               "tradingName_value" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(unincorpBodyVatRegNumUrl)
@@ -119,7 +119,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
               "tradingName_value" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           reset(mockActions)
@@ -132,7 +132,7 @@ class BusinessPartnersUnincorporatedBodyTradingNameControllerSpec extends Contro
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

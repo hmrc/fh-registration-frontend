@@ -43,7 +43,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -57,7 +57,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -76,7 +76,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
           .withFormUrlEncodedBody("enterAddress.line1" -> "Line one", "enterAddress.line3" -> "town")
           .withMethod("POST")
 
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe SEE_OTHER
         reset(mockActions)
@@ -89,7 +89,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
           .withFormUrlEncodedBody()
           .withMethod("POST")
 
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe BAD_REQUEST
         reset(mockActions)
@@ -103,7 +103,7 @@ class BusinessPartnersCorporateBodyEnterAddressControllerSpec extends Controller
         val request = FakeRequest()
           .withFormUrlEncodedBody("enterAddress.line1" -> "Line one", "enterAddress.line3" -> "town")
           .withMethod("POST")
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))

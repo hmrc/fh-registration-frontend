@@ -46,7 +46,7 @@ class ContactPersonControllerSpec
 
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
@@ -60,7 +60,7 @@ class ContactPersonControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.load())(request))
+        val result = csrfAddToken(controller.load())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
@@ -86,7 +86,7 @@ class ContactPersonControllerSpec
               "usingSameContactAddress" -> "true"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,true,None,None,None)"
@@ -114,7 +114,7 @@ class ContactPersonControllerSpec
               "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,None,None,None,AB1 2YZ,None,None)),None)"
@@ -145,7 +145,7 @@ class ContactPersonControllerSpec
               "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
           contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
@@ -167,7 +167,7 @@ class ContactPersonControllerSpec
               "usingSameContactAddress" -> ""
             )
             .withMethod("POST")
-          val result = await(csrfAddToken(controller.next())(request))
+          val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
@@ -182,7 +182,7 @@ class ContactPersonControllerSpec
         setupUserAction()
         when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
         val request = FakeRequest()
-        val result = await(csrfAddToken(controller.next())(request))
+        val result = csrfAddToken(controller.next())(request)
 
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
