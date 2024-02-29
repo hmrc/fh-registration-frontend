@@ -28,17 +28,14 @@ object AppDependencies {
     "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion,
     "org.mindrot" % "jbcrypt" % "0.4",
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion" % hmrcMongoVersion,
-
     compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.14" cross CrossVersion.full),
     "com.github.ghik" % "silencer-lib" % "1.7.14" % Provided cross CrossVersion.full
   )
 
   def test(scope: String = "test,it") = Seq(
     "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapVersion % scope,
-    "org.mockito"            %% "mockito-scala-scalatest"     % "1.17.30" % scope,
     "org.pegdown" % "pegdown" % "1.6.0" % scope,
     "org.jsoup" % "jsoup" % "1.15.4" % scope,
-    "org.scalatestplus"      %% "scalacheck-1-17" % "3.2.17.0" % scope,
     "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % scope,
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
     "com.github.java-json-tools" % "json-schema-validator" % "2.2.14" % scope
