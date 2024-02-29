@@ -29,14 +29,6 @@ object OtherStoragePremisesHelper {
 
   def apply(data: StoragePremisesModel, mode: Mode)(implicit messages: Messages) = {
 
-    val changeLink = {
-      if (Mode isEditable mode) {
-        Some("form/otherStoragePremises")
-      } else {
-        None
-      }
-    }
-
     val storageAddress = {
       data.value.values.zipWithIndex.flatMap {
         case (storagePremise: StoragePremise, index) =>
@@ -46,10 +38,16 @@ object OtherStoragePremisesHelper {
               SummaryRowParams.ofBoolean(
                 Some(Messages("fh.summary.thirdPartyPremises")),
                 storagePremise.isThirdParty,
-                changeLink,
+                None,
                 GroupRow.Bottom
               ),
-              None
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                s"form/otherStoragePremises/${index + 1}",
+                Text("Change"),
+                Some(Messages("fh.other_storage_premises.each.title", {
+                  index + 1
+                })))
             ),
             Helpers.createSummaryRow(
               SummaryRowParams(Some(Messages("fh.other_storage_premises.each.title", {
@@ -70,15 +68,22 @@ object OtherStoragePremisesHelper {
     val storagePremise = Seq(
       Helpers.createSummaryRow(
         SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.thirdPartyPremises")),
+          Some(Messages("fh.summary.usesStoragePremises")),
           data.hasValue,
-          changeLink,
+          None,
           GroupRow.Single
         ),
-        None))
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          s"form/otherStoragePremises",
+          Text("Change"),
+          Some(Messages("fh.other_storage_premises.title"))
+        )
+      )
+    )
 
     if (data.hasValue) {
-      storageAddress ++ storagePremise
+      storagePremise ++ storageAddress
     } else {
       storagePremise
     }
