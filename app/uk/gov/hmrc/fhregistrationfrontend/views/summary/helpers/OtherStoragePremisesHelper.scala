@@ -35,8 +35,22 @@ object OtherStoragePremisesHelper {
           val address = Helpers.formatAddress(storagePremise.address)
           Seq(
             Helpers.createSummaryRow(
+              SummaryRowParams(Some(Messages("fh.summary.thirdPartyPremises.address", {
+                index + 1
+              })), Some(address), None, GroupRow.Single),
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                s"form/otherStoragePremises/${index + 1}",
+                Text("Change"),
+                Some(Messages("fh.summary.thirdPartyPremises.address", {
+                  index + 1
+                })))
+            ),
+            Helpers.createSummaryRow(
               SummaryRowParams.ofBoolean(
-                Some(Messages("fh.summary.thirdPartyPremises")),
+                Some(Messages("fh.summary.thirdPartyPremises", {
+                  index + 1
+                })),
                 storagePremise.isThirdParty,
                 None,
                 GroupRow.Bottom
@@ -45,21 +59,10 @@ object OtherStoragePremisesHelper {
                 Mode isEditable mode,
                 s"form/otherStoragePremises/${index + 1}",
                 Text("Change"),
-                Some(Messages("fh.other_storage_premises.each.title", {
+                Some(Messages("fh.summary.thirdPartyPremises.hidden", {
                   index + 1
-                })))
-            ),
-            Helpers.createSummaryRow(
-              SummaryRowParams(Some(Messages("fh.other_storage_premises.each.title", {
-                index + 1
-              })), Some(address), None, GroupRow.Single),
-              Helpers.createChangeLink(
-                Mode isEditable mode,
-                s"form/otherStoragePremises/${index + 1}",
-                Text("Change"),
-                Some(Messages("fh.other_storage_premises.each.title", {
-                  index + 1
-                })))
+                }))
+              )
             )
           )
       }.toSeq
@@ -77,7 +80,7 @@ object OtherStoragePremisesHelper {
           Mode isEditable mode,
           s"form/otherStoragePremises",
           Text("Change"),
-          Some(Messages("fh.other_storage_premises.title"))
+          Some(Messages("fh.summary.usesStorage.hidden"))
         )
       )
     )
