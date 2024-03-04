@@ -66,6 +66,9 @@ class Actions @Inject()(
   def journeyAction = userAction andThen new JourneyAction(journeys)
   def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None, journeys)
 
+//   USING NEXT PAGE ACTION AS A DUMMY ACTION TO FIND CORRECT NEXT ROUTING AND THEN CALL PAGE ACTION WITH IT
+  def nextPageAction(pageId: String) = journeyAction andThen new NextPageAction(pageId, None, journeys)
+
   def newApplicationAction =
     noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
 

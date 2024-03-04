@@ -40,6 +40,11 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
   def get[T](pageId: String): Option[Page[T]] =
     pages find (_.id == pageId) map (_.asInstanceOf[Page[T]])
 
+  def overwrite[T](page: Page[T], value: Option[T]): CachedJourneyState =
+//    TODO: NEED TO IMPLEMENT THIS FUNCTION
+//    CAN HACK IT TO WORK CURRENTLY BY SAVING, CLICKING BACK, THEN CLICKING SAVE AGAIN (HAS SAME EFFECT ON CALL TO getNextPageFromJourneysAndCurrentPageIdAlt
+    this
+
   override def lastEditedPage: Option[AnyPage] = {
     val firstNotCompletedIndex = pages indexWhere (_.pageStatus != Completed)
 

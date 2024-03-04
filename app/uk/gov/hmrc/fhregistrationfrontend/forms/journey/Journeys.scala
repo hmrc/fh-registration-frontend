@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
+
 import javax.inject.Inject
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, ImportingActivities, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 class Journeys @Inject()(views: Views) {
@@ -27,16 +29,69 @@ class Journeys @Inject()(views: Views) {
 
   private val page = new InjectedPage(views)
 
+  def getNextPageFromJourneysAndCurrentPageId(
+    journeyType: JourneyType,
+    journeyPages: JourneyPages,
+    journeyState: JourneyState,
+    pageId: String
+  ): String =
+//    TODO: FILL IN THIS METHOD
+    if (conditionalPages.map(a => a.page.id).contains(pageId)) {
+//      CHECK CONDITION HAS BEEN MET (WE CAN ASSUME CONDITIONAL PAGES WILL BE BOOLEAN IN FUTURE - THIS HELPS A LOT)
+      val importingActivitiesData: Option[ImportingActivities] =
+        journeyState.get[ImportingActivities](page.importingActivitiesPage.id).flatMap(_.data)
+      println("INITIAL FUNCTION")
+      println(importingActivitiesData)
+      val routingBool = importingActivitiesData.exists(_.hasEori)
+      conditionalPages.find(a => a.page.id == pageId).get.routing(routingBool).id
+    } else {
+//      JUST GET NEXT PAGE ID
+      val index = journeyPages.pages.map(_.id).indexOf(pageId)
+      journeyPages.pages(index + 1).id
+    }
+
+  def getNextPageFromJourneysAndCurrentPageIdAlt(
+    journey: JourneyNavigation,
+    journeyState: JourneyState,
+    newPage: AnyPage
+  ): Option[AnyPage] =
+    //    TODO: FILL IN THIS METHOD
+    if (conditionalPages.map(a => a.page.id).contains(newPage.id)) {
+      //      CHECK CONDITION HAS BEEN MET (WE CAN ASSUME CONDITIONAL PAGES WILL BE BOOLEAN IN FUTURE - THIS HELPS A LOT)
+      val importingActivitiesData: Option[ImportingActivities] = {
+        journeyState.get[ImportingActivities](page.importingActivitiesPage.id).flatMap(_.data)
+      }
+      println("ALT FUNCTION")
+      println(importingActivitiesData)
+      val routingBool = importingActivitiesData.exists(_.hasEori)
+      val dfd = conditionalPages.find(a => a.page.id == newPage.id)
+      val a = dfd.map(_.routing(routingBool))
+      a
+    } else {
+      //      JUST GET NEXT PAGE ID
+      journey next newPage
+    }
+
+  case class ConditionalPageRouting(page: AnyPage, routing: Boolean => AnyPage)
+
+  val conditionalPages = Seq[ConditionalPageRouting](
+    ConditionalPageRouting(
+      page.importingActivitiesPage,
+//       IMPLEMENTED RANDOM ROUTING CONDITION TO SHOW WHAT IS POSSIBLE
+      bool => if (bool) page.businessCustomersPage else page.otherStoragePremisesPage
+    )
+  )
+
   val limitedCompanyPages =
     Seq[AnyPage](
-      page.contactPersonPage,
-      page.mainBusinessAddressPage,
-      page.companyRegistrationNumberPage,
-      page.dateOfIncorporationPage,
-      page.tradingNamePage,
-      page.vatNumberPage,
-      page.companyOfficersPage,
-      page.businessStatusPage,
+//      page.contactPersonPage,
+//      page.mainBusinessAddressPage,
+//      page.companyRegistrationNumberPage,
+//      page.dateOfIncorporationPage,
+//      page.tradingNamePage,
+//      page.vatNumberPage,
+//      page.companyOfficersPage,
+//      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage
@@ -44,12 +99,12 @@ class Journeys @Inject()(views: Views) {
 
   val soleTraderPages =
     Seq[AnyPage](
-      page.contactPersonPage,
-      page.mainBusinessAddressPage,
-      page.nationalInsuranceNumberPage,
-      page.tradingNamePage,
-      page.vatNumberPage,
-      page.businessStatusPage,
+//      page.contactPersonPage,
+//      page.mainBusinessAddressPage,
+//      page.nationalInsuranceNumberPage,
+//      page.tradingNamePage,
+//      page.vatNumberPage,
+//      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage
@@ -57,12 +112,12 @@ class Journeys @Inject()(views: Views) {
 
   val partnershipPages =
     Seq[AnyPage](
-      page.contactPersonPage,
-      page.mainBusinessAddressPage,
-      page.tradingNamePage,
-      page.vatNumberPage,
-      page.businessPartnersPage,
-      page.businessStatusPage,
+//      page.contactPersonPage,
+//      page.mainBusinessAddressPage,
+//      page.tradingNamePage,
+//      page.vatNumberPage,
+//      page.businessPartnersPage,
+//      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage

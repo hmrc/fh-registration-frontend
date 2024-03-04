@@ -43,5 +43,6 @@ trait JourneyState {
   def isPageComplete(page: AnyPage): Boolean
 
   def get[T](pageId: String): Option[Page[T]]
+  def overwrite[T](page: Page[T], value: Option[T]): JourneyState
   def lastEditedPage: Option[AnyPage]
 }
