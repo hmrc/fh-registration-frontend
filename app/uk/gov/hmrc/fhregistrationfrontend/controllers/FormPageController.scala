@@ -45,11 +45,6 @@ class FormPageController @Inject()(
     renderForm(request.page, false)
   }
 
-  def loadNextPage(pageId: String) = nextPageAction(pageId) { implicit request =>
-//    TODO: THIS IS NOT USED AT ALL
-    renderForm(request.page, false)
-  }
-
   def loadWithSection(pageId: String, sectionId: String) =
     pageAction(pageId, Some(sectionId)) { implicit request =>
       renderForm(request.page, false)
@@ -73,7 +68,7 @@ class FormPageController @Inject()(
                   if (isSaveForLate)
                     Redirect(routes.Application.savedForLater)
                   else {
-//                  REALISTICIALLY WOULD PREFER TO FIND CORRECT NEXT PAGE IN THIS FUNCTION
+//                  REALISTICALLY WOULD PREFER TO FIND CORRECT NEXT PAGE IN THIS FUNCTION
 //                  THE PROBLEM IS THE REQUEST WE HAVE HERE HAS THE JOURNEY PAGES/STATE WITHOUT THE SAVED VALUE
 //                  WE COULD PASS IN THE PAGE AND SAVED VALUE AND THEN WORK OUT IN THERE LIKE
                     findNextPage(page, value)
@@ -113,8 +108,9 @@ class FormPageController @Inject()(
 //  WE THEN NEED TO BUILD THIS FUNCTION CORRECTLY - ESSENTIALLY REFORMING THE PAGE REQUEST VALUE (THIS SEEMS INEFFICIENT)
   def getFollowingPage[T](newPage: Page[T], value: Option[T])(implicit request: PageRequest[_]): Option[AnyPage] = {
     val initJourneyState = request.journeyState
+//    TODO: CURRENTLY NOT IMPLEMENTED, BUT CAN WORKAROUND
     val newJourneyState = initJourneyState.overwrite(newPage, value)
-    journeys.getNextPageFromJourneysAndCurrentPageIdAlt(request.journey, newJourneyState, newPage)
+    journeys.getNextPageFromJourneysAndCurrentPageId(request.journey, newJourneyState, newPage)
   }
 
   private def findNextPage[T](newPage: Page[T], value: Option[T])(implicit request: PageRequest[_]): Result =
@@ -133,7 +129,7 @@ class FormPageController @Inject()(
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
       request.journey next newPage match {
-        case Some(nextPage) => Redirect(routes.FormPageController.loadNextPage(newPage.id))
+        case Some(nextPage) => Redirect(routes.FormPageController.load(nextPage.id))
         case None           => Redirect(routes.SummaryController.summary)
       }
 

@@ -63,7 +63,7 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
   }
 
   def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
-//    TODO: THIS NEEDS TO NOW TAKE ACCOUNT OF OPTIONAL PAGES
+//    TODO: THIS NEEDS TO NOW TAKE ACCOUNT OF OPTIONAL PAGES OTHERWISE GIVES 'THIS PAGE IS NOT FOUND' ERROR PAGE
     if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
