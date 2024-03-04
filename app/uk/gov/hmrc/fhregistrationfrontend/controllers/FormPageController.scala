@@ -68,9 +68,9 @@ class FormPageController @Inject()(
                   if (isSaveForLate)
                     Redirect(routes.Application.savedForLater)
                   else {
-//                  REALISTICALLY WOULD PREFER TO FIND CORRECT NEXT PAGE IN THIS FUNCTION
+//                  FIND CORRECT NEXT PAGE IN THIS FUNCTION
 //                  THE PROBLEM IS THE REQUEST WE HAVE HERE HAS THE JOURNEY PAGES/STATE WITHOUT THE SAVED VALUE
-//                  WE COULD PASS IN THE PAGE AND SAVED VALUE AND THEN WORK OUT IN THERE LIKE
+//                  WE TRY TO PASS IN THE PAGE AND SAVED VALUE AND THEN WORK OUT IN THERE LIKE
                     findNextPage(page, value)
 //                  showNextPage(page)
                   }
@@ -105,7 +105,7 @@ class FormPageController @Inject()(
       }
     }
 
-//  WE THEN NEED TO BUILD THIS FUNCTION CORRECTLY - ESSENTIALLY REFORMING THE PAGE REQUEST VALUE (THIS SEEMS INEFFICIENT)
+//  WE THEN NEED TO BUILD THIS FUNCTION CORRECTLY - ESSENTIALLY REFORMING THE PAGE REQUEST VALUE (THIS SEEMS INEFFICIENT - OTHER APPROACHES SEEM WORSE)
   def getFollowingPage[T](newPage: Page[T], value: Option[T])(implicit request: PageRequest[_]): Option[AnyPage] = {
     val initJourneyState = request.journeyState
 //    TODO: CURRENTLY NOT IMPLEMENTED, BUT CAN WORKAROUND

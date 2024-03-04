@@ -42,7 +42,7 @@ class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
 
   def overwrite[T](page: Page[T], value: Option[T]): CachedJourneyState =
 //    TODO: NEED TO IMPLEMENT THIS FUNCTION
-//    CAN HACK IT TO WORK CURRENTLY BY SAVING, CLICKING BACK, THEN CLICKING SAVE AGAIN (HAS SAME EFFECT ON CALL TO getNextPageFromJourneysAndCurrentPageIdAlt
+//    CAN HACK IT TO WORK CURRENTLY BY SAVING, CLICKING BACK, THEN CLICKING SAVE AGAIN (HAS SAME EFFECT ON CALL TO getNextPageFromJourneysAndCurrentPageId
     this
 
   override def lastEditedPage: Option[AnyPage] = {
