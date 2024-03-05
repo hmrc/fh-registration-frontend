@@ -72,7 +72,7 @@ object CompanyOrIndividualHelper {
         if (individual.hasPassportNumber.contains(true)) {
           Helpers.createSummaryRow(
             SummaryRowParams(
-              Some(messages("fh.company_officers.individual.passport.label")),
+              Some(messages("fh.individualIdentification.passportNumber.label")),
               individual.passport,
               None
             ),
