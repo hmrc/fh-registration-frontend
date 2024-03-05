@@ -56,7 +56,9 @@ class FormPageController @Inject()(
       request
         .page[T]
         .parseFromRequest(
-          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          pageWithErrors => {
+            Future successful renderForm(pageWithErrors, true)
+          },
           page => {
             addressAuditService.auditAddresses(pageId, page.updatedAddresses)
             save4LaterService

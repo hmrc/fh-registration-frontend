@@ -35,10 +35,42 @@ object ImportingActivitiesForm {
   val hasEoriMapping = hasEoriKey               -> yesOrNo()
   val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))
 
-  val importingActivitiesForm = Form(
+  val hasEoriForm = Form(hasEoriMapping)
+  val eoriNumberForm: Form[EoriNumber] = Form(eoriNumberMapping)
+
+  val optionalEoriNumberOnlyMapping = eoriNumberKey                             -> (eoriNumber onlyWhen (hasEoriMapping is true))
+  val optionalGoodsImportedOutsideEoriOnlyMapping = goodsImportedOutsideEoriKey -> (yesOrNo() onlyWhen (hasEoriMapping is true))
+//
+//  val eoriNumberOnlyForm: Form[Option[String]] = Form(optionalEoriNumberOnlyMapping)
+//  val goodsImportedOutsideEoriOnlyForm: Form[Option[Boolean]] = Form(optionalGoodsImportedOutsideEoriOnlyMapping)
+
+  val eoriNumberOnlyMapping = eoriNumberKey                             -> eoriNumber
+  val goodsImportedOutsideEoriOnlyMapping = goodsImportedOutsideEoriKey -> yesOrNo()
+
+  val eoriNumberOnlyForm: Form[String] = Form(eoriNumberOnlyMapping)
+  val goodsImportedOutsideEoriOnlyForm: Form[Boolean] = Form(goodsImportedOutsideEoriOnlyMapping)
+
+  val importingActivitiesForm: Form[ImportingActivities] = Form(
     mapping(
       hasEoriMapping,
       optionalEoriNumberMapping
     )(ImportingActivities.apply)(ImportingActivities.unapply)
+  )
+
+  val newImportingActivitiesForm: Form[ImportingActivities] = Form(
+    mapping(
+      hasEoriMapping,
+      optionalEoriNumberOnlyMapping,
+      optionalGoodsImportedOutsideEoriOnlyMapping
+    )((hasEori, optEoriNumber, optGoodsImported) => {
+      val eori: Option[EoriNumber] = optEoriNumber.flatMap(eoriNumber =>
+        optGoodsImported.map(goodsImported => EoriNumber(eoriNumber, goodsImported)))
+      ImportingActivities(hasEori, eori)
+    })(importingActivities => {
+      Some(
+        importingActivities.hasEori,
+        importingActivities.eoriNumber.map(_.eoriNumber),
+        importingActivities.eoriNumber.map(_.goodsImportedOutsideEori))
+    })
   )
 }
