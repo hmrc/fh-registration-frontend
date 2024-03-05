@@ -784,8 +784,8 @@ fh.business_partners.entity_intro=A legal entity is an individual, company or ot
 
 fh.business_partners.add_a_partner=Partner {0}
 fh.businessPartners.each.title=Partner {0}
-fh.business_partners.entity_type.label=What type of legal entity is the {0} partner?
-fh.businessPartnersType.error.required=Select the type of legal entity for the {0} partner
+fh.business_partners.entity_type.label=What type of legal entity is this partner?
+fh.businessPartnersType.error.required=Select the type of legal entity for this partner
 
 fh.business_partners_address.title=What is the partner’s address?
 fh.business_partners_address.heading=What is {0}’s address?
