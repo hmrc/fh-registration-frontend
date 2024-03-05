@@ -41,21 +41,25 @@
 
 @layout(title = titlePrefix + title, Some(pageScripts)) {
 
+    @if(emailVerificationForm.errors.nonEmpty) {
+
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+            Seq(ErrorLink(
+                href = Some(s"${emailVerificationForm.errors.head.key}"),
+                content = Text(messages(s"fh.${emailVerificationForm.errors.head.key}.${emailVerificationForm.
+                        errors.head.message}"))
+            )),
+            title = Text(messages("fh.generic.error"))
+        ))
+    }
+
     <h1 class="govuk-heading-l">@title</h1>
 
+    @viewHelpers.govukInsetText(InsetText(
+        content = Text(Messages("fh.emailVerification.alternativeEmail.info"))
+    ))
+
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, Symbol("novalidate") -> "novalidate") {
-        @if(emailVerificationForm.errors.nonEmpty) {
-
-            @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-                Seq(ErrorLink(
-                    href = Some(s"${emailVerificationForm.errors.head.key}"),
-                    content = Text(messages(s"fh.${emailVerificationForm.errors.head.key}.${emailVerificationForm.
-                            errors.head.message}"))
-                )),
-                title = Text(messages("fh.generic.error"))
-            ))
-        }
-
 
         @viewHelpers.govukInput(Input(
             id = alternativeEmailKey,
@@ -65,7 +69,7 @@
             } else None,
             inputType = "email",
             label = Label(
-              isPageHeading = true,
+              isPageHeading = false,
               classes = "govuk-label--m",
               content = Text(messages("fh.emailVerification.alternativeEmail.label"))
             ),
@@ -78,10 +82,6 @@
             value = emailVerificationForm(alternativeEmailKey).value
         ))
         <input type="hidden" name="@{emailOptionKey}" value="false">
-
-    @viewHelpers.govukInsetText(InsetText(
-        content = Text(Messages("fh.emailVerification.alternativeEmail.info"))
-    ))
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
 
