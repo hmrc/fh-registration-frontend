@@ -35,6 +35,9 @@ object ImportingActivitiesForm {
   val hasEoriMapping = hasEoriKey               -> yesOrNo()
   val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))
 
+  val hasEoriForm = Form(hasEoriMapping)
+  val eoriNumberForm: Form[EoriNumber] = Form(eoriNumberMapping)
+
   val importingActivitiesForm = Form(
     mapping(
       hasEoriMapping,

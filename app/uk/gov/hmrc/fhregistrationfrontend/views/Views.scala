@@ -42,6 +42,8 @@ class Views @Inject()(
   val date_of_incorporation: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.date_of_incorporation,
   val has_other_storage_premises: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.has_other_storage_premises,
   val importing_activities: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.importing_activities,
+  val has_eori: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.has_eori,
+  val importing_activities_eori_yes: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.importing_activities_eori_yes,
   val main_business_address: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.main_business_address,
   val national_insurance_number: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.national_insurance_number,
   val other_storage_premises: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.other_storage_premises,

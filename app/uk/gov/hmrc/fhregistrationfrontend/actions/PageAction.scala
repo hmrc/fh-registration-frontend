@@ -69,12 +69,13 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
-  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] =
+  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] = {
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else {
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
+  }
 
   def loadPage[A](request: JourneyRequest[A]): Either[Result, Page[T]] =
     request.journeyState.get[T](pageId) match {

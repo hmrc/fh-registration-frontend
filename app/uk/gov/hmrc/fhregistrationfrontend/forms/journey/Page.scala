@@ -227,19 +227,55 @@ object Page {
       }
     )
 
-    val importingActivitiesPostUrl =
+//    val importingActivitiesPostUrl =
+//      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
+//
+//    val importingActivitiesPage = new BasicPage[ImportingActivities](
+//      "importingActivities",
+//      ImportingActivitiesForm.importingActivitiesForm,
+//      new FormRendering[ImportingActivities] {
+//        override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+//          implicit request: Request[_],
+//          messages: Messages,
+//          appConfig: AppConfig): Html =
+//          views.importing_activities(form, navigation, importingActivitiesPostUrl)
+//      }
+//    )
+
+    val hasEoriPostUrl =
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
 
-    val importingActivitiesPage = new BasicPage[ImportingActivities](
-      "importingActivities",
-      ImportingActivitiesForm.importingActivitiesForm,
-      new FormRendering[ImportingActivities] {
-        override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+    val hasEoriPage = new BasicPage[Boolean](
+      "hasEori",
+      ImportingActivitiesForm.hasEoriForm,
+      new FormRendering[Boolean] {
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.importing_activities(form, navigation, importingActivitiesPostUrl)
+          views.has_eori(form, navigation, hasEoriPostUrl)
       }
+    )
+
+    val importingActivitiesEoriYesPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+        .saveWithSection("importingActivities", "eoriNumber")
+
+    val importingActivitiesEoriYesPage = new BasicPage[EoriNumber](
+      "eoriNumber",
+      ImportingActivitiesForm.eoriNumberForm,
+      new FormRendering[EoriNumber] {
+        override def render(form: Form[EoriNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.importing_activities_eori_yes(form, navigation, importingActivitiesEoriYesPostUrl)
+      }
+    )
+
+    val importingActivitiesPage = ImportingActivitiesPage(
+      hasEoriPage,
+      importingActivitiesEoriYesPage
     )
 
     val businessCustomersPage = new BasicPage[BusinessCustomers](
