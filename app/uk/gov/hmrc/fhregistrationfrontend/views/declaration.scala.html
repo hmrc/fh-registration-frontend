@@ -55,7 +55,7 @@
       name = s"$alternativeEmailKey.email",
       inputType = "email",
       label = Label(
-        isPageHeading = true,
+        isPageHeading = false,
         content = Text(messages("fh.confirmationEmail.email.label"))
       ),
       autocomplete = Some("email"),
@@ -77,7 +77,7 @@
       name = s"$alternativeEmailKey.emailConfirmation",
       inputType = "email",
       label = Label(
-        isPageHeading = true,
+        isPageHeading = false,
         content = Text(messages("fh.confirmationEmail.email.confirmation.label"))
       ),
       autocomplete = Some("email"),
@@ -127,7 +127,8 @@
       classes = "govuk-!-width-one-half",
       value = declarationForm.data.get(fullNameKey),
       errorMessage = formErrorMessage(declarationForm, fullNameKey, "fh.declaration.person_name." + declarationForm(fullNameKey).error.fold("")(_.message)),
-      spellcheck = Some(false)
+      spellcheck = Some(false),
+      autocomplete = Some("name")
     ))
 
     @viewHelpers.govukInput(Input(
@@ -141,7 +142,8 @@
       classes = "govuk-!-width-one-half",
       value = declarationForm.data.get(jobTitleKey),
       errorMessage = formErrorMessage(declarationForm, jobTitleKey, "fh.declaration.person_status." + declarationForm(jobTitleKey).error.fold("")(_.message)),
-      spellcheck = Some(false)
+      spellcheck = Some(false),
+        autocomplete = Some("organization-title")
     ))
 
     <h2 class="govuk-heading-m">@{
@@ -156,7 +158,7 @@
         legend = Some(Legend(
           content = Text(Messages("fh.confirmationEmail.use_default_email.confirm.label")),
           classes = "govuk-fieldset__legend--m",
-          isPageHeading = true
+          isPageHeading = false
         ))
       )),
       idPrefix = Some(usingDefaultEmailKey),
