@@ -165,7 +165,7 @@ class BusinessPartnerControllerISpec
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select the type of legal entity for the first partner")
+            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select the type of legal entity for this partner")
           }
         }
       }
