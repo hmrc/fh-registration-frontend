@@ -81,7 +81,8 @@
     id = s"$eoriNumberKey",
     name = s"$eoriNumberKey",
     label = Label(
-      isPageHeading = false,
+      isPageHeading = true,
+      classes = "govuk-fieldset__legend--l",
       content = HtmlContent(s"<strong>${messages("fh.importing_activities.eori.label")}</strong>")
     ),
     spellcheck = Some(false),
@@ -119,6 +120,9 @@
       },
         title = Text(messages("fh.generic.error"))))
     }
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      What is the EORI number of the business?
+    </legend>
     @conditionalHtml
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()

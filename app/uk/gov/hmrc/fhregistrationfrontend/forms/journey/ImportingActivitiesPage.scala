@@ -47,7 +47,7 @@ case class ImportingActivitiesPage(
   }
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(
-    implicit r: Request[_]): X = {
+    implicit r: Request[_]): X =
     if (isMainSection) {
       mainPage.parseFromRequest(
         withErrors,
@@ -65,11 +65,10 @@ case class ImportingActivitiesPage(
         }
       )
     }
-  }
 
   override val withSubsection: PartialFunction[Option[String], Page[ImportingActivities]] = {
-    case None                  => this copy (section = mainSection)
-    case `mainSection`         => this copy (section = mainSection)
+    case None          => this copy (section = mainSection)
+    case `mainSection` => this copy (section = mainSection)
     case newSection if hasEori =>
       this copy (section = newSection,
       eoriNumberPage = eoriNumberPage)
