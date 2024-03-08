@@ -25,4 +25,10 @@ case class VatNumber(
 
 object VatNumber {
   implicit val format = Json.format[VatNumber]
+
+  def sanitisedVatNumber(vatNumber: Option[String]): Option[String] =
+    vatNumber match {
+      case Some(value) if value.toLowerCase().contains("gb") => Some(value.substring(2))
+      case _                                                 => vatNumber
+    }
 }
