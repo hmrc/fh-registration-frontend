@@ -44,12 +44,12 @@ class Journeys @Inject()(views: Views) {
 
   val soleTraderPages =
     Seq[AnyPage](
-//      page.contactPersonPage,
-//      page.mainBusinessAddressPage,
-//      page.nationalInsuranceNumberPage,
-//      page.tradingNamePage,
-//      page.vatNumberPage,
-//      page.businessStatusPage,
+      page.contactPersonPage,
+      page.mainBusinessAddressPage,
+      page.nationalInsuranceNumberPage,
+      page.tradingNamePage,
+      page.vatNumberPage,
+      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage
@@ -134,17 +134,22 @@ class Journeys @Inject()(views: Views) {
     pageDataLoader pageData page.otherStoragePremisesPage
   )
 
-  def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
-    pageDataLoader pageData page.mainBusinessAddressPage,
-    pageDataLoader pageData page.contactPersonPage,
-    pageDataLoader pageData page.nationalInsuranceNumberPage,
-    pageDataLoader pageData page.tradingNamePage,
-    pageDataLoader pageData page.vatNumberPage,
-    pageDataLoader pageData page.businessStatusPage,
-    pageDataLoader pageData page.importingActivitiesPage,
-    pageDataLoader pageData page.businessCustomersPage,
-    pageDataLoader pageData page.otherStoragePremisesPage
-  )
+  def soleTraderApplication(pageDataLoader: PageDataLoader) = {
+    val importingActivities = pageDataLoader pageData page.importingActivitiesPage
+    println("AAAAAAAAAAAA")
+    println(importingActivities)
+    SoleProprietorApplication(
+      pageDataLoader pageData page.mainBusinessAddressPage,
+      pageDataLoader pageData page.contactPersonPage,
+      pageDataLoader pageData page.nationalInsuranceNumberPage,
+      pageDataLoader pageData page.tradingNamePage,
+      pageDataLoader pageData page.vatNumberPage,
+      pageDataLoader pageData page.businessStatusPage,
+      pageDataLoader pageData page.importingActivitiesPage,
+      pageDataLoader pageData page.businessCustomersPage,
+      pageDataLoader pageData page.otherStoragePremisesPage
+    )
+  }
 
   def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
     pageDataLoader pageData page.mainBusinessAddressPage,

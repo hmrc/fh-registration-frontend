@@ -42,6 +42,7 @@ class SummaryController @Inject()(
       case BusinessType.Partnership =>
         journeys partnershipApplication request
     }
+//    TODO: USE THIS TO CHECK VALUES AND RENDER EORI QUESTIONS SEPARATELY
     Ok(
       getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest), views))
   }
