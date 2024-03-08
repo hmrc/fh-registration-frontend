@@ -36,7 +36,7 @@ case class NewImportingActivitiesPage(
   override val format: Format[ImportingActivities] = ImportingActivities.format
 
   val mainSection = Some("any")
-
+//TODO: DATA NOT SAVING CORRECTLY - ROUTING IS FINE
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
     this copy (
