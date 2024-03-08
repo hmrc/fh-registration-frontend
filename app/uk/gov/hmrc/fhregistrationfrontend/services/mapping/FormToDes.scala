@@ -224,7 +224,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     bpr: BusinessRegistrationDetails): SoleProprietorIdentification =
     SoleProprietorIdentification(
       st.nationalInsuranceNumber.value,
-      st.vatNumber.value,
+      VatNumber.sanitisedVatNumber(st.vatNumber.value),
       bpr.utr
     )
 
@@ -232,7 +232,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.NonProprietor(
       tradingName.value,
       des.NonProprietorIdentification(
-        vatNumber.value,
+        VatNumber.sanitisedVatNumber(vatNumber.value),
         bpr.utr
       )
     )
