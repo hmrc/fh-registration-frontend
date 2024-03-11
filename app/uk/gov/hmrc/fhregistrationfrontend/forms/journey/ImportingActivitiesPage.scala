@@ -58,8 +58,6 @@ case class ImportingActivitiesPage(
       mainPage.parseFromRequest(
         withErrors,
         mp => {
-          println("DDDDDDD")
-          println(mp)
           val newValue = this copy (mainPage = mp)
           withData(newValue)
         }
@@ -68,8 +66,6 @@ case class ImportingActivitiesPage(
       eoriNumberPage.parseFromRequest(
         withErrors,
         spp => {
-          println("EEEEEEE")
-          println(spp)
           val newValue = this copy (eoriNumberPage = spp)
           withData(newValue)
         }
@@ -78,8 +74,6 @@ case class ImportingActivitiesPage(
       goodsPage.parseFromRequest(
         withErrors,
         spp => {
-          println("FFFFFFF")
-          println(spp)
           val newValue = this copy (goodsPage = spp)
           withData(newValue)
         }
@@ -162,7 +156,6 @@ case class ImportingActivitiesPage(
 
 //  TODO: CORRECT THIS
   override def pageStatus: PageStatus = {
-    println("BBBBBBBB")
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
     else if (!hasEori) Completed
     else if (eoriNumberPage.pageStatus == Completed) Completed
