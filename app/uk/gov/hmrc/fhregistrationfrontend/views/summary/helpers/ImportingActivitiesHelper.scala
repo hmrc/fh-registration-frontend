@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 
 object ImportingActivitiesHelper {
 
-  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) = {
+  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) =
     if (importingActivitiesForm.hasEori) {
       Seq(
         Helpers.createSummaryRow(
@@ -89,6 +89,5 @@ object ImportingActivitiesHelper {
         )
       )
     }
-  }
 
 }
