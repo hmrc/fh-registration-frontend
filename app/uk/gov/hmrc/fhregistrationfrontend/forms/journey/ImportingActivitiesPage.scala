@@ -21,13 +21,14 @@ import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, EoriNumber, ImportingActivities, ListWithTrackedChanges, StoragePremise}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, EoriNumber, ImportingActivities}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 case class ImportingActivitiesPage(
   mainPage: Page[Boolean],
-  eoriNumberPage: Page[EoriNumber],
+  eoriNumberPage: Page[String],
+  goodsPage: Page[Boolean],
   section: Option[String] = None
 ) extends Page[ImportingActivities] {
 
@@ -38,29 +39,48 @@ case class ImportingActivitiesPage(
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
+    val eoriNumberPageWithData =
+      data.eoriNumber.map(_.eoriNumber).map(eori => eoriNumberPage withData eori).getOrElse(eoriNumberPage)
+    val goodsPageWithData =
+      data.eoriNumber.map(_.goodsImportedOutsideEori).map(goods => goodsPage withData goods).getOrElse(goodsPage)
     this copy (
       section = newSection,
       mainPage = mainPage withData data.hasEori,
-//      eoriNumberPage = if (data.hasEori) eoriNumberPage withData data.eoriNumber.get else eoriNumberPage
-      eoriNumberPage = eoriNumberPage withData data.eoriNumber.getOrElse(EoriNumber("", false))
+      eoriNumberPage = eoriNumberPageWithData,
+      goodsPage = goodsPageWithData
     )
   }
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(
     implicit r: Request[_]): X =
+    //    TODO: CASE MATCH
     if (isMainSection) {
       mainPage.parseFromRequest(
         withErrors,
         mp => {
+          println("DDDDDDD")
+          println(mp)
           val newValue = this copy (mainPage = mp)
           withData(newValue)
         }
       )
-    } else {
+    } else if (section.contains("eoriNumber")) {
       eoriNumberPage.parseFromRequest(
         withErrors,
         spp => {
+          println("EEEEEEE")
+          println(spp)
           val newValue = this copy (eoriNumberPage = spp)
+          withData(newValue)
+        }
+      )
+    } else {
+      goodsPage.parseFromRequest(
+        withErrors,
+        spp => {
+          println("FFFFFFF")
+          println(spp)
+          val newValue = this copy (goodsPage = spp)
           withData(newValue)
         }
       )
@@ -71,20 +91,33 @@ case class ImportingActivitiesPage(
     case `mainSection` => this copy (section = mainSection)
     case newSection if hasEori =>
       this copy (section = newSection,
-      eoriNumberPage = eoriNumberPage)
+      eoriNumberPage = eoriNumberPage,
+      goodsPage = goodsPage)
   }
 
   override def nextSubsection: Option[String] =
+    //    TODO: CASE MATCH
     if (isMainSection && hasEori)
       Some("eoriNumber")
     else if (isMainSection && !hasEori)
       None
+    else if (section.contains("eoriNumber"))
+      Some("goods")
     else
+//      TODO: PROB WRONG
       eoriNumberPage.nextSubsection
 
   override def previousSubsection: Option[String] =
-    if (isMainSection) None
-    else eoriNumberPage.previousSubsection orElse mainSection
+    //    TODO: CASE MATCH
+    if (isMainSection && hasEori)
+      None
+    else if (isMainSection && !hasEori)
+      None
+    else if (section.contains("goods"))
+      Some("eoriNumber")
+    else
+      //      TODO: PROB WRONG
+      eoriNumberPage.previousSubsection orElse mainSection
 
   private def isMainSection = section.isEmpty || (section == mainSection)
   private def hasEori = mainPage.data contains true
@@ -92,14 +125,27 @@ case class ImportingActivitiesPage(
   override def render(
     bpr: BusinessRegistrationDetails,
     navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+//    TODO: CASE MATCH
     if (isMainSection)
       mainPage.render(bpr, navigation)
-    else
+    else if (section.contains("eoriNumber"))
       eoriNumberPage.render(bpr, navigation)
+    else
+      goodsPage.render(bpr, navigation)
 
   override val data: Option[ImportingActivities] = {
+    //TODO: DATA NOT SAVING CORRECTLY - ROUTING IS FINE
     mainPage.data map { hasEori =>
-      ImportingActivities(hasEori, eoriNumberPage.data)
+//      val eori = eoriNumberPage.data
+//      val goods = goodsPage.data
+//      val eoriNumber: Option[EoriNumber] = for {
+//        e <- eori
+//        g <- goods
+//      } yield EoriNumber(e, g)
+//      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
+      val eoriNumber: Option[EoriNumber] =
+        eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
+      ImportingActivities(hasEori, eoriNumber)
     }
   }
 
@@ -107,24 +153,30 @@ case class ImportingActivitiesPage(
     if (isMainSection)
       None
     else
+//      TODO: CORRECT THIS
       eoriNumberPage.delete map { updatedStoragePremisePage =>
         this copy (
           eoriNumberPage = updatedStoragePremisePage
         )
       }
 
-  override def pageStatus: PageStatus =
+//  TODO: CORRECT THIS
+  override def pageStatus: PageStatus = {
+    println("BBBBBBBB")
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
     else if (!hasEori) Completed
     else if (eoriNumberPage.pageStatus == Completed) Completed
     else InProgress
+  }
 
+  //  TODO: CORRECT THIS
   override def lastSection: Option[String] =
     if (hasEori)
       eoriNumberPage.lastSection
     else
       None
 
+//  TODO: DO WE NEED THIS?
   override def updatedAddresses: List[Address] =
     if (isMainSection) mainPage.updatedAddresses
     else eoriNumberPage.updatedAddresses
