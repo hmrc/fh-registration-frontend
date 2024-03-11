@@ -39,14 +39,15 @@ case class NewImportingActivitiesPage(
 //TODO: DATA NOT SAVING CORRECTLY - ROUTING IS FINE
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
+    val eoriNumberPageWithData =
+      data.eoriNumber.map(_.eoriNumber).map(eori => eoriNumberPage withData eori).getOrElse(eoriNumberPage)
+    val goodsPageWithData =
+      data.eoriNumber.map(_.goodsImportedOutsideEori).map(goods => goodsPage withData goods).getOrElse(goodsPage)
     this copy (
       section = newSection,
       mainPage = mainPage withData data.hasEori,
-//      eoriNumberPage = if (data.hasEori) eoriNumberPage withData data.eoriNumber.get else eoriNumberPage
-      eoriNumberPage = eoriNumberPage withData data.eoriNumber
-        .map(_.eoriNumber)
-        .getOrElse(""),
-      goodsPage = goodsPage withData data.eoriNumber.map(_.goodsImportedOutsideEori).getOrElse(false)
+      eoriNumberPage = eoriNumberPageWithData,
+      goodsPage = goodsPageWithData
     )
   }
 
@@ -98,8 +99,14 @@ case class NewImportingActivitiesPage(
       eoriNumberPage.nextSubsection
 
   override def previousSubsection: Option[String] =
-    if (isMainSection) None
-    else eoriNumberPage.previousSubsection orElse mainSection
+    if (isMainSection && hasEori)
+      None
+    else if (isMainSection && !hasEori)
+      None
+    else if (section.contains("goods"))
+      Some("eoriNumber")
+    else
+      eoriNumberPage.previousSubsection orElse mainSection
 
   private def isMainSection = section.isEmpty || (section == mainSection)
   private def hasEori = mainPage.data contains true
