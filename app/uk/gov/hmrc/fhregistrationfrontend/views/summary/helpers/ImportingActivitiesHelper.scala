@@ -26,53 +26,69 @@ import play.api.i18n.Messages
 
 object ImportingActivitiesHelper {
 
-  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) =
-    Seq(if (importingActivitiesForm.hasEori) {
-
-      Helpers.createSummaryRow(
-        SummaryRowParams(
-          Some(Messages("fh.importing_activities.eori.label")),
-          importingActivitiesForm.eoriNumber.map(_.eoriNumber),
-          None,
-          GroupRow.Top
+  def apply(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages) = {
+    if (importingActivitiesForm.hasEori) {
+      Seq(
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.hasEORI")),
+            importingActivitiesForm.hasEori,
+            None,
+            GroupRow.Single
+          ),
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/importingActivities",
+            Text("Change"),
+            Some(Messages("fh.summary.hasEORI"))
+          )
         ),
-        Helpers.createChangeLink(
-          Mode isEditable mode,
-          "form/importingActivities",
-          Text("Change"),
-          Some(Messages("fh.importing_activities.eori.label")))
-      )
-
-      Helpers.createSummaryRow(
-        SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.usesEORI")),
-          importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
-          None,
-          GroupRow.Bottom
+        Helpers.createSummaryRow(
+          SummaryRowParams(
+            Some(Messages("fh.importing_activities.eori.label")),
+            importingActivitiesForm.eoriNumber.map(_.eoriNumber),
+            None,
+            GroupRow.Top
+          ),
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/importingActivities/eoriNumber",
+            Text("Change"),
+            Some(Messages("fh.importing_activities.eori.label")))
         ),
-        Helpers.createChangeLink(
-          Mode isEditable mode,
-          "form/importingActivities",
-          Text("Change"),
-          Some(Messages("fh.summary.usesEORI"))
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.usesEORI")),
+            importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
+            None,
+            GroupRow.Bottom
+          ),
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/importingActivities/goods",
+            Text("Change"),
+            Some(Messages("fh.summary.usesEORI"))
+          )
         )
       )
-
     } else {
-      Helpers.createSummaryRow(
-        SummaryRowParams.ofBoolean(
-          Some(Messages("fh.summary.hasEORI")),
-          importingActivitiesForm.hasEori,
-          None,
-          GroupRow.Single
-        ),
-        Helpers.createChangeLink(
-          Mode isEditable mode,
-          "form/importingActivities",
-          Text("Change"),
-          Some(Messages("fh.summary.hasEORI"))
+      Seq(
+        Helpers.createSummaryRow(
+          SummaryRowParams.ofBoolean(
+            Some(Messages("fh.summary.hasEORI")),
+            importingActivitiesForm.hasEori,
+            None,
+            GroupRow.Single
+          ),
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/importingActivities",
+            Text("Change"),
+            Some(Messages("fh.summary.hasEORI"))
+          )
         )
       )
-    })
+    }
+  }
 
 }
