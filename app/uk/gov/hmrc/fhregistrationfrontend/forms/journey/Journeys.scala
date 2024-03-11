@@ -44,12 +44,12 @@ class Journeys @Inject()(views: Views) {
 
   val soleTraderPages =
     Seq[AnyPage](
-      page.contactPersonPage,
-      page.mainBusinessAddressPage,
-      page.nationalInsuranceNumberPage,
-      page.tradingNamePage,
-      page.vatNumberPage,
-      page.businessStatusPage,
+//      page.contactPersonPage,
+//      page.mainBusinessAddressPage,
+//      page.nationalInsuranceNumberPage,
+//      page.tradingNamePage,
+//      page.vatNumberPage,
+//      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage
@@ -135,9 +135,6 @@ class Journeys @Inject()(views: Views) {
   )
 
   def soleTraderApplication(pageDataLoader: PageDataLoader) = {
-    val importingActivities = pageDataLoader pageData page.importingActivitiesPage
-    println("AAAAAAAAAAAA")
-    println(importingActivities)
     SoleProprietorApplication(
       pageDataLoader pageData page.mainBusinessAddressPage,
       pageDataLoader pageData page.contactPersonPage,
