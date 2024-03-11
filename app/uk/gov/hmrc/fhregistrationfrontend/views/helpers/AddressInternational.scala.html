@@ -81,6 +81,7 @@
             content = Text(message("fh.address.line3.label"))
         ),
         spellcheck = Some(false),
+        autocomplete = Some("address-level1"),
         classes = "govuk-!-width-three-quarters",
         value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
         errorMessage =

@@ -83,6 +83,7 @@
                 content = HtmlContent(s"${message("fh.address.line3.label")}")
             ),
             spellcheck = Some(false),
+            autocomplete = Some("address-level2"),
             classes = "govuk-!-width-two-thirds",
             value = Some(s"${formDate(s"$fieldName.Line3").value.getOrElse("")}"),
             errorMessage =
@@ -103,6 +104,7 @@
                 content = HtmlContent(s"${message("fh.address.line4.label")}")
             ),
             spellcheck = Some(false),
+            autocomplete = Some("address-level1"),
             classes = "govuk-!-width-two-thirds",
             value = Some(s"${formDate(s"$fieldName.Line4").value.getOrElse("")}"),
             errorMessage =
