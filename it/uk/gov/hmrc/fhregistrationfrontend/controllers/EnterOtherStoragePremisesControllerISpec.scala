@@ -75,7 +75,7 @@ class EnterOtherStoragePremisesControllerISpec
             whenReady(result) { res =>
               res.status mustBe 400
               val page = Jsoup.parse(res.body)
-              page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("You must enter line 1 of the address")
+              page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter address line 1")
               page.title must include("Other storage premises - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
             }
           }
