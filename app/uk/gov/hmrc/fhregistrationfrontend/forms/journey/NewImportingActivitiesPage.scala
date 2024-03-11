@@ -53,11 +53,13 @@ case class NewImportingActivitiesPage(
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(
     implicit r: Request[_]): X =
-  //    TODO: CASE MATCH
+    //    TODO: CASE MATCH
     if (isMainSection) {
       mainPage.parseFromRequest(
         withErrors,
         mp => {
+          println("DDDDDDD")
+          println(mp)
           val newValue = this copy (mainPage = mp)
           withData(newValue)
         }
@@ -66,6 +68,8 @@ case class NewImportingActivitiesPage(
       eoriNumberPage.parseFromRequest(
         withErrors,
         spp => {
+          println("EEEEEEE")
+          println(spp)
           val newValue = this copy (eoriNumberPage = spp)
           withData(newValue)
         }
@@ -74,6 +78,8 @@ case class NewImportingActivitiesPage(
       goodsPage.parseFromRequest(
         withErrors,
         spp => {
+          println("FFFFFFF")
+          println(spp)
           val newValue = this copy (goodsPage = spp)
           withData(newValue)
         }
@@ -90,7 +96,7 @@ case class NewImportingActivitiesPage(
   }
 
   override def nextSubsection: Option[String] =
-  //    TODO: CASE MATCH
+    //    TODO: CASE MATCH
     if (isMainSection && hasEori)
       Some("eoriNumber")
     else if (isMainSection && !hasEori)
@@ -102,7 +108,7 @@ case class NewImportingActivitiesPage(
       eoriNumberPage.nextSubsection
 
   override def previousSubsection: Option[String] =
-  //    TODO: CASE MATCH
+    //    TODO: CASE MATCH
     if (isMainSection && hasEori)
       None
     else if (isMainSection && !hasEori)
@@ -110,7 +116,7 @@ case class NewImportingActivitiesPage(
     else if (section.contains("goods"))
       Some("eoriNumber")
     else
-    //      TODO: PROB WRONG
+      //      TODO: PROB WRONG
       eoriNumberPage.previousSubsection orElse mainSection
 
   private def isMainSection = section.isEmpty || (section == mainSection)
@@ -130,7 +136,16 @@ case class NewImportingActivitiesPage(
   override val data: Option[ImportingActivities] = {
     //TODO: DATA NOT SAVING CORRECTLY - ROUTING IS FINE
     mainPage.data map { hasEori =>
-      ImportingActivities(hasEori, None)
+//      val eori = eoriNumberPage.data
+//      val goods = goodsPage.data
+//      val eoriNumber: Option[EoriNumber] = for {
+//        e <- eori
+//        g <- goods
+//      } yield EoriNumber(e, g)
+//      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
+      val eoriNumber: Option[EoriNumber] =
+        eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
+      ImportingActivities(hasEori, eoriNumber)
     }
   }
 
@@ -146,13 +161,15 @@ case class NewImportingActivitiesPage(
       }
 
 //  TODO: CORRECT THIS
-  override def pageStatus: PageStatus =
+  override def pageStatus: PageStatus = {
+    println("BBBBBBBB")
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
     else if (!hasEori) Completed
     else if (eoriNumberPage.pageStatus == Completed) Completed
     else InProgress
+  }
 
-//  TODO: CORRECT THIS
+  //  TODO: CORRECT THIS
   override def lastSection: Option[String] =
     if (hasEori)
       eoriNumberPage.lastSection
