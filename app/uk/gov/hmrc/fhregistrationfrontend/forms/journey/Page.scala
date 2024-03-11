@@ -227,57 +227,6 @@ object Page {
       }
     )
 
-//    val importingActivitiesPostUrl =
-//      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
-//
-//    val importingActivitiesPage = new BasicPage[ImportingActivities](
-//      "importingActivities",
-//      ImportingActivitiesForm.importingActivitiesForm,
-//      new FormRendering[ImportingActivities] {
-//        override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-//          implicit request: Request[_],
-//          messages: Messages,
-//          appConfig: AppConfig): Html =
-//          views.importing_activities(form, navigation, importingActivitiesPostUrl)
-//      }
-//    )
-
-//    val hasEoriPostUrl =
-//      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
-//
-//    val hasEoriPage = new BasicPage[Boolean](
-//      "hasEori",
-//      ImportingActivitiesForm.hasEoriForm,
-//      new FormRendering[Boolean] {
-//        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-//          implicit request: Request[_],
-//          messages: Messages,
-//          appConfig: AppConfig): Html =
-//          views.has_eori(form, navigation, hasEoriPostUrl)
-//      }
-//    )
-//
-//    val importingActivitiesEoriYesPostUrl =
-//      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-//        .saveWithSection("importingActivities", "eoriNumber")
-//
-//    val importingActivitiesEoriYesPage = new BasicPage[EoriNumber](
-//      "eoriNumber",
-//      ImportingActivitiesForm.eoriNumberForm,
-//      new FormRendering[EoriNumber] {
-//        override def render(form: Form[EoriNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-//          implicit request: Request[_],
-//          messages: Messages,
-//          appConfig: AppConfig): Html =
-//          views.importing_activities_eori_yes(form, navigation, importingActivitiesEoriYesPostUrl)
-//      }
-//    )
-//
-//    val importingActivitiesPage = ImportingActivitiesPage(
-//      hasEoriPage,
-//      importingActivitiesEoriYesPage
-//    )
-
     val hasEoriPostUrl =
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
 
@@ -305,7 +254,7 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.importing_activities_eori_yes_eori_number_new(form, navigation, importingActivitiesEoriYesNumberPostUrl)
+          views.importing_activities_eori_yes_eori_number(form, navigation, importingActivitiesEoriYesNumberPostUrl)
       }
     )
 
@@ -321,11 +270,11 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.importing_activities_eori_yes_goods_new(form, navigation, importingActivitiesEoriYesGoodsPostUrl)
+          views.importing_activities_eori_yes_goods(form, navigation, importingActivitiesEoriYesGoodsPostUrl)
       }
     )
 
-    val importingActivitiesPage = NewImportingActivitiesPage(
+    val importingActivitiesPage = ImportingActivitiesPage(
       hasEoriPage,
       importingActivitiesEoriYesNumberPage,
       importingActivitiesEoriYesGoodsPage

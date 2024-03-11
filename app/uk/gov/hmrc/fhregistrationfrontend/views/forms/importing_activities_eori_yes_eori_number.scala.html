@@ -25,7 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(importingActivitiesForm: Form[EoriNumber], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(importingActivitiesForm: Form[String], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -46,36 +46,7 @@
   Messages("fh.importing_activities.eori.confirm.label")
 }
 
-@eoriQuery=  @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(messages("fh.importing_activities.eori_used_for_others.confirm.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$goodsImportedOutsideEoriKey"),
-    name = s"$goodsImportedOutsideEoriKey",
-    errorMessage = if(importingActivitiesForm(s"$goodsImportedOutsideEoriKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages(s"fh.eoriNumber.goodsImportedOutsideEori.error.required"))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text("Yes"),
-        value = Some("true"),
-        checked = importingActivitiesForm(s"$goodsImportedOutsideEoriKey").value.toList.contains("true")
-      ),
-      RadioItem(
-        content = Text("No"),
-        value = Some("false"),
-        checked = importingActivitiesForm(s"$goodsImportedOutsideEoriKey").value.toList.contains("false")
-      )
-    )
-  ))
-}
-
-@conditionalHtml = {
+@eoriNumberInput = {
   <div class="govuk-body">
   @viewHelpers.govukInput(Input(
     id = s"$eoriNumberKey",
@@ -100,7 +71,6 @@
       },
     value = importingActivitiesForm(s"$eoriNumberKey").value
   ))
-  @eoriQuery
   </div>
 }
 
@@ -120,10 +90,7 @@
       },
         title = Text(messages("fh.generic.error"))))
     }
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      What is the EORI number of the business?
-    </legend>
-    @conditionalHtml
+    @eoriNumberInput
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()
 
