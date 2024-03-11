@@ -62,12 +62,14 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
     result.value
   }
 
-  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
+  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] = {
+    println("HELLO")
     if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
+  }
 
   def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] =
     if (page.withSubsection isDefinedAt sectionId)
