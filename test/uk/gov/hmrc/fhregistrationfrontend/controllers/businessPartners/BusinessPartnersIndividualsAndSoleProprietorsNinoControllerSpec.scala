@@ -106,7 +106,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
         val request = FakeRequest()
           .withFormUrlEncodedBody(
             "nationalInsuranceNumber_yesNo" -> "true",
-            "nationalInsuranceNumber_value" -> "QQ123456C"
+            "nationalInsuranceNumber_value" -> "AA123456C"
           )
           .withMethod("POST")
         val result = csrfAddToken(controller.next(index, mode))(request)
@@ -131,7 +131,7 @@ class BusinessPartnersIndividualsAndSoleProprietorsNinoControllerSpec
             .withCookies(Cookie("businessType", "individual"))
             .withFormUrlEncodedBody(
               "nationalInsuranceNumber_yesNo" -> "true",
-              "nationalInsuranceNumber_value" -> "QQ123456C"
+              "nationalInsuranceNumber_value" -> "AA123456C"
             )
             .withMethod("POST")
           val result = csrfAddToken(controller.next(index, mode))(request)
