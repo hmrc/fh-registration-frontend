@@ -35,9 +35,9 @@ class NationalInsuranceNumberFormSpec extends UnitSpec {
 
       val data = Map(
         "nationalInsuranceNumber_yesNo" -> "true",
-        "nationalInsuranceNumber_value" -> "QQ123456C"
+        "nationalInsuranceNumber_value" -> "AA123456C"
       )
-      form.bind(data).get shouldBe NationalInsuranceNumber(true, Some("QQ123456C"))
+      form.bind(data).get shouldBe NationalInsuranceNumber(true, Some("AA123456C"))
     }
   }
 }
