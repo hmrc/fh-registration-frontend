@@ -32,17 +32,21 @@ object CustomFormatters {
     override def unbind(key: String, value: Boolean) = Map(key -> value.toString)
   }
 
-  def transformNino(nino: String): String = nino.filterNot(_.isWhitespace).replaceAll("[,.!?\\-]", "").toUpperCase()
+  def transformNino(nino: String): String =
+    nino.filterNot(_.isWhitespace).replaceAll("[,.!?\\-\\t\\/]", "").toUpperCase()
 
   def ninoFormatter(): Formatter[String] = new Formatter[String] {
     val ninoRegex =
-      """^[ \t\/,.!?\\-]*[A-Za-z]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[A-Za-z]{1}[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[ \t\/,.!?\\-]*[0-9]{1}[ \t\/,.!?\\-]*[A-Da-d]{1}[ \t\/,.!?\\-]*$"""
+      """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CE-HJ-NPR-TW-Z][A-C E-HJ-NPR-SW-Z]\d{6}[ABCD]$"""
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
-      Right(data.getOrElse(key, "")).flatMap {
-        case ""                               => Left(Seq(FormError(key, "error.required")))
-        case nino if nino.matches(ninoRegex)  => Right(transformNino(nino))
-        case nino if !nino.matches(ninoRegex) => Left(Seq(FormError(key, "error.pattern")))
+      Right(data.getOrElse(key, "")).flatMap { nino =>
+        println(Console.YELLOW_B + s"Nino: $nino" + Console.RESET)
+        transformNino(nino) match {
+          case ""                               => Left(Seq(FormError(key, "error.required")))
+          case nino if nino.matches(ninoRegex)  => Right(nino)
+          case nino if !nino.matches(ninoRegex) => Left(Seq(FormError(key, "error.pattern")))
+        }
       }
 
     override def unbind(key: String, value: String) =
