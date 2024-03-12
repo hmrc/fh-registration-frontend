@@ -71,7 +71,7 @@ object Mappings {
   def companyRegistrationNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
       v
-    }) verifying Constraints.pattern("^[a-zA-Z0-9]{8}$".r)
+    }) verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
 
   def companyRegistrationNumberFormatted =
     nonEmptyText transform (value => value.trim, { v: String =>
@@ -105,8 +105,8 @@ object Mappings {
 
   def eoriNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
-    v
-  }) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+      v
+    }) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
   def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
 
