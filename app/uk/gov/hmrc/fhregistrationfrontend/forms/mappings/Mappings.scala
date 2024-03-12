@@ -69,7 +69,7 @@ object Mappings {
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def companyRegistrationNumber =
-    nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
+    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
       v
     }) verifying Constraints.pattern("^[a-zA-Z0-9]{8}$".r)
 
@@ -93,7 +93,7 @@ object Mappings {
 
   def unincorporatedBodyName =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,140}$".r)
 
   def ltdLiabilityPartnershipName =
     nonEmptyText verifying Constraints.pattern(
@@ -103,7 +103,10 @@ object Mappings {
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
 
-  def eoriNumber = nonEmptyText verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+  def eoriNumber =
+    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
+    v
+  }) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
   def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
 

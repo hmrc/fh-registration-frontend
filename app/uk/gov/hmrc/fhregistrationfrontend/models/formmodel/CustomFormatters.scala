@@ -41,7 +41,6 @@ object CustomFormatters {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       Right(data.getOrElse(key, "")).flatMap { nino =>
-        println(Console.YELLOW_B + s"Nino: $nino" + Console.RESET)
         transformNino(nino) match {
           case ""                               => Left(Seq(FormError(key, "error.required")))
           case nino if nino.matches(ninoRegex)  => Right(nino)
