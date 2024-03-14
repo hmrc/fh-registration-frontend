@@ -44,10 +44,12 @@ case class ImportingActivitiesPage(
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
-    val eoriNumberPageWithData =
-      data.eoriNumber.map(_.eoriNumber).map(eori => eoriNumberPage withData eori).getOrElse(eoriNumberPage)
-    val goodsPageWithData =
-      data.eoriNumber.map(_.goodsImportedOutsideEori).map(goods => goodsPage withData goods).getOrElse(goodsPage)
+//    val eoriNumberPageWithData =
+//      data.eoriNumber.map(_.eoriNumber).map(eori => eoriNumberPage withData eori).getOrElse(eoriNumberPage)
+//    val goodsPageWithData =
+//      data.eoriNumber.map(_.goodsImportedOutsideEori).map(goods => goodsPage withData goods).getOrElse(goodsPage)
+    val eoriNumberPageWithData = data.eori.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
+    val goodsPageWithData = data.goodsImported.map(goods => goodsPage withData goods) getOrElse goodsPage
     this copy (
       section = newSection,
       mainPage = mainPage withData data.hasEori,
@@ -151,7 +153,7 @@ case class ImportingActivitiesPage(
 //      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
       val eoriNumber: Option[EoriNumber] =
         eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
-      ImportingActivities(hasEori, eoriNumber)
+      ImportingActivities(hasEori, eoriNumber, eori = eoriNumberPage.data, goodsImported = goodsPage.data)
     }
   }
 

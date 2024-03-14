@@ -24,9 +24,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration => _, _}
 
-//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-//MAY BE ABLE TO WORK AROUND THIS ONE POSSIBLY
-//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
 trait FormToDes {
   def limitedCompanySubmission(
     bpr: BusinessRegistrationDetails,
@@ -261,7 +258,6 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         )
       }
     }
-
   def allOtherInformation(application: BusinessEntityApplication) = {
     val desPremises =
       if (application.otherStoragePremises.hasValue)
@@ -270,10 +266,17 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         allRemoved(premise, application.otherStoragePremises.value)
 
     val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
+//    val originalEoriNumberType: Option[EORINumberType] =
+//      application.importingActivities.eoriNumber map eoriNumberType(application.vatNumber.hasValue)
+    val newEoriNumberType: Option[EORINumberType] = eoriNumberTypeNEW(
+      application.vatNumber.hasValue,
+      application.importingActivities.eori,
+      application.importingActivities.goodsImported)
     des.AllOtherInformation(
       application.businessCustomers.numberOfCustomers,
       application.importingActivities.hasEori,
-      application.importingActivities.eoriNumber map eoriNumberType(application.vatNumber.hasValue),
+//      originalEoriNumberType,
+      newEoriNumberType,
       nbPremises.toString,
       Some(desPremises)
     )
@@ -313,6 +316,22 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       if (!hasVat) Some(eoriNumber.eoriNumber) else None,
       Some(eoriNumber.goodsImportedOutsideEori)
     )
+
+  //TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
+  //MAY BE ABLE TO WORK AROUND THIS ONE POSSIBLY
+  //ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
+  def eoriNumberTypeNEW(
+    hasVat: Boolean,
+    eori: Option[String],
+    goodsImported: Option[Boolean]): Option[EORINumberType] = {
+//    TODO: NEEDS TO BE IMPROVED
+    val eoriNumberType = des.EORINumberType(
+      if (hasVat) eori else None,
+      if (!hasVat) eori else None,
+      goodsImported
+    )
+    Some(eoriNumberType)
+  }
 
   def isNewFulfilmentBusiness(bs: BusinessStatus) = des.IsNewFulfilmentBusiness(
     bs.isNewFulfilmentBusiness,
