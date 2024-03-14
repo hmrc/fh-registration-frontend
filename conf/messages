@@ -392,10 +392,10 @@ fh.importing_activities.eori.hint_text=The first two letters are the country cod
 fh.importing_activities.eori.confirm.hint_text1=The business should have an EORI number if it imports goods from sellers outside the UK. Contact the
 fh.importing_activities.eori.confirm.hint_text2=if you cannot find your number.
 fh.importing_activities.eori.link_text=EORI team at HMRC (opens in a new window or tab)
-fh.eoriNumber.eoriNumber.error.required=Enter the EORI number
-fh.eoriNumber.eoriNumber.error.pattern=Enter a valid EORI number
+fh.eoriNumber.error.required=Enter the EORI number
+fh.eoriNumber.error.pattern=Enter a valid EORI number
 fh.importing_activities.eori_used_for_others.confirm.label=Does the business import goods not belonging to it under its EORI number?
-fh.eoriNumber.goodsImportedOutsideEori.error.required=Select whether the business imports goods not belonging to it under its EORI number
+fh.goodsImportedOutsideEori.error.required=Select whether the business imports goods not belonging to it under its EORI number
 
 # - Business Customers
 #===========================================================
