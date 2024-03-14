@@ -39,8 +39,8 @@ case class ImportingActivitiesPage(
   override val format: Format[ImportingActivities] = ImportingActivities.format
 
   val mainSection = Some("any")
-  val eoriNumberSection = Some("eoriNumber")
-  val goodsSection = Some("goods")
+  val eoriNumberSection = Some("enterEORI")
+  val goodsSection = Some("importingGoodsNotBelongingToBusiness")
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
@@ -61,7 +61,7 @@ case class ImportingActivitiesPage(
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(
     implicit r: Request[_]): X =
     section match {
-      case Some("eoriNumber") => {
+      case Some("enterEORI") => {
         eoriNumberPage.parseFromRequest(
           withErrors,
           en => {
@@ -70,7 +70,7 @@ case class ImportingActivitiesPage(
           }
         )
       }
-      case Some("goods") => {
+      case Some("importingGoodsNotBelongingToBusiness") => {
         goodsPage.parseFromRequest(
           withErrors,
           goods => {
@@ -136,9 +136,9 @@ case class ImportingActivitiesPage(
     bpr: BusinessRegistrationDetails,
     navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
     section match {
-      case Some("eoriNumber") => eoriNumberPage.render(bpr, navigation)
-      case Some("goods")      => goodsPage.render(bpr, navigation)
-      case _                  => mainPage.render(bpr, navigation)
+      case Some("enterEORI")                            => eoriNumberPage.render(bpr, navigation)
+      case Some("importingGoodsNotBelongingToBusiness") => goodsPage.render(bpr, navigation)
+      case _                                            => mainPage.render(bpr, navigation)
     }
 
   override val data: Option[ImportingActivities] = {
