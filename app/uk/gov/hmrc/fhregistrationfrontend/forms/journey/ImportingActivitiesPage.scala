@@ -96,7 +96,6 @@ case class ImportingActivitiesPage(
   }
 
   override def nextSubsection: Option[String] =
-    //    TODO: TIDY
     if (isMainSection && hasEori)
       eoriNumberSection
     else if (isMainSection && !hasEori)
@@ -109,7 +108,6 @@ case class ImportingActivitiesPage(
       None
 
   override def previousSubsection: Option[String] =
-    //    TODO: TIDY
     if (isMainSection && hasEori)
       None
     else if (isMainSection && !hasEori)
