@@ -24,8 +24,8 @@ case class ImportingActivities(
   hasEori: Boolean,
   eoriNumber: Option[EoriNumber] = None,
   // TODO: REMOVE DEFAULT PARAMS FROM EORI AND GOODSIMPORTED
-  goodsImported: Option[Boolean] = None,
-  eori: Option[String] = None
+  eori: Option[String] = None,
+  goodsImported: Option[Boolean] = None
 )
 
 object ImportingActivities {
