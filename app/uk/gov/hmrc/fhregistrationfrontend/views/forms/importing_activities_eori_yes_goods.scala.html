@@ -58,7 +58,7 @@
     idPrefix = Some(s"$goodsImportedOutsideEoriKey"),
     name = s"$goodsImportedOutsideEoriKey",
     errorMessage = if(importingActivitiesForm(s"$goodsImportedOutsideEoriKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages(s"fh.eoriNumber.goodsImportedOutsideEori.error.required"))))
+      Some(ErrorMessage(content = Text(messages(s"fh.goodsImportedOutsideEori.error.required"))))
     } else None,
     items = Seq(
       RadioItem(
