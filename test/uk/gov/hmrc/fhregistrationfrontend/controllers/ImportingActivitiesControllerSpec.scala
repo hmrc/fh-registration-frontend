@@ -29,7 +29,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-//TODO: FIX
 class ImportingActivitiesControllerSpec
     extends ControllerSpecWithGuiceApp with EmailVerificationConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
@@ -87,7 +86,7 @@ class ImportingActivitiesControllerSpec
           val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ImportingActivities(false,None)"
+          contentAsString(result) shouldBe "Form submitted, with result: ImportingActivities(false,None,None,None)"
           reset(mockActions)
         }
       }
