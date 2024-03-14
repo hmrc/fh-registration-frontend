@@ -37,12 +37,12 @@ object OtherStoragePremisesHelper {
           ActionItem(
             href = s"form/otherStoragePremises/$index/confirmDelete/$lastUpdateTimestamp",
             content = Text("Remove"),
-            visuallyHiddenText = Some(messages("fh.summary.thirdPartyPremises.hidden", index))
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
           ),
           ActionItem(
             href = s"form/otherStoragePremises/$index",
             content = Text("Change"),
-            visuallyHiddenText = Some(messages("fh.summary.thirdPartyPremises.hidden", index))
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
           )
         )
       } else {
@@ -50,7 +50,7 @@ object OtherStoragePremisesHelper {
           ActionItem(
             href = s"form/otherStoragePremises/$index",
             content = Text("Change"),
-            visuallyHiddenText = Some(messages("fh.summary.thirdPartyPremises.hidden", index))
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
           )
         )
       }
