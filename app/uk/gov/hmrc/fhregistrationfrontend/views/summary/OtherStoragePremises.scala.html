@@ -60,7 +60,7 @@
 
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.summary.thirdPartyPremises")),
+        Some(Messages("fh.summary.thirdPartyPremises", {index+1})),
         storagePremise.isThirdParty,
         None,
         GroupRow.Bottom
