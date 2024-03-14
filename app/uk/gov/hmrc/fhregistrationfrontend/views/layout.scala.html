@@ -35,8 +35,18 @@
 )
 
 
-@(title: String, pageScripts: Option[Html] = None, pageHeadBlock: Option[Html] = None, backUrl:Option[String] = None, isBrowserBackMimic: Boolean = false)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
+@(
+        title: String,
+        pageScripts: Option[Html] = None,
+        pageHeadBlock: Option[Html] = None,
+        backUrl:Option[String] = None,
+        isBrowserBackMimic: Boolean = false
+)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
 
+@headBlock = {
+    <style>.govuk-fieldset .govuk-summary-list__actions { width: 25%; }</style>
+    @hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)
+}
 @content = {
     @contentBlock
     @hmrcReportTechnicalIssueHelper()
@@ -52,7 +62,7 @@
     backLinkUrl = backUrl,
     backLink = if(isBrowserBackMimic) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else None,
     displayHmrcBanner = true,
-    additionalHeadBlock = Some(hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)),
+    additionalHeadBlock = Some(headBlock),
     additionalScriptsBlock = pageScripts,
     // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
 )(content)

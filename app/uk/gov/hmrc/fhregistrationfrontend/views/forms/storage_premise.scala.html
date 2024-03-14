@@ -113,8 +113,6 @@
 
     @viewHelpers.form(action = postAction) {
 
-<div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
         @AddressUK(
           otherStoragePremisesForm,
           AddressUKParams(
@@ -126,13 +124,7 @@
           ),
           viewHelpers
         )
-        </div>
-        <div class="govuk-grid-column-one-quarter">
-        @if(params.canRemove) {
-          <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.confirmDeleteSection("otherStoragePremises", sectionId, navigation.lastUpdateTimestamp)}">Remove</a>
-        }
-        </div>
-      </div>
+
 
       @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
