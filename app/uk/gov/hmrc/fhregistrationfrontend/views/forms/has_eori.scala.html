@@ -43,7 +43,7 @@
 }
 
 @title = @{
-  Messages("fh.importing_activities.eori.confirm.label")
+  Messages("fh.importing_activities.eori.confirm.title")
 }
 
 @layout(title = titlePrefix + title, Some(pageScripts),  backUrl = BackHelper.getUrl(navigation) ) {
@@ -60,19 +60,18 @@
       },
         title = Text(messages("fh.generic.error"))))
     }
+    <h1>@Messages("fh.importing_activities.eori.confirm.title")</h1>
+    @helpHtml
     @viewHelpers.govUkRadios(Radios(
       fieldset = Some(Fieldset(
         legend = Some(Legend(
-          content = Text(Messages(title)),
+          content = Text(Messages("fh.importing_activities.eori.confirm.label")),
           classes = "govuk-fieldset__legend--l",
-          isPageHeading = true
+          isPageHeading = false
         ))
       )),
       idPrefix = Some(hasEoriKey),
       name = hasEoriKey,
-      hint = Some(Hint(
-        content = HtmlContent(helpHtml)
-      )),
       errorMessage = if (importingActivitiesForm(hasEoriKey).hasErrors) {
         Some(ErrorMessage(content = Text(messages(s"fh.hasEori.error.required"))))
       } else None,
