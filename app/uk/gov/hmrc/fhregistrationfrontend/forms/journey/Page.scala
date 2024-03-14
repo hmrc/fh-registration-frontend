@@ -244,10 +244,10 @@ object Page {
 
     val importingActivitiesEoriYesNumberPostUrl =
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-        .saveWithSection("importingActivities", "eoriNumber")
+        .saveWithSection("importingActivities", "enterEORI")
 
     val importingActivitiesEoriYesNumberPage = new BasicPage[String](
-      "eoriNumber",
+      "enterEORI",
       ImportingActivitiesForm.eoriNumberOnlyForm,
       new FormRendering[String] {
         override def render(form: Form[String], bpr: BusinessRegistrationDetails, navigation: Navigation)(
@@ -260,10 +260,10 @@ object Page {
 
     val importingActivitiesEoriYesGoodsPostUrl =
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-        .saveWithSection("importingActivities", "goods")
+        .saveWithSection("importingActivities", "importingGoodsNotBelongingToBusiness")
 
     val importingActivitiesEoriYesGoodsPage = new BasicPage[Boolean](
-      "goods",
+      "importingGoodsNotBelongingToBusiness",
       ImportingActivitiesForm.goodsImportedOutsideEoriOnlyForm,
       new FormRendering[Boolean] {
         override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
