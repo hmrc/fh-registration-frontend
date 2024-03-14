@@ -44,12 +44,12 @@ class Journeys @Inject()(views: Views) {
 
   val soleTraderPages =
     Seq[AnyPage](
-//      page.contactPersonPage,
-//      page.mainBusinessAddressPage,
-//      page.nationalInsuranceNumberPage,
-//      page.tradingNamePage,
-//      page.vatNumberPage,
-//      page.businessStatusPage,
+      page.contactPersonPage,
+      page.mainBusinessAddressPage,
+      page.nationalInsuranceNumberPage,
+      page.tradingNamePage,
+      page.vatNumberPage,
+      page.businessStatusPage,
       page.importingActivitiesPage,
       page.businessCustomersPage,
       page.otherStoragePremisesPage

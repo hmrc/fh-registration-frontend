@@ -48,8 +48,6 @@ trait DesToForm {
   def declaration(declaration: des.Declaration): Declaration
 }
 
-//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
 @Inject
 class DesToFormImpl extends DesToForm {
   val GBCountryCode = "GB"
@@ -154,11 +152,17 @@ class DesToFormImpl extends DesToForm {
   def businessCustomers(allOtherInformation: des.AllOtherInformation) =
     BusinessCustomers(allOtherInformation.numberOfCustomers)
 
-  def importingActivities(allOtherInformation: des.AllOtherInformation) =
+  def importingActivities(allOtherInformation: des.AllOtherInformation) = {
+    //TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
+    //ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
+    val eoriNumberFromInfo = eoriNumber(allOtherInformation)
     ImportingActivities(
       allOtherInformation.doesEORIExist,
-      eoriNumber(allOtherInformation)
+      eoriNumberFromInfo,
+      eori = eoriNumberFromInfo.map(_.eoriNumber),
+      goodsImported = eoriNumberFromInfo.map(_.goodsImportedOutsideEori)
     )
+  }
 
   def eoriNumber(allOtherInformation: des.AllOtherInformation): Option[EoriNumber] =
     if (allOtherInformation.doesEORIExist)
