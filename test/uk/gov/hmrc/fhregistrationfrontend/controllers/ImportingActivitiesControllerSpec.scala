@@ -29,6 +29,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
+//TODO: FIX
 class ImportingActivitiesControllerSpec
     extends ControllerSpecWithGuiceApp with EmailVerificationConnectorMocks with ActionsMock with BeforeAndAfterEach {
 

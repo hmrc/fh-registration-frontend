@@ -34,6 +34,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus.StatusPagePar
 
 import scala.concurrent.Future
 
+//TODO: FIX
 class ApplicationControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with Save4LaterMocks
     with JourneyRequestBuilder with BeforeAndAfterEach with BeforeAndAfter {
