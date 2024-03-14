@@ -24,6 +24,9 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.models.{businessregistration, des}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{Declaration => _, _}
 
+//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
+//MAY BE ABLE TO WORK AROUND THIS ONE POSSIBLY
+//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
 trait FormToDes {
   def limitedCompanySubmission(
     bpr: BusinessRegistrationDetails,

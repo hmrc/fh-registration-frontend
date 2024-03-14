@@ -25,6 +25,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, EoriNumber, Imp
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
+//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
+//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
 case class ImportingActivitiesPage(
   mainPage: Page[Boolean],
   eoriNumberPage: Page[String],
