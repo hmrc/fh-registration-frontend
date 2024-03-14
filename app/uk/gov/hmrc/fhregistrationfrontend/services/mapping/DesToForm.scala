@@ -158,7 +158,7 @@ class DesToFormImpl extends DesToForm {
     val eoriNumberFromInfo = eoriNumber(allOtherInformation)
     ImportingActivities(
       allOtherInformation.doesEORIExist,
-      eoriNumberFromInfo,
+//      eoriNumberFromInfo,
       eori = eoriNumberFromInfo.map(_.eoriNumber),
       goodsImported = eoriNumberFromInfo.map(_.goodsImportedOutsideEori)
     )

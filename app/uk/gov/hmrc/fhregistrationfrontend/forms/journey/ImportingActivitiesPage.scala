@@ -150,10 +150,10 @@ case class ImportingActivitiesPage(
 //        e <- eori
 //        g <- goods
 //      } yield EoriNumber(e, g)
-//      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
-      val eoriNumber: Option[EoriNumber] =
-        eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
-      ImportingActivities(hasEori, eoriNumber, eori = eoriNumberPage.data, goodsImported = goodsPage.data)
+////      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
+//      val eoriNumber: Option[EoriNumber] =
+//        eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
+      ImportingActivities(hasEori, eori = eoriNumberPage.data, goodsImported = goodsPage.data)
     }
   }
 

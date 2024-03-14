@@ -23,8 +23,9 @@ import play.api.libs.json.Json
 case class ImportingActivities(
   hasEori: Boolean,
   eoriNumber: Option[EoriNumber] = None,
-  eori: Option[String] = None,
-  goodsImported: Option[Boolean] = None
+  // TODO: REMOVE DEFAULT PARAMS FROM EORI AND GOODSIMPORTED
+  goodsImported: Option[Boolean] = None,
+  eori: Option[String] = None
 )
 
 object ImportingActivities {

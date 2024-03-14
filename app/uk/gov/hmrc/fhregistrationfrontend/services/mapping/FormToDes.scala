@@ -267,8 +267,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
     val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
 //    val originalEoriNumberType: Option[EORINumberType] =
-//      application.importingActivities.eoriNumber map eoriNumberType(application.vatNumber.hasValue)
-    val newEoriNumberType: Option[EORINumberType] = eoriNumberTypeNEW(
+//      application.importingActivities.eoriNumber map eoriNumberTypeOLD(application.vatNumber.hasValue)
+    val newEoriNumberType: Option[EORINumberType] = eoriNumberType(
       application.vatNumber.hasValue,
       application.importingActivities.eori,
       application.importingActivities.goodsImported)
@@ -310,7 +310,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       address.countryCode.getOrElse("GB")
     )
 
-  def eoriNumberType(hasVat: Boolean)(eoriNumber: EoriNumber) =
+  def eoriNumberTypeOLD(hasVat: Boolean)(eoriNumber: EoriNumber) =
     des.EORINumberType(
       if (hasVat) Some(eoriNumber.eoriNumber) else None,
       if (!hasVat) Some(eoriNumber.eoriNumber) else None,
@@ -320,10 +320,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   //TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
   //MAY BE ABLE TO WORK AROUND THIS ONE POSSIBLY
   //ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
-  def eoriNumberTypeNEW(
-    hasVat: Boolean,
-    eori: Option[String],
-    goodsImported: Option[Boolean]): Option[EORINumberType] = {
+  def eoriNumberType(hasVat: Boolean, eori: Option[String], goodsImported: Option[Boolean]): Option[EORINumberType] = {
 //    TODO: NEEDS TO BE IMPROVED
     val eoriNumberType = des.EORINumberType(
       if (hasVat) eori else None,
