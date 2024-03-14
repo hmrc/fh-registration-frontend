@@ -46,7 +46,7 @@ object ImportingActivitiesHelper {
         Helpers.createSummaryRow(
           SummaryRowParams(
             Some(Messages("fh.importing_activities.eori.label")),
-            importingActivitiesForm.eoriNumber.map(_.eoriNumber),
+            importingActivitiesForm.eori,
             None,
             GroupRow.Top
           ),
@@ -59,7 +59,7 @@ object ImportingActivitiesHelper {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
             Some(Messages("fh.summary.usesEORI")),
-            importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
+            importingActivitiesForm.goodsImported,
             None,
             GroupRow.Bottom
           ),
