@@ -266,23 +266,16 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         allRemoved(premise, application.otherStoragePremises.value)
 
     val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
-//    val originalEoriNumberType: Option[EORINumberType] =
-//      application.importingActivities.eoriNumber map eoriNumberTypeOLD(application.vatNumber.hasValue)
-//    val newEoriNumberType: Option[EORINumberType] = eoriNumberType(
-//      application.vatNumber.hasValue,
-//      application.importingActivities.eori,
-//      application.importingActivities.goodsImported)
-    val newEoriNumberType: Option[EORINumberType] = (for {
+    val eoriNumberTypeValue: Option[EORINumberType] = for {
       eori <- application.importingActivities.eori
       goodsImported <- application.importingActivities.goodsImported
     } yield {
       eoriNumberType(application.vatNumber.hasValue, eori, goodsImported)
-    })
+    }
     des.AllOtherInformation(
       application.businessCustomers.numberOfCustomers,
       application.importingActivities.hasEori,
-//      originalEoriNumberType,
-      newEoriNumberType,
+      eoriNumberTypeValue,
       nbPremises.toString,
       Some(desPremises)
     )
@@ -316,18 +309,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       address.countryCode.getOrElse("GB")
     )
 
-  def eoriNumberTypeOLD(hasVat: Boolean)(eoriNumber: EoriNumber): EORINumberType =
-    des.EORINumberType(
-      if (hasVat) Some(eoriNumber.eoriNumber) else None,
-      if (!hasVat) Some(eoriNumber.eoriNumber) else None,
-      Some(eoriNumber.goodsImportedOutsideEori)
-    )
-
-  //TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-  //MAY BE ABLE TO WORK AROUND THIS ONE POSSIBLY
-  //ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
   def eoriNumberType(hasVat: Boolean, eori: String, goodsImported: Boolean): EORINumberType = {
-//    TODO: NEEDS TO BE IMPROVED
     des.EORINumberType(
       if (hasVat) Some(eori) else None,
       if (!hasVat) Some(eori) else None,
