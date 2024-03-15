@@ -25,7 +25,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{ChangeIndicators, Subscrip
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data.LtdLargeUk
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-//TODO: FIX
 class DiffSpecs extends UnitSpec {
 
   val service = new FormToDesImpl()
