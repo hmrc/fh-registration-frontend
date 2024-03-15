@@ -106,7 +106,7 @@
         BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
                 ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
                 BusinessCustomersHelper(applicationData.businessCustomers, params.mode) ++
-                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode)
+                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode, params.lastUpdateTimestamp.getOrElse(""))
         ))
     ))
 

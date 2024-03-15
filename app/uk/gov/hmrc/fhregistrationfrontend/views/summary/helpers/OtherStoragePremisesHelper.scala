@@ -27,7 +27,33 @@ import play.api.i18n.Messages
 
 object OtherStoragePremisesHelper {
 
-  def apply(data: StoragePremisesModel, mode: Mode)(implicit messages: Messages) = {
+  def apply(data: StoragePremisesModel, mode: Mode, lastUpdateTimestamp: String)(implicit messages: Messages) = {
+
+    val isEditable = Mode isEditable mode
+
+    def getActions(index: Int) =
+      if (data.value.values.size > 1) {
+        Seq(
+          ActionItem(
+            href = s"form/otherStoragePremises/$index/confirmDelete/$lastUpdateTimestamp",
+            content = Text("Remove"),
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
+          ),
+          ActionItem(
+            href = s"form/otherStoragePremises/$index",
+            content = Text("Change"),
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
+          )
+        )
+      } else {
+        Seq(
+          ActionItem(
+            href = s"form/otherStoragePremises/$index",
+            content = Text("Change"),
+            visuallyHiddenText = Some(messages("fh.otherStoragePremises.each.title", index))
+          )
+        )
+      }
 
     val storageAddress = {
       data.value.values.zipWithIndex.flatMap {
@@ -35,16 +61,17 @@ object OtherStoragePremisesHelper {
           val address = Helpers.formatAddress(storagePremise.address)
           Seq(
             Helpers.createSummaryRow(
-              SummaryRowParams(Some(Messages("fh.summary.thirdPartyPremises.address", {
-                index + 1
-              })), Some(address), None, GroupRow.Single),
-              Helpers.createChangeLink(
-                Mode isEditable mode,
-                s"form/otherStoragePremises/${index + 1}",
-                Text("Change"),
-                Some(Messages("fh.summary.thirdPartyPremises.address", {
+              params = SummaryRowParams(
+                label = Some(messages("fh.summary.thirdPartyPremises.address", {
                   index + 1
-                })))
+                })),
+                value = Some(address),
+                changeLink = None,
+                groupRow = GroupRow.Single
+              ),
+              summaryActions = if (isEditable) {
+                Some(Actions(items = getActions(index + 1)))
+              } else { None },
             ),
             Helpers.createSummaryRow(
               SummaryRowParams.ofBoolean(

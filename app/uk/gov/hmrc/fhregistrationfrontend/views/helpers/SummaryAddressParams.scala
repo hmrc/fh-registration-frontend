@@ -33,5 +33,6 @@ case class SummaryAddressParams(
   label: Option[String] = None,
   value: Html,
   changeLink: Option[String] = None,
-  groupRow: GroupRow = GroupRow.Single
+  groupRow: GroupRow = GroupRow.Single,
+  removeLink: Option[String] = None
 )

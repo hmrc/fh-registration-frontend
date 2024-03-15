@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
@@ -30,7 +29,13 @@
 
 @this(layout: layout, govukFieldset : GovukFieldset)
 
-@(applicationData: LimitedCompanyApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
+@(
+        applicationData: LimitedCompanyApplication,
+        bpr: BusinessRegistrationDetails,
+        verifiedEmail: String,
+        environment: Option[String],
+        params: SummaryPageParams
+)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @conditionalText = @{
@@ -115,7 +120,7 @@
         BusinessStatusHelper(applicationData.businessStatus, params.mode) ++
                 ImportingActivitiesHelper(applicationData.importingActivities, params.mode) ++
                 BusinessCustomersHelper(applicationData.businessCustomers, params.mode) ++
-                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode)
+                OtherStoragePremisesHelper(applicationData.otherStoragePremises, params.mode, params.lastUpdateTimestamp.getOrElse(""))
         ))
     ))
 
@@ -131,4 +136,5 @@
   @if(Mode isEditable params.mode) {
         @SummaryButtons()
   }
+
 }
