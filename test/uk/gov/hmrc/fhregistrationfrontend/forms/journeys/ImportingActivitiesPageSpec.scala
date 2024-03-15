@@ -25,88 +25,81 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class ImportingActivitiesPageSpec extends UnitSpec with MockitoSugar {
 
-  val mainPage = BasicPage(
+  private val mainPage = BasicPage(
     "hasEori",
     ImportingActivitiesForm.hasEoriForm,
     mock[FormRendering[Boolean]]
   )
-  val eoriNumberPage = BasicPage(
+  private val eoriNumberPage = BasicPage(
     "enterEORI",
     ImportingActivitiesForm.eoriNumberOnlyForm,
     mock[FormRendering[String]]
   )
-  val goodsPage = BasicPage(
+  private val goodsPage = BasicPage(
     "importingGoodsNotBelongingToBusiness",
     ImportingActivitiesForm.goodsImportedOutsideEoriOnlyForm,
     mock[FormRendering[Boolean]]
   )
 
+  private val enterEoriSubsection = Some("enterEORI")
+  private val goodsSubsection = Some("importingGoodsNotBelongingToBusiness")
+
+  private val answeredFalseToHasEori = ImportingActivitiesPage(mainPage withData false, eoriNumberPage, goodsPage)
+  private val answeredTrueToHasEori = ImportingActivitiesPage(mainPage withData true, eoriNumberPage, goodsPage)
+  private val answeredTrueToHasEoriAndEoriNumberInputted = ImportingActivitiesPage(
+    mainPage withData true, eoriNumberPage withData "1234123132", goodsPage
+  ).withSubsection(enterEoriSubsection)
+  private val answeredTrueToHasEoriAndEoriNumberAndGoodsInputted = ImportingActivitiesPage(
+    mainPage withData true, eoriNumberPage withData "1234123132", goodsPage withData true
+  ).withSubsection(goodsSubsection)
+
   "Next section" should {
     "Be None" when {
-      "Answer is No" in {
-        val page = ImportingActivitiesPage(mainPage withData false, eoriNumberPage, goodsPage)
-
-        page.nextSubsection shouldBe None
+      "Answer is No on main section" in {
+        answeredFalseToHasEori.nextSubsection shouldBe None
       }
 
-//      "Has more is false" in {
-//        val page = ImportingActivitiesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
-//          .withSubsection(Some("2"))
-//
-//        page.nextSubsection shouldBe None
-//
-//      }
-
+      "on goods subsection" in {
+        answeredTrueToHasEoriAndEoriNumberAndGoodsInputted.nextSubsection shouldBe None
+      }
     }
 
-//    "Be a number" when {
-//      "Answer is Yes" in {
-//
-//        val page =
-//          ImportingActivitiesPage(mainPage withData true, repeatingPage withData ListWithTrackedChanges.empty())
-//
-//        page.nextSubsection shouldBe Some("1")
-//      }
-//
-//      "Has more is True" in {
-//
-//        val page = ImportingActivitiesPage(
-//          mainPage withData true,
-//          repeatingPage withData (listWithPremises(2) copy (addMore = true)))
-//          .withSubsection(Some("2"))
-//
-//        page.nextSubsection shouldBe Some("3")
-//
-//      }
-//    }
+    "Be enter eori subsection" when {
+      "Answer is Yes on main section" in {
+        answeredTrueToHasEori.nextSubsection.get shouldEqual enterEoriSubsection.get
+      }
+    }
+
+    "Be goods subsection" when {
+      "on enter eori subsection" in {
+        answeredTrueToHasEoriAndEoriNumberInputted.nextSubsection.get shouldEqual goodsSubsection.get
+      }
+    }
+
   }
 
   "Previous section" should {
     "Be none" when {
-      "on main section" in {
-        val page = ImportingActivitiesPage(mainPage withData true, eoriNumberPage, goodsPage)
+      "Answer is No on main section" in {
+        answeredFalseToHasEori.previousSubsection shouldBe None
+      }
 
-        page.previousSubsection shouldBe None
+      "Answer is Yes on main section" in {
+        answeredTrueToHasEori.previousSubsection shouldBe None
       }
     }
 
-//    "Be main section" when {
-//      "on first premise" in {
-//        val page = ImportingActivitiesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
-//          .withSubsection(Some("1"))
-//
-//        page.previousSubsection shouldBe Some("any")
-//      }
-//    }
-//
-//    "Be first premise" when {
-//      "on second premise" in {
-//        val page = ImportingActivitiesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
-//          .withSubsection(Some("2"))
-//
-//        page.previousSubsection shouldBe Some("1")
-//      }
-//    }
+    "Be mainsection" when {
+      "Answer is Yes on main section" in {
+        answeredTrueToHasEoriAndEoriNumberInputted.previousSubsection.get shouldEqual "any"
+      }
+    }
+
+    "Be enter eori subsection" when {
+      "on goods subsection" in {
+        answeredTrueToHasEoriAndEoriNumberAndGoodsInputted.previousSubsection.get shouldEqual enterEoriSubsection.get
+      }
+    }
 
   }
 

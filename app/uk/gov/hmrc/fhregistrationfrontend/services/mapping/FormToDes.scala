@@ -267,7 +267,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
     val nbPremises = if (application.otherStoragePremises.hasValue) application.otherStoragePremises.value.size else 0
     val eoriNumberTypeValue: Option[EORINumberType] = for {
-      eori <- application.importingActivities.eori
+      eori          <- application.importingActivities.eori
       goodsImported <- application.importingActivities.goodsImported
     } yield {
       eoriNumberType(application.vatNumber.hasValue, eori, goodsImported)
@@ -309,13 +309,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       address.countryCode.getOrElse("GB")
     )
 
-  def eoriNumberType(hasVat: Boolean, eori: String, goodsImported: Boolean): EORINumberType = {
+  def eoriNumberType(hasVat: Boolean, eori: String, goodsImported: Boolean): EORINumberType =
     des.EORINumberType(
       if (hasVat) Some(eori) else None,
       if (!hasVat) Some(eori) else None,
       Some(goodsImported)
     )
-  }
 
   def isNewFulfilmentBusiness(bs: BusinessStatus) = des.IsNewFulfilmentBusiness(
     bs.isNewFulfilmentBusiness,
