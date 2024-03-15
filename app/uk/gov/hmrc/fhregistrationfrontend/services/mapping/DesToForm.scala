@@ -153,12 +153,9 @@ class DesToFormImpl extends DesToForm {
     BusinessCustomers(allOtherInformation.numberOfCustomers)
 
   def importingActivities(allOtherInformation: des.AllOtherInformation) = {
-    //TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-    //ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
     val eoriNumberFromInfo = eoriNumber(allOtherInformation)
     ImportingActivities(
       allOtherInformation.doesEORIExist,
-//      eoriNumberFromInfo,
       eori = eoriNumberFromInfo.map(_.eoriNumber),
       goodsImported = eoriNumberFromInfo.map(_.goodsImportedOutsideEori)
     )
