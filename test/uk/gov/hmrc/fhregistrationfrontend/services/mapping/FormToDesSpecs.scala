@@ -31,7 +31,6 @@ import java.io.InputStream
 import java.time.LocalDate
 import scala.io.Source
 
-//TODO: FIX
 class FormToDesSpecs extends UnitSpec {
 
   val factory = JsonSchemaFactory

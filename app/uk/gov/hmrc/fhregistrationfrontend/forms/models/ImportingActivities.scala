@@ -18,12 +18,9 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import play.api.libs.json.Json
 
-//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRAT
 case class ImportingActivities(
   hasEori: Boolean,
   eoriNumber: Option[EoriNumber] = None,
-  // TODO: REMOVE DEFAULT PARAMS FROM EORI AND GOODSIMPORTED
   eori: Option[String] = None,
   goodsImported: Option[Boolean] = None
 )
