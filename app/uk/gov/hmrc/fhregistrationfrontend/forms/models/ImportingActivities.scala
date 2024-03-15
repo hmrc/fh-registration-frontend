@@ -21,6 +21,7 @@ import play.api.libs.json.Json
 case class ImportingActivities(
   hasEori: Boolean,
   eoriNumber: Option[EoriNumber] = None,
+// TODO: May want to remove default params from below if possible
   eori: Option[String] = None,
   goodsImported: Option[Boolean] = None
 )
