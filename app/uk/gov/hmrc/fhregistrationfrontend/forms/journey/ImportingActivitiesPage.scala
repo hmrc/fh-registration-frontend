@@ -21,12 +21,10 @@ import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, EoriNumber, ImportingActivities}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, ImportingActivities}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
-//TODO: NEED TO CHANGE FORMAT OF IMPORTING ACTIVITIES TO BOOL, Option[String], Option[Bool] - WHAT IS THE BEST WAY
-//ADD OPTION[STRING], ADD OPTION[BOOL] AND MIGRATE
 case class ImportingActivitiesPage(
   mainPage: Page[Boolean],
   eoriNumberPage: Page[String],
@@ -44,10 +42,6 @@ case class ImportingActivitiesPage(
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
-//    val eoriNumberPageWithData =
-//      data.eoriNumber.map(_.eoriNumber).map(eori => eoriNumberPage withData eori).getOrElse(eoriNumberPage)
-//    val goodsPageWithData =
-//      data.eoriNumber.map(_.goodsImportedOutsideEori).map(goods => goodsPage withData goods).getOrElse(goodsPage)
     val eoriNumberPageWithData = data.eori.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
     val goodsPageWithData = data.goodsImported.map(goods => goodsPage withData goods) getOrElse goodsPage
     this copy (
@@ -61,7 +55,7 @@ case class ImportingActivitiesPage(
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(
     implicit r: Request[_]): X =
     section match {
-      case Some("enterEORI") => {
+      case Some("enterEORI") =>
         eoriNumberPage.parseFromRequest(
           withErrors,
           en => {
@@ -69,8 +63,7 @@ case class ImportingActivitiesPage(
             withData(newValue)
           }
         )
-      }
-      case Some("importingGoodsNotBelongingToBusiness") => {
+      case Some("importingGoodsNotBelongingToBusiness") =>
         goodsPage.parseFromRequest(
           withErrors,
           goods => {
@@ -78,8 +71,7 @@ case class ImportingActivitiesPage(
             withData(newValue)
           }
         )
-      }
-      case _ => {
+      case _ =>
         mainPage.parseFromRequest(
           withErrors,
           mp => {
@@ -87,7 +79,6 @@ case class ImportingActivitiesPage(
             withData(newValue)
           }
         )
-      }
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[ImportingActivities]] = {
@@ -142,17 +133,7 @@ case class ImportingActivitiesPage(
     }
 
   override val data: Option[ImportingActivities] = {
-    //TODO: DATA NOT SAVING CORRECTLY - ROUTING IS FINE
     mainPage.data map { hasEori =>
-//      val eori = eoriNumberPage.data
-//      val goods = goodsPage.data
-//      val eoriNumber: Option[EoriNumber] = for {
-//        e <- eori
-//        g <- goods
-//      } yield EoriNumber(e, g)
-////      TODO: BELOW WILL DEFAULT GOOD TO FALSE - TEMP HACK TO TEST SAVING/LOADING/ROUTING
-//      val eoriNumber: Option[EoriNumber] =
-//        eoriNumberPage.data.map(eori => EoriNumber(eori, goodsPage.data.getOrElse(false)))
       ImportingActivities(hasEori, eori = eoriNumberPage.data, goodsImported = goodsPage.data)
     }
   }

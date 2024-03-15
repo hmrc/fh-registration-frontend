@@ -134,18 +134,17 @@ class Journeys @Inject()(views: Views) {
     pageDataLoader pageData page.otherStoragePremisesPage
   )
 
-  def soleTraderApplication(pageDataLoader: PageDataLoader) =
-    SoleProprietorApplication(
-      pageDataLoader pageData page.mainBusinessAddressPage,
-      pageDataLoader pageData page.contactPersonPage,
-      pageDataLoader pageData page.nationalInsuranceNumberPage,
-      pageDataLoader pageData page.tradingNamePage,
-      pageDataLoader pageData page.vatNumberPage,
-      pageDataLoader pageData page.businessStatusPage,
-      pageDataLoader pageData page.importingActivitiesPage,
-      pageDataLoader pageData page.businessCustomersPage,
-      pageDataLoader pageData page.otherStoragePremisesPage
-    )
+  def soleTraderApplication(pageDataLoader: PageDataLoader) = SoleProprietorApplication(
+    pageDataLoader pageData page.mainBusinessAddressPage,
+    pageDataLoader pageData page.contactPersonPage,
+    pageDataLoader pageData page.nationalInsuranceNumberPage,
+    pageDataLoader pageData page.tradingNamePage,
+    pageDataLoader pageData page.vatNumberPage,
+    pageDataLoader pageData page.businessStatusPage,
+    pageDataLoader pageData page.importingActivitiesPage,
+    pageDataLoader pageData page.businessCustomersPage,
+    pageDataLoader pageData page.otherStoragePremisesPage
+  )
 
   def ltdApplication(pageDataLoader: PageDataLoader) = LimitedCompanyApplication(
     pageDataLoader pageData page.mainBusinessAddressPage,
