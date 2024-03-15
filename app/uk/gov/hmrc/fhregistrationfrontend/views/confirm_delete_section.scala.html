@@ -32,9 +32,7 @@ layout: layout, viewHelpers: ViewHelpers
 
 @sectionName = {@messages(s"fh.$page.each.title", section)}
 
-@title = @{
-  messages("fh.delete_confirmation_section.delete", sectionName)
-}
+@title = @{messages("fh.delete_confirmation_section.header", sectionName)}
 
 @layout(title = title, pageScripts = Some(pageScripts), isBrowserBackMimic = true) {
 
