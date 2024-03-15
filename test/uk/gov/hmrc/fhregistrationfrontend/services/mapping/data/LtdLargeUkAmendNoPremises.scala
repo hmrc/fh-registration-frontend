@@ -95,7 +95,7 @@ object LtdLargeUkAmendNoPremises {
       false
     ),
     BusinessStatus(true, Some(LocalDate.of(2018, 6, 30))),
-    ImportingActivities(true, Some(EoriNumber("1234123132", true))),
+    ImportingActivities(true, eori = Some("1234123132"), goodsImported = Some(true)),
     BusinessCustomers("Over 100"),
     OtherStoragePremises(
       false,
