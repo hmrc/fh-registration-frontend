@@ -51,7 +51,7 @@ class ImportingActivitiesControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include(
-          "Does the business have an EORI (Economic Operator Registration and Identification) number?")
+          "Does the business have an EORI number?")
         reset(mockActions)
       }
     }
@@ -104,7 +104,7 @@ class ImportingActivitiesControllerSpec
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.title should include(
-            "Does the business have an EORI (Economic Operator Registration and Identification) number?")
+            "Does the business have an EORI number?")
           reset(mockActions)
         }
       }
