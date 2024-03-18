@@ -951,7 +951,7 @@ fh.businessPartnerUnincorporatedBody.partnerAddress.postcode.error.pattern=Enter
 
 fh.business_partners.utr.confirm.label=Do they have a Self Assessment Unique Taxpayer Reference?
 fh.business_partners.utr.confirm.error=Select whether the business partner has a Unique Taxpayer Reference?
-fh.businessPartners.utr.label=Self Assessment Unique Taxpayer Reference
+fh.business_partners.utr.label=Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.error=Enter a valid Self Assessment Unique Taxpayer Reference
 fh.business_partners.utr.hintText=For example, 1234567890
 
