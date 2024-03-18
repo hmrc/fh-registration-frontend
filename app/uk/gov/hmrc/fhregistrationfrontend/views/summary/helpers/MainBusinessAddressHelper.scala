@@ -27,23 +27,20 @@ import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 
 object MainBusinessAddressHelper {
   def apply(mainBusinessAddressForm: models.MainBusinessAddress, mode: Mode)(implicit messages: Messages) = {
-    val isGroupHead =
-      if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") GroupRow.Top else GroupRow.Single
-
     val mainBusinessAddress =
       Seq(
         Helpers.createSummaryRow(
           SummaryRowParams.ofString(
-            Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
+            Some(messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
             mainBusinessAddressForm.timeAtCurrentAddress,
             None,
-            isGroupHead
+            GroupRow.Single
           ),
           Helpers.createChangeLink(
             Mode isEditable mode,
             "form/mainBusinessAddress",
             Text("Change"),
-            Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
+            Some(messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
           )
         ))
 
@@ -56,48 +53,66 @@ object MainBusinessAddressHelper {
           Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
-                Some(Messages("fh.mainBusinessAddress.summary.yearsAtAddress")),
-                mainBusinessAddressForm.timeAtCurrentAddress,
+                label = Some(messages("fh.main_business_address.previous.label")),
+                value = Some("No"),
                 None,
-                isGroupHead
+                GroupRow.Single
               ),
-              None
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(messages("fh.mainBusinessAddress.summary.hasPreviousAddress"))
+              )
             )
           )
         case (Some(true), Some(previousAddress)) =>
           Seq(
             Helpers.createSummaryRow(
               SummaryRowParams.ofString(
-                Some(Messages("fh.mainBusinessAddress.summary.previousAddress")),
+                label = Some(messages("fh.main_business_address.previous.label")),
+                value = Some("Yes"),
+                None,
+                GroupRow.Single
+              ),
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(messages("fh.mainBusinessAddress.summary.hasPreviousAddress"))
+              )
+            ),
+            Helpers.createSummaryRow(
+              SummaryRowParams.ofString(
+                Some(messages("fh.mainBusinessAddress.summary.previousAddress")),
                 Helpers.formatAddress(previousAddress),
                 None,
-                GroupRow.Member
+                GroupRow.Single
               ),
-              None
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(messages("fh.mainBusinessAddress.summary.previousAddress"))
+              )
             ),
             Helpers.createSummaryRow(
               SummaryRowParams.ofDate(
-                Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
+                Some(messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
                 mainBusinessAddressForm.previousAddressStartdate,
                 None,
-                GroupRow.Bottom
+                GroupRow.Single
               ),
-              None
+              Helpers.createChangeLink(
+                Mode isEditable mode,
+                "form/mainBusinessAddress",
+                Text("Change"),
+                Some(messages("fh.mainBusinessAddress.summary.previousAddressStartdate"))
+              )
             )
           )
-        case (Some(true), _) =>
-          Seq(
-            Helpers.createSummaryRow(
-              SummaryRowParams.ofDate(
-                Some(Messages("fh.mainBusinessAddress.summary.previousAddressStartdate")),
-                mainBusinessAddressForm.previousAddressStartdate,
-                None,
-                GroupRow.Bottom
-              ),
-              None
-            )
-          )
-        case _ => Seq.empty
+        case (Some(true), _) => Seq.empty
+        case _               => Seq.empty
       }
     }
     if (mainBusinessAddressForm.timeAtCurrentAddress == "Less than 3 years") {
