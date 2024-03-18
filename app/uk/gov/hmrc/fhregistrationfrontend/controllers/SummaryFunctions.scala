@@ -83,7 +83,10 @@ trait SummaryFunctions {
   }
 
   protected def summaryPageParams(journeyRequest: JourneyRequest[_]) =
-    SummaryPageParams(modeForJourneyType(journeyRequest.journeyType), journeyRequest.hasUpdates)
+    SummaryPageParams(
+      modeForJourneyType(journeyRequest.journeyType),
+      journeyRequest.hasUpdates,
+      Some(journeyRequest.lastUpdateTimestamp.toString))
 
   protected def summaryPageParams(journeyType: JourneyType, hasUpdates: Option[Boolean] = None) =
     SummaryPageParams(modeForJourneyType(journeyType), hasUpdates)

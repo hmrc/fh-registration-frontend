@@ -123,6 +123,10 @@ tr > td:last-child {
     margin-top: 1.875em;
 }
 
+.govuk-fieldset .govuk-summary-list__actions {
+    width: 25%;
+}
+
 @media print {
     .hidden-print,
     #content a,

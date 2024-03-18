@@ -20,5 +20,6 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
 
 case class SummaryPageParams(
   mode: Mode,
-  hasAmendments: Option[Boolean] = None
+  hasAmendments: Option[Boolean] = None,
+  lastUpdateTimestamp: Option[String] = None
 )

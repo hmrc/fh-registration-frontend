@@ -34,7 +34,7 @@
 
 @SummaryRow(
   SummaryRowParams.ofBoolean(
-    Some(Messages("fh.summary.usesStoragePremises")),
+    Some(messages("fh.summary.usesStoragePremises")),
     data.hasValue,
     changeLink,
     GroupRow.Single
@@ -46,7 +46,7 @@
   @for((storagePremise:StoragePremise, index) <- data.value.values.zipWithIndex) {
 
     @SummaryRepeatingAddress(
-      heading = Messages("fh.other_storage_premises.each.title",{index+1}),
+      heading = messages("fh.other_storage_premises.each.title",{index+1}),
       address = SummaryAddressBlock(
         Line1 = Some(storagePremise.address.addressLine1),
         Line2 = storagePremise.address.addressLine2,
@@ -60,7 +60,7 @@
 
     @SummaryRow(
       SummaryRowParams.ofBoolean(
-        Some(Messages("fh.summary.thirdPartyPremises", {index+1})),
+        Some(messages("fh.summary.thirdPartyPremises", {index+1})),
         storagePremise.isThirdParty,
         None,
         GroupRow.Bottom

@@ -30,21 +30,20 @@ layout: layout, viewHelpers: ViewHelpers
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@sectionName = {@Messages(s"fh.$page.each.title", section)}
+@sectionName = {@messages(s"fh.$page.each.title", section)}
 
-@title = @{
-  Messages("fh.delete_confirmation_section.delete", sectionName)
-}
+@title = @{messages("fh.delete_confirmation_section.header", sectionName)}
 
 @layout(title = title, pageScripts = Some(pageScripts), isBrowserBackMimic = true) {
 
     @viewHelpers.form(action = FormPageController.deleteSection(page, section, timestamp), Symbol("novalidate") -> "novalidate") {
 
-    <h1>@title</h1>
+    <h1 class="govuk-heading-l">@title</h1>
 
-    <span class="form-hint">@sectionName will be removed from your application, use the back link if you would prefer to edit the details instead.</span>
+    <p class="govuk-body form-hint">@sectionName will be removed from your application.</p>
 
-    <button class="button form-actions">@Messages("fh.delete_confirmation_section.delete", sectionName)</button><br><br>
-
+      <p class="govuk-body">
+          <button class="govuk-button button form-actions">@messages("fh.delete_confirmation_section.delete", sectionName)</button>
+      </p>
   }
 }
