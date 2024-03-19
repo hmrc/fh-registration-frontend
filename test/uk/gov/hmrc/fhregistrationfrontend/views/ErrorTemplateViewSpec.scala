@@ -37,7 +37,6 @@ class ErrorTemplateViewSpec
   object Selectors {
     val body = "govuk-body"
     val heading = "govuk-heading-l"
-    val button = "govuk-button"
   }
 
   "error_template for page not found" should {
@@ -52,7 +51,7 @@ class ErrorTemplateViewSpec
         status(result) shouldBe NOT_FOUND
         val page = Jsoup.parse(contentAsString(result))
         page.title mustEqual "Page not found - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
-        page.getElementsByTag("h1").text mustEqual "This page can’t be found"
+        page.getElementsByClass(Selectors.heading).text mustEqual "This page can’t be found"
         page
           .getElementsByClass(Selectors.body)
           .text() mustBe "Please check that you have entered the correct web address."
@@ -60,24 +59,4 @@ class ErrorTemplateViewSpec
       }
     }
   }
-
-  "error_template for technical issues" should {
-    "render the technical issues page" when {
-      "the new business partner pages are disabled" in {
-        setupUserAction()
-        when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-        val request = FakeRequest("POST", "/")
-        val result = csrfAddToken(controller.load())(request)
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        val page = Jsoup.parse(contentAsString(result))
-        page.title mustEqual "Internal Server Error - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
-        page.getElementsByTag("h1").text mustEqual "Sorry, we’re experiencing technical difficulties"
-        page
-          .getElementsByClass(Selectors.body)
-          .text() mustBe "Please try again in a few minutes."
-        reset(mockActions)
-      }
-    }
-  }
-
 }

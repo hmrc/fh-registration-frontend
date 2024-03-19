@@ -40,7 +40,9 @@ class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {
         .title() mustEqual "Are you sure you want to delete Storage premises 1? - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
     }
     "should have the expected heading" in {
-      document.getElementsByTag("h1").text() mustEqual "Are you sure you want to delete Storage premises 1?"
+      document
+        .getElementsByClass(Selectors.heading)
+        .text() mustEqual "Are you sure you want to delete Storage premises 1?"
     }
     "contain the correct button" in {
       document
@@ -67,7 +69,9 @@ class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {
         .title() mustEqual "Are you sure you want to delete Company officer 1? - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
     }
     "should have the expected heading" in {
-      document.getElementsByTag("h1").text() mustEqual "Are you sure you want to delete Company officer 1?"
+      document
+        .getElementsByClass(Selectors.heading)
+        .text() mustEqual "Are you sure you want to delete Company officer 1?"
     }
     "contain the correct button" in {
       document
