@@ -31,7 +31,7 @@
 
     $lookup.show();
 
-    if($this.val().length || $this.hasClass('form-control-error')) {
+    if($this.val().length || $this.hasClass('govuk-input--error')) {
       $lookup.addClass('js-hidden');
       $manual.removeClass('js-hidden');
       $lookupLink.show();
@@ -92,11 +92,11 @@
 
   function showError (error, store, $input) {
     clearError(store);
-    var $error = $('<span class="error-message" role="alert">' + error + '</span>');
+    var $error = $('<p class="govuk-error-message">' + error + '</p>');
     if ($input) {
       // a user input error
       $error.insertBefore($input);
-      $input.addClass('form-control-error').focus();
+      $input.addClass('govuk-input--error').focus();
     } else {
       // a service level error
       $error.insertAfter(store.$submitButton);
@@ -109,10 +109,10 @@
   function clearError (store) {
     store
       .$container
-      .find('.form-control-error')
-      .removeClass('form-control-error')
+      .find('.govuk-input--error')
+      .removeClass('govuk-input--error')
       .end()
-      .find('.error-message')
+      .find('.govuk-error-message')
       .remove();
   }
 
@@ -150,7 +150,7 @@
   function processResults (data, store) {
     store.count = data.addresses.length;
     store.addresses = data.addresses;
-    store.legend = '<legend class="form-label-bold">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
+    store.legend = '<legend class="form-label-bold govuk-fieldset__legend">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
 
     if (store.count > maxCount) {
       showError('We found more than ' + maxCount + ' results for "' + store.$postcodeInput.val() + '", please enter a property name or number and try again or enter the address manually', store, store.$filterInput);

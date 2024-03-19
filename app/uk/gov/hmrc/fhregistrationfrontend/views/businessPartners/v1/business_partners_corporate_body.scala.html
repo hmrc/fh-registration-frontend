@@ -1,0 +1,206 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@this(
+        viewHelpers: ViewHelpers,
+        addressForm: AddressUKOld
+)
+@(businessPartnerForm: Form[_])(implicit messages: Messages)
+
+@tradingNameHtml = @{
+  viewHelpers.govukInput(Input(
+    id = s"$businessPartnerCorporateBodyKey.$tradeNameKey",
+    name = s"$businessPartnerCorporateBodyKey.$tradeNameKey",
+    label = Label(
+      isPageHeading = false,
+      content = Text(messages("fh.tradingName.label")),
+      classes = "govuk-label--s"
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    errorMessage =
+      businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$tradeNameKey").map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.businessPartnerCorporateBody.tradeName_value.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+      },
+    value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$tradeNameKey").value
+  ))
+}
+
+@vatHtml = @{
+  viewHelpers.govukInput(Input(
+    id = s"$businessPartnerCorporateBodyKey.$vatRegistrationKey",
+    name = s"$businessPartnerCorporateBodyKey.$vatRegistrationKey",
+    label = Label(
+      isPageHeading = false,
+      content = Text(messages("fh.vatNumber.label")),
+      classes = "govuk-label--s"
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    hint = Some(Hint(
+      content = Text(messages("fh.vatNumber.guided.hintText"))
+    )),
+    errorMessage =
+      businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+      },
+    value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$vatRegistrationKey").value
+  ))
+}
+
+@utrHtml = @{
+  viewHelpers.govukInput(Input(
+    id = s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey",
+    name = s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey",
+    label = Label(
+      isPageHeading = false,
+      content = Text(messages("fh.business_partners.utr.label")),
+      classes = "govuk-label--s"
+    ),
+    spellcheck = Some(false),
+    classes = "govuk-!-width-one-half",
+    hint = Some(Hint(
+      content = Text(messages("fh.business_partners.utr.hintText"))
+    )),
+    errorMessage =
+      businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").map{ e =>
+        ErrorMessage(
+          content = Text(messages(s"fh.${e.key}.${e.message}")),
+          visuallyHiddenText = Some(messages("generic.errorPrefix"))
+        )
+      },
+    value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$uniqueTaxpayerReferenceKey").value
+  ))
+}
+<h3 class="govuk-heading-m">@Messages("fh.business_partners.enter.title")</h3>
+
+@viewHelpers.govukInput(Input(
+  id = s"$businessPartnerCorporateBodyKey.$companyNameKey",
+  name = s"$businessPartnerCorporateBodyKey.$companyNameKey",
+  value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyNameKey").value,
+  label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--s",
+    content = Text(messages("fh.business_partners.corporate_body.name.label"))
+  ),
+  errorMessage = businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$companyNameKey").map(error => {
+    ErrorMessage(
+      content = Text(messages("fh.businessPartnerCorporateBody.companyName." + error.message))
+    )
+  })
+))
+
+@viewHelpers.govUkRadios(Radios(
+  fieldset = Some(Fieldset(
+    legend = Some(Legend(
+      content = Text(messages("fh.trading_name.confirm.label")),
+      classes = "govuk-fieldset__legend--s",
+      isPageHeading = false
+    )),
+    classes = "govuk-!-margin-bottom-5"
+  )),
+  idPrefix = Some(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey"),
+  name = s"$businessPartnerCorporateBodyKey.$hasTradeNameKey",
+  errorMessage = businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").map(error => {
+    ErrorMessage(content = Text(messages(s"fh.$businessPartnerCorporateBodyKey.$hasTradeNameKey.${error.message}")))
+  }),
+  items = Seq(
+    RadioItem(
+      content = Text(messages("fh.generic.yes")),
+      value = Some("true"),
+      checked = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").value.toList.contains("true"),
+      conditionalHtml = Some(tradingNameHtml)
+    ),
+    RadioItem(
+      content = Text(messages("fh.generic.no")),
+      value = Some("false"),
+      checked = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasTradeNameKey").value.toList.contains("false")
+    )
+  )
+))
+
+@viewHelpers.govukInput(Input(
+  id = s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey",
+  name = s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey",
+  value = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").value,
+  label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--s",
+    content = Text(messages("fh.company_registration_number.title"))
+  ),
+  hint = Some(Hint(
+    content = Text(messages("fh.companyRegistrationNumber.hint_text"))
+  )),
+  errorMessage = businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$companyRegistrationNumberKey").map(error => {
+    ErrorMessage(
+      content = Text(messages("fh.businessPartnerCorporateBody.companyRegistrationNumber." + error.message))
+    )
+  })
+))
+
+@viewHelpers.govUkRadios(Radios(
+  fieldset = Some(Fieldset(
+    legend = Some(Legend(
+      content = Text(messages("fh.vat_registration.confirm.label")),
+      classes = "govuk-fieldset__legend--s",
+      isPageHeading = false
+    )),
+    classes = "govuk-!-margin-bottom-5"
+  )),
+  idPrefix = Some(s"$businessPartnerCorporateBodyKey.$hasVatKey"),
+  name = s"$businessPartnerCorporateBodyKey.$hasVatKey",
+  errorMessage = businessPartnerForm.error(s"$businessPartnerCorporateBodyKey.$hasVatKey").map(_ => {
+    ErrorMessage(content = Text(messages("fh.businessPartnerCorporateBody.vat_yesNo.error.required")))
+  }),
+  items = Seq(
+    RadioItem(
+      content = Text(messages("fh.generic.yes")),
+      value = Some("true"),
+      checked = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").value.toList.contains("true"),
+      conditionalHtml = Some(vatHtml)
+    ),
+    RadioItem(
+      content = Text(messages("fh.generic.no")),
+      value = Some("false"),
+      checked = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$hasVatKey").value.toList.contains("false"),
+      conditionalHtml = Some(utrHtml)
+    )
+  )
+))
+
+@addressForm(
+  businessPartnerForm,
+  AddressUKParams(
+    name = s"$businessPartnerCorporateBodyKey.$addressKey",
+    label = Messages("fh.business_partners.enter.partner_address"),
+    hasErrors = businessPartnerForm(s"$businessPartnerCorporateBodyKey.$addressKey.postcode").hasErrors,
+    error = Some(Messages("fh.business_partners.enter.partner_address.error"))
+  )
+)
