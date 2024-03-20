@@ -98,7 +98,7 @@
                 DateOfIncorporationHelper(applicationData.dateOfIncorporation, params.mode) ++
                 TradingNameHelper(applicationData.tradingName, params.mode) ++
                 VatRegistrationNumberHelper(applicationData.vatNumber, params.mode) ++
-                CompanyOfficersHelper(applicationData.companyOfficers, params.mode)
+                CompanyOfficersHelper(applicationData.companyOfficers, params.mode, params.lastUpdateTimestamp.getOrElse(""))
         ))
     ))
 
