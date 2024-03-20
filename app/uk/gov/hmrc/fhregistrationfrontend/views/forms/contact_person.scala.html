@@ -44,8 +44,8 @@
 }
 
 @pageHeadBlock = {
-  @autcompleteCss()
-  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+    @autcompleteCss()
+    <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
 
@@ -120,8 +120,6 @@
 
 @layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
-    <link href="@routes.Assets.at("stylesheets/accessible-autocomplete.min.css")" media="all" rel="stylesheet" type="text/css">
-    <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
     @if(contactPersonForm.errors.nonEmpty) {
 
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =

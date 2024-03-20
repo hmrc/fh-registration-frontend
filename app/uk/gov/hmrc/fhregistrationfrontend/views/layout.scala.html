@@ -46,6 +46,7 @@
 @headBlock = {
     <style>.govuk-fieldset .govuk-summary-list__actions { width: 25%; }</style>
     @hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)
+    @pageHeadBlock.getOrElse(Html(""))
 }
 @content = {
     @contentBlock
