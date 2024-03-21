@@ -64,7 +64,6 @@ class Views @Inject()(
   ////////////////////////////Miscellaneous/////////////////////////////////////////////////
   val error_forbidden: uk.gov.hmrc.fhregistrationfrontend.views.html.error_forbidden,
   val error_template: uk.gov.hmrc.fhregistrationfrontend.views.html.error_template,
-  val govuk_wrapper: uk.gov.hmrc.fhregistrationfrontend.views.html.govuk_wrapper,
   val saved: uk.gov.hmrc.fhregistrationfrontend.views.html.saved,
   val ltd_summary: uk.gov.hmrc.fhregistrationfrontend.views.html.ltd_summary,
   val sole_proprietor_summary: uk.gov.hmrc.fhregistrationfrontend.views.html.sole_proprietor_summary,

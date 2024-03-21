@@ -2,4 +2,3 @@
 ->         /fhdds                     app.Routes
 ->         /fh-admin-page             fhadmin.Routes
 ->         /                          health.Routes
-->     	   /template                  template.Routes
