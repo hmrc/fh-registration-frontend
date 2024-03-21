@@ -20,12 +20,12 @@
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 @this(
-mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
+layout: layout
 )
 
-@(submission: SubmissionTracking)(implicit request: Request[_], config: AppConfig,  messagesApi: Messages)
+@(submission: SubmissionTracking)(implicit request: Request[_], config: AppConfig,  messages: Messages)
 
-@mainTemplate(title = Messages("home.admin.submisson.page.title")) {
+@layout(title = messages("home.admin.submisson.page.title")) {
 
 
         <table>
@@ -74,7 +74,7 @@ mainTemplate: uk.gov.hmrc.fhregistrationfrontend.views.html.main_template_old
                 }</td>
 
                 <td>{
-                        <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.admin.routes.AdminPageController.deleteSubmission(submission.formBundleId)" >DELETE</a>
+                        <a href="@uk.gov.hmrc.fhregistrationfrontend.controllers.admin.routes.AdminPageController.deleteSubmission(submission.formBundleId)">DELETE</a>
                 }</td>
 
             </tr>

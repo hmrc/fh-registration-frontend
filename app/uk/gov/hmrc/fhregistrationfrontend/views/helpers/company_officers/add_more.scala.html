@@ -40,13 +40,11 @@
       } else None,
       items = Seq(
         RadioItem(
-          id = Some("addMore-true"),
           content = Text("Yes"),
           value = Some("true"),
           checked = companyOfficersForm("addMore").value.contains("true"),
         ),
         RadioItem(
-          id = Some("addMore-false"),
           content = Text("No"),
           value = Some("false"),
           checked = companyOfficersForm("addMore").value.contains("false"),
