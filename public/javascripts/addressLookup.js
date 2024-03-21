@@ -75,7 +75,7 @@
           '                d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>\n' +
           '          </svg>\n' +
           '          <span class="govuk-pagination__link-title">Previous<span class="page-nav__title"> ' + perPage + ' addresses</span>\n' +
-          '      </span></a></div'
+          '      </span></a></div>'
       )
     }
     if (nextPage) {
@@ -193,7 +193,7 @@
     // remove previous results
     store.$results
       .html('<p class="govuk-body">searching...</p>')
-      .siblings('.pagination')
+      .siblings('.govuk-pagination')
       .remove();
     // clear down previous address fields
     clearAddressFields(store.context);
