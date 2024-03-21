@@ -164,7 +164,8 @@
     ErrorMessage(
       content = Text(messages(s"fh.$businessPartnerLimitedLiabilityPartnershipKey.$companyRegistrationNumberKey.${error.message}"))
     )
-  })
+  }),
+  classes = "govuk-input--width-10"
 ))
 
 @viewHelpers.govUkRadios(Radios(

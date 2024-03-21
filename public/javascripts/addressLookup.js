@@ -137,7 +137,7 @@
     var i = start;
     return results.reduce(function (list, next) {
       var address = next.address;
-      list.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + store.context + '-result-' + i + '" name="' + store.context + '-result" value="' + i + '"><label for="' + store.context + '-result-' + i + '">');
+      list.push('<div class="govuk-radios__item"><input class="postcode-lookup-result govuk-radios__input" type="radio" id="' + store.context + '-result-' + i + '" name="' + store.context + '-result" value="' + i + '"><label class="govuk-label govuk-radios__label" for="' + store.context + '-result-' + i + '">');
       list.push(address.lines.join(', '));
       list.push(', ' + address.town + ', ');
       list.push(address.postcode);
@@ -150,7 +150,7 @@
   function processResults (data, store) {
     store.count = data.addresses.length;
     store.addresses = data.addresses;
-    store.legend = '<legend class="form-label-bold govuk-fieldset__legend">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
+    store.legend = '<legend class="govuk-fieldset__legend govuk-fieldset__legend--s">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
 
     if (store.count > maxCount) {
       showError('We found more than ' + maxCount + ' results for "' + store.$postcodeInput.val() + '", please enter a property name or number and try again or enter the address manually', store, store.$filterInput);
@@ -162,7 +162,7 @@
   function showResults (start, end, store) {
     var pagedResults = buildRadios(start, end, store);
     store.$results
-      .html(store.legend + pagedResults.join(''))
+      .html(store.legend + '<div class="govuk-radios govuk-radios--small" data-module="govuk-radios">' + pagedResults.join('') + '</div>')
       .focus()
       .on('click', '.postcode-lookup-result', function (e) {
         var index = $(e.currentTarget).val();
@@ -175,7 +175,7 @@
   function searchAddress (url, store) {
     // remove previous results
     store.$results
-      .html('searching...')
+      .html('<p class="govuk-body">searching...</p>')
       .siblings('.pagination')
       .remove();
     // clear down previous address fields
