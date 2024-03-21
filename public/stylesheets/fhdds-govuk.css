@@ -1,0 +1,23 @@
+.fhdds-print-only {
+  display: none;
+}
+
+@media print {
+  .fhdds-print-only {
+    display: block;
+  }
+}
+
+.autocomplete__input.govuk-input--error {
+  border-color: #d4351c;
+}
+
+.autocomplete__dropdown-arrow-down {
+  z-index: 0;
+}
+
+@media (min-width: 40.0625em) {
+  .autocomplete__wrapper {
+    width: 75% !important;
+  }
+}

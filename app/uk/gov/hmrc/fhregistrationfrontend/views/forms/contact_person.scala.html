@@ -44,8 +44,8 @@
 }
 
 @pageHeadBlock = {
-  @autcompleteCss()
-  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+    @autcompleteCss()
+    <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
 
@@ -120,7 +120,7 @@
 
 @layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
-  @if(contactPersonForm.errors.nonEmpty) {
+    @if(contactPersonForm.errors.nonEmpty) {
 
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             if(contactPersonForm(isUkAddressKey).value.contains("true")) {
