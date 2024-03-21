@@ -63,34 +63,51 @@
     var nextPage = store.count > end ? page + 1 : null;
     var prevPage = end - perPage > 0 ? page - 1 : null;
     // remove any previous pagination navigation
-    store.$results.siblings('.pagination').off().remove();
+    store.$results.siblings('.govuk-pagination').off().remove();
     // build the pagination navigation
-    var paginationNav = ['<div class="pagination" style="margin-top:1em;position:relative;overflow:visible;">'];
+    var paginationNav = ['<nav class="govuk-pagination" role="navigation" aria-label="Pagination">'];
     // we are using zero indexed paging
     if (prevPage || prevPage === 0) {
-      paginationNav.push('<div style="float:left; width: 49%;"><a href="#" class="prev-page page-nav__link page-nav__link--previous"><span class="page-nav__label">Previous</span><span class="page-nav__title">' + perPage + ' addresses</span></a></div>');
+      paginationNav.push('<div class="govuk-pagination__prev"><a class="govuk-link govuk-pagination__link" href="#" rel="prev">\n' +
+          '          <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg"\n' +
+          '               height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">\n' +
+          '            <path\n' +
+          '                d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>\n' +
+          '          </svg>\n' +
+          '          <span class="govuk-pagination__link-title">Previous<span class="page-nav__title"> ' + perPage + ' addresses</span>\n' +
+          '      </span></a></div'
+      )
     }
     if (nextPage) {
       var remainder = end + perPage <= store.count ? perPage : store.count % end;
-      paginationNav.push('<div style="float:right; width: 49%"><a href="#" class="next-page page-nav__link page-nav__link--next"><span class="page-nav__label">Next</span><span class="page-nav__title">' + remainder + ' ' + Utils.pluralise(remainder, 'address', 'addresses') + '</span></a></div>');
+      paginationNav.push('<div class="govuk-pagination__next"><a class="govuk-link govuk-pagination__link" href="#" rel="next">\n' +
+          '      <span class="govuk-pagination__link-title">\n' +
+          '        Next<span class="page-nav__title"> ' + remainder + ' ' + Utils.pluralise(remainder, 'address', 'addresses') + '</span>\n' +
+          '      </span>\n' +
+          '          <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg"\n' +
+          '               height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">\n' +
+          '            <path\n' +
+          '                d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>\n' +
+          '          </svg></a></div>'
+      )
     }
-    paginationNav.push('</div>');
+    paginationNav.push('</nav>');
     // insert pagination navigation to DOM
     $(paginationNav.join('')).insertAfter(store.$results);
-    $('.pagination')
-      .on('click', 'a.next-page', function (e) {
-        e.preventDefault();
-        showPage(nextPage, store);
-      })
-      .on('click', 'a.prev-page', function (e) {
-        e.preventDefault();
-        showPage(prevPage, store);
-      });
+    $('.govuk-pagination')
+        .on('click', 'a[rel="next"]', function (e) {
+          e.preventDefault();
+          showPage(nextPage, store);
+        })
+        .on('click', 'a[rel="prev"]', function (e) {
+          e.preventDefault();
+          showPage(prevPage, store);
+        });
 
     showResults(start, end, store);
   }
 
-  function showError (error, store, $input) {
+  function showError(error, store, $input) {
     clearError(store);
     var $error = $('<p class="govuk-error-message">' + error + '</p>');
     if ($input) {
@@ -102,21 +119,21 @@
       $error.insertAfter(store.$submitButton);
     }
 
-    store.$results.empty().siblings('.pagination').remove();
+    store.$results.empty().siblings('.govuk-pagination').remove();
     store.$submitButton.removeAttr('disabled');
   }
 
-  function clearError (store) {
+  function clearError(store) {
     store
-      .$container
-      .find('.govuk-input--error')
-      .removeClass('govuk-input--error')
-      .end()
-      .find('.govuk-error-message')
-      .remove();
+        .$container
+        .find('.govuk-input--error')
+        .removeClass('govuk-input--error')
+        .end()
+        .find('.govuk-error-message')
+        .remove();
   }
 
-  function initStore (context) {
+  function initStore(context) {
     var $container = $('#' + context + '-fieldset');
     Store[context] = {
       context: context,
@@ -132,12 +149,12 @@
     return Store[context];
   }
 
-  function buildRadios (start, end, store) {
+  function buildRadios(start, end, store) {
     var results = store.addresses.slice(start, end);
     var i = start;
     return results.reduce(function (list, next) {
       var address = next.address;
-      list.push('<div class="multiple-choice"><input class="postcode-lookup-result" type="radio" id="' + store.context + '-result-' + i + '" name="' + store.context + '-result" value="' + i + '"><label for="' + store.context + '-result-' + i + '">');
+      list.push('<div class="govuk-radios__item"><input class="postcode-lookup-result govuk-radios__input" type="radio" id="' + store.context + '-result-' + i + '" name="' + store.context + '-result" value="' + i + '"><label class="govuk-label govuk-radios__label" for="' + store.context + '-result-' + i + '">');
       list.push(address.lines.join(', '));
       list.push(', ' + address.town + ', ');
       list.push(address.postcode);
@@ -150,7 +167,7 @@
   function processResults (data, store) {
     store.count = data.addresses.length;
     store.addresses = data.addresses;
-    store.legend = '<legend class="form-label-bold govuk-fieldset__legend">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
+    store.legend = '<legend class="govuk-fieldset__legend govuk-fieldset__legend--s">' + store.count + ' ' + Utils.pluralise(store.count, 'address', 'addresses') + ' found:</legend>';
 
     if (store.count > maxCount) {
       showError('We found more than ' + maxCount + ' results for "' + store.$postcodeInput.val() + '", please enter a property name or number and try again or enter the address manually', store, store.$filterInput);
@@ -162,7 +179,7 @@
   function showResults (start, end, store) {
     var pagedResults = buildRadios(start, end, store);
     store.$results
-      .html(store.legend + pagedResults.join(''))
+      .html(store.legend + '<div class="govuk-radios govuk-radios--small" data-module="govuk-radios">' + pagedResults.join('') + '</div>')
       .focus()
       .on('click', '.postcode-lookup-result', function (e) {
         var index = $(e.currentTarget).val();
@@ -175,7 +192,7 @@
   function searchAddress (url, store) {
     // remove previous results
     store.$results
-      .html('searching...')
+      .html('<p class="govuk-body">searching...</p>')
       .siblings('.pagination')
       .remove();
     // clear down previous address fields
