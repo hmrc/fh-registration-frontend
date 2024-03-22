@@ -91,7 +91,7 @@
 }
 
 @titlePrefix = @{
-  if (businessPartnerForm.hasErrors) s"""$messages("fh.generic.errorPrefix") """ else ""
+  if (businessPartnerForm.hasErrors) s"""${messages("fh.generic.errorPrefix")} """ else ""
 }
 
 @title = @{messages("fh.business_partners.title", section)}
