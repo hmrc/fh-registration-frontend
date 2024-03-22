@@ -42,12 +42,11 @@
     <label for="@{fieldName}-postcode-search" class="govuk-label">Postcode</label>
     <input type="text" class="govuk-input postcode-value form-control" data-context="@{fieldName}" id="@{fieldName}-postcode-search" style="width: 150px;" aria-controls="@{fieldName}-results" />
     <button data-context="@{fieldName}" data-module="govuk-button" class="govuk-button govuk-button--secondary button--secondary address-lookup" role="button" tabindex="0">Look up address</button>
-    <div class="govuk-form-group">
-      <fieldset id="@{fieldName}-results" class="lookup-results-fieldset govuk-fieldset" aria-live="polite"></fieldset>
+    <div class="govuk-form-group" id="@{fieldName}-results" aria-live="polite">
     </div>
-    <div class="form-group" style="margin-top: 1em">
+    <p class="govuk-body">
       <a href="#@{fieldName}-title" data-context="@{fieldName}" class="manual-address-mode govuk-link">Enter address manually</a>
-    </div>
+    </p>
   </div>
 
   <div id="@{fieldName}-manual-container" class="address-manual-container js-hidden">
