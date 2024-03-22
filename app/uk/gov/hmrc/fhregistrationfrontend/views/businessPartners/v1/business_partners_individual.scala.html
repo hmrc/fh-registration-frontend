@@ -61,7 +61,6 @@
     name = s"$businessPartnerIndividualKey.$firstNameKey",
     value = businessPartnerForm(s"$businessPartnerIndividualKey.$firstNameKey").value,
     label = Label(
-        isPageHeading = true,
         classes = "govuk-label--s",
         content = Text(messages("fh.business_partners.individual.first_name.label"))
     ),
@@ -77,7 +76,6 @@
     name = s"$businessPartnerIndividualKey.$lastNameKey",
     value = businessPartnerForm(s"$businessPartnerIndividualKey.$lastNameKey").value,
     label = Label(
-        isPageHeading = true,
         classes = "govuk-label--s",
         content = Text(messages("fh.contact_person.last_name.label"))
     ),
@@ -92,8 +90,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(messages("fh.business_partners.individual.nino.confirm.label")),
-            classes = "govuk-fieldset__legend--s",
-            isPageHeading = false
+            classes = "govuk-fieldset__legend--s"
         )),
         classes = "govuk-!-margin-bottom-5"
     )),

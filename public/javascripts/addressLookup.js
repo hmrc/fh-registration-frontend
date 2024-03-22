@@ -179,7 +179,7 @@
   function showResults (start, end, store) {
     var pagedResults = buildRadios(start, end, store);
     store.$results
-      .html(store.legend + '<div class="govuk-radios govuk-radios--small" data-module="govuk-radios">' + pagedResults.join('') + '</div>')
+      .html('<fieldset class="lookup-results-fieldset govuk-fieldset">' + store.legend + '<div class="govuk-radios govuk-radios--small" data-module="govuk-radios">' + pagedResults.join('') + '</div></fieldset>')
       .focus()
       .on('click', '.postcode-lookup-result', function (e) {
         var index = $(e.currentTarget).val();

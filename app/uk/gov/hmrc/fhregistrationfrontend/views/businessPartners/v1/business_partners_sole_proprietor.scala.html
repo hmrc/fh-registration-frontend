@@ -34,7 +34,6 @@
     id = s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey",
     name = s"$businessPartnerSoleProprietorKey.$nationalInsuranceNumberKey",
     label = Label(
-      isPageHeading = false,
       content = Text(messages("fh.national_insurance_number.label")),
       classes = "govuk-label--s"
     ),
@@ -59,7 +58,6 @@
     id = s"$businessPartnerSoleProprietorKey.$tradeNameKey",
     name = s"$businessPartnerSoleProprietorKey.$tradeNameKey",
     label = Label(
-      isPageHeading = false,
       content = Text(messages("fh.tradingName.label")),
       classes = "govuk-label--s"
     ),
@@ -81,7 +79,6 @@
     id = s"$businessPartnerSoleProprietorKey.$vatRegistrationKey",
     name = s"$businessPartnerSoleProprietorKey.$vatRegistrationKey",
     label = Label(
-      isPageHeading = false,
       content = Text(messages("fh.vatNumber.label")),
       classes = "govuk-label--s"
     ),
@@ -106,7 +103,6 @@
     id = s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey",
     name = s"$businessPartnerSoleProprietorKey.$uniqueTaxpayerReferenceKey",
     label = Label(
-      isPageHeading = false,
       content = Text(messages("fh.business_partners.utr.label")),
       classes = "govuk-label--s"
     ),
@@ -133,7 +129,6 @@
   name = s"$businessPartnerSoleProprietorKey.$firstNameKey",
   value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$firstNameKey").value,
   label = Label(
-    isPageHeading = true,
     classes = "govuk-label--s",
     content = Text(messages("fh.business_partners.individual.first_name.label"))
   ),
@@ -149,7 +144,6 @@
   name = s"$businessPartnerSoleProprietorKey.$lastNameKey",
   value = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$lastNameKey").value,
   label = Label(
-    isPageHeading = true,
     classes = "govuk-label--s",
     content = Text(messages("fh.contact_person.last_name.label"))
   ),
@@ -164,8 +158,7 @@
   fieldset = Some(Fieldset(
     legend = Some(Legend(
       content = Text(messages("fh.trading_name.confirm.label")),
-      classes = "govuk-fieldset__legend--s",
-      isPageHeading = false
+      classes = "govuk-fieldset__legend--s"
     )),
     classes = "govuk-!-margin-bottom-5"
   )),
@@ -193,8 +186,7 @@
   fieldset = Some(Fieldset(
     legend = Some(Legend(
       content = Text(messages("fh.business_partners.individual.nino.confirm.label")),
-      classes = "govuk-fieldset__legend--s",
-      isPageHeading = false
+      classes = "govuk-fieldset__legend--s"
     )),
     classes = "govuk-!-margin-bottom-5"
   )),
@@ -222,8 +214,7 @@
   fieldset = Some(Fieldset(
     legend = Some(Legend(
       content = Text(messages("fh.vat_registration.confirm.label")),
-      classes = "govuk-fieldset__legend--s",
-      isPageHeading = false
+      classes = "govuk-fieldset__legend--s"
     )),
     classes = "govuk-!-margin-bottom-5"
   )),
@@ -252,8 +243,8 @@
   businessPartnerForm,
   AddressUKParams(
     name = s"$businessPartnerSoleProprietorKey.$addressKey",
-    label = Messages("fh.business_partners.enter.partner_address"),
+    label = messages("fh.business_partners.enter.partner_address"),
     hasErrors = businessPartnerForm(s"$businessPartnerSoleProprietorKey.$addressKey.postcode").hasErrors,
-    error = Some(Messages("fh.business_partners.enter.partner_address.error"))
+    error = Some(messages("fh.business_partners.enter.partner_address.error"))
   )
 )

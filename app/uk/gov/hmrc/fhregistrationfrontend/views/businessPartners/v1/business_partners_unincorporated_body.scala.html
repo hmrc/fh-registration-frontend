@@ -34,7 +34,6 @@
         id = s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey",
         name = s"$businessPartnerUnincorporatedBodyKey.$tradeNameKey",
         label = Label(
-            isPageHeading = false,
             content = Text(messages("fh.tradingName.label")),
             classes = "govuk-label--s"
         ),
@@ -56,7 +55,6 @@
         id = s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey",
         name = s"$businessPartnerUnincorporatedBodyKey.$vatRegistrationKey",
         label = Label(
-            isPageHeading = false,
             content = Text(messages("fh.vatNumber.label")),
             classes = "govuk-label--s"
         ),
@@ -81,7 +79,6 @@
         id = s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey",
         name = s"$businessPartnerUnincorporatedBodyKey.$uniqueTaxpayerReferenceKey",
         label = Label(
-            isPageHeading = false,
             content = Text(messages("fh.business_partners.utr.label")),
             classes = "govuk-label--s"
         ),
@@ -108,7 +105,6 @@
     name = s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey",
     value = businessPartnerForm(s"$businessPartnerUnincorporatedBodyKey.$unincorporatedBodyNameKey").value,
     label = Label(
-        isPageHeading = true,
         classes = "govuk-label--s",
         content = Text(messages("fh.business_partners.unincorporate_body.name.label"))
     ),
@@ -123,8 +119,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(messages("fh.trading_name.confirm.label")),
-            classes = "govuk-fieldset__legend--s",
-            isPageHeading = false
+            classes = "govuk-fieldset__legend--s"
         )),
         classes = "govuk-!-margin-bottom-5"
     )),
@@ -152,8 +147,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(messages("fh.vat_registration.confirm.label")),
-            classes = "govuk-fieldset__legend--s",
-            isPageHeading = false
+            classes = "govuk-fieldset__legend--s"
         )),
         classes = "govuk-!-margin-bottom-5"
     )),
@@ -181,8 +175,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(messages("fh.business_partners.utr.confirm.label")),
-            classes = "govuk-fieldset__legend--s",
-            isPageHeading = false
+            classes = "govuk-fieldset__legend--s"
         )),
         classes = "govuk-!-margin-bottom-5"
     )),
