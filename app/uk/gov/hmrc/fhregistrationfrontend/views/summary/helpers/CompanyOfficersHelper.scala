@@ -27,7 +27,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany, C
 
 object CompanyOfficersHelper {
 
-  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode)(implicit messages: Messages) =
+  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode, lastUpdateTimestamp: String)(
+    implicit messages: Messages) =
     companyOfficers.values.zipWithIndex.flatMap {
       case (companyOfficer, index) =>
         val individualOrCompanyDetails = companyOfficer.identification match {
@@ -38,6 +39,32 @@ object CompanyOfficersHelper {
             CompanyOrIndividualHelper.createCompany(company)(messages: Messages)
         }
 
+        val isEditable = Mode isEditable mode
+
+        def getActions(index: Int) =
+          if (companyOfficers.values.size > 1) {
+            Seq(
+              ActionItem(
+                href = s"form/companyOfficers/$index/confirmDelete/$lastUpdateTimestamp",
+                content = Text("Remove"),
+                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+              ),
+              ActionItem(
+                href = s"form/companyOfficers/$index",
+                content = Text("Change"),
+                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+              )
+            )
+          } else {
+            Seq(
+              ActionItem(
+                href = s"form/companyOfficers/$index",
+                content = Text("Change"),
+                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+              )
+            )
+          }
+
         val officerLabel = Helpers.createSummaryRow(
           SummaryRowParams(
             Some(Messages("fh.company_officers.each.title", {
@@ -47,11 +74,9 @@ object CompanyOfficersHelper {
             None,
             GroupRow.Single
           ),
-          Helpers.createChangeLink(
-            Mode isEditable mode,
-            s"form/companyOfficers/${index + 1}",
-            Text("Change"),
-            Some(Messages("fh.company_officers.each.title", { index + 1 })))
+          summaryActions = if (isEditable) {
+            Some(Actions(items = getActions(index + 1)))
+          } else { None }
         )
 
         officerLabel +: individualOrCompanyDetails
