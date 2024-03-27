@@ -46,7 +46,7 @@ class ImportingActivitiesControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: ImportingActivities(false,None)")
+              res.body must include("Form submitted, with result: ImportingActivities(false,None,None,None)")
             }
           }
         }
@@ -70,7 +70,7 @@ class ImportingActivitiesControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,false)))")
+              res.body must include("Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,false)),None,None)")
             }
           }
         }
@@ -94,7 +94,7 @@ class ImportingActivitiesControllerISpec
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,true)))")
+              res.body must include("Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,true)),None,None)")
             }
           }
         }

@@ -152,11 +152,14 @@ class DesToFormImpl extends DesToForm {
   def businessCustomers(allOtherInformation: des.AllOtherInformation) =
     BusinessCustomers(allOtherInformation.numberOfCustomers)
 
-  def importingActivities(allOtherInformation: des.AllOtherInformation) =
+  def importingActivities(allOtherInformation: des.AllOtherInformation) = {
+    val eoriNumberFromInfo = eoriNumber(allOtherInformation)
     ImportingActivities(
       allOtherInformation.doesEORIExist,
-      eoriNumber(allOtherInformation)
+      eori = eoriNumberFromInfo.map(_.eoriNumber),
+      goodsImported = eoriNumberFromInfo.map(_.goodsImportedOutsideEori)
     )
+  }
 
   def eoriNumber(allOtherInformation: des.AllOtherInformation): Option[EoriNumber] =
     if (allOtherInformation.doesEORIExist)

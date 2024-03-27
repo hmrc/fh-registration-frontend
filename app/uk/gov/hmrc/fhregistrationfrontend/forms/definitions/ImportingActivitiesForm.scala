@@ -35,10 +35,26 @@ object ImportingActivitiesForm {
   val hasEoriMapping = hasEoriKey               -> yesOrNo()
   val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))
 
-  val importingActivitiesForm = Form(
-    mapping(
-      hasEoriMapping,
-      optionalEoriNumberMapping
-    )(ImportingActivities.apply)(ImportingActivities.unapply)
-  )
+  val hasEoriForm = Form(hasEoriMapping)
+
+  val eoriNumberOnlyMapping = eoriNumberKey                             -> eoriNumber
+  val goodsImportedOutsideEoriOnlyMapping = goodsImportedOutsideEoriKey -> yesOrNo()
+
+  val eoriNumberOnlyForm: Form[String] = Form(eoriNumberOnlyMapping)
+  val goodsImportedOutsideEoriOnlyForm: Form[Boolean] = Form(goodsImportedOutsideEoriOnlyMapping)
+
+  val importingActivitiesForm: Form[ImportingActivities] = {
+    val apply: (Boolean, Option[EoriNumber]) => ImportingActivities = (hasEori, eoriNumber) =>
+      ImportingActivities(hasEori, eoriNumber)
+    val unapply: ImportingActivities => Option[(Boolean, Option[EoriNumber])] =
+      importingActivities => {
+        Some((importingActivities.hasEori, importingActivities.eoriNumber))
+      }
+    Form(
+      mapping(
+        hasEoriMapping,
+        optionalEoriNumberMapping
+      )(apply)(unapply)
+    )
+  }
 }

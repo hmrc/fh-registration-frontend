@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.EoriNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
@@ -25,7 +25,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(importingActivitiesForm: Form[ImportingActivities], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(importingActivitiesForm: Form[String], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
@@ -43,46 +43,17 @@
 }
 
 @title = @{
-  Messages("fh.importing_activities.eori_all.confirm.title")
+  Messages("fh.importing_activities.eori.confirm.label")
 }
 
-@eoriQuery=  @{
-  viewHelpers.govUkRadios(Radios(
-    fieldset = Some(Fieldset(
-      legend = Some(Legend(
-        content = Text(messages("fh.importing_activities.eori_used_for_others.confirm.label")),
-        classes = "govuk-fieldset__legend--m",
-        isPageHeading = false
-      ))
-    )),
-    idPrefix = Some(s"$eoriNumberKey.$goodsImportedOutsideEoriKey"),
-    name = s"$eoriNumberKey.$goodsImportedOutsideEoriKey",
-    errorMessage = if(importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").hasErrors) {
-      Some(ErrorMessage(content = Text(messages(s"fh.eoriNumber.goodsImportedOutsideEori.error.required"))))
-    } else None,
-    items = Seq(
-      RadioItem(
-        content = Text("Yes"),
-        value = Some("true"),
-        checked = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value.toList.contains("true")
-      ),
-      RadioItem(
-        content = Text("No"),
-        value = Some("false"),
-        checked = importingActivitiesForm(s"$eoriNumberKey.$goodsImportedOutsideEoriKey").value.toList.contains("false")
-
-      )
-    )
-  ))
-}
-
-@conditionalHtml = {
+@eoriNumberInput = {
   <div class="govuk-body">
   @viewHelpers.govukInput(Input(
-    id = s"$eoriNumberKey.$eoriNumberKey",
-    name = s"$eoriNumberKey.$eoriNumberKey",
+    id = s"$eoriNumberKey",
+    name = s"$eoriNumberKey",
     label = Label(
-      isPageHeading = false,
+      isPageHeading = true,
+      classes = "govuk-fieldset__legend--l",
       content = HtmlContent(s"<strong>${messages("fh.importing_activities.eori.label")}</strong>")
     ),
     spellcheck = Some(false),
@@ -91,16 +62,15 @@
       content = Text(messages("fh.importing_activities.eori.hint_text"))
     )),
     errorMessage =
-      importingActivitiesForm.error(s"$eoriNumberKey.$eoriNumberKey").map{ e =>
+      importingActivitiesForm.error(s"$eoriNumberKey").map{ e =>
         ErrorMessage(
-          content = Text(messages(s"fh.$eoriNumberKey.$eoriNumberKey.${e.message}")),
+          content = Text(messages(s"fh.$eoriNumberKey.${e.message}")),
           visuallyHiddenText = Some(messages("generic.errorPrefix"))
         )
 
       },
-    value = importingActivitiesForm(s"$eoriNumberKey.$eoriNumberKey").value
+    value = importingActivitiesForm(s"$eoriNumberKey").value
   ))
-  @eoriQuery
   </div>
 }
 
@@ -120,38 +90,8 @@
       },
         title = Text(messages("fh.generic.error"))))
     }
-    @viewHelpers.govUkRadios(Radios(
-      fieldset = Some(Fieldset(
-        legend = Some(Legend(
-          content = Text(Messages(title)),
-          classes = "govuk-fieldset__legend--l",
-          isPageHeading = true
-        ))
-      )),
-      idPrefix = Some(hasEoriKey),
-      name = hasEoriKey,
-      hint = Some(Hint(
-        content = HtmlContent(helpHtml)
-      )),
-      errorMessage = if (importingActivitiesForm(hasEoriKey).hasErrors) {
-        Some(ErrorMessage(content = Text(messages(s"fh.hasEori.error.required"))))
-      } else None,
-      items = Seq(
-        RadioItem(
-          content = Text(messages("fh.generic.yes")),
-          value = Some("true"),
-          checked = importingActivitiesForm(hasEoriKey).value.toList.contains("true"),
-          conditionalHtml = Some(conditionalHtml)
-        ),
-        RadioItem(
-          content = Text(messages("fh.generic.no")),
-          value = Some("false"),
-          checked = importingActivitiesForm(hasEoriKey).value.toList.contains("false"),
-        )
-      )
-    ))
-
-
+TODO: NEED TO SORT DISPLAY ON THIS TEMPLATE
+    @eoriNumberInput
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()
 
