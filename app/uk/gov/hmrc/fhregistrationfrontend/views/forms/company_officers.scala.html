@@ -44,7 +44,7 @@ company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$
 }
 
 @indNatInsNoInput = @{
-company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some(s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label.hint_text"))
+company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some("fh.partner.national_insurance_number.hintText"))
 }
 
 @indNatIdInput = @{
