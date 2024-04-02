@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LabelSize
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EoriNumber
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
@@ -52,10 +53,8 @@
     id = s"$eoriNumberKey",
     name = s"$eoriNumberKey",
     label = Label(
-      isPageHeading = true,
-      classes = "govuk-fieldset__legend--l",
-      content = HtmlContent(s"<strong>${messages("fh.importing_activities.eori.label")}</strong>")
-    ),
+      content = Text(messages("fh.importing_activities.eori.label"))
+    ).asPageHeading(LabelSize.Large),
     spellcheck = Some(false),
     classes = "govuk-!-width-one-half",
     hint = Some(Hint(
@@ -90,7 +89,7 @@
       },
         title = Text(messages("fh.generic.error"))))
     }
-TODO: NEED TO SORT DISPLAY ON THIS TEMPLATE
+
     @eoriNumberInput
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
     @SaveForLater()
