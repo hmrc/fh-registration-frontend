@@ -17,10 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journeys
 
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.fhregistrationfrontend.forms.TestData
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ListWithTrackedChanges, StoragePremise}
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class ImportingActivitiesPageSpec extends UnitSpec with MockitoSugar {
@@ -47,10 +45,14 @@ class ImportingActivitiesPageSpec extends UnitSpec with MockitoSugar {
   private val answeredFalseToHasEori = ImportingActivitiesPage(mainPage withData false, eoriNumberPage, goodsPage)
   private val answeredTrueToHasEori = ImportingActivitiesPage(mainPage withData true, eoriNumberPage, goodsPage)
   private val answeredTrueToHasEoriAndEoriNumberInputted = ImportingActivitiesPage(
-    mainPage withData true, eoriNumberPage withData "1234123132", goodsPage
+    mainPage withData true,
+    eoriNumberPage withData "1234123132",
+    goodsPage
   ).withSubsection(enterEoriSubsection)
   private val answeredTrueToHasEoriAndEoriNumberAndGoodsInputted = ImportingActivitiesPage(
-    mainPage withData true, eoriNumberPage withData "1234123132", goodsPage withData true
+    mainPage withData true,
+    eoriNumberPage withData "1234123132",
+    goodsPage withData true
   ).withSubsection(goodsSubsection)
 
   "Next section" should {
