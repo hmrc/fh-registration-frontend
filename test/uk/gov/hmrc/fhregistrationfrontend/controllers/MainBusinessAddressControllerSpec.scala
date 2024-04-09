@@ -80,13 +80,13 @@ class MainBusinessAddressControllerSpec
           when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
           val request = FakeRequest()
             .withFormUrlEncodedBody(
-              "timeAtCurrentAddress" -> "3-5 years"
+              "timeAtCurrentAddress" -> "3 to 5 years"
             )
             .withMethod("POST")
           val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result:MainBusinessAddress(3-5 years,None,None,None)"
+          contentAsString(result) shouldBe "Form submitted, with result:MainBusinessAddress(3 to 5 years,None,None,None)"
           reset(mockActions)
         }
       }
