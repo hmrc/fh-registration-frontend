@@ -42,8 +42,8 @@ case class ImportingActivitiesPage(
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
-    val eoriNumberPageWithData = data.eori.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
-    val goodsPageWithData = data.goodsImported.map(goods => goodsPage withData goods) getOrElse goodsPage
+    val eoriNumberPageWithData = data.eoriValue.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
+    val goodsPageWithData = data.goodsImportedValue.map(goods => goodsPage withData goods) getOrElse goodsPage
     this copy (
       section = newSection,
       mainPage = mainPage withData data.hasEori,
