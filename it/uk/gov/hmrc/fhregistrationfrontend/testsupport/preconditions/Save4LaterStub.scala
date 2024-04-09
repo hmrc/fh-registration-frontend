@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json
 import uk.gov.hmrc.crypto.CompositeSymmetricCrypto.aes
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerIndividual, CompanyOfficerType, ListWithTrackedChanges}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerIndividual, CompanyOfficerType, ImportingActivities, ListWithTrackedChanges}
 
 case class Save4LaterStub
 ()
@@ -134,10 +134,9 @@ case class Save4LaterStub
     builder
   }
 
-  def hasFullFormDataWithImportingActivities(importingActivities: String) = {
-//    TODO: USE MODEL RATHER THAN STRING
+  def hasFullFormDataWithImportingActivities(importingActivities: ImportingActivities) = {
     val withoutImportingActivities = businessInformationData ++ formData - "importingActivities"
-    stubS4LGet(withoutImportingActivities ++ Map("importingActivities" -> importingActivities))
+    stubS4LGet(withoutImportingActivities ++ Map("importingActivities" -> Json.toJson(importingActivities).toString()))
     builder
   }
 
