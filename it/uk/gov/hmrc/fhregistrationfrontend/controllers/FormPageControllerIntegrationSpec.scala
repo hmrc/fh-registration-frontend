@@ -80,6 +80,42 @@ class FormPageControllerIntegrationSpec
         }
       }
     }
+
+    "Load Importing Activities data correctly from save4Later when the it contains the split fields" in {
+
+      given
+        .commonPrecondition
+        .save4later.hasFullFormDataWithImportingActivities("""{"hasEori": true, "eori": "1234123132", "goodsImported": true}""")
+
+      WsTestClient.withClient { client =>
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 200
+        }
+
+      }
+    }
+
+    "Convert Importing Activities data correctly from save4Later when the it contains the EORI number model" in {
+
+      given
+        .commonPrecondition
+        .save4later.hasFullFormDataWithImportingActivities("""{"hasEori": true, "eoriNumber": {"eoriNumber": "1234123132", "goodsImportedOutsideEori": true}}""")
+
+      WsTestClient.withClient { client =>
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 200
+        }
+
+      }
+    }
   }
 
 }

@@ -134,6 +134,13 @@ case class Save4LaterStub
     builder
   }
 
+  def hasFullFormDataWithImportingActivities(importingActivities: String) = {
+//    TODO: USE MODEL RATHER THAN STRING
+    val withoutImportingActivities = businessInformationData ++ formData - "importingActivities"
+    stubS4LGet(withoutImportingActivities ++ Map("importingActivities" -> importingActivities))
+    builder
+  }
+
   def hasAmendmentData() = {
       stubS4LGet(amendmentData)
     builder
