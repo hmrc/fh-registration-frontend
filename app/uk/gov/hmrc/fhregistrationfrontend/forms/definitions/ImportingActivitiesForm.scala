@@ -17,28 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{eoriNumber, yesOrNo}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
 object ImportingActivitiesForm {
 
   val eoriNumberKey = "eoriNumber"
   val goodsImportedOutsideEoriKey = "goodsImportedOutsideEori"
   val hasEoriKey = "hasEori"
 
-  val eoriNumberMapping = mapping(
-    eoriNumberKey               -> eoriNumber,
-    goodsImportedOutsideEoriKey -> yesOrNo()
-  )(EoriNumber.apply)(EoriNumber.unapply)
+  val hasEoriMapping = hasEoriKey -> yesOrNo()
 
-  val hasEoriMapping = hasEoriKey               -> yesOrNo()
-  val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))
+  val hasEoriForm = Form(hasEoriMapping)
 
-  val importingActivitiesForm = Form(
-    mapping(
-      hasEoriMapping,
-      optionalEoriNumberMapping
-    )(ImportingActivities.apply)(ImportingActivities.unapply)
-  )
+  val eoriNumberOnlyMapping = eoriNumberKey                             -> eoriNumber
+  val goodsImportedOutsideEoriOnlyMapping = goodsImportedOutsideEoriKey -> yesOrNo()
+
+  val eoriNumberOnlyForm: Form[String] = Form(eoriNumberOnlyMapping)
+  val goodsImportedOutsideEoriOnlyForm: Form[Boolean] = Form(goodsImportedOutsideEoriOnlyMapping)
 }

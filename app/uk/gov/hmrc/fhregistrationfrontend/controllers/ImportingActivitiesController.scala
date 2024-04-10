@@ -22,8 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation.noNavigation
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm.{eoriNumberKey, hasEoriMapping, importingActivitiesForm}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.ImportingActivities
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.UnusedImportingActivitiesForm.importingActivitiesForm
 
 @Singleton
 class ImportingActivitiesController @Inject()(

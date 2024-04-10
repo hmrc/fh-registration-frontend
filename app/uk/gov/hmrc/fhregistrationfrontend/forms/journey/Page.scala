@@ -227,19 +227,57 @@ object Page {
       }
     )
 
-    val importingActivitiesPostUrl =
+    val hasEoriPostUrl =
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("importingActivities")
 
-    val importingActivitiesPage = new BasicPage[ImportingActivities](
-      "importingActivities",
-      ImportingActivitiesForm.importingActivitiesForm,
-      new FormRendering[ImportingActivities] {
-        override def render(form: Form[ImportingActivities], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+    val hasEoriPage = new BasicPage[Boolean](
+      "hasEori",
+      ImportingActivitiesForm.hasEoriForm,
+      new FormRendering[Boolean] {
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html =
-          views.importing_activities(form, navigation, importingActivitiesPostUrl)
+          views.has_eori(form, navigation, hasEoriPostUrl)
       }
+    )
+
+    val importingActivitiesEoriYesNumberPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+        .saveWithSection("importingActivities", "enterEORI")
+
+    val importingActivitiesEoriYesNumberPage = new BasicPage[String](
+      "enterEORI",
+      ImportingActivitiesForm.eoriNumberOnlyForm,
+      new FormRendering[String] {
+        override def render(form: Form[String], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.importing_activities_eori_yes_eori_number(form, navigation, importingActivitiesEoriYesNumberPostUrl)
+      }
+    )
+
+    val importingActivitiesEoriYesGoodsPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+        .saveWithSection("importingActivities", "importingGoodsNotBelongingToBusiness")
+
+    val importingActivitiesEoriYesGoodsPage = new BasicPage[Boolean](
+      "importingGoodsNotBelongingToBusiness",
+      ImportingActivitiesForm.goodsImportedOutsideEoriOnlyForm,
+      new FormRendering[Boolean] {
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig): Html =
+          views.importing_activities_eori_yes_goods(form, navigation, importingActivitiesEoriYesGoodsPostUrl)
+      }
+    )
+
+    val importingActivitiesPage = ImportingActivitiesPage(
+      hasEoriPage,
+      importingActivitiesEoriYesNumberPage,
+      importingActivitiesEoriYesGoodsPage
     )
 
     val businessCustomersPage = new BasicPage[BusinessCustomers](

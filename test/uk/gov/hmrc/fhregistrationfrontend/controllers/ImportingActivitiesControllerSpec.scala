@@ -86,7 +86,7 @@ class ImportingActivitiesControllerSpec
           val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ImportingActivities(false,None)"
+          contentAsString(result) shouldBe "Form submitted, with result: ImportingActivities(false,None,None,None)"
           reset(mockActions)
         }
       }

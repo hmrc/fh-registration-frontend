@@ -36,7 +36,7 @@
     @SummaryRow(
       SummaryRowParams(
         Some(Messages("fh.importing_activities.eori.label")),
-        importingActivitiesForm.eoriNumber.map(_.eoriNumber),
+        importingActivitiesForm.eori,
         changeLink,
         GroupRow.Top
       )
@@ -45,7 +45,7 @@
     @SummaryRow(
       SummaryRowParams.ofBoolean(
         Some(Messages("fh.summary.usesEORI")),
-        importingActivitiesForm.eoriNumber.map(_.goodsImportedOutsideEori),
+        importingActivitiesForm.goodsImported,
         None,
         GroupRow.Bottom
       )

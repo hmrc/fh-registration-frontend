@@ -20,8 +20,13 @@ import play.api.libs.json.Json
 
 case class ImportingActivities(
   hasEori: Boolean,
-  eoriNumber: Option[EoriNumber]
-)
+  eoriNumber: Option[EoriNumber] = None,
+  eori: Option[String] = None,
+  goodsImported: Option[Boolean] = None
+) {
+  val eoriValue: Option[String] = eori.orElse(eoriNumber.map(_.eoriNumber))
+  val goodsImportedValue: Option[Boolean] = goodsImported.orElse(eoriNumber.map(_.goodsImportedOutsideEori))
+}
 
 object ImportingActivities {
   implicit val format = Json.format[ImportingActivities]

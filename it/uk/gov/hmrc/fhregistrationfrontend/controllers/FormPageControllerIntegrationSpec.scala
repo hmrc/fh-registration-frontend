@@ -3,6 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class FormPageControllerIntegrationSpec
@@ -78,6 +79,47 @@ class FormPageControllerIntegrationSpec
         whenReady(result2) { res =>
           res.status mustBe 404
         }
+      }
+    }
+
+    "Load Importing Activities data correctly from save4Later when the it contains the split fields" in {
+      val importingActivitiesWithSplitFields = ImportingActivities(hasEori = true, eori = Some("1234123132"), goodsImported = Some(true))
+
+      given
+        .commonPrecondition
+        .save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithSplitFields)
+
+      WsTestClient.withClient { client =>
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 200
+        }
+
+      }
+    }
+
+    "Convert Importing Activities data correctly from save4Later when the it contains the EORI number model" in {
+      val importingActivitiesWithEoriNumberModel = ImportingActivities(
+        hasEori = true,
+        eoriNumber = Some(EoriNumber(eoriNumber = "1234123132", goodsImportedOutsideEori = true))
+      )
+
+      given
+        .commonPrecondition
+        .save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithEoriNumberModel)
+
+      WsTestClient.withClient { client =>
+        val result = client.url(s"$baseUrl/summary")
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
+
+        whenReady(result) { res =>
+          res.status mustBe 200
+        }
+
       }
     }
   }
