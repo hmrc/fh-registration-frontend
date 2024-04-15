@@ -52,7 +52,7 @@ object ImportingActivitiesHelper {
           ),
           Helpers.createChangeLink(
             Mode isEditable mode,
-            "form/importingActivities/eoriNumber",
+            "form/importingActivities/enterEORI",
             Text("Change"),
             Some(Messages("fh.importing_activities.eori.label")))
         ),
@@ -65,7 +65,7 @@ object ImportingActivitiesHelper {
           ),
           Helpers.createChangeLink(
             Mode isEditable mode,
-            "form/importingActivities/goods",
+            "form/importingActivities/importingGoodsNotBelongingToBusiness",
             Text("Change"),
             Some(Messages("fh.summary.usesEORI"))
           )
