@@ -470,6 +470,7 @@ fh.summary.startNewFulfilmentDate=Date the business intends to start operating a
 fh.summary.HasNino=Has a National Insurance number
 fh.summary.HasVat=Business has a UK VAT registration number
 fh.summary.hasEORI=Business has an EORI number
+fh.summary.enterEORI=EORI number
 fh.summary.usesEORI=Business imports goods not belonging to it under its EORI number
 fh.summary.overseasCustomers=Number of overseas customers
 fh.summary.usesStoragePremises=Business uses storage premises
