@@ -419,7 +419,7 @@ class DesToFormImpl extends DesToForm {
     )
 
   def mainBusinessAddress(mainAddress: des.BusinessAddressForFHDDS) = MainBusinessAddress(
-    mainAddress.timeOperatedAtCurrentAddress,
+    des.BusinessAddressForFHDDS.parseToRequiredString(mainAddress.timeOperatedAtCurrentAddress),
     mainAddress.previousOperationalAddress map (_.anyPreviousOperatingAddress),
     mainAddress.previousOperationalAddress.flatMap(previousAddress),
     mainAddress.previousOperationalAddress.flatMap(previousAddressStartDate)

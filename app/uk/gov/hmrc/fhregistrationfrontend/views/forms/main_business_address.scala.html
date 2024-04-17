@@ -195,7 +195,7 @@
           idPrefix = Some(timeAtCurrentAddressKey),
           name = timeAtCurrentAddressKey,
           errorMessage = if (mainBusinessAddressForm(timeAtCurrentAddressKey).hasErrors) {
-              Some(ErrorMessage(content = Text(messages("fh.timeAtCurrentAddress.error.required"))))
+              Some(ErrorMessage(content = Text(messages("fh.timeAtCurrentAddress.error.invalid"))))
           } else None,
           hint = Some(Hint(
            content = Text(Messages("fh.main_business_address.time_at_address.hintText"))

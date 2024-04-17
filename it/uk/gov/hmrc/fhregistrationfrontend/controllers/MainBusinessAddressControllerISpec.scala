@@ -309,12 +309,12 @@ class MainBusinessAddressControllerISpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "timeAtCurrentAddress" -> Seq("3-5 years")
+                "timeAtCurrentAddress" -> Seq("3 to 5 years")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result:MainBusinessAddress(3-5 years,None,None,None)")
+              res.body must include("Form submitted, with result:MainBusinessAddress(3 to 5 years,None,None,None)")
             }
           }
         }
@@ -331,12 +331,12 @@ class MainBusinessAddressControllerISpec
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
               .post(Map(
-                "timeAtCurrentAddress" -> Seq("5-10 years")
+                "timeAtCurrentAddress" -> Seq("5 to 10 years")
               ))
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result:MainBusinessAddress(5-10 years,None,None,None)")
+              res.body must include("Form submitted, with result:MainBusinessAddress(5 to 10 years,None,None,None)")
             }
           }
         }

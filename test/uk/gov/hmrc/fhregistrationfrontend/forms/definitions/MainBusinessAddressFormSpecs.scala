@@ -27,7 +27,7 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
   val form = MainBusinessAddressForm.mainBusinessAddressForm
 
   val valid = Map(
-    timeAtCurrentAddressKey -> "3-5 years"
+    timeAtCurrentAddressKey -> "3 to 5 years"
   )
 
   val validWithNoPreviousAddress = Map(
@@ -69,7 +69,7 @@ class MainBusinessAddressFormSpecs extends UnitSpec with FormSpecsHelper[MainBus
     "accept valid form data" in {
 
       val data = dataFromValidForm(valid)
-      data.timeAtCurrentAddress shouldBe "3-5 years"
+      data.timeAtCurrentAddress shouldBe "3 to 5 years"
       data.hasPreviousAddress shouldBe None
       data.previousAddress shouldBe None
     }

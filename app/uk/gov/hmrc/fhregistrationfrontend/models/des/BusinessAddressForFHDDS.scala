@@ -42,4 +42,10 @@ case class BusinessAddressForFHDDS(
 
 object BusinessAddressForFHDDS {
   implicit val format = Json.format[BusinessAddressForFHDDS]
+
+  def parseToRequiredString(value: String) = value match {
+    case "3-5 years"  => "3 to 5 years"
+    case "5-10 years" => "5 to 10 years"
+    case _            => value
+  }
 }
