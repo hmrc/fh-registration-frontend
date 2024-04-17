@@ -139,7 +139,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.BusinessAddressForFHDDS(
       currentAddress(bpr.businessAddress),
       des.CommonDetails(None, None, None),
-      mainAddress.timeAtCurrentAddress,
+      MainBusinessAddress.acceptedDESSchemaOptions(mainAddress.timeAtCurrentAddress),
       previousOperationalAddress(mainAddress)
     )
 

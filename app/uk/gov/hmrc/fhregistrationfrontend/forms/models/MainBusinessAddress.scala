@@ -37,4 +37,10 @@ object MainBusinessAddress {
     "5 to 10 years",
     "10 or more years"
   )
+
+  def acceptedDESSchemaOptions(value: String) = value match {
+    case "3 to 5 years"  => "3-5 years"
+    case "5 to 10 years" => "5-10 years"
+    case _               => value
+  }
 }
