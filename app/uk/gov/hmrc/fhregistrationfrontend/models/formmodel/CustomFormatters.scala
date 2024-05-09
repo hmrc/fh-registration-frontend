@@ -37,7 +37,7 @@ object CustomFormatters {
 
   def ninoFormatter(): Formatter[String] = new Formatter[String] {
     val ninoRegex =
-      """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CE-HJ-NPR-TW-Z][A-C E-HJ-NPR-SW-Z]\d{6}[ABCD]$"""
+      """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z]\d{6}[ABCD]$"""
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       Right(data.getOrElse(key, "")).flatMap { nino =>
