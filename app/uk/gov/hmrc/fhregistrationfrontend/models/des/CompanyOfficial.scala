@@ -35,11 +35,11 @@ case class CompanyAsOfficial(
 ) extends CompanyOfficial
 
 object IndividualAsOfficial {
-  implicit val format = Json.format[IndividualAsOfficial]
+  implicit val format: OFormat[IndividualAsOfficial] = Json.format[IndividualAsOfficial]
 }
 
 object CompanyAsOfficial {
-  implicit val format = Json.format[CompanyAsOfficial]
+  implicit val format: OFormat[CompanyAsOfficial] = Json.format[CompanyAsOfficial]
 }
 
 object CompanyOfficial {
@@ -60,6 +60,6 @@ object CompanyOfficial {
     }
   }
 
-  implicit val format = Format(reads, writes)
+  implicit val format: Format[CompanyOfficial] = Format(reads, writes)
 
 }

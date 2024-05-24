@@ -41,7 +41,7 @@ class CompanyOfficersCYAController @Inject()(
     Ok(view.companyOfficersCYAView("#", summaryList, routes.CompanyOfficersCYAController.next(index)))
   }
 
-  def next(index: Int): Action[AnyContent] = dataRequiredActionCompanyOfficers(index, NormalMode) { implicit request =>
+  def next(index: Int): Action[AnyContent] = dataRequiredActionCompanyOfficers(index, NormalMode) { _ =>
     Ok(s"Form submitted, with result:")
   }
 }

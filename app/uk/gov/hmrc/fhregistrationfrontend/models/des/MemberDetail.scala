@@ -17,20 +17,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class IdentificationBusiness(vatRegistrationNumber: Option[String], uniqueTaxpayerReference: Option[String])
 
 object IdentificationBusiness {
-  implicit val format = Json.format[IdentificationBusiness]
+  implicit val format: OFormat[IdentificationBusiness] = Json.format[IdentificationBusiness]
 }
 
 case class IncorporationDetail(companyRegistrationNumber: Option[String], dateOfIncorporation: Option[LocalDate])
 
 object IncorporationDetail extends DateTimeFormat {
 
-  implicit val format = Json.format[IncorporationDetail]
+  implicit val format: OFormat[IncorporationDetail] = Json.format[IncorporationDetail]
 }
 
 case class MemberDetail(
@@ -42,5 +41,5 @@ case class MemberDetail(
   modification: Modification)
 
 object MemberDetail {
-  implicit val format = Json.format[MemberDetail]
+  implicit val format: OFormat[MemberDetail] = Json.format[MemberDetail]
 }

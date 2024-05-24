@@ -33,7 +33,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.mvc.{AnyContent, Request}
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{JourneyRequest, SummaryRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys}
@@ -63,17 +63,18 @@ trait SummaryFunctions {
         views.partnership_summary(a, bpr, verifiedEmail, None, params)
     }
 
-  protected def getSummaryPrintable(journeys: Journeys)(implicit request: SummaryRequest[AnyContent]) = {
+  protected def getSummaryPrintable(journeys: Journeys)(
+    implicit request: SummaryRequest[AnyContent]): HtmlFormat.Appendable = {
     val application = request.businessType match {
       case BusinessType.CorporateBody => journeys ltdApplication request
       case BusinessType.SoleTrader    => journeys soleTraderApplication request
-      case BusinessType.Partnership   => journeys partnershipApplication request
+      case _                          => journeys partnershipApplication request
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)
   }
 
-  protected def readOnlySummaryPageParams(status: FhddsStatus) = {
+  protected def readOnlySummaryPageParams(status: FhddsStatus): SummaryPageParams = {
     val mode = status match {
       case FhddsStatus.Deregistered | FhddsStatus.Revoked => Mode.ReadOnlyRegister
       case _                                              => Mode.ReadOnlyApplication
@@ -82,19 +83,19 @@ trait SummaryFunctions {
     SummaryPageParams(mode, None)
   }
 
-  protected def summaryPageParams(journeyRequest: JourneyRequest[_]) =
+  protected def summaryPageParams(journeyRequest: JourneyRequest[_]): SummaryPageParams =
     SummaryPageParams(
       modeForJourneyType(journeyRequest.journeyType),
       journeyRequest.hasUpdates,
       Some(journeyRequest.lastUpdateTimestamp.toString))
 
-  protected def summaryPageParams(journeyType: JourneyType, hasUpdates: Option[Boolean] = None) =
+  protected def summaryPageParams(journeyType: JourneyType, hasUpdates: Option[Boolean] = None): SummaryPageParams =
     SummaryPageParams(modeForJourneyType(journeyType), hasUpdates)
 
-  protected def modeForJourneyType(journeyType: JourneyType) = journeyType match {
+  protected def modeForJourneyType(journeyType: JourneyType): Mode.Value = journeyType match {
     case JourneyType.New       => Mode.New
     case JourneyType.Variation => Mode.Variation
-    case JourneyType.Amendment => Mode.Amendment
+    case _                     => Mode.Amendment
   }
 
 }

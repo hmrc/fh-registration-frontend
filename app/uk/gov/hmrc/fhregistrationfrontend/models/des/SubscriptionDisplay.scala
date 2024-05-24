@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SubscriptionDisplay(
   organizationType: String,
@@ -28,7 +28,7 @@ case class SubscriptionDisplay(
   declaration: Declaration)
 
 object SubscriptionDisplay {
-  implicit val format = Json.format[SubscriptionDisplay]
+  implicit val format: OFormat[SubscriptionDisplay] = Json.format[SubscriptionDisplay]
 }
 
 case class SubscriptionDisplayWrapper(
@@ -36,5 +36,5 @@ case class SubscriptionDisplayWrapper(
 )
 
 object SubscriptionDisplayWrapper {
-  implicit val format = Json.format[SubscriptionDisplayWrapper]
+  implicit val format: OFormat[SubscriptionDisplayWrapper] = Json.format[SubscriptionDisplayWrapper]
 }

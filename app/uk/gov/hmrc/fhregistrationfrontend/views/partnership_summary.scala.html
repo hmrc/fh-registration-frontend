@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -29,14 +28,8 @@
 
 @this(layout: layout, govukFieldset : GovukFieldset)
 
-@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
+@(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-
-@conditionalText = @{
-  params.hasAmendments.filter(_ == true).map { _ =>
-      Messages(s"fh.summary.${params.mode}.unsubmittedAlert")
-  }
-}
 
 @title = @{
   Messages(s"fh.summary.${params.mode}.title")

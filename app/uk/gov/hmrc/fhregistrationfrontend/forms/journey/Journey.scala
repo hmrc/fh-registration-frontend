@@ -27,7 +27,7 @@ class JourneyPages(val pages: Seq[AnyPage]) {
 
 trait JourneyNavigation {
 
-  def next[_](page: AnyPage): Option[AnyPage]
+  def next[A](page: AnyPage): Option[AnyPage]
 
   def previous(page: AnyPage): Option[AnyPage]
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class EoriNumber(
   eoriNumber: String,
@@ -24,5 +24,5 @@ case class EoriNumber(
 )
 
 object EoriNumber {
-  implicit val format = Json.format[EoriNumber]
+  implicit val format: OFormat[EoriNumber] = Json.format[EoriNumber]
 }

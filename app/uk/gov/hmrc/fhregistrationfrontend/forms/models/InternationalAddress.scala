@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class InternationalAddress(
   addressLine1: String,
@@ -27,6 +27,6 @@ case class InternationalAddress(
 )
 
 object InternationalAddress {
-  implicit val format = Json.format[InternationalAddress]
+  implicit val format: OFormat[InternationalAddress] = Json.format[InternationalAddress]
 
 }

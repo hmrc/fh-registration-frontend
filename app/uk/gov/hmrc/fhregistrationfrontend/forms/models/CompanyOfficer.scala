@@ -47,19 +47,20 @@ case class CompanyOfficerCompany(
 ) extends CompanyOfficerIdentification
 
 object CompanyOfficer {
-  implicit val companyOfficerCompanyFormat = Json.format[CompanyOfficerCompany]
-  implicit val companyOfficerIndividualFormat = Json.format[CompanyOfficerIndividual]
+  implicit val companyOfficerCompanyFormat: OFormat[CompanyOfficerCompany] = Json.format[CompanyOfficerCompany]
+  implicit val companyOfficerIndividualFormat: OFormat[CompanyOfficerIndividual] = Json.format[CompanyOfficerIndividual]
 
-  implicit val companyOfficerIdentificationWrites = new Writes[CompanyOfficerIdentification] {
-    override def writes(o: CompanyOfficerIdentification): JsValue =
-      o match {
-        case i: CompanyOfficerIndividual => Json toJson i
-        case c: CompanyOfficerCompany    => Json toJson c
-      }
-  }
+  implicit val companyOfficerIdentificationWrites: Writes[CompanyOfficerIdentification] =
+    new Writes[CompanyOfficerIdentification] {
+      override def writes(o: CompanyOfficerIdentification): JsValue =
+        o match {
+          case i: CompanyOfficerIndividual => Json toJson i
+          case c: CompanyOfficerCompany    => Json toJson c
+        }
+    }
 
-  implicit val writes = Json.writes[CompanyOfficer]
-  implicit val reads = new Reads[CompanyOfficer] {
+  implicit val writes: OWrites[CompanyOfficer] = Json.writes[CompanyOfficer]
+  implicit val reads: Reads[CompanyOfficer] = new Reads[CompanyOfficer] {
     override def reads(value: JsValue): JsResult[CompanyOfficer] =
       value.validate[JsObject].flatMap { json =>
         (json \ "officialType") match {
@@ -74,6 +75,6 @@ object CompanyOfficer {
 
   }
 
-  implicit val companyOfficerFormat = Format(reads, writes)
+  implicit val companyOfficerFormat: Format[CompanyOfficer] = Format(reads, writes)
 
 }

@@ -1,0 +1,77 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+
+
+@(
+    businessPartnersForm: Form[_],
+    businessPartnerTypeKey: String,
+    identificationKey: String,
+    labelKey: String,
+    conditionYesHtml: Option[Html] = None,
+    conditionNoHtml: Option[Html] = None,
+    optHint: Option[String] = None
+)(
+    implicit messages: Messages,
+    viewHelpers: ViewHelpers
+)
+
+@formKey = @{
+    s"$businessPartnerTypeKey.$identificationKey"
+}
+
+@{
+    viewHelpers.govUkRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages(labelKey)),
+          classes = "govuk-fieldset__legend--m",
+          isPageHeading = false
+        ))
+      )),
+      hint = optHint.map {hintText => (Hint(
+        content = Text(messages(hintText))
+      ))},
+      idPrefix = Some(formKey),
+      name = formKey,
+      errorMessage = if (businessPartnersForm(formKey).hasErrors) {
+        Some(ErrorMessage(content = Text(messages(s"fh.$formKey.error.required"))))
+      } else None,
+      items = Seq(
+        RadioItem(
+          id = Some(s"$formKey-true"),
+          content = Text("Yes"),
+          value = Some("true"),
+          checked = businessPartnersForm(formKey).value.contains("true"),
+          conditionalHtml = conditionYesHtml
+        ),
+        RadioItem(
+          id = Some(s"$formKey-false"),
+          content = Text("No"),
+          value = Some("false"),
+          checked = businessPartnersForm(formKey).value.contains("false"),
+          conditionalHtml = conditionNoHtml
+        )
+      )
+    ))
+}

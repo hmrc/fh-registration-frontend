@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ContactPerson(
   firstName: String,
@@ -31,6 +31,6 @@ case class ContactPerson(
 )
 
 object ContactPerson {
-  implicit val format = Json.format[ContactPerson]
+  implicit val format: OFormat[ContactPerson] = Json.format[ContactPerson]
 
 }

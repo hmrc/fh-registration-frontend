@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
@@ -32,16 +31,7 @@
         formHelper: FormWithCSRF
     )
 
-@(businessPartnersAddressForm: Form[UkAddressLookup], partnerName: String, postAction: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
-@pageScripts = {
-    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-    <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
-}
-
-@titlePrefix = @{
-    if (businessPartnersAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
-}
+@(businessPartnersAddressForm: Form[UkAddressLookup], partnerName: String, postAction: Call)(implicit request: Request[_], messages: Messages)
 
 @layout(title = messages("fh.business_partners_address.title"), backUrl = None, isBrowserBackMimic = true){
 

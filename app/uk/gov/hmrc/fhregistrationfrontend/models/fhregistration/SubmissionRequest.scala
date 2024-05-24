@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistration.models.fhdds
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, OFormat}
 
 case class SubmissionRequest(
   emailAddress: String,
@@ -24,5 +24,5 @@ case class SubmissionRequest(
 )
 
 object SubmissionRequest {
-  implicit val submissionRequestFormat = Json.format[SubmissionRequest]
+  implicit val submissionRequestFormat: OFormat[SubmissionRequest] = Json.format[SubmissionRequest]
 }

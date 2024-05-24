@@ -19,7 +19,9 @@
 @import play.api.i18n.Messages
 @import play.api.data.Form
 
-@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, viewHelpers: ViewHelpers, formName: Option[String] = None)(implicit message: Messages)
+@this(viewHelpers: ViewHelpers)
+
+@(formDate: Form[_], params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.AddressUKParams, formName: Option[String] = None)(implicit message: Messages)
 
 @fieldName = @{
     params.context match {
@@ -28,8 +30,16 @@
     }
 }
 
+@legendClass = @{
+    if(params.legendAsSubHeading) {
+        "govuk-fieldset__legend govuk-fieldset__legend--m"
+    } else {
+        "govuk-fieldset__legend govuk-fieldset__legend--s"
+    }
+}
+
 <fieldset class="govuk-fieldset">
-    <legend id="@{fieldName}-title" class="govuk-fieldset__legend govuk-fieldset__legend--s">
+    <legend id="@{fieldName}-title" class="@legendClass">
     @{params.label}
     </legend>
 @viewHelpers.govukInput(Input(

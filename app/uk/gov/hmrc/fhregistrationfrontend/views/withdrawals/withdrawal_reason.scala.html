@@ -17,14 +17,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.{reasonKey, reasonOtherKey}
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

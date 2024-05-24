@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum.DeregistrationReasonEnum
 
 case class DeregistrationReason(
@@ -25,5 +25,5 @@ case class DeregistrationReason(
 )
 
 object DeregistrationReason {
-  implicit val format = Json.format[DeregistrationReason]
+  implicit val format: OFormat[DeregistrationReason] = Json.format[DeregistrationReason]
 }

@@ -45,12 +45,14 @@ case class PartnerIdentification(
 )
 
 object PartnerType {
-  implicit val partnerIdentificationFormat = Json.format[PartnerIdentification]
+  implicit val partnerIdentificationFormat: OFormat[PartnerIdentification] = Json.format[PartnerIdentification]
 
-  implicit val individualPartnerTypeFormat = Json.format[IndividualPartnerType]
-  implicit val soleProprietorPartnerTypeFormat = Json.format[SoleProprietorPartnerType]
-  implicit val limitedLiabilityPartnershipTypeFormat = Json.format[LimitedLiabilityPartnershipType]
-  implicit val partnershipOrUnIncorporatedBodyPartnerTypeFormat =
+  implicit val individualPartnerTypeFormat: OFormat[IndividualPartnerType] = Json.format[IndividualPartnerType]
+  implicit val soleProprietorPartnerTypeFormat: OFormat[SoleProprietorPartnerType] =
+    Json.format[SoleProprietorPartnerType]
+  implicit val limitedLiabilityPartnershipTypeFormat: OFormat[LimitedLiabilityPartnershipType] =
+    Json.format[LimitedLiabilityPartnershipType]
+  implicit val partnershipOrUnIncorporatedBodyPartnerTypeFormat: OFormat[PartnershipOrUnIncorporatedBodyPartnerType] =
     Json.format[PartnershipOrUnIncorporatedBodyPartnerType]
 
 //  val writes: Writes[PartnerType] = new Writes[PartnerType](
@@ -83,6 +85,6 @@ object PartnerType {
     }
   }
 
-  implicit val format = Format(reads, writes)
+  implicit val format: Format[PartnerType] = Format(reads, writes)
 
 }

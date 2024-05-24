@@ -66,20 +66,22 @@ class EnterOtherStoragePremisesController @Inject()(
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EnterOtherStoragePremisesController.next(storagePremisesNum)
 
     if (config.newBusinessPartnerPagesEnabled) {
-      form.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(
-            view.storage_premise(
-              formWithErrors,
-              noNavigation,
-              storagePremisesNum,
-              RepeatingPageParams(false, None),
-              postAction))
-        },
-        result => {
-          Ok(s"Form submitted with: $result")
-        }
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
+            BadRequest(
+              view.storage_premise(
+                formWithErrors,
+                noNavigation,
+                storagePremisesNum,
+                RepeatingPageParams(false, None),
+                postAction))
+          },
+          result => {
+            Ok(s"Form submitted with: $result")
+          }
+        )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
     }

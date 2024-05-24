@@ -76,7 +76,7 @@ object UserAnswers {
 
     import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
-    def reads()(implicit encryption: Encryption): Reads[UserAnswers] =
+    def reads(implicit encryption: Encryption): Reads[UserAnswers] =
       (
         (__ \ "_id").read[String] and
           (__ \ "data").read[EncryptedValue] and

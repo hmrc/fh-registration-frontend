@@ -18,7 +18,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -29,7 +28,7 @@
         formHelper: FormWithCSRF,
         viewHelpers: ViewHelpers)
 
-@(postcode: String, name: String, backAction: String, manuallyEnterAddressUrl: String, buttonUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(postcode: String, name: String, backAction: String, manuallyEnterAddressUrl: String, buttonUrl: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

@@ -41,7 +41,7 @@
         pageHeadBlock: Option[Html] = None,
         backUrl:Option[String] = None,
         isBrowserBackMimic: Boolean = false
-)(contentBlock: Html)(implicit request : Request[_], messages: Messages, config: AppConfig)
+)(contentBlock: Html)(implicit request : Request[_], messages: Messages)
 
 @headBlock = {
     <style>.govuk-fieldset .govuk-summary-list__actions { width: 25%; }</style>

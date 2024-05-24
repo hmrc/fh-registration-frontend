@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(govukRadios: GovukRadios)
@@ -28,7 +27,7 @@
     hint: Option[Html] = None,
     classes: String = "",
     inline: Boolean = false
-)(implicit messages: Messages, request: Request[_], appConfig: AppConfig)
+)(implicit messages: Messages)
 
 @legend = {
     <h1 class="govuk-fieldset__heading">

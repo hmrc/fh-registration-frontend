@@ -20,7 +20,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.{Navigation, SummaryP
 
 class SummaryJourney extends JourneyNavigation {
 
-  override def next[_](page: AnyPage): Option[AnyPage] = None
+  override def next[A](page: AnyPage): Option[AnyPage] = None
 
   override def previous(page: AnyPage): Option[AnyPage] = None
 

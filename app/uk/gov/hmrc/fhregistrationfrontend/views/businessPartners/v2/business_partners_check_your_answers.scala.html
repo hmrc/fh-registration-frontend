@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -28,7 +27,7 @@
         viewHelpers: ViewHelpers,
         govukFieldset: GovukFieldset)
 
-@(backAction: String, summaryRows: Seq[SummaryListRow])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(backAction: String, summaryRows: Seq[SummaryListRow])(implicit request: Request[_], messages: Messages)
 
 @title = @{
     messages("fh.businessPartners.summary.title")

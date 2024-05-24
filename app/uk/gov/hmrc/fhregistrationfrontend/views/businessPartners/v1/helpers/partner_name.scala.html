@@ -1,0 +1,100 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v1._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
+
+@(
+    businessPartnerForm: Form[_],
+    businessPartnerTypeKey: String
+)(
+    implicit messages: Messages,
+    viewHelpers: ViewHelpers
+)
+
+@firstNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        firstNameKey,
+        "fh.business_partners.first_name.label"
+    )
+}
+
+@lastNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        lastNameKey,
+        "fh.business_partners.last_name.label"
+    )
+}
+
+@liabilityPartnershipNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        limitedLiabilityPartnershipNameKey,
+        "fh.business_partners.liability_partnership.name.label"
+    )
+}
+
+@partnershipNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        partnershipNameKey,
+        "fh.business_partners.partnership.name.label"
+    )
+}
+
+@corparateBodyPartnershipNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        companyNameKey,
+        "fh.business_partners.corporate_body.name.label"
+    )
+}
+
+@unincorparateBodyPartnershipNameInput = @{
+    inputText(
+        businessPartnerForm,
+        businessPartnerTypeKey,
+        unincorporatedBodyNameKey,
+        "fh.business_partners.unincorporate_body.name.label"
+    )
+}
+
+@if(businessPartnerTypeKey.contains(businessPartnerUnincorporatedBodyKey)) {
+    @unincorparateBodyPartnershipNameInput
+} else if(businessPartnerTypeKey.contains(businessPartnerCorporateBodyKey)) {
+    @corparateBodyPartnershipNameInput
+} else if(businessPartnerTypeKey.contains(businessPartnerPartnershipKey)) {
+    @partnershipNameInput
+} else if(businessPartnerTypeKey.contains(businessPartnerLimitedLiabilityPartnershipKey)) {
+    @liabilityPartnershipNameInput
+} else {
+    @firstNameInput
+    @lastNameInput
+}
+

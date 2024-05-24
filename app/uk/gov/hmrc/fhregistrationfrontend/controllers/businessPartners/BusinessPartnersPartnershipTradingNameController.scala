@@ -51,7 +51,7 @@ class BusinessPartnersPartnershipTradingNameController @Inject()(
     routes.BusinessPartnersPartnershipTradingNameController.next(index, mode)
   val partner = "Test User"
 
-  private def getBusinessType: String = config.getRandomBusinessType
+  private def getBusinessType: String = config.getRandomBusinessType()
 
   def load(index: Int, mode: Mode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
     implicit request =>

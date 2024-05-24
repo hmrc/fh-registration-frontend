@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -22,7 +21,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(expiryTime: String, act: Form[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(expiryTime: String, act: Form[String])(implicit request: Request[_], messages: Messages)
 
 @title = @{
   Messages("fh.continue_delete.header")

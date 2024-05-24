@@ -17,11 +17,10 @@
 package uk.gov.hmrc.fhregistration.models.fhdds
 
 import java.util.Date
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SubmissionResponse(registrationNumber: String, processingDate: Date)
 
 object SubmissionResponse {
-  implicit val submissionResponseFormat = Json.format[SubmissionResponse]
+  implicit val submissionResponseFormat: OFormat[SubmissionResponse] = Json.format[SubmissionResponse]
 }

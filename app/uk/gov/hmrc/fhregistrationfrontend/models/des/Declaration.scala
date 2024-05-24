@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Declaration(personName: String, personStatus: String, email: Option[String], isInformationAccurate: Boolean)
 
 object Declaration {
-  implicit val format = Json.format[Declaration]
+  implicit val format: OFormat[Declaration] = Json.format[Declaration]
 }

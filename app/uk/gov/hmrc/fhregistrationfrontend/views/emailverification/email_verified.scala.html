@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -23,7 +22,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(verifiedEmail: String, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(verifiedEmail: String, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 
 import play.api.libs.json.{Format, Reads, Writes}
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 
 object WithdrawalReasonEnum extends Enumeration {
   type WithdrawalReasonEnum = Value
@@ -26,7 +27,7 @@ object WithdrawalReasonEnum extends Enumeration {
   val DuplicateApplication = Value("Duplicate Application")
   val Other = Value("Other")
 
-  implicit val format = Format(
+  implicit val format: Format[withdrawal.WithdrawalReasonEnum.Value] = Format(
     Reads.enumNameReads(WithdrawalReasonEnum),
     Writes.enumNameWrites[this.type]
   )

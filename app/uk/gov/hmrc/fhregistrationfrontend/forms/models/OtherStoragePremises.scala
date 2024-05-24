@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class OtherStoragePremises(
   hasValue: Boolean,
@@ -24,5 +24,5 @@ case class OtherStoragePremises(
 )
 
 object OtherStoragePremises {
-  implicit val format = Json.format[OtherStoragePremises]
+  implicit val format: OFormat[OtherStoragePremises] = Json.format[OtherStoragePremises]
 }

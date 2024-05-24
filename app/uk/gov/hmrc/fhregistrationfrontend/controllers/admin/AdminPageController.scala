@@ -55,7 +55,7 @@ class AdminPageController @Inject()(
   def getSubmissions: Action[AnyContent] = authAction.async { implicit request =>
     fhddsConnector.getAllSubmission().map {
       case submissions if submissions.nonEmpty => Ok(views.show_all_submissions(submissions))
-      case submissions if submissions.isEmpty  => Ok("No Submissions found")
+      case _                                   => Ok("No Submissions found")
     }
   }
 

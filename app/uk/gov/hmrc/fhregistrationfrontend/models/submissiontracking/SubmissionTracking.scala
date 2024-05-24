@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress.EnrolmentProgress
 
@@ -32,7 +32,7 @@ case class SubmissionTracking(
 }
 
 object SubmissionTracking {
-  implicit val formats = Json.format[SubmissionTracking]
+  implicit val formats: OFormat[SubmissionTracking] = Json.format[SubmissionTracking]
 
   def apply(
     userId: String,
