@@ -15,9 +15,6 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.views
-
-import uk.gov.hmrc.fhregistrationfrontend.views.html.companyOfficers.v2.CompanyOfficersCYA
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -81,28 +78,5 @@ class Views @Inject()(
   val contact_person_page: uk.gov.hmrc.fhregistrationfrontend.views.html.contact_person,
   val trading_name_page: uk.gov.hmrc.fhregistrationfrontend.views.html.trading_name,
   val business_status_page: uk.gov.hmrc.fhregistrationfrontend.views.html.business_status,
-  val other_storage_premises_page: uk.gov.hmrc.fhregistrationfrontend.views.html.other_storage_premises,
-  ////////////////////////////BusinessPartners///////////////////////////////////////////////
-  val business_partners_choose_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_choose_address,
-  val business_partners_enter_vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_vat_registration,
-  val business_partners_has_nino: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_nino_page,
-  val business_partners_has_trading_partner_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_trading_partner_name,
-  val business_partners_search_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_search_address,
-  val business_partners_has_utr: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_utr_number,
-  val business_partners_enter_utr_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_utr_number,
-  val business_partners_enter_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_address,
-  val business_partners_confirm_partner_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_confirm_address,
-  val business_partners_has_vat_number: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_vat_number,
-  val business_partners_enter_crn: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_company_registration_number,
-  val business_partners_has_trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_has_trading_name,
-  val business_partners_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_registered_address,
-  val business_partners_enter_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_registered_address,
-  val business_partners_confirm_registered_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_confirm_registered_address,
-  val business_partners_enter_company_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_enter_company_name,
-  val business_partners_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_name,
-  val business_partners_individualsAndSoleProprietors_partner_name: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_partner_name,
-  val business_partners_cannot_find_address: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_cannot_find_address,
-  val business_partners_type: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_type,
-  val business_partners_check_your_answers: uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v2.business_partners_check_your_answers,
-  val companyOfficersCYAView: CompanyOfficersCYA
+  val other_storage_premises_page: uk.gov.hmrc.fhregistrationfrontend.views.html.other_storage_premises
 )

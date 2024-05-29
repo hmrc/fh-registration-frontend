@@ -30,21 +30,27 @@ class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {
 
   "encryptUserAnswers" should {
     "encrypt userAnswers" in {
-      val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+      val userAnswers = UserAnswers("id", Map("1" -> Json.obj("foo" -> "bar")), Instant.ofEpochSecond(1))
 
       val result = ModelEncryption.encryptUserAnswers(userAnswers)
       result._1 mustBe userAnswers.id
-      Json.parse(encryption.crypto.decrypt(result._2, userAnswers.id)).as[JsObject] mustBe userAnswers.data
+      result._2.map {
+        case (x, encryValue) =>
+          (x -> Json.parse(encryption.crypto.decrypt(encryValue, userAnswers.id)).as[JsObject])
+      } mustBe userAnswers.data
       result._3 mustBe userAnswers.lastUpdated
     }
   }
   "decryptUserAnswers" should {
     "decrypt userAnswers in tuple form" in {
-      val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+      val userAnswers = UserAnswers("id", Map("1" -> Json.obj("foo" -> "bar")), Instant.ofEpochSecond(1))
 
       val result = ModelEncryption.decryptUserAnswers(
         userAnswers.id,
-        encryption.crypto.encrypt(userAnswers.data.toString(), userAnswers.id),
+        userAnswers.data.map {
+          case (x, value) =>
+            (x -> encryption.crypto.encrypt(value.toString(), userAnswers.id))
+        },
         userAnswers.lastUpdated
       )
       result mustBe userAnswers

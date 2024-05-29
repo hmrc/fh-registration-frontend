@@ -3,7 +3,6 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.{configureFor, reset, resetAllScenarios}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import models.UserAnswers
 import org.mongodb.scala.bson.BsonDocument
 import org.scalatest.concurrent.{IntegrationPatience, PatienceConfiguration}
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -11,25 +10,17 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.ws.{WSClient, WSRequest}
-import play.api.mvc.{Call, CookieHeaderEncoding, Session, SessionCookieBaker}
+import play.api.libs.ws.WSClient
+import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
-import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType.BusinessPartnerTypes
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.PartnerTypePage
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
-import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, UkAddressLookup}
-import uk.gov.hmrc.fhregistrationfrontend.pages.businessPartners.UkAddressLookupPage
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
-import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
-import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 
 trait TestConfiguration
   extends GuiceOneServerPerSuite
@@ -140,67 +131,4 @@ trait TestConfiguration
     println("===== END =====")
   }
 
-  def emptyUserAnswers: UserAnswers = UserAnswers("some-id")
-
-  def userAnswersWithBusinessPartnerType(partnerType: BusinessPartnerType.Value, index: Int = 1): UserAnswers =
-    emptyUserAnswers.set(PartnerTypePage(index), partnerType).success.value
-  def getUserAnswersFromSession: Option[UserAnswers] = {
-    Await.result(sessionCache.get("some-id"), Duration(3,TimeUnit.SECONDS))
-  }
-
-  def addUserAnswersToSession(userAnswers: UserAnswers): Boolean = {
-    Await.result(sessionCache.set(userAnswers), Duration(3,TimeUnit.SECONDS))
-  }
-
-
-  def buildRequest(path: String,
-                   followRedirects: Boolean = false): WSRequest = {
-    ws.url(s"$baseUrl$path")
-      .withFollowRedirects(followRedirects)
-  }
-
-  def buildRequestFromRoute(route: Call,
-                   followRedirects: Boolean = false): WSRequest = {
-    ws.url(s"http://localhost:$port${route.url}")
-      .withFollowRedirects(followRedirects)
-  }
-
-  val startCall = routes.Application.main()
-
-  val multipleAddresses: Map[String, Address] = {
-    val address1 = Address(
-      addressLine1 = "1 Romford Road",
-      addressLine2 = Some("Wellington"),
-      addressLine3 = Some("Telford"),
-      addressLine4 = None,
-      postcode = "TF1 4ER",
-      countryCode = None,
-      lookupId = None
-    )
-    val address2 = address1.copy(addressLine1 = "2 Romford Road")
-
-    Map("1" -> address1, "2" -> address2)
-  }
-
-  val singleAddress: Map[String, Address] =
-    Map("1" -> Address(
-      addressLine1 = "1 Romford Road",
-      addressLine2 = Some("Wellington"),
-      addressLine3 = Some("Telford"),
-      addressLine4 = None,
-      postcode = "TF1 4ER",
-      countryCode = None,
-      lookupId = None)
-    )
-
-  def seedCacheWithUKAddressLookup(addressList: Map[String, Address]): UserAnswers = emptyUserAnswers
-    .set[UkAddressLookup](
-      UkAddressLookupPage(1),
-      UkAddressLookup(
-        Some("1 Romford Road"),
-        "TF1 4ER",
-        addressList
-      ))
-    .success
-    .value
 }

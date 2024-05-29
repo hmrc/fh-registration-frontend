@@ -79,9 +79,9 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
     }
   }
 
-  def expectedMode(journeyType: JourneyType) = journeyType match {
+  def expectedMode(journeyType: JourneyType): Mode.Value = journeyType match {
     case JourneyType.Amendment => Mode.Amendment
     case JourneyType.New       => Mode.New
-    case JourneyType.Variation => Mode.Variation
+    case _ => Mode.Variation
   }
 }

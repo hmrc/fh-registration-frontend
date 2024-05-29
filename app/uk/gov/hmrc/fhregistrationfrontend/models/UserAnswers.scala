@@ -16,76 +16,52 @@
 
 package models
 
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json._
-import queries.{Gettable, Settable}
 import uk.gov.hmrc.crypto.EncryptedValue
+import uk.gov.hmrc.crypto.json.CryptoFormats
 import uk.gov.hmrc.fhregistrationfrontend.models.ModelEncryption
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import uk.gov.hmrc.crypto.json.CryptoFormats
-import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.Utr
 
 import java.time.Instant
-import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
   id: String,
-  data: JsObject = Json.obj(),
+  data: Map[String, JsValue] = Map.empty[String, JsValue],
   lastUpdated: Instant = Instant.now
 ) {
 
-  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
-    Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
+  def getDataEntry[A](key: String)(implicit rds: Reads[A]): Option[A] =
+    data
+      .get(key)
+      .map(_.as[A])
 
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
-
-    val updatedData = data.setObject(page.path, Json.toJson(value)) match {
-      case JsSuccess(jsValue, _) =>
-        Success(jsValue)
-      case JsError(errors) =>
-        Failure(JsResultException(errors))
-    }
-
-    updatedData.flatMap { d =>
-      val updatedAnswers = copy(data = d)
-      page.cleanup(Some(value), updatedAnswers)
-    }
+  def setDataEntry[A](key: String, value: A)(implicit writes: Writes[A]): UserAnswers = {
+    val updatedData = data + (key -> Json.toJson(value))
+    copy(data = updatedData)
   }
 
-  def remove[A](page: Settable[A]): Try[UserAnswers] = {
-
-    val updatedData = data.removeObject(page.path) match {
-      case JsSuccess(jsValue, _) =>
-        Success(jsValue)
-      case JsError(_) =>
-        Success(data)
-    }
-
-    updatedData.flatMap { d =>
-      val updatedAnswers = copy(data = d)
-      page.cleanup(None, updatedAnswers)
-    }
+  def removeDataEntry(key: String): UserAnswers = {
+    val updatedData = data.removed(key)
+    copy(data = updatedData)
   }
 }
 
 object UserAnswers {
-
   object MongoFormats {
     implicit val cryptEncryptedValueFormats: Format[EncryptedValue] = CryptoFormats.encryptedValueFormat
 
     import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-
     def reads()(implicit encryption: Encryption): Reads[UserAnswers] =
       (
         (__ \ "_id").read[String] and
-          (__ \ "data").read[EncryptedValue] and
+          (__ \ "data").read[Map[String, EncryptedValue]] and
           (__ \ "lastUpdated").read[Instant]
       )(ModelEncryption.decryptUserAnswers _)
 
     def writes(implicit encryption: Encryption): OWrites[UserAnswers] = new OWrites[UserAnswers] {
       override def writes(userAnswers: UserAnswers): JsObject = {
-        val encryptedValue: (String, EncryptedValue, Instant) = {
+        val encryptedValue: (String, Map[String, EncryptedValue], Instant) = {
           ModelEncryption.encryptUserAnswers(userAnswers)
         }
         Json.obj(
@@ -95,7 +71,6 @@ object UserAnswers {
         )
       }
     }
-
     def format(implicit encryption: Encryption): OFormat[UserAnswers] = OFormat(reads, writes)
   }
 }
