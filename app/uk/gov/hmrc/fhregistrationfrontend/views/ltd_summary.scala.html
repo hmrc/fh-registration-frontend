@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.summary._
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -35,7 +34,7 @@
         verifiedEmail: String,
         environment: Option[String],
         params: SummaryPageParams
-)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, viewHelpers: ViewHelpers)
+)(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
 @scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 
 @conditionalText = @{

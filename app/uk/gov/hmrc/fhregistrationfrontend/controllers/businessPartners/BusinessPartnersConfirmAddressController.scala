@@ -55,7 +55,7 @@ class BusinessPartnersConfirmAddressController @Inject()(
   }
 
   def next(index: Int, mode: Mode = NormalMode): Action[AnyContent] = dataRequiredActionBusinessPartners(index, mode) {
-    implicit request =>
+    _ =>
       Redirect(routes.BusinessPartnersCheckYourAnswersController.load())
   }
 }

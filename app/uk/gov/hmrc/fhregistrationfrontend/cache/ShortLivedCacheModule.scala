@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.cache
 import javax.inject.{Inject, Singleton}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.crypto.ApplicationCrypto
+import uk.gov.hmrc.crypto.{ApplicationCrypto, Decrypter, Encrypter}
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
@@ -37,7 +37,8 @@ class DefaultShortLivedCache @Inject()(
   override val shortLiveCache: ShortLivedHttpCaching,
   val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit lazy val crypto = new ApplicationCrypto(runModeConfiguration.underlying).JsonCrypto
+  override implicit lazy val crypto
+    : Encrypter with Decrypter = new ApplicationCrypto(runModeConfiguration.underlying).JsonCrypto
 }
 
 @Singleton

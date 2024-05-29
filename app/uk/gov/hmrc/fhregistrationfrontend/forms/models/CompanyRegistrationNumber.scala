@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CompanyRegistrationNumber(
   crn: String,
@@ -24,5 +24,5 @@ case class CompanyRegistrationNumber(
 )
 
 object CompanyRegistrationNumber {
-  implicit val format = Json.format[CompanyRegistrationNumber]
+  implicit val format: OFormat[CompanyRegistrationNumber] = Json.format[CompanyRegistrationNumber]
 }

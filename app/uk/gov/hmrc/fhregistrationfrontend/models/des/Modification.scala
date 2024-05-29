@@ -24,5 +24,5 @@ case class Modification(changeIndicator: String, changeDate: Option[LocalDate])
 
 object Modification extends DateTimeFormat {
 
-  implicit val format = Json.format[Modification]
+  implicit val format: OFormat[Modification] = Json.format[Modification]
 }

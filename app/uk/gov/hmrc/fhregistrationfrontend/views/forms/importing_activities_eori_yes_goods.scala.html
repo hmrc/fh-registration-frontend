@@ -19,23 +19,15 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ImportingActivitiesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(importingActivitiesForm: Form[Boolean], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(importingActivitiesForm: Form[Boolean], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
-
-@helpHtml = {
-  <p class="govuk-body govuk-!-margin-top-2"></p>
-  @messages("fh.importing_activities.eori.confirm.hint_text1")
-  <a class="govuk-link" href=@{messages("link.eoriTeam")} target="_blank">@messages("fh.importing_activities.eori.link_text")</a>
-  @Messages("fh.importing_activities.eori.confirm.hint_text2")
 }
 
 @titlePrefix = @{

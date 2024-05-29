@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ChangeIndicators(
   businessTypeChanged: Boolean,
@@ -31,5 +31,5 @@ case class ChangeIndicators(
   declarationChanged: Boolean)
 
 object ChangeIndicators {
-  implicit val formatter = Json.format[ChangeIndicators]
+  implicit val formatter: OFormat[ChangeIndicators] = Json.format[ChangeIndicators]
 }

@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import java.time.LocalDate
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class MainBusinessAddress(
   timeAtCurrentAddress: String,
@@ -29,7 +28,7 @@ case class MainBusinessAddress(
 
 object MainBusinessAddress {
 
-  implicit val format = Json.format[MainBusinessAddress]
+  implicit val format: OFormat[MainBusinessAddress] = Json.format[MainBusinessAddress]
 
   val TimeAtCurrentAddressOptions = Seq(
     "Less than 3 years",
@@ -38,7 +37,7 @@ object MainBusinessAddress {
     "10 or more years"
   )
 
-  def acceptedDESSchemaOptions(value: String) = value match {
+  def acceptedDESSchemaOptions(value: String): String = value match {
     case "3 to 5 years"  => "3-5 years"
     case "5 to 10 years" => "5-10 years"
     case _               => value

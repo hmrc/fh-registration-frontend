@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessPartners
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat, Reads, Writes}
 
 case class Utr(
   utr: String
 )
 
 object Utr {
-  implicit val format = Json.format[Utr]
+  implicit val format: OFormat[Utr] = Json.format[Utr]
   implicit val writes: Writes[Utr] = Json.writes
   implicit val reads: Reads[Utr] = Json.reads
 }

@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -25,7 +24,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
 

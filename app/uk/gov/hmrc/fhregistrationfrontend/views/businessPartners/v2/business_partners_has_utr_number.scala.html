@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -28,7 +27,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessPartnersUtrForm: Form[HasUniqueTaxpayerReference],  partnerName: String, businessPartnerType: String, postAction: Call, backLink: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(businessPartnersUtrForm: Form[HasUniqueTaxpayerReference],  partnerName: String, businessPartnerType: String, postAction: Call, backLink: String)(implicit request: Request[_], messages: Messages)
 
 @titlePrefix = @{
     if (businessPartnersUtrForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""

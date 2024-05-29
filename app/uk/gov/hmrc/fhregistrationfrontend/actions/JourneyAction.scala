@@ -128,7 +128,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
     }
 
   def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
-    val pagesForEntityType = getBusinessType(cacheMap).right flatMap {
+    val pagesForEntityType = getBusinessType(cacheMap).flatMap {
       _ match {
         case BusinessType.CorporateBody => Right(journeys.limitedCompanyPages)
         case BusinessType.SoleTrader    => Right(journeys.soleTraderPages)

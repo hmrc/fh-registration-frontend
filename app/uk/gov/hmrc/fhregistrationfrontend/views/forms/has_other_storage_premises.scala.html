@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
@@ -26,7 +25,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(hasOtherStoragePremisesForm: Form[Boolean], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(hasOtherStoragePremisesForm: Form[Boolean], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>

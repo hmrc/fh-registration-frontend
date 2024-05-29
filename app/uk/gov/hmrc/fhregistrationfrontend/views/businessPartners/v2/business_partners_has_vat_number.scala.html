@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm.{hasVatNumberKey, vatNumberKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -28,7 +27,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(vatNumberForm: Form[VatNumber], businessPartnerType: String, businessName: String, postAction: Call, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(vatNumberForm: Form[VatNumber], businessPartnerType: String, businessName: String, postAction: Call, backAction: String)(implicit request: Request[_], messages: Messages)
 
 
 @titlePrefix = @{

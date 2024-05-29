@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Deregistration(
   date: LocalDate,
@@ -27,7 +26,7 @@ case class Deregistration(
 )
 
 object Deregistration extends DateTimeFormat {
-  implicit val format = Json.format[Deregistration]
+  implicit val format: OFormat[Deregistration] = Json.format[Deregistration]
 }
 
 case class DeregistrationRequest(
@@ -36,5 +35,5 @@ case class DeregistrationRequest(
 )
 
 object DeregistrationRequest {
-  implicit val format = Json.format[DeregistrationRequest]
+  implicit val format: OFormat[DeregistrationRequest] = Json.format[DeregistrationRequest]
 }

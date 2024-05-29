@@ -65,8 +65,9 @@ class BusinessPartnersCorporateBodyCompanyRegistrationNumberController @Inject()
           },
           regNumber => {
             regNumber.crnFormatted match {
-              case Some(regNumber) =>
+              case Some(_) =>
                 Redirect(routes.BusinessPartnersCorporateBodyVatNumberController.load())
+              case _ => Redirect(routes.PartnerTypeController.load(0, NormalMode))
             }
           }
         )

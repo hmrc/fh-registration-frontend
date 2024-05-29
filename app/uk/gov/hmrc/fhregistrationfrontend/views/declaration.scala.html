@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.SummaryPageParams
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -28,7 +27,7 @@
 
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages)
 
 
 @linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary.url}

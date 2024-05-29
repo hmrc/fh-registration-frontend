@@ -19,14 +19,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @indNameInput = @{
 company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))

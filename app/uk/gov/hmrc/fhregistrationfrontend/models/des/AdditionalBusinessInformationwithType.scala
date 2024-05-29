@@ -16,18 +16,18 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class EORINumberType(EORIVat: Option[String], EORINonVat: Option[String], goodsImportedOutEORI: Option[Boolean])
 
 object EORINumberType {
-  implicit val format = Json.format[EORINumberType]
+  implicit val format: OFormat[EORINumberType] = Json.format[EORINumberType]
 }
 
 case class PartnerCorporateBody(numberOfOtherOfficials: String, companyOfficials: Option[List[CompanyOfficial]])
 
 object PartnerCorporateBody {
-  implicit val format = Json.format[PartnerCorporateBody]
+  implicit val format: OFormat[PartnerCorporateBody] = Json.format[PartnerCorporateBody]
 }
 
 case class AllOtherInformation(
@@ -38,7 +38,7 @@ case class AllOtherInformation(
   premises: Option[List[Premises]])
 
 object AllOtherInformation {
-  implicit val format = Json.format[AllOtherInformation]
+  implicit val format: OFormat[AllOtherInformation] = Json.format[AllOtherInformation]
 }
 
 case class AdditionalBusinessInformationwithType(
@@ -46,5 +46,6 @@ case class AdditionalBusinessInformationwithType(
   allOtherInformation: AllOtherInformation)
 
 object AdditionalBusinessInformationwithType {
-  implicit val format = Json.format[AdditionalBusinessInformationwithType]
+  implicit val format: OFormat[AdditionalBusinessInformationwithType] =
+    Json.format[AdditionalBusinessInformationwithType]
 }

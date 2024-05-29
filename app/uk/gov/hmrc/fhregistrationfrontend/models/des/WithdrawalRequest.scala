@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Withdrawal(
   withdrawalDate: LocalDate,
@@ -27,7 +26,7 @@ case class Withdrawal(
 )
 
 object Withdrawal extends DateTimeFormat {
-  implicit val format = Json.format[Withdrawal]
+  implicit val format: OFormat[Withdrawal] = Json.format[Withdrawal]
 }
 
 case class WithdrawalRequest(
@@ -36,5 +35,5 @@ case class WithdrawalRequest(
 )
 
 object WithdrawalRequest {
-  implicit val format = Json.format[WithdrawalRequest]
+  implicit val format: OFormat[WithdrawalRequest] = Json.format[WithdrawalRequest]
 }

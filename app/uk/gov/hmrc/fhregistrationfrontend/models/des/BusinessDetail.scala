@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BusinessDetail(
   soleProprietor: Option[SoleProprietor],
@@ -25,5 +25,5 @@ case class BusinessDetail(
   partnership: Option[Partnership])
 
 object BusinessDetail {
-  implicit val format = Json.format[BusinessDetail]
+  implicit val format: OFormat[BusinessDetail] = Json.format[BusinessDetail]
 }

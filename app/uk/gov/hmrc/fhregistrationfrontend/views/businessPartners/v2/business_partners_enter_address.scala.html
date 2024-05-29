@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnersEnterAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
@@ -28,7 +27,7 @@
     button: components.button
 )
 
-@(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, journeyType: String, backAction: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[BusinessPartnersEnterAddress],postAction: Call, partnerName: String, journeyType: String, backAction: String)(implicit request: Request[_], messages: Messages)
 
 @fieldName = @{s"enterAddress"}
 

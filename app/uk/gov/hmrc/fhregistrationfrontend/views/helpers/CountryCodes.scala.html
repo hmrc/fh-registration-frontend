@@ -21,17 +21,6 @@
 
 @(params: uk.gov.hmrc.fhregistrationfrontend.views.helpers.CountryCodeParams, viewHelpers: ViewHelpers)(implicit message: Messages)
 
-@fieldName = @{
-    params.context match {
-        case Some(context) => {
-            context + "." + params.name
-        }
-        case _ => {
-            params.name
-        }
-    }
-}
-
 @countryCodeName = @{
     params.context match {
         case Some(context) => {
@@ -43,15 +32,6 @@
     }
 }
 
-@formGroupClass = @{
-    if(params.hasErrors) "form-group form-group-error"
-    else "form-group"
-}
-
-@inputClass = @{
-    if(params.hasErrors) "form-control form-control-error"
-    else "form-control"
-}
 
 @viewHelpers.govukSelect(Select(
     id = "countryCode",

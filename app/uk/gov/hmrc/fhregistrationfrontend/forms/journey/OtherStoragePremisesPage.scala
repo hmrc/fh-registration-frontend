@@ -98,7 +98,7 @@ case class OtherStoragePremisesPage(
 
   override val data: Option[OtherStoragePremises] = {
     mainPage.data map { hasOthers =>
-      OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse ListWithTrackedChanges.empty[StoragePremise])
+      OtherStoragePremises(hasOthers, storagePremisePage.data getOrElse ListWithTrackedChanges.empty[StoragePremise]())
     }
   }
 

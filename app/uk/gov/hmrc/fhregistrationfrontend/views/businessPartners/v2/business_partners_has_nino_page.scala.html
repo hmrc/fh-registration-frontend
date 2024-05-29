@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
@@ -26,7 +25,7 @@
         viewHelpers: ViewHelpers
 )
 
-@(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(partnerNinoForm: Form[_], radioItems: Seq[RadioItem], postAction: Call)(implicit request: Request[_], messages: Messages)
 
 @layout(title = messages("fh.businessPartners.nino.title.v2"), backUrl = None, isBrowserBackMimic = true){
 

@@ -64,7 +64,7 @@ class DesToFormImpl extends DesToForm {
         limitedCompanyApplication(display)
       case BusinessType.SoleTrader =>
         soleProprietorApplication(display)
-      case BusinessType.Partnership =>
+      case _ =>
         partnershipApplication(display)
     }
 
@@ -116,7 +116,7 @@ class DesToFormImpl extends DesToForm {
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
       case BusinessType.Partnership =>
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
-      case BusinessType.SoleTrader =>
+      case _ =>
         subscriptionDisplay.businessDetail.soleProprietor.flatMap(_.identification.uniqueTaxpayerReference)
     }
 

@@ -17,21 +17,17 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.{BusinessType, businessTypeEntityMap}
 
 object EntityTypeMapping {
 
-  def desToForm(organizationType: String) = organizationType match {
-    case "Corporate Body"  => BusinessType.CorporateBody
-    case "Partnership"     => BusinessType.Partnership
-    case "Sole Proprietor" => BusinessType.SoleTrader
-    case _                 => throw new ReverseMappingException("unknwon entity type")
-  }
+  def desToForm(organizationType: String): BusinessType =
+    businessTypeEntityMap
+      .collectFirst {
+        case (businessType, orgType) if orgType == organizationType => businessType
+      }
+      .getOrElse(throw new ReverseMappingException("unknwon entity type"))
 
-  def formToDes(businessType: BusinessType) = businessType match {
-    case BusinessType.CorporateBody => "Corporate Body"
-    case BusinessType.Partnership   => "Partnership"
-    case BusinessType.SoleTrader    => "Sole Proprietor"
-  }
+  def formToDes(businessType: BusinessType): String = businessTypeEntityMap(businessType)
 
 }

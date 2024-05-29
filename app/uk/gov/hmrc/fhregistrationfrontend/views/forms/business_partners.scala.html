@@ -18,30 +18,24 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartners
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessPartner
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v1._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v1.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components.{Details => DetailsGovUK, _}
 
 @this(
-        layout: layout,
-        viewHelpers: ViewHelpers,
-        individualForm: business_partners_individual,
-        soleProprietorForm: business_partners_sole_proprietor,
-        partnershipForm: business_partners_partnership,
-        llpForm: business_partners_liability_partnership,
-        corporateForm: business_partners_corporate_body,
-        unincorporatedForm: business_partners_unincorporated_body
-)
+        layout: layout
+)(implicit addressUK: AddressUK, viewHelpers: ViewHelpers)
 
 @(
         businessPartnerForm: Form[(BusinessPartner, Boolean)],
         navigation: Navigation,
         section: String,
         params: RepeatingPageParams
-)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
@@ -51,43 +45,6 @@
 
 @entityDetails = {
   <p class="govuk-body">@messages("fh.business_partners.entity_intro")</p>
-}
-@addMore = {
-@params.forceHasMore match {
-  case Some(force) => {
-    <input type="hidden" name="addMore" value="@force" />
-  }
-  case None => {
-
-    @viewHelpers.govUkRadios(Radios(
-      fieldset = Some(Fieldset(
-        legend = Some(Legend(
-          content = Text(messages("fh.business_partners.addMore")),
-          classes = "govuk-fieldset__legend--m",
-          isPageHeading = false
-        ))
-      )),
-      idPrefix = Some("addMore"),
-      name = "addMore",
-      errorMessage = if (businessPartnerForm("addMore").hasErrors) {
-        Some(ErrorMessage(content = Text(messages("fh.addMore.error.required"))))
-      } else None,
-      items = Seq(
-        RadioItem(
-          content = Text(messages("fh.generic.yes")),
-          value = Some("true"),
-          checked = businessPartnerForm("addMore").value.toList.contains("true")
-        ),
-        RadioItem(
-          content = Text(messages("fh.generic.no")),
-          value = Some("false"),
-          checked = businessPartnerForm("addMore").value.toList.contains("false")
-        )
-      ),
-      classes = "govuk-radios--inline"
-    ))
-  }
-}
 }
 
 @titlePrefix = @{
@@ -142,42 +99,42 @@
           content = Text(messages("fh.business_partners.entity_type.individual.label")),
           value = Some(messages("fh.business_partners.entity_type.individual.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.individual.value")),
-          conditionalHtml = Some(individualForm(businessPartnerForm))
+          conditionalHtml = Some(individualBusinessPartner(businessPartnerForm))
         ),
         RadioItem(
           content = Text(messages("fh.business_partners.entity_type.soleProprietor.label")),
           value = Some(messages("fh.business_partners.entity_type.soleProprietor.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.soleProprietor.value")),
-          conditionalHtml = Some(soleProprietorForm(businessPartnerForm))
+          conditionalHtml = Some(soleProprietorBusinessPartner(businessPartnerForm))
         ),
         RadioItem(
           content = Text(messages("fh.business_partners.entity_type.partnership.label")),
           value = Some(messages("fh.business_partners.entity_type.partnership.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.partnership.value")),
-          conditionalHtml = Some(partnershipForm(businessPartnerForm))
+          conditionalHtml = Some(partnershipBusinessPartner(businessPartnerForm))
         ),
         RadioItem(
           content = Text(messages("fh.business_partners.entity_type.limitedLiabilityPartnership.label")),
           value = Some(messages("fh.business_partners.entity_type.limitedLiabilityPartnership.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.limitedLiabilityPartnership.value")),
-          conditionalHtml = Some(llpForm(businessPartnerForm))
+          conditionalHtml = Some(liabilityPartnershipBusinessPartner(businessPartnerForm))
         ),
         RadioItem(
           content = Text(messages("fh.business_partners.entity_type.corporateBody.label")),
           value = Some(messages("fh.business_partners.entity_type.corporateBody.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.corporateBody.value")),
-          conditionalHtml = Some(corporateForm(businessPartnerForm))
+          conditionalHtml = Some(corporateBodyBusinessPartner(businessPartnerForm))
         ),
         RadioItem(
           content = Text(messages("fh.business_partners.entity_type.unincorporatedBody.label")),
           value = Some(messages("fh.business_partners.entity_type.unincorporatedBody.value")),
           checked = businessPartnerForm(businessPartnersTypeKey).value.toList.contains(messages("fh.business_partners.entity_type.unincorporatedBody.value")),
-          conditionalHtml = Some(unincorporatedForm(businessPartnerForm))
+          conditionalHtml = Some(unincorporatedBodyBusinessPartner(businessPartnerForm))
         )
       )
     ))
 
-    @addMore
+    @add_more(businessPartnerForm, params)
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
 

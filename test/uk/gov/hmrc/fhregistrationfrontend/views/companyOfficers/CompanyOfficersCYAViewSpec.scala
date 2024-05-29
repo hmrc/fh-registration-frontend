@@ -48,7 +48,7 @@ class CompanyOfficersCYAViewSpec extends ViewSpecHelper {
 
   val backLink = "http://test.com"
   val call = Call("GET", "/foo")
-  val html = cyaView(backLink, summaryList, call)(request, Messages, appConfig)
+  val html = cyaView(backLink, summaryList, call)(request, Messages)
   val document = doc(html)
 
   "cyaView" should {

@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
@@ -25,7 +24,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(emailVerificationForm: Form[EmailVerification], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

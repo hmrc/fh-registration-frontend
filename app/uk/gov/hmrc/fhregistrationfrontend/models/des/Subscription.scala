@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Subscription(
   organizationType: String,
@@ -28,7 +28,7 @@ case class Subscription(
   declaration: Declaration)
 
 object Subscription {
-  implicit val format = Json.format[Subscription]
+  implicit val format: OFormat[Subscription] = Json.format[Subscription]
 
   def of(sd: SubscriptionDisplay) =
     Subscription(
@@ -49,7 +49,7 @@ case class SubScriptionCreate(
 )
 
 object SubScriptionCreate {
-  implicit val format = Json.format[SubScriptionCreate]
+  implicit val format: OFormat[SubScriptionCreate] = Json.format[SubScriptionCreate]
 
   def apply(subscription: Subscription): SubScriptionCreate =
     SubScriptionCreate("Create", subscription, None)

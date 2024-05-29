@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class VatNumber(
   hasValue: Boolean,
@@ -24,7 +24,7 @@ case class VatNumber(
 )
 
 object VatNumber {
-  implicit val format = Json.format[VatNumber]
+  implicit val format: OFormat[VatNumber] = Json.format[VatNumber]
 
   def sanitisedVatNumber(vatNumber: Option[String]): Option[String] =
     vatNumber match {

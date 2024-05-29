@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessPartners
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BusinessPartnersEnterAddress(
   addressLine1: String,
@@ -26,5 +26,5 @@ case class BusinessPartnersEnterAddress(
 )
 
 object BusinessPartnersEnterAddress {
-  implicit val format = Json.format[BusinessPartnersEnterAddress]
+  implicit val format: OFormat[BusinessPartnersEnterAddress] = Json.format[BusinessPartnersEnterAddress]
 }

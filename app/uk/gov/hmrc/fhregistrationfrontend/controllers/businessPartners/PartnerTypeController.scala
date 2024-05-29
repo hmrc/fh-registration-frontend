@@ -55,38 +55,40 @@ class PartnerTypeController @Inject()(
   }
 
   def next(index: Int, mode: Mode): Action[AnyContent] = dataRetrievalAction.async { implicit request =>
-    businessPartnerTypeForm().bindFromRequest.fold(
-      formWithErrors => {
-        Future.successful(
-          BadRequest(view.business_partners_type(formWithErrors, "first", postAction(index, mode), backUrl))
-        )
-      },
-      businessType => {
-        val nextUrl = businessType match {
-          case BusinessPartnerType.UnincorporatedBody =>
-            routes.BusinessPartnersUnincorporatedBodyNameController.load(index, NormalMode)
-          case BusinessPartnerType.Partnership =>
-            routes.BusinessPartnersPartnershipNameController.load(index, NormalMode)
-          case BusinessPartnerType.LimitedLiabilityPartnership =>
-            routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, NormalMode)
-          case BusinessPartnerType.CorporateBody =>
-            routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, NormalMode)
-          case _ =>
-            routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController
-              .load(index, NormalMode)
+    businessPartnerTypeForm()
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(
+            BadRequest(view.business_partners_type(formWithErrors, "first", postAction(index, mode), backUrl))
+          )
+        },
+        businessType => {
+          val nextUrl = businessType match {
+            case BusinessPartnerType.UnincorporatedBody =>
+              routes.BusinessPartnersUnincorporatedBodyNameController.load(index, NormalMode)
+            case BusinessPartnerType.Partnership =>
+              routes.BusinessPartnersPartnershipNameController.load(index, NormalMode)
+            case BusinessPartnerType.LimitedLiabilityPartnership =>
+              routes.BusinessPartnersLtdLiabilityPartnershipNameController.load(index, NormalMode)
+            case BusinessPartnerType.CorporateBody =>
+              routes.BusinessPartnersCorporateBodyCompanyNameController.load(index, NormalMode)
+            case _ =>
+              routes.BusinessPartnersIndividualsAndSoleProprietorsPartnerNameController
+                .load(index, NormalMode)
+          }
+          val optPreviousSelectedAnswers =
+            request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
+          optPreviousSelectedAnswers match {
+            case Some(answer) if answer == businessType && mode == CheckMode =>
+              Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load()))
+            case Some(answer) if answer == businessType =>
+              Future.successful(Redirect(nextUrl))
+            case _ =>
+              val newUserAnswers = UserAnswers(request.userId).set(PartnerTypePage(index), businessType)
+              updateUserAnswersAndSaveToCache(newUserAnswers, nextUrl, PartnerTypePage(index))
+          }
         }
-        val optPreviousSelectedAnswers =
-          request.optUserAnswers.fold[Option[BusinessPartnerType.Value]](None)(_.get(PartnerTypePage(index)))
-        optPreviousSelectedAnswers match {
-          case Some(answer) if answer == businessType && mode == CheckMode =>
-            Future.successful(Redirect(routes.BusinessPartnersCheckYourAnswersController.load()))
-          case Some(answer) if answer == businessType =>
-            Future.successful(Redirect(nextUrl))
-          case _ =>
-            val newUserAnswers = UserAnswers(request.userId).set(PartnerTypePage(index), businessType)
-            updateUserAnswersAndSaveToCache(newUserAnswers, nextUrl, PartnerTypePage(index))
-        }
-      }
-    )
+      )
   }
 }

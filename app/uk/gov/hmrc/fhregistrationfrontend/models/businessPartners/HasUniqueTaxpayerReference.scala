@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessPartners
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class HasUniqueTaxpayerReference(
   hasValue: Boolean,
@@ -24,5 +24,5 @@ case class HasUniqueTaxpayerReference(
 )
 
 object HasUniqueTaxpayerReference {
-  implicit val format = Json.format[HasUniqueTaxpayerReference]
+  implicit val format: OFormat[HasUniqueTaxpayerReference] = Json.format[HasUniqueTaxpayerReference]
 }

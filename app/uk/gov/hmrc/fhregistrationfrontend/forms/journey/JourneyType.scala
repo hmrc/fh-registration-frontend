@@ -17,11 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 import play.api.libs.json.{Format, Reads, Writes}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 object JourneyType extends Enumeration {
   type JourneyType = Value
 
   val New, Amendment, Variation = Value
 
-  implicit val businessTypeFormat = Format(Reads.enumNameReads(JourneyType), Writes.enumNameWrites[this.type])
+  implicit val businessTypeFormat: Format[journey.JourneyType.Value] =
+    Format(Reads.enumNameReads(JourneyType), Writes.enumNameWrites[this.type])
 }

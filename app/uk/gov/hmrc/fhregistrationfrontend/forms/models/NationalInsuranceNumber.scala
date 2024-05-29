@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class NationalInsuranceNumber(
   hasValue: Boolean,
@@ -24,5 +24,5 @@ case class NationalInsuranceNumber(
 )
 
 object NationalInsuranceNumber {
-  implicit val format = Json.format[NationalInsuranceNumber]
+  implicit val format: OFormat[NationalInsuranceNumber] = Json.format[NationalInsuranceNumber]
 }

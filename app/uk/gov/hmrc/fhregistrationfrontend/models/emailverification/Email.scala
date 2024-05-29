@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.emailverification
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Email(email: String)
 
 object Email {
-  implicit val format = Json.format[Email]
+  implicit val format: OFormat[Email] = Json.format[Email]
 }

@@ -19,15 +19,14 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.StoragePremisesForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(layout: layout, viewHelpers: ViewHelpers, addressForm: AddressUKOld)
+@this(layout: layout, viewHelpers: ViewHelpers, addressForm: AddressUK)
 
 
-@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
@@ -46,7 +45,7 @@
 
   <h1 class="govuk-heading-l">title</h1>
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), 'novalidate -> "novalidate") {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), Symbol("novalidate") -> "novalidate") {
 
     @viewHelpers.govUkRadios(Radios(
       fieldset = Some(Fieldset(

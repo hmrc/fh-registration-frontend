@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessPartners
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CompanyName(value: String)
 
 object CompanyName {
-  implicit val format = Json.format[CompanyName]
+  implicit val format: OFormat[CompanyName] = Json.format[CompanyName]
 }
