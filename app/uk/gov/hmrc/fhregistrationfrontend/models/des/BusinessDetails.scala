@@ -17,19 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SoleProprietor(tradingName: Option[String], identification: SoleProprietorIdentification)
 
 object SoleProprietor {
-  implicit val format = Json.format[SoleProprietor]
+  implicit val format: OFormat[SoleProprietor] = Json.format[SoleProprietor]
 }
 
 case class NonProprietor(tradingName: Option[String], identification: NonProprietorIdentification)
 
 object NonProprietor {
-  implicit val format = Json.format[NonProprietor]
+  implicit val format: OFormat[NonProprietor] = Json.format[NonProprietor]
 }
 
 case class PartnerDetail(
@@ -40,20 +39,20 @@ case class PartnerDetail(
 )
 
 object PartnerDetail {
-  implicit val format = Json.format[PartnerDetail]
+  implicit val format: OFormat[PartnerDetail] = Json.format[PartnerDetail]
 }
 
 case class Partnership(numbersOfPartners: String, partnerDetails: List[PartnerDetail])
 
 object Partnership {
-  implicit val format = Json.format[Partnership]
+  implicit val format: OFormat[Partnership] = Json.format[Partnership]
 }
 
 case class IncorporationDetails(companyRegistrationNumber: Option[String], dateOfIncorporation: Option[LocalDate])
 
 object IncorporationDetails extends DateTimeFormat {
 
-  implicit val format = Json.format[IncorporationDetails]
+  implicit val format: OFormat[IncorporationDetails] = Json.format[IncorporationDetails]
 }
 
 case class LimitedLiabilityPartnershipCorporateBody(
@@ -62,5 +61,6 @@ case class LimitedLiabilityPartnershipCorporateBody(
 
 object LimitedLiabilityPartnershipCorporateBody extends DateTimeFormat {
 
-  implicit val format = Json.format[LimitedLiabilityPartnershipCorporateBody]
+  implicit val format: OFormat[LimitedLiabilityPartnershipCorporateBody] =
+    Json.format[LimitedLiabilityPartnershipCorporateBody]
 }

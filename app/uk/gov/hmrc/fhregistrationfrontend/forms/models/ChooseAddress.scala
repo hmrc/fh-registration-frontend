@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ChooseAddress(chosenAddress: String)
 
 object ChooseAddress {
-  implicit val format = Json.format[ChooseAddress]
+  implicit val format: OFormat[ChooseAddress] = Json.format[ChooseAddress]
 }

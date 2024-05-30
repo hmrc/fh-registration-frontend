@@ -135,10 +135,10 @@ class DeclarationController @Inject()(
     val submissionResult = request.journeyRequest.journeyType match {
       case JourneyType.Amendment => amendedSubmission(declaration)
       case JourneyType.Variation => amendedSubmission(declaration)
-      case JourneyType.New       => createSubmission(declaration)
+      case _                     => createSubmission(declaration)
     }
 
-    submissionResult.right map { submissionResponse =>
+    submissionResult.map { submissionResponse =>
       submissionResponse foreach { case _ => save4LaterService.removeUserData(request.userId) }
       submissionResponse
     }
@@ -202,7 +202,7 @@ class DeclarationController @Inject()(
         formToDes limitedCompanySubmission (request.bpr, verifiedEmail, journeys ltdApplication pageDataLoader, d)
       case BusinessType.SoleTrader =>
         formToDes soleProprietorCompanySubmission (request.bpr, verifiedEmail, journeys soleTraderApplication pageDataLoader, d)
-      case BusinessType.Partnership =>
+      case _ =>
         formToDes partnership (request.bpr, verifiedEmail, journeys partnershipApplication pageDataLoader, d)
     }
 }

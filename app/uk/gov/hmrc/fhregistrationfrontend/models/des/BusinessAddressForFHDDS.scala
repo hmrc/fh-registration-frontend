@@ -17,12 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
 import java.time.LocalDate
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class PreviousOperationalAddressDetail(previousAddress: Address, previousAddressStartdate: LocalDate)
 
 object PreviousOperationalAddressDetail extends DateTimeFormat {
-  implicit val format = Json.format[PreviousOperationalAddressDetail]
+  implicit val format: OFormat[PreviousOperationalAddressDetail] = Json.format[PreviousOperationalAddressDetail]
 
 }
 
@@ -31,7 +31,7 @@ case class PreviousOperationalAddress(
   previousOperationalAddressDetail: Option[List[PreviousOperationalAddressDetail]])
 
 object PreviousOperationalAddress {
-  implicit val format = Json.format[PreviousOperationalAddress]
+  implicit val format: OFormat[PreviousOperationalAddress] = Json.format[PreviousOperationalAddress]
 }
 
 case class BusinessAddressForFHDDS(
@@ -41,7 +41,7 @@ case class BusinessAddressForFHDDS(
   previousOperationalAddress: Option[PreviousOperationalAddress])
 
 object BusinessAddressForFHDDS {
-  implicit val format = Json.format[BusinessAddressForFHDDS]
+  implicit val format: OFormat[BusinessAddressForFHDDS] = Json.format[BusinessAddressForFHDDS]
 
   def parseToRequiredString(value: String) = value match {
     case "3-5 years"  => "3 to 5 years"

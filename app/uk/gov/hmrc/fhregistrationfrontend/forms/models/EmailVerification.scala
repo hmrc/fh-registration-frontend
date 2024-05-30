@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class EmailVerification(
   usingGgEmailAddress: Boolean,
@@ -32,5 +32,5 @@ case class EmailVerification(
 }
 
 object EmailVerification {
-  implicit val format = Json.format[EmailVerification]
+  implicit val format: OFormat[EmailVerification] = Json.format[EmailVerification]
 }

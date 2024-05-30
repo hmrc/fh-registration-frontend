@@ -17,10 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 
 import com.github.tototoshi.play.json.JsonNaming
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 
 case class Identification(idNumber: String, issuingInstitution: String, issuingCountryCode: String)
 
 object Identification {
-  implicit val formats = JsonNaming snakecase Json.format[Identification]
+  implicit val formats: Format[Identification] = JsonNaming snakecase Json.format[Identification]
 }

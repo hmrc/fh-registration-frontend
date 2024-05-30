@@ -14,14 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 
 @this(
  layout: layout
 )
 
-@()(implicit request: Request[_], config: AppConfig, messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
 @layout(title = Messages("home.admin.page.title")) {
  <h1>@messages("home.admin.page.header")</h1>

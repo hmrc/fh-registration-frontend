@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 @import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonEnum._
 @import  uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.{reasonKey, reasonOtherKey}
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -25,14 +24,10 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-}
-
-@titlePrefix = @{
-  if (reasonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{messages("fh.deregistration.title")}

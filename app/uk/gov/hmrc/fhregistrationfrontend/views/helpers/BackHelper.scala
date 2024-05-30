@@ -21,12 +21,13 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 object BackHelper {
 
   private def call(navigation: Navigation) = navigation.back.map {
-    case SummaryPage            => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
     case FormPage(pageId, None) => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(pageId)
     case FormPage(pageId, Some(subsection)) =>
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(pageId, subsection)
+    case _ => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+
   }
 
-  def getUrl(navigation: Navigation) = call(navigation).map(_.url).headOption
+  def getUrl(navigation: Navigation): Option[String] = call(navigation).map(_.url).headOption
 
 }

@@ -39,7 +39,7 @@ class SummaryController @Inject()(
         journeys ltdApplication request
       case BusinessType.SoleTrader =>
         journeys soleTraderApplication request
-      case BusinessType.Partnership =>
+      case _ =>
         journeys partnershipApplication request
     }
     Ok(

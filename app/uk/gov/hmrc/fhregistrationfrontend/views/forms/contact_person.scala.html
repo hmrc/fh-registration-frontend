@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -28,12 +27,12 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 @import views.html.helper.CSPNonce
 
-@this(layout: layout, viewHelpers: ViewHelpers,
+@this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers,
     autcompleteCss: HmrcAccessibleAutocompleteCss,
     autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 
-@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   @autocompleteJavascript()
@@ -57,32 +56,32 @@
   Messages("fh.contactPerson.title")
 }
 @UkAddressConditional = {
-    @AddressUK(
-    formDate = contactPersonForm,
-    params = AddressUKParams(
-      context = Some("otherUkContactAddress"),
-      name = "contactAddress",
-      label = Messages("fh.contact_person.contact_address_new.label"),
-      hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
-      error = Some(Messages("fh.contact_person.contact_address_new.error"))
-    ),
-      viewHelpers = viewHelpers,
+    @addressUK(
+      formDate = contactPersonForm,
+      params = AddressUKParams(
+        context = Some("otherUkContactAddress"),
+        name = "contactAddress",
+        label = Messages("fh.contact_person.contact_address_new.label"),
+        hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
+        error = Some(Messages("fh.contact_person.contact_address_new.error"))
+      ),
       Some("contact_person")
     )
   }
 
 @NonUkAddressConditional= {
   @AddressInternational(
-  contactPersonForm,
-  AddressUKParams(
-  context = Some("otherInternationalContactAddress"),
-  name = "contactAddress",
-  label = "International Contact address",
-  hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
-  error = Some(Messages("fh.contact_person.contact_address_new.error"))
-  ), viewHelpers
+    contactPersonForm,
+    AddressUKParams(
+      context = Some("otherInternationalContactAddress"),
+      name = "contactAddress",
+      label = "International Contact address",
+      hasErrors = contactPersonForm(s"$otherInternationalContactAddressKey").hasErrors,
+      error = Some(Messages("fh.contact_person.contact_address_new.error"))
+    ),
+    viewHelpers
   )
-  }
+}
 
 
 @conditionalHtml =   {

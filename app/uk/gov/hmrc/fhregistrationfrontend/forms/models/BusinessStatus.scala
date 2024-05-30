@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
 import java.time.LocalDate
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BusinessStatus(
   isNewFulfilmentBusiness: Boolean,
@@ -25,5 +25,5 @@ case class BusinessStatus(
 )
 
 object BusinessStatus {
-  implicit val format = Json.format[BusinessStatus]
+  implicit val format: OFormat[BusinessStatus] = Json.format[BusinessStatus]
 }

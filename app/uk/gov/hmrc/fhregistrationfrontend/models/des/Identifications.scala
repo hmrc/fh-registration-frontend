@@ -36,17 +36,17 @@ case class SoleProprietorIdentification(
 case class NonProprietorIdentification(vatRegistrationNumber: Option[String], uniqueTaxpayerReference: Option[String])
 
 object IndividualIdentification {
-  implicit val format = Json.format[IndividualIdentification]
+  implicit val format: OFormat[IndividualIdentification] = Json.format[IndividualIdentification]
 }
 
 object CompanyIdentification {
-  implicit val format = Json.format[CompanyIdentification]
+  implicit val format: OFormat[CompanyIdentification] = Json.format[CompanyIdentification]
 }
 
 object SoleProprietorIdentification {
-  implicit val format = Json.format[SoleProprietorIdentification]
+  implicit val format: OFormat[SoleProprietorIdentification] = Json.format[SoleProprietorIdentification]
 }
 
 object NonProprietorIdentification {
-  implicit val format = Json.format[NonProprietorIdentification]
+  implicit val format: OFormat[NonProprietorIdentification] = Json.format[NonProprietorIdentification]
 }

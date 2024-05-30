@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.des
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class RoleInOrganization(
   beneficialShareHolder: Boolean,
@@ -30,7 +30,7 @@ case class RoleInOrganization(
   otherRoleDescription: Option[String])
 
 object RoleInOrganization {
-  implicit val format = Json.format[RoleInOrganization]
+  implicit val format: OFormat[RoleInOrganization] = Json.format[RoleInOrganization]
 
   def otherRole(description: String) = RoleInOrganization(
     beneficialShareHolder = false,
@@ -49,7 +49,7 @@ object RoleInOrganization {
 case class CommonDetails(telephone: Option[String], mobileNumber: Option[String], email: Option[String])
 
 object CommonDetails {
-  implicit val format = Json.format[CommonDetails]
+  implicit val format: OFormat[CommonDetails] = Json.format[CommonDetails]
   def apply(): CommonDetails = CommonDetails(None, None, None)
 }
 
@@ -62,5 +62,5 @@ case class ContactDetail(
   roleInOrganization: Option[RoleInOrganization])
 
 object ContactDetail {
-  implicit val format = Json.format[ContactDetail]
+  implicit val format: OFormat[ContactDetail] = Json.format[ContactDetail]
 }

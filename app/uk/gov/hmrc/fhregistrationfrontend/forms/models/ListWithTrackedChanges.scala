@@ -36,7 +36,7 @@ object ListWithTrackedChanges {
     false
   )
 
-  implicit def valueWithStatusFormat[T](implicit format: Format[T]) = Json.format[(T, Status)]
+  implicit def valueWithStatusFormat[T](implicit format: Format[T]): OFormat[(T, Status)] = Json.format[(T, Status)]
 
   implicit private def writes[T](implicit format: Format[T]): Writes[ListWithTrackedChanges[T]] =
     new Writes[ListWithTrackedChanges[T]] {

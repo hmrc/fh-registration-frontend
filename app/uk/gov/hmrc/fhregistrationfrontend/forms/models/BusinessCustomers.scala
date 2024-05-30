@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BusinessCustomers(
   numberOfCustomers: String
 )
 
 object BusinessCustomers {
-  implicit val format = Json.format[BusinessCustomers]
+  implicit val format: OFormat[BusinessCustomers] = Json.format[BusinessCustomers]
   val businessCustomersOptions = Seq(
     "None",
     "1-10",

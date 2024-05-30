@@ -19,7 +19,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.ContactPersonForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -29,13 +28,13 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 
-@this(layout: layout,
+@this(layout: layout, addressUK: AddressUK,
 viewHelpers: ViewHelpers,
 autcompleteCss: HmrcAccessibleAutocompleteCss,
 autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 
-@(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
     @autocompleteJavascript()
@@ -52,7 +51,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 @title = @{Messages("fh.contactPerson.title")}
 
 @UkAddressConditional = {
-    @AddressUK(
+    @addressUK(
         formDate = contactPersonForm,
         params = AddressUKParams(
             context = Some("otherUkContactAddress"),
@@ -61,7 +60,6 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
             hasErrors = contactPersonForm(s"$otherUkContactAddressKey").hasErrors,
             error = Some(Messages("fh.contact_person.contact_address_new.error"))
         ),
-        viewHelpers = viewHelpers,
         Some("contact_person")
     )
 }

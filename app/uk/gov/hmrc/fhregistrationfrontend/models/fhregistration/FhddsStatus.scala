@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.fhregistration
 
 import play.api.libs.json.{Format, Reads, Writes}
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration
 
 object FhddsStatus extends Enumeration {
 
@@ -31,6 +32,7 @@ object FhddsStatus extends Enumeration {
   val Withdrawn = Value("withdrawn")
   val Deregistered = Value("deregistered")
 
-  implicit val format = Format(Reads.enumNameReads(FhddsStatus), Writes.enumNameWrites[this.type])
+  implicit val format: Format[fhregistration.FhddsStatus.Value] =
+    Format(Reads.enumNameReads(FhddsStatus), Writes.enumNameWrites[this.type])
 
 }

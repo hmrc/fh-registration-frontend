@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -25,7 +24,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(emailVerificationForm: Form[EmailVerification], forced: Boolean, defaultEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(emailVerificationForm: Form[EmailVerification], forced: Boolean, defaultEmail: Option[String], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 
 @titlePrefix = @{
@@ -41,11 +40,6 @@
     <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
 }
 
-@htmlContent = {
-    <p class="govuk-body">@messages(s"fh.emailVerification.alternativeEmail.info")</p>
-    <div class="govuk-!-padding-bottom-2"></div>
-    <b>@messages(s"fh.emailVerification.$alternativeEmailKey.label")</b>
-}
 @action = @{
     if (forced) uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitForcedContactEmail
     else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail

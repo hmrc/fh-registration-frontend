@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DateOfIncorporationForm.dateOfIncorporationKey
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation._
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
@@ -27,7 +26,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
   <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>

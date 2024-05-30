@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 
 import com.github.tototoshi.play.json.JsonNaming
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 
 case class Address(
   line1: String,
@@ -36,5 +36,5 @@ case class Address(
 }
 
 object Address {
-  implicit val formats = JsonNaming snakecase Json.format[Address]
+  implicit val formats: Format[Address] = JsonNaming snakecase Json.format[Address]
 }

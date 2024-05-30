@@ -94,28 +94,34 @@ case class BusinessPartnerUnincorporatedBody(
 ) extends BusinessPartnerIdentification
 
 object BusinessPartner {
-  implicit val businessPartnerIndividualFormat = Json.format[BusinessPartnerIndividual]
-  implicit val businessPartnerSoleProprietorFormat = Json.format[BusinessPartnerSoleProprietor]
-  implicit val businessPartnerPartnershipFormat = Json.format[BusinessPartnerPartnership]
-  implicit val businessPartnerLimitedLiabilityPartnershipFormat =
+  implicit val businessPartnerIndividualFormat: OFormat[BusinessPartnerIndividual] =
+    Json.format[BusinessPartnerIndividual]
+  implicit val businessPartnerSoleProprietorFormat: OFormat[BusinessPartnerSoleProprietor] =
+    Json.format[BusinessPartnerSoleProprietor]
+  implicit val businessPartnerPartnershipFormat: OFormat[BusinessPartnerPartnership] =
+    Json.format[BusinessPartnerPartnership]
+  implicit val businessPartnerLimitedLiabilityPartnershipFormat: OFormat[BusinessPartnerLimitedLiabilityPartnership] =
     Json.format[BusinessPartnerLimitedLiabilityPartnership]
-  implicit val businessPartnerCorporateBodyFormat = Json.format[BusinessPartnerCorporateBody]
-  implicit val businessPartnerUnincorporatedBodyFormat = Json.format[BusinessPartnerUnincorporatedBody]
+  implicit val businessPartnerCorporateBodyFormat: OFormat[BusinessPartnerCorporateBody] =
+    Json.format[BusinessPartnerCorporateBody]
+  implicit val businessPartnerUnincorporatedBodyFormat: OFormat[BusinessPartnerUnincorporatedBody] =
+    Json.format[BusinessPartnerUnincorporatedBody]
 
-  implicit val businessPartnerIdentificationWrites = new Writes[BusinessPartnerIdentification] {
-    override def writes(o: BusinessPartnerIdentification): JsValue =
-      o match {
-        case i: BusinessPartnerIndividual                  => Json toJson i
-        case s: BusinessPartnerSoleProprietor              => Json toJson s
-        case p: BusinessPartnerPartnership                 => Json toJson p
-        case l: BusinessPartnerLimitedLiabilityPartnership => Json toJson l
-        case c: BusinessPartnerCorporateBody               => Json toJson c
-        case u: BusinessPartnerUnincorporatedBody          => Json toJson u
-      }
-  }
+  implicit val businessPartnerIdentificationWrites: Writes[BusinessPartnerIdentification] =
+    new Writes[BusinessPartnerIdentification] {
+      override def writes(o: BusinessPartnerIdentification): JsValue =
+        o match {
+          case i: BusinessPartnerIndividual                  => Json toJson i
+          case s: BusinessPartnerSoleProprietor              => Json toJson s
+          case p: BusinessPartnerPartnership                 => Json toJson p
+          case l: BusinessPartnerLimitedLiabilityPartnership => Json toJson l
+          case c: BusinessPartnerCorporateBody               => Json toJson c
+          case u: BusinessPartnerUnincorporatedBody          => Json toJson u
+        }
+    }
 
-  implicit val writes = Json.writes[BusinessPartner]
-  implicit val reads = new Reads[BusinessPartner] {
+  implicit val writes: OWrites[BusinessPartner] = Json.writes[BusinessPartner]
+  implicit val reads: Reads[BusinessPartner] = new Reads[BusinessPartner] {
     override def reads(value: JsValue): JsResult[BusinessPartner] =
       value.validate[JsObject].flatMap { json =>
         (json \ "businessPartnerType") match {
@@ -142,6 +148,6 @@ object BusinessPartner {
 
   }
 
-  implicit val businessPartnerFormat = Format(reads, writes)
+  implicit val businessPartnerFormat: Format[BusinessPartner] = Format(reads, writes)
 
 }

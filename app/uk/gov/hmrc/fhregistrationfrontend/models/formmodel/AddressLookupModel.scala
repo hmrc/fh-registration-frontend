@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.formmodel
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, OFormat}
 
 /** Represents a country as per ISO3166. */
 case class Country(
@@ -29,7 +29,7 @@ case class Country(
   name: String)
 
 object Country {
-  implicit val formats = Json.format[Country]
+  implicit val formats: OFormat[Country] = Json.format[Country]
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ case class Address(lines: Seq[String], town: Option[String], postcode: String, c
 }
 
 object Address {
-  implicit val formats = Json.format[Address]
+  implicit val formats: OFormat[Address] = Json.format[Address]
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ case class AddressRecord(
 }
 
 object AddressRecord {
-  implicit val formats = Json.format[AddressRecord]
+  implicit val formats: OFormat[AddressRecord] = Json.format[AddressRecord]
 }
 
 //-------------------------------------------------------------------------------------------------
