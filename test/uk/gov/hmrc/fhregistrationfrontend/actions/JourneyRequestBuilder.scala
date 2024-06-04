@@ -58,12 +58,14 @@ trait JourneyRequestBuilder extends ActionSpecBase {
     new JourneyPages(pagesWithData)
   }
 
-  def fullyCompleteJourney(pages: Seq[Page[_]] = journeys.partnershipPages) = {
+  def fullyCompleteJourney(pages: Seq[Page[_]] = journeys.partnershipPages): JourneyPages = {
     val pagesWithData = pages map examplePageData
     new JourneyPages(pagesWithData)
   }
 
-  def examplePageData(page: Page[_]) =
+  def examplePageData(page: Page[_]): Page[
+    _ >: ContactPerson with MainBusinessAddress with CompanyRegistrationNumber with DateOfIncorporation with NationalInsuranceNumber with TradingName with VatNumber with ListWithTrackedChanges[
+      CompanyOfficer] with ListWithTrackedChanges[BusinessPartner] with BusinessStatus with ImportingActivities with BusinessCustomers with OtherStoragePremises <: Product] =
     page.id match {
       case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
       case mainBusinessAddressPage.id =>

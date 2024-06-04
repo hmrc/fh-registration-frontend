@@ -1,6 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.$packageName$
 
-import uk.gov.hmrc.fhregistrationfrontend.controllers.{AppController, CommonPlayDependencies, ControllerHelper}
+import uk.gov.hmrc.fhregistrationfrontend.controllers.{AppController, CommonPlayDependencies}
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.forms.$packageName$.$className$Form.form

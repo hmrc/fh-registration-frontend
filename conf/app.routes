@@ -1,7 +1,5 @@
 # microservice specific routes
 ->          /hmrc-frontend                                              hmrcfrontend.Routes
-->          /company-officers                                           app.companyOfficers.Routes
-->          /business-partners                                          app.businessPartners.Routes
 
 GET         /                                                           @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.main()
 GET         /enrolment-progress                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.enrolmentPending()
