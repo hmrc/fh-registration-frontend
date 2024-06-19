@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 import java.text.SimpleDateFormat
 import java.util.Date
 import play.api.data.FormError
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SummaryAddressBlock
 import uk.gov.hmrc.govukfrontend.views.html.components._
 
@@ -42,7 +42,18 @@ object Helpers {
     val line3 = if (address.addressLine3.nonEmpty) { "<br>" + address.addressLine3.get } else ""
     val line4 = if (address.addressLine4.nonEmpty) { "<br>" + address.addressLine4.get } else ""
 
-    s"""${address.addressLine1}""" + s"""$line2""" + s"""$line3""" + s"""$line4""" + s"""<br>${address.postcode}"""
+    s"${address.addressLine1}$line2$line3$line4<br>${address.postcode}"
+  }
+
+  def formatAddress(address: InternationalAddress): String = {
+    val line2 = if (address.addressLine2.nonEmpty) {
+      "<br>" + address.addressLine2.get
+    } else ""
+    val line3 = if (address.addressLine3.nonEmpty) {
+      "<br>" + address.addressLine3.get
+    } else ""
+
+    s"${address.addressLine1}$line2$line3<br>${address.countryCode}"
   }
 
   def createAddressString(address: Address): String = {
