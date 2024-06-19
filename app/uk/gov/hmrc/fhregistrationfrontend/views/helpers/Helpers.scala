@@ -38,22 +38,17 @@ object Helpers {
     new SimpleDateFormat("dd MMMM yyyy").format(date)
 
   def formatAddress(address: Address): String = {
-    val line2 = if (address.addressLine2.nonEmpty) { "<br>" + address.addressLine2.get } else ""
-    val line3 = if (address.addressLine3.nonEmpty) { "<br>" + address.addressLine3.get } else ""
-    val line4 = if (address.addressLine4.nonEmpty) { "<br>" + address.addressLine4.get } else ""
-
-    s"${address.addressLine1}$line2$line3$line4<br>${address.postcode}"
+    val optionalLines = List(address.addressLine2, address.addressLine3, address.addressLine4).flatten
+      .map(line => s"<br>$line")
+      .mkString("")
+    s"${address.addressLine1}$optionalLines<br>${address.postcode}"
   }
 
   def formatAddress(address: InternationalAddress): String = {
-    val line2 = if (address.addressLine2.nonEmpty) {
-      "<br>" + address.addressLine2.get
-    } else ""
-    val line3 = if (address.addressLine3.nonEmpty) {
-      "<br>" + address.addressLine3.get
-    } else ""
-
-    s"${address.addressLine1}$line2$line3<br>${address.countryCode}"
+    val optionalLines = List(address.addressLine2, address.addressLine3).flatten
+      .map(line => s"<br>$line")
+      .mkString("")
+    s"${address.addressLine1}$optionalLines<br>${address.countryCode}"
   }
 
   def createAddressString(address: Address): String = {
