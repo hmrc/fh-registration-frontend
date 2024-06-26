@@ -30,22 +30,6 @@ object ContactPersonHelper {
   def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(
     implicit messages: Messages) = {
 
-    val ContactPersonAddressLabel =
-      if (!contactPersonForm.usingSameContactAddress) {
-        if (contactPersonForm.ukOtherAddress.contains(true)) {
-          "fh.contact_person.contact_address_new.label"
-        } else {
-          "fh.contact_person.contact_address_international.label"
-        }
-      } else "fh.contact_person.contact_address.title"
-
-    val ContactPersonAddress =
-      if (contactPersonForm.otherUkContactAddress.isDefined) {
-        Helpers.formatAddress(contactPersonForm.otherUkContactAddress.get)
-      } else {
-        ""
-      }
-
     val PageLabel =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
@@ -68,37 +52,71 @@ object ContactPersonHelper {
           contactPersonForm.jobTitle,
           None,
           GroupRow.Top),
-        None)
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/contactPerson",
+          Text("Change"),
+          Some(Messages("fh.contact_person.job_title.label"))
+        )
+      )
 
-    val telephoneNumber =
+    val TelephoneNumber =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.contact_person.telephone.label")),
           contactPersonForm.telephone,
           None,
           GroupRow.Top),
-        None)
+        Helpers.createChangeLink(
+          Mode isEditable mode,
+          "form/contactPerson",
+          Text("Change"),
+          Some(Messages("fh.contact_person.telephone.label"))
+        )
+      )
+
+    val ContactPersonAddressLabel =
+      if (!contactPersonForm.usingSameContactAddress) {
+        if (contactPersonForm.ukOtherAddress.contains(true)) {
+          "fh.contact_person.contact_address_new.label"
+        } else {
+          "fh.contact_person.contact_address_international.label"
+        }
+      } else "fh.contact_person.contact_address.title"
+
+    val ContactPersonAddress =
+      (contactPersonForm.otherUkContactAddress, contactPersonForm.otherInternationalContactAddress) match {
+        case (Some(otherUkContactAddress), None)            => Helpers.formatAddress(otherUkContactAddress)
+        case (None, Some(otherInternationalContactAddress)) => Helpers.formatAddress(otherInternationalContactAddress)
+        case (_, _)                                         => ""
+      }
 
     val Address =
-      if (contactPersonForm.otherUkContactAddress.isDefined) {
+      if (!contactPersonForm.usingSameContactAddress) {
         Seq(
           Helpers.createSummaryRow(
             SummaryRowParams
               .ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None, GroupRow.Bottom),
-            None))
+            Helpers.createChangeLink(
+              Mode isEditable mode,
+              "form/contactPerson",
+              Text("Change"),
+              Some(Messages(ContactPersonAddressLabel))
+            )
+          ))
       } else Seq.empty
 
-    if (Address.nonEmpty) {
+    if (!contactPersonForm.usingSameContactAddress) {
       Seq(
         PageLabel,
         JobTitle,
-        telephoneNumber
+        TelephoneNumber
       ) ++ Address
     } else {
       Seq(
         PageLabel,
         JobTitle,
-        telephoneNumber
+        TelephoneNumber
       )
     }
   }
