@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 
 @Inject
-class SummaryController @Inject()(
+class SummaryController @Inject() (
   ds: CommonPlayDependencies,
   cc: MessagesControllerComponents,
   actions: Actions,
@@ -43,6 +43,7 @@ class SummaryController @Inject()(
         journeys partnershipApplication request
     }
     Ok(
-      getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest), views))
+      getSummaryHtml(application, request.bpr, request.verifiedEmail, summaryPageParams(request.journeyRequest), views)
+    )
   }
 }

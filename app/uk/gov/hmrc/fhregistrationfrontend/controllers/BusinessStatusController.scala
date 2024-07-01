@@ -24,11 +24,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class BusinessStatusController @Inject()(
+class BusinessStatusController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -46,12 +47,8 @@ class BusinessStatusController @Inject()(
       businessStatusForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.business_status_page(formWithErrors))
-          },
-          businessStatus => {
-            Ok(s"Form submitted, with result: $businessStatus")
-          }
+          formWithErrors => BadRequest(view.business_status_page(formWithErrors)),
+          businessStatus => Ok(s"Form submitted, with result: $businessStatus")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

@@ -35,7 +35,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
   lazy val action = new StartVariationAction(mockFhddsConnector)(
     mockSave4Later,
     errorHandler,
-    scala.concurrent.ExecutionContext.Implicits.global)
+    scala.concurrent.ExecutionContext.Implicits.global
+  )
 
   "Start variation action " should {
     "Fail when no fhdds registration number" in {
@@ -45,7 +46,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         registrationNumber = None,
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
@@ -57,7 +59,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(registrationNumber),
         Some(Assistant),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
 
       setupFhddsStatus(FhddsStatus.ApprovedWithConditions)
       val cacheMap = CacheMapBuilder(testUserId)
@@ -78,7 +81,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(registrationNumber),
         Some(Assistant),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
       } {
@@ -88,7 +92,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         val action = new StartVariationAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -102,7 +107,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(registrationNumber),
         Some(Assistant),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Approved, ApprovedWithConditions)
       } {
@@ -111,7 +117,8 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         val action = new StartVariationAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 

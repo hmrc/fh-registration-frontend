@@ -40,9 +40,7 @@ object UnusedImportingActivitiesForm {
     val apply: (Boolean, Option[EoriNumber]) => ImportingActivities = (hasEori, eoriNumber) =>
       ImportingActivities(hasEori, eoriNumber)
     val unapply: ImportingActivities => Option[(Boolean, Option[EoriNumber])] =
-      importingActivities => {
-        Some((importingActivities.hasEori, importingActivities.eoriNumber))
-      }
+      importingActivities => Some((importingActivities.hasEori, importingActivities.eoriNumber))
     Form(
       mapping(
         hasEoriMapping,

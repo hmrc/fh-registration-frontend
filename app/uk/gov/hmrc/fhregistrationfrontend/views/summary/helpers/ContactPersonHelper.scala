@@ -27,8 +27,9 @@ import uk.gov.hmrc.fhregistrationfrontend.views.summary._
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
 
 object ContactPersonHelper {
-  def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(
-    implicit messages: Messages) = {
+  def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit
+    messages: Messages
+  ) = {
 
     val PageLabel =
       Helpers.createSummaryRow(
@@ -36,7 +37,8 @@ object ContactPersonHelper {
           Some(Messages("fh.generic.name")),
           contactPersonForm.firstName + " " + contactPersonForm.lastName,
           None,
-          GroupRow.Top),
+          GroupRow.Top
+        ),
         Helpers.createChangeLink(
           Mode isEditable mode,
           "form/contactPerson",
@@ -51,7 +53,8 @@ object ContactPersonHelper {
           Some(Messages("fh.contact_person.job_title.label")),
           contactPersonForm.jobTitle,
           None,
-          GroupRow.Top),
+          GroupRow.Top
+        ),
         Helpers.createChangeLink(
           Mode isEditable mode,
           "form/contactPerson",
@@ -66,7 +69,8 @@ object ContactPersonHelper {
           Some(Messages("fh.contact_person.telephone.label")),
           contactPersonForm.telephone,
           None,
-          GroupRow.Top),
+          GroupRow.Top
+        ),
         Helpers.createChangeLink(
           Mode isEditable mode,
           "form/contactPerson",
@@ -103,7 +107,8 @@ object ContactPersonHelper {
               Text("Change"),
               Some(Messages(ContactPersonAddressLabel))
             )
-          ))
+          )
+        )
       } else Seq.empty
 
     if (!contactPersonForm.usingSameContactAddress) {

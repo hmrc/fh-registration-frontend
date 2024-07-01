@@ -32,7 +32,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionRepository @Inject()(
+class SessionRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext, encryption: Encryption)
@@ -58,7 +58,7 @@ class SessionRepository @Inject()(
     collection
       .updateOne(
         filter = byId(id),
-        update = Updates.set("lastUpdated", Instant.now()),
+        update = Updates.set("lastUpdated", Instant.now())
       )
       .toFuture()
       .map(_ => true)

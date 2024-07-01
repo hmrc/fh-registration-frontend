@@ -34,9 +34,8 @@ class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {
 
       val result = ModelEncryption.encryptUserAnswers(userAnswers)
       result._1 mustBe userAnswers.id
-      result._2.map {
-        case (x, encryValue) =>
-          (x -> Json.parse(encryption.crypto.decrypt(encryValue, userAnswers.id)).as[JsObject])
+      result._2.map { case (x, encryValue) =>
+        x -> Json.parse(encryption.crypto.decrypt(encryValue, userAnswers.id)).as[JsObject]
       } mustBe userAnswers.data
       result._3 mustBe userAnswers.lastUpdated
     }
@@ -47,9 +46,8 @@ class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {
 
       val result = ModelEncryption.decryptUserAnswers(
         userAnswers.id,
-        userAnswers.data.map {
-          case (x, value) =>
-            (x -> encryption.crypto.encrypt(value.toString(), userAnswers.id))
+        userAnswers.data.map { case (x, value) =>
+          x -> encryption.crypto.encrypt(value.toString(), userAnswers.id)
         },
         userAnswers.lastUpdated
       )

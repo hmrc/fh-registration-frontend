@@ -33,7 +33,8 @@ class EnrolledUserActionSpec extends ActionSpecBase {
         registrationNumber = None,
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
@@ -45,7 +46,8 @@ class EnrolledUserActionSpec extends ActionSpecBase {
         Some(registrationNumber),
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
 
       val refined = refinedRequest(action, userRequest)
 

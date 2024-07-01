@@ -33,7 +33,8 @@ trait EmailVerificationConnectorMocks extends MockitoSugar {
   def setupEmailVerificationConnector(email: String, isVerified: Boolean) = {
     when(mockEmailVerifcationConnector.isVerified(ArgumentMatchers.eq(email))(any())) thenReturn Future(isVerified)
     when(mockEmailVerifcationConnector.requestVerification(ArgumentMatchers.eq(email), any())(any())) thenReturn Future(
-      isVerified)
+      isVerified
+    )
   }
 
 }

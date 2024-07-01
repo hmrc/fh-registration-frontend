@@ -21,8 +21,9 @@ import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 
 object StubbedErrorHandler extends ErrorHandler with Results {
 
-  override def errorResultsPages(errorResults: Results.Status, errorMsg: Option[String])(
-    implicit request: Request[_]): Result =
+  override def errorResultsPages(errorResults: Results.Status, errorMsg: Option[String])(implicit
+    request: Request[_]
+  ): Result =
     errorResults("")
 
   override def applicationError(implicit request: Request[_]): Result =

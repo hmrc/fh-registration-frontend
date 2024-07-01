@@ -34,7 +34,7 @@ trait EmailVerificationConnector {
   def requestVerification(email: String, emailHash: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean]
 }
 
-class DefaultEmailVerificationConnector @Inject()(
+class DefaultEmailVerificationConnector @Inject() (
   appConfig: AppConfig,
   val http: HttpClient,
   val runModeConfiguration: Configuration,
@@ -60,8 +60,9 @@ class DefaultEmailVerificationConnector @Inject()(
     http.POST(url, Json.toJson(Email(email)))
   }
 
-  override def requestVerification(email: String, emailHash: String)(
-    implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
+  override def requestVerification(email: String, emailHash: String)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Boolean] = {
     val templateId: String = "fhdds_email_verification"
     val linkExpiryDuration: String = "PT30M"
     val request = EmailVerificationRequest(

@@ -40,7 +40,8 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
 
     when(mockSave4Later.fetchBusinessRegistrationDetails(same(userId))(any()))
       .thenReturn(
-        Future successful cacheMap.getEntry[BusinessRegistrationDetails](Save4LaterKeys.businessRegistrationDetailsKey))
+        Future successful cacheMap.getEntry[BusinessRegistrationDetails](Save4LaterKeys.businessRegistrationDetailsKey)
+      )
 
     when(mockSave4Later.fetchBusinessType(same(userId))(any()))
       .thenReturn(Future successful cacheMap.getEntry[String](Save4LaterKeys.businessTypeKey))

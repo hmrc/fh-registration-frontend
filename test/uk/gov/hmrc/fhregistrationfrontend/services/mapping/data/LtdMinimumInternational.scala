@@ -46,7 +46,8 @@ object LtdMinimumInternational {
           None,
           "Bulgaria",
           "BG"
-        ))
+        )
+      )
     ),
     CompanyRegistrationNumber("12345678", None),
     DateOfIncorporation(LocalDate.of(2009, 4, 21)),
@@ -66,7 +67,8 @@ object LtdMinimumInternational {
             None,
             "Company Secretary"
           )
-        ) -> changeFlags),
+        ) -> changeFlags
+      ),
       List.empty,
       false
     ),

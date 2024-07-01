@@ -5,22 +5,22 @@ import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class WithdrawalControllerIntegrationSpec
-  extends Specifications with TestConfiguration {
+class WithdrawalControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "WithdrawalController" should {
 
     "Ask the reason for the withdrawal" in {
 
-      given
-        .withdrawalPrecondition
+      given.withdrawalPrecondition
 
       WsTestClient.withClient { client =>
-        val result1 = client.url(s"$baseUrl/withdraw")
+        val result1 = client
+          .url(s"$baseUrl/withdraw")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
-        val result2 = client.url(s"$baseUrl/withdraw/reason")
+        val result2 = client
+          .url(s"$baseUrl/withdraw/reason")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
@@ -37,20 +37,16 @@ class WithdrawalControllerIntegrationSpec
 
     "Post the reason for the withdrawal" in {
 
-      given
-        .withdrawalPrecondition
-        .keyStore.saveWithdrawalReason(sessionId)
+      given.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
 
-      
       WsTestClient.withClient { client =>
         val result =
-          client.url(s"$baseUrl/withdraw/reason")
+          client
+            .url(s"$baseUrl/withdraw/reason")
             .withFollowRedirects(false)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map("reason" -> Seq("Applied in Error")))
-
 
         whenReady(result) { res =>
           res.status mustBe 303
@@ -62,14 +58,12 @@ class WithdrawalControllerIntegrationSpec
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      given
-        .withdrawalPrecondition
-        .keyStore.fetchWithdrawalReason(sessionId)
-        .fhddsBackend.getSubscription()
+      given.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
 
       WsTestClient.withClient { client =>
         val result =
-          client.url(s"$baseUrl/withdraw/confirm")
+          client
+            .url(s"$baseUrl/withdraw/confirm")
             .withHttpHeaders(xSessionId)
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .get()
@@ -82,15 +76,16 @@ class WithdrawalControllerIntegrationSpec
 
     "Show bad request to the user if not enrolled" in {
 
-      given
-        .commonPrecondition
+      given.commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result1 = client.url(s"$baseUrl/withdraw")
+        val result1 = client
+          .url(s"$baseUrl/withdraw")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
-        val result2 = client.url(s"$baseUrl/withdraw/reason")
+        val result2 = client
+          .url(s"$baseUrl/withdraw/reason")
           .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()

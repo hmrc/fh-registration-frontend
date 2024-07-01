@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FhddsConnector @Inject()(
+class FhddsConnector @Inject() (
   val http: HttpClient,
   val runModeConfiguration: Configuration,
   environment: Environment
@@ -43,12 +43,14 @@ class FhddsConnector @Inject()(
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] =
     http.GET[FhddsStatus](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
 
-  def getSubmission(fhddsRegistrationNumber: String)(
-    implicit headerCarrier: HeaderCarrier): Future[SubscriptionDisplayWrapper] =
+  def getSubmission(fhddsRegistrationNumber: String)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[SubscriptionDisplayWrapper] =
     http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
 
-  def createSubmission(safeId: String, currentRegNumber: Option[String], request: SubmissionRequest)(
-    implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] = {
+  def createSubmission(safeId: String, currentRegNumber: Option[String], request: SubmissionRequest)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[SubmissionResponse] = {
     val url = currentRegNumber.fold(
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId"
     ) { currentRegNumber =>
@@ -58,23 +60,29 @@ class FhddsConnector @Inject()(
     http.POST[SubmissionRequest, SubmissionResponse](url, request)
   }
 
-  def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(
-    implicit headerCarrier: HeaderCarrier): Future[SubmissionResponse] =
+  def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[SubmissionResponse] =
     http.POST[SubmissionRequest, SubmissionResponse](
       s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber",
-      request)
+      request
+    )
 
-  def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(
-    implicit headerCarrier: HeaderCarrier): Future[Date] =
+  def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Date] =
     http.POST[WithdrawalRequest, Date](
       s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber",
-      request)
+      request
+    )
 
-  def deregister(fhddsRegistrationNumber: String, request: DeregistrationRequest)(
-    implicit headerCarrier: HeaderCarrier): Future[Date] =
+  def deregister(fhddsRegistrationNumber: String, request: DeregistrationRequest)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Date] =
     http.POST[DeregistrationRequest, Date](
       s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber",
-      request)
+      request
+    )
 
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)

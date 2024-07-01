@@ -30,7 +30,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val action =
         new PageAction("some-page-id", None, journeys)(
           StubbedErrorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
       status(result(action, request)) shouldBe NOT_FOUND
     }
 
@@ -39,7 +40,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
       val action = new PageAction(contactPersonPage.id, None, journeys)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
 
       val refined = refinedRequest(action, request)
 
@@ -56,7 +58,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
       val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
 
       status(result(action, request)) shouldBe NOT_FOUND
     }
@@ -66,7 +69,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
       val action = new PageAction(contactPersonPage.id, Some("1"), journeys)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
 
       status(result(action, request)) shouldBe NOT_FOUND
     }
@@ -84,7 +88,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
 
       val refined = refinedRequest(action, request)
       refined.page.data shouldBe Some(FormTestData.mainBusinessAddress)
@@ -98,7 +103,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
       val action = new PageAction(companyOfficersPage.id, Some("2"), journeys)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
       val refined = refinedRequest(action, request)
       refined.page.section shouldBe Some("2")
       refined.page.data shouldBe Some(FormTestData.companyOfficers)

@@ -37,11 +37,11 @@ trait AppConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(
+class FrontendAppConfig @Inject() (
   configuration: play.api.Configuration,
   val runModeConfiguration: Configuration,
-  environment: Environment)
-    extends ServicesConfig(runModeConfiguration) with AppConfig {
+  environment: Environment
+) extends ServicesConfig(runModeConfiguration) with AppConfig {
 
   private def loadConfig(key: String) =
     configuration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
@@ -51,7 +51,8 @@ class FrontendAppConfig @Inject()(
   val addressReputationEndpoint = baseUrl("address-lookup")
   override lazy val exciseEnquiryLink: String = getConfString(
     "exciseEnquiryLink",
-    "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries")
+    "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries"
+  )
 
   override lazy val appName: String = loadConfig("appName")
 
@@ -83,7 +84,8 @@ class FrontendAppConfig @Inject()(
       "sole-proprietor",
       "individual",
       "corporateBody",
-      "unincorporated-body")
+      "unincorporated-body"
+    )
   def getRandomBusinessType(): String = staticBusinessTypes(Random.nextInt(6))
 
   val vatNumber = Seq(true, false)

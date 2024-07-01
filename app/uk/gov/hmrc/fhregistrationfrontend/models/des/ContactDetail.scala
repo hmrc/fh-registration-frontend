@@ -27,7 +27,8 @@ case class RoleInOrganization(
   nominatedOfficer: Boolean,
   designatedmember: Boolean,
   otherRoleType: Boolean,
-  otherRoleDescription: Option[String])
+  otherRoleDescription: Option[String]
+)
 
 object RoleInOrganization {
   implicit val format: OFormat[RoleInOrganization] = Json.format[RoleInOrganization]
@@ -59,7 +60,8 @@ case class ContactDetail(
   usingSameContactAddress: Boolean,
   address: Option[Address],
   commonDetails: CommonDetails,
-  roleInOrganization: Option[RoleInOrganization])
+  roleInOrganization: Option[RoleInOrganization]
+)
 
 object ContactDetail {
   implicit val format: OFormat[ContactDetail] = Json.format[ContactDetail]

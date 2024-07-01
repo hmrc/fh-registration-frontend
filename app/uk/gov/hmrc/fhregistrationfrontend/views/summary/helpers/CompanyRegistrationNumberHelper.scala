@@ -27,10 +27,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyRegistrationNumber
 
 object CompanyRegistrationNumberHelper {
 
-  def apply(companyRegistrationNumberForm: CompanyRegistrationNumber, mode: Mode)(
-    implicit messages: Messages): Seq[SummaryListRow] = {
+  def apply(companyRegistrationNumberForm: CompanyRegistrationNumber, mode: Mode)(implicit
+    messages: Messages
+  ): Seq[SummaryListRow] = {
 
-    val CompanyRegistrationNumber = {
+    val CompanyRegistrationNumber =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.company_registration_number.title")),
@@ -45,7 +46,6 @@ object CompanyRegistrationNumberHelper {
           Some(Messages("fh.company_registration_number.title"))
         )
       )
-    }
     Seq(CompanyRegistrationNumber)
   }
 

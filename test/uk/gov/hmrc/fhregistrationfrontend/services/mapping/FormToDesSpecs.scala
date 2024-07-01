@@ -61,14 +61,16 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-limited-company.json"),
           LtdLargeUk.verifiedEmail,
           LtdLargeUk.application(),
-          LtdLargeUk.declaration)
+          LtdLargeUk.declaration
+        )
 
       val amendedSubscription: Subscription =
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
           LtdLargeUkNew.verifiedEmail,
           LtdLargeUkNew.application(),
-          LtdLargeUkNew.declaration)
+          LtdLargeUkNew.declaration
+        )
 
       val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
 
@@ -80,7 +82,8 @@ class FormToDesSpecs extends UnitSpec {
             brd("business-registration-details-limited-company.json"),
             LtdLargeUkNew.verifiedEmail,
             LtdLargeUkNew.application(),
-            LtdLargeUkNew.declaration),
+            LtdLargeUkNew.declaration
+          ),
         Some(changeIndicators)
       )
 
@@ -93,14 +96,16 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-sole-trader.json"),
           SPLargeUk.verifiedEmail,
           SPLargeUk.application(),
-          SPLargeUk.declaration)
+          SPLargeUk.declaration
+        )
 
       val amendedSubscription: Subscription =
         service.soleProprietorCompanySubmission(
           brd("business-registration-details-sole-trader.json"),
           SPLargeUkNew.verifiedEmail,
           SPLargeUkNew.application(),
-          SPLargeUkNew.declaration)
+          SPLargeUkNew.declaration
+        )
 
       val changeIndicators = Diff.changeIndicators(originalSubscription, amendedSubscription)
 
@@ -112,7 +117,8 @@ class FormToDesSpecs extends UnitSpec {
             brd("business-registration-details-sole-trader.json"),
             SPLargeUkNew.verifiedEmail,
             SPLargeUkNew.application(),
-            SPLargeUkNew.declaration),
+            SPLargeUkNew.declaration
+          ),
         Some(changeIndicators)
       )
 
@@ -162,7 +168,8 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-limited-company.json"),
           LtdMinimum.verifiedEmail,
           LtdMinimum.application(),
-          LtdMinimum.declaration),
+          LtdMinimum.declaration
+        ),
         None
       )
 
@@ -212,7 +219,8 @@ class FormToDesSpecs extends UnitSpec {
         brd("business-registration-details-limited-company.json"),
         LtdLargeUk.verifiedEmail,
         LtdLargeUk.application(),
-        LtdLargeUk.declaration),
+        LtdLargeUk.declaration
+      ),
       None
     )
 
@@ -261,7 +269,8 @@ class FormToDesSpecs extends UnitSpec {
           brd("business-registration-details-sole-trader.json"),
           SPLargeUk.verifiedEmail,
           SPLargeUk.application(),
-          SPLargeUk.declaration),
+          SPLargeUk.declaration
+        ),
         None
       )
 

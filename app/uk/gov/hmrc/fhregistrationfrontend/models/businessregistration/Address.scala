@@ -25,7 +25,8 @@ case class Address(
   line3: Option[String] = None,
   line4: Option[String] = None,
   postcode: Option[String] = None,
-  country: String) {
+  country: String
+) {
 
   override def toString = {
     val line3display = line3.map(line3 => s"$line3, ").getOrElse("")

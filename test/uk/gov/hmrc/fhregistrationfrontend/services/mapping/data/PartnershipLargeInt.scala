@@ -45,7 +45,8 @@ object PartnershipLargeInt {
           None,
           "Bulgaria",
           "BG"
-        ))
+        )
+      )
     ),
     TradingName(true, Some("DodgyCo")),
     VatNumber(true, Some("123456789")),
@@ -93,7 +94,8 @@ object PartnershipLargeInt {
               Some("llp town"),
               "AA14 1AA",
               None,
-              None)
+              None
+            )
           )
         ) -> changeFlags,
         BusinessPartner(
@@ -146,8 +148,14 @@ object PartnershipLargeInt {
       true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> changeFlags,
-          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> changeFlags
+          StoragePremise(
+            Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
+            false
+          ) -> changeFlags,
+          StoragePremise(
+            Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
+            true
+          ) -> changeFlags
         ),
         List.empty,
         false
@@ -165,6 +173,7 @@ object PartnershipLargeInt {
       AlternativeEmail(
         "a@b.co",
         "a@b.co"
-      ))
+      )
+    )
   )
 }

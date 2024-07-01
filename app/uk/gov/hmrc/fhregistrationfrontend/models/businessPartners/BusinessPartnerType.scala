@@ -31,13 +31,12 @@ object BusinessPartnerType extends Enumeration {
   val partnerTypes: Seq[BusinessPartnerType.Value] =
     Seq(Individual, SoleProprietor, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody)
 
-  def options(implicit messages: Messages): Seq[RadioItem] = partnerTypes.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"fh.business_partners.entity_type.${Introspector.decapitalize(value.toString)}.label")),
-        value = Some(value.toString),
-        id = Some(s"value_$index")
-      )
+  def options(implicit messages: Messages): Seq[RadioItem] = partnerTypes.zipWithIndex.map { case (value, index) =>
+    RadioItem(
+      content = Text(messages(s"fh.business_partners.entity_type.${Introspector.decapitalize(value.toString)}.label")),
+      value = Some(value.toString),
+      id = Some(s"value_$index")
+    )
   }
 
   implicit val format: Format[BusinessPartnerType.Value] =

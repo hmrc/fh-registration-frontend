@@ -39,7 +39,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
-class DeclarationController @Inject()(
+class DeclarationController @Inject() (
   ds: CommonPlayDependencies,
   links: ExternalUrls,
   desToForm: DesToForm,
@@ -65,7 +65,9 @@ class DeclarationController @Inject()(
         declarationForm,
         Some(request.verifiedEmail),
         request.bpr,
-        summaryPageParams(request.journeyRequest.journeyType)))
+        summaryPageParams(request.journeyRequest.journeyType)
+      )
+    )
   }
 
   def showAcknowledgment() = userAction.async { implicit request =>
@@ -81,10 +83,10 @@ class DeclarationController @Inject()(
         journeyType = JourneyType withName journeyTypeString
         processingDate = new Date(timestamp.toLong)
         printableSummary <- userSummary
-      } yield {
-        Ok(views
-          .acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType)))
-      }
+      } yield Ok(
+        views
+          .acknowledgement_page(processingDate, email, Html(printableSummary), mode = modeForJourneyType(journeyType))
+      )
     }
 
   def submitForm() = summaryAction.async { implicit request =>
@@ -98,10 +100,12 @@ class DeclarationController @Inject()(
             newFormErrors,
             Some(request.verifiedEmail),
             request.bpr,
-            summaryPageParams(request.journeyRequest.journeyType)))
+            summaryPageParams(request.journeyRequest.journeyType)
+          )
+        )
 
       },
-      success = usersDeclaration => {
+      success = usersDeclaration =>
         sendSubscription(usersDeclaration).fold(
           error =>
             Future successful BadRequest(
@@ -109,29 +113,31 @@ class DeclarationController @Inject()(
                 form,
                 Some(request.verifiedEmail),
                 request.bpr,
-                summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false)))),
-          _.flatMap {
-            response =>
-              keyStoreService
-                .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
-                .map(_ => true)
-                .recover { case _ => false }
-                .map { pdfSaved =>
-                  Redirect(routes.DeclarationController.showAcknowledgment)
-                    .withSession(
-                      request.session
-                        + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)
-                        + (emailSessionKey               -> usersDeclaration.email)
-                        + (processingTimestampSessionKey -> response.processingDate.getTime.toString))
-                }
+                summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false))
+              )
+            ),
+          _.flatMap { response =>
+            keyStoreService
+              .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
+              .map(_ => true)
+              .recover { case _ => false }
+              .map { pdfSaved =>
+                Redirect(routes.DeclarationController.showAcknowledgment)
+                  .withSession(
+                    request.session
+                      + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)
+                      + (emailSessionKey               -> usersDeclaration.email)
+                      + (processingTimestampSessionKey -> response.processingDate.getTime.toString)
+                  )
+              }
           }
         )
-      }
     )
   }
 
-  private def sendSubscription(declaration: Declaration)(
-    implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  private def sendSubscription(
+    declaration: Declaration
+  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val submissionResult = request.journeyRequest.journeyType match {
       case JourneyType.Amendment => amendedSubmission(declaration)
       case JourneyType.Variation => amendedSubmission(declaration)
@@ -144,8 +150,9 @@ class DeclarationController @Inject()(
     }
   }
 
-  def createSubmission(declaration: Declaration)(
-    implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  def createSubmission(
+    declaration: Declaration
+  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val subscription = getSubscriptionForDes(formToDes, declaration, request.verifiedEmail, request)
     val payload = SubScriptionCreate(subscription)
 
@@ -157,8 +164,9 @@ class DeclarationController @Inject()(
     Right(fhddsConnector.createSubmission(request.bpr.safeId.get, request.registrationNumber, submissionRequest))
   }
 
-  def amendedSubmission(declaration: Declaration)(
-    implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  def amendedSubmission(
+    declaration: Declaration
+  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
@@ -196,7 +204,8 @@ class DeclarationController @Inject()(
     formToDes: FormToDes,
     d: Declaration,
     verifiedEmail: String,
-    pageDataLoader: PageDataLoader)(implicit request: SummaryRequest[_]) =
+    pageDataLoader: PageDataLoader
+  )(implicit request: SummaryRequest[_]) =
     request.businessType match {
       case BusinessType.CorporateBody =>
         formToDes limitedCompanySubmission (request.bpr, verifiedEmail, journeys ltdApplication pageDataLoader, d)

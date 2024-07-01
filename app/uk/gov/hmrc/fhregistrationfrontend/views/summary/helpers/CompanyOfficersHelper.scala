@@ -27,58 +27,56 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficerCompany, C
 
 object CompanyOfficersHelper {
 
-  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode, lastUpdateTimestamp: String)(
-    implicit messages: Messages) =
-    companyOfficers.values.zipWithIndex.flatMap {
-      case (companyOfficer, index) =>
-        val individualOrCompanyDetails = companyOfficer.identification match {
-          case individual: CompanyOfficerIndividual =>
-            CompanyOrIndividualHelper.createIndividual(individual)(messages: Messages)
+  def apply(companyOfficers: ListWithTrackedChanges[CompanyOfficer], mode: Mode, lastUpdateTimestamp: String)(implicit
+    messages: Messages
+  ) =
+    companyOfficers.values.zipWithIndex.flatMap { case (companyOfficer, index) =>
+      val individualOrCompanyDetails = companyOfficer.identification match {
+        case individual: CompanyOfficerIndividual =>
+          CompanyOrIndividualHelper.createIndividual(individual)(messages: Messages)
 
-          case company: CompanyOfficerCompany =>
-            CompanyOrIndividualHelper.createCompany(company)(messages: Messages)
+        case company: CompanyOfficerCompany =>
+          CompanyOrIndividualHelper.createCompany(company)(messages: Messages)
+      }
+
+      val isEditable = Mode isEditable mode
+
+      def getActions(index: Int) =
+        if (companyOfficers.values.size > 1) {
+          Seq(
+            ActionItem(
+              href = s"form/companyOfficers/$index/confirmDelete/$lastUpdateTimestamp",
+              content = Text("Remove"),
+              visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+            ),
+            ActionItem(
+              href = s"form/companyOfficers/$index",
+              content = Text("Change"),
+              visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+            )
+          )
+        } else {
+          Seq(
+            ActionItem(
+              href = s"form/companyOfficers/$index",
+              content = Text("Change"),
+              visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
+            )
+          )
         }
 
-        val isEditable = Mode isEditable mode
+      val officerLabel = Helpers.createSummaryRow(
+        SummaryRowParams(
+          Some(Messages("fh.company_officers.each.title", index + 1)),
+          None,
+          None,
+          GroupRow.Single
+        ),
+        summaryActions = if (isEditable) {
+          Some(Actions(items = getActions(index + 1)))
+        } else { None }
+      )
 
-        def getActions(index: Int) =
-          if (companyOfficers.values.size > 1) {
-            Seq(
-              ActionItem(
-                href = s"form/companyOfficers/$index/confirmDelete/$lastUpdateTimestamp",
-                content = Text("Remove"),
-                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
-              ),
-              ActionItem(
-                href = s"form/companyOfficers/$index",
-                content = Text("Change"),
-                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
-              )
-            )
-          } else {
-            Seq(
-              ActionItem(
-                href = s"form/companyOfficers/$index",
-                content = Text("Change"),
-                visuallyHiddenText = Some(messages("fh.company_officers.each.title", index))
-              )
-            )
-          }
-
-        val officerLabel = Helpers.createSummaryRow(
-          SummaryRowParams(
-            Some(Messages("fh.company_officers.each.title", {
-              index + 1
-            })),
-            None,
-            None,
-            GroupRow.Single
-          ),
-          summaryActions = if (isEditable) {
-            Some(Actions(items = getActions(index + 1)))
-          } else { None }
-        )
-
-        officerLabel +: individualOrCompanyDetails
+      officerLabel +: individualOrCompanyDetails
     }.toSeq
 }

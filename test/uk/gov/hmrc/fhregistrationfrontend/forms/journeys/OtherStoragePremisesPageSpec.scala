@@ -67,7 +67,8 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
 
         val page = OtherStoragePremisesPage(
           mainPage withData true,
-          repeatingPage withData (listWithPremises(2) copy (addMore = true)))
+          repeatingPage withData (listWithPremises(2) copy (addMore = true))
+        )
           .withSubsection(Some("2"))
 
         page.nextSubsection shouldBe Some("3")
@@ -81,7 +82,8 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
       "on main section" in {
         val page = OtherStoragePremisesPage(
           mainPage withData true,
-          repeatingPage withData (listWithPremises(2) copy (addMore = true)))
+          repeatingPage withData (listWithPremises(2) copy (addMore = true))
+        )
 
         page.previousSubsection shouldBe None
       }

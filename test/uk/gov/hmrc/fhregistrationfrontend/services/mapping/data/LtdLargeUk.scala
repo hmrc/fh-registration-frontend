@@ -35,7 +35,8 @@ object LtdLargeUk {
           "ZZ11 1ZZ",
           None,
           None
-        )),
+        )
+      ),
       Some(LocalDate.of(2015, 3, 20))
     ),
     ContactPerson(
@@ -66,7 +67,8 @@ object LtdLargeUk {
             None,
             None,
             "Company Secretary"
-          )) -> changeFlags,
+          )
+        ) -> changeFlags,
         CompanyOfficer(
           CompanyOfficerType.Individual,
           CompanyOfficerIndividual(
@@ -101,8 +103,14 @@ object LtdLargeUk {
       true,
       ListWithTrackedChanges(
         List(
-          StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> changeFlags,
-          StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> changeFlags
+          StoragePremise(
+            Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
+            false
+          ) -> changeFlags,
+          StoragePremise(
+            Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
+            true
+          ) -> changeFlags
         ),
         List.empty,
         false
@@ -120,6 +128,7 @@ object LtdLargeUk {
       AlternativeEmail(
         "a@b.co",
         "a@b.co"
-      ))
+      )
+    )
   )
 }

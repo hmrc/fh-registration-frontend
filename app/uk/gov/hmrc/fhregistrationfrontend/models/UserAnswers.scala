@@ -61,9 +61,8 @@ object UserAnswers {
 
     def writes(implicit encryption: Encryption): OWrites[UserAnswers] = new OWrites[UserAnswers] {
       override def writes(userAnswers: UserAnswers): JsObject = {
-        val encryptedValue: (String, Map[String, EncryptedValue], Instant) = {
+        val encryptedValue: (String, Map[String, EncryptedValue], Instant) =
           ModelEncryption.encryptUserAnswers(userAnswers)
-        }
         Json.obj(
           "id"          -> encryptedValue._1,
           "data"        -> encryptedValue._2,

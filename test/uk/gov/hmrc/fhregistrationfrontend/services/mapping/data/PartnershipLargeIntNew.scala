@@ -87,7 +87,8 @@ object PartnershipLargeIntNew {
                 Some("llp town"),
                 "AA14 1AA",
                 None,
-                None)
+                None
+              )
             )
           ) -> Updated,
           BusinessPartner(
@@ -130,7 +131,8 @@ object PartnershipLargeIntNew {
               None,
               Address("church one", None, None, Some("church town"), "AA17 1AA", None, None)
             )
-          )),
+          )
+        ),
         false
       ),
       BusinessStatus(true, Some(LocalDate.of(2018, 7, 30))),
@@ -140,9 +142,18 @@ object PartnershipLargeIntNew {
         true,
         ListWithTrackedChanges(
           List(
-            StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> ListWithTrackedChanges.Added,
-            StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.Updated,
-            StoragePremise(Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> ListWithTrackedChanges.NoChange
+            StoragePremise(
+              Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
+              false
+            ) -> ListWithTrackedChanges.Added,
+            StoragePremise(
+              Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
+              true
+            ) -> ListWithTrackedChanges.Updated,
+            StoragePremise(
+              Address("26 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None),
+              true
+            ) -> ListWithTrackedChanges.NoChange
           ),
           List(StoragePremise(Address("27 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)),
           false
@@ -159,6 +170,7 @@ object PartnershipLargeIntNew {
       AlternativeEmail(
         "a@b.co",
         "a@b.co"
-      ))
+      )
+    )
   )
 }

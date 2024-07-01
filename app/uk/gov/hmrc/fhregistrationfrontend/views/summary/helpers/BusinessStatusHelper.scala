@@ -41,7 +41,8 @@ object BusinessStatusHelper {
           Mode isEditable mode,
           "form/businessStatus",
           Text("Change"),
-          Some(Messages("fh.summary.startNewFulfilmentDate")))
+          Some(Messages("fh.summary.startNewFulfilmentDate"))
+        )
       )
 
     } else {
@@ -57,7 +58,8 @@ object BusinessStatusHelper {
           Mode isEditable mode,
           "form/businessStatus",
           Text("Change"),
-          Some(Messages("fh.summary.newFulfilmentBusiness")))
+          Some(Messages("fh.summary.newFulfilmentBusiness"))
+        )
       )
     }
     Seq(BusinessStatus)

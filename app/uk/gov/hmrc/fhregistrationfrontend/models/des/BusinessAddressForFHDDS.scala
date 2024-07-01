@@ -28,7 +28,8 @@ object PreviousOperationalAddressDetail extends DateTimeFormat {
 
 case class PreviousOperationalAddress(
   anyPreviousOperatingAddress: Boolean,
-  previousOperationalAddressDetail: Option[List[PreviousOperationalAddressDetail]])
+  previousOperationalAddressDetail: Option[List[PreviousOperationalAddressDetail]]
+)
 
 object PreviousOperationalAddress {
   implicit val format: OFormat[PreviousOperationalAddress] = Json.format[PreviousOperationalAddress]
@@ -38,7 +39,8 @@ case class BusinessAddressForFHDDS(
   currentAddress: Address,
   commonDetails: CommonDetails,
   timeOperatedAtCurrentAddress: String,
-  previousOperationalAddress: Option[PreviousOperationalAddress])
+  previousOperationalAddress: Option[PreviousOperationalAddress]
+)
 
 object BusinessAddressForFHDDS {
   implicit val format: OFormat[BusinessAddressForFHDDS] = Json.format[BusinessAddressForFHDDS]

@@ -46,7 +46,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
       val action = controller.addressLookup("AA1 1AA", None)
 
       when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
-        AddressLookupErrorResponse(new BadRequestException("unkown")))
+        AddressLookupErrorResponse(new BadRequestException("unkown"))
+      )
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_REQUEST
@@ -56,7 +57,8 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
       val action = controller.addressLookup("AA1 1AA", None)
 
       when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
-        AddressLookupErrorResponse(new IOException()))
+        AddressLookupErrorResponse(new IOException())
+      )
 
       val result = action.apply(FakeRequest())
       status(result) shouldBe BAD_GATEWAY
@@ -70,13 +72,15 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
             "id1",
             123342,
             Address(Seq("Line1", "Line2"), Some("town"), "AA1 1AA", Country("GB", "Great Britain")),
-            "en")
+            "en"
+          )
         )
       )
       val action = controller.addressLookup("AA1 1AA", None)
 
       when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
-        AddressLookupSuccessResponse(response))
+        AddressLookupSuccessResponse(response)
+      )
 
       val result = action.apply(FakeRequest())
 

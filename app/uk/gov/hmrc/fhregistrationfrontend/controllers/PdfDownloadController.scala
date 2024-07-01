@@ -24,7 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
 import scala.concurrent.ExecutionContext
 
 @Inject
-class PdfDownloadController @Inject()(
+class PdfDownloadController @Inject() (
   ds: CommonPlayDependencies,
   keyStoreService: KeyStoreService,
   cc: MessagesControllerComponents,

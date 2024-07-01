@@ -34,8 +34,9 @@ import play.api.Logging
 trait AddressAuditService extends Logging {
   def auditAddresses(page: String, addresses: List[Address])(implicit headerCarrier: HeaderCarrier): Future[Any]
 
-  def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(
-    implicit headerCarrier: HeaderCarrier): Future[Any]
+  def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Any]
 }
 
 object AddressAuditService {
@@ -48,38 +49,41 @@ object AddressAuditService {
 private case class AddressAuditData(auditType: String, details: Seq[(String, String)])
 
 @Singleton
-class DefaultAddressAuditService @Inject()(
+class DefaultAddressAuditService @Inject() (
   addressLookupConnector: AddressLookupConnector,
   auditConnector: AuditConnector
 )(implicit ec: ExecutionContext)
     extends AddressAuditService {
 
-  override def auditAddresses(page: String, addresses: List[Address])(
-    implicit headerCarrier: HeaderCarrier): Future[Any] = {
+  override def auditAddresses(page: String, addresses: List[Address])(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Any] = {
     if (!addresses.isEmpty)
       logger info s"Auditing ${addresses.size} addresses for $page"
     val auditResults = addresses map { address =>
       addressAuditData(address)
         .flatMap(sendAuditEvent(s"/fhdds/form/$page", _))
-        .recover({ case t => AuditResult.Failure("failed to generate the event", Some(t)) })
+        .recover { case t => AuditResult.Failure("failed to generate the event", Some(t)) }
     }
 
     Future sequence auditResults
   }
 
-  override def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(
-    implicit headerCarrier: HeaderCarrier): Future[Any] = {
+  override def auditAddressesFromRecordSet(path: String, recordSet: RecordSet)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Any] = {
     val auditResults = recordSet.addresses.map { addressRecord =>
       val address = addressRecordToAddress(addressRecord)
       postcodeAddress(addressRecord.id, address)
         .flatMap(sendAuditEvent(path, _))
-        .recover({ case t => AuditResult.Failure("failed to generate the event", Some(t)) })
+        .recover { case t => AuditResult.Failure("failed to generate the event", Some(t)) }
     }
     Future sequence auditResults
   }
 
-  private def sendAuditEvent(path: String, addressAuditData: AddressAuditData)(
-    implicit headerCarrier: HeaderCarrier) = {
+  private def sendAuditEvent(path: String, addressAuditData: AddressAuditData)(implicit
+    headerCarrier: HeaderCarrier
+  ) = {
     val event = DataEvent(
       AddressAuditService.AuditSource,
       addressAuditData.auditType,
@@ -96,8 +100,9 @@ class DefaultAddressAuditService @Inject()(
       case Some(id) => postcodeAddress(id, address)
     }
 
-  private def postcodeAddress(id: String, address: Address)(
-    implicit headerCarrier: HeaderCarrier): Future[AddressAuditData] =
+  private def postcodeAddress(id: String, address: Address)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[AddressAuditData] =
     addressLookupConnector lookupById id map {
       case Some(originalAddressRecord) =>
         val originalAddress = addressRecordToAddress(originalAddressRecord)
@@ -128,10 +133,14 @@ class DefaultAddressAuditService @Inject()(
   private def postcodeAddressModifiedSubmitted(
     address: Address,
     originalAddress: Address,
-    originalUprn: String): AddressAuditData =
+    originalUprn: String
+  ): AddressAuditData =
     AddressAuditData(
       AddressAuditService.AuditTypePostcodeAddressModifiedSubmitted,
-      addressDetails("submitted", address) ++ addressDetails("original", originalAddress) :+ ("originalUPRN" -> originalUprn)
+      addressDetails("submitted", address) ++ addressDetails(
+        "original",
+        originalAddress
+      ) :+ ("originalUPRN" -> originalUprn)
     )
 
   private def addressDetails(prefix: String, address: Address) =

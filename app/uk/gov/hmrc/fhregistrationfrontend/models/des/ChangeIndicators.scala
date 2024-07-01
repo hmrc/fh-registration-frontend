@@ -28,7 +28,8 @@ case class ChangeIndicators(
   coOfficialsChanged: Boolean,
   additionalBusinessInfoChanged: Boolean,
   premisesChanged: Boolean,
-  declarationChanged: Boolean)
+  declarationChanged: Boolean
+)
 
 object ChangeIndicators {
   implicit val formatter: OFormat[ChangeIndicators] = Json.format[ChangeIndicators]

@@ -6,18 +6,17 @@ import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.KeyStoreStub
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class DeclarationControllerIntegrationSpec
-  extends Specifications with TestConfiguration {
+class DeclarationControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "DeclarationController" should {
 
     "Show the declaration page when the user has fulfilled all the pages" in {
 
-      given
-        .summaryPrecondition
+      given.summaryPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/declaration")
+        val result = client
+          .url(s"$baseUrl/declaration")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -29,23 +28,23 @@ class DeclarationControllerIntegrationSpec
     }
 
     "Post the declaration form" in {
-      given
-        .summaryPrecondition
-        .fhddsBackend.createSubscription()
+      given.summaryPrecondition.fhddsBackend.createSubscription()
 
       WsTestClient.withClient { client =>
         val result =
-          client.url(s"$baseUrl/submit")
+          client
+            .url(s"$baseUrl/submit")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-
-            .withHttpHeaders("X-Session-ID" -> "some-id",
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders("X-Session-ID" -> "some-id", "Csrf-Token" -> "nocheck")
             .withFollowRedirects(false)
-            .post(Map("fullName" -> Seq("Tester"),
-              "jobTitle" -> Seq("Dev"),
-              "usingDefaultEmail" -> Seq("true"),
-              "defaultEmail" -> Seq("user@test.com")
-            ))
+            .post(
+              Map(
+                "fullName"          -> Seq("Tester"),
+                "jobTitle"          -> Seq("Dev"),
+                "usingDefaultEmail" -> Seq("true"),
+                "defaultEmail"      -> Seq("user@test.com")
+              )
+            )
 
         whenReady(result) { res =>
           res.status mustBe 303

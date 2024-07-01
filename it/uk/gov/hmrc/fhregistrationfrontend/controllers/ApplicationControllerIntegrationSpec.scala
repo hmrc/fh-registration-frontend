@@ -5,57 +5,68 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class ApplicationControllerIntegrationSpec
-  extends Specifications with TestConfiguration {
+class ApplicationControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "Application" should {
 
     "be reachable" in {
-      given
-        .audit.writesAuditOrMerged()
+      given.audit.writesAuditOrMerged()
 
       WsTestClient.withClient { client =>
-        whenReady(client.url(s"http://localhost:$port/ping/ping")
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) {result =>
+        whenReady(
+          client
+            .url(s"http://localhost:$port/ping/ping")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+        ) { result =>
           result.status mustBe 200
         }
       }
     }
 
     "redirects to the login page if the user is not logged in" in {
-      given
-        .audit.writesAuditOrMerged()
-        .user.isNotAuthorised()
+      given.audit.writesAuditOrMerged().user.isNotAuthorised()
 
       WsTestClient.withClient { client =>
-        whenReady(client.url(s"$baseUrl").withFollowRedirects(false)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()) { res =>
+        whenReady(
+          client
+            .url(s"$baseUrl")
+            .withFollowRedirects(false)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+        ) { res =>
           res.status mustBe 303
-          res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9553/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
+          res
+            .header(HeaderNames.LOCATION)
+            .get mustBe "http://localhost:9553/bas-gateway/sign-in?continue_url=http%3A%2F%2Flocalhost%3A1118%2Ffhdds&origin=fh-registration-frontend"
         }
       }
     }
 
     "redirect to the verification of main business address if logged in" in {
-      given
-        .audit.writesAuditOrMerged()
-        .user.isAuthorised()
-        .fhddsBackend.hasNoEnrolmentProgress()
+      given.audit.writesAuditOrMerged().user.isAuthorised().fhddsBackend.hasNoEnrolmentProgress()
 
       WsTestClient.withClient { client =>
-        whenReady(client.url(s"$baseUrl").withFollowRedirects(false)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) { res =>
+        whenReady(
+          client
+            .url(s"$baseUrl")
+            .withFollowRedirects(false)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+        ) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "/fhdds/start"
         }
       }
 
       WsTestClient.withClient { client =>
-        whenReady(client.url(s"$baseUrl/start").withFollowRedirects(false)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-          .get()) { res =>
+        whenReady(
+          client
+            .url(s"$baseUrl/start")
+            .withFollowRedirects(false)
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
+        ) { res =>
           res.status mustBe 303
           res.header(HeaderNames.LOCATION).get mustBe "http://localhost:9923/business-customer/FHDDS"
         }
@@ -64,12 +75,14 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to business type page when the user has a correct BPR and the user is new" in {
 
-      given
-          .commonPrecondition
+      given.commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
-          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+        val result = client
+          .url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
+          .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+          .get()
 
         whenReady(result) { res =>
           res.status mustBe 303
@@ -80,11 +93,12 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to forbidden page when the user is assistant" in {
 
-      given
-        .commonPreconditionAssist
+      given.commonPreconditionAssist
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
+        val result = client
+          .url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -97,11 +111,12 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to bad request page when the user is not admin/user or assistant" in {
 
-      given
-        .commonPreconditionNoRole
+      given.commonPreconditionNoRole
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/continue").withFollowRedirects(false)
+        val result = client
+          .url(s"$baseUrl/continue")
+          .withFollowRedirects(false)
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 

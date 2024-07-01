@@ -28,13 +28,14 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
-class EmailVerificationController @Inject()(
+class EmailVerificationController @Inject() (
   ds: CommonPlayDependencies,
   actions: Actions,
   cc: MessagesControllerComponents,
   emailVerificationConnector: EmailVerificationConnector,
   save4LaterService: Save4LaterService,
-  views: Views)(implicit ec: ExecutionContext)
+  views: Views
+)(implicit ec: ExecutionContext)
     extends AppController(ds, cc) {
   import actions._
 
@@ -58,7 +59,8 @@ class EmailVerificationController @Inject()(
     emailVerificationForm.bindFromRequest() fold (
       formWithErrors =>
         Future.successful(
-          BadRequest(views.email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))),
+          BadRequest(views.email_options(formWithErrors, forced, request.candidateEmail, Navigation.noNavigation))
+        ),
       emailOptions => handleContactEmail(emailOptions)
     )
 
@@ -140,9 +142,7 @@ class EmailVerificationController @Inject()(
         for {
           _ <- save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
           _ <- save4LaterService deletePendingEmail request.userId
-        } yield {
-          Redirect(routes.EmailVerificationController.emailVerified)
-        }
+        } yield Redirect(routes.EmailVerificationController.emailVerified)
       case Some(pendingEmail) =>
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Future successful Ok(views.email_pending_verification(form, Navigation.noNavigation, None))

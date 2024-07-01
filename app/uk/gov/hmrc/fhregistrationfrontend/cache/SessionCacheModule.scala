@@ -31,7 +31,7 @@ class SessionCacheModule extends Module {
 }
 
 @Singleton
-class DefaultSessionCache @Inject()(
+class DefaultSessionCache @Inject() (
   override val http: HttpClient,
   val configuration: Configuration,
   environment: Environment
@@ -45,5 +45,6 @@ class DefaultSessionCache @Inject()(
   override lazy val baseUri = baseUrl("cachable.session-cache")
   override lazy val domain = getConfString(
     "cachable.session-cache.domain",
-    throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
+    throw new Exception(s"Could not find config 'cachable.session-cache.domain'")
+  )
 }

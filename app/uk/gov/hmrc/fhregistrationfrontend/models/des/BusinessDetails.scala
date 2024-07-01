@@ -57,7 +57,8 @@ object IncorporationDetails extends DateTimeFormat {
 
 case class LimitedLiabilityPartnershipCorporateBody(
   groupRepresentativeJoinDate: Option[LocalDate],
-  incorporationDetails: IncorporationDetails)
+  incorporationDetails: IncorporationDetails
+)
 
 object LimitedLiabilityPartnershipCorporateBody extends DateTimeFormat {
 

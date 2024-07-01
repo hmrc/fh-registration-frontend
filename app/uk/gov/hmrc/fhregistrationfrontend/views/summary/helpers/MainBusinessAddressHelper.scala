@@ -42,7 +42,8 @@ object MainBusinessAddressHelper {
             Text("Change"),
             Some(messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
           )
-        ))
+        )
+      )
 
     val addressLessThanThreeYears = {
       val hasPreviousAddress = mainBusinessAddressForm.hasPreviousAddress

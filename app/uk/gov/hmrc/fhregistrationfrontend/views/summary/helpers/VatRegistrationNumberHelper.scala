@@ -41,7 +41,8 @@ object VatRegistrationNumberHelper {
             Mode isEditable mode,
             "form/vatNumber",
             Text("Change"),
-            Some(Messages("fh.vatNumber.label")))
+            Some(Messages("fh.vatNumber.label"))
+          )
         )
       } else {
         Helpers.createSummaryRow(
@@ -56,7 +57,8 @@ object VatRegistrationNumberHelper {
               Mode isEditable mode,
               "form/vatNumber",
               Text("Change"),
-              Some(Messages("fh.summary.HasVat")))
+              Some(Messages("fh.summary.HasVat"))
+            )
         )
       }
 

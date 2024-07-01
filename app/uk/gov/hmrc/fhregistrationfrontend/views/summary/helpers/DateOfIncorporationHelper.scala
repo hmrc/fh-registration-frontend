@@ -28,7 +28,7 @@ object DateOfIncorporationHelper {
 
   def apply(dateOfIncorporationForm: DateOfIncorporation, mode: Mode)(implicit messages: Messages) = {
 
-    val DateOfIncorporation = {
+    val DateOfIncorporation =
       Helpers.createSummaryRow(
         SummaryRowParams.ofDate(
           Some(Messages("fh.date_of_incorporation.title")),
@@ -43,7 +43,6 @@ object DateOfIncorporationHelper {
           Some(Messages("fh.date_of_incorporation.title"))
         )
       )
-    }
     Seq(DateOfIncorporation)
   }
 }

@@ -54,9 +54,7 @@ object ListWithTrackedChanges {
           values  <- (json \ "valuesWithStatus").validate[List[(T, Status)]]
           deleted <- (json \ "deleted").validate[List[T]]
           addMore <- (json \ "addMore").validateOpt[Boolean].map(_ getOrElse false)
-        } yield {
-          ListWithTrackedChanges(values, deleted, addMore)
-        }
+        } yield ListWithTrackedChanges(values, deleted, addMore)
     }
 
   implicit def listWithTrackedChangesFormat[T](implicit format: Format[T]): Format[ListWithTrackedChanges[T]] =

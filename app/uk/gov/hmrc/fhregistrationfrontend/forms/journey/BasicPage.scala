@@ -55,22 +55,26 @@ case class BasicPage[T](
     }
   }
 
-  override def render(
-    bpr: BusinessRegistrationDetails,
-    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+    request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig
+  ): Html = {
     val filledForm = data map (form fill _) getOrElse form
     rendering.render(filledForm, bpr, navigation)
   }
 
   private def errorRenderer(form: Form[T]) = new Rendering {
-    override def render(
-      bpr: BusinessRegistrationDetails,
-      navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+      request: Request[_],
+      messages: Messages,
+      appConfig: AppConfig
+    ): Html =
       rendering.render(form, bpr, navigation)
   }
 
-  override val withSubsection: PartialFunction[Option[String], Page[T]] = {
-    case None => this
+  override val withSubsection: PartialFunction[Option[String], Page[T]] = { case None =>
+    this
   }
 
   override def delete: Option[Page[T]] = None

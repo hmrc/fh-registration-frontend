@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBindi
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FormPageController @Inject()(
+class FormPageController @Inject() (
   ds: CommonPlayDependencies,
   addressAuditService: AddressAuditService,
   cc: MessagesControllerComponents,
@@ -116,7 +116,7 @@ class FormPageController @Inject()(
 
   val submitButtonValueForm: Form[String] = Form("saveAction" -> nonEmptyText)
 
-  /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater'*/
+  /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater' */
   private def isSaveForLate(implicit req: Request[_]): Boolean =
     submitButtonValueForm
       .bindFromRequest()

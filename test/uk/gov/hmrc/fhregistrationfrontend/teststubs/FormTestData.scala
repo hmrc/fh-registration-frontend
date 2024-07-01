@@ -64,7 +64,8 @@ object FormTestData {
           None,
           None,
           "Company Secretary"
-        )) -> Added,
+        )
+      ) -> Added,
       CompanyOfficer(
         CompanyOfficerType.Individual,
         CompanyOfficerIndividual(
@@ -99,8 +100,11 @@ object FormTestData {
     true,
     ListWithTrackedChanges(
       List(
-        StoragePremise(Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None), false) -> Added,
-        StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true)    -> Added
+        StoragePremise(
+          Address("1 Some High Street", None, None, Some("Sometown"), "Z99 2YY", None, None),
+          false
+        )                                                                                                      -> Added,
+        StoragePremise(Address("25 Testing Close", None, None, Some("Othertown"), "Z9 3WW", None, None), true) -> Added
       ),
       List.empty,
       false
@@ -151,7 +155,8 @@ object FormTestData {
             Some("llp town"),
             "AA14 1AA",
             None,
-            None)
+            None
+          )
         )
       ) -> Added,
       BusinessPartner(

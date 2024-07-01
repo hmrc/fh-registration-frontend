@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.Future
 
 @Singleton
-class BusinessCustomerFrontendConnector @Inject()(
+class BusinessCustomerFrontendConnector @Inject() (
   val http: HttpClient,
   val configuration: Configuration,
   environment: Environment,

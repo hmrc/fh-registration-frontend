@@ -79,9 +79,7 @@ object CustomFormatters {
               .allCatch[E#Value]
               .either(`enum`.withName(s))
               .left
-              .map(e => {
-                Seq(FormError(key, "error.invalid", args))
-              })
+              .map(e => Seq(FormError(key, "error.invalid", args)))
         }
 
       def unbind(key: String, value: E#Value) = Map(key -> value.toString)
