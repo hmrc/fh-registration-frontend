@@ -168,7 +168,7 @@ object Page {
       }
     )
 
-    val vatNumberPage = new BasicPage[VatNumber](
+    val vatNumberBasicPage = new BasicPage[VatNumber](
       "vatNumber",
       VatNumberForm.vatNumberForm,
       new FormRendering[VatNumber] {
@@ -181,6 +181,10 @@ object Page {
             navigation,
             uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
       }
+    )
+
+    val vatNumberPage = VatNumberPage(
+      vatNumberBasicPage
     )
 
     val businessPartnersPage = new RepeatingPage[BusinessPartner](
