@@ -22,6 +22,7 @@ import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
@@ -51,14 +52,14 @@ class FormPageController @Inject()(
   def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
   def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
 
-  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async {
-    implicit request =>
+  def saveVatNumber(): Action[AnyContent] =
+    pageAction("vatNumber", None).async { implicit request =>
       request
-        .page[T]
+        .page[VatNumber]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-            addressAuditService.auditAddresses(pageId, page.updatedAddresses)
+            addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
             save4LaterService
               .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
               .map { _ =>
@@ -70,7 +71,33 @@ class FormPageController @Inject()(
               }
           }
         )
-  }
+    }
+
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
+    if (pageId == "vatNumber") {
+      saveVatNumber()
+    } else {
+
+      pageAction(pageId, sectionId).async { implicit request =>
+        request
+          .page[T]
+          .parseFromRequest(
+            pageWithErrors => Future successful renderForm(pageWithErrors, true),
+            page => {
+              addressAuditService.auditAddresses(pageId, page.updatedAddresses)
+              save4LaterService
+                .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+                .map { _ =>
+                  if (isSaveForLate)
+                    Redirect(routes.Application.savedForLater)
+                  else {
+                    showNextPage(page)
+                  }
+                }
+            }
+          )
+      }
+    }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request =>

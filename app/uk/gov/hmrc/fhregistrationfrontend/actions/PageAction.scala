@@ -35,6 +35,10 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   val journeyState = request.journeyState
   def lastUpdateTimestamp = request.lastUpdateTimestamp
   def bpr = request.bpr
+
+//  TODO: BELOW IS INITIAL METHOD COPIED FROM SUMMARY ACTION - WILL HAVE TO USE TO GET CURRENTLY USED VAT NUMBERS
+  def pageDataOpt[T](page: Page[T]): Option[T] =
+    request.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
 }
 
 //TODO all exceptional results need to be reviewed
