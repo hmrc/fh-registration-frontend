@@ -54,40 +54,47 @@ class FormPageController @Inject()(
 
   def saveVatNumber(): Action[AnyContent] =
     pageAction("vatNumber", None).async { implicit request =>
-      val usedVatNumber = request.vatReg()
-      val usedCompanyOfficers = request.companyOfficers()
-      val usedBusinessPartners = request.businessPartners()
-      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
-        _ match {
-          case co: CompanyOfficerCompany => co.vat
-          case co: CompanyOfficerIndividual => None
-        })
-      val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners.flatMap(
-        _ match {
-          case i: BusinessPartnerIndividual => None
-          case s: BusinessPartnerSoleProprietor => s.vat
-          case p: BusinessPartnerPartnership => p.vat
-          case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
-          case c: BusinessPartnerCorporateBody => c.vat
-          case u: BusinessPartnerUnincorporatedBody => u.vat
-        })
-      val disallowedVatNumbers = usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+//      val usedVatNumber = request.vatReg()
+//      val usedCompanyOfficers = request.companyOfficers()
+//      val usedBusinessPartners = request.businessPartners()
+//      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
+//        _ match {
+//          case co: CompanyOfficerCompany => co.vat
+//          case co: CompanyOfficerIndividual => None
+//        })
+//      val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners.flatMap(
+//        _ match {
+//          case i: BusinessPartnerIndividual => None
+//          case s: BusinessPartnerSoleProprietor => s.vat
+//          case p: BusinessPartnerPartnership => p.vat
+//          case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+//          case c: BusinessPartnerCorporateBody => c.vat
+//          case u: BusinessPartnerUnincorporatedBody => u.vat
+//        })
+//      val disallowedVatNumbers = usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+      val disallowedVatNumbers = List("GB123456789")
       request
         .page[VatNumber]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-//            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED
-            addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
-            save4LaterService
-              .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-              .map { _ =>
-                if (isSaveForLate)
-                  Redirect(routes.Application.savedForLater)
-                else {
-                  showNextPage(page)
+//            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
+            if (disallowedVatNumbers.contains(page.data.get.value.get)) {
+//              FIGURE OUT HOW TO WRITE PAGE
+              val pageWithErrors = page
+              Future successful renderForm(pageWithErrors, true)
+            } else {
+              addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
+              save4LaterService
+                .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+                .map { _ =>
+                  if (isSaveForLate)
+                    Redirect(routes.Application.savedForLater)
+                  else {
+                    showNextPage(page)
+                  }
                 }
-              }
+            }
           }
         )
     }
