@@ -22,7 +22,7 @@ import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
@@ -54,11 +54,30 @@ class FormPageController @Inject()(
 
   def saveVatNumber(): Action[AnyContent] =
     pageAction("vatNumber", None).async { implicit request =>
+      val usedVatNumber = request.vatReg()
+      val usedCompanyOfficers = request.companyOfficers()
+      val usedBusinessPartners = request.businessPartners()
+      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
+        _ match {
+          case co: CompanyOfficerCompany => co.vat
+          case co: CompanyOfficerIndividual => None
+        })
+      val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners.flatMap(
+        _ match {
+          case i: BusinessPartnerIndividual => None
+          case s: BusinessPartnerSoleProprietor => s.vat
+          case p: BusinessPartnerPartnership => p.vat
+          case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+          case c: BusinessPartnerCorporateBody => c.vat
+          case u: BusinessPartnerUnincorporatedBody => u.vat
+        })
+      val disallowedVatNumbers = usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
       request
         .page[VatNumber]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
+//            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED
             addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
             save4LaterService
               .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
