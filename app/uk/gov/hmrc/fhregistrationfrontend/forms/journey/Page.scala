@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 import javax.inject.Inject
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
@@ -32,9 +32,10 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 trait Rendering extends Logging {
-  def render(
-    bpr: BusinessRegistrationDetails,
-    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
+  def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
+    implicit request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig): Html
 }
 
 trait FormRendering[T] {
@@ -168,23 +169,46 @@ object Page {
       }
     )
 
-    val vatNumberBasicPage = new BasicPage[VatNumber](
+//    val vatNumberBasicPage = new BasicPage[VatNumber](
+//      "vatNumber",
+//      VatNumberForm.vatNumberForm,
+//      new FormRendering[VatNumber] {
+//        override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+//          implicit request: Request[_],
+//          messages: Messages,
+//          appConfig: AppConfig): Html = {
+//          val blah = form
+//          println(blah)
+//          println("gfdgdg")
+//          views.vat_registration(
+//            form,
+//            navigation,
+//            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
+//        }
+//      }
+//    )
+//
+//    val vatNumberPage = VatNumberPage(
+//      vatNumberBasicPage
+//    )
+
+    val vatNumberPage = new BasicPage[VatNumber](
       "vatNumber",
       VatNumberForm.vatNumberForm,
       new FormRendering[VatNumber] {
         override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
           implicit request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig): Html = {
+          val blah = form
+          println(blah)
+          println("gfdgdg")
           views.vat_registration(
             form,
             navigation,
             uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
+        }
       }
-    )
-
-    val vatNumberPage = VatNumberPage(
-      vatNumberBasicPage
     )
 
     val businessPartnersPage = new RepeatingPage[BusinessPartner](

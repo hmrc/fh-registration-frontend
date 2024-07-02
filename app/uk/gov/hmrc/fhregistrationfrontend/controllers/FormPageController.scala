@@ -17,12 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
+import play.api.i18n.Messages
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
+import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, FormRendering, Page, Rendering, VatNumberPage}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
@@ -76,13 +82,43 @@ class FormPageController @Inject()(
       request
         .page[VatNumber]
         .parseFromRequest(
-          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          pageWithErrors => {
+            val blah = pageWithErrors
+            println(blah)
+            println("GFGDGD")
+            Future successful renderForm(pageWithErrors, true)
+          },
           page => {
 //            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
             if (disallowedVatNumbers.contains(page.data.get.value.get)) {
 //              FIGURE OUT HOW TO WRITE PAGE
-              val pageWithErrors = page
-              Future successful renderForm(pageWithErrors, true)
+              val vatNumberBasicPage = new BasicPage[VatNumber](
+                "vatNumber",
+                VatNumberForm.vatNumberForm,
+                new FormRendering[VatNumber] {
+                  override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+                    implicit request: Request[_],
+                    messages: Messages,
+                    appConfig: AppConfig): Html = {
+                    val blah = form
+                    println(blah)
+                    println("gfdgdg")
+                    views.vat_registration(
+                      form,
+                      navigation,
+                      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+                        .save("vatNumber"))(request, request2Messages(request))
+                  }
+                }
+              )
+              val formError = FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())
+              Future successful BadRequest(
+                vatNumberBasicPage.render(
+                  request.bpr,
+                  request.journey.navigation(request.lastUpdateTimestamp, request.page),
+                  Option(formError))(request, request2Messages(request), appConfig))
+              //              val newPage = VatNumberPage(page)
+//              Future successful BadRequest(newPage.renderWithFormError(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page), formError))
             } else {
               addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
               save4LaterService

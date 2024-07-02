@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
@@ -123,9 +124,10 @@ case class ImportingActivitiesPage(
   private def isMainSection = section.isEmpty || (section == mainSection)
   private def hasEori = mainPage.data contains true
 
-  override def render(
-    bpr: BusinessRegistrationDetails,
-    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
+    implicit request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig): Html =
     section match {
       case Some("enterEORI")                            => eoriNumberPage.render(bpr, navigation)
       case Some("importingGoodsNotBelongingToBusiness") => goodsPage.render(bpr, navigation)

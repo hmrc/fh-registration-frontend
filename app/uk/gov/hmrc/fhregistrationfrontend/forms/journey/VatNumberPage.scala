@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -35,6 +37,8 @@ case class VatNumberPage(
   override val format: Format[VatNumber] = VatNumber.format
 
   val mainSection = Some("any")
+
+//  TODO: REFORM BASIC PAGE FROM PAGE COPYING OVER FROM PAGE.SCALA and HAVE NEW RENDER FUNCTION
 
   override def withData(data: VatNumber): Page[VatNumber] =
     this copy (mainPage = mainPage withData data)
@@ -59,9 +63,10 @@ case class VatNumberPage(
   override def previousSubsection: Option[String] = None
   override def lastSection: Option[String] = None
 
-  override def render(
-    bpr: BusinessRegistrationDetails,
-    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
+    implicit request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig): Html =
     section match {
       case _ => mainPage.render(bpr, navigation)
     }
