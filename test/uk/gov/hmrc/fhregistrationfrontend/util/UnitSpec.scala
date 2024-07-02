@@ -20,8 +20,8 @@ import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page, VatNumberPage}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress, TradingName, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, Journeys, Page}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson, MainBusinessAddress, TradingName}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import scala.concurrent.ExecutionContext
@@ -38,7 +38,6 @@ trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues with Guic
   lazy val contactPersonPage: Page[ContactPerson] = page.contactPersonPage
   lazy val tradingNamePage: BasicPage[TradingName] = page.tradingNamePage
   lazy val businessPartnersPage = page.businessPartnersPage
-//  lazy val vatNumberPage: VatNumberPage = page.vatNumberPage
   lazy val vatNumberPage = page.vatNumberPage
   lazy val companyRegistrationNumberPage = page.companyRegistrationNumberPage
   lazy val dateOfIncorporationPage = page.dateOfIncorporationPage

@@ -82,12 +82,7 @@ class FormPageController @Inject()(
       request
         .page[VatNumber]
         .parseFromRequest(
-          pageWithErrors => {
-            val blah = pageWithErrors
-            println(blah)
-            println("GFGDGD")
-            Future successful renderForm(pageWithErrors, true)
-          },
+          pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
 //            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
             if (disallowedVatNumbers.contains(page.data.get.value.get)) {
@@ -100,9 +95,6 @@ class FormPageController @Inject()(
                     implicit request: Request[_],
                     messages: Messages,
                     appConfig: AppConfig): Html = {
-                    val blah = form
-                    println(blah)
-                    println("gfdgdg")
                     views.vat_registration(
                       form,
                       navigation,
@@ -117,8 +109,6 @@ class FormPageController @Inject()(
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page),
                   Option(formError))(request, request2Messages(request), appConfig))
-              //              val newPage = VatNumberPage(page)
-//              Future successful BadRequest(newPage.renderWithFormError(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page), formError))
             } else {
               addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
               save4LaterService

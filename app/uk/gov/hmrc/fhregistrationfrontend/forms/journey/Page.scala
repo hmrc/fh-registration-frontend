@@ -169,29 +169,6 @@ object Page {
       }
     )
 
-//    val vatNumberBasicPage = new BasicPage[VatNumber](
-//      "vatNumber",
-//      VatNumberForm.vatNumberForm,
-//      new FormRendering[VatNumber] {
-//        override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-//          implicit request: Request[_],
-//          messages: Messages,
-//          appConfig: AppConfig): Html = {
-//          val blah = form
-//          println(blah)
-//          println("gfdgdg")
-//          views.vat_registration(
-//            form,
-//            navigation,
-//            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
-//        }
-//      }
-//    )
-//
-//    val vatNumberPage = VatNumberPage(
-//      vatNumberBasicPage
-//    )
-
     val vatNumberPage = new BasicPage[VatNumber](
       "vatNumber",
       VatNumberForm.vatNumberForm,
@@ -200,9 +177,6 @@ object Page {
           implicit request: Request[_],
           messages: Messages,
           appConfig: AppConfig): Html = {
-          val blah = form
-          println(blah)
-          println("gfdgdg")
           views.vat_registration(
             form,
             navigation,
