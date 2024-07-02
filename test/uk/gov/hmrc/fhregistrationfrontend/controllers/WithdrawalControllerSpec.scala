@@ -188,6 +188,7 @@ class WithdrawalControllerSpec
     when(mockKeyStoreService.saveWithdrawalReason(any())(any())) thenReturn Future.successful(())
 
   def setupKeyStoreWithdrawalReason(
-    reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))): Unit =
+    reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))
+  ): Unit =
     when(mockKeyStoreService.fetchWithdrawalReason()(any())) thenReturn Future.successful(reason)
 }

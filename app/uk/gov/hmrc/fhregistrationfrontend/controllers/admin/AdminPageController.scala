@@ -34,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AdminPageController @Inject()(
+class AdminPageController @Inject() (
   frontendAppConfig: FrontendAppConfig,
   implicit val appConfig: AppConfig,
   fhddsConnector: FhddsConnector,
@@ -82,9 +82,7 @@ class AdminPageController @Inject()(
     requestForm
       .bindFromRequest()
       .fold(
-        formWithErrors => {
-          Future.successful(BadRequest(views.admin_get_groupID(formWithErrors)))
-        },
+        formWithErrors => Future.successful(BadRequest(views.admin_get_groupID(formWithErrors))),
         formData =>
           fhddsConnector
             .addEnrolment(formData.userId, formData.groupId, formData.registrationNumber)
@@ -100,12 +98,9 @@ class AdminPageController @Inject()(
     allocateEnrolmentForm
       .bindFromRequest()
       .fold(
-        formWithErrors => {
-          Future.successful(BadRequest(views.allocate_enrolment(formWithErrors)))
-        },
-        formData => {
+        formWithErrors => Future.successful(BadRequest(views.allocate_enrolment(formWithErrors))),
+        formData =>
           fhddsConnector.allocateEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-        }
       )
   }
 
@@ -117,13 +112,9 @@ class AdminPageController @Inject()(
     deleteEnrolmentForm
       .bindFromRequest()
       .fold(
-        formWithErrors => {
-          Future.successful(BadRequest(views.delete_enrolment(formWithErrors)))
-
-        },
-        formData => {
+        formWithErrors => Future.successful(BadRequest(views.delete_enrolment(formWithErrors))),
+        formData =>
           fhddsConnector.deleteEnrolment(formData.userId, formData.registrationNumber).map(result => Ok(result.body))
-        }
       )
   }
 
@@ -168,7 +159,8 @@ object AdminRequest {
       "userId"             -> nonEmptyText,
       "groupId"            -> nonEmptyText,
       "registrationNumber" -> nonEmptyText
-    )(AdminRequest.apply)(AdminRequest.unapply))
+    )(AdminRequest.apply)(AdminRequest.unapply)
+  )
 }
 
 case class EnrolmentForm(userId: String, registrationNumber: String)
@@ -181,7 +173,8 @@ object EnrolmentForm {
     mapping(
       "userId"             -> nonEmptyText,
       "registrationNumber" -> nonEmptyText
-    )(EnrolmentForm.apply)(EnrolmentForm.unapply))
+    )(EnrolmentForm.apply)(EnrolmentForm.unapply)
+  )
 
   val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm
 }

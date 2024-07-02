@@ -29,8 +29,8 @@ class EmailVerificationRequest[A](
   val verifiedEmail: Option[String],
   val pendingEmail: Option[String],
   val candidateEmail: Option[String],
-  request: UserRequest[A])
-    extends WrappedRequest(request) {
+  request: UserRequest[A]
+) extends WrappedRequest(request) {
 
   def userId = request.userId
 }

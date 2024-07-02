@@ -38,7 +38,8 @@ case class MemberDetail(
   identification: IdentificationBusiness,
   groupJoiningDate: Option[LocalDate],
   address: Address,
-  modification: Modification)
+  modification: Modification
+)
 
 object MemberDetail {
   implicit val format: OFormat[MemberDetail] = Json.format[MemberDetail]

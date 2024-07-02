@@ -35,7 +35,7 @@ case class StatusPageParams(
 
 object StatusPageParams {
 
-  class StatusParams @Inject()(registrationStatusViews: RegistrationStatusViews) {
+  class StatusParams @Inject() (registrationStatusViews: RegistrationStatusViews) {
 
     val statusParams = List(
       StatusPageParams(
@@ -55,14 +55,16 @@ object StatusPageParams {
       StatusPageParams(
         Approved,
         cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation,
-        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
+        secondary =
+          Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
         category = "post"
       ),
       StatusPageParams(
         ApprovedWithConditions,
         cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation,
-        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
+        secondary =
+          Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
         category = "post"
       ),

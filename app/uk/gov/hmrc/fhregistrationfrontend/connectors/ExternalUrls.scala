@@ -42,7 +42,7 @@ trait ExternalUrls {
   val surveyRedirectUrl: String
 }
 
-class DefaultExternalUrls @Inject()(
+class DefaultExternalUrls @Inject() (
   val runModeConfiguration: Configuration,
   environment: Environment
 ) extends ServicesConfig(runModeConfiguration) with ExternalUrls {

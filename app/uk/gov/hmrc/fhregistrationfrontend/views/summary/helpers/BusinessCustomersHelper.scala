@@ -39,6 +39,8 @@ object BusinessCustomersHelper {
           Mode isEditable mode,
           "form/businessCustomers",
           Text("Change"),
-          Some(Messages("fh.summary.overseasCustomers")))
-      ))
+          Some(Messages("fh.summary.overseasCustomers"))
+        )
+      )
+    )
 }

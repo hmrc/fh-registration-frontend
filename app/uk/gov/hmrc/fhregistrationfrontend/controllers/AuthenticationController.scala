@@ -30,9 +30,9 @@ case class Credentials(username: String, password: String) {
     (providedUsername == username) && BCrypt.checkpw(providedPassword, password)
 }
 
-case class AuthenticationController @Inject()(credentials: Credentials, bodyParser: BodyParser[AnyContent])(
-  implicit ec: ExecutionContext)
-    extends AuthenticatedBuilder[String](
+case class AuthenticationController @Inject() (credentials: Credentials, bodyParser: BodyParser[AnyContent])(implicit
+  ec: ExecutionContext
+) extends AuthenticatedBuilder[String](
       AuthenticationController.extractCredentials(credentials),
       bodyParser,
       AuthenticationController.onUnauthorised
@@ -44,9 +44,9 @@ object AuthenticationController {
       authHeader <- header.headers.get("Authorization")
       encoded    <- authHeader.split(" ").drop(1).headOption
       (username, password) <- Try {
-                               val authInfo = new String(Base64.getDecoder.decode(encoded)).split(":").toList
-                               (authInfo(0), authInfo(1))
-                             }.toOption
+                                val authInfo = new String(Base64.getDecoder.decode(encoded)).split(":").toList
+                                (authInfo(0), authInfo(1))
+                              }.toOption
       authenticatedUsername <- if (storedCredentials.check(username, password)) Some(username) else None
     } yield authenticatedUsername
   }

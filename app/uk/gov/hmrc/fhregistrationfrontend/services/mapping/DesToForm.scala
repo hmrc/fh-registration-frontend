@@ -110,7 +110,8 @@ class DesToFormImpl extends DesToForm {
     )
 
   override def businessRegistrationDetails(
-    subscriptionDisplay: des.SubscriptionDisplay): BusinessRegistrationDetails = {
+    subscriptionDisplay: des.SubscriptionDisplay
+  ): BusinessRegistrationDetails = {
     val utr: Option[String] = entityType(subscriptionDisplay) match {
       case BusinessType.CorporateBody =>
         subscriptionDisplay.businessDetail.nonProprietor.flatMap(_.identification.uniqueTaxpayerReference)
@@ -167,9 +168,8 @@ class DesToFormImpl extends DesToForm {
         eori                <- allOtherInformation.EORINumber
         importedOutsideEori <- eori.goodsImportedOutEORI
         number              <- eori.EORINonVat orElse eori.EORIVat
-      } yield {
-        EoriNumber(number, importedOutsideEori)
-      } else
+      } yield EoriNumber(number, importedOutsideEori)
+    else
       None
 
   def businessPartners(partnership: Option[des.Partnership]): ListWithTrackedChanges[BusinessPartner] = {
@@ -344,16 +344,12 @@ class DesToFormImpl extends DesToForm {
       }
 
   def nationalInsuranceNumber(businessDetails: des.BusinessDetail): NationalInsuranceNumber =
-    businessDetails.soleProprietor
-      .map(
-        id => {
-          NationalInsuranceNumber(
-            id.identification.nino.nonEmpty,
-            id.identification.nino
-          )
-        }
+    businessDetails.soleProprietor.map { id =>
+      NationalInsuranceNumber(
+        id.identification.nino.nonEmpty,
+        id.identification.nino
       )
-      .get
+    }.get
 
   def companyRegistrationNumber(businessDetails: des.BusinessDetail) =
     CompanyRegistrationNumber(
@@ -429,17 +425,13 @@ class DesToFormImpl extends DesToForm {
     for {
       prevAddressesDetail <- pa.previousOperationalAddressDetail
       prevAddressDetail   <- prevAddressesDetail.headOption
-    } yield {
-      prevAddressDetail.previousAddressStartdate
-    }
+    } yield prevAddressDetail.previousAddressStartdate
 
   def previousAddress(pa: des.PreviousOperationalAddress) =
     for {
       prevAddressesDetail <- pa.previousOperationalAddressDetail
       prevAddressDetail   <- prevAddressesDetail.headOption
-    } yield {
-      address(prevAddressDetail.previousAddress)
-    }
+    } yield address(prevAddressDetail.previousAddress)
 
   override def declaration(declaration: des.Declaration): Declaration = Declaration(
     declaration.personName,

@@ -25,11 +25,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation.noNavigati
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.UnusedImportingActivitiesForm.importingActivitiesForm
 
 @Singleton
-class ImportingActivitiesController @Inject()(
+class ImportingActivitiesController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
   import actions._
@@ -49,12 +50,8 @@ class ImportingActivitiesController @Inject()(
       importingActivitiesForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction))
-          },
-          hasEori => {
-            Ok(s"Form submitted, with result: $hasEori")
-          }
+          formWithErrors => BadRequest(view.importing_activities(formWithErrors, noNavigation, postAction)),
+          hasEori => Ok(s"Form submitted, with result: $hasEori")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

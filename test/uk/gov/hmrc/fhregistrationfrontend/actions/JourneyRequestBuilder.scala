@@ -51,7 +51,8 @@ trait JourneyRequestBuilder extends ActionSpecBase {
         case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
         case businessPartnersPage.id =>
           page.asInstanceOf[Page[ListWithTrackedChanges[BusinessPartner]]] withData FormTestData.partners.copy(
-            addMore = true)
+            addMore = true
+          )
         case _ => page
       }
     }
@@ -65,7 +66,11 @@ trait JourneyRequestBuilder extends ActionSpecBase {
 
   def examplePageData(page: Page[_]): Page[
     _ >: ContactPerson with MainBusinessAddress with CompanyRegistrationNumber with DateOfIncorporation with NationalInsuranceNumber with TradingName with VatNumber with ListWithTrackedChanges[
-      CompanyOfficer] with ListWithTrackedChanges[BusinessPartner] with BusinessStatus with ImportingActivities with BusinessCustomers with OtherStoragePremises <: Product] =
+      CompanyOfficer
+    ] with ListWithTrackedChanges[
+      BusinessPartner
+    ] with BusinessStatus with ImportingActivities with BusinessCustomers with OtherStoragePremises <: Product
+  ] =
     page.id match {
       case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
       case mainBusinessAddressPage.id =>

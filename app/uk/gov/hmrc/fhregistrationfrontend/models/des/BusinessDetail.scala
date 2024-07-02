@@ -22,7 +22,8 @@ case class BusinessDetail(
   soleProprietor: Option[SoleProprietor],
   nonProprietor: Option[NonProprietor],
   limitedLiabilityPartnershipCorporateBody: Option[LimitedLiabilityPartnershipCorporateBody],
-  partnership: Option[Partnership])
+  partnership: Option[Partnership]
+)
 
 object BusinessDetail {
   implicit val format: OFormat[BusinessDetail] = Json.format[BusinessDetail]

@@ -28,7 +28,7 @@ object TradingNameHelper {
 
   def apply(tradingNameForm: TradingName, mode: Mode)(implicit messages: Messages) = {
 
-    val TradingName = {
+    val TradingName =
       if (tradingNameForm.hasValue) {
         Helpers.createSummaryRow(
           SummaryRowParams(
@@ -41,7 +41,8 @@ object TradingNameHelper {
             Mode isEditable mode,
             "form/tradingName",
             Text("Change"),
-            Some(Messages("fh.tradingName.title")))
+            Some(Messages("fh.tradingName.title"))
+          )
         )
       } else {
         Helpers.createSummaryRow(
@@ -55,10 +56,10 @@ object TradingNameHelper {
             Mode isEditable mode,
             "form/tradingName",
             Text("Change"),
-            Some(Messages("fh.summary.hasTradingName")))
+            Some(Messages("fh.summary.hasTradingName"))
+          )
         )
       }
-    }
     Seq(TradingName)
   }
 

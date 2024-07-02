@@ -5,8 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class TradingNameControllerISpec
-  extends Specifications with TestConfiguration {
+class TradingNameControllerISpec extends Specifications with TestConfiguration {
   val requestUrl = "tradingName"
 
   "GET /tradingName" when {
@@ -16,14 +15,18 @@ class TradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 200
             val page = Jsoup.parse(res.body)
             page.title must include("Trading name - Apply for the Fulfilment House Due Diligence Scheme")
-            page.getElementsByTag("h1").text must include("Does the business use a trading name that is different from its registered one?")
+            page.getElementsByTag("h1").text must include(
+              "Does the business use a trading name that is different from its registered one?"
+            )
           }
         }
       }
@@ -39,13 +42,16 @@ class TradingNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
+            val result = client
+              .url(s"$baseUrl/$requestUrl")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("true"),
-                "tradingName_value" -> Seq("Shelby Company Limited")
-              ))
+              .post(
+                Map(
+                  "tradingName_yesNo" -> Seq("true"),
+                  "tradingName_value" -> Seq("Shelby Company Limited")
+                )
+              )
 
             whenReady(result) { res =>
               res.status mustBe 200
@@ -58,13 +64,16 @@ class TradingNameControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
+            val result = client
+              .url(s"$baseUrl/$requestUrl")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "tradingName_yesNo" -> Seq("false"),
-                "tradingName_value" -> Seq.empty
-              ))
+              .post(
+                Map(
+                  "tradingName_yesNo" -> Seq("false"),
+                  "tradingName_value" -> Seq.empty
+                )
+              )
 
             whenReady(result) { res =>
               res.status mustBe 200
@@ -80,19 +89,24 @@ class TradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq.empty,
-              "tradingName_value" -> Seq.empty
-            ))
+            .post(
+              Map(
+                "tradingName_yesNo" -> Seq.empty,
+                "tradingName_value" -> Seq.empty
+              )
+            )
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.title must include("Trading name - Apply for the Fulfilment House Due Diligence Scheme")
-            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Select whether the business has a different trading name")
+            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include(
+              "Select whether the business has a different trading name"
+            )
           }
         }
       }
@@ -103,19 +117,24 @@ class TradingNameControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "tradingName_yesNo" -> Seq("true"),
-              "tradingName_value" -> Seq.empty
-            ))
+            .post(
+              Map(
+                "tradingName_yesNo" -> Seq("true"),
+                "tradingName_value" -> Seq.empty
+              )
+            )
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
             page.title must include("Trading name - Apply for the Fulfilment House Due Diligence Scheme")
-            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include("Enter the trading name")
+            page.getElementsByClass("govuk-list govuk-error-summary__list").text() must include(
+              "Enter the trading name"
+            )
           }
         }
       }

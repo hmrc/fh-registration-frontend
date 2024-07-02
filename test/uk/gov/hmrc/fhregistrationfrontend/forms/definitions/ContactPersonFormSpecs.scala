@@ -100,7 +100,7 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
       fieldHasErrors(telephoneKey, "a", "error.pattern")
 
       fieldHasErrors(emailAddressKey, "user", "error.email")
-      //max 132
+      // max 132
       fieldHasErrors(emailAddressKey, "user@" + Array.fill(128)('a').mkString, "error.email")
 
     }

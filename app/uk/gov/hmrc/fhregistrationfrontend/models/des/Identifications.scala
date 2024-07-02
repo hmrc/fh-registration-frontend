@@ -21,17 +21,20 @@ import play.api.libs.json._
 case class IndividualIdentification(
   passportNumber: Option[String],
   nationalIdNumber: Option[String],
-  nino: Option[String])
+  nino: Option[String]
+)
 
 case class CompanyIdentification(
   vatRegistrationNumber: Option[String],
   uniqueTaxpayerReference: Option[String],
-  companyRegistrationNumber: Option[String])
+  companyRegistrationNumber: Option[String]
+)
 
 case class SoleProprietorIdentification(
   nino: Option[String],
   vatRegistrationNumber: Option[String],
-  uniqueTaxpayerReference: Option[String])
+  uniqueTaxpayerReference: Option[String]
+)
 
 case class NonProprietorIdentification(vatRegistrationNumber: Option[String], uniqueTaxpayerReference: Option[String])
 

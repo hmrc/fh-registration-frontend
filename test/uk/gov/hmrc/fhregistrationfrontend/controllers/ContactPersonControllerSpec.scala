@@ -89,7 +89,9 @@ class ContactPersonControllerSpec
           val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,true,None,None,None)"
+          contentAsString(
+            result
+          ) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,true,None,None,None)"
           reset(mockActions)
         }
       }
@@ -99,27 +101,29 @@ class ContactPersonControllerSpec
           "Is this the address you want to use? No" +
           "Is the contact address in the UK? Yes" +
           "Only mandatory fields entered" in {
-          setupUserAction()
+            setupUserAction()
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "firstName"                                     -> "John",
-              "lastName"                                      -> "Smith",
-              "jobTitle"                                      -> "Astronaut",
-              "telephone"                                     -> "0123456789",
-              "usingSameContactAddress"                       -> "false",
-              "isUkAddress"                                   -> "true",
-              "otherUkContactAddress_contactAddress.Line1"    -> "Flat 1",
-              "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
-            )
-            .withMethod("POST")
-          val result = csrfAddToken(controller.next())(request)
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "firstName"                                     -> "John",
+                "lastName"                                      -> "Smith",
+                "jobTitle"                                      -> "Astronaut",
+                "telephone"                                     -> "0123456789",
+                "usingSameContactAddress"                       -> "false",
+                "isUkAddress"                                   -> "true",
+                "otherUkContactAddress_contactAddress.Line1"    -> "Flat 1",
+                "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
+              )
+              .withMethod("POST")
+            val result = csrfAddToken(controller.next())(request)
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,None,None,None,AB1 2YZ,None,None)),None)"
-          reset(mockActions)
-        }
+            status(result) shouldBe OK
+            contentAsString(
+              result
+            ) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,None,None,None,AB1 2YZ,None,None)),None)"
+            reset(mockActions)
+          }
       }
 
       "return 200" when {
@@ -127,30 +131,32 @@ class ContactPersonControllerSpec
           "Is this the address you want to use? No" +
           "Is the contact address in the UK? Yes" +
           "All fields entered" in {
-          setupUserAction()
+            setupUserAction()
 
-          when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
-          val request = FakeRequest()
-            .withFormUrlEncodedBody(
-              "firstName"                                     -> "John",
-              "lastName"                                      -> "Smith",
-              "jobTitle"                                      -> "Astronaut",
-              "telephone"                                     -> "0123456789",
-              "usingSameContactAddress"                       -> "false",
-              "isUkAddress"                                   -> "true",
-              "otherUkContactAddress_contactAddress.Line1"    -> "Flat 1",
-              "otherUkContactAddress_contactAddress.Line2"    -> "5 High Street",
-              "otherUkContactAddress_contactAddress.Line3"    -> "Worthing",
-              "otherUkContactAddress_contactAddress.Line4"    -> "West Sussex",
-              "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
-            )
-            .withMethod("POST")
-          val result = csrfAddToken(controller.next())(request)
+            when(mockAppConfig.newBusinessPartnerPagesEnabled).thenReturn(true)
+            val request = FakeRequest()
+              .withFormUrlEncodedBody(
+                "firstName"                                     -> "John",
+                "lastName"                                      -> "Smith",
+                "jobTitle"                                      -> "Astronaut",
+                "telephone"                                     -> "0123456789",
+                "usingSameContactAddress"                       -> "false",
+                "isUkAddress"                                   -> "true",
+                "otherUkContactAddress_contactAddress.Line1"    -> "Flat 1",
+                "otherUkContactAddress_contactAddress.Line2"    -> "5 High Street",
+                "otherUkContactAddress_contactAddress.Line3"    -> "Worthing",
+                "otherUkContactAddress_contactAddress.Line4"    -> "West Sussex",
+                "otherUkContactAddress_contactAddress.postcode" -> "AB1 2YZ"
+              )
+              .withMethod("POST")
+            val result = csrfAddToken(controller.next())(request)
 
-          status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
-          reset(mockActions)
-        }
+            status(result) shouldBe OK
+            contentAsString(
+              result
+            ) shouldBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
+            reset(mockActions)
+          }
       }
 
       "return 400" when {

@@ -83,6 +83,8 @@ object Helpers {
               content = content,
               visuallyHiddenText = hiddenText
             )
-          )))
+          )
+        )
+      )
     } else None
 }

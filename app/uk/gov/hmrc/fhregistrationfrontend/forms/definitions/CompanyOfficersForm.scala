@@ -43,11 +43,17 @@ object CompanyOfficersForm {
 
   val companyOfficersKey = "companyOfficers"
 
-  val hasNinoMapping = hasNationalInsuranceNumberKey  -> yesOrNo()
-  val ninoMapping = nationalInsuranceNumberKey        -> (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
-  val hasPassportNumberMapping = hasPassportNumberKey -> (yesOrNo() onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
-  val passportNumberMapping = passportNumberKey       -> (passportNumber onlyWhen (hasPassportNumberMapping is Some(true) withPrefix individualIdentificationKey))
-  val nationalIdMapping = nationalIDKey               -> (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(false) withPrefix individualIdentificationKey))
+  val hasNinoMapping = hasNationalInsuranceNumberKey -> yesOrNo()
+  val ninoMapping =
+    nationalInsuranceNumberKey -> (nino onlyWhen (hasNinoMapping is true withPrefix individualIdentificationKey))
+  val hasPassportNumberMapping =
+    hasPassportNumberKey -> (yesOrNo() onlyWhen (hasNinoMapping is false withPrefix individualIdentificationKey))
+  val passportNumberMapping = passportNumberKey -> (passportNumber onlyWhen (hasPassportNumberMapping is Some(
+    true
+  ) withPrefix individualIdentificationKey))
+  val nationalIdMapping = nationalIDKey -> (nationalIdNumber onlyWhen (hasPassportNumberMapping is Some(
+    false
+  ) withPrefix individualIdentificationKey))
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
@@ -69,27 +75,25 @@ object CompanyOfficersForm {
   val companyOfficerCompanyMapping = mapping(
     companyNameKey -> companyName,
     hasVatMapping,
-    vatRegistrationKey     -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
+    vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
     companyRegistrationKey -> (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
-    roleKey                -> oneOf(roles)
+    roleKey -> oneOf(roles)
   )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
     companyOfficerTypeMapping,
-    companyIdentificationKey    -> (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
+    companyIdentificationKey -> (companyOfficerCompanyMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Company)),
     individualIdentificationKey -> (companyOfficerIndividualMapping onlyWhen (companyOfficerTypeMapping is CompanyOfficerType.Individual))
-  ) {
-    case (identificationType, company, individual) =>
-      CompanyOfficer(
-        identificationType,
-        company getOrElse individual.get
-      )
-  } {
-    case CompanyOfficer(identificationType, identification) =>
-      identification match {
-        case i: CompanyOfficerIndividual => Some((identificationType, None, Some(i)))
-        case c: CompanyOfficerCompany    => Some((identificationType, Some(c), None))
-      }
+  ) { case (identificationType, company, individual) =>
+    CompanyOfficer(
+      identificationType,
+      company getOrElse individual.get
+    )
+  } { case CompanyOfficer(identificationType, identification) =>
+    identification match {
+      case i: CompanyOfficerIndividual => Some((identificationType, None, Some(i)))
+      case c: CompanyOfficerCompany    => Some((identificationType, Some(c), None))
+    }
   }
 
   val companyOfficerForm = Form(companyOfficerMapping)

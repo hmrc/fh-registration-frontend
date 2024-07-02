@@ -28,33 +28,32 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class Actions @Inject()(
+class Actions @Inject() (
   externalUrls: ExternalUrls,
   fhddsConnector: FhddsConnector,
   sessionCache: SessionRepository,
   frontendAppConfig: FrontendAppConfig,
   cc: ControllerComponents,
   journeys: Journeys
-)(
-  implicit val authConnector: AuthConnector,
+)(implicit
+  val authConnector: AuthConnector,
   save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler,
-  ec: ExecutionContext) {
+  ec: ExecutionContext
+) {
 
   def userAction: ActionBuilder[UserRequest, AnyContent] = UserAction(externalUrls, errorHandler, cc)
   def dataRetrievalAction =
     userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache)
 
   def dataRequiredActionCompanyOfficers(index: Int, mode: Mode) =
-    userAction andThen newCompanyOfficersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
-      ec,
-      index,
-      mode)
+    userAction andThen newCompanyOfficersFlowEnabledAction andThen new DataRetrievedAction(
+      sessionCache
+    ) andThen new DataRequiredAction(ec, index, mode)
   def dataRequiredActionBusinessPartners(index: Int, mode: Mode) =
-    userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(sessionCache) andThen new DataRequiredAction(
-      ec,
-      index,
-      mode)
+    userAction andThen newBusinessPartnersFlowEnabledAction andThen new DataRetrievedAction(
+      sessionCache
+    ) andThen new DataRequiredAction(ec, index, mode)
 
   def notAdminUser = userAction andThen new NotAdminUserFilter
   def noPendingSubmissionFilter = userAction andThen new NoPendingSubmissionFilter(fhddsConnector)

@@ -24,20 +24,22 @@ import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 import java.time.Instant
 
 object ModelEncryption {
-  def encryptUserAnswers(userAnswers: UserAnswers)(
-    implicit encryption: Encryption): (String, Map[String, EncryptedValue], Instant) = {
+  def encryptUserAnswers(
+    userAnswers: UserAnswers
+  )(implicit encryption: Encryption): (String, Map[String, EncryptedValue], Instant) = {
     val encryptedDataValues = userAnswers.data
-      .map {
-        case (key, value) => key -> encryption.crypto.encrypt(value.toString(), userAnswers.id)
+      .map { case (key, value) =>
+        key -> encryption.crypto.encrypt(value.toString(), userAnswers.id)
       }
     (userAnswers.id, encryptedDataValues, userAnswers.lastUpdated)
   }
 
-  def decryptUserAnswers(id: String, data: Map[String, EncryptedValue], lastUpdated: Instant)(
-    implicit encryption: Encryption): UserAnswers = {
+  def decryptUserAnswers(id: String, data: Map[String, EncryptedValue], lastUpdated: Instant)(implicit
+    encryption: Encryption
+  ): UserAnswers = {
     val decryptedUAData = data
-      .map {
-        case (key, encrytedValue) => key -> Json.parse(encryption.crypto.decrypt(encrytedValue, id))
+      .map { case (key, encrytedValue) =>
+        key -> Json.parse(encryption.crypto.decrypt(encrytedValue, id))
       }
     UserAnswers(
       id = id,

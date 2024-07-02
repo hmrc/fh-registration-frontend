@@ -31,7 +31,5 @@ trait ContactEmailFunctions {
     for {
       displayWrapper <- fhddsConnector getSubmission request.registrationNumber
       display = displayWrapper.subScriptionDisplay
-    } yield {
-      desToForm.contactEmail(display)
-    }
+    } yield desToForm.contactEmail(display)
 }

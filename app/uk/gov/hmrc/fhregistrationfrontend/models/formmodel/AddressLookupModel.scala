@@ -26,7 +26,8 @@ case class Country(
   // and https://en.wikipedia.org/wiki/ISO_3166-2:GB
   code: String,
   // The printable name for the country, e.g. "United Kingdom"
-  name: String)
+  name: String
+)
 
 object Country {
   implicit val formats: OFormat[Country] = Json.format[Country]
@@ -34,10 +35,8 @@ object Country {
 
 //-------------------------------------------------------------------------------------------------
 
-/**
-  * Address typically represents a postal address.
-  * For UK addresses, 'town' will always be present.
-  * For non-UK addresses, 'town' may be absent and there may be an extra line instead.
+/** Address typically represents a postal address. For UK addresses, 'town' will always be present. For non-UK
+  * addresses, 'town' may be absent and there may be an extra line instead.
   */
 case class Address(lines: Seq[String], town: Option[String], postcode: String, country: Country) {
 
@@ -70,8 +69,7 @@ object Address {
 
 //-------------------------------------------------------------------------------------------------
 
-/**
-  * Represents one address record. Arrays of these are returned from the address-lookup microservice.
+/** Represents one address record. Arrays of these are returned from the address-lookup microservice.
   */
 case class AddressRecord(
   id: String,
@@ -79,7 +77,8 @@ case class AddressRecord(
   address: Address,
   // ISO639-1 code, e.g. 'en' for English
   // see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-  language: String) {
+  language: String
+) {
 
   def isValid = address.isValid && language.length == 2
 }

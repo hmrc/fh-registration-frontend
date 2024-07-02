@@ -32,7 +32,8 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
         Map.empty,
         Seq(
           confirmKey -> "error.required"
-        ))
+        )
+      )
     }
 
     "Have errors when yes but 'use default email' is not answered" in {
@@ -40,7 +41,8 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
         Map(confirmKey -> "true"),
         Seq(
           usingDefaultEmailKey -> "error.required"
-        ))
+        )
+      )
     }
 
     "Have errors when default email is missing" in {
@@ -48,7 +50,8 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
         Map(confirmKey -> "true", usingDefaultEmailKey -> "true"),
         Seq(
           defaultEmailKey -> "error.required"
-        ))
+        )
+      )
     }
 
     "Have errors when default email is wrong format" in {
@@ -60,7 +63,8 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
         ),
         Seq(
           defaultEmailKey -> "error.email"
-        ))
+        )
+      )
     }
 
     "Have errors when no custom email is provided" in {
@@ -71,7 +75,8 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
         ),
         Seq(
           s"$alternativeEmailKey.email" -> "error.required"
-        ))
+        )
+      )
     }
 
     "Have errors when no custom email does not match" in {

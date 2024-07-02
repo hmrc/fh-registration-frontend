@@ -5,8 +5,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class BusinessStatusControllerISpec
-  extends Specifications with TestConfiguration {
+class BusinessStatusControllerISpec extends Specifications with TestConfiguration {
   val requestUrl = "businessStatus"
 
   "GET /businessStatus" when {
@@ -16,8 +15,10 @@ class BusinessStatusControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
-            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie)).get()
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
+            .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
+            .get()
 
           whenReady(result) { res =>
             res.status mustBe 200
@@ -38,15 +39,18 @@ class BusinessStatusControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
+            val result = client
+              .url(s"$baseUrl/$requestUrl")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "isNewFulfilmentBusiness" -> Seq("true"),
-                "proposedStartDate.day"   -> Seq("01"),
-                "proposedStartDate.month" -> Seq("01"),
-                "proposedStartDate.year"  -> Seq("2020")
-              ))
+              .post(
+                Map(
+                  "isNewFulfilmentBusiness" -> Seq("true"),
+                  "proposedStartDate.day"   -> Seq("01"),
+                  "proposedStartDate.month" -> Seq("01"),
+                  "proposedStartDate.year"  -> Seq("2020")
+                )
+              )
 
             whenReady(result) { res =>
               res.status mustBe 200
@@ -59,12 +63,15 @@ class BusinessStatusControllerISpec
           given.commonPrecondition
 
           WsTestClient.withClient { client =>
-            val result = client.url(s"$baseUrl/$requestUrl")
+            val result = client
+              .url(s"$baseUrl/$requestUrl")
               .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
               .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-              .post(Map(
-                "isNewFulfilmentBusiness" -> Seq("false")
-              ))
+              .post(
+                Map(
+                  "isNewFulfilmentBusiness" -> Seq("false")
+                )
+              )
 
             whenReady(result) { res =>
               res.status mustBe 200
@@ -80,12 +87,15 @@ class BusinessStatusControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "isNewFulfilmentBusiness" -> Seq.empty
-            ))
+            .post(
+              Map(
+                "isNewFulfilmentBusiness" -> Seq.empty
+              )
+            )
 
           whenReady(result) { res =>
             res.status mustBe 400
@@ -104,15 +114,18 @@ class BusinessStatusControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "isNewFulfilmentBusiness" -> Seq("true"),
-              "proposedStartDate.day"   -> Seq(""),
-              "proposedStartDate.month" -> Seq(""),
-              "proposedStartDate.year"  -> Seq("")
-            ))
+            .post(
+              Map(
+                "isNewFulfilmentBusiness" -> Seq("true"),
+                "proposedStartDate.day"   -> Seq(""),
+                "proposedStartDate.month" -> Seq(""),
+                "proposedStartDate.year"  -> Seq("")
+              )
+            )
 
           whenReady(result) { res =>
             res.status mustBe 400
@@ -131,15 +144,18 @@ class BusinessStatusControllerISpec
         given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/$requestUrl")
+          val result = client
+            .url(s"$baseUrl/$requestUrl")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
             .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
-            .post(Map(
-              "isNewFulfilmentBusiness" -> Seq("true"),
-              "proposedStartDate.day"   -> Seq("ab"),
-              "proposedStartDate.month" -> Seq("cd"),
-              "proposedStartDate.year"  -> Seq("ef")
-            ))
+            .post(
+              Map(
+                "isNewFulfilmentBusiness" -> Seq("true"),
+                "proposedStartDate.day"   -> Seq("ab"),
+                "proposedStartDate.month" -> Seq("cd"),
+                "proposedStartDate.year"  -> Seq("ef")
+              )
+            )
 
           whenReady(result) { res =>
             res.status mustBe 400

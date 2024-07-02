@@ -41,7 +41,8 @@ object BusinessPartnerIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None),
+        None
+      ),
       if (individual.hasNino) {
         Helpers.createSummaryRow(
           SummaryRowParams(
@@ -49,7 +50,8 @@ object BusinessPartnerIndividualHelper {
             individual.nino,
             None
           ),
-          None)
+          None
+        )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
@@ -58,14 +60,17 @@ object BusinessPartnerIndividualHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
           Helpers.formatAddress(individual.address),
           None,
-          GroupRow.Member),
-        None)
+          GroupRow.Member
+        ),
+        None
+      )
     )
 }

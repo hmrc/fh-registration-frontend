@@ -24,11 +24,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class OtherStoragePremisesController @Inject()(
+class OtherStoragePremisesController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -48,12 +49,8 @@ class OtherStoragePremisesController @Inject()(
       hasOtherStoragePrmisesForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.other_storage_premises_page(formWithErrors, postAction))
-          },
-          otherStorePremises => {
-            Ok(s"Form submitted, with result: $otherStorePremises")
-          }
+          formWithErrors => BadRequest(view.other_storage_premises_page(formWithErrors, postAction)),
+          otherStorePremises => Ok(s"Form submitted, with result: $otherStorePremises")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

@@ -29,19 +29,22 @@ trait FormToDes {
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: LimitedCompanyApplication,
-    d: Declaration): des.Subscription
+    d: Declaration
+  ): des.Subscription
 
   def soleProprietorCompanySubmission(
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: SoleProprietorApplication,
-    d: Declaration): des.Subscription
+    d: Declaration
+  ): des.Subscription
 
   def partnership(
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: PartnershipApplication,
-    d: Declaration): des.Subscription
+    d: Declaration
+  ): des.Subscription
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes
 
@@ -61,7 +64,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: SoleProprietorApplication,
-    d: Declaration): des.Subscription =
+    d: Declaration
+  ): des.Subscription =
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.SoleTrader,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -76,7 +80,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: PartnershipApplication,
-    d: Declaration): des.Subscription =
+    d: Declaration
+  ): des.Subscription =
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.Partnership,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -91,7 +96,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     bpr: BusinessRegistrationDetails,
     verifiedEmail: String,
     application: LimitedCompanyApplication,
-    d: Declaration): des.Subscription =
+    d: Declaration
+  ): des.Subscription =
     des.Subscription(
       EntityTypeMapping formToDes BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
@@ -116,7 +122,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       contact.usingSameContactAddress,
       contactDetailAddress(bpr, contact),
       des.CommonDetails(Some(contact.telephone), None, Some(verifiedEmail)),
-      Some(des.RoleInOrganization otherRole contact.jobTitle) //TODO: job title is the role?
+      Some(des.RoleInOrganization otherRole contact.jobTitle) // TODO: job title is the role?
     )
 
   def internationalAddress(a: InternationalAddress) =
@@ -130,7 +136,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     )
 
   def contactDetailAddress(bpr: BusinessRegistrationDetails, contact: ContactPerson): Option[des.Address] =
-    //TODO move this logic to ContactPerson?
+    // TODO move this logic to ContactPerson?
     contact.otherUkContactAddress
       .map(address(_))
       .orElse(contact.otherInternationalContactAddress.map(internationalAddress(_)))
@@ -157,9 +163,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     val previousAddressDetail = for {
       address <- mainBusinessAddress.previousAddress
       start   <- mainBusinessAddress.previousAddressStartdate
-    } yield {
-      List(previousOperationalAddressDetail(start, address))
-    }
+    } yield List(previousOperationalAddressDetail(start, address))
 
     mainBusinessAddress.hasPreviousAddress map {
       des.PreviousOperationalAddress(_, previousAddressDetail)
@@ -175,30 +179,27 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def businessDetail(application: BusinessEntityApplication, bpr: BusinessRegistrationDetails) =
     application match {
-      case llt: LimitedCompanyApplication => {
+      case llt: LimitedCompanyApplication =>
         des.BusinessDetail(
           None,
           Some(nonProprietor(llt.tradingName, llt.vatNumber, bpr)),
           Some(llpOrCorporate(llt.companyRegistrationNumber, llt.dateOfIncorporation)),
           None
         )
-      }
-      case st: SoleProprietorApplication => {
+      case st: SoleProprietorApplication =>
         des.BusinessDetail(
           Some(SoleProprietor(st.tradingName.value, soleProprietorIdentification(st, bpr))),
           None,
           None,
           None
         )
-      }
-      case ps: PartnershipApplication => {
+      case ps: PartnershipApplication =>
         des.BusinessDetail(
           None,
           Some(nonProprietor(ps.tradingName, ps.vatNumber, bpr)),
           None,
           Some(partnershipPartners(ps.businessPartners))
         )
-      }
     }
 
   def partnershipPartners(businessPartners: ListWithTrackedChanges[BusinessPartner]): Partnership =
@@ -221,7 +222,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def soleProprietorIdentification(
     st: SoleProprietorApplication,
-    bpr: BusinessRegistrationDetails): SoleProprietorIdentification =
+    bpr: BusinessRegistrationDetails
+  ): SoleProprietorIdentification =
     SoleProprietorIdentification(
       st.nationalInsuranceNumber.value,
       VatNumber.sanitisedVatNumber(st.vatNumber.value),
@@ -239,24 +241,21 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
 
   def additionalBusinessInformation(application: BusinessEntityApplication) =
     application match {
-      case llt: LimitedCompanyApplication => {
+      case llt: LimitedCompanyApplication =>
         des.AdditionalBusinessInformationwithType(
           Some(partnerCorporateBody(llt.companyOfficers)),
           allOtherInformation(llt)
         )
-      }
-      case st: SoleProprietorApplication => {
+      case st: SoleProprietorApplication =>
         des.AdditionalBusinessInformationwithType(
           None,
           allOtherInformation(st)
         )
-      }
-      case ps: PartnershipApplication => {
+      case ps: PartnershipApplication =>
         des.AdditionalBusinessInformationwithType(
           None,
           allOtherInformation(ps)
         )
-      }
     }
   def allOtherInformation(application: BusinessEntityApplication) = {
     val desPremises =
@@ -269,9 +268,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     val eoriNumberTypeValue: Option[EORINumberType] = for {
       eori          <- application.importingActivities.eori
       goodsImported <- application.importingActivities.goodsImported
-    } yield {
-      eoriNumberType(application.vatNumber.hasValue, eori, goodsImported)
-    }
+    } yield eoriNumberType(application.vatNumber.hasValue, eori, goodsImported)
     des.AllOtherInformation(
       application.businessCustomers.numberOfCustomers,
       application.importingActivities.hasEori,
@@ -287,7 +284,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     }
 
     val flag = Some(des.Modification("Removed", changeDate))
-    val all = (markedRemoved ++ list.deleted)
+    val all = markedRemoved ++ list.deleted
     all map (t(_, flag))
   }
 
@@ -330,8 +327,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   }
 
   def repeatedValue[T, D](t: (T, Option[Modification]) => D, list: ListWithTrackedChanges[T]): List[D] = {
-    val values = list.valuesWithStatus map {
-      case (v, changeStatus) => t(v, modification(changeStatus))
+    val values = list.valuesWithStatus map { case (v, changeStatus) =>
+      t(v, modification(changeStatus))
     }
 
     if (withModificationFlags)
@@ -346,7 +343,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
         case ListWithTrackedChanges.NoChange => None
         case ListWithTrackedChanges.Added    => Some(Modification("Added", changeDate))
         case ListWithTrackedChanges.Updated  => Some(Modification("Updated", changeDate))
-      } else
+      }
+    else
       None
 
   val partnerDetail: (BusinessPartner, Option[Modification]) => des.PartnerDetail = {
@@ -369,7 +367,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               nino = s.nino,
               identification = PartnerIdentification(
                 vatRegistrationNumber = s.vat,
-                uniqueTaxpayerReference = s.uniqueTaxpayerReference),
+                uniqueTaxpayerReference = s.uniqueTaxpayerReference
+              ),
               tradingName = s.tradeName
             ),
             modification
@@ -382,7 +381,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               CompanyName(companyName = Some(p.partnershipName), tradingName = p.tradeName),
               identification = PartnerIdentification(
                 vatRegistrationNumber = p.vat,
-                uniqueTaxpayerReference = p.uniqueTaxpayerReference)
+                uniqueTaxpayerReference = p.uniqueTaxpayerReference
+              )
             ),
             modification
           )
@@ -394,10 +394,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               CompanyName(companyName = Some(l.limitedLiabilityPartnershipName), tradingName = l.tradeName),
               identification = PartnerIdentification(
                 vatRegistrationNumber = l.vat,
-                uniqueTaxpayerReference = l.uniqueTaxpayerReference),
+                uniqueTaxpayerReference = l.uniqueTaxpayerReference
+              ),
               incorporationDetails = IncorporationDetail(
                 companyRegistrationNumber = Some(l.companyRegistrationNumber),
-                dateOfIncorporation = None)
+                dateOfIncorporation = None
+              )
             ),
             modification
           )
@@ -409,10 +411,12 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               CompanyName(companyName = Some(c.companyName), tradingName = c.tradeName),
               identification = PartnerIdentification(
                 vatRegistrationNumber = c.vat,
-                uniqueTaxpayerReference = c.uniqueTaxpayerReference),
+                uniqueTaxpayerReference = c.uniqueTaxpayerReference
+              ),
               incorporationDetails = IncorporationDetail(
                 companyRegistrationNumber = Some(c.companyRegistrationNumber),
-                dateOfIncorporation = None)
+                dateOfIncorporation = None
+              )
             ),
             modification
           )
@@ -424,7 +428,8 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               CompanyName(companyName = Some(u.unincorporatedBodyName), tradingName = u.tradeName),
               identification = PartnerIdentification(
                 vatRegistrationNumber = u.vat,
-                uniqueTaxpayerReference = u.uniqueTaxpayerReference)
+                uniqueTaxpayerReference = u.uniqueTaxpayerReference
+              )
             ),
             modification
           )

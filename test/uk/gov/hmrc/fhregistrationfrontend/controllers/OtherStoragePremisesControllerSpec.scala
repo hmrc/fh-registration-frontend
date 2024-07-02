@@ -48,7 +48,8 @@ class OtherStoragePremisesControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include(
-          "Does the business use any UK premises to store third-party goods imported from outside the UK?")
+          "Does the business use any UK premises to store third-party goods imported from outside the UK?"
+        )
         reset(mockActions)
       }
     }
@@ -121,7 +122,8 @@ class OtherStoragePremisesControllerSpec
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.title should include(
-            "Does the business use any UK premises to store third-party goods imported from outside the UK?")
+            "Does the business use any UK premises to store third-party goods imported from outside the UK?"
+          )
           reset(mockActions)
         }
       }

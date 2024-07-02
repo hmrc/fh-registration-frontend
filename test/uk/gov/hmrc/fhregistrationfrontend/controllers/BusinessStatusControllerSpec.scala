@@ -124,7 +124,8 @@ class BusinessStatusControllerSpec
           val page = Jsoup.parse(contentAsString(result))
           page.title should include("Are you setting up a new fulfilment business?")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Select whether the business is setting up a new fulfilment business")
+            "Select whether the business is setting up a new fulfilment business"
+          )
           reset(mockActions)
         }
 
@@ -146,7 +147,8 @@ class BusinessStatusControllerSpec
           val page = Jsoup.parse(contentAsString(result))
           page.title should include("Are you setting up a new fulfilment business?")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter the intended start date")
+            "Enter the intended start date"
+          )
           reset(mockActions)
         }
 
@@ -168,7 +170,8 @@ class BusinessStatusControllerSpec
           val page = Jsoup.parse(contentAsString(result))
           page.title should include("Are you setting up a new fulfilment business?")
           page.getElementsByClass("govuk-list govuk-error-summary__list").text() should include(
-            "Enter a valid date for the intended start date")
+            "Enter a valid date for the intended start date"
+          )
           reset(mockActions)
         }
       }

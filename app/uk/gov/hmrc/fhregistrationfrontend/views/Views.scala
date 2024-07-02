@@ -18,18 +18,18 @@ package uk.gov.hmrc.fhregistrationfrontend.views
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Views @Inject()(
-  ////////////////////////////Deregistration///////////////////////////////////
+class Views @Inject() (
+  //////////////////////////// Deregistration///////////////////////////////////
   val deregistration_acknowledgement: uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.deregistration_acknowledgement,
   val deregistration_confirm: uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.deregistration_confirm,
   val deregistration_reason: uk.gov.hmrc.fhregistrationfrontend.views.html.deregistration.deregistration_reason,
-  ////////////////////////////Email////////////////////////////////////////////
+  //////////////////////////// Email////////////////////////////////////////////
   val email_change_start: uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification.email_change_start,
   val email_edit: uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification.email_edit,
   val email_options: uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification.email_options,
   val email_pending_verification: uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification.email_pending_verification,
   val email_verified: uk.gov.hmrc.fhregistrationfrontend.views.html.emailverification.email_verified,
-  ////////////////////////////Forms/////////////////////////////////////////////
+  //////////////////////////// Forms/////////////////////////////////////////////
   val business_customers: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_customers,
   val business_partners: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_partners,
   val business_status: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.business_status,
@@ -48,20 +48,20 @@ class Views @Inject()(
   val storage_premise: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.storage_premise,
   val vat_registration: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.vat_registration,
   val trading_name: uk.gov.hmrc.fhregistrationfrontend.views.html.forms.trading_name,
-  ////////////////////////////Withdrawals///////////////////////////////////////////
+  //////////////////////////// Withdrawals///////////////////////////////////////////
   val withdrawal_acknowledgement: uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.withdrawal_acknowledgement,
   val withdrawal_reason: uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.withdrawal_reason,
   val withdrawal_confirm: uk.gov.hmrc.fhregistrationfrontend.views.html.withdrawals.withdrawal_confirm,
-  ////////////////////////////Delete///////////////////////////////////////////////
+  //////////////////////////// Delete///////////////////////////////////////////////
   val confirm_delete: uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete,
   val confirm_delete_section: uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section,
   val continue_delete: uk.gov.hmrc.fhregistrationfrontend.views.html.continue_delete,
-  ////////////////////////////Enrollment///////////////////////////////////////////
+  //////////////////////////// Enrollment///////////////////////////////////////////
   val delete_enrolment: uk.gov.hmrc.fhregistrationfrontend.views.html.delete_enrolment,
   val allocate_enrolment: uk.gov.hmrc.fhregistrationfrontend.views.html.allocate_enrolment,
   val declaration: uk.gov.hmrc.fhregistrationfrontend.views.html.declaration,
   val enrolment_pending: uk.gov.hmrc.fhregistrationfrontend.views.html.enrolment_pending,
-  ////////////////////////////Miscellaneous/////////////////////////////////////////////////
+  //////////////////////////// Miscellaneous/////////////////////////////////////////////////
   val error_forbidden: uk.gov.hmrc.fhregistrationfrontend.views.html.error_forbidden,
   val error_template: uk.gov.hmrc.fhregistrationfrontend.views.html.error_template,
   val saved: uk.gov.hmrc.fhregistrationfrontend.views.html.saved,

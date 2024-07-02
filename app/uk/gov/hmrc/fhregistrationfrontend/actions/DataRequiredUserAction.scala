@@ -34,7 +34,8 @@ class DataRequiredAction(val executionContext: ExecutionContext, index: Int, mod
     extends ActionRefiner[DataRetrievedActionRequest, DataRequiredRequest] with FrontendAction {
 
   override protected def refine[A](
-    request: DataRetrievedActionRequest[A]): Future[Either[Result, DataRequiredRequest[A]]] = {
+    request: DataRetrievedActionRequest[A]
+  ): Future[Either[Result, DataRequiredRequest[A]]] = {
     implicit val r = request
     Future successful {
       r.optUserAnswers match {

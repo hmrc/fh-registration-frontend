@@ -37,7 +37,8 @@ class NewApplicationActionSpec extends ActionSpecBase {
         Some(registrationNumber),
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Processing, Received, Approved, ApprovedWithConditions)
       } {
@@ -45,7 +46,8 @@ class NewApplicationActionSpec extends ActionSpecBase {
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
           StubbedErrorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
 
         status(result(action, userRequest)) shouldBe BAD_REQUEST
       }
@@ -58,11 +60,13 @@ class NewApplicationActionSpec extends ActionSpecBase {
         registrationNumber = None,
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       val fhddsConnector = mock[FhddsConnector]
       val action = new NewApplicationAction(fhddsConnector)(
         StubbedErrorHandler,
-        scala.concurrent.ExecutionContext.Implicits.global)
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
 
       status(result(action, userRequest)) shouldBe OK
     }
@@ -74,7 +78,8 @@ class NewApplicationActionSpec extends ActionSpecBase {
         Some(registrationNumber),
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
@@ -82,7 +87,8 @@ class NewApplicationActionSpec extends ActionSpecBase {
         when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
           StubbedErrorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
 
         status(result(action, userRequest)) shouldBe OK
       }

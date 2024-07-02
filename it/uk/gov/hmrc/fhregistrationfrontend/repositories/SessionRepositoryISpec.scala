@@ -18,15 +18,12 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 class SessionRepositoryISpec
-  extends AnyFreeSpec
-    with Matchers
-    with ScalaFutures
-    with IntegrationPatience
-    with OptionValues with GuiceOneAppPerSuite with FutureAwaits with DefaultAwaitTimeout with BeforeAndAfterEach {
+    extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with OptionValues
+    with GuiceOneAppPerSuite with FutureAwaits with DefaultAwaitTimeout with BeforeAndAfterEach {
 
   val repository: SessionRepository = app.injector.instanceOf[SessionRepository]
   val encryption: Encryption = app.injector.instanceOf[Encryption]
-  implicit val cryptEncryptedValueFormats: Format[EncryptedValue]  = CryptoFormats.encryptedValueFormat
+  implicit val cryptEncryptedValueFormats: Format[EncryptedValue] = CryptoFormats.encryptedValueFormat
 
   override def beforeEach(): Unit = {
     await(repository.collection.deleteMany(BsonDocument()).toFuture())
@@ -35,44 +32,47 @@ class SessionRepositoryISpec
 
   "indexes" - {
     "are correct" in {
-      repository.indexes.toList.toString() mustBe List(IndexModel(
-        Indexes.ascending("lastUpdated"),
-        IndexOptions()
-          .name("lastUpdatedIdx")
-          .expireAfter(900, TimeUnit.SECONDS)
-      )).toString()
+      repository.indexes.toList.toString() mustBe List(
+        IndexModel(
+          Indexes.ascending("lastUpdated"),
+          IndexOptions()
+            .name("lastUpdatedIdx")
+            .expireAfter(900, TimeUnit.SECONDS)
+        )
+      ).toString()
     }
   }
 
   ".set" - {
     "must set the last updated time on the supplied user answers to `now`, and save them" in {
-      val userAnswersBefore = UserAnswers("id", Map("1" -> Json.obj("foo" -> "bar")),Instant.ofEpochSecond(1))
+      val userAnswersBefore = UserAnswers("id", Map("1" -> Json.obj("foo" -> "bar")), Instant.ofEpochSecond(1))
       val timeBeforeTest = Instant.now()
-      val setResult     = await(repository.set(userAnswersBefore))
+      val setResult = await(repository.set(userAnswersBefore))
       val updatedRecord = await(repository.get(userAnswersBefore.id)).get
       lazy val timeAfterTest = Instant.now()
 
       setResult mustEqual true
-      assert(updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli)
-      assert(updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli)
+      assert(
+        updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli
+      )
+      assert(
+        updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli
+      )
 
       updatedRecord.id mustBe userAnswersBefore.id
       updatedRecord.data mustBe userAnswersBefore.data
     }
 
     "correctly encrypt the records data" in {
-      val userAnswersBefore = UserAnswers("id",
-        Map("1" -> Json.obj("foo" -> "bar")),
-        Instant.ofEpochSecond(1))
+      val userAnswersBefore = UserAnswers("id", Map("1" -> Json.obj("foo" -> "bar")), Instant.ofEpochSecond(1))
       val setResult = await(repository.set(userAnswersBefore))
       setResult mustBe true
       val updatedRecord = await(repository.collection.find[BsonDocument](BsonDocument()).toFuture()).head
       val resultParsedToJson = Json.parse(updatedRecord.toJson).as[JsObject]
-      val dataDecrypted = {
-        (resultParsedToJson \ "data").as[Map[String, EncryptedValue]].map{
-          case (x, encryVal) => x -> Json.parse(encryption.crypto.decrypt(encryVal, userAnswersBefore.id))
+      val dataDecrypted =
+        (resultParsedToJson \ "data").as[Map[String, EncryptedValue]].map { case (x, encryVal) =>
+          x -> Json.parse(encryption.crypto.decrypt(encryVal, userAnswersBefore.id))
         }
-      }
 
       dataDecrypted mustBe userAnswersBefore.data
     }
@@ -90,8 +90,12 @@ class SessionRepositoryISpec
         val updatedRecord = await(repository.get(userAnswersBefore.id)).get
         lazy val timeAfterTest = Instant.now()
 
-        assert(updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli)
-        assert(updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli)
+        assert(
+          updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli
+        )
+        assert(
+          updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli
+        )
 
         updatedRecord.id mustBe userAnswersBefore.id
         updatedRecord.data mustBe userAnswersBefore.data
@@ -139,8 +143,12 @@ class SessionRepositoryISpec
         result mustEqual true
         val updatedRecord = await(repository.collection.find(BsonDocument()).headOption()).get
 
-        assert(updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli)
-        assert(updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli)
+        assert(
+          updatedRecord.lastUpdated.toEpochMilli > timeBeforeTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeBeforeTest.toEpochMilli
+        )
+        assert(
+          updatedRecord.lastUpdated.toEpochMilli < timeAfterTest.toEpochMilli || updatedRecord.lastUpdated.toEpochMilli == timeAfterTest.toEpochMilli
+        )
 
         updatedRecord.id mustBe userAnswersBefore.id
         updatedRecord.data mustBe userAnswersBefore.data

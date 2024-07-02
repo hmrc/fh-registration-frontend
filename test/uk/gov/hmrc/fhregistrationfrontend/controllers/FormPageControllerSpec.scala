@@ -48,7 +48,8 @@ class FormPageControllerSpec
   val addressAuditService: AddressAuditService = mock[AddressAuditService]
   val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, views)(
     mockSave4Later,
-    scala.concurrent.ExecutionContext.Implicits.global)
+    scala.concurrent.ExecutionContext.Implicits.global
+  )
 
   "load" should {
     "Render the page" in {
@@ -215,7 +216,8 @@ class FormPageControllerSpec
       setupPageAction(
         businessPartnersPage,
         journeyPages = JourneyRequestBuilder.fullyCompleteJourney(),
-        cacheMap = cacheMap)
+        cacheMap = cacheMap
+      )
 
       setupSave4LaterFrom(cacheMap)
 
@@ -306,8 +308,8 @@ class FormPageControllerSpec
       BusinessPartnersForm.hasNationalInsuranceNumberKey -> "false"
     ) ++ addressForm
 
-    individualPartner.map {
-      case (k, v) => s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
+    individualPartner.map { case (k, v) =>
+      s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
     } +
       (BusinessPartnersForm.businessPartnersTypeKey -> BusinessPartnerType.Individual.toString) +
       ("addMore"                                    -> addMore.toString)

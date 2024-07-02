@@ -34,18 +34,24 @@ trait ActionSpecBase
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A]) = {
     val p = Promise[P[_]]
-    val result = action.invokeBlock(request, { r: P[A] =>
-      p success r
-      Future(Ok)
-    })
+    val result = action.invokeBlock(
+      request,
+      { r: P[A] =>
+        p success r
+        Future(Ok)
+      }
+    )
 
     status(result) shouldBe OK
     await(p.future)
   }
 
   def result[P[_], R[_], A](action: ActionFunction[R, P], request: R[A]) =
-    action.invokeBlock(request, { r: P[A] =>
-      Future(Ok)
-    })
+    action.invokeBlock(
+      request,
+      { r: P[A] =>
+        Future(Ok)
+      }
+    )
 
 }

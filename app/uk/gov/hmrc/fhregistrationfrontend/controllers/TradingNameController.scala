@@ -24,11 +24,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class TradingNameController @Inject()(
+class TradingNameController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -46,12 +47,8 @@ class TradingNameController @Inject()(
       tradingNameForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.trading_name_page(formWithErrors, "Test User"))
-          },
-          tradingName => {
-            Ok(s"Form submitted, with result: $tradingName")
-          }
+          formWithErrors => BadRequest(view.trading_name_page(formWithErrors, "Test User")),
+          tradingName => Ok(s"Form submitted, with result: $tradingName")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

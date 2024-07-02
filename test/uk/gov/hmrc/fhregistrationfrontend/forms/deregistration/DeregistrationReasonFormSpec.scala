@@ -32,7 +32,8 @@ class DeregistrationReasonFormSpec extends UnitSpec with FormSpecsHelper[Deregis
         Map.empty,
         Seq(
           reasonKey -> "error.required"
-        ))
+        )
+      )
     }
 
     "Fail if reason is not recognized" in {
@@ -44,7 +45,9 @@ class DeregistrationReasonFormSpec extends UnitSpec with FormSpecsHelper[Deregis
     }
 
     "Parse the reason" in {
-      dataFromValidForm(Map(reasonKey -> "CEASES_REGISTERABLE_SCHEME")).deregistrationReason shouldBe DeregistrationReasonEnum.NoLongerNeeded
+      dataFromValidForm(
+        Map(reasonKey -> "CEASES_REGISTERABLE_SCHEME")
+      ).deregistrationReason shouldBe DeregistrationReasonEnum.NoLongerNeeded
     }
 
     "Parse reason other and the description" in {
@@ -52,7 +55,8 @@ class DeregistrationReasonFormSpec extends UnitSpec with FormSpecsHelper[Deregis
         Map(
           reasonKey      -> "Others",
           reasonOtherKey -> "Some private reason"
-        ))
+        )
+      )
       parsed.deregistrationReason shouldBe DeregistrationReasonEnum.Other
       parsed.deregistrationReasonOther shouldBe Some("Some private reason")
     }

@@ -55,7 +55,8 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
         Map(
           emailOptionKey  -> "true",
           defaultEmailKey -> "default@test.com"
-        ))
+        )
+      )
 
       parsed.usingGgEmailAddress shouldBe true
       parsed.ggEmail shouldBe Some("default@test.com")
@@ -67,7 +68,8 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
         Map(
           emailOptionKey      -> "false",
           alternativeEmailKey -> "alternate@test.com"
-        ))
+        )
+      )
 
       parsed.usingGgEmailAddress shouldBe false
       parsed.alternativeEmail shouldBe Some("alternate@test.com")

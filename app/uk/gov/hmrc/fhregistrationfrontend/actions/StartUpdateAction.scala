@@ -39,8 +39,8 @@ class StartUpdateRequest[A](
 abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
   implicit val save4LaterService: Save4LaterService,
   implicit val ec: ExecutionContext,
-  errorHandler: ErrorHandler)
-    extends ActionRefiner[UserRequest, StartUpdateRequest] with FrontendAction with ActionFunctions {
+  errorHandler: ErrorHandler
+) extends ActionRefiner[UserRequest, StartUpdateRequest] with FrontendAction with ActionFunctions {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, StartUpdateRequest[A]]] = {
 
@@ -51,17 +51,16 @@ abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
         _        <- EitherT(checkIsProcessing(registrationNumber))
         cacheMap <- EitherT(loadCacheMap)
         journeyType = loadJourneyType(cacheMap)
-      } yield {
-        new StartUpdateRequest[A](registrationNumber, Some(journeyType), request)
-      }
+      } yield new StartUpdateRequest[A](registrationNumber, Some(journeyType), request)
       result.value
     }
 
     whenRegistered getOrElse Future.successful(Left(errorHandler.errorResultsPages(Results.BadRequest)))
   }
 
-  private def checkIsProcessing(registrationNumber: String)(
-    implicit request: UserRequest[_]): Future[Either[Result, Boolean]] =
+  private def checkIsProcessing(
+    registrationNumber: String
+  )(implicit request: UserRequest[_]): Future[Either[Result, Boolean]] =
     fhddsConnector.getStatus(registrationNumber) map isAllowed map {
       case true  => Right(true)
       case false => Left(errorHandler.errorResultsPages(Results.BadRequest))

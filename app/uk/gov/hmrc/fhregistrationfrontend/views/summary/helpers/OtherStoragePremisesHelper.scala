@@ -55,45 +55,37 @@ object OtherStoragePremisesHelper {
         )
       }
 
-    val storageAddress = {
-      data.value.values.zipWithIndex.flatMap {
-        case (storagePremise: StoragePremise, index) =>
-          val address = Helpers.formatAddress(storagePremise.address)
-          Seq(
-            Helpers.createSummaryRow(
-              params = SummaryRowParams(
-                label = Some(messages("fh.summary.thirdPartyPremises.address", {
-                  index + 1
-                })),
-                value = Some(address),
-                changeLink = None,
-                groupRow = GroupRow.Single
-              ),
-              summaryActions = if (isEditable) {
-                Some(Actions(items = getActions(index + 1)))
-              } else { None },
+    val storageAddress =
+      data.value.values.zipWithIndex.flatMap { case (storagePremise: StoragePremise, index) =>
+        val address = Helpers.formatAddress(storagePremise.address)
+        Seq(
+          Helpers.createSummaryRow(
+            params = SummaryRowParams(
+              label = Some(messages("fh.summary.thirdPartyPremises.address", index + 1)),
+              value = Some(address),
+              changeLink = None,
+              groupRow = GroupRow.Single
             ),
-            Helpers.createSummaryRow(
-              SummaryRowParams.ofBoolean(
-                Some(Messages("fh.summary.thirdPartyPremises", {
-                  index + 1
-                })),
-                storagePremise.isThirdParty,
-                None,
-                GroupRow.Bottom
-              ),
-              Helpers.createChangeLink(
-                Mode isEditable mode,
-                s"form/otherStoragePremises/${index + 1}",
-                Text("Change"),
-                Some(Messages("fh.summary.thirdPartyPremises.hidden", {
-                  index + 1
-                }))
-              )
+            summaryActions = if (isEditable) {
+              Some(Actions(items = getActions(index + 1)))
+            } else { None }
+          ),
+          Helpers.createSummaryRow(
+            SummaryRowParams.ofBoolean(
+              Some(Messages("fh.summary.thirdPartyPremises", index + 1)),
+              storagePremise.isThirdParty,
+              None,
+              GroupRow.Bottom
+            ),
+            Helpers.createChangeLink(
+              Mode isEditable mode,
+              s"form/otherStoragePremises/${index + 1}",
+              Text("Change"),
+              Some(Messages("fh.summary.thirdPartyPremises.hidden", index + 1))
             )
           )
+        )
       }.toSeq
-    }
 
     val storagePremise = Seq(
       Helpers.createSummaryRow(

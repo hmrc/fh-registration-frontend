@@ -26,7 +26,7 @@ object BusinessPartnerPartnershipHelper {
 
   def apply(partner: BusinessPartnerPartnershipModel)(implicit messages: Messages): Seq[SummaryListRow] = {
 
-    val partnerHasVat = {
+    val partnerHasVat =
       if (partner.hasVat) {
         Seq(
           Helpers.createSummaryRow(
@@ -35,14 +35,14 @@ object BusinessPartnerPartnershipHelper {
               partner.vat,
               None
             ),
-            None)
+            None
+          )
         )
       } else {
         Seq.empty
       }
-    }
 
-    val hasUniqueTaxpayerReference = {
+    val hasUniqueTaxpayerReference =
       if (partner.hasUniqueTaxpayerReference) {
         Seq(
           Helpers.createSummaryRow(
@@ -51,12 +51,12 @@ object BusinessPartnerPartnershipHelper {
               partner.uniqueTaxpayerReference,
               None
             ),
-            None)
+            None
+          )
         )
       } else {
         Seq.empty
       }
-    }
 
     val businessPartnerPartnership = Seq(
       Helpers.createSummaryRow(
@@ -75,7 +75,8 @@ object BusinessPartnerPartnershipHelper {
           None,
           GroupRow.Member
         ),
-        None),
+        None
+      ),
       if (partner.hasTradeName) {
         Helpers.createSummaryRow(
           SummaryRowParams(
@@ -84,7 +85,8 @@ object BusinessPartnerPartnershipHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
@@ -93,21 +95,25 @@ object BusinessPartnerPartnershipHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
           Helpers.formatAddress(partner.address),
           None,
-          GroupRow.Member),
-        None)
+          GroupRow.Member
+        ),
+        None
+      )
     )
 
     (partner.hasVat, partner.hasUniqueTaxpayerReference) match {
       case (true, true) =>
         businessPartnerPartnership.dropRight(1) ++ partnerHasVat ++ hasUniqueTaxpayerReference ++ Seq(
-          businessPartnerPartnership.last)
+          businessPartnerPartnership.last
+        )
 
       case (true, false) =>
         businessPartnerPartnership.dropRight(1) ++ partnerHasVat ++ Seq(businessPartnerPartnership.last)

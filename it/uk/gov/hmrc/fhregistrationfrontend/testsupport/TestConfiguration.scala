@@ -23,10 +23,7 @@ import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
 
 trait TestConfiguration
-  extends GuiceOneServerPerSuite
-    with IntegrationPatience
-    with PatienceConfiguration
-    with BeforeAndAfterEach
+    extends GuiceOneServerPerSuite with IntegrationPatience with PatienceConfiguration with BeforeAndAfterEach
     with BeforeAndAfterAll {
 
   me: Suite with TestSuite =>
@@ -58,48 +55,47 @@ trait TestConfiguration
     cookieHeaderEncoding.encodeCookieHeader(Seq(encryptedSessionCookie))
   }
   val authData = Map("authToken" -> AUTHORIZE_HEADER_VALUE)
-  val sessionAndAuth  = Map("authToken" -> AUTHORIZE_HEADER_VALUE, "sessionId" -> sessionId)
+  val sessionAndAuth = Map("authToken" -> AUTHORIZE_HEADER_VALUE, "sessionId" -> sessionId)
 
   val authCookie: String = createSessionCookieAsString(authData).substring(5)
   val authAndSessionCookie: String = createSessionCookieAsString(sessionAndAuth).substring(5)
   abstract override implicit val patienceConfig: PatienceConfig =
-    PatienceConfig(
-      timeout = Span(4, Seconds),
-      interval = Span(50, Millis))
+    PatienceConfig(timeout = Span(4, Seconds), interval = Span(50, Millis))
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(replaceWithWiremock(Seq(
-      "auth",
-      "auth.bas-gateway",
-      "fhdds",
-      "business-customer-frontend",
-      "cachable.short-lived-cache",
-      "cachable.session-cache",
-      "address-lookup"
-    )))
+    .configure(
+      replaceWithWiremock(
+        Seq(
+          "auth",
+          "auth.bas-gateway",
+          "fhdds",
+          "business-customer-frontend",
+          "cachable.short-lived-cache",
+          "cachable.session-cache",
+          "address-lookup"
+        )
+      )
+    )
     .build()
-        app.injector.instanceOf[HealthController]
+  app.injector.instanceOf[HealthController]
 
-
-  private def replaceWithWiremock(services: Seq[String]) = {
-
+  private def replaceWithWiremock(services: Seq[String]) =
     services.foldLeft(Map.empty[String, Any]) { (configMap, service) =>
       configMap ++ Map(
-        s"microservice.services.$service.host" -> wiremockHost,
-        s"microservice.services.$service.port" -> wiremockPort,
+        s"microservice.services.$service.host"                     -> wiremockHost,
+        s"microservice.services.$service.port"                     -> wiremockPort,
         s"microservice.services.cachable.short-lived-cache.domain" -> "save4later",
-        s"microservice.services.cachable.session-cache.domain" -> "keystore",
+        s"microservice.services.cachable.session-cache.domain"     -> "keystore",
         s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
-        s"play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
-        s"json.encryption.key" -> "fqpLDZ4sumDsekHkeEBlCA==",
-        s"json.encryption.previousKeys" -> List.empty,
-        "mongodb.uri" -> "mongodb://localhost:27017/fh-registration-frontend-integration",
+        s"play.filters.csrf.header.bypassHeaders.Csrf-Token"       -> "nocheck",
+        s"json.encryption.key"                                     -> "fqpLDZ4sumDsekHkeEBlCA==",
+        s"json.encryption.previousKeys"                            -> List.empty,
+        "mongodb.uri"                   -> "mongodb://localhost:27017/fh-registration-frontend-integration",
         "business-partners-new-enabled" -> s"$newBusinessPartnersFlowEnabled",
-        "company-officers-new-enabled" -> s"$newCompanyOfficersFlowEnabled"
+        "company-officers-new-enabled"  -> s"$newCompanyOfficersFlowEnabled"
       )
     } ++
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
-  }
 
   val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 
@@ -113,20 +109,20 @@ trait TestConfiguration
   }
 
   override def beforeEach() = {
-    Await.result(sessionCache.collection.deleteMany(BsonDocument()).toFuture(),Duration(3,TimeUnit.SECONDS))
+    Await.result(sessionCache.collection.deleteMany(BsonDocument()).toFuture(), Duration(3, TimeUnit.SECONDS))
     resetAllScenarios()
     reset()
   }
 
-  override protected def afterAll(): Unit = {
+  override protected def afterAll(): Unit =
     wireMockServer.stop()
-  }
 
   override def afterEach(): Unit = {
     println("===== REQUESTS =====")
     wireMockServer.getAllServeEvents.asScala.toList
       .sortBy(_.getRequest.getLoggedDate)
-      .map(_.getRequest).map(r => s"${r.getLoggedDate.toInstant.toEpochMilli}\t${r.getMethod}\t${r.getUrl}")
+      .map(_.getRequest)
+      .map(r => s"${r.getLoggedDate.toInstant.toEpochMilli}\t${r.getMethod}\t${r.getUrl}")
       .foreach(println)
     println("===== END =====")
   }

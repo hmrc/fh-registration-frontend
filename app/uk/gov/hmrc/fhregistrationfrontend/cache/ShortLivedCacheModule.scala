@@ -33,16 +33,17 @@ class ShortLivedCacheModule extends Module {
 }
 
 @Singleton
-class DefaultShortLivedCache @Inject()(
+class DefaultShortLivedCache @Inject() (
   override val shortLiveCache: ShortLivedHttpCaching,
   val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit lazy val crypto
-    : Encrypter with Decrypter = new ApplicationCrypto(runModeConfiguration.underlying).JsonCrypto
+  override implicit lazy val crypto: Encrypter with Decrypter = new ApplicationCrypto(
+    runModeConfiguration.underlying
+  ).JsonCrypto
 }
 
 @Singleton
-class DefaultShortLivedHttpCaching @Inject()(
+class DefaultShortLivedHttpCaching @Inject() (
   override val http: HttpClient,
   val runModeConfiguration: Configuration,
   environment: Environment
@@ -53,6 +54,7 @@ class DefaultShortLivedHttpCaching @Inject()(
   override lazy val baseUri: String = baseUrl("cachable.short-lived-cache")
   override lazy val domain: String = getConfString(
     "cachable.short-lived-cache.domain",
-    throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'"))
+    throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'")
+  )
 
 }

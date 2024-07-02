@@ -22,10 +22,10 @@ import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NewApplicationAction(val fhddsConnector: FhddsConnector)(
-  implicit val errorHandler: ErrorHandler,
-  override val executionContext: ExecutionContext)
-    extends ActionRefiner[UserRequest, UserRequest] with FrontendAction {
+class NewApplicationAction(val fhddsConnector: FhddsConnector)(implicit
+  val errorHandler: ErrorHandler,
+  override val executionContext: ExecutionContext
+) extends ActionRefiner[UserRequest, UserRequest] with FrontendAction {
 
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, UserRequest[A]]] = {
 

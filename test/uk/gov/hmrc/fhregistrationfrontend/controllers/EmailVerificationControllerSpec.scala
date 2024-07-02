@@ -40,7 +40,8 @@ class EmailVerificationControllerSpec
     mockMcc,
     mockEmailVerifcationConnector,
     mockSave4LaterService,
-    views)(scala.concurrent.ExecutionContext.Implicits.global)
+    views
+  )(scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
