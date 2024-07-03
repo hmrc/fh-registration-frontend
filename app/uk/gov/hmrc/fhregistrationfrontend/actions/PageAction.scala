@@ -38,13 +38,13 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   def bpr = request.bpr
 
 //  TODO: BELOW IS INITIAL METHOD COPIED FROM SUMMARY ACTION - WILL HAVE TO USE TO GET CURRENTLY USED VAT NUMBERS
-  def pageDataOpt[T](page: Page[T]): Option[T] =
+  private def pageDataOpt[T](page: Page[T]): Option[T] =
     request.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
 
-  def vatReg(): Option[VatNumber] =
+  private def vatReg(): Option[VatNumber] =
     None
 
-  def companyOfficers(): List[CompanyOfficer] =
+  private def companyOfficers(): List[CompanyOfficer] =
     List(
       CompanyOfficer(
         officialType = CompanyOfficerType.Company,
@@ -58,8 +58,29 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
       )
     )
 
-  def businessPartners(): List[BusinessPartner] =
+  private def businessPartners(): List[BusinessPartner] =
     List()
+
+  def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
+    //      val usedCompanyOfficers = request.companyOfficers()
+    //      val usedBusinessPartners = request.businessPartners()
+    //      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
+    //        _ match {
+    //          case co: CompanyOfficerCompany => co.vat
+    //          case co: CompanyOfficerIndividual => None
+    //        })
+    //      val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners.flatMap(
+    //        _ match {
+    //          case i: BusinessPartnerIndividual => None
+    //          case s: BusinessPartnerSoleProprietor => s.vat
+    //          case p: BusinessPartnerPartnership => p.vat
+    //          case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+    //          case c: BusinessPartnerCorporateBody => c.vat
+    //          case u: BusinessPartnerUnincorporatedBody => u.vat
+    //        })
+    //      val disallowedVatNumbers = usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+    ???
+  }
 }
 
 //TODO all exceptional results need to be reviewed
