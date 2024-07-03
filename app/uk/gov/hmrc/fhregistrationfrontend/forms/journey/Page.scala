@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 import javax.inject.Inject
-import play.api.data.{Form, FormError}
+import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request

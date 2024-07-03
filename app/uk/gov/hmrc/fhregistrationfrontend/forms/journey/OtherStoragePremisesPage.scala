@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request

@@ -60,7 +60,7 @@ class FormPageController @Inject()(
 
   def saveVatNumber(): Action[AnyContent] =
     pageAction("vatNumber", None).async { implicit request =>
-//      val usedVatNumber = request.vatReg()
+      val usedVatNumber = request.vatReg()
 //      val usedCompanyOfficers = request.companyOfficers()
 //      val usedBusinessPartners = request.businessPartners()
 //      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
