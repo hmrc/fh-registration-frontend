@@ -89,10 +89,9 @@ case class OtherStoragePremisesPage(
   private def isMainSection = section.isEmpty || (section == mainSection)
   private def hasOtherPremises = mainPage.data contains true
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-    implicit request: Request[_],
-    messages: Messages,
-    appConfig: AppConfig): Html =
+  override def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
     if (isMainSection)
       mainPage.render(bpr, navigation)
     else

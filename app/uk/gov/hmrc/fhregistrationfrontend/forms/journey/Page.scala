@@ -32,10 +32,9 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 trait Rendering extends Logging {
-  def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-    implicit request: Request[_],
-    messages: Messages,
-    appConfig: AppConfig): Html
+  def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
 }
 
 trait FormRendering[T] {

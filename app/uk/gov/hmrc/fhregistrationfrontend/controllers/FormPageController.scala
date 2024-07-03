@@ -84,10 +84,9 @@ class FormPageController @Inject()(
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-            def vatNumberIsAlreadyUsed(disallowedVatNumbers: List[String], vatNumber: VatNumber): Boolean = {
+            def vatNumberIsAlreadyUsed(disallowedVatNumbers: List[String], vatNumber: VatNumber): Boolean =
               //            CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
               disallowedVatNumbers.contains(vatNumber.value.get)
-            }
             val pageData = page.data.get
             if (vatNumberIsAlreadyUsed(disallowedVatNumbers, pageData)) {
               val vatNumberBasicPage = new BasicPage[VatNumber](
@@ -133,7 +132,7 @@ class FormPageController @Inject()(
         )
     }
 
-  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = {
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
     pageId match {
       case "vatNumber" => saveVatNumber()
       case _ =>
@@ -157,7 +156,6 @@ class FormPageController @Inject()(
             )
         }
     }
-  }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request =>

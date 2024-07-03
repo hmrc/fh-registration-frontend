@@ -58,24 +58,20 @@ case class BasicPage[T](
   def renderWithUpdatedForm(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(
     implicit request: Request[_],
     messages: Messages,
-    appConfig: AppConfig): Html = {
+    appConfig: AppConfig): Html =
     rendering.render(form, bpr, navigation)
-  }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-    implicit request: Request[_],
-    messages: Messages,
-    appConfig: AppConfig): Html = {
-    val newForm = formError map form.withError getOrElse form
-    val filledForm = data map (newForm fill _) getOrElse newForm
+  override def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
+    val filledForm = data map (form fill _) getOrElse form
     rendering.render(filledForm, bpr, navigation)
   }
 
   private def errorRenderer(form: Form[T]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-      implicit request: Request[_],
-      messages: Messages,
-      appConfig: AppConfig): Html =
+    override def render(
+      bpr: BusinessRegistrationDetails,
+      navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
       rendering.render(form, bpr, navigation)
   }
 

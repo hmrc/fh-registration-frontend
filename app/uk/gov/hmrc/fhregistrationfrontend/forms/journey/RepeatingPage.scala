@@ -108,10 +108,9 @@ case class RepeatingPage[T](
     }
   }
 
-  override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-    implicit request: Request[_],
-    messages: Messages,
-    appConfig: AppConfig): Html = {
+  override def render(
+    bpr: BusinessRegistrationDetails,
+    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html = {
     val filledForm =
       if (index < value.size) form fill ((value(index), value.addMore))
       else form
@@ -120,10 +119,9 @@ case class RepeatingPage[T](
   }
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
-    override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
-      implicit request: Request[_],
-      messages: Messages,
-      appConfig: AppConfig): Html =
+    override def render(
+      bpr: BusinessRegistrationDetails,
+      navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
       renderer.render(form, bpr, navigation, section(index), renderingParams)
   }
 
