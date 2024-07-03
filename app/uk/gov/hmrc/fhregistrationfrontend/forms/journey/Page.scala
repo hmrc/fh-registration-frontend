@@ -176,12 +176,11 @@ object Page {
         override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
           implicit request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html = {
+          appConfig: AppConfig): Html =
           views.vat_registration(
             form,
             navigation,
             uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
-        }
       }
     )
 

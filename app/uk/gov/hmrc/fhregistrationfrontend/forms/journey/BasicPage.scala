@@ -55,6 +55,13 @@ case class BasicPage[T](
     }
   }
 
+  def renderWithUpdatedForm(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+    implicit request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig): Html = {
+    rendering.render(form, bpr, navigation)
+  }
+
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation, formError: Option[FormError] = None)(
     implicit request: Request[_],
     messages: Messages,
