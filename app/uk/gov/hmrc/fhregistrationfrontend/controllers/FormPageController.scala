@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.Messages
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
@@ -57,6 +57,33 @@ class FormPageController @Inject() (
   def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
   def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
 
+  private def saveSuccessfully[T](page: Page[T])(implicit request: PageRequest[AnyContent]): Future[Result] = {
+    addressAuditService.auditAddresses(page.id, page.updatedAddresses)
+    save4LaterService
+      .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+      .map { _ =>
+        if (isSaveForLate)
+          Redirect(routes.Application.savedForLater)
+        else {
+          showNextPage(page)
+        }
+      }
+  }
+
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
+    pageId match {
+      case "vatNumber" => saveVatNumber()
+      case _ =>
+        pageAction(pageId, sectionId).async { implicit request =>
+          request
+            .page[T]
+            .parseFromRequest(
+              pageWithErrors => Future successful renderForm(pageWithErrors, true),
+              page => saveSuccessfully(page)
+            )
+        }
+    }
+
   def saveVatNumber(): Action[AnyContent] =
     pageAction("vatNumber", None).async { implicit request =>
       request
@@ -69,26 +96,31 @@ class FormPageController @Inject() (
             def vatNumberIsAlreadyUsed(usedVatNumbers: List[String], vatNumber: VatNumber): Boolean =
               //            TODO: CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
               usedVatNumbers.contains(vatNumber.value.get)
-            if (vatNumberIsAlreadyUsed(usedVatNumbers, pageData)) {
+            if (!vatNumberIsAlreadyUsed(usedVatNumbers, pageData)) {
+              saveSuccessfully(page)
+            } else {
               val vatNumberBasicPage = new BasicPage[VatNumber](
                 "vatNumber",
                 VatNumberForm.vatNumberForm,
                 new FormRendering[VatNumber] {
-                  override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-                    implicit request: Request[_],
-                    messages: Messages,
-                    appConfig: AppConfig): Html =
+                  override def render(
+                    form: Form[VatNumber],
+                    bpr: BusinessRegistrationDetails,
+                    navigation: Navigation
+                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
                     views.vat_registration(
                       form,
                       navigation,
                       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-                        .save("vatNumber"))(request, request2Messages(request))
+                        .save("vatNumber")
+                    )(request, request2Messages(request))
                 }
               )
               val updatedForm: Form[VatNumber] = VatNumberForm.vatNumberForm.copy(
                 data = Map(
                   "vatNumber_yesNo" -> pageData.hasValue.toString,
-                  "vatNumber_value" -> pageData.value.getOrElse("")),
+                  "vatNumber_value" -> pageData.value.getOrElse("")
+                ),
                 errors = Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List()))
               )
               Future successful BadRequest(
@@ -96,46 +128,11 @@ class FormPageController @Inject() (
                   updatedForm,
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page)
-                )(request, request2Messages(request), appConfig))
-            } else {
-              addressAuditService.auditAddresses("vatNumber", page.updatedAddresses)
-              save4LaterService
-                .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-                .map { _ =>
-                  if (isSaveForLate)
-                    Redirect(routes.Application.savedForLater)
-                  else {
-                    showNextPage(page)
-                  }
-                }
+                )(request, request2Messages(request), appConfig)
+              )
             }
           }
         )
-    }
-
-  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
-    pageId match {
-      case "vatNumber" => saveVatNumber()
-      case _ =>
-        pageAction(pageId, sectionId).async { implicit request =>
-          request
-            .page[T]
-            .parseFromRequest(
-              pageWithErrors => Future successful renderForm(pageWithErrors, true),
-              page => {
-                addressAuditService.auditAddresses(pageId, page.updatedAddresses)
-                save4LaterService
-                  .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-                  .map { _ =>
-                    if (isSaveForLate)
-                      Redirect(routes.Application.savedForLater)
-                    else {
-                      showNextPage(page)
-                    }
-                  }
-              }
-            )
-        }
     }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
