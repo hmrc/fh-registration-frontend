@@ -364,6 +364,7 @@ fh.business_partner.vatNumber.guided.hintText=This is 9 numbers, sometimes with 
 fh.vatNumber.guided.hintText=This is 9 numbers, sometimes with ‘GB’ at the start, for example 123456789 or GB123456789. You can find it on your VAT registration certificate.
 fh.vatNumber_value.error.required=Enter the VAT registration number
 fh.vatNumber_value.error.pattern=Enter a valid UK VAT registration number
+fh.vatNumber_value.error.vatAlreadyUsed=You can only use a VAT registration number once in an application. You’ve already entered this number for another person or business.
 
 # - Business status
 #===========================================================
