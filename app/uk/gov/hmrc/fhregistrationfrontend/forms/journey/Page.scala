@@ -32,16 +32,19 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 trait Rendering extends Logging {
-  def render(
-    bpr: BusinessRegistrationDetails,
-    navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
+  def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+    request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig
+  ): Html
 }
 
 trait FormRendering[T] {
-  def render(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-    implicit request: Request[_],
+  def render(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+    request: Request[_],
     messages: Messages,
-    appConfig: AppConfig): Html
+    appConfig: AppConfig
+  ): Html
 }
 
 trait RepeatedFormRendering[T] {
@@ -50,7 +53,8 @@ trait RepeatedFormRendering[T] {
     bpr: BusinessRegistrationDetails,
     navigation: Navigation,
     sectionId: String,
-    params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
+    params: RepeatingPageParams
+  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html
 }
 
 trait Page[T] extends Rendering {
@@ -67,7 +71,7 @@ trait Page[T] extends Rendering {
   def previousSubsection: Option[String]
   def section: Option[String]
 
-  /** returns None if the page can not be deleted or Some(new page state)*/
+  /** returns None if the page can not be deleted or Some(new page state) */
   def delete: Option[Page[T]]
 
   def pageStatus: PageStatus
@@ -80,7 +84,7 @@ object Page {
 
   type AnyPage = Page[_]
 
-  class InjectedPage @Inject()(views: Views) {
+  class InjectedPage @Inject() (views: Views) {
 
     import CompanyOfficer.companyOfficerFormat
     import CompanyRegistrationNumber.format
@@ -94,15 +98,17 @@ object Page {
       "mainBusinessAddress",
       MainBusinessAddressForm.mainBusinessAddressForm,
       new FormRendering[MainBusinessAddress] {
-        override def render(form: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
-          messages: Messages,
-          appConfig: AppConfig): Html =
+        override def render(
+          form: Form[MainBusinessAddress],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.main_business_address(
             form,
             bpr,
             navigation,
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress"))
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress")
+          )
       },
       addressOnPage = _.previousAddress
     )
@@ -111,10 +117,11 @@ object Page {
       "contactPerson",
       ContactPersonForm.contactPersonForm,
       new FormRendering[ContactPerson] {
-        override def render(form: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
-          messages: Messages,
-          appConfig: AppConfig): Html =
+        override def render(
+          form: Form[ContactPerson],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.contact_person(form, bpr, navigation)
       },
       addressOnPage = _.otherUkContactAddress
@@ -127,7 +134,8 @@ object Page {
         override def render(
           form: Form[CompanyRegistrationNumber],
           bpr: BusinessRegistrationDetails,
-          navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.company_registration_number(form, navigation)
       }
     )
@@ -139,7 +147,8 @@ object Page {
         override def render(
           form: Form[NationalInsuranceNumber],
           bpr: BusinessRegistrationDetails,
-          navigation: Navigation)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.national_insurance_number(form, navigation)
       }
     )
@@ -148,10 +157,11 @@ object Page {
       "dateOfIncorporation",
       DateOfIncorporationForm.dateOfIncorporationForm,
       new FormRendering[DateOfIncorporation] {
-        override def render(form: Form[DateOfIncorporation], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
-          messages: Messages,
-          appConfig: AppConfig): Html =
+        override def render(
+          form: Form[DateOfIncorporation],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.date_of_incorporation(form, navigation)
       }
     )
@@ -160,10 +170,11 @@ object Page {
       "tradingName",
       TradingNameForm.tradingNameForm,
       new FormRendering[TradingName] {
-        override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[TradingName], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.trading_name(form, navigation)
       }
     )
@@ -172,14 +183,16 @@ object Page {
       "vatNumber",
       VatNumberForm.vatNumberForm,
       new FormRendering[VatNumber] {
-        override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[VatNumber], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.vat_registration(
             form,
             navigation,
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber"))
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("vatNumber")
+          )
       }
     )
 
@@ -191,7 +204,8 @@ object Page {
           bpr: BusinessRegistrationDetails,
           navigation: Navigation,
           sectionId: String,
-          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          params: RepeatingPageParams
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.business_partners(form, navigation, sectionId, params)
       },
       BusinessPartnersForm.businessPartnerMapping,
@@ -209,7 +223,8 @@ object Page {
           bpr: BusinessRegistrationDetails,
           navigation: Navigation,
           sectionId: String,
-          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          params: RepeatingPageParams
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.company_officers(form, navigation, sectionId, params)
       },
       CompanyOfficersForm.companyOfficerMapping
@@ -219,10 +234,11 @@ object Page {
       "businessStatus",
       BusinessStatusForm.businessStatusForm,
       new FormRendering[BusinessStatus] {
-        override def render(form: Form[BusinessStatus], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
-          messages: Messages,
-          appConfig: AppConfig): Html =
+        override def render(
+          form: Form[BusinessStatus],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.business_status(form, navigation)
       }
     )
@@ -234,10 +250,11 @@ object Page {
       "hasEori",
       ImportingActivitiesForm.hasEoriForm,
       new FormRendering[Boolean] {
-        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.has_eori(form, navigation, hasEoriPostUrl)
       }
     )
@@ -250,10 +267,11 @@ object Page {
       "enterEORI",
       ImportingActivitiesForm.eoriNumberOnlyForm,
       new FormRendering[String] {
-        override def render(form: Form[String], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[String], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.importing_activities_eori_yes_eori_number(form, navigation, importingActivitiesEoriYesNumberPostUrl)
       }
     )
@@ -266,10 +284,11 @@ object Page {
       "importingGoodsNotBelongingToBusiness",
       ImportingActivitiesForm.goodsImportedOutsideEoriOnlyForm,
       new FormRendering[Boolean] {
-        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.importing_activities_eori_yes_goods(form, navigation, importingActivitiesEoriYesGoodsPostUrl)
       }
     )
@@ -284,14 +303,16 @@ object Page {
       "businessCustomers",
       BusinessCustomersForm.businessCustomersForm,
       new FormRendering[BusinessCustomers] {
-        override def render(form: Form[BusinessCustomers], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
-          messages: Messages,
-          appConfig: AppConfig): Html =
+        override def render(
+          form: Form[BusinessCustomers],
+          bpr: BusinessRegistrationDetails,
+          navigation: Navigation
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.business_customers(
             form,
             navigation,
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers"))
+            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessCustomers")
+          )
       }
     )
 
@@ -299,10 +320,11 @@ object Page {
       "hasOtherStoragePremises",
       StoragePremisesForm.hasOtherStoragePrmisesForm,
       new FormRendering[Boolean] {
-        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(
-          implicit request: Request[_],
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
           messages: Messages,
-          appConfig: AppConfig): Html =
+          appConfig: AppConfig
+        ): Html =
           views.has_other_storage_premises(form, navigation)
       }
     )
@@ -315,7 +337,8 @@ object Page {
           bpr: BusinessRegistrationDetails,
           navigation: Navigation,
           sectionId: String,
-          params: RepeatingPageParams)(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+          params: RepeatingPageParams
+        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
           views.storage_premise(
             form,
             navigation,

@@ -25,11 +25,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import javax.inject.Inject
 
-class UkVatNumberController @Inject()(
+class UkVatNumberController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -41,7 +42,8 @@ class UkVatNumberController @Inject()(
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url)
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url
+        )
       Ok(view.vat_registration(bpAddressForm, Navigation.noNavigation, postAction))
     } else {
       errorHandler.errorResultsPages(Results.NotFound)
@@ -54,16 +56,13 @@ class UkVatNumberController @Inject()(
       val postAction =
         Call(
           method = "POST",
-          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url)
+          url = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.UkVatNumberController.load().url
+        )
       vatNumberForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.vat_registration(formWithErrors, Navigation.noNavigation, postAction))
-          },
-          bpAddress => {
-            Ok(s"Next page!")
-          }
+          formWithErrors => BadRequest(view.vat_registration(formWithErrors, Navigation.noNavigation, postAction)),
+          bpAddress => Ok(s"Next page!")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

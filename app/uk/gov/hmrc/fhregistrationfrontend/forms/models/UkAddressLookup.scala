@@ -21,7 +21,8 @@ import play.api.libs.json.{Json, OFormat}
 case class UkAddressLookup(
   addressLine: Option[String],
   postcode: String,
-  lookupResult: Map[String, Address] = Map.empty)
+  lookupResult: Map[String, Address] = Map.empty
+)
 
 object UkAddressLookup {
   implicit val format: OFormat[UkAddressLookup] = Json.format[UkAddressLookup]

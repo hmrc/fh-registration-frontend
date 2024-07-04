@@ -50,7 +50,8 @@ object BusinessPartnerSoleProprietorHelper {
             partner.tradeName,
             None
           ),
-          None)
+          None
+        )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
@@ -59,7 +60,8 @@ object BusinessPartnerSoleProprietorHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       },
       if (partner.hasNino) {
         Helpers.createSummaryRow(
@@ -68,7 +70,8 @@ object BusinessPartnerSoleProprietorHelper {
             partner.nino,
             None
           ),
-          None)
+          None
+        )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
@@ -77,7 +80,8 @@ object BusinessPartnerSoleProprietorHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       },
       if (partner.hasVat) {
         Helpers.createSummaryRow(
@@ -86,7 +90,8 @@ object BusinessPartnerSoleProprietorHelper {
             partner.vat,
             None
           ),
-          None)
+          None
+        )
       } else {
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(
@@ -95,14 +100,16 @@ object BusinessPartnerSoleProprietorHelper {
             None,
             GroupRow.Member
           ),
-          None)
+          None
+        )
       },
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.partnerAddress")),
           Helpers.formatAddress(partner.address),
           None,
-          GroupRow.Bottom),
+          GroupRow.Bottom
+        ),
         None
       )
     )

@@ -76,10 +76,10 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 }
 
 //TODO all exceptional results need to be reviewed
-class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], journey: Journeys)(
-  implicit errorHandler: ErrorHandler,
-  val executionContext: ExecutionContext)
-    extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
+class PageAction[T, V] @Inject() (pageId: String, sectionId: Option[String], journey: Journeys)(implicit
+  errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext
+) extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
 
   override def refine[A](input: JourneyRequest[A]): Future[Either[Result, PageRequest[A]]] = {
     implicit val r: JourneyRequest[A] = input
@@ -90,13 +90,11 @@ class PageAction[T, V] @Inject()(pageId: String, sectionId: Option[String], jour
       _               <- accessiblePage(pageWithData, input.journeyState).toEitherT[Future]
       pageWithSection <- loadPageSection(pageWithData).toEitherT[Future]
       journeyNavigation = loadJourneyNavigation(input.journeyPages, input.journeyState)
-    } yield {
-      new PageRequest(
-        journeyNavigation,
-        pageWithSection,
-        input
-      )
-    }
+    } yield new PageRequest(
+      journeyNavigation,
+      pageWithSection,
+      input
+    )
     result.value
   }
 

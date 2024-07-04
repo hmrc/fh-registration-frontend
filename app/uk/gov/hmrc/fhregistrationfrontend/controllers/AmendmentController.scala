@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
-class AmendmentController @Inject()(
+class AmendmentController @Inject() (
   desToForm: DesToForm,
   ds: CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
@@ -86,33 +86,29 @@ class AmendmentController @Inject()(
         else save4LaterService.saveV1ContactEmail(request.userId, contactEmail)
 
       for {
-        _        <- save4LaterService.saveDisplayData4Later(request.userId, Save4LaterKeys.verifiedEmailKey, contactEmail)
+        _ <- save4LaterService.saveDisplayData4Later(request.userId, Save4LaterKeys.verifiedEmailKey, contactEmail)
         verified <- emailVerificationConnector.isVerified(contactEmail)
         result   <- saveIfVerified(verified)
-      } yield {
-        result
-      }
+      } yield result
     }
 
   }
 
   private def saveDisplayPageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
-    pages.pages.foldLeft(Future successful ignored) {
-      case (acc, page) =>
-        acc flatMap { _ =>
-          save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(hc, page.format)
-        }
+    pages.pages.foldLeft(Future successful ignored) { case (acc, page) =>
+      acc flatMap { _ =>
+        save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(hc, page.format)
+      }
     }
   }
 
   private def savePageData(userId: String, pages: JourneyPages)(implicit hc: HeaderCarrier) = {
     val ignored: Any = 1
-    pages.pages.foldLeft(Future successful ignored) {
-      case (acc, page) =>
-        acc flatMap { _ =>
-          save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)
-        }
+    pages.pages.foldLeft(Future successful ignored) { case (acc, page) =>
+      acc flatMap { _ =>
+        save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)
+      }
     }
   }
 }

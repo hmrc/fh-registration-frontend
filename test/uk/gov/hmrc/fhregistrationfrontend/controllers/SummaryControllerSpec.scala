@@ -58,10 +58,10 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
     "Render the summary html for all business types" in {
       for {
         (businessType, pages) <- List(
-                                  BusinessType.Partnership   -> journeys.partnershipPages,
-                                  BusinessType.SoleTrader    -> journeys.soleTraderPages,
-                                  BusinessType.CorporateBody -> journeys.limitedCompanyPages
-                                )
+                                   BusinessType.Partnership   -> journeys.partnershipPages,
+                                   BusinessType.SoleTrader    -> journeys.soleTraderPages,
+                                   BusinessType.CorporateBody -> journeys.limitedCompanyPages
+                                 )
       } {
         setupSummaryAction(
           journeyPages = JourneyRequestBuilder.fullyCompleteJourney(pages),

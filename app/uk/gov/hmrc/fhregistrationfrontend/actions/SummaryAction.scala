@@ -46,9 +46,7 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
     implicit val r: JourneyRequest[A] = input
     val result: EitherT[Future, Result, SummaryRequest[A]] = for {
       _ <- journeyIsComplete(input.journeyState).toEitherT[Future]
-    } yield {
-      new SummaryRequest[A](input)
-    }
+    } yield new SummaryRequest[A](input)
 
     result.value
   }

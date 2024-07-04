@@ -26,7 +26,7 @@ object CompanyOrIndividualHelper {
 
   def createIndividual(individual: CompanyOfficerIndividual)(implicit messages: Messages): Seq[SummaryListRow] = {
 
-    val titleRow = {
+    val titleRow =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(messages("fh.summary.companyOfficerType")),
@@ -34,10 +34,10 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None)
-    }
+        None
+      )
 
-    val descriptiveRow = {
+    val descriptiveRow =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(messages("fh.generic.name")),
@@ -45,10 +45,10 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None)
-    }
+        None
+      )
 
-    val Role = {
+    val Role =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(messages("fh.summary.companyOfficerRole")),
@@ -56,10 +56,10 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Bottom
         ),
-        None)
-    }
+        None
+      )
 
-    val conditionalHtml = {
+    val conditionalHtml =
       if (individual.hasNino) {
         Helpers.createSummaryRow(
           SummaryRowParams(
@@ -67,7 +67,8 @@ object CompanyOrIndividualHelper {
             individual.nino,
             None
           ),
-          None)
+          None
+        )
       } else {
         if (individual.hasPassportNumber.contains(true)) {
           Helpers.createSummaryRow(
@@ -76,7 +77,8 @@ object CompanyOrIndividualHelper {
               individual.passport,
               None
             ),
-            None)
+            None
+          )
         } else {
           Helpers.createSummaryRow(
             SummaryRowParams(
@@ -84,17 +86,17 @@ object CompanyOrIndividualHelper {
               individual.nationalId,
               None
             ),
-            None)
+            None
+          )
         }
       }
-    }
 
     Seq(titleRow, conditionalHtml, descriptiveRow, Role)
   }
 
   def createCompany(company: CompanyOfficerCompany)(implicit messages: Messages) = {
 
-    val titleRow = {
+    val titleRow =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.companyOfficerType")),
@@ -102,10 +104,10 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None)
-    }
+        None
+      )
 
-    val descriptiveRow = {
+    val descriptiveRow =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.company_officers.company.company_name.label")),
@@ -113,10 +115,10 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None)
-    }
+        None
+      )
 
-    val companyRole = {
+    val companyRole =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
           Some(Messages("fh.summary.companyOfficerRole")),
@@ -124,20 +126,20 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Bottom
         ),
-        None)
-    }
+        None
+      )
 
-    val vatNumber = {
+    val vatNumber =
       Helpers.createSummaryRow(
         SummaryRowParams(
           Some(Messages("fh.vatNumber.label")),
           company.vat,
           None
         ),
-        None)
-    }
+        None
+      )
 
-    val noVatNumber = {
+    val noVatNumber =
       Helpers.createSummaryRow(
         SummaryRowParams.ofBoolean(
           Some(Messages("fh.company_officers.company.vat_registration.confirm.label")),
@@ -145,26 +147,25 @@ object CompanyOrIndividualHelper {
           None,
           GroupRow.Member
         ),
-        None)
-    }
+        None
+      )
 
-    val CompanyRegistrationNumber = {
+    val CompanyRegistrationNumber =
       Helpers.createSummaryRow(
         SummaryRowParams(
           Some(Messages("fh.company_officers.company.company_registration_number.label")),
           company.crn,
           None
         ),
-        None)
-    }
+        None
+      )
 
-    val conditionalHtml = {
+    val conditionalHtml =
       if (company.hasVat) {
         Seq(titleRow, vatNumber, descriptiveRow, companyRole)
       } else {
         Seq(titleRow, noVatNumber, CompanyRegistrationNumber, descriptiveRow, companyRole)
       }
-    }
 
     conditionalHtml
   }

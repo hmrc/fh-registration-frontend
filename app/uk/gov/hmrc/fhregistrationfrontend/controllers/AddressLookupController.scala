@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressLookupController @Inject()(
+class AddressLookupController @Inject() (
   addressLookupConnector: AddressLookupConnector,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext)

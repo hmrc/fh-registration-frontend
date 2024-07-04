@@ -21,7 +21,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessEntityApplication, LimitedCompanyApplication, PartnershipApplication, SoleProprietorApplication}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
-class Journeys @Inject()(views: Views) {
+class Journeys @Inject() (views: Views) {
 
   import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
 

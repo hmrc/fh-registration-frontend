@@ -85,23 +85,28 @@ object Mappings {
 
   def companyName =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\\u005C\u2014\u2013\u2010\u002d]{1,140}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\\u005C\u2014\u2013\u2010\u002d]{1,140}$".r
+    )
 
   def tradingName =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
+    )
 
   def unincorporatedBodyName =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
+    )
 
   def ltdLiabilityPartnershipName =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
+    )
 
   def partnershipName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
+    )
 
   def eoriNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
@@ -118,11 +123,13 @@ object Mappings {
 
   def nationalIdNumber =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r
+    )
 
   def passportNumber =
     nonEmptyText verifying Constraints.pattern(
-      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r)
+      "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r
+    )
 
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
@@ -185,10 +192,12 @@ object Mappings {
       "day"   -> text,
       "month" -> text,
       "year"  -> text
-    ).transform({ case (d, m, y) => (d.trim, m.trim, y.trim) }, { v: RawFormValues =>
+    ).transform(
+      { case (d, m, y) => (d.trim, m.trim, y.trim) },
+      { v: RawFormValues =>
         v
-      })
-      .verifying(Constraint(allDateValuesEntered(_)))
+      }
+    ).verifying(Constraint(allDateValuesEntered(_)))
       .verifying(Constraint(dateIsValid(_)))
       .verifying(Constraint(dateInAllowedRange(_)))
       .transform(
@@ -217,7 +226,8 @@ object Mappings {
   def `enum`[E <: Enumeration](
     `enum`: E,
     requiredErrorKey: String = "error.required",
-    args: Seq[String] = Nil): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
+    args: Seq[String] = Nil
+  ): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
@@ -236,8 +246,8 @@ object Mappings {
     case _               => false
   }
 
-  private def z[T]: ((Boolean, Option[T])) => Option[T] = {
-    case (_, value) => value
+  private def z[T]: ((Boolean, Option[T])) => Option[T] = { case (_, value) =>
+    value
   }
 
   private def t[T]: Option[T] => (Boolean, Option[T]) = { value =>

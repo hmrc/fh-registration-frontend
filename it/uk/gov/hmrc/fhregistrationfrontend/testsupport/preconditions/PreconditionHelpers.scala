@@ -1,77 +1,90 @@
-
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
 trait PreconditionHelpers {
   implicit val builder: PreconditionBuilder
 
-  def commonPrecondition = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
-      .fhddsBackend.hasNoEnrolmentProgress()
-  }
+  def commonPrecondition =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorised()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .save4later
+      .businessRecordWasSaved()
+      .save4later
+      .getNoneData()
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
 
-  def commonPreconditionWithMultipleAddressLookup(isSuccess: Boolean) = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .fhddsBackend.hasNoEnrolmentProgress()
-      .addressLookup.lookupAddress(isSuccess)
-  }
+  def commonPreconditionWithMultipleAddressLookup(isSuccess: Boolean) =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorised()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
+      .addressLookup
+      .lookupAddress(isSuccess)
 
-  def commonPreconditionWithSingleAddressLookup(isSuccess: Boolean) = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .fhddsBackend.hasNoEnrolmentProgress()
-      .addressLookup.lookupSingleAddress(isSuccess)
-  }
+  def commonPreconditionWithSingleAddressLookup(isSuccess: Boolean) =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorised()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
+      .addressLookup
+      .lookupSingleAddress(isSuccess)
 
-  def commonPreconditionWithEmptyAddressLookup(isSuccess: Boolean) = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorised()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .fhddsBackend.hasNoEnrolmentProgress()
-      .addressLookup.lookupNoAddress(isSuccess)
-  }
+  def commonPreconditionWithEmptyAddressLookup(isSuccess: Boolean) =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorised()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
+      .addressLookup
+      .lookupNoAddress(isSuccess)
 
-  def commonPreconditionAssist = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorisedAssistant()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
-      .fhddsBackend.hasNoEnrolmentProgress()
-  }
+  def commonPreconditionAssist =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorisedAssistant()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .save4later
+      .businessRecordWasSaved()
+      .save4later
+      .getNoneData()
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
 
-  def commonPreconditionNoRole = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorisedNoCredRole()
-      .businessCustomerFrontend.hasBusinessCustomerRecord
-      .save4later.businessRecordWasSaved()
-      .save4later.getNoneData()
-      .fhddsBackend.hasNoEnrolmentProgress()
-  }
+  def commonPreconditionNoRole =
+    builder.audit
+      .writesAuditOrMerged()
+      .user
+      .isAuthorisedNoCredRole()
+      .businessCustomerFrontend
+      .hasBusinessCustomerRecord
+      .save4later
+      .businessRecordWasSaved()
+      .save4later
+      .getNoneData()
+      .fhddsBackend
+      .hasNoEnrolmentProgress()
 
-  def withdrawalPrecondition = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorisedAndEnrolled
-  }
+  def withdrawalPrecondition =
+    builder.audit.writesAuditOrMerged().user.isAuthorisedAndEnrolled
 
-  def summaryPrecondition = {
-    builder
-      .audit.writesAuditOrMerged()
-      .user.isAuthorised()
-      .save4later.hasFullFormData()
-  }
+  def summaryPrecondition =
+    builder.audit.writesAuditOrMerged().user.isAuthorised().save4later.hasFullFormData()
 
 }

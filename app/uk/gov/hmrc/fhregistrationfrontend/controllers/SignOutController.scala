@@ -21,7 +21,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.connectors
 
 @Singleton
-class SignOutController @Inject()(
+class SignOutController @Inject() (
   ds: CommonPlayDependencies,
   externalUrls: connectors.ExternalUrls,
   cc: MessagesControllerComponents

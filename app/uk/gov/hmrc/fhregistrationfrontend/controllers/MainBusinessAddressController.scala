@@ -26,11 +26,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.Address
 import javax.inject.Inject
 
-class MainBusinessAddressController @Inject()(
+class MainBusinessAddressController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -48,13 +49,11 @@ class MainBusinessAddressController @Inject()(
       mainBusinessAddressForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
+          formWithErrors =>
             BadRequest(
-              view.main_business_address(formWithErrors, businessRegistrationDetails, noNavigation, postAction))
-          },
-          mainBusinessAddress => {
-            Ok(s"Form submitted, with result:$mainBusinessAddress")
-          }
+              view.main_business_address(formWithErrors, businessRegistrationDetails, noNavigation, postAction)
+            ),
+          mainBusinessAddress => Ok(s"Form submitted, with result:$mainBusinessAddress")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

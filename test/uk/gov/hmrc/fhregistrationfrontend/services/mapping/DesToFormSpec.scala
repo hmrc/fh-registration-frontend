@@ -55,13 +55,15 @@ class DesToFormSpec extends UnitSpec {
     "Correctly load fhdds-limited-company-minimum-less-than-three-years" in {
       validatesFor(
         "limited-company/fhdds-limited-company-minimum-less-than-three-years",
-        LtdMinimumLessThanThreeYears.application(NoChange))
+        LtdMinimumLessThanThreeYears.application(NoChange)
+      )
     }
 
     "Correctly load limited-company-minimum-international" in {
       validatesFor(
         "limited-company/fhdds-limited-company-minimum-international",
-        LtdMinimumInternational.application(NoChange))
+        LtdMinimumInternational.application(NoChange)
+      )
     }
 
     "Correctly load limited-company-large-uk" in {

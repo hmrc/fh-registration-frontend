@@ -76,11 +76,11 @@ class JourneyRequest[A](
 
 }
 
-class JourneyAction @Inject()(journeys: Journeys)(
-  implicit val save4LaterService: Save4LaterService,
+class JourneyAction @Inject() (journeys: Journeys)(implicit
+  val save4LaterService: Save4LaterService,
   errorHandler: ErrorHandler,
-  val executionContext: ExecutionContext)
-    extends ActionRefiner[UserRequest, JourneyRequest] with FrontendAction with ActionFunctions {
+  val executionContext: ExecutionContext
+) extends ActionRefiner[UserRequest, JourneyRequest] with FrontendAction with ActionFunctions {
 
   override def refine[A](input: UserRequest[A]): Future[Either[Result, JourneyRequest[A]]] = {
     implicit val r: UserRequest[A] = input
@@ -93,9 +93,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
       journeyType = loadJourneyType(cacheMap)
       journeyPages <- getJourneyPages(cacheMap).toEitherT[Future]
       journeyState = loadJourneyState(journeyPages)
-    } yield {
-      new JourneyRequest[A](cacheMap, r, bpr, bt, verifiedEmail, journeyType, journeyPages, journeyState)
-    }
+    } yield new JourneyRequest[A](cacheMap, r, bpr, bt, verifiedEmail, journeyType, journeyPages, journeyState)
 
     result.value
   }
@@ -105,9 +103,7 @@ class JourneyAction @Inject()(journeys: Journeys)(
       .getEntry[String](Save4LaterKeys.verifiedEmailKey)
       .fold(
         Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus))
-      )(
-        verifiedEmail => Either.right(verifiedEmail)
-      )
+      )(verifiedEmail => Either.right(verifiedEmail))
 
   def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] =
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {

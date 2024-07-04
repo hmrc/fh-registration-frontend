@@ -7,9 +7,7 @@ import uk.gov.hmrc.crypto.CompositeSymmetricCrypto.aes
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerIndividual, CompanyOfficerType, ImportingActivities, ListWithTrackedChanges}
 
-case class Save4LaterStub
-()
-  (implicit builder: PreconditionBuilder) {
+case class Save4LaterStub()(implicit builder: PreconditionBuilder) {
 
   val brd =
     """
@@ -43,20 +41,22 @@ case class Save4LaterStub
 
   val companyOfficials = ListWithTrackedChanges(
     valuesWithStatus = List(
-      (CompanyOfficer(
-        officialType = CompanyOfficerType.Individual,
-        identification = CompanyOfficerIndividual(
-          firstName = "firstName",
-          lastName = "lastName",
-          hasNino = true,
-          nino = Some("AA123123A"),
-          hasPassportNumber = None,
-          passport = None,
-          nationalId = None,
-          role = "Director"
-        )
-      ),
-        ListWithTrackedChanges.NoChange)
+      (
+        CompanyOfficer(
+          officialType = CompanyOfficerType.Individual,
+          identification = CompanyOfficerIndividual(
+            firstName = "firstName",
+            lastName = "lastName",
+            hasNino = true,
+            nino = Some("AA123123A"),
+            hasPassportNumber = None,
+            passport = None,
+            nationalId = None,
+            role = "Director"
+          )
+        ),
+        ListWithTrackedChanges.NoChange
+      )
     ),
     deleted = List.empty,
     false
@@ -73,7 +73,7 @@ case class Save4LaterStub
   }
 
   def savePageData(key: String, data: String = "") = {
-      stubS4LGet(businessInformationData + (key -> data))
+    stubS4LGet(businessInformationData + (key -> data))
     builder
   }
 
@@ -85,28 +85,25 @@ case class Save4LaterStub
   }
 
   private val formData = Map(
-    "mainBusinessAddress" -> """{"timeAtCurrentAddress": "3-5 years"}""",
-    "contactPerson" -> contactPerson,
+    "mainBusinessAddress"       -> """{"timeAtCurrentAddress": "3-5 years"}""",
+    "contactPerson"             -> contactPerson,
     "companyRegistrationNumber" -> """{"crn": "12345678"}""",
-    "dateOfIncorporation" -> """{"dateOfIncorporation": "2222-02-22"}""",
-    "tradingName" -> """{"hasValue": false}""",
-    "vatNumber" -> """{"hasValue": false}""",
-    "companyOfficers" -> Json.toJson(companyOfficials).toString(),
-    "businessStatus" -> """{"isNewFulfilmentBusiness": false}""",
-    "importingActivities" -> """{"hasEori": false}""",
-    "businessCustomers" -> """{"numberOfCustomers": "1-10"}""",
-    "otherStoragePremises" -> """{"hasValue": false, "value": {"valuesWithStatus": [], "deleted": []}}"""
+    "dateOfIncorporation"       -> """{"dateOfIncorporation": "2222-02-22"}""",
+    "tradingName"               -> """{"hasValue": false}""",
+    "vatNumber"                 -> """{"hasValue": false}""",
+    "companyOfficers"           -> Json.toJson(companyOfficials).toString(),
+    "businessStatus"            -> """{"isNewFulfilmentBusiness": false}""",
+    "importingActivities"       -> """{"hasEori": false}""",
+    "businessCustomers"         -> """{"numberOfCustomers": "1-10"}""",
+    "otherStoragePremises"      -> """{"hasValue": false, "value": {"valuesWithStatus": [], "deleted": []}}"""
   )
-
-
 
   private val businessInformationData = Map(
-    "userLastTimeSaved" -> System.currentTimeMillis().toString,
+    "userLastTimeSaved"           -> System.currentTimeMillis().toString,
     "businessRegistrationDetails" -> brd,
-    "verifiedEmail" -> "\"user@test.com\"",
-    "businessType" -> "\"CorporateBody\""
+    "verifiedEmail"               -> "\"user@test.com\"",
+    "businessType"                -> "\"CorporateBody\""
   )
-
 
   private val displayDesDeclaration = Map(
     "display_des_declaration" ->
@@ -124,7 +121,9 @@ case class Save4LaterStub
     "display_verifiedEmail" -> "\"user@test.com\""
   )
   private val amendmentData =
-    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map { case (k, v) => s"display_$k" -> v} + ("isAmendment" -> "true")
+    businessInformationData ++ displayVerifiedEmail ++ displayDesDeclaration ++ formData ++ formData.map {
+      case (k, v) => s"display_$k" -> v
+    } + ("isAmendment" -> "true")
 
   private val fullJourneyData: Map[String, String] =
     businessInformationData ++ formData
@@ -141,7 +140,7 @@ case class Save4LaterStub
   }
 
   def hasAmendmentData() = {
-      stubS4LGet(amendmentData)
+    stubS4LGet(amendmentData)
     builder
   }
 
@@ -157,7 +156,7 @@ case class Save4LaterStub
   }
 
   def businessTypeWasSaved() = {
-      stubS4LGet(businessInformationData)
+    stubS4LGet(businessInformationData)
     builder
   }
 
@@ -172,21 +171,24 @@ case class Save4LaterStub
 
   def stubS4LPut(key: String, data: String = "data"): MappingBuilder =
     put(urlPathMatching(s"/save4later/fh-registration-frontend/some-id/data/$key"))
-      .willReturn(ok(
-        s"""
-           |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
-           |    "data": { "${encrypt(key)}": "${encrypt(data)}" },
-           |    "id": "some-id",
-           |    "modifiedDetails": {
-           |      "createdAt": { "$$date": 1502265526026 },
-           |      "lastUpdated": { "$$date": 1502265526026 }}}
+      .willReturn(
+        ok(
+          s"""
+             |{ "atomicId": { "$$oid": "598ac0b64e0000d800170620" },
+             |    "data": { "${encrypt(key)}": "${encrypt(data)}" },
+             |    "id": "some-id",
+             |    "modifiedDetails": {
+             |      "createdAt": { "$$date": 1502265526026 },
+             |      "lastUpdated": { "$$date": 1502265526026 }}}
           """.stripMargin
-      ))
+        )
+      )
 
   def stubS4LGet(key: String = "", data: String = ""): MappingBuilder =
     get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
-      .willReturn(ok(
-        s"""
+      .willReturn(
+        ok(
+          s"""
            {
              "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
              "data": {
@@ -199,33 +201,37 @@ case class Save4LaterStub
              }
            }
           """.stripMargin
-      ))
+        )
+      )
 
-  def stubS4LGet(data: Map[String, String]) = {
-    stubFor(get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
-      .willReturn(ok(
-        s"""
-           |{
-           |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
-           |  "data": ${asS4LData(data)},
-           |  "id": "some-id",
-           |  "modifiedDetails": {
-           |    "createdAt": { "$$date": 1502097615710 },
-           |    "lastUpdated": { "$$date": 1502189409725 }
-           |  }
-           |}
+  def stubS4LGet(data: Map[String, String]) =
+    stubFor(
+      get(urlPathMatching("/save4later/fh-registration-frontend/some-id"))
+        .willReturn(
+          ok(
+            s"""
+               |{
+               |  "atomicId": { "$$oid": "598830cf5e00005e00b3401e" },
+               |  "data": ${asS4LData(data)},
+               |  "id": "some-id",
+               |  "modifiedDetails": {
+               |    "createdAt": { "$$date": 1502097615710 },
+               |    "lastUpdated": { "$$date": 1502189409725 }
+               |  }
+               |}
           """.stripMargin
-      )))
-  }
+          )
+        )
+    )
 
-  private def asS4LData(data: Map[String, String]) = {
-    Json.toJson(
-      data.map {
-        case (k, v) => k -> Json.toJson(encrypt(v))
-      }
-    ).toString()
-
-  }
+  private def asS4LData(data: Map[String, String]) =
+    Json
+      .toJson(
+        data.map { case (k, v) =>
+          k -> Json.toJson(encrypt(v))
+        }
+      )
+      .toString()
 
   def acceptsDelete() = {
     stubFor(

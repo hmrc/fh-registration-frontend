@@ -34,7 +34,8 @@ object Diff {
       original.additionalBusinessInformation.partnerCorporateBody != amended.additionalBusinessInformation.partnerCorporateBody,
       additionalBusinessInformationChanged(
         original.additionalBusinessInformation.allOtherInformation,
-        amended.additionalBusinessInformation.allOtherInformation),
+        amended.additionalBusinessInformation.allOtherInformation
+      ),
       original.additionalBusinessInformation.allOtherInformation.premises
         != amended.additionalBusinessInformation.allOtherInformation.premises,
       original.declaration != amended.declaration
@@ -70,8 +71,8 @@ object Diff {
 
     val soleProprietor = GenLens[Subscription](_.businessDetail.soleProprietor) composePrism some
     val nonProprietor = GenLens[Subscription](_.businessDetail.nonProprietor) composePrism some
-    val limitedLiabilityPartnershipCorporateBody = GenLens[Subscription](
-      _.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
+    val limitedLiabilityPartnershipCorporateBody =
+      GenLens[Subscription](_.businessDetail.limitedLiabilityPartnershipCorporateBody) composePrism some
 
     val partnership = GenLens[Subscription](_.businessDetail.partnership) composePrism some
 

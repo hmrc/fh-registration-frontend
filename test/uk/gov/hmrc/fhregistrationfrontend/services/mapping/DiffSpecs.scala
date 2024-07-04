@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import java.time.LocalDate
-import monocle.macros.{GenLens}
+import monocle.macros.GenLens
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
@@ -54,7 +54,8 @@ class DiffSpecs extends UnitSpec {
       "proposed start date changed" in {
         testChangeIndicators(
           businessStatusLens set BusinessStatus(true, Some(LocalDate.of(2018, 7, 30))),
-          businessTypeChanged)
+          businessTypeChanged
+        )
       }
     }
 
@@ -71,7 +72,8 @@ class DiffSpecs extends UnitSpec {
       "vat number is not provided" in {
         testChangeIndicators(
           vatNumberLens set VatNumber(false, None),
-          changeIndicators(businessDetailChanged = true, additionalBusinessInfoChanged = true))
+          changeIndicators(businessDetailChanged = true, additionalBusinessInfoChanged = true)
+        )
       }
 
       "vat number is changed" in {
@@ -85,7 +87,8 @@ class DiffSpecs extends UnitSpec {
           ListWithTrackedChanges(
             companyOfficers.valuesWithStatus.tail,
             List(companyOfficers.valuesWithStatus.head._1),
-            addMore = false)
+            addMore = false
+          )
         },
         changeIndicators(coOfficialsChanged = true)
       )
@@ -115,13 +118,15 @@ class DiffSpecs extends UnitSpec {
       "eori number changes" in {
         testChangeIndicators(
           importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1111111111", true))),
-          onlyAdditionalInfoChanged)
+          onlyAdditionalInfoChanged
+        )
       }
 
       "goods imported outside eori changes" in {
         testChangeIndicators(
           importingActivitiesLens set ImportingActivities(true, Some(EoriNumber("1234123132", false))),
-          onlyAdditionalInfoChanged)
+          onlyAdditionalInfoChanged
+        )
       }
 
       "number of customers changes" in {
@@ -131,7 +136,8 @@ class DiffSpecs extends UnitSpec {
       "no longer declaring vat number" in {
         testChangeIndicators(
           vatNumberLens set VatNumber(false, None),
-          changeIndicators(additionalBusinessInfoChanged = true, businessDetailChanged = true))
+          changeIndicators(additionalBusinessInfoChanged = true, businessDetailChanged = true)
+        )
       }
     }
 
@@ -139,7 +145,8 @@ class DiffSpecs extends UnitSpec {
 
   private def testChangeIndicators(
     update: LimitedCompanyApplication => LimitedCompanyApplication,
-    expectedChangeIndicators: ChangeIndicators) = {
+    expectedChangeIndicators: ChangeIndicators
+  ) = {
     val subscription: Subscription = mkSubscription()
     val amendedApplication = update(LtdLargeUk.application(ListWithTrackedChanges.NoChange))
 

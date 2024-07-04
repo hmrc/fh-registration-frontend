@@ -28,7 +28,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Country, Address => LookupAddress}
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address => LookupAddress, AddressRecord, Country}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.model.DataEvent
 
@@ -42,7 +42,8 @@ class AddressAuditServiceSpecs
   implicit val hc = HeaderCarrier()
 
   val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(
-    scala.concurrent.ExecutionContext.Implicits.global)
+    scala.concurrent.ExecutionContext.Implicits.global
+  )
   val ac: ArgumentCaptor[DataEvent] = ArgumentCaptor.forClass(classOf[DataEvent])
 
   override def beforeEach(): Unit = {

@@ -25,7 +25,8 @@ case class SubscriptionDisplay(
   businessDetail: BusinessDetail,
   businessAddressForFHDDS: BusinessAddressForFHDDS,
   contactDetail: ContactDetail,
-  declaration: Declaration)
+  declaration: Declaration
+)
 
 object SubscriptionDisplay {
   implicit val format: OFormat[SubscriptionDisplay] = Json.format[SubscriptionDisplay]

@@ -5,17 +5,16 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class UkVatNumberControllerISpec
-  extends Specifications with TestConfiguration {
+class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/corporate-body-vat-registration-number" should {
 
     "render the corporate-body-vat-registration-number page" in {
-      given
-        .commonPrecondition
+      given.commonPrecondition
 
       WsTestClient.withClient { client =>
-        val result = client.url(s"$baseUrl/vatNumber ")
+        val result = client
+          .url(s"$baseUrl/vatNumber ")
           .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
           .get()
 
@@ -32,16 +31,14 @@ class UkVatNumberControllerISpec
   "POST /form/business-partners/corporate-body-vat-registration-number" when {
     "yes is selected and the vatnumber entered" should {
       "return 200 with vatnumber" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber ")
+          val result = client
+            .url(s"$baseUrl/vatNumber ")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true"),
-              "vatNumber_value" -> Seq("123456789")))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("vatNumber_yesNo" -> Seq("true"), "vatNumber_value" -> Seq("123456789")))
 
           whenReady(result) { res =>
             res.status mustBe 200
@@ -53,14 +50,13 @@ class UkVatNumberControllerISpec
 
     "no is selected" should {
       "return 200 with no vatnumber message" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber")
+          val result = client
+            .url(s"$baseUrl/vatNumber")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq("false")))
 
           whenReady(result) { res =>
@@ -73,20 +69,21 @@ class UkVatNumberControllerISpec
 
     "no hasVat number selected" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber")
+          val result = client
+            .url(s"$baseUrl/vatNumber")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq.empty))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Select whether the business has a VAT registration number"
+            )
           }
         }
       }
@@ -94,20 +91,21 @@ class UkVatNumberControllerISpec
 
     "hasVat number selected but vatNumber not supplied" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber")
+          val result = client
+            .url(s"$baseUrl/vatNumber")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq("true")))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter the VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Enter the VAT registration number"
+            )
           }
         }
       }
@@ -115,20 +113,21 @@ class UkVatNumberControllerISpec
 
     "the form hasVat field is invalid format" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber")
+          val result = client
+            .url(s"$baseUrl/vatNumber")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
             .post(Map("vatNumber_yesNo" -> Seq("error")))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Select whether the business has a VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Select whether the business has a VAT registration number"
+            )
           }
         }
       }
@@ -136,21 +135,21 @@ class UkVatNumberControllerISpec
 
     "the vatnumber field is invalid format" should {
       "return 400" in {
-        given
-          .commonPrecondition
+        given.commonPrecondition
 
         WsTestClient.withClient { client =>
-          val result = client.url(s"$baseUrl/vatNumber")
+          val result = client
+            .url(s"$baseUrl/vatNumber")
             .addCookies(DefaultWSCookie("mdtp", authAndSessionCookie))
-            .withHttpHeaders(xSessionId,
-              "Csrf-Token" -> "nocheck")
-            .post(Map("vatNumber_yesNo" -> Seq("true"),
-              "vatNumber_value" -> Seq("1234")))
+            .withHttpHeaders(xSessionId, "Csrf-Token" -> "nocheck")
+            .post(Map("vatNumber_yesNo" -> Seq("true"), "vatNumber_value" -> Seq("1234")))
 
           whenReady(result) { res =>
             res.status mustBe 400
             val page = Jsoup.parse(res.body)
-            page.getElementsByClass("govuk-error-summary").text() must include("There is a problem Enter a valid UK VAT registration number")
+            page.getElementsByClass("govuk-error-summary").text() must include(
+              "There is a problem Enter a valid UK VAT registration number"
+            )
           }
         }
       }

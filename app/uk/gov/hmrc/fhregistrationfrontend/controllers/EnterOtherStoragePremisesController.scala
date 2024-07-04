@@ -30,11 +30,12 @@ import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 import javax.inject.Inject
 
-class EnterOtherStoragePremisesController @Inject()(
+class EnterOtherStoragePremisesController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -69,18 +70,17 @@ class EnterOtherStoragePremisesController @Inject()(
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
+          formWithErrors =>
             BadRequest(
               view.storage_premise(
                 formWithErrors,
                 noNavigation,
                 storagePremisesNum,
                 RepeatingPageParams(false, None),
-                postAction))
-          },
-          result => {
-            Ok(s"Form submitted with: $result")
-          }
+                postAction
+              )
+            ),
+          result => Ok(s"Form submitted with: $result")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

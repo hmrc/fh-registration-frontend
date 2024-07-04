@@ -48,7 +48,8 @@ class BusinessCustomersControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include(
-          "How many overseas customers established outside the UK does the business store goods for, currently?")
+          "How many overseas customers established outside the UK does the business store goods for, currently?"
+        )
         reset(mockActions)
       }
     }
@@ -102,7 +103,8 @@ class BusinessCustomersControllerSpec
           status(result) shouldBe BAD_REQUEST
           val page = Jsoup.parse(contentAsString(result))
           page.title should include(
-            "How many overseas customers established outside the UK does the business store goods for, currently?")
+            "How many overseas customers established outside the UK does the business store goods for, currently?"
+          )
           reset(mockActions)
         }
       }

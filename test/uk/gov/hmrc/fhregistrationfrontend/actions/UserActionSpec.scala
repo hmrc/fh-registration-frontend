@@ -39,7 +39,8 @@ class UserActionSpec extends ActionSpecBase {
   val fakeRequest: Request[Any] = FakeRequest()
   lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler, mockMessagesControllerComponent)(
     mockAuthConnector,
-    scala.concurrent.ExecutionContext.Implicits.global)
+    scala.concurrent.ExecutionContext.Implicits.global
+  )
 
   "UserAction" should {
     "Find the internal user id and email with no enrolments " in {
@@ -116,10 +117,13 @@ class UserActionSpec extends ActionSpecBase {
 
     val authResult = Future successful (new ~(
       new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole),
-      userAffinityGroup))
+      userAffinityGroup
+    ))
     when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
   }
 
   def setupAuthConnector(throwable: Throwable) =
-    when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed throwable)
+    when(
+      mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+    ) thenReturn (Future failed throwable)
 }

@@ -44,9 +44,11 @@ trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
 
   def setupDesDisplayResult(
     jsonFile: String = "limited-company/fhdds-limited-company-large-uk",
-    registrationNumber: String = registrationNumber) =
+    registrationNumber: String = registrationNumber
+  ) =
     when(mockFhddsConnector.getSubmission(same(registrationNumber))(any())) thenReturn Future.successful(
-      loadDesDataFile(jsonFile))
+      loadDesDataFile(jsonFile)
+    )
 
   private def loadDesDataFile(jsonFile: String): SubscriptionDisplayWrapper = {
     val resource = getClass.getResourceAsStream(s"/json/valid/display/$jsonFile.json")

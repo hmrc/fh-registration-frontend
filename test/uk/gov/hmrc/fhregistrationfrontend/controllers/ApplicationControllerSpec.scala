@@ -65,7 +65,10 @@ class ApplicationControllerSpec
     views,
     statusView,
     statusParams
-  )(mockSave4Later, ec)
+  )(
+    mockSave4Later,
+    ec
+  )
 
   "main" should {
 
@@ -396,7 +399,8 @@ class ApplicationControllerSpec
       setupNewApplicationAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
       when(mockBusinessCustomerConnector.getReviewDetails(any(), any())) thenReturn Future.successful(
-        FormTestData.someBpr)
+        FormTestData.someBpr
+      )
 
       val request = FakeRequest()
       val result = controller continueWithBpr request

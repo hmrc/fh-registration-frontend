@@ -34,7 +34,7 @@ case class AddressLookupErrorResponse(cause: Exception) extends AddressLookupRes
 case class LookupAddressByPostcode(postcode: String, filter: Option[String])
 
 @Singleton
-class AddressLookupConnector @Inject()(
+class AddressLookupConnector @Inject() (
   val http: HttpClient,
   val runModeConfiguration: Configuration,
   environment: Environment,
@@ -62,10 +62,9 @@ class AddressLookupConnector @Inject()(
         }
         val addressRec = RecordSet(results)
         AddressLookupSuccessResponse(addressRec)
-      } recover {
-      case e: Exception =>
-        logger.warn(s"Error received from address lookup service: $e")
-        AddressLookupErrorResponse(e)
+      } recover { case e: Exception =>
+      logger.warn(s"Error received from address lookup service: $e")
+      AddressLookupErrorResponse(e)
     }
   }
 
@@ -73,7 +72,7 @@ class AddressLookupConnector @Inject()(
     logger.info("lookupById function is being called")
     http
       .POST[String, Array[AddressRecord]](s"$endpoint/lookup/$id", id, headers)
-      .map { _.headOption }
+      .map(_.headOption)
   }
 
 }

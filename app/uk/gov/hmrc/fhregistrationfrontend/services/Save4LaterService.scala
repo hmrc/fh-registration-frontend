@@ -41,7 +41,7 @@ object Save4LaterKeys {
 }
 
 @Singleton
-class Save4LaterService @Inject()(
+class Save4LaterService @Inject() (
   shortLivedCache: ShortLivedCache
 )(implicit ec: ExecutionContext) {
 
@@ -74,7 +74,7 @@ class Save4LaterService @Inject()(
     savePendingEmail(userId, "")
 
   def fetchPendingEmail(userId: String)(implicit hc: HeaderCarrier): Future[Option[String]] =
-    fetchData4Later[String](userId, pendingEmailKey).map { _.filterNot(_.isEmpty) }
+    fetchData4Later[String](userId, pendingEmailKey).map(_.filterNot(_.isEmpty))
 
   def saveBusinessRegistrationDetails(userId: String, brd: BusinessRegistrationDetails)(implicit hc: HeaderCarrier) =
     saveDraftData4Later(userId, businessRegistrationDetailsKey, brd)
@@ -88,9 +88,10 @@ class Save4LaterService @Inject()(
   def removeUserData(userId: String)(implicit hc: HeaderCarrier): Future[Any] =
     shortLivedCache.remove(userId)
 
-  def saveDraftData4Later[T](userId: String, formId: String, data: T)(
-    implicit hc: HeaderCarrier,
-    formats: json.Format[T]): Future[Option[T]] = {
+  def saveDraftData4Later[T](userId: String, formId: String, data: T)(implicit
+    hc: HeaderCarrier,
+    formats: json.Format[T]
+  ): Future[Option[T]] = {
     val lastTimeUserSaved = System.currentTimeMillis()
     shortLivedCache.cache(userId, userLastTimeSavedKey, lastTimeUserSaved).flatMap { _ =>
       shortLivedCache.cache(userId, formId, data) map { data =>
@@ -104,9 +105,10 @@ class Save4LaterService @Inject()(
       data.getEntry[JourneyType](journeyTypeKey)
     }
 
-  def saveDisplayData4Later[T](userId: String, formId: String, data: T)(
-    implicit hc: HeaderCarrier,
-    formats: json.Format[T]): Future[Option[T]] = {
+  def saveDisplayData4Later[T](userId: String, formId: String, data: T)(implicit
+    hc: HeaderCarrier,
+    formats: json.Format[T]
+  ): Future[Option[T]] = {
     val key = displayKeyForPage(formId)
     shortLivedCache.cache(userId, key, data) map { data =>
       data.getEntry[T](key)
@@ -118,8 +120,9 @@ class Save4LaterService @Inject()(
       data.getEntry[des.Declaration](displayDesDeclarationKey)
     }
 
-  def fetchData4Later[T](utr: String, formId: String)(
-    implicit hc: HeaderCarrier,
-    formats: json.Format[T]): Future[Option[T]] =
+  def fetchData4Later[T](utr: String, formId: String)(implicit
+    hc: HeaderCarrier,
+    formats: json.Format[T]
+  ): Future[Option[T]] =
     shortLivedCache.fetchAndGetEntry[T](utr, formId)
 }

@@ -27,11 +27,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressService @Inject()(addressLookupConnector: AddressLookupConnector, addressAuditService: AddressAuditService)(
-  implicit ec: ExecutionContext) {
+class AddressService @Inject() (
+  addressLookupConnector: AddressLookupConnector,
+  addressAuditService: AddressAuditService
+)(implicit ec: ExecutionContext) {
 
-  def addressLookup(path: String, postcode: String, filter: Option[String])(
-    implicit hc: HeaderCarrier): Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
+  def addressLookup(path: String, postcode: String, filter: Option[String])(implicit
+    hc: HeaderCarrier
+  ): Future[Either[AddressLookupErrorResponse, Map[String, Address]]] =
     addressLookupConnector.lookup(postcode, filter).map {
       case AddressLookupSuccessResponse(addressList) =>
         addressAuditService.auditAddressesFromRecordSet(path, addressList)

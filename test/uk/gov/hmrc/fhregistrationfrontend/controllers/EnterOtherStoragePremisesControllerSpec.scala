@@ -49,7 +49,8 @@ class EnterOtherStoragePremisesControllerSpec
         status(result) shouldBe OK
         val page = Jsoup.parse(contentAsString(result))
         page.title() should include(
-          "Other storage premises - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK")
+          "Other storage premises - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
+        )
         reset(mockActions)
       }
     }
@@ -87,7 +88,9 @@ class EnterOtherStoragePremisesControllerSpec
           val result = csrfAddToken(controller.next())(request)
 
           status(result) shouldBe OK
-          contentAsString(result) shouldBe "Form submitted with: (StoragePremise(Address(44 Test town,None,None,None,AB1 2YZ,None,None),true),false)"
+          contentAsString(
+            result
+          ) shouldBe "Form submitted with: (StoragePremise(Address(44 Test town,None,None,None,AB1 2YZ,None,None),true),false)"
           reset(mockActions)
         }
       }

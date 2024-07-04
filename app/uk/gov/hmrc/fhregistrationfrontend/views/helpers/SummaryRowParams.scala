@@ -19,16 +19,18 @@ package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-/**
-  * Created by ali on 20/02/18.
+/** Created by ali on 20/02/18.
   *
-  * for a single row in a summary, all vals are optional
-  * meaning it's possible to leave any blank
+  * for a single row in a summary, all vals are optional meaning it's possible to leave any blank
   *
-  * @param value     the value stored for this field
-  * @param label     the label for the actual question
-  * @param changeLink uri for change links
-  * @param groupRow  Enum for position in a group of rows
+  * @param value
+  *   the value stored for this field
+  * @param label
+  *   the label for the actual question
+  * @param changeLink
+  *   uri for change links
+  * @param groupRow
+  *   Enum for position in a group of rows
   */
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow.GroupRow
@@ -49,35 +51,40 @@ object SummaryRowParams {
     label: Option[String],
     value: Option[String],
     changeLink: Option[String],
-    groupRow: GroupRow): SummaryRowParams =
+    groupRow: GroupRow
+  ): SummaryRowParams =
     SummaryRowParams(label, value, changeLink, groupRow)
 
   def ofBoolean(
     label: Option[String],
     value: Option[Boolean],
     changeLink: Option[String],
-    groupRow: GroupRow): SummaryRowParams =
+    groupRow: GroupRow
+  ): SummaryRowParams =
     SummaryRowParams(label, value map (if (_) "Yes" else "No"), changeLink, groupRow)
 
   def ofBoolean(
     label: Option[String],
     value: Boolean,
     changeLink: Option[String],
-    groupRow: GroupRow): SummaryRowParams =
+    groupRow: GroupRow
+  ): SummaryRowParams =
     ofBoolean(label, Some(value), changeLink, groupRow)
 
   def ofDate(
     label: Option[String],
     value: Option[LocalDate],
     changeLink: Option[String],
-    groupRow: GroupRow): SummaryRowParams =
+    groupRow: GroupRow
+  ): SummaryRowParams =
     SummaryRowParams(label, value map (_.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))), changeLink, groupRow)
 
   def ofDate(
     label: Option[String],
     value: LocalDate,
     changeLink: Option[String],
-    groupRow: GroupRow): SummaryRowParams =
+    groupRow: GroupRow
+  ): SummaryRowParams =
     ofDate(label, Some(value), changeLink, groupRow)
 
 }

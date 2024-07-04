@@ -42,7 +42,8 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         registrationNumber = None,
         None,
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
     }
@@ -70,7 +71,8 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(registrationNumber),
         Some(User),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
@@ -80,7 +82,8 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         val action = new StartAmendmentAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
         status(result(action, userRequest)) shouldBe BAD_REQUEST
 
       }
@@ -94,7 +97,8 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         Some(registrationNumber),
         Some(Assistant),
         Some(AffinityGroup.Individual),
-        FakeRequest())
+        FakeRequest()
+      )
       for {
         fhddsStatus <- List(Received, Processing)
       } {
@@ -103,7 +107,8 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         val action = new StartAmendmentAction(fhddsConnector)(
           mockSave4Later,
           errorHandler,
-          scala.concurrent.ExecutionContext.Implicits.global)
+          scala.concurrent.ExecutionContext.Implicits.global
+        )
 
         setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
 

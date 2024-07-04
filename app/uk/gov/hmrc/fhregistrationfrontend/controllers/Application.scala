@@ -42,7 +42,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Application @Inject()(
+class Application @Inject() (
   links: ExternalUrls,
   ds: CommonPlayDependencies,
   fhddsConnector: FhddsConnector,
@@ -112,9 +112,7 @@ class Application @Inject()(
     for {
       details <- businessCustomerConnector.getReviewDetails
       _       <- save4LaterService.saveBusinessRegistrationDetails(request.userId, details)
-    } yield {
-      Redirect(routes.Application.businessType)
-    }
+    } yield Redirect(routes.Application.businessType)
   }
 
   def deleteOrContinue(isNewForm: Boolean) = userAction.async { implicit request =>
@@ -135,7 +133,7 @@ class Application @Inject()(
       .bindFromRequest()
       .fold(
         formWithErrors => Future successful errorHandler.errorResultsPages(Results.BadRequest),
-        deleteOrContinue => {
+        deleteOrContinue =>
           if (deleteOrContinue == "delete") {
             save4LaterService.fetchLastUpdateTime(request.userId) flatMap {
               case Some(savedDate) =>
@@ -149,7 +147,6 @@ class Application @Inject()(
           } else {
             Future successful Redirect(routes.Application.resumeForm)
           }
-        }
       )
   }
 
@@ -195,13 +192,10 @@ class Application @Inject()(
       .fold(
         formWithErrors =>
           Future.successful(BadRequest(views.business_type(formWithErrors, links.businessCustomerVerificationUrl))),
-        businessType => {
+        businessType =>
           for {
             _ <- save4LaterService.saveBusinessType(request.userId, businessType)
-          } yield {
-            Redirect(routes.EmailVerificationController.contactEmail)
-          }
-        }
+          } yield Redirect(routes.EmailVerificationController.contactEmail)
       )
   }
 
@@ -211,10 +205,9 @@ class Application @Inject()(
 
   def savedForLater = userAction.async { implicit request =>
     save4LaterService.fetchLastUpdateTime(request.userId).map {
-      case Some(savedDate) => {
+      case Some(savedDate) =>
         val date = dateTimeHelper.generateDate(formMaxExpiryDays, savedDate)
         Ok(views.saved(dateTimeHelper.convertDateToString(date)))
-      }
       case None => errorHandler.errorResultsPages(Results.NotFound)
     }
   }
@@ -222,7 +215,7 @@ class Application @Inject()(
   def checkStatus() = enrolledUserAction.async { implicit request =>
     fhddsConnector
       .getStatus(request.registrationNumber)(hc)
-      .map(fhddsStatus => { Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)) })
+      .map(fhddsStatus => Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)))
   }
 }
 
@@ -241,10 +234,11 @@ abstract class AppController(val ds: CommonPlayDependencies, val cc: MessagesCon
 }
 
 @Singleton
-class CommonPlayDependencies @Inject()(
+class CommonPlayDependencies @Inject() (
   val conf: Configuration,
   val appConfig: AppConfig,
   val env: Environment,
   val messagesApi: MessagesApi,
   val errorHandler: ErrorHandler,
-  val viewHelpers: ViewHelpers)
+  val viewHelpers: ViewHelpers
+)

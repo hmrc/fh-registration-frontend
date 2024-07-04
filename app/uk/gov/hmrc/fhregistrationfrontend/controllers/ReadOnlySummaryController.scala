@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
 
 import scala.concurrent.ExecutionContext
 
-class ReadOnlySummaryController @Inject()(
+class ReadOnlySummaryController @Inject() (
   ds: CommonPlayDependencies,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,

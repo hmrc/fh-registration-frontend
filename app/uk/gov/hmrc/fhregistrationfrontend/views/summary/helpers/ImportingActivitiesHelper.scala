@@ -54,7 +54,8 @@ object ImportingActivitiesHelper {
             Mode isEditable mode,
             "form/importingActivities/enterEORI",
             Text("Change"),
-            Some(Messages("fh.importing_activities.eori.label")))
+            Some(Messages("fh.importing_activities.eori.label"))
+          )
         ),
         Helpers.createSummaryRow(
           SummaryRowParams.ofBoolean(

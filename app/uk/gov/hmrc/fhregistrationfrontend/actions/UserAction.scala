@@ -35,12 +35,12 @@ class UserRequest[A](
   val registrationNumber: Option[String],
   val credentialRole: Option[CredentialRole],
   val userAffinityGroup: Option[AffinityGroup],
-  request: Request[A])
-    extends WrappedRequest(request) {
+  request: Request[A]
+) extends WrappedRequest(request) {
   def userIsRegistered = registrationNumber.isDefined
 }
 
-case class UserAction @Inject()(
+case class UserAction @Inject() (
   externalUrls: ExternalUrls,
   errorHandler: ErrorHandler,
   cc: ControllerComponents
@@ -75,7 +75,8 @@ case class UserAction @Inject()(
           else if (retrieveAffinityGroup.isEmpty) {
             Future successful Left(
               errorHandler
-                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service.")))
+                .errorResultsPages(Results.Forbidden, Some("Agents are not permitted to access this service."))
+            )
           } else
             Future successful Right(
               new UserRequest(
@@ -84,13 +85,14 @@ case class UserAction @Inject()(
                 retrieveEnrolments.headOption,
                 credentialRole,
                 retrieveAffinityGroup,
-                request))
+                request
+              )
+            )
         case _ =>
           throw AuthorisationException.fromString("Can not find user id")
 
-      } recover {
-      case e =>
-        Left(handleFailure(e))
+      } recover { case e =>
+      Left(handleFailure(e))
     }
   }
 

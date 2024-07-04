@@ -23,10 +23,10 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgres
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(
-  implicit val errorHandler: ErrorHandler,
-  val executionContext: ExecutionContext)
-    extends ActionFilter[UserRequest] with FrontendAction {
+class NoPendingSubmissionFilter(fhddsConnector: FhddsConnector)(implicit
+  val errorHandler: ErrorHandler,
+  val executionContext: ExecutionContext
+) extends ActionFilter[UserRequest] with FrontendAction {
 
   override protected def filter[A](request: UserRequest[A]): Future[Option[Result]] = {
     implicit val r = request

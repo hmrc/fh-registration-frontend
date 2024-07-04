@@ -25,11 +25,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
 import javax.inject.Inject
 
-class ContactPersonController @Inject()(
+class ContactPersonController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -57,12 +58,8 @@ class ContactPersonController @Inject()(
       contactPersonForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.contact_person_page(formWithErrors, address))
-          },
-          contactPerson => {
-            Ok(s"Form submitted, with result: $contactPerson")
-          }
+          formWithErrors => BadRequest(view.contact_person_page(formWithErrors, address)),
+          contactPerson => Ok(s"Form submitted, with result: $contactPerson")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

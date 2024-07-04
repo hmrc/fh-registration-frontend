@@ -35,7 +35,8 @@ case class AllOtherInformation(
   doesEORIExist: Boolean,
   EORINumber: Option[EORINumberType],
   numberOfpremises: String,
-  premises: Option[List[Premises]])
+  premises: Option[List[Premises]]
+)
 
 object AllOtherInformation {
   implicit val format: OFormat[AllOtherInformation] = Json.format[AllOtherInformation]
@@ -43,7 +44,8 @@ object AllOtherInformation {
 
 case class AdditionalBusinessInformationwithType(
   partnerCorporateBody: Option[PartnerCorporateBody],
-  allOtherInformation: AllOtherInformation)
+  allOtherInformation: AllOtherInformation
+)
 
 object AdditionalBusinessInformationwithType {
   implicit val format: OFormat[AdditionalBusinessInformationwithType] =

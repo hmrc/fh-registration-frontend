@@ -58,7 +58,8 @@ object LtdMinimum {
             None,
             "Director"
           )
-        ) -> changeFlags),
+        ) -> changeFlags
+      ),
       List.empty,
       false
     ),
@@ -78,6 +79,7 @@ object LtdMinimum {
       AlternativeEmail(
         "a@a.ro",
         "a@a.ro"
-      ))
+      )
+    )
   )
 }

@@ -25,11 +25,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation.noNavigati
 
 import javax.inject.Inject
 
-class BusinessCustomersController @Inject()(
+class BusinessCustomersController @Inject() (
   ds: CommonPlayDependencies,
   view: Views,
   actions: Actions,
-  config: FrontendAppConfig)(
+  config: FrontendAppConfig
+)(
   cc: MessagesControllerComponents
 ) extends AppController(ds, cc) {
 
@@ -49,12 +50,8 @@ class BusinessCustomersController @Inject()(
       businessCustomersForm
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            BadRequest(view.business_customers(formWithErrors, noNavigation, postAction))
-          },
-          numberOfCustomers => {
-            Ok(s"Next page! with form result: $numberOfCustomers")
-          }
+          formWithErrors => BadRequest(view.business_customers(formWithErrors, noNavigation, postAction)),
+          numberOfCustomers => Ok(s"Next page! with form result: $numberOfCustomers")
         )
     } else {
       errorHandler.errorResultsPages(Results.NotFound)

@@ -72,8 +72,10 @@ object PartnerType {
 
   val reads: Reads[PartnerType] = new Reads[PartnerType] {
     override def reads(json: JsValue) = json.validate[JsObject].flatMap { o =>
-      if ((o \ "name").toOption.isDefined
-          && (o \ "identification").toOption.isDefined) {
+      if (
+        (o \ "name").toOption.isDefined
+        && (o \ "identification").toOption.isDefined
+      ) {
         soleProprietorPartnerTypeFormat reads json
       } else if ((o \ "name").toOption.isDefined) {
         individualPartnerTypeFormat reads json

@@ -35,7 +35,7 @@ import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
-class WithdrawalController @Inject()(
+class WithdrawalController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
@@ -95,8 +95,9 @@ class WithdrawalController @Inject()(
       )
   }
 
-  private def handleConfirmation(confirmed: Confirmation, reason: WithdrawalReason)(
-    implicit request: EnrolledUserRequest[_]) =
+  private def handleConfirmation(confirmed: Confirmation, reason: WithdrawalReason)(implicit
+    request: EnrolledUserRequest[_]
+  ) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
         .map { processingDate =>
@@ -104,15 +105,17 @@ class WithdrawalController @Inject()(
             .withSession(
               request.session
                 + (EmailSessionKey               -> confirmed.email.get)
-                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString))
+                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString)
+            )
 
         }
     } else {
       Future successful Redirect(routes.Application.checkStatus)
     }
 
-  private def sendRequest(email: String, reason: WithdrawalReason)(
-    implicit request: EnrolledUserRequest[_]): Future[Date] = {
+  private def sendRequest(email: String, reason: WithdrawalReason)(implicit
+    request: EnrolledUserRequest[_]
+  ): Future[Date] = {
     val withdrawRequest = des.WithdrawalRequest(
       email,
       des.Withdrawal(
@@ -134,7 +137,5 @@ class WithdrawalController @Inject()(
       email     <- request.session get EmailSessionKey
       timestamp <- request.session get ProcessingTimestampSessionKey
       processingDate = new Date(timestamp.toLong)
-    } yield {
-      Ok(views.withdrawal_acknowledgement(processingDate, email))
-    }
+    } yield Ok(views.withdrawal_acknowledgement(processingDate, email))
 }

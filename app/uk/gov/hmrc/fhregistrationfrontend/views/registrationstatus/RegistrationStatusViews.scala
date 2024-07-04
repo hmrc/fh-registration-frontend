@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.views.registrationstatus
 import com.google.inject.{Inject, Singleton}
 
 @Singleton
-class RegistrationStatusViews @Inject()(
+class RegistrationStatusViews @Inject() (
   val statusHeading: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusHeading,
   val statusMoreInfo: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusMoreInfo,
   val statusNewApplication: uk.gov.hmrc.fhregistrationfrontend.views.html.registrationstatus.statusNewApplication,

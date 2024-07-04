@@ -188,7 +188,7 @@ class DeregistrationControllerSpec
     when(mockKeyStoreService.saveDeregistrationReason(any())(any())) thenReturn Future.successful(())
 
   def setupKeyStoreDeregistrationReason(
-    reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None)))
-    : Unit =
+    reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))
+  ): Unit =
     when(mockKeyStoreService.fetchDeregistrationReason()(any())) thenReturn Future.successful(reason)
 }
