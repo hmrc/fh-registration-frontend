@@ -23,7 +23,7 @@ import play.api.mvc.{ActionRefiner, Result, WrappedRequest, _}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, CompanyOfficer, CompanyOfficerCompany, CompanyOfficerType, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,49 +37,41 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   def lastUpdateTimestamp = request.lastUpdateTimestamp
   def bpr = request.bpr
 
-//  TODO: BELOW IS INITIAL METHOD COPIED FROM SUMMARY ACTION - WILL HAVE TO USE TO GET CURRENTLY USED VAT NUMBERS
-  private def pageDataOpt[T](page: Page[T]): Option[T] =
-    request.journeyPages.get(page.id).flatMap((p: Page[T]) => p.data)
+  private def pageDataOpt[T](pageId: String): Option[T] =
+    request.journeyPages.get(pageId).flatMap((p: Page[T]) => p.data)
 
-  private def vatReg(): Option[VatNumber] =
-    None
+  private def vatReg(): Option[VatNumber] = pageDataOpt("vatNumber")
 
-  private def companyOfficers(): List[CompanyOfficer] =
-    List(
-      CompanyOfficer(
-        officialType = CompanyOfficerType.Company,
-        identification = CompanyOfficerCompany(
-          "Some Company",
-          true,
-          Some("GB123456789"),
-          None,
-          "Company Secretary"
-        )
-      )
-    )
+  private def companyOfficers(): List[CompanyOfficer] = {
+    val companyOfficersPageOpt: Option[ListWithTrackedChanges[CompanyOfficer]] = pageDataOpt("companyOfficers")
+    companyOfficersPageOpt.map(_.values.toList).getOrElse(List.empty)
+  }
 
-  private def businessPartners(): List[BusinessPartner] =
-    List()
+  private def businessPartners(): List[BusinessPartner] = {
+    val businessPartnersPageOpt: Option[ListWithTrackedChanges[BusinessPartner]] = pageDataOpt("businessPartners")
+    businessPartnersPageOpt.map(_.values.toList).getOrElse(List.empty)
+  }
 
   def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
-    //      val usedCompanyOfficers = request.companyOfficers()
-    //      val usedBusinessPartners = request.businessPartners()
-    //      val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers.flatMap(
-    //        _ match {
-    //          case co: CompanyOfficerCompany => co.vat
-    //          case co: CompanyOfficerIndividual => None
-    //        })
-    //      val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners.flatMap(
-    //        _ match {
-    //          case i: BusinessPartnerIndividual => None
-    //          case s: BusinessPartnerSoleProprietor => s.vat
-    //          case p: BusinessPartnerPartnership => p.vat
-    //          case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
-    //          case c: BusinessPartnerCorporateBody => c.vat
-    //          case u: BusinessPartnerUnincorporatedBody => u.vat
-    //        })
-    //      val disallowedVatNumbers = usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
-    ???
+    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers()
+    val usedBusinessPartners: List[BusinessPartner] = businessPartners()
+    val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
+      .map(_.identification)
+      .flatMap(_ match {
+        case co: CompanyOfficerCompany   => co.vat
+        case _: CompanyOfficerIndividual => None
+      })
+    val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
+      .map(_.identification)
+      .flatMap(_ match {
+        case s: BusinessPartnerSoleProprietor              => s.vat
+        case p: BusinessPartnerPartnership                 => p.vat
+        case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+        case c: BusinessPartnerCorporateBody               => c.vat
+        case u: BusinessPartnerUnincorporatedBody          => u.vat
+        case _: BusinessPartnerIndividual                  => None
+      })
+    usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 }
 

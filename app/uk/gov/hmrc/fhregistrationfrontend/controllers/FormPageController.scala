@@ -20,18 +20,17 @@ import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.Messages
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, FormRendering, Page, Rendering}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -66,9 +65,9 @@ class FormPageController @Inject()(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData) ++ List("GB123456789")
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData)
             def vatNumberIsAlreadyUsed(usedVatNumbers: List[String], vatNumber: VatNumber): Boolean =
-            //            TODO: CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
+              //            TODO: CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
               usedVatNumbers.contains(vatNumber.value.get)
             if (vatNumberIsAlreadyUsed(usedVatNumbers, pageData)) {
               val vatNumberBasicPage = new BasicPage[VatNumber](
