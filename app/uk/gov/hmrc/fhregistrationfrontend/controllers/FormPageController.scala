@@ -93,10 +93,7 @@ class FormPageController @Inject() (
           page => {
             val pageData = page.data.get
             val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData)
-            def vatNumberIsAlreadyUsed(usedVatNumbers: List[String], vatNumber: VatNumber): Boolean =
-              //            TODO: CHECK IN HERE AROUND ARE VAT NUMBERS BEING USED - WRITE BETTER
-              usedVatNumbers.contains(vatNumber.value.get)
-            if (!vatNumberIsAlreadyUsed(usedVatNumbers, pageData)) {
+            if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
               val vatNumberBasicPage = new BasicPage[VatNumber](
