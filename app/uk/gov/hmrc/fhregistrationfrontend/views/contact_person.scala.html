@@ -134,8 +134,10 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
         }
 
         <h1 class="govuk-heading-l">@title</h1>
-        <p class="govuk-body">@Messages("fh.contact_person.intro")</p>
-
+        <fieldset class="govuk-fieldset">
+        <legend class="govuk-body">
+            @Messages("fh.contact_person.intro")
+        </legend>
         @viewHelpers.form(action = ContactPersonController.next()) {
 
             @viewHelpers.govukInput(Input(
@@ -249,9 +251,10 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
                 )
             ))
 
+        </fieldset>
 
-            @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
-            @SaveForLater()
+        @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+        @SaveForLater()
 
         }
     }
