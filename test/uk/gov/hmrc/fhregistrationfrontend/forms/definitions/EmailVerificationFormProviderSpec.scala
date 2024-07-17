@@ -20,10 +20,10 @@ import play.api.data.Form
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
+class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
 
-  override def form: Form[EmailVerification] = EmailVerificationForm.emailVerificationForm
-  import EmailVerificationForm._
+  override def form: Form[EmailVerification] = EmailVerificationFormProvider.emailVerificationForm
+  import EmailVerificationFormProvider._
 
   "Email Verification Form" should {
     "Fail if usingDefaultEmail is not answered" in {

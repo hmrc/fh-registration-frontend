@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{email, yesOrN
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 
-object EmailVerificationForm {
+case class EmailVerificationFormProvider(candidateEmail: Option[String] = None) {
 
   val emailOptionKey = "usingDefaultEmailAddress"
   val defaultEmailKey = "defaultEmail"
