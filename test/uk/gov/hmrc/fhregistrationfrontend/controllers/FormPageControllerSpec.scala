@@ -23,7 +23,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm, VatNumberForm}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
@@ -122,6 +122,19 @@ class FormPageControllerSpec
       val result = csrfAddToken(controller.save(contactPersonPage.id))(request)
       status(result) shouldBe SEE_OTHER
       verify(addressAuditService).auditAddresses(any(), any())(any())
+    }
+
+    "Render vat number error form if vat number used elsewhere in journey" in {
+      setupPageAction(vatNumberPage, journeyPages = JourneyRequestBuilder.fullyCompleteJourney())
+      setupSave4Later()
+
+      val request = FakeRequest().withFormUrlEncodedBody(
+        VatNumberForm.hasVatNumberKey -> "true",
+        VatNumberForm.vatNumberKey -> "223456789"
+      )
+      val result = csrfAddToken(controller.save(vatNumberPage.id))(request)
+
+      status(result) shouldBe BAD_REQUEST
     }
 
     "Redirect to summary" in {

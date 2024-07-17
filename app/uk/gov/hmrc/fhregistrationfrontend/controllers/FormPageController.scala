@@ -17,14 +17,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Results}
+import play.api.i18n.Messages
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
+import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{Page, Rendering}
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, FormRendering, Page, Rendering}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,26 +57,80 @@ class FormPageController @Inject() (
   def save[T](pageId: String): Action[AnyContent] = save(pageId, None)
   def saveWithSection[T, V](pageId: String, sectionId: String): Action[AnyContent] = save(pageId, Some(sectionId))
 
-  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] = pageAction(pageId, sectionId).async {
-    implicit request =>
+  private def saveSuccessfully[T](page: Page[T])(implicit request: PageRequest[AnyContent]): Future[Result] = {
+    addressAuditService.auditAddresses(page.id, page.updatedAddresses)
+    save4LaterService
+      .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+      .map { _ =>
+        if (isSaveForLate)
+          Redirect(routes.Application.savedForLater)
+        else {
+          showNextPage(page)
+        }
+      }
+  }
+
+  def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
+    pageId match {
+      case "vatNumber" => saveVatNumber()
+      case _ =>
+        pageAction(pageId, sectionId).async { implicit request =>
+          request
+            .page[T]
+            .parseFromRequest(
+              pageWithErrors => Future successful renderForm(pageWithErrors, true),
+              page => saveSuccessfully(page)
+            )
+        }
+    }
+
+  def saveVatNumber(): Action[AnyContent] =
+    pageAction("vatNumber", None).async { implicit request =>
       request
-        .page[T]
+        .page[VatNumber]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-            addressAuditService.auditAddresses(pageId, page.updatedAddresses)
-            save4LaterService
-              .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
-              .map { _ =>
-                if (isSaveForLate)
-                  Redirect(routes.Application.savedForLater)
-                else {
-                  showNextPage(page)
+            val pageData = page.data.get
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData)
+            if (!pageData.value.exists(usedVatNumbers.contains)) {
+              saveSuccessfully(page)
+            } else {
+              val vatNumberBasicPage = new BasicPage[VatNumber](
+                "vatNumber",
+                VatNumberForm.vatNumberForm,
+                new FormRendering[VatNumber] {
+                  override def render(
+                    form: Form[VatNumber],
+                    bpr: BusinessRegistrationDetails,
+                    navigation: Navigation
+                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+                    views.vat_registration(
+                      form,
+                      navigation,
+                      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+                        .save("vatNumber")
+                    )(request, request2Messages(request))
                 }
-              }
+              )
+              val updatedForm: Form[VatNumber] = VatNumberForm.vatNumberForm.copy(
+                data = Map(
+                  "vatNumber_yesNo" -> pageData.hasValue.toString,
+                  "vatNumber_value" -> pageData.value.getOrElse("")
+                ),
+                errors = Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List()))
+              )
+              Future successful BadRequest(
+                vatNumberBasicPage.renderWithUpdatedForm(
+                  updatedForm,
+                  request.bpr,
+                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
+                )(request, request2Messages(request), appConfig)
+              )
+            }
           }
         )
-  }
+    }
 
   def deleteSection[T](pageId: String, sectionId: String, lastUpdateTimestamp: Long): Action[AnyContent] =
     pageAction(pageId, Some(sectionId)).async { implicit request =>

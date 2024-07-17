@@ -23,6 +23,7 @@ import play.api.mvc.{ActionRefiner, Result, WrappedRequest, _}
 import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,6 +36,43 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   val journeyState = request.journeyState
   def lastUpdateTimestamp = request.lastUpdateTimestamp
   def bpr = request.bpr
+
+  private def pageDataOpt[T](pageId: String): Option[T] =
+    request.journeyPages.get(pageId).flatMap((p: Page[T]) => p.data)
+
+  private def vatReg(): Option[VatNumber] = pageDataOpt("vatNumber")
+
+  private def companyOfficers(): List[CompanyOfficer] = {
+    val companyOfficersPageOpt: Option[ListWithTrackedChanges[CompanyOfficer]] = pageDataOpt("companyOfficers")
+    companyOfficersPageOpt.map(_.values.toList).getOrElse(List.empty)
+  }
+
+  private def businessPartners(): List[BusinessPartner] = {
+    val businessPartnersPageOpt: Option[ListWithTrackedChanges[BusinessPartner]] = pageDataOpt("businessPartners")
+    businessPartnersPageOpt.map(_.values.toList).getOrElse(List.empty)
+  }
+
+  def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
+    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers()
+    val usedBusinessPartners: List[BusinessPartner] = businessPartners()
+    val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
+      .map(_.identification)
+      .flatMap(_ match {
+        case co: CompanyOfficerCompany   => co.vat
+        case _: CompanyOfficerIndividual => None
+      })
+    val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
+      .map(_.identification)
+      .flatMap(_ match {
+        case s: BusinessPartnerSoleProprietor              => s.vat
+        case p: BusinessPartnerPartnership                 => p.vat
+        case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+        case c: BusinessPartnerCorporateBody               => c.vat
+        case u: BusinessPartnerUnincorporatedBody          => u.vat
+        case _: BusinessPartnerIndividual                  => None
+      })
+    usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+  }
 }
 
 //TODO all exceptional results need to be reviewed
