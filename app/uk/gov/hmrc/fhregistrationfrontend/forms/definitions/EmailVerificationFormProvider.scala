@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
-import play.api.data.Form
+import play.api.data.{Form, Mapping}
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{email, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{changedEmail, email, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 
-case class EmailVerificationFormProvider(candidateEmail: Option[String] = None) {
+case class EmailVerificationFormProvider(candidateEmail: Option[String]) {
 
   val emailOptionKey = "usingDefaultEmailAddress"
   val defaultEmailKey = "defaultEmail"
@@ -30,7 +30,7 @@ case class EmailVerificationFormProvider(candidateEmail: Option[String] = None) 
 
   private val usingDefaultEmailMapping = emailOptionKey     -> yesOrNo()
   private val defaultEmailMapping = defaultEmailKey         -> (email onlyWhen (usingDefaultEmailMapping is true))
-  private val alternativeEmailMapping = alternativeEmailKey -> (email onlyWhen (usingDefaultEmailMapping is false))
+  private val alternativeEmailMapping = alternativeEmailKey -> (changedEmail(candidateEmail) onlyWhen (usingDefaultEmailMapping is false))
 
   val emailVerificationForm = Form(
     mapping(

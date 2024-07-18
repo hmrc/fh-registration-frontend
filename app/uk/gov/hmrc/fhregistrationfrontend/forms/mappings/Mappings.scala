@@ -68,6 +68,11 @@ object Mappings {
 
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
+  def changedEmail(candidateEmail: Option[String]): Mapping[String] = {
+//    TODO: ADD CHECK THAT EMAIL HAS CHANGED
+    email
+  }
+
   def companyRegistrationNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
       v
