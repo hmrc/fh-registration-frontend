@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
-
+// TODO: ADD UNIT TESTS FOR ALTERNATIVE EMAIL SAME AS ORIGINAL EMAIL
   private val defaultEmail = Option("a@b.com")
   override def form: Form[EmailVerification] = EmailVerificationFormProvider(defaultEmail).emailVerificationForm
   import EmailVerificationFormProvider._
