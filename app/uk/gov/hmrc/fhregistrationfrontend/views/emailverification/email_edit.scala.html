@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
-@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormProvider._
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormKeys._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -61,10 +61,10 @@
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, Symbol("novalidate") -> "novalidate") {
 
         @viewHelpers.govukInput(Input(
-            id = "alternativeEmail",
-            name = "alternativeEmail",
-            errorMessage = if (emailVerificationForm("alternativeEmail").hasErrors) {
-                Some(ErrorMessage(content = Text(messages(s"fh.emailVerification.alternativeEmail.${emailVerificationForm.errors.head.message}"))))
+            id = alternativeEmailKey,
+            name = alternativeEmailKey,
+            errorMessage = if (emailVerificationForm(alternativeEmailKey).hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.emailVerification.$alternativeEmailKey.${emailVerificationForm.errors.head.message}"))))
             } else None,
             inputType = "email",
             label = Label(
@@ -78,9 +78,9 @@
             hint = Some(Hint(
                 content = Text(messages("fh.emailVerification.alternativeEmail.hintText"))
             )),
-            value = emailVerificationForm("alternativeEmail").value
+            value = emailVerificationForm(alternativeEmailKey).value
         ))
-        <input type="hidden" name="usingDefaultEmailAddress" value="false">
+        <input type="hidden" name="@{emailOptionKey}" value="false">
 
     @viewHelpers.govukButton(Button(content = Text(messages("button.continue")), inputType = Some("submit")))
 
