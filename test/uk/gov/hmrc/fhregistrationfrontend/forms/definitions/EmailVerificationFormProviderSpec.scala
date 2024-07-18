@@ -22,10 +22,9 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
-// TODO: ADD UNIT TESTS FOR ALTERNATIVE EMAIL SAME AS ORIGINAL EMAIL
-  private val defaultEmail = Option("a@b.com")
-  override def form: Form[EmailVerification] = EmailVerificationFormProvider(defaultEmail).emailVerificationForm
-  import EmailVerificationFormProvider._
+
+  private val defaultEmail = "default@test.com"
+  override def form: Form[EmailVerification] = EmailVerificationFormProvider(Option(defaultEmail)).emailVerificationForm
 
   "Email Verification Form" should {
     "Fail if usingDefaultEmail is not answered" in {
@@ -52,17 +51,27 @@ class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[Em
       )
     }
 
+    "Fail if usingDefaultEmail is no and alternate email is same as default email" in {
+      formDataHasErrors(
+        Map(
+          emailOptionKey      -> "false",
+          alternativeEmailKey -> defaultEmail
+        ),
+        Seq(alternativeEmailKey -> "error.emailAlreadyUsed")
+      )
+    }
+
     "Parse when using default email" in {
       val parsed = dataFromValidForm(
         Map(
           emailOptionKey  -> "true",
-          defaultEmailKey -> "default@test.com"
+          defaultEmailKey -> defaultEmail
         )
       )
 
       parsed.usingGgEmailAddress shouldBe true
-      parsed.ggEmail shouldBe Some("default@test.com")
-      parsed.email shouldBe "default@test.com"
+      parsed.ggEmail shouldBe Option(defaultEmail)
+      parsed.email shouldBe defaultEmail
     }
 
     "Parse when using alternate email" in {

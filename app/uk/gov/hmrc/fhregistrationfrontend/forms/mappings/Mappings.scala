@@ -72,11 +72,11 @@ object Mappings {
     def checkCandidateEmail(): Constraint[String] =
       Constraint {
         case email if candidateEmail.contains(email) =>
-          Invalid("error.alreadyUsed")
+          Invalid("error.emailAlreadyUsed")
         case _ =>
           Valid
       }
-    email verifying checkCandidateEmail
+    email verifying checkCandidateEmail()
   }
 
   def companyRegistrationNumber =
