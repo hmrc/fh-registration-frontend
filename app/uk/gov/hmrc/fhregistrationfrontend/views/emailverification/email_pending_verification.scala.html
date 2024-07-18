@@ -41,12 +41,14 @@
   }
 }
 
+@alternativeEmailValue = @{emailVerificationForm("alternativeEmail").value}
+
 @layout(title = title, Some(pageScripts)) {
 
   @showAlert
 
     <h1 class ="govuk-heading-l">@title</h1>
-    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@{emailVerificationForm(alternativeEmailKey).value}</p>
+    <p class="govuk-body">@Messages("fh.emailVerification.pendingText.sentEmail")<br>@alternativeEmailValue</p>
     <h2 class ="govuk-heading-m">@Messages("fh.emailVerification.pendingText.whatHappensNext")</h2>
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.goToEmail")</p>
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.youHave30Mins")</p>
@@ -55,8 +57,8 @@
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
     @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail) {
-        <input type="hidden" name="@{emailOptionKey}" value="false">
-        <input type="hidden" name="@{alternativeEmailKey}" value="@{emailVerificationForm(alternativeEmailKey).value}">
+        <input type="hidden" name="usingDefaultEmailAddress" value="false">
+        <input type="hidden" name="alternativeEmail" value="@alternativeEmailValue">
 
         @viewHelpers.govukButton(Button(
             content = Text(Messages("fh.emailVerification.resendEmail")),

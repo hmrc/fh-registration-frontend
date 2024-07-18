@@ -69,8 +69,14 @@ object Mappings {
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
   def changedEmail(candidateEmail: Option[String]): Mapping[String] = {
-//    TODO: ADD CHECK THAT EMAIL HAS CHANGED
-    email
+    def checkCandidateEmail(): Constraint[String] =
+      Constraint {
+        case email if candidateEmail.contains(email) =>
+          Invalid("error.alreadyUsed")
+        case _ =>
+          Valid
+      }
+    email verifying checkCandidateEmail
   }
 
   def companyRegistrationNumber =

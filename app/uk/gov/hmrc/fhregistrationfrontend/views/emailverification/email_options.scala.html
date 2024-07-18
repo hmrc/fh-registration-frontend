@@ -50,7 +50,7 @@
         name = "alternativeEmail",
         inputType = "email",
         label = Label(
-            content = Text(messages(s"fh.emailVerification.$alternativeEmailKey.label")),
+            content = Text(messages(s"fh.emailVerification.alternativeEmail.label")),
             classes = "govuk-!-font-weight-bold"
         ),
         autocomplete = Some("email"),
@@ -60,14 +60,14 @@
             content = Text(messages(s"fh.emailVerification.alternativeEmail.info"))
         )),
         errorMessage =
-            emailVerificationForm.error(alternativeEmailKey).map{ e =>
+            emailVerificationForm.error("alternativeEmail").map{ e =>
                 ErrorMessage(
                     content = Text(messages(s"fh.emailVerification.${e.key}.${e.message}")),
                     visuallyHiddenText = Some(messages("generic.errorPrefix"))
                 )
 
             },
-        value = emailVerificationForm(alternativeEmailKey).value
+        value = emailVerificationForm("alternativeEmail").value
     ))
 }
 
@@ -85,7 +85,7 @@
     @viewHelpers.form(action = action, Symbol("novalidate") -> "novalidate") {
 
 
-        <input type="hidden" name="@{defaultEmailKey}" value="@{defaultEmail.getOrElse("")}"/>
+        <input type="hidden" name="defaultEmail" value="@{defaultEmail.getOrElse("")}"/>
 
         @viewHelpers.govUkRadios(Radios(
             fieldset = Some(Fieldset(
@@ -95,10 +95,10 @@
                     isPageHeading = true
                 ))
             )),
-            idPrefix = Some(emailOptionKey),
-            name = emailOptionKey,
-            errorMessage = if (emailVerificationForm(emailOptionKey).hasErrors) {
-                Some(ErrorMessage(content = Text(messages(s"fh.emailVerification.$emailOptionKey.${emailVerificationForm.errors.head.message}"))))
+            idPrefix = Some("usingDefaultEmailAddress"),
+            name = "usingDefaultEmailAddress",
+            errorMessage = if (emailVerificationForm("usingDefaultEmailAddress").hasErrors) {
+                Some(ErrorMessage(content = Text(messages(s"fh.emailVerification.usingDefaultEmailAddress.${emailVerificationForm.errors.head.message}"))))
             } else None,
             items = Seq(
                 RadioItem(
