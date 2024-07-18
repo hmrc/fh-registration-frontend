@@ -17,12 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormKeys._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
 
-  override def form: Form[EmailVerification] = EmailVerificationFormProvider.emailVerificationForm
+  private val defaultEmail = Option("a@b.com")
+  override def form: Form[EmailVerification] = EmailVerificationFormProvider(defaultEmail).emailVerificationForm
   import EmailVerificationFormProvider._
 
   "Email Verification Form" should {
