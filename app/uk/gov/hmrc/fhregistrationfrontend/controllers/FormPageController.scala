@@ -18,19 +18,21 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
-import play.api.data.Forms.nonEmptyText
+import play.api.data.Forms.{nonEmptyText, tuple}
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, FormRendering, Page, Rendering}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{skippingOnePrefix, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ListWithTrackedChanges, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
+import uk.gov.hmrc.fhregistrationfrontend.views.helpers.RepeatingPageParams
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -73,6 +75,7 @@ class FormPageController @Inject() (
   def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
     pageId match {
       case "vatNumber" => saveVatNumber()
+      case "businessPartners" => saveBusinessPartners(sectionId)
       case _ =>
         pageAction(pageId, sectionId).async { implicit request =>
           request
@@ -113,6 +116,7 @@ class FormPageController @Inject() (
                     )(request, request2Messages(request))
                 }
               )
+//              TODO: PASS BELOW VALUE INTO basic page and create renderWithFormError method
               val updatedForm: Form[VatNumber] = VatNumberForm.vatNumberForm.copy(
                 data = Map(
                   "vatNumber_yesNo" -> pageData.hasValue.toString,
@@ -125,6 +129,51 @@ class FormPageController @Inject() (
                   updatedForm,
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page)
+                )(request, request2Messages(request), appConfig)
+              )
+            }
+          }
+        )
+    }
+
+  def saveBusinessPartners(sectionId: Option[String]): Action[AnyContent] =
+    pageAction("businessPartners", sectionId).async { implicit request =>
+      request
+        .page[(BusinessPartner, Boolean)]
+        .parseFromRequest(
+          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          page => {
+            val pageData = page.data.get
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData._1, sectionId)
+            if (false) {
+              saveSuccessfully(page)
+            } else {
+              val businessPartnersPage = new RepeatingPage[BusinessPartner](
+                "businessPartners",
+                new RepeatedFormRendering[(BusinessPartner, Boolean)] {
+                  override def render(
+                                       form: Form[(BusinessPartner, Boolean)],
+                                       bpr: BusinessRegistrationDetails,
+                                       navigation: Navigation,
+                                       sectionId: String,
+                                       params: RepeatingPageParams
+                                     )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+                    views.business_partners(form, navigation, sectionId, params)(request, request2Messages(request))
+                },
+                BusinessPartnersForm.businessPartnerMapping,
+                value = request.businessPartners(),
+                minItems = 2,
+                addressOnPage = { bp =>
+                  Some(bp.identification.address)
+                }
+              )
+              Future successful BadRequest(
+                businessPartnersPage.renderWithFormError(
+//                  TODO: SUSPECT ONLY WORKS FOR SOLE PROPRIETOR LIKE THIS
+                  Seq(FormError("businessPartnerSoleProprietor_vat_value", List("error.vatAlreadyUsed"), List())),
+                  request.bpr,
+                  request.journey.navigation(request.lastUpdateTimestamp, request.page),
+                  sectionId.get
                 )(request, request2Messages(request), appConfig)
               )
             }

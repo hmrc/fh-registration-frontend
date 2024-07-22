@@ -42,19 +42,13 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   private def vatReg(): Option[VatNumber] = pageDataOpt("vatNumber")
 
-  private def companyOfficers(): List[CompanyOfficer] = {
-    val companyOfficersPageOpt: Option[ListWithTrackedChanges[CompanyOfficer]] = pageDataOpt("companyOfficers")
-    companyOfficersPageOpt.map(_.values.toList).getOrElse(List.empty)
-  }
+  def companyOfficers(): ListWithTrackedChanges[CompanyOfficer] = pageDataOpt("companyOfficers").getOrElse(ListWithTrackedChanges.empty[CompanyOfficer]())
 
-  private def businessPartners(): List[BusinessPartner] = {
-    val businessPartnersPageOpt: Option[ListWithTrackedChanges[BusinessPartner]] = pageDataOpt("businessPartners")
-    businessPartnersPageOpt.map(_.values.toList).getOrElse(List.empty)
-  }
+  def businessPartners(): ListWithTrackedChanges[BusinessPartner] = pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]())
 
   def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
-    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers()
-    val usedBusinessPartners: List[BusinessPartner] = businessPartners()
+    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
+    val usedBusinessPartners: List[BusinessPartner] = businessPartners().values.toList
     val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
       .map(_.identification)
       .flatMap(_ match {
@@ -70,6 +64,28 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
         case c: BusinessPartnerCorporateBody               => c.vat
         case u: BusinessPartnerUnincorporatedBody          => u.vat
         case _: BusinessPartnerIndividual                  => None
+      })
+    usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+  }
+
+  def otherUsedVatNumbers(businessPartnerPageData: BusinessPartner, sectionId: Option[String]): List[String] = {
+    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
+    val usedBusinessPartners: List[BusinessPartner] = businessPartners().values.toList
+    val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
+      .map(_.identification)
+      .flatMap(_ match {
+        case co: CompanyOfficerCompany => co.vat
+        case _: CompanyOfficerIndividual => None
+      })
+    val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
+      .map(_.identification)
+      .flatMap(_ match {
+        case s: BusinessPartnerSoleProprietor => s.vat
+        case p: BusinessPartnerPartnership => p.vat
+        case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+        case c: BusinessPartnerCorporateBody => c.vat
+        case u: BusinessPartnerUnincorporatedBody => u.vat
+        case _: BusinessPartnerIndividual => None
       })
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }

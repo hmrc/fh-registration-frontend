@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import play.api.data.{Form, Mapping}
+import play.api.data.{Form, FormError, Mapping}
 import play.api.data.Forms._
 import play.api.i18n.Messages
 import play.api.libs.json.Format
@@ -107,6 +107,22 @@ case class RepeatingPage[T](
         onSuccess(updatePage)
       }
     }
+  }
+
+  def renderWithFormError(formErrors: Seq[FormError],
+                            bpr: BusinessRegistrationDetails,
+                            navigation: Navigation,
+                            sectionId: String)(implicit
+                                                    request: Request[_],
+                                                    messages: Messages,
+                                                    appConfig: AppConfig
+  ): Html = {
+    val filledForm = {
+      if (index < value.size) form fill ((value(sectionId.toInt - 1), value.addMore))
+      else form
+    }
+    val filledFormWithErrors = filledForm.copy(errors = formErrors)
+    renderer.render(filledFormWithErrors, bpr, navigation, sectionId, renderingParams)
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
