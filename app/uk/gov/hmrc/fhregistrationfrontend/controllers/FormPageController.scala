@@ -98,6 +98,7 @@ class FormPageController @Inject() (
             if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
+              //              TODO: PULL OUT TO SEPARATE FILE IN forms/journey DIRECTORY
               val vatNumberBasicPage = new BasicPage[VatNumber](
                 "vatNumber",
                 VatNumberForm.vatNumberForm,
@@ -115,6 +116,7 @@ class FormPageController @Inject() (
                     )(request, request2Messages(request))
                 }
               )
+              //                TODO: CHANGE TO withPageData AND withError
               val updatedForm: Form[VatNumber] = vatNumberBasicPage.form.copy(
                 data = Map(
                   "vatNumber_yesNo" -> pageData.hasValue.toString,
@@ -159,6 +161,7 @@ class FormPageController @Inject() (
             if (false) {
               saveSuccessfully(page)
             } else {
+//              TODO: PULL OUT TO SEPARATE FILE IN forms/journey DIRECTORY
               val businessPartnersPage = new RepeatingPage[BusinessPartner](
                 "businessPartners",
                 new RepeatedFormRendering[(BusinessPartner, Boolean)] {
@@ -180,6 +183,7 @@ class FormPageController @Inject() (
               )
               val updatedFormDataAndError: (Map[String, String], Seq[FormError]) =
                 getVatNumberAlreadyUsedFormDataAndError(pageData, sectionId)
+//                TODO: CHANGE TO withPageData AND withError
               val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
                 data = updatedFormDataAndError._1,
                 errors = updatedFormDataAndError._2
