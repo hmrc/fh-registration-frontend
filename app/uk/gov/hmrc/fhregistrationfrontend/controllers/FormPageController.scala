@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
-import play.api.data.Forms.{nonEmptyText, tuple}
+import play.api.data.Forms.nonEmptyText
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
 import play.twirl.api.Html
@@ -134,7 +134,10 @@ class FormPageController @Inject() (
         )
     }
 
-  private def getVatNumberAlreadyUsedFormDataAndError(pageData: ListWithTrackedChanges[BusinessPartner], sectionId: Option[String]): (Map[String, String], Seq[FormError]) = {
+  private def getVatNumberAlreadyUsedFormDataAndError(
+    pageData: ListWithTrackedChanges[BusinessPartner],
+    sectionId: Option[String]
+  ): (Map[String, String], Seq[FormError]) = {
 //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
     val businessPartner = pageData.values.toList.head
     val data = BusinessPartnersForm.getFormDataFromPageData(pageData, sectionId)
@@ -175,7 +178,8 @@ class FormPageController @Inject() (
                   Some(bp.identification.address)
                 }
               )
-              val updatedFormDataAndError: (Map[String, String], Seq[FormError]) = getVatNumberAlreadyUsedFormDataAndError(pageData, sectionId)
+              val updatedFormDataAndError: (Map[String, String], Seq[FormError]) =
+                getVatNumberAlreadyUsedFormDataAndError(pageData, sectionId)
               val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
                 data = updatedFormDataAndError._1,
                 errors = updatedFormDataAndError._2

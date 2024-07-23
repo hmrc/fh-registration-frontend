@@ -248,36 +248,63 @@ object BusinessPartnersForm {
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
 
-  private def emptyMapOfBusinessPartnerKeys(): Map[String, String] = {
-//    TODO: IMPLEMENT
-    Map.empty
-  }
+  private val constantKeys = List("businessPartnersType", "addMore")
+  private val soleProprietorKeys = businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k")
+  private val partnershipKeys = businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k")
+  private val limitedLiabilityPartnershipKeys = businessPartnerLimitedLiabilityPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerLimitedLiabilityPartnership.$k")
+  private val corporateBodyKeys = businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k")
+  private val unincorporatedBodyKeys = businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k")
+  private val individualKeys = businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
+  private def emptyMapOfBusinessPartnerKeys: Map[String, String] =
+    List(
+      constantKeys,
+      soleProprietorKeys,
+      partnershipKeys,
+      limitedLiabilityPartnershipKeys,
+      corporateBodyKeys,
+      unincorporatedBodyKeys,
+      individualKeys
+    ).flatten.map(_ -> "").toMap
 
-  def getFormDataFromPageData(pageData: ListWithTrackedChanges[BusinessPartner], sectionId: Option[String]): Map[String, String] = {
+  def getFormDataFromPageData(
+    pageData: ListWithTrackedChanges[BusinessPartner],
+    sectionId: Option[String]
+  ): Map[String, String] = {
     //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
     val businessPartner = pageData.values.toList.head
-    //    TODO: GET DATA FROM DATA SCREENSHOTS/IMPLEMENT
+    //    TODO: IMPLEMENT
     val setDataMap: Map[String, String] = businessPartner.identification match {
-      case s: BusinessPartnerSoleProprietor => {
-        Map.empty
-      }
-      case p: BusinessPartnerPartnership => {
-        Map.empty
-      }
-      case l: BusinessPartnerLimitedLiabilityPartnership => {
-        Map.empty
-      }
-      case c: BusinessPartnerCorporateBody => {
-        Map.empty
-      }
-      case u: BusinessPartnerUnincorporatedBody => {
-        Map.empty
-      }
-      case _: BusinessPartnerIndividual => {
-        Map.empty
-      }
+      case s: BusinessPartnerSoleProprietor =>
+        val soleProprietorKeys = businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k")
+        Map(
+          "businessPartnersType" -> "SoleProprietor"
+        )
+      case p: BusinessPartnerPartnership =>
+        val partnershipKeys = businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k")
+        Map(
+          "businessPartnersType" -> "Partnership"
+        )
+      case l: BusinessPartnerLimitedLiabilityPartnership =>
+        val limitedLiabilityPartnershipKeys = businessPartnerLimitedLiabilityPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerLimitedLiabilityPartnership.$k")
+        Map(
+          "businessPartnersType" -> "LimitedLiabilityPartnership"
+        )
+      case c: BusinessPartnerCorporateBody =>
+        val corporateBodyKeys = businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k")
+        Map(
+          "businessPartnersType" -> "CorporateBody"
+        )
+      case u: BusinessPartnerUnincorporatedBody =>
+        val unincorporatedBodyKeys = businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k")
+        Map(
+          "businessPartnersType" -> "UnincorporatedBody"
+        )
+      case _: BusinessPartnerIndividual =>
+        val individualKeys = businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
+        Map(
+          "businessPartnersType" -> "Individual"
+        )
     }
-    val emptyMap: Map[String, String] = emptyMapOfBusinessPartnerKeys()
-    emptyMap ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
+    emptyMapOfBusinessPartnerKeys ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
   }
 }
