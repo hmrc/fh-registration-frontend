@@ -109,8 +109,8 @@ case class RepeatingPage[T](
     }
   }
 
-  def renderWithFormError(
-    formErrors: Seq[FormError],
+  def renderWithUpdatedForm(
+    updatedForm: Form[(T, Boolean)],
     bpr: BusinessRegistrationDetails,
     navigation: Navigation,
     sectionId: String
@@ -118,13 +118,8 @@ case class RepeatingPage[T](
     request: Request[_],
     messages: Messages,
     appConfig: AppConfig
-  ): Html = {
-    val filledForm =
-      if (index < value.size) form fill ((value(sectionId.toInt - 1), value.addMore))
-      else form
-    val filledFormWithErrors = filledForm.copy(errors = formErrors)
-    renderer.render(filledFormWithErrors, bpr, navigation, sectionId, renderingParams)
-  }
+  ): Html =
+    renderer.render(updatedForm, bpr, navigation, sectionId, renderingParams)
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],
@@ -143,8 +138,10 @@ case class RepeatingPage[T](
       request: Request[_],
       messages: Messages,
       appConfig: AppConfig
-    ): Html =
+    ): Html = {
+      val fgfg = form
       renderer.render(form, bpr, navigation, section(index), renderingParams)
+    }
   }
 
   def renderingParams = RepeatingPageParams(

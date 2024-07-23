@@ -70,7 +70,8 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 
-  def otherUsedVatNumbers(businessPartnerPageData: BusinessPartner, sectionId: Option[String]): List[String] = {
+  def otherUsedVatNumbers(businessPartnersPageData: List[BusinessPartner], sectionId: Option[String]): List[String] = {
+//    TODO: IMPLEMENT THIS METHOD
     val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
     val usedBusinessPartners: List[BusinessPartner] = businessPartners().values.toList
     val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers

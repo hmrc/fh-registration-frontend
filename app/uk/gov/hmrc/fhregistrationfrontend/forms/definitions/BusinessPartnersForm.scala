@@ -247,4 +247,10 @@ object BusinessPartnersForm {
       businessPartnersKey -> list(businessPartnerMapping)
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
+
+  def getFormDataFromPageData(pageData: ListWithTrackedChanges[BusinessPartner], sectionId: Option[String]): Map[String, String] = {
+    //    TODO: GET DATA FROM DATA SCREENSHOTS
+    //            TODO: ADDMORE IS PART OF LISTWITHTRACKEDCHANGES
+    ???
+  }
 }
