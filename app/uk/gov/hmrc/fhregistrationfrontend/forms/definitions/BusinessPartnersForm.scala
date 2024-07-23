@@ -248,9 +248,36 @@ object BusinessPartnersForm {
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
 
+  private def emptyMapOfBusinessPartnerKeys(): Map[String, String] = {
+//    TODO: IMPLEMENT
+    Map.empty
+  }
+
   def getFormDataFromPageData(pageData: ListWithTrackedChanges[BusinessPartner], sectionId: Option[String]): Map[String, String] = {
-    //    TODO: GET DATA FROM DATA SCREENSHOTS
-    //            TODO: ADDMORE IS PART OF LISTWITHTRACKEDCHANGES
-    ???
+    //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+    val businessPartner = pageData.values.toList.head
+    //    TODO: GET DATA FROM DATA SCREENSHOTS/IMPLEMENT
+    val setDataMap: Map[String, String] = businessPartner.identification match {
+      case s: BusinessPartnerSoleProprietor => {
+        Map.empty
+      }
+      case p: BusinessPartnerPartnership => {
+        Map.empty
+      }
+      case l: BusinessPartnerLimitedLiabilityPartnership => {
+        Map.empty
+      }
+      case c: BusinessPartnerCorporateBody => {
+        Map.empty
+      }
+      case u: BusinessPartnerUnincorporatedBody => {
+        Map.empty
+      }
+      case _: BusinessPartnerIndividual => {
+        Map.empty
+      }
+    }
+    val emptyMap: Map[String, String] = emptyMapOfBusinessPartnerKeys()
+    emptyMap ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
   }
 }

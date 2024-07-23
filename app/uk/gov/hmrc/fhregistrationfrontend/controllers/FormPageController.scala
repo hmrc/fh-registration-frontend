@@ -136,9 +136,11 @@ class FormPageController @Inject() (
     }
 
   private def getVatNumberAlreadyUsedFormDataAndError(pageData: ListWithTrackedChanges[BusinessPartner], sectionId: Option[String]): (Map[String, String], Seq[FormError]) = {
+//    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+    val businessPartner = pageData.values.toList.head
     val data = BusinessPartnersForm.getFormDataFromPageData(pageData, sectionId)
-    //                  TODO: ERRORS ONLY WORKS FOR SOLE PROPRIETOR LIKE THIS - NEED TO SET ERROR CORRECTLY USING DATA
-    val errors = Seq(FormError("businessPartnerSoleProprietor.vat_value", List("error.vatAlreadyUsed"), List()))
+    val errorField = s"businessPartner${businessPartner.businessPartnerType.toString}.vat_value"
+    val errors = Seq(FormError(errorField, List("error.vatAlreadyUsed"), List()))
     (data, errors)
   }
 
@@ -177,7 +179,6 @@ class FormPageController @Inject() (
               val updatedFormDataAndError: (Map[String, String], Seq[FormError]) = getVatNumberAlreadyUsedFormDataAndError(pageData, sectionId)
               val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
                 data = updatedFormDataAndError._1,
-                //                  TODO: SUSPECT ONLY WORKS FOR SOLE PROPRIETOR LIKE THIS
                 errors = updatedFormDataAndError._2
               )
               Future successful BadRequest(
