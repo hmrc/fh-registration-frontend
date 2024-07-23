@@ -42,9 +42,11 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   private def vatReg(): Option[VatNumber] = pageDataOpt("vatNumber")
 
-  def companyOfficers(): ListWithTrackedChanges[CompanyOfficer] = pageDataOpt("companyOfficers").getOrElse(ListWithTrackedChanges.empty[CompanyOfficer]())
+  def companyOfficers(): ListWithTrackedChanges[CompanyOfficer] =
+    pageDataOpt("companyOfficers").getOrElse(ListWithTrackedChanges.empty[CompanyOfficer]())
 
-  def businessPartners(): ListWithTrackedChanges[BusinessPartner] = pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]())
+  def businessPartners(): ListWithTrackedChanges[BusinessPartner] =
+    pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]())
 
   def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
     val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
@@ -74,18 +76,18 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
       .map(_.identification)
       .flatMap(_ match {
-        case co: CompanyOfficerCompany => co.vat
+        case co: CompanyOfficerCompany   => co.vat
         case _: CompanyOfficerIndividual => None
       })
     val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
       .map(_.identification)
       .flatMap(_ match {
-        case s: BusinessPartnerSoleProprietor => s.vat
-        case p: BusinessPartnerPartnership => p.vat
+        case s: BusinessPartnerSoleProprietor              => s.vat
+        case p: BusinessPartnerPartnership                 => p.vat
         case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
-        case c: BusinessPartnerCorporateBody => c.vat
-        case u: BusinessPartnerUnincorporatedBody => u.vat
-        case _: BusinessPartnerIndividual => None
+        case c: BusinessPartnerCorporateBody               => c.vat
+        case u: BusinessPartnerUnincorporatedBody          => u.vat
+        case _: BusinessPartnerIndividual                  => None
       })
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }

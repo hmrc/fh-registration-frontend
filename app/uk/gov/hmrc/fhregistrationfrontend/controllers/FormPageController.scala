@@ -74,7 +74,7 @@ class FormPageController @Inject() (
 
   def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
     pageId match {
-      case "vatNumber" => saveVatNumber()
+      case "vatNumber"        => saveVatNumber()
       case "businessPartners" => saveBusinessPartners(sectionId)
       case _ =>
         pageAction(pageId, sectionId).async { implicit request =>
@@ -139,12 +139,13 @@ class FormPageController @Inject() (
   def saveBusinessPartners(sectionId: Option[String]): Action[AnyContent] =
     pageAction("businessPartners", sectionId).async { implicit request =>
       request
-        .page[(BusinessPartner, Boolean)]
+        .page[ListWithTrackedChanges[BusinessPartner]]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-            val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData._1, sectionId)
+//            TODO: ADDMORE IS PART OF LISTWITHTRACKEDCHANGES
+            val pageData1: ListWithTrackedChanges[BusinessPartner] = page.data.get
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData1.values.toList.head, sectionId)
             if (false) {
               saveSuccessfully(page)
             } else {
@@ -152,12 +153,12 @@ class FormPageController @Inject() (
                 "businessPartners",
                 new RepeatedFormRendering[(BusinessPartner, Boolean)] {
                   override def render(
-                                       form: Form[(BusinessPartner, Boolean)],
-                                       bpr: BusinessRegistrationDetails,
-                                       navigation: Navigation,
-                                       sectionId: String,
-                                       params: RepeatingPageParams
-                                     )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
+                    form: Form[(BusinessPartner, Boolean)],
+                    bpr: BusinessRegistrationDetails,
+                    navigation: Navigation,
+                    sectionId: String,
+                    params: RepeatingPageParams
+                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
                     views.business_partners(form, navigation, sectionId, params)(request, request2Messages(request))
                 },
                 BusinessPartnersForm.businessPartnerMapping,
@@ -167,10 +168,13 @@ class FormPageController @Inject() (
                   Some(bp.identification.address)
                 }
               )
+//              TODO: NEED TO CREATE NEW FORM - ANNOYINGLY
+              val dddf = request.businessPartners()
+//              TODO: NEED TO ADD IN ACTUAL DATA
               Future successful BadRequest(
                 businessPartnersPage.renderWithFormError(
 //                  TODO: SUSPECT ONLY WORKS FOR SOLE PROPRIETOR LIKE THIS
-                  Seq(FormError("businessPartnerSoleProprietor_vat_value", List("error.vatAlreadyUsed"), List())),
+                  Seq(FormError("businessPartnerSoleProprietor.vat_value", List("error.vatAlreadyUsed"), List())),
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page),
                   sectionId.get
