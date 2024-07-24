@@ -138,10 +138,8 @@ case class RepeatingPage[T](
       request: Request[_],
       messages: Messages,
       appConfig: AppConfig
-    ): Html = {
-      val fgfg = form
+    ): Html =
       renderer.render(form, bpr, navigation, section(index), renderingParams)
-    }
   }
 
   def renderingParams = RepeatingPageParams(

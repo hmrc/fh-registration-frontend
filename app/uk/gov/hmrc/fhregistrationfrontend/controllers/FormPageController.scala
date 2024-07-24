@@ -25,6 +25,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ListWithTrackedChanges, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
@@ -162,6 +163,8 @@ class FormPageController @Inject() (
               saveSuccessfully(page)
             } else {
 //              TODO: PULL OUT TO SEPARATE FILE IN forms/journey DIRECTORY
+              val page = new InjectedPage(views)
+              val businessPartnersPageNew = page.businessPartnersPage.copy(value = request.businessPartners())
               val businessPartnersPage = new RepeatingPage[BusinessPartner](
                 "businessPartners",
                 new RepeatedFormRendering[(BusinessPartner, Boolean)] {

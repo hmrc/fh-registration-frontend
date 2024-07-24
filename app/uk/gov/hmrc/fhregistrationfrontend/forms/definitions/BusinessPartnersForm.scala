@@ -249,13 +249,21 @@ object BusinessPartnersForm {
   )
 
   private val constantKeys = List("businessPartnersType", "addMore")
-  private val soleProprietorKeys = businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k")
-  private val partnershipKeys = businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k")
-  private val limitedLiabilityPartnershipKeys = businessPartnerLimitedLiabilityPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerLimitedLiabilityPartnership.$k")
-  private val corporateBodyKeys = businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k")
-  private val unincorporatedBodyKeys = businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k")
-  private val individualKeys = businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
+  private val soleProprietorKeys =
+    businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k")
+  private val partnershipKeys =
+    businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k")
+  private val limitedLiabilityPartnershipKeys = businessPartnerLimitedLiabilityPartnershipMapping.mappings
+    .map(_.key)
+    .map(k => s"businessPartnerLimitedLiabilityPartnership.$k")
+  private val corporateBodyKeys =
+    businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k")
+  private val unincorporatedBodyKeys =
+    businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k")
+  private val individualKeys =
+    businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
   private def emptyMapOfBusinessPartnerKeys: Map[String, String] =
+//    TODO: THIS MIGHT NOT BE ALL OF THEM
     List(
       constantKeys,
       soleProprietorKeys,
@@ -272,38 +280,19 @@ object BusinessPartnersForm {
   ): Map[String, String] = {
     //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
     val businessPartner = pageData.values.toList.head
-    //    TODO: IMPLEMENT
     val setDataMap: Map[String, String] = businessPartner.identification match {
       case s: BusinessPartnerSoleProprietor =>
-        val soleProprietorKeys = businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k")
-        Map(
-          "businessPartnersType" -> "SoleProprietor"
-        )
+        businessPartnerSoleProprietorMapping.unbind(s).map(kv => s"businessPartnerSoleProprietor.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "SoleProprietor")
       case p: BusinessPartnerPartnership =>
-        val partnershipKeys = businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k")
-        Map(
-          "businessPartnersType" -> "Partnership"
-        )
+        businessPartnerPartnershipMapping.unbind(p).map(kv => s"businessPartnerPartnership.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "Partnership")
       case l: BusinessPartnerLimitedLiabilityPartnership =>
-        val limitedLiabilityPartnershipKeys = businessPartnerLimitedLiabilityPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerLimitedLiabilityPartnership.$k")
-        Map(
-          "businessPartnersType" -> "LimitedLiabilityPartnership"
-        )
+        businessPartnerLimitedLiabilityPartnershipMapping.unbind(l).map(kv => s"businessPartnerLimitedLiabilityPartnership.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "LimitedLiabilityPartnership")
       case c: BusinessPartnerCorporateBody =>
-        val corporateBodyKeys = businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k")
-        Map(
-          "businessPartnersType" -> "CorporateBody"
-        )
+        businessPartnerCorporateBodyMapping.unbind(c).map(kv => s"businessPartnerCorporateBody.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "CorporateBody")
       case u: BusinessPartnerUnincorporatedBody =>
-        val unincorporatedBodyKeys = businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k")
-        Map(
-          "businessPartnersType" -> "UnincorporatedBody"
-        )
-      case _: BusinessPartnerIndividual =>
-        val individualKeys = businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
-        Map(
-          "businessPartnersType" -> "Individual"
-        )
+        businessPartnerUnincorporatedBodyMapping.unbind(u).map(kv => s"businessPartnerUnincorporatedBody.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "UnincorporatedBody")
+      case i: BusinessPartnerIndividual =>
+        businessPartnerIndividualMapping.unbind(i).map(kv => s"businessPartnerIndividual.${kv._1}" -> kv._2) ++ Map("businessPartnersType" -> "Individual")
     }
     emptyMapOfBusinessPartnerKeys ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
   }
