@@ -28,6 +28,8 @@ object BackHelper {
 
   }
 
-  def getUrl(navigation: Navigation): Option[String] = call(navigation).map(_.url).headOption
+  def getUrl(navigation: Navigation): Option[String] = {
+    call(navigation).map(_.url).headOption
+  }
 
 }

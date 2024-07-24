@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.api.libs.json.Format
 import play.api.mvc.Request
@@ -55,12 +55,22 @@ case class BasicPage[T](
     }
   }
 
-  def renderWithUpdatedForm(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+//  def renderWithUpdatedForm(form: Form[T], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+//    request: Request[_],
+//    messages: Messages,
+//    appConfig: AppConfig
+//  ): Html =
+//    rendering.render(form, bpr, navigation)
+
+  def renderWithFormError(formError: Seq[FormError], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],
     messages: Messages,
     appConfig: AppConfig
-  ): Html =
-    rendering.render(form, bpr, navigation)
+  ): Html = {
+    val filledForm = data map (form fill _) getOrElse form
+    val formWithError = filledForm copy (errors = formError)
+    rendering.render(formWithError, bpr, navigation)
+  }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],

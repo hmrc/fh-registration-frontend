@@ -248,58 +248,58 @@ object BusinessPartnersForm {
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
 
-  def withPageData(
-    pageData: ListWithTrackedChanges[BusinessPartner],
-    sectionId: Option[String]
-  ): Map[String, String] = {
-    //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
-    val businessPartner = pageData.values.toList.head
-    val setDataMap: Map[String, String] = businessPartner.identification match {
-      case s: BusinessPartnerSoleProprietor =>
-        businessPartnerSoleProprietorMapping
-          .unbind(s)
-          .map(kv => s"businessPartnerSoleProprietor.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "SoleProprietor"
-        )
-      case p: BusinessPartnerPartnership =>
-        businessPartnerPartnershipMapping.unbind(p).map(kv => s"businessPartnerPartnership.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "Partnership"
-        )
-      case l: BusinessPartnerLimitedLiabilityPartnership =>
-        businessPartnerLimitedLiabilityPartnershipMapping
-          .unbind(l)
-          .map(kv => s"businessPartnerLimitedLiabilityPartnership.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "LimitedLiabilityPartnership"
-        )
-      case c: BusinessPartnerCorporateBody =>
-        businessPartnerCorporateBodyMapping
-          .unbind(c)
-          .map(kv => s"businessPartnerCorporateBody.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "CorporateBody"
-        )
-      case u: BusinessPartnerUnincorporatedBody =>
-        businessPartnerUnincorporatedBodyMapping
-          .unbind(u)
-          .map(kv => s"businessPartnerUnincorporatedBody.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "UnincorporatedBody"
-        )
-      case i: BusinessPartnerIndividual =>
-        businessPartnerIndividualMapping.unbind(i).map(kv => s"businessPartnerIndividual.${kv._1}" -> kv._2) ++ Map(
-          "businessPartnersType" -> "Individual"
-        )
-    }
-    val emptyMapOfBusinessPartnerKeys = List(
-      businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k"),
-      businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k"),
-      businessPartnerLimitedLiabilityPartnershipMapping.mappings
-        .map(_.key)
-        .map(k => s"businessPartnerLimitedLiabilityPartnership.$k"),
-      businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k"),
-      businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k"),
-      businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
-    ).flatten.map(_ -> "").toMap
-    emptyMapOfBusinessPartnerKeys ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
-  }
+//  def withPageData(
+//    pageData: ListWithTrackedChanges[BusinessPartner],
+//    sectionId: Option[String]
+//  ): Map[String, String] = {
+//    //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+//    val businessPartner = pageData.values.toList.head
+//    val setDataMap: Map[String, String] = businessPartner.identification match {
+//      case s: BusinessPartnerSoleProprietor =>
+//        businessPartnerSoleProprietorMapping
+//          .unbind(s)
+//          .map(kv => s"businessPartnerSoleProprietor.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "SoleProprietor"
+//        )
+//      case p: BusinessPartnerPartnership =>
+//        businessPartnerPartnershipMapping.unbind(p).map(kv => s"businessPartnerPartnership.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "Partnership"
+//        )
+//      case l: BusinessPartnerLimitedLiabilityPartnership =>
+//        businessPartnerLimitedLiabilityPartnershipMapping
+//          .unbind(l)
+//          .map(kv => s"businessPartnerLimitedLiabilityPartnership.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "LimitedLiabilityPartnership"
+//        )
+//      case c: BusinessPartnerCorporateBody =>
+//        businessPartnerCorporateBodyMapping
+//          .unbind(c)
+//          .map(kv => s"businessPartnerCorporateBody.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "CorporateBody"
+//        )
+//      case u: BusinessPartnerUnincorporatedBody =>
+//        businessPartnerUnincorporatedBodyMapping
+//          .unbind(u)
+//          .map(kv => s"businessPartnerUnincorporatedBody.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "UnincorporatedBody"
+//        )
+//      case i: BusinessPartnerIndividual =>
+//        businessPartnerIndividualMapping.unbind(i).map(kv => s"businessPartnerIndividual.${kv._1}" -> kv._2) ++ Map(
+//          "businessPartnersType" -> "Individual"
+//        )
+//    }
+//    val emptyMapOfBusinessPartnerKeys = List(
+//      businessPartnerSoleProprietorMapping.mappings.map(_.key).map(k => s"businessPartnerSoleProprietor.$k"),
+//      businessPartnerPartnershipMapping.mappings.map(_.key).map(k => s"businessPartnerPartnership.$k"),
+//      businessPartnerLimitedLiabilityPartnershipMapping.mappings
+//        .map(_.key)
+//        .map(k => s"businessPartnerLimitedLiabilityPartnership.$k"),
+//      businessPartnerCorporateBodyMapping.mappings.map(_.key).map(k => s"businessPartnerCorporateBody.$k"),
+//      businessPartnerUnincorporatedBodyMapping.mappings.map(_.key).map(k => s"businessPartnerUnicorporatedBody.$k"),
+//      businessPartnerIndividualMapping.mappings.map(_.key).map(k => s"businessPartnerIndividual.$k")
+//    ).flatten.map(_ -> "").toMap
+//    emptyMapOfBusinessPartnerKeys ++ setDataMap ++ Map("addMore" -> pageData.addMore.toString)
+//  }
 
   def withError(
     pageData: ListWithTrackedChanges[BusinessPartner],
