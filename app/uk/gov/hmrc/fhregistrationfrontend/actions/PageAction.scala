@@ -63,6 +63,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   def otherUsedVatNumbers(businessPartnersPageData: List[BusinessPartner], sectionId: Option[String]): List[String] = {
 //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+//    CHECK SECTION ID, SUSPECT None/Some(1) = index 0, Some(2) = 1 etc.
     val businessPartnerPageData = businessPartnersPageData(0)
     val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
     val usedBusinessPartners: List[BusinessPartner] = businessPartnersPageData.zipWithIndex.filter(_._2 != 0).map(_._1)
