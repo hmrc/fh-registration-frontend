@@ -162,28 +162,8 @@ class FormPageController @Inject() (
             if (false) {
               saveSuccessfully(page)
             } else {
-//              TODO: PULL OUT TO SEPARATE FILE IN forms/journey DIRECTORY
               val page = new InjectedPage(views)
-              val businessPartnersPageNew = page.businessPartnersPage.copy(value = request.businessPartners())
-              val businessPartnersPage = new RepeatingPage[BusinessPartner](
-                "businessPartners",
-                new RepeatedFormRendering[(BusinessPartner, Boolean)] {
-                  override def render(
-                    form: Form[(BusinessPartner, Boolean)],
-                    bpr: BusinessRegistrationDetails,
-                    navigation: Navigation,
-                    sectionId: String,
-                    params: RepeatingPageParams
-                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-                    views.business_partners(form, navigation, sectionId, params)(request, request2Messages(request))
-                },
-                BusinessPartnersForm.businessPartnerMapping,
-                value = request.businessPartners(),
-                minItems = 2,
-                addressOnPage = { bp =>
-                  Some(bp.identification.address)
-                }
-              )
+              val businessPartnersPage = page.businessPartnersPage.copy(value = request.businessPartners())
               val updatedFormDataAndError: (Map[String, String], Seq[FormError]) =
                 getVatNumberAlreadyUsedFormDataAndError(pageData, sectionId)
 //                TODO: CHANGE TO withPageData AND withError
