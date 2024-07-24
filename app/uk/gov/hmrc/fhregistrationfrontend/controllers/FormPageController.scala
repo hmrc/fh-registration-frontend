@@ -146,19 +146,30 @@ class FormPageController @Inject() (
           page => {
             val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
             val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData.values.toList, sectionId)
-//            TODO: ADD CORRECT CONDITION BELOW
-            if (false) {
+//    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+            val businessPartnerPageData = pageData.values.toList.head
+            val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnerPageData)
+            if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
               val page = new InjectedPage(views)
-              val businessPartnersPage = page.businessPartnersPage.copy(value = request.businessPartners())
-              val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
-                data = BusinessPartnersForm.withPageData(pageData, sectionId),
-                errors = BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed")
-              )
+//              TODO: VALUE SHORTCUT
+              val businessPartnersPage = page.businessPartnersPage.copy(value = pageData)
+//              val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
+//                data = BusinessPartnersForm.withPageData(pageData, sectionId),
+//                errors = BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed")
+//              )
+//              Future successful BadRequest(
+//                businessPartnersPage.renderWithUpdatedForm(
+//                  updatedForm,
+//                  request.bpr,
+//                  request.journey.navigation(request.lastUpdateTimestamp, request.page),
+//                  sectionId.get
+//                )(request, request2Messages(request), appConfig)
+//              )
               Future successful BadRequest(
-                businessPartnersPage.renderWithUpdatedForm(
-                  updatedForm,
+                businessPartnersPage.renderWithFormError(
+                  BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page),
                   sectionId.get

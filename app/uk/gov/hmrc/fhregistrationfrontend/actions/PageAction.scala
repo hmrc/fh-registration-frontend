@@ -57,40 +57,24 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
         case co: CompanyOfficerCompany   => co.vat
         case _: CompanyOfficerIndividual => None
       })
-    val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
-      .map(_.identification)
-      .flatMap(_ match {
-        case s: BusinessPartnerSoleProprietor              => s.vat
-        case p: BusinessPartnerPartnership                 => p.vat
-        case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
-        case c: BusinessPartnerCorporateBody               => c.vat
-        case u: BusinessPartnerUnincorporatedBody          => u.vat
-        case _: BusinessPartnerIndividual                  => None
-      })
+    val usedVatRegInBusinessPartners = usedBusinessPartners.flatMap(BusinessPartner.getVatNumber)
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 
   def otherUsedVatNumbers(businessPartnersPageData: List[BusinessPartner], sectionId: Option[String]): List[String] = {
-//    TODO: IMPLEMENT THIS METHOD
+//    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
+    val businessPartnerPageData = businessPartnersPageData(0)
     val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers().values.toList
-    val usedBusinessPartners: List[BusinessPartner] = businessPartners().values.toList
-    val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
+    val usedBusinessPartners: List[BusinessPartner] = businessPartnersPageData.zipWithIndex.filter(_._2 != 0).map(_._1)
+    val vatRegNumber: Option[String] = vatReg().flatMap(_.value)
+    val usedVatRegInCompanyOfficers: List[Option[String]] = usedCompanyOfficers
       .map(_.identification)
-      .flatMap(_ match {
+      .map(_ match {
         case co: CompanyOfficerCompany   => co.vat
         case _: CompanyOfficerIndividual => None
       })
-    val usedVatRegInBusinessPartners: List[String] = usedBusinessPartners
-      .map(_.identification)
-      .flatMap(_ match {
-        case s: BusinessPartnerSoleProprietor              => s.vat
-        case p: BusinessPartnerPartnership                 => p.vat
-        case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
-        case c: BusinessPartnerCorporateBody               => c.vat
-        case u: BusinessPartnerUnincorporatedBody          => u.vat
-        case _: BusinessPartnerIndividual                  => None
-      })
-    usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
+    val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
+    (usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners ++ List(vatRegNumber)).flatten
   }
 }
 

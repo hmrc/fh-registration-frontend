@@ -150,4 +150,12 @@ object BusinessPartner {
 
   implicit val businessPartnerFormat: Format[BusinessPartner] = Format(reads, writes)
 
+  def getVatNumber(businessPartner: BusinessPartner): Option[String] = businessPartner.identification match {
+    case s: BusinessPartnerSoleProprietor              => s.vat
+    case p: BusinessPartnerPartnership                 => p.vat
+    case l: BusinessPartnerLimitedLiabilityPartnership => l.vat
+    case c: BusinessPartnerCorporateBody               => c.vat
+    case u: BusinessPartnerUnincorporatedBody          => u.vat
+    case _: BusinessPartnerIndividual                  => None
+  }
 }
