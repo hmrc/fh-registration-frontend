@@ -19,20 +19,14 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
-import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
-import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ListWithTrackedChanges, VatNumber}
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
-import uk.gov.hmrc.fhregistrationfrontend.views.helpers.{BackHelper, RepeatingPageParams}
 
 import scala.concurrent.{ExecutionContext, Future}
 
