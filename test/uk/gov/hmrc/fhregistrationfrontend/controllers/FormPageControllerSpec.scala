@@ -137,6 +137,18 @@ class FormPageControllerSpec
       status(result) shouldBe BAD_REQUEST
     }
 
+    "Render business partner error form if vat number used elsewhere in journey" in {
+      setupPageAction(businessPartnersPage, journeyPages = JourneyRequestBuilder.fullyCompleteJourney())
+      setupSave4Later()
+
+      val request = FakeRequest().withFormUrlEncodedBody(
+        businessPartnerFormData(addMore = true, vatNumber = "123456789").toSeq: _*
+      )
+      val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
+
+      status(result) shouldBe BAD_REQUEST
+    }
+
     "Redirect to summary" in {
       setupPageAction(tradingNamePage, journeyPages = JourneyRequestBuilder.fullyCompleteJourney())
       setupSave4Later()
@@ -309,22 +321,25 @@ class FormPageControllerSpec
     }
   }
 
-  def businessPartnerFormData(addMore: Boolean) = {
+  def businessPartnerFormData(addMore: Boolean, vatNumber: String = "111222333") = {
     val addressForm = Map(
       s"${BusinessPartnersForm.addressKey}.Line1"    -> "Some Line 1",
       s"${BusinessPartnersForm.addressKey}.postcode" -> "AA1 1AA"
     )
 
-    val individualPartner = Map(
+    val soleProprietorPartner = Map(
       BusinessPartnersForm.firstNameKey                  -> "George",
       BusinessPartnersForm.lastNameKey                   -> "Costanza",
-      BusinessPartnersForm.hasNationalInsuranceNumberKey -> "false"
+      BusinessPartnersForm.hasTradeNameKey               -> "false",
+      BusinessPartnersForm.hasNationalInsuranceNumberKey -> "false",
+      BusinessPartnersForm.hasVatKey                     -> "true",
+      BusinessPartnersForm.vatRegistrationKey            -> vatNumber,
     ) ++ addressForm
 
-    individualPartner.map { case (k, v) =>
-      s"${BusinessPartnersForm.businessPartnerIndividualKey}.$k" -> v
+    soleProprietorPartner.map { case (k, v) =>
+      s"${BusinessPartnersForm.businessPartnerSoleProprietorKey}.$k" -> v
     } +
-      (BusinessPartnersForm.businessPartnersTypeKey -> BusinessPartnerType.Individual.toString) +
+      (BusinessPartnersForm.businessPartnersTypeKey -> BusinessPartnerType.SoleProprietor.toString) +
       ("addMore"                                    -> addMore.toString)
   }
 }

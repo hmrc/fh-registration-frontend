@@ -89,7 +89,7 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData)
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage(pageData)
             if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
@@ -116,7 +116,7 @@ class FormPageController @Inject() (
           page => {
             val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
             val businessPartnersPageData = pageData.values.toList
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(businessPartnersPageData, sectionId)
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
             val index = sectionId.map(_.toInt - 1).getOrElse(0)
             val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
             if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
