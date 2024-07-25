@@ -99,8 +99,6 @@ class FormPageController @Inject() (
             if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
-              //              TODO: PULL OUT TO SEPARATE FILE IN forms/journey DIRECTORY
-              //              TODO: VALUE SHORTCUT
               val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
 //              val vatNumberBasicPage = new BasicPage[VatNumber](
 //                "vatNumber",
@@ -161,7 +159,6 @@ class FormPageController @Inject() (
             if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
-//              TODO: VALUE SHORTCUT
               val businessPartnersPage = new InjectedPage(views).businessPartnersPage.copy(value = pageData)
 //              val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
 //                data = BusinessPartnersForm.withPageData(pageData, sectionId),
