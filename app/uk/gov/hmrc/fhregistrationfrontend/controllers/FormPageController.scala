@@ -94,37 +94,6 @@ class FormPageController @Inject() (
               saveSuccessfully(page)
             } else {
               val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
-//              val vatNumberBasicPage = new BasicPage[VatNumber](
-//                "vatNumber",
-//                VatNumberForm.vatNumberForm,
-//                new FormRendering[VatNumber] {
-//                  override def render(
-//                    form: Form[VatNumber],
-//                    bpr: BusinessRegistrationDetails,
-//                    navigation: Navigation
-//                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-//                    views.vat_registration(
-//                      form,
-//                      navigation,
-//                      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-//                        .save("vatNumber")
-//                    )(request, request2Messages(request))
-//                }
-//              )
-//              val updatedForm: Form[VatNumber] = vatNumberBasicPage.form.copy(
-//                data = Map(
-//                  "vatNumber_yesNo" -> pageData.hasValue.toString,
-//                  "vatNumber_value" -> pageData.value.getOrElse("")
-//                ),
-//                errors = Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List()))
-//              )
-//              Future successful BadRequest(
-//                vatNumberBasicPage.renderWithUpdatedForm(
-//                  updatedForm,
-//                  request.bpr,
-//                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
-//                )(request, request2Messages(request), appConfig)
-//              )
               Future successful BadRequest(
                 vatNumberBasicPage.renderWithFormError(
                   Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
@@ -154,18 +123,6 @@ class FormPageController @Inject() (
               saveSuccessfully(page)
             } else {
               val businessPartnersPage = new InjectedPage(views).businessPartnersPage.copy(value = pageData)
-//              val updatedForm: Form[(BusinessPartner, Boolean)] = businessPartnersPage.form.copy(
-//                data = BusinessPartnersForm.withPageData(pageData, sectionId),
-//                errors = BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed")
-//              )
-//              Future successful BadRequest(
-//                businessPartnersPage.renderWithUpdatedForm(
-//                  updatedForm,
-//                  request.bpr,
-//                  request.journey.navigation(request.lastUpdateTimestamp, request.page),
-//                  sectionId.get
-//                )(request, request2Messages(request), appConfig)
-//              )
               Future successful BadRequest(
                 businessPartnersPage.renderWithFormError(
                   BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),

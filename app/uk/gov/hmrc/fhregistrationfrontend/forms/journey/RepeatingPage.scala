@@ -127,18 +127,6 @@ case class RepeatingPage[T](
     renderer.render(formWithError, bpr, navigation, sectionId, renderingParams)
   }
 
-//  def renderWithUpdatedForm(
-//    updatedForm: Form[(T, Boolean)],
-//    bpr: BusinessRegistrationDetails,
-//    navigation: Navigation,
-//    sectionId: String
-//  )(implicit
-//    request: Request[_],
-//    messages: Messages,
-//    appConfig: AppConfig
-//  ): Html =
-//    renderer.render(updatedForm, bpr, navigation, sectionId, renderingParams)
-
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],
     messages: Messages,

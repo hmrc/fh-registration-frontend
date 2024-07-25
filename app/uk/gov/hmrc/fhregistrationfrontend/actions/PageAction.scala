@@ -49,16 +49,8 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]()).values.toList
 
   def otherUsedVatNumbers(vatNumberPageData: VatNumber): List[String] = {
-    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers()
-    val usedBusinessPartners: List[BusinessPartner] = businessPartners()
-//    val usedVatRegInCompanyOfficers: List[String] = usedCompanyOfficers
-//      .map(_.identification)
-//      .flatMap(_ match {
-//        case co: CompanyOfficerCompany   => co.vat
-//        case _: CompanyOfficerIndividual => None
-//      })
-    val usedVatRegInCompanyOfficers = usedCompanyOfficers.flatMap(CompanyOfficer.getVatNumber)
-    val usedVatRegInBusinessPartners = usedBusinessPartners.flatMap(BusinessPartner.getVatNumber)
+    val usedVatRegInCompanyOfficers = companyOfficers().flatMap(CompanyOfficer.getVatNumber)
+    val usedVatRegInBusinessPartners = businessPartners().flatMap(BusinessPartner.getVatNumber)
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 
@@ -66,16 +58,9 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
 //    CHECK SECTION ID, SUSPECT None/Some(1) = index 0, Some(2) = 1 etc.
     val businessPartnerPageData = businessPartnersPageData(0)
-    val usedCompanyOfficers: List[CompanyOfficer] = companyOfficers()
     val usedBusinessPartners: List[BusinessPartner] = businessPartnersPageData.zipWithIndex.filter(_._2 != 0).map(_._1)
     val vatRegNumber: Option[String] = vatReg().flatMap(_.value)
-//    val usedVatRegInCompanyOfficers: List[Option[String]] = usedCompanyOfficers
-//      .map(_.identification)
-//      .map(_ match {
-//        case co: CompanyOfficerCompany   => co.vat
-//        case _: CompanyOfficerIndividual => None
-//      })
-    val usedVatRegInCompanyOfficers = usedCompanyOfficers.map(CompanyOfficer.getVatNumber)
+    val usedVatRegInCompanyOfficers = companyOfficers().map(CompanyOfficer.getVatNumber)
     val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
     (usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners ++ List(vatRegNumber)).flatten
   }
