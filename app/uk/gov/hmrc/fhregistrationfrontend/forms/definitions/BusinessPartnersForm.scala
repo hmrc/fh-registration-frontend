@@ -254,8 +254,8 @@ object BusinessPartnersForm {
     field: String,
     errorType: String
   ): Seq[FormError] = {
-    //    TODO: BUSINESS PARTNER MUST USE SECTION ID TO DETERMINE
-    val businessPartner = pageData.values.toList.head
+    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val businessPartner = pageData.values.toList(index)
     val errorField = s"businessPartner${businessPartner.businessPartnerType.toString}.$field"
     Seq(FormError(errorField, List(errorType), List()))
   }

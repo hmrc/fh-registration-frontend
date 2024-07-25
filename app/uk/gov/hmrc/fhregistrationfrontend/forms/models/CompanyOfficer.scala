@@ -78,7 +78,7 @@ object CompanyOfficer {
   implicit val companyOfficerFormat: Format[CompanyOfficer] = Format(reads, writes)
 
   def getVatNumber(companyOfficer: CompanyOfficer): Option[String] = companyOfficer.identification match {
-    case co: CompanyOfficerCompany => co.vat
+    case co: CompanyOfficerCompany   => co.vat
     case _: CompanyOfficerIndividual => None
   }
 }
