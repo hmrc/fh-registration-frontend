@@ -123,14 +123,13 @@ class FormPageController @Inject() (
             if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
-              val businessPartnersPage = new InjectedPage(views).businessPartnersPage.copy(value = pageData)
+              val businessPartnersPage =
+                new InjectedPage(views).businessPartnersPage.copy(value = pageData, index = index)
               Future successful BadRequest(
                 businessPartnersPage.renderWithFormError(
                   BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
                   request.bpr,
-                  request.journey
-                    .navigation(request.lastUpdateTimestamp, request.page),
-                  sectionId.get
+                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
                 )(request, request2Messages(request), appConfig)
               )
             }

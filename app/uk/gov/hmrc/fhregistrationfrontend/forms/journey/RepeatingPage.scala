@@ -112,8 +112,7 @@ case class RepeatingPage[T](
   def renderWithFormError(
     formError: Seq[FormError],
     bpr: BusinessRegistrationDetails,
-    navigation: Navigation,
-    sectionId: String
+    navigation: Navigation
   )(implicit
     request: Request[_],
     messages: Messages,
@@ -124,7 +123,7 @@ case class RepeatingPage[T](
       else form
 
     val formWithError = filledForm copy (errors = formError)
-    renderer.render(formWithError, bpr, navigation, sectionId, renderingParams)
+    renderer.render(formWithError, bpr, navigation, section(index), renderingParams)
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
