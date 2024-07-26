@@ -116,7 +116,8 @@ class FormPageController @Inject() (
           page => {
             val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
             val businessPartnersPageData = pageData.values.toList
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
+            val usedVatNumbers: List[String] =
+              request.otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
             val index = sectionId.map(_.toInt - 1).getOrElse(0)
             val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
             if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {

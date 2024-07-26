@@ -333,7 +333,7 @@ class FormPageControllerSpec
       BusinessPartnersForm.hasTradeNameKey               -> "false",
       BusinessPartnersForm.hasNationalInsuranceNumberKey -> "false",
       BusinessPartnersForm.hasVatKey                     -> "true",
-      BusinessPartnersForm.vatRegistrationKey            -> vatNumber,
+      BusinessPartnersForm.vatRegistrationKey            -> vatNumber
     ) ++ addressForm
 
     soleProprietorPartner.map { case (k, v) =>
