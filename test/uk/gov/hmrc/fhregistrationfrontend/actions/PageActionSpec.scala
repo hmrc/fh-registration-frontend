@@ -127,7 +127,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       )
 
       val refined = refinedRequest(action, request)
-      refined.otherUsedVatNumbersFromVatNumberPage(FormTestData.vatNumber) shouldBe List("123456789")
+      refined.otherUsedVatNumbersFromVatNumberPage() shouldBe List("123456789")
     }
   }
 
@@ -147,7 +147,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     )
 
     val refined = refinedRequest(action, request)
-    refined.otherUsedVatNumbersFromVatNumberPage(FormTestData.vatNumber) shouldBe List("223456789", "323456789", "423456789")
+    refined.otherUsedVatNumbersFromVatNumberPage() shouldBe List("223456789", "323456789", "423456789")
   }
 
   "Load other used vat numbers in business partners when passed a first business partner - business partnership journey" in {

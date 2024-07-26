@@ -89,7 +89,7 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage(pageData)
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
             if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
