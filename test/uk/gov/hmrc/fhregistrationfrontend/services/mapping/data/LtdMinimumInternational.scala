@@ -75,7 +75,7 @@ object LtdMinimumInternational {
     BusinessStatus(false, None),
     ImportingActivities(false, None),
     BusinessCustomers("11-50"),
-    OtherStoragePremises(false, ListWithTrackedChanges.empty[StoragePremise])
+    OtherStoragePremises(false, ListWithTrackedChanges.empty()[StoragePremise])
   )
 
   val verifiedEmail = "a@a.ro"

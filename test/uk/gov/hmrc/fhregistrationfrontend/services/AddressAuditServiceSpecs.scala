@@ -39,7 +39,7 @@ class AddressAuditServiceSpecs
 
   val auditConnector = mock[AuditConnector]
   val addressLookupConnector = mock[AddressLookupConnector]
-  implicit val hc = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(
     scala.concurrent.ExecutionContext.Implicits.global

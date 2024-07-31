@@ -37,7 +37,7 @@ class AmendmentControllerSpec
     with EmailVerificationConnectorMocks {
 
   val mockSave4LaterService = mock[Save4LaterService]
-  implicit val hc = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override def beforeEach(): Unit = {
     super.beforeEach()

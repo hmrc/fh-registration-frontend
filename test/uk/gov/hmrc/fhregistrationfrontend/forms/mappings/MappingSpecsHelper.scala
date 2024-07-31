@@ -26,8 +26,8 @@ trait MappingSpecsHelper[T] extends Matchers {
     val bound = mapping bind post
 
     bound.isRight shouldBe true
-    bound.right.toOption.isDefined shouldBe true
-    bound.right.toOption.get
+    bound.toOption.isDefined shouldBe true
+    bound.toOption.get
   }
 
   def formDataHasErrors(post: Map[String, String], expected: List[(String, String)]): Unit = {

@@ -130,7 +130,7 @@ class FormPageControllerSpec
 
       val request = FakeRequest().withFormUrlEncodedBody(
         VatNumberForm.hasVatNumberKey -> "true",
-        VatNumberForm.vatNumberKey -> "223456789"
+        VatNumberForm.vatNumberKey    -> "223456789"
       )
       val result = csrfAddToken(controller.save(vatNumberPage.id))(request)
 
