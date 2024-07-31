@@ -33,7 +33,7 @@ trait ActionSpecBase
     with UserTestData {
 
   def refinedRequest[P[_], R[_], A](action: ActionRefiner[R, P], request: R[A]) = {
-    val p = Promise[P[_]]
+    val p = Promise[P[_]]()
     val result = action.invokeBlock(
       request,
       { r: P[A] =>
