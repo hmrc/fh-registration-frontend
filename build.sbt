@@ -4,8 +4,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import play.sbt.routes.RoutesKeys
 
-lazy val appDependencies: Seq[ModuleID] = AppDependencies.apply()
-
 val appName = "fh-registration-frontend"
 
 lazy val plugins : Seq[Plugins] = Seq.empty
@@ -48,7 +46,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
-    libraryDependencies ++= appDependencies,
+    libraryDependencies ++= AppDependencies.all,
     retrieveManaged := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     Compile / scalafmtOnCompile := true,

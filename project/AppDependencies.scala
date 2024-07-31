@@ -2,7 +2,6 @@ import play.sbt.PlayImport.ws
 import sbt._
 
 object AppDependencies {
-  import play.core.PlayVersion
 
   val monocleVersion = "2.1.0"
   val bootstrapVersion = "8.4.0"
@@ -30,14 +29,14 @@ object AppDependencies {
     "com.github.ghik" % "silencer-lib" % "1.7.14" % Provided cross CrossVersion.full
   )
 
-  def test(scope: String = "test,it") = Seq(
-    "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapVersion % scope,
-    "org.pegdown" % "pegdown" % "1.6.0" % scope,
-    "org.jsoup" % "jsoup" % "1.15.4" % scope,
-    "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % scope,
-    "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
-    "com.github.java-json-tools" % "json-schema-validator" % "2.2.14" % scope
-  )
+  val test: Seq[ModuleID] = Seq(
+    "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapVersion,
+    "org.pegdown" % "pegdown" % "1.6.0",
+    "org.jsoup" % "jsoup" % "1.15.4",
+    "com.github.julien-truffaut" %% "monocle-law" % monocleVersion,
+    "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion,
+    "com.github.java-json-tools" % "json-schema-validator" % "2.2.14"
+  ).map(_ % "test, it")
 
-  def apply(): Seq[ModuleID] = compile ++ test()
+  val all: Seq[ModuleID] = compile ++ test
 }
