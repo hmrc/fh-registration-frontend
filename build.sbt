@@ -63,7 +63,6 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "it")).value,
     IntegrationTest / resourceDirectory := baseDirectory.value / "it/resources",
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution := false,
     IntegrationTest / scalafmtOnCompile := true)
   .settings(resolvers ++= Seq(Resolver.jcenterRepo))
@@ -72,9 +71,3 @@ lazy val microservice = Project(appName, file("."))
   .settings(scalacOptions += "-Wconf:cat=lint-multiarg-infix:silent")
   .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(Global / lintUnusedKeysOnLoad := false)
-
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]) = {
-  tests.map { test =>
-    new Group(test.name, Seq(test), SubProcess(ForkOptions().withRunJVMOptions(Vector(s"-Dtest.name=${test.name}"))))
-  }
-}
