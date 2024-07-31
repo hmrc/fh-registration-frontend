@@ -3,8 +3,8 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json
-import uk.gov.hmrc.crypto.CompositeSymmetricCrypto.aes
-import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
+import uk.gov.hmrc.crypto.SymmetricCryptoFactory.aesCrypto
+import uk.gov.hmrc.crypto.{Decrypter, Encrypter, PlainText}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{CompanyOfficer, CompanyOfficerIndividual, CompanyOfficerType, ImportingActivities, ListWithTrackedChanges}
 
 case class Save4LaterStub()(implicit builder: PreconditionBuilder) {
@@ -165,7 +165,7 @@ case class Save4LaterStub()(implicit builder: PreconditionBuilder) {
     builder
   }
 
-  val crypto: CompositeSymmetricCrypto = aes(s"fqpLDZ4sumDsekHkeEBlCA==", Seq.empty)
+  val crypto: Encrypter with Decrypter = aesCrypto(s"fqpLDZ4sumDsekHkeEBlCA==")
 
   def encrypt(str: String): String = crypto.encrypt(PlainText(str)).value
 
