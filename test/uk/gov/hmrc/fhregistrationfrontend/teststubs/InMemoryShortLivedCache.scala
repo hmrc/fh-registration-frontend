@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
 import play.api.libs.json.{JsValue, Reads, Writes}
-import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
+import uk.gov.hmrc.crypto.{Decrypter, Encrypter}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.cache.client.{CacheMap, ShortLivedCache, ShortLivedHttpCaching}
 
@@ -28,7 +28,7 @@ class InMemoryShortLivedCache(userId: String) extends ShortLivedCache {
 
   val cache = mutable.Map[String, JsValue]()
 
-  override implicit val crypto: CompositeSymmetricCrypto = null
+  override implicit val crypto: Encrypter with Decrypter = null
   override def shortLiveCache: ShortLivedHttpCaching = null
 
   override def cache[A](cacheId: String, formId: String, body: A)(implicit

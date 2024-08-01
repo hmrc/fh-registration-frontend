@@ -10,8 +10,8 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.verifiers.VerifierBuilder
 trait Specifications extends PlaySpec with AnyWordSpecLike with ScalaFutures {
   this: TestConfiguration =>
 
-  implicit val given = new PreconditionBuilder
-  implicit val expect = new VerifierBuilder
+  implicit val `given`: PreconditionBuilder = new PreconditionBuilder
+  implicit val expect: VerifierBuilder = new VerifierBuilder
   lazy val user = new ActionsBuilder(baseUrl)
 
 }

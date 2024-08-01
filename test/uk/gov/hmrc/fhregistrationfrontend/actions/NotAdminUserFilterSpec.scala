@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FhddsConnectorMocks, Stubbe
 
 class NotAdminUserFilterSpec extends ActionSpecBase with FhddsConnectorMocks {
 
-  implicit val errorHandler = StubbedErrorHandler
+  implicit val errorHandler: StubbedErrorHandler.type = StubbedErrorHandler
   lazy val filter = new NotAdminUserFilter()(errorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Not admin user filter" should {

@@ -33,7 +33,7 @@ class EmailVerificationControllerSpec
 
   val shortLivedCache = new InMemoryShortLivedCache(testUserId)
   val mockSave4LaterService = mock[Save4LaterService]
-  implicit val hc = HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   val controller = new EmailVerificationController(
     commonDependencies,
     mockActions,

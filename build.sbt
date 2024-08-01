@@ -4,8 +4,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import play.sbt.routes.RoutesKeys
 
-lazy val appDependencies: Seq[ModuleID] = AppDependencies.apply()
-
 val appName = "fh-registration-frontend"
 
 lazy val plugins : Seq[Plugins] = Seq.empty
@@ -34,7 +32,7 @@ lazy val scoverageSettings = {
 }
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .settings(majorVersion := 0)
   .settings(libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always)
   .settings(PlayKeys.playDefaultPort := 1118)
@@ -48,7 +46,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
-    libraryDependencies ++= appDependencies,
+    libraryDependencies ++= AppDependencies.all,
     retrieveManaged := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     Compile / scalafmtOnCompile := true,
@@ -65,7 +63,6 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "it")).value,
     IntegrationTest / resourceDirectory := baseDirectory.value / "it/resources",
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution := false,
     IntegrationTest / scalafmtOnCompile := true)
   .settings(resolvers ++= Seq(Resolver.jcenterRepo))
@@ -74,9 +71,3 @@ lazy val microservice = Project(appName, file("."))
   .settings(scalacOptions += "-Wconf:cat=lint-multiarg-infix:silent")
   .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(Global / lintUnusedKeysOnLoad := false)
-
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]) = {
-  tests.map { test =>
-    new Group(test.name, Seq(test), SubProcess(ForkOptions().withRunJVMOptions(Vector(s"-Dtest.name=${test.name}"))))
-  }
-}
