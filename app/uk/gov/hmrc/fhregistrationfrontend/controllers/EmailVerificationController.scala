@@ -20,7 +20,7 @@ import javax.inject.Inject
 import play.api.mvc.{MessagesControllerComponents, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, EmailVerificationRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.EmailVerificationConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm.emailVerificationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormProvider
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
@@ -40,10 +40,12 @@ class EmailVerificationController @Inject() (
   import actions._
 
   def contactEmail = emailVerificationAction { implicit request =>
+    val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     Ok(views.email_options(emailVerificationForm, false, request.candidateEmail, Navigation.noNavigation))
   }
 
   def forcedContactEmail = emailVerificationAction { implicit request =>
+    val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     Ok(views.email_options(emailVerificationForm, true, request.candidateEmail, Navigation.noNavigation))
   }
 
@@ -55,7 +57,8 @@ class EmailVerificationController @Inject() (
     doSubmitContactEmail(true)
   }
 
-  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) =
+  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) = {
+    val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     emailVerificationForm.bindFromRequest() fold (
       formWithErrors =>
         Future.successful(
@@ -63,6 +66,7 @@ class EmailVerificationController @Inject() (
         ),
       emailOptions => handleContactEmail(emailOptions)
     )
+  }
 
   private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) =
     emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap {
@@ -86,6 +90,7 @@ class EmailVerificationController @Inject() (
   private def hashMatches(email: String, hash: String) = emailHash(email) == hash
 
   def emailVerificationStatus = emailVerificationAction { implicit request =>
+    val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(pendingEmail), None) =>
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
@@ -105,6 +110,7 @@ class EmailVerificationController @Inject() (
   }
 
   def emailEdit = emailVerificationAction { implicit request =>
+    val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     (request.pendingEmail, request.verifiedEmail) match {
       case (Some(verifiedEmail), _) =>
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(verifiedEmail)))
@@ -144,6 +150,7 @@ class EmailVerificationController @Inject() (
           _ <- save4LaterService deletePendingEmail request.userId
         } yield Redirect(routes.EmailVerificationController.emailVerified)
       case Some(pendingEmail) =>
+        val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
         val form = emailVerificationForm.fill(EmailVerification(false, None, Some(pendingEmail)))
         Future successful Ok(views.email_pending_verification(form, Navigation.noNavigation, None))
 

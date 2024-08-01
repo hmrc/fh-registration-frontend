@@ -40,7 +40,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   private def pageDataOpt[T](pageId: String): Option[T] =
     request.journeyPages.get(pageId).flatMap((p: Page[T]) => p.data)
 
-  private def vatReg(): Option[VatNumber] = pageDataOpt("vatNumber")
+  private val vatReg: Option[VatNumber] = pageDataOpt("vatNumber")
 
   private def companyOfficers(): List[CompanyOfficer] = {
     val companyOfficersPageOpt: Option[ListWithTrackedChanges[CompanyOfficer]] = pageDataOpt("companyOfficers")

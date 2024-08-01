@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormKeys._
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, InMemoryShortLivedCache}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -94,8 +94,8 @@ class EmailVerificationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          EmailVerificationForm.emailOptionKey  -> "true",
-          EmailVerificationForm.defaultEmailKey -> "c@c.co"
+          emailOptionKey  -> "true",
+          defaultEmailKey -> "c@c.co"
         )
         .withMethod("POST")
 
@@ -115,8 +115,8 @@ class EmailVerificationControllerSpec
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          EmailVerificationForm.emailOptionKey  -> "true",
-          EmailVerificationForm.defaultEmailKey -> "c@c.co"
+          emailOptionKey  -> "true",
+          defaultEmailKey -> "c@c.co"
         )
         .withMethod("POST")
 

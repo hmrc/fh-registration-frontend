@@ -113,9 +113,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load other used vat numbers in company officers when passed a vat number - limited company journey" in {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
-          case companyOfficersPage.id => page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
+          case companyOfficersPage.id =>
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -134,8 +135,8 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     val seqPages = journeys.partnershipPages map { page =>
       page.id match {
         case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-        case _ => page
+        case vatNumberPage.id        => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+        case _                       => page
       }
     }
 

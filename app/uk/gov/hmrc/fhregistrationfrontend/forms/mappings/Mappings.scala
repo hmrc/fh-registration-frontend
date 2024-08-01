@@ -68,6 +68,17 @@ object Mappings {
 
   def email: Mapping[String] = nonEmptyText(0, 100) verifying Constraints.emailAddress
 
+  def changedEmail(candidateEmail: Option[String]): Mapping[String] = {
+    def checkCandidateEmail(): Constraint[String] =
+      Constraint {
+        case email if candidateEmail.contains(email) =>
+          Invalid("error.emailAlreadyUsed")
+        case _ =>
+          Valid
+      }
+    email verifying checkCandidateEmail()
+  }
+
   def companyRegistrationNumber =
     nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
       v

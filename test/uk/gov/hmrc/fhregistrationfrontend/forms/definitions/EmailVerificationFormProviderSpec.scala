@@ -17,13 +17,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormKeys._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
-class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
+class EmailVerificationFormProviderSpec extends UnitSpec with FormSpecsHelper[EmailVerification] {
 
-  override def form: Form[EmailVerification] = EmailVerificationForm.emailVerificationForm
-  import EmailVerificationForm._
+  private val defaultEmail = "default@test.com"
+  override def form: Form[EmailVerification] = EmailVerificationFormProvider(Option(defaultEmail)).emailVerificationForm
 
   "Email Verification Form" should {
     "Fail if usingDefaultEmail is not answered" in {
@@ -50,17 +51,27 @@ class EmailVerificationFormSpec extends UnitSpec with FormSpecsHelper[EmailVerif
       )
     }
 
+    "Fail if usingDefaultEmail is no and alternate email is same as default email" in {
+      formDataHasErrors(
+        Map(
+          emailOptionKey      -> "false",
+          alternativeEmailKey -> defaultEmail
+        ),
+        Seq(alternativeEmailKey -> "error.emailAlreadyUsed")
+      )
+    }
+
     "Parse when using default email" in {
       val parsed = dataFromValidForm(
         Map(
           emailOptionKey  -> "true",
-          defaultEmailKey -> "default@test.com"
+          defaultEmailKey -> defaultEmail
         )
       )
 
       parsed.usingGgEmailAddress shouldBe true
-      parsed.ggEmail shouldBe Some("default@test.com")
-      parsed.email shouldBe "default@test.com"
+      parsed.ggEmail shouldBe Option(defaultEmail)
+      parsed.email shouldBe defaultEmail
     }
 
     "Parse when using alternate email" in {
