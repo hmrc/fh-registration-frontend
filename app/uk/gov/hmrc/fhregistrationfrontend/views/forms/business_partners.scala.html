@@ -53,7 +53,14 @@
 
 @title = @{messages("fh.business_partners.title", section)}
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), isBrowserBackMimic = true) {
+@tempBackUrl = @{
+  BackHelper.getUrl(navigation) match {
+    case Some(navigationUrl) => Some(navigationUrl)
+    case _ => Some("#")
+  }
+}
+
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), backUrl = tempBackUrl) {
 
   @if(businessPartnerForm.hasErrors) {
     @viewHelpers.govukErrorSummary(ErrorSummary(

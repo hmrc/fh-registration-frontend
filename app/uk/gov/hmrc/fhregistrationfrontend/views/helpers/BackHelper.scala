@@ -25,9 +25,9 @@ object BackHelper {
     case FormPage(pageId, Some(subsection)) =>
       uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(pageId, subsection)
     case _ => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
-
   }
 
-  def getUrl(navigation: Navigation): Option[String] = call(navigation).map(_.url).headOption
+  def getUrl(navigation: Navigation): Option[String] =
+    call(navigation).map(_.url).headOption
 
 }

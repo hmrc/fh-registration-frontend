@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Forms.{list, mapping}
-import play.api.data.{Form, Mapping}
+import play.api.data.{Form, FormError, Mapping}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
@@ -247,4 +247,16 @@ object BusinessPartnersForm {
       businessPartnersKey -> list(businessPartnerMapping)
     )(BusinessPartners.apply)(BusinessPartners.unapply)
   )
+
+  def withError(
+    pageData: ListWithTrackedChanges[BusinessPartner],
+    sectionId: Option[String],
+    field: String,
+    errorType: String
+  ): Seq[FormError] = {
+    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val businessPartner = pageData.values.toList(index)
+    val errorField = s"businessPartner${businessPartner.businessPartnerType.toString}.$field"
+    Seq(FormError(errorField, List(errorType), List()))
+  }
 }

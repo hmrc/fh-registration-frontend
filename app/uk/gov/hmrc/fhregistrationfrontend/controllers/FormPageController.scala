@@ -19,16 +19,12 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
-import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
-import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.VatNumberForm
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{BasicPage, FormRendering, Page, Rendering}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
-import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
+import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ListWithTrackedChanges, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -72,7 +68,8 @@ class FormPageController @Inject() (
 
   def save[T](pageId: String, sectionId: Option[String]): Action[AnyContent] =
     pageId match {
-      case "vatNumber" => saveVatNumber()
+      case "vatNumber"        => saveVatNumber()
+      case "businessPartners" => saveBusinessPartners(sectionId)
       case _ =>
         pageAction(pageId, sectionId).async { implicit request =>
           request
@@ -92,37 +89,45 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbers(pageData)
+            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
             if (!pageData.value.exists(usedVatNumbers.contains)) {
               saveSuccessfully(page)
             } else {
-              val vatNumberBasicPage = new BasicPage[VatNumber](
-                "vatNumber",
-                VatNumberForm.vatNumberForm,
-                new FormRendering[VatNumber] {
-                  override def render(
-                    form: Form[VatNumber],
-                    bpr: BusinessRegistrationDetails,
-                    navigation: Navigation
-                  )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-                    views.vat_registration(
-                      form,
-                      navigation,
-                      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
-                        .save("vatNumber")
-                    )(request, request2Messages(request))
-                }
-              )
-              val updatedForm: Form[VatNumber] = VatNumberForm.vatNumberForm.copy(
-                data = Map(
-                  "vatNumber_yesNo" -> pageData.hasValue.toString,
-                  "vatNumber_value" -> pageData.value.getOrElse("")
-                ),
-                errors = Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List()))
-              )
+              val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
               Future successful BadRequest(
-                vatNumberBasicPage.renderWithUpdatedForm(
-                  updatedForm,
+                vatNumberBasicPage.renderWithFormError(
+                  Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
+                  request.bpr,
+                  request.journey
+                    .navigation(request.lastUpdateTimestamp, request.page)
+                )(request, request2Messages(request), appConfig)
+              )
+            }
+          }
+        )
+    }
+
+  def saveBusinessPartners(sectionId: Option[String]): Action[AnyContent] =
+    pageAction("businessPartners", sectionId).async { implicit request =>
+      request
+        .page[ListWithTrackedChanges[BusinessPartner]]
+        .parseFromRequest(
+          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          page => {
+            val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
+            val businessPartnersPageData = pageData.values.toList
+            val usedVatNumbers: List[String] =
+              request.otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
+            val index = sectionId.map(_.toInt - 1).getOrElse(0)
+            val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
+            if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
+              saveSuccessfully(page)
+            } else {
+              val businessPartnersPage =
+                new InjectedPage(views).businessPartnersPage.copy(value = pageData, index = index)
+              Future successful BadRequest(
+                businessPartnersPage.renderWithFormError(
+                  BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page)
                 )(request, request2Messages(request), appConfig)
