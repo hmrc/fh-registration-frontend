@@ -62,7 +62,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedBusinessPartners: List[BusinessPartner] =
       businessPartnersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
     val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
-    (usedVatRegInBusinessPartners ++ List(vatReg().flatMap(_.value))).flatten
+    (usedVatRegInBusinessPartners ++ List(vatReg.flatMap(_.value))).flatten
   }
 }
 
