@@ -64,6 +64,17 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
     (usedVatRegInBusinessPartners ++ List(vatReg.flatMap(_.value))).flatten
   }
+
+  def otherUsedVatNumbersFromCompanyOfficersPage(
+    companyOfficersPageData: List[CompanyOfficer],
+    sectionId: Option[String]
+  ): List[String] = {
+    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val usedCompanyOfficers: List[CompanyOfficer] =
+      companyOfficersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
+    val usedVatRegInCompanyOfficers = usedCompanyOfficers.map(CompanyOfficer.getVatNumber)
+    (usedVatRegInCompanyOfficers ++ List(vatReg.flatMap(_.value))).flatten
+  }
 }
 
 //TODO all exceptional results need to be reviewed

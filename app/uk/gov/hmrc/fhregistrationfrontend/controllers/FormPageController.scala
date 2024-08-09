@@ -21,10 +21,10 @@ import play.api.data.{Form, FormError}
 import play.api.data.Forms.nonEmptyText
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, PageRequest}
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, CompanyOfficersForm}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.InjectedPage
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, ListWithTrackedChanges, VatNumber}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartner, CompanyOfficer, ListWithTrackedChanges, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -70,6 +70,7 @@ class FormPageController @Inject() (
     pageId match {
       case "vatNumber"        => saveVatNumber()
       case "businessPartners" => saveBusinessPartners(sectionId)
+      case "companyOfficers"  => saveCompanyOfficers(sectionId)
       case _ =>
         pageAction(pageId, sectionId).async { implicit request =>
           request
@@ -128,6 +129,36 @@ class FormPageController @Inject() (
               Future successful BadRequest(
                 businessPartnersPage.renderWithFormError(
                   BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
+                  request.bpr,
+                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
+                )(request, request2Messages(request), appConfig)
+              )
+            }
+          }
+        )
+    }
+
+  def saveCompanyOfficers(sectionId: Option[String]): Action[AnyContent] =
+    pageAction("companyOfficers", sectionId).async { implicit request =>
+      request
+        .page[ListWithTrackedChanges[CompanyOfficer]]
+        .parseFromRequest(
+          pageWithErrors => Future successful renderForm(pageWithErrors, true),
+          page => {
+            val pageData: ListWithTrackedChanges[CompanyOfficer] = page.data.get
+            val companyOfficersPageData = pageData.values.toList
+            val usedVatNumbers: List[String] =
+              request.otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, sectionId)
+            val index = sectionId.map(_.toInt - 1).getOrElse(0)
+            val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
+            if (!vatNumberOnCompanyOfficer.exists(usedVatNumbers.contains)) {
+              saveSuccessfully(page)
+            } else {
+              val companyOfficersPage =
+                new InjectedPage(views).companyOfficersPage.copy(value = pageData, index = index)
+              Future successful BadRequest(
+                companyOfficersPage.renderWithFormError(
+                  CompanyOfficersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page)
                 )(request, request2Messages(request), appConfig)
