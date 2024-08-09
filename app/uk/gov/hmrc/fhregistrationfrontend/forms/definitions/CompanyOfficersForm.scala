@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Forms.mapping
-import play.api.data.{Form, Mapping}
+import play.api.data.{Form, FormError, Mapping}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
@@ -97,5 +97,13 @@ object CompanyOfficersForm {
   }
 
   val companyOfficerForm = Form(companyOfficerMapping)
+
+  def withError(
+    field: String,
+    errorType: String
+  ): Seq[FormError] = {
+    val errorField = s"companyIdentification.$field"
+    Seq(FormError(errorField, List(errorType), List()))
+  }
 
 }
