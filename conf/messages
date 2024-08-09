@@ -624,6 +624,7 @@ fh.company_officers.company.vat_registration.error=Enter a valid UK VAT registra
 fh.companyIdentification.hasVat.error.required=Select whether company officer {0} has a VAT registration number
 fh.companyIdentification.vatRegistration.error.required=Enter a VAT registration number for company officer {0}
 fh.companyIdentification.vatRegistration.error.pattern=Enter a valid UK VAT registration number for company officer {0}
+fh.companyIdentification.vatRegistration.error.vatAlreadyUsed=You can only use a VAT registration number once in an application. You've already entered this number for another person or business.
 fh.companyIdentification.companyRegistration.error.required=Enter the company registration number for company officer {0}
 fh.companyIdentification.companyRegistration.error.pattern=Company registration number must be 8 numbers, or 2 letters followed by 6 numbers
 fh.companyIdentification.role.error.required=Select what role company officer {0} has in the company

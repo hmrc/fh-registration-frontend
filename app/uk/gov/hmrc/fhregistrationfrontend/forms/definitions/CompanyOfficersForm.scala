@@ -104,9 +104,9 @@ object CompanyOfficersForm {
     field: String,
     errorType: String
   ): Seq[FormError] = {
-    val index = sectionId.map(_.toInt - 1).getOrElse(0)
-    val companyOfficer = pageData.values.toList(index)
-    val errorField = s"companyOfficer${companyOfficer.officialType.toString}.$field"
+//    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+//    val companyOfficer = pageData.values.toList(index)
+    val errorField = s"companyIdentification.$field"
     Seq(FormError(errorField, List(errorType), List()))
   }
 

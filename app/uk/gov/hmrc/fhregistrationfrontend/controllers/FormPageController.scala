@@ -158,7 +158,7 @@ class FormPageController @Inject() (
                 new InjectedPage(views).companyOfficersPage.copy(value = pageData, index = index)
               Future successful BadRequest(
                 companyOfficersPage.renderWithFormError(
-                  CompanyOfficersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
+                  CompanyOfficersForm.withError(pageData, sectionId, "vatRegistration", "error.vatAlreadyUsed"),
                   request.bpr,
                   request.journey.navigation(request.lastUpdateTimestamp, request.page)
                 )(request, request2Messages(request), appConfig)
