@@ -155,17 +155,17 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val companyOfficerCompany = Map(
-        CompanyOfficersForm.companyNameKey -> "George Co",
-        CompanyOfficersForm.hasVatKey -> "true",
+        CompanyOfficersForm.companyNameKey     -> "George Co",
+        CompanyOfficersForm.hasVatKey          -> "true",
         CompanyOfficersForm.vatRegistrationKey -> "123456789",
-        CompanyOfficersForm.roleKey -> "Director"
+        CompanyOfficersForm.roleKey            -> "Director"
       )
 
       val companyOfficersFormData = companyOfficerCompany.map { case (k, v) =>
         s"companyIdentification.$k" -> v
       } +
         (CompanyOfficersForm.identificationTypeKey -> CompanyOfficerType.Company.toString) +
-        ("addMore" -> true.toString)
+        ("addMore"                                 -> true.toString)
 
       val request = FakeRequest().withFormUrlEncodedBody(
         companyOfficersFormData.toSeq: _*
