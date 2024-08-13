@@ -19,8 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.models
 import play.api.libs.json.{Json, OFormat}
 
 case class AlternativeEmail(
-  email: String,
-  emailConfirmation: String
+  email: String
 )
 
 case class Declaration(
