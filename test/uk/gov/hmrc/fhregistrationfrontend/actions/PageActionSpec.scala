@@ -127,7 +127,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       )
 
       val refined = refinedRequest(action, request)
-      refined.otherUsedVatNumbersFromVatNumberPage() shouldBe List("123456789")
+      refined.otherUsedVatNumbersFromVatNumberPage() shouldBe List("523456789", "623456789")
     }
   }
 
@@ -192,5 +192,49 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       FormTestData.partners.values.toList,
       sectionId = Some("2")
     ) shouldBe List("323456789", "423456789", "123456789")
+  }
+
+  "Load other used vat numbers in company officers when passed a first company officer - limited company journey" in {
+    val seqPages = journeys.limitedCompanyPages map { page =>
+      page.id match {
+        case companyOfficersPage.id => page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(companyOfficersPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.otherUsedVatNumbersFromCompanyOfficersPage(
+      FormTestData.companyOfficers.values.toList,
+      sectionId = Some("1")
+    ) shouldBe List("623456789", "123456789")
+  }
+
+  "Load other used vat numbers in company officers when passed a second company officer - limited company journey" in {
+    val seqPages = journeys.limitedCompanyPages map { page =>
+      page.id match {
+        case companyOfficersPage.id => page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(companyOfficersPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.otherUsedVatNumbersFromCompanyOfficersPage(
+      FormTestData.companyOfficers.values.toList,
+      sectionId = Some("2")
+    ) shouldBe List("523456789", "623456789", "123456789")
   }
 }

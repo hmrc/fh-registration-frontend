@@ -54,16 +54,13 @@ object FormTestData {
   val companyOfficers = ListWithTrackedChanges(
     List(
       CompanyOfficer(
-        CompanyOfficerType.Individual,
-        CompanyOfficerIndividual(
-          "Cosmin",
-          "M",
+        CompanyOfficerType.Company,
+        CompanyOfficerCompany(
+          "Some Company",
           true,
-          Some("AA123123A"),
+          Some("523456789"),
           None,
-          None,
-          None,
-          "Company Secretary"
+          "Director"
         )
       ) -> Added,
       CompanyOfficer(
@@ -84,7 +81,7 @@ object FormTestData {
         CompanyOfficerCompany(
           "Some Company",
           true,
-          Some("123456789"),
+          Some("623456789"),
           None,
           "Company Secretary"
         )
