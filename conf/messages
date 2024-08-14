@@ -1038,17 +1038,7 @@ fh.reasonOtherText.error.pattern=Reason for withdrawal must be 40 characters or 
 # - Withdrawal confirm
 #============================================================
 fh.withdrawalConfirm.title=Are you sure you want to withdraw your application?
-fh.withdrawalConfirm.error=Select yes if you want to withdraw your application
 fh.withdrawalConfirm.confirm.error.required=Select yes if you want to withdraw your application
-fh.withdrawalConfirm.noDefaultEmail.legend=We will send a confirmation to the email address you enter below
-fh.withdrawalConfirm.noDefaultEmail.email.label=Enter the email address
-fh.withdrawalConfirm.noDefaultEmail.emailConfirm.label=Re-enter the email address
-fh.withdrawalConfirm.hasDefaultEmail.legend=We will send a confirmation email to
-fh.withdrawalConfirm.usingDefaultEmail.error.required=Select whether this is the correct email address to use
-fh.withdrawalConfirm.alternativeEmail.email.error.required=Enter an alternative email address
-fh.withdrawalConfirm.alternativeEmail.emailConfirmation.no_match.error=The email addresses you have entered do not match
-fh.withdrawalConfirm.alternativeEmail.emailConfirmation.empty.error=Re-enter the alternative email address
-fh.withdrawalConfirm.alternativeEmail.email.error.email=Enter a valid email address
 
 fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to
