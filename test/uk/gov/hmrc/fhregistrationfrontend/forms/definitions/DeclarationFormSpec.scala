@@ -56,17 +56,6 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
       )
     }
 
-    "Fail if alternative email but email does not match" in {
-      formDataHasErrors(
-        personsData ++ Map(
-          usingDefaultEmailKey                      -> "false",
-          s"$alternativeEmailKey.email"             -> "alternative@test.com",
-          s"$alternativeEmailKey.emailConfirmation" -> "another@test.com"
-        ),
-        Seq(s"$alternativeEmailKey.emailConfirmation" -> "no_match.error")
-      )
-    }
-
     "Accept data using default email" in {
       val parsed = dataFromValidForm(
         personsData ++ Map(
@@ -85,8 +74,7 @@ class DeclarationFormSpec extends UnitSpec with FormSpecsHelper[Declaration] {
       val parsed = dataFromValidForm(
         personsData ++ Map(
           usingDefaultEmailKey                      -> "false",
-          s"$alternativeEmailKey.email"             -> "alternative@test.com",
-          s"$alternativeEmailKey.emailConfirmation" -> "alternative@test.com"
+          s"$alternativeEmailKey.email"             -> "alternative@test.com"
         )
       )
 

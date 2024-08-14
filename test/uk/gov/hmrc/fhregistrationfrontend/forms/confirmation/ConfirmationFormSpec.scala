@@ -79,20 +79,6 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
       )
     }
 
-    "Have errors when no custom email does not match" in {
-      formDataHasErrors(
-        Map(
-          confirmKey                                -> "true",
-          usingDefaultEmailKey                      -> "false",
-          s"$alternativeEmailKey.email"             -> "a@test.com",
-          s"$alternativeEmailKey.emailConfirmation" -> "b@test.com"
-        ),
-        Seq(
-          s"$alternativeEmailKey.emailConfirmation" -> "no_match.error"
-        )
-      )
-    }
-
     "Accept a NO answer" in {
       val data = Map(
         confirmKey -> "false"
@@ -120,8 +106,7 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
       val data = Map(
         confirmKey                                -> "true",
         usingDefaultEmailKey                      -> "false",
-        s"$alternativeEmailKey.email"             -> "custom@test.com",
-        s"$alternativeEmailKey.emailConfirmation" -> "custom@test.com"
+        s"$alternativeEmailKey.email"             -> "custom@test.com"
       )
 
       val confirmation = dataFromValidForm(data)
