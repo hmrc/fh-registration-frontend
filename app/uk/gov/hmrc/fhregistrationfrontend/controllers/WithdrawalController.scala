@@ -115,20 +115,6 @@ class WithdrawalController @Inject() (
         Future successful Redirect(routes.Application.checkStatus)
       }
     )
-//    if (confirmed.continue) {
-//      sendRequest(contactEmail.get, reason)
-//        .map { processingDate =>
-//          Redirect(routes.WithdrawalController.acknowledgment)
-//            .withSession(
-//              request.session
-//                + (EmailSessionKey               -> confirmed.email.get)
-//                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString)
-//            )
-//
-//        }
-//    } else {
-//      Future successful Redirect(routes.Application.checkStatus)
-//    }
 
   private def sendRequest(email: String, reason: WithdrawalReason)(implicit
     request: EnrolledUserRequest[_]

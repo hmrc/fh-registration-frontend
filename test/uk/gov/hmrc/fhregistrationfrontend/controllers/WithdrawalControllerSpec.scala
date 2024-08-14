@@ -135,16 +135,14 @@ class WithdrawalControllerSpec
       setupWithdrawal()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          ConfirmationForm.confirmKey           -> "true",
-          ConfirmationForm.usingDefaultEmailKey -> "true",
-          ConfirmationForm.defaultEmailKey      -> "some@email.com"
+          ConfirmationForm.confirmKey           -> "true"
         )
         .withMethod("POST")
       val result = csrfAddToken(controller.postConfirmation)(request)
 
       status(result) shouldBe SEE_OTHER
       val s = session(result)
-      s.get(controller.EmailSessionKey) shouldBe Some("some@email.com")
+      s.get(controller.EmailSessionKey) shouldBe Some("a@w.ro")
       s.get(controller.ProcessingTimestampSessionKey) shouldBe defined
       redirectLocation(result) shouldBe Some("/fhdds/withdraw/acknowledgment")
     }
