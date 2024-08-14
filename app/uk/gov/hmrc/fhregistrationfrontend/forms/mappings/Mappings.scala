@@ -144,8 +144,7 @@ object Mappings {
 
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
-      "email"             -> email,
-      "emailConfirmation" -> of(emailConfirmationFormat)
+      "email"             -> email
     )(AlternativeEmail.apply)(AlternativeEmail.unapply)
 
   def internationalAddress: Mapping[InternationalAddress] =
