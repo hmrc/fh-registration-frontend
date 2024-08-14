@@ -75,11 +75,6 @@ object SPLargeUkNew {
     "Z",
     false,
     Some("yuan@yuan.co.uk"),
-    Some(
-      AlternativeEmail(
-        "a@b.co",
-        "a@b.co"
-      )
-    )
+    Some(AlternativeEmail("a@b.co"))
   )
 }

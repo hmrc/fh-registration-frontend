@@ -124,11 +124,6 @@ object LtdLargeUk {
     "D",
     false,
     Some("cosmin@cosmin.co.uk"),
-    Some(
-      AlternativeEmail(
-        "a@b.co",
-        "a@b.co"
-      )
-    )
+    Some(AlternativeEmail("a@b.co"))
   )
 }

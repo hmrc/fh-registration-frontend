@@ -128,7 +128,7 @@ class ConfirmationFormSpec extends UnitSpec with FormSpecsHelper[Confirmation] {
       confirmation.continue shouldBe true
       confirmation.usingDefaultEmail shouldBe Some(false)
       confirmation.defaultEmail shouldBe None
-      confirmation.alternativeEmail shouldBe Some(AlternativeEmail("custom@test.com", "custom@test.com"))
+      confirmation.alternativeEmail shouldBe Some(AlternativeEmail("custom@test.com"))
       confirmation.email shouldBe Some("custom@test.com")
     }
 

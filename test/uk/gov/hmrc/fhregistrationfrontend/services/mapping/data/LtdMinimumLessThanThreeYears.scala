@@ -75,11 +75,6 @@ object LtdMinimumLessThanThreeYears {
     "Director",
     false,
     None,
-    Some(
-      AlternativeEmail(
-        "a@a.ro",
-        "a@a.ro"
-      )
-    )
+    Some(AlternativeEmail("a@a.ro"))
   )
 }
