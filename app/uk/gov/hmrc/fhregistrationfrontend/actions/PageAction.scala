@@ -75,6 +75,25 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedVatRegInCompanyOfficers = usedCompanyOfficers.map(CompanyOfficer.getVatNumber)
     (usedVatRegInCompanyOfficers ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
+
+  def isVatNumberUniqueForVatNumberPage(vatNumberPageData: VatNumber): Boolean = {
+    val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromVatNumberPage()
+    !vatNumberPageData.value.exists(otherUsedVatNumbers.contains)
+  }
+
+  def isVatNumberUniqueForBusinessPartner(businessPartnersPageData: List[BusinessPartner], sectionId: Option[String]): Boolean = {
+    val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
+    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
+    !vatNumberOnBusinessPartner.exists(otherUsedVatNumbers.contains)
+  }
+
+  def isVatNumberUniqueForCompanyOfficer(companyOfficersPageData: List[CompanyOfficer], sectionId: Option[String]): Boolean = {
+    val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, sectionId)
+    val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
+    !vatNumberOnCompanyOfficer.exists(otherUsedVatNumbers.contains)
+  }
 }
 
 //TODO all exceptional results need to be reviewed
