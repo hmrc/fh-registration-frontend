@@ -40,7 +40,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   private def pageDataOpt[T](pageId: String): Option[T] =
     request.journeyPages.get(pageId).flatMap((p: Page[T]) => p.data)
 
-  private val vatReg: Option[VatNumber] = pageDataOpt("vatNumber")
+  private val vatNumberRegistering: Option[VatNumber] = pageDataOpt("vatNumber")
 
   private def companyOfficers(): List[CompanyOfficer] =
     pageDataOpt("companyOfficers").getOrElse(ListWithTrackedChanges.empty[CompanyOfficer]()).values.toList
@@ -62,7 +62,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedBusinessPartners: List[BusinessPartner] =
       businessPartnersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
     val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
-    (usedVatRegInBusinessPartners ++ List(vatReg.flatMap(_.value))).flatten
+    (usedVatRegInBusinessPartners ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
 
   def otherUsedVatNumbersFromCompanyOfficersPage(
@@ -73,7 +73,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val usedCompanyOfficers: List[CompanyOfficer] =
       companyOfficersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
     val usedVatRegInCompanyOfficers = usedCompanyOfficers.map(CompanyOfficer.getVatNumber)
-    (usedVatRegInCompanyOfficers ++ List(vatReg.flatMap(_.value))).flatten
+    (usedVatRegInCompanyOfficers ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
 }
 
