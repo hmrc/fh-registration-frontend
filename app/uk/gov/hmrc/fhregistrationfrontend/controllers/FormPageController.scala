@@ -89,21 +89,34 @@ class FormPageController @Inject() (
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
-            val pageData = page.data.get
-            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
-            if (!pageData.value.exists(usedVatNumbers.contains)) {
-              saveSuccessfully(page)
-            } else {
-              val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
-              Future successful BadRequest(
-                vatNumberBasicPage.renderWithFormError(
-                  Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
-                  request.bpr,
-                  request.journey
-                    .navigation(request.lastUpdateTimestamp, request.page)
-                )(request, request2Messages(request), appConfig)
-              )
+//            val pageData = page.data.get
+//            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
+            request.isVatNumberUniqueForVatNumberPage(page.data.get) match {
+              case false =>
+                val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
+                Future successful BadRequest(
+                  vatNumberBasicPage.renderWithFormError(
+                    Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
+                    request.bpr,
+                    request.journey
+                      .navigation(request.lastUpdateTimestamp, request.page)
+                  )(request, request2Messages(request), appConfig)
+                )
+              case _ => saveSuccessfully(page)
             }
+//            if (!pageData.value.exists(usedVatNumbers.contains)) {
+//              saveSuccessfully(page)
+//            } else {
+//              val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
+//              Future successful BadRequest(
+//                vatNumberBasicPage.renderWithFormError(
+//                  Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
+//                  request.bpr,
+//                  request.journey
+//                    .navigation(request.lastUpdateTimestamp, request.page)
+//                )(request, request2Messages(request), appConfig)
+//              )
+//            }
           }
         )
     }
