@@ -135,7 +135,7 @@ class WithdrawalControllerSpec
       setupWithdrawal()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
-          ConfirmationForm.confirmKey           -> "true"
+          ConfirmationForm.confirmKey -> "true"
         )
         .withMethod("POST")
       val result = csrfAddToken(controller.postConfirmation)(request)

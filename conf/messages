@@ -1039,6 +1039,7 @@ fh.reasonOtherText.error.pattern=Reason for withdrawal must be 40 characters or 
 #============================================================
 fh.withdrawalConfirm.title=Are you sure you want to withdraw your application?
 fh.withdrawalConfirm.confirm.error.required=Select yes if you want to withdraw your application
+fh.withdrawalConfirm.email.warningText=We will send a confirmation email to {0}
 
 fh.ack.withdrawal=Application withdrawn
 fh.ack.withdrawal.emailSend=We will send a confirmation email to

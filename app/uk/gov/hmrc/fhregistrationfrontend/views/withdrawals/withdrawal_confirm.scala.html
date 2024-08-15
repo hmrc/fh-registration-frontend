@@ -77,6 +77,11 @@
       )
     ))
 
+    @viewHelpers.govukWarningText(WarningText(
+      iconFallbackText = Some(messages("generic.warning")),
+      content = Text(messages("fh.withdrawalConfirm.email.warningText", defaultEmail.get))
+    ))
+
     @viewHelpers.govukButton(Button(
       content = Text(messages("button.confirm")),
       inputType = Some("submit")
