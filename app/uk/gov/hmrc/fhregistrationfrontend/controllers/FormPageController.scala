@@ -89,8 +89,6 @@ class FormPageController @Inject() (
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page =>
-//            val pageData = page.data.get
-//            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
             request.isVatNumberUniqueForVatNumberPage(page.data.get) match {
               case false =>
                 val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
@@ -104,19 +102,6 @@ class FormPageController @Inject() (
                 )
               case _ => saveSuccessfully(page)
             }
-//            if (!pageData.value.exists(usedVatNumbers.contains)) {
-//              saveSuccessfully(page)
-//            } else {
-//              val vatNumberBasicPage = new InjectedPage(views).vatNumberPage.copy(data = page.data)
-//              Future successful BadRequest(
-//                vatNumberBasicPage.renderWithFormError(
-//                  Seq(FormError("vatNumber_value", List("error.vatAlreadyUsed"), List())),
-//                  request.bpr,
-//                  request.journey
-//                    .navigation(request.lastUpdateTimestamp, request.page)
-//                )(request, request2Messages(request), appConfig)
-//              )
-//            }
         )
     }
 
@@ -128,7 +113,6 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
-//            val businessPartnersPageData = pageData.values.toList
             request.isVatNumberUniqueForBusinessPartner(pageData.values.toList, sectionId) match {
               case false =>
                 val index = sectionId.map(_.toInt - 1).getOrElse(0)
@@ -143,25 +127,6 @@ class FormPageController @Inject() (
                 )
               case _ => saveSuccessfully(page)
             }
-//            val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
-//            val businessPartnersPageData = pageData.values.toList
-//            val usedVatNumbers: List[String] =
-//              request.otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
-//            val index = sectionId.map(_.toInt - 1).getOrElse(0)
-//            val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
-//            if (!vatNumberOnBusinessPartner.exists(usedVatNumbers.contains)) {
-//              saveSuccessfully(page)
-//            } else {
-//              val businessPartnersPage =
-//                new InjectedPage(views).businessPartnersPage.copy(value = pageData, index = index)
-//              Future successful BadRequest(
-//                businessPartnersPage.renderWithFormError(
-//                  BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
-//                  request.bpr,
-//                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
-//                )(request, request2Messages(request), appConfig)
-//              )
-//            }
           }
         )
     }
@@ -174,7 +139,6 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData: ListWithTrackedChanges[CompanyOfficer] = page.data.get
-//            val companyOfficersPageData = pageData.values.toList
             request.isVatNumberUniqueForCompanyOfficer(pageData.values.toList, sectionId) match {
               case false =>
                 val index = sectionId.map(_.toInt - 1).getOrElse(0)
@@ -189,25 +153,6 @@ class FormPageController @Inject() (
                 )
               case _ => saveSuccessfully(page)
             }
-//            val pageData: ListWithTrackedChanges[CompanyOfficer] = page.data.get
-//            val companyOfficersPageData = pageData.values.toList
-//            val usedVatNumbers: List[String] =
-//              request.otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, sectionId)
-//            val index = sectionId.map(_.toInt - 1).getOrElse(0)
-//            val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
-//            if (!vatNumberOnCompanyOfficer.exists(usedVatNumbers.contains)) {
-//              saveSuccessfully(page)
-//            } else {
-//              val companyOfficersPage =
-//                new InjectedPage(views).companyOfficersPage.copy(value = pageData, index = index)
-//              Future successful BadRequest(
-//                companyOfficersPage.renderWithFormError(
-//                  CompanyOfficersForm.withError("vatRegistration", "error.vatAlreadyUsed"),
-//                  request.bpr,
-//                  request.journey.navigation(request.lastUpdateTimestamp, request.page)
-//                )(request, request2Messages(request), appConfig)
-//              )
-//            }
           }
         )
     }
