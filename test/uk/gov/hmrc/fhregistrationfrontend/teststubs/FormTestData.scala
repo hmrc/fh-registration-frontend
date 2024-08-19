@@ -200,6 +200,24 @@ object FormTestData {
     false
   )
 
+  def businessPartnerSoleProprietorWithVatNumber(vatNumber: Option[String]) = {
+    BusinessPartner(
+      BusinessPartnerType.SoleProprietor,
+      BusinessPartnerSoleProprietor(
+        "ms sole",
+        "trader",
+        true,
+        Some("dodgy sole trader"),
+        true,
+        Some("AA123231"),
+        true,
+        vatNumber,
+        None,
+        Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
+      )
+    )
+  }
+
   val anAddress = businessregistration
     .Address(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postcode = Some("NE98 1ZZ"), country = "GB")
 
