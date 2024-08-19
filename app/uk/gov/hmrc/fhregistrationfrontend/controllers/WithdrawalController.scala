@@ -23,8 +23,9 @@ import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.Confirmation
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.{Confirmation, WithdrawalConfirmation}
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.WithdrawalConfirmationForm.withdrawalConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.withdrawalReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
@@ -79,11 +80,11 @@ class WithdrawalController @Inject() (
     }
 
   def confirm = withWithdrawalReason { implicit request => reason =>
-    contactEmail map (email => Ok(views.withdrawal_confirm(confirmationForm, email)))
+    contactEmail map (email => Ok(views.withdrawal_confirm(withdrawalConfirmationForm, email)))
   }
 
   def postConfirmation = withWithdrawalReason { implicit request => reason =>
-    confirmationForm
+    withdrawalConfirmationForm
       .bindFromRequest()
       .fold(
         formWithError => {
@@ -95,23 +96,25 @@ class WithdrawalController @Inject() (
       )
   }
 
-  private def handleConfirmation(confirmed: Confirmation, reason: WithdrawalReason)(implicit
+  private def handleConfirmation(confirmed: WithdrawalConfirmation, reason: WithdrawalReason)(implicit
     request: EnrolledUserRequest[_]
-  ) =
-    if (confirmed.continue) {
-      sendRequest(confirmed.email.get, reason)
-        .map { processingDate =>
-          Redirect(routes.WithdrawalController.acknowledgment)
-            .withSession(
-              request.session
-                + (EmailSessionKey               -> confirmed.email.get)
-                + (ProcessingTimestampSessionKey -> processingDate.getTime.toString)
-            )
+  ): Future[Result] =
+    contactEmail flatMap (email =>
+      if (confirmed.continue) {
+        sendRequest(email.get, reason)
+          .map { processingDate =>
+            Redirect(routes.WithdrawalController.acknowledgment)
+              .withSession(
+                request.session
+                  + (EmailSessionKey               -> email.get)
+                  + (ProcessingTimestampSessionKey -> processingDate.getTime.toString)
+              )
 
-        }
-    } else {
-      Future successful Redirect(routes.Application.checkStatus)
-    }
+          }
+      } else {
+        Future successful Redirect(routes.Application.checkStatus)
+      }
+    )
 
   private def sendRequest(email: String, reason: WithdrawalReason)(implicit
     request: EnrolledUserRequest[_]
