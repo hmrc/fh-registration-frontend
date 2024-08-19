@@ -113,9 +113,9 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData: ListWithTrackedChanges[BusinessPartner] = page.data.get
-            request.isVatNumberUniqueForBusinessPartner(pageData.values.toList, sectionId) match {
+            val index = sectionId.map(_.toInt - 1).getOrElse(0)
+            request.isVatNumberUniqueForBusinessPartner(pageData.values.toList, index) match {
               case false =>
-                val index = sectionId.map(_.toInt - 1).getOrElse(0)
                 val businessPartnersPage =
                   new InjectedPage(views).businessPartnersPage.copy(value = pageData, index = index)
                 Future successful BadRequest(
@@ -139,9 +139,9 @@ class FormPageController @Inject() (
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
           page => {
             val pageData: ListWithTrackedChanges[CompanyOfficer] = page.data.get
-            request.isVatNumberUniqueForCompanyOfficer(pageData.values.toList, sectionId) match {
+            val index = sectionId.map(_.toInt - 1).getOrElse(0)
+            request.isVatNumberUniqueForCompanyOfficer(pageData.values.toList, index) match {
               case false =>
-                val index = sectionId.map(_.toInt - 1).getOrElse(0)
                 val companyOfficersPage =
                   new InjectedPage(views).companyOfficersPage.copy(value = pageData, index = index)
                 Future successful BadRequest(

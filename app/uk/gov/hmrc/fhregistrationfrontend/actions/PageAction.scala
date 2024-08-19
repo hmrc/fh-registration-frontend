@@ -86,9 +86,8 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   def isVatNumberUniqueForBusinessPartner(
     businessPartnersPageData: List[BusinessPartner],
-    sectionId: Option[String]
+    index: Int
   ): Boolean = {
-    val index = sectionId.map(_.toInt - 1).getOrElse(0)
     val otherUsedVatNumbers: List[String] =
       otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, index)
     val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
@@ -100,9 +99,8 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   def isVatNumberUniqueForCompanyOfficer(
     companyOfficersPageData: List[CompanyOfficer],
-    sectionId: Option[String]
+    index: Int
   ): Boolean = {
-    val index = sectionId.map(_.toInt - 1).getOrElse(0)
     val otherUsedVatNumbers: List[String] =
       otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, index)
     val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))

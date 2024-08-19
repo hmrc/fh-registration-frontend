@@ -341,7 +341,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForBusinessPartner(
         businessPartnersWithUniqueFirstVatNumber.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe true
     }
 
@@ -365,7 +365,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForBusinessPartner(
         businessPartnersWithNonUniqueFirstVatNumber.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe false
     }
 
@@ -389,7 +389,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForBusinessPartner(
         businessPartnersWithUniqueSecondVatNumber.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe true
     }
 
@@ -413,7 +413,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForBusinessPartner(
         businessPartnersWithNonUniqueSecondVatNumber.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe false
     }
 
@@ -438,7 +438,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForCompanyOfficer(
         companyOfficersWithUniqueFirstVatNumber.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe true
     }
 
@@ -463,7 +463,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForCompanyOfficer(
         companyOfficersWithNonUniqueFirstVatNumber.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe false
     }
 
@@ -488,7 +488,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForCompanyOfficer(
         companyOfficersWithUniqueSecondVatNumber.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe true
     }
 
@@ -513,7 +513,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForCompanyOfficer(
         companyOfficersWithNonUniqueSecondVatNumber.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe false
     }
 
