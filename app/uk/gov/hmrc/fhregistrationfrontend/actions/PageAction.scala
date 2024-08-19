@@ -56,51 +56,60 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 
   private[actions] def otherUsedVatNumbersFromBusinessPartnersPage(
     businessPartnersPageData: List[BusinessPartner],
-    sectionId: Option[String]
+    index: Int
   ): List[String] = {
-    val index = sectionId.map(_.toInt - 1).getOrElse(0)
-    val usedBusinessPartners: List[BusinessPartner] =
-      businessPartnersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
-    val usedVatRegInBusinessPartners = usedBusinessPartners.map(BusinessPartner.getVatNumber)
+    val usedVatRegInBusinessPartners: List[Option[String]] = businessPartnersPageData.zipWithIndex.collect {
+      case (businessPartner, currentIndex) if currentIndex != index =>
+        BusinessPartner.getVatNumber(businessPartner)
+    }
     (usedVatRegInBusinessPartners ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
 
   private[actions] def otherUsedVatNumbersFromCompanyOfficersPage(
     companyOfficersPageData: List[CompanyOfficer],
-    sectionId: Option[String]
+    index: Int
   ): List[String] = {
-    val index = sectionId.map(_.toInt - 1).getOrElse(0)
-    val usedCompanyOfficers: List[CompanyOfficer] =
-      companyOfficersPageData.zipWithIndex.filter(_._2 != index).map(_._1)
-    val usedVatRegInCompanyOfficers = usedCompanyOfficers.map(CompanyOfficer.getVatNumber)
+    val usedVatRegInCompanyOfficers: List[Option[String]] = companyOfficersPageData.zipWithIndex.collect {
+      case (companyOfficer, currentIndex) if currentIndex != index =>
+        CompanyOfficer.getVatNumber(companyOfficer)
+    }
     (usedVatRegInCompanyOfficers ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
 
   def isVatNumberUniqueForVatNumberPage(vatNumberPageData: VatNumber): Boolean = {
     val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromVatNumberPage()
-    !vatNumberPageData.value.exists(otherUsedVatNumbers.contains)
+    vatNumberPageData.value match {
+      case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
+      case _ => true
+    }
   }
 
   def isVatNumberUniqueForBusinessPartner(
     businessPartnersPageData: List[BusinessPartner],
     sectionId: Option[String]
   ): Boolean = {
-    val otherUsedVatNumbers: List[String] =
-      otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, sectionId)
     val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val otherUsedVatNumbers: List[String] =
+      otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, index)
     val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
-    !vatNumberOnBusinessPartner.exists(otherUsedVatNumbers.contains)
+    vatNumberOnBusinessPartner match {
+      case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
+      case _ => true
+    }
   }
 
   def isVatNumberUniqueForCompanyOfficer(
     companyOfficersPageData: List[CompanyOfficer],
     sectionId: Option[String]
   ): Boolean = {
-    val otherUsedVatNumbers: List[String] =
-      otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, sectionId)
     val index = sectionId.map(_.toInt - 1).getOrElse(0)
+    val otherUsedVatNumbers: List[String] =
+      otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, index)
     val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
-    !vatNumberOnCompanyOfficer.exists(otherUsedVatNumbers.contains)
+    vatNumberOnCompanyOfficer match {
+      case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
+      case _ => true
+    }
   }
 }
 

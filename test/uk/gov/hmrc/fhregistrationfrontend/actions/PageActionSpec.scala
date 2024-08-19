@@ -167,7 +167,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.otherUsedVatNumbersFromBusinessPartnersPage(
         FormTestData.partners.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe List("223456789", "323456789", "423456789", "123456789")
     }
 
@@ -189,7 +189,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.otherUsedVatNumbersFromBusinessPartnersPage(
         FormTestData.partners.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe List("323456789", "423456789", "123456789")
     }
 
@@ -212,7 +212,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.otherUsedVatNumbersFromCompanyOfficersPage(
         FormTestData.companyOfficers.values.toList,
-        sectionId = Some("1")
+        index = 0
       ) shouldBe List("623456789", "123456789")
     }
 
@@ -235,7 +235,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.otherUsedVatNumbersFromCompanyOfficersPage(
         FormTestData.companyOfficers.values.toList,
-        sectionId = Some("2")
+        index = 1
       ) shouldBe List("523456789", "623456789", "123456789")
     }
 
