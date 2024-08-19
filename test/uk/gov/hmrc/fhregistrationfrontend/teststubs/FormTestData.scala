@@ -90,6 +90,20 @@ object FormTestData {
     List.empty,
     false
   )
+
+  def companyOfficerCompanyWithVatNumber(vatNumber: Option[String]) = {
+    CompanyOfficer(
+      CompanyOfficerType.Company,
+      CompanyOfficerCompany(
+        "Some Company",
+        true,
+        vatNumber,
+        None,
+        "Company Secretary"
+      )
+    )
+  }
+
   val businessStatus = BusinessStatus(true, Some(LocalDate.of(2018, 6, 30)))
   val importingActivities = ImportingActivities(true, eori = Some("1234123132"), goodsImported = Some(false))
   val businessCustomers = BusinessCustomers("Over 100")
