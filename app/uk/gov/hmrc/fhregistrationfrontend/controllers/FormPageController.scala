@@ -88,7 +88,7 @@ class FormPageController @Inject() (
         .page[VatNumber]
         .parseFromRequest(
           pageWithErrors => Future successful renderForm(pageWithErrors, true),
-          page => {
+          page =>
 //            val pageData = page.data.get
 //            val usedVatNumbers: List[String] = request.otherUsedVatNumbersFromVatNumberPage()
             request.isVatNumberUniqueForVatNumberPage(page.data.get) match {
@@ -117,7 +117,6 @@ class FormPageController @Inject() (
 //                )(request, request2Messages(request), appConfig)
 //              )
 //            }
-          }
         )
     }
 
