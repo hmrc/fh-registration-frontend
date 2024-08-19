@@ -48,13 +48,13 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   private def businessPartners(): List[BusinessPartner] =
     pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]()).values.toList
 
-  def otherUsedVatNumbersFromVatNumberPage(): List[String] = {
+  private[actions] def otherUsedVatNumbersFromVatNumberPage(): List[String] = {
     val usedVatRegInCompanyOfficers = companyOfficers().flatMap(CompanyOfficer.getVatNumber)
     val usedVatRegInBusinessPartners = businessPartners().flatMap(BusinessPartner.getVatNumber)
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 
-  def otherUsedVatNumbersFromBusinessPartnersPage(
+  private[actions] def otherUsedVatNumbersFromBusinessPartnersPage(
     businessPartnersPageData: List[BusinessPartner],
     sectionId: Option[String]
   ): List[String] = {
@@ -65,7 +65,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     (usedVatRegInBusinessPartners ++ List(vatNumberRegistering.flatMap(_.value))).flatten
   }
 
-  def otherUsedVatNumbersFromCompanyOfficersPage(
+  private[actions] def otherUsedVatNumbersFromCompanyOfficersPage(
     companyOfficersPageData: List[CompanyOfficer],
     sectionId: Option[String]
   ): List[String] = {
