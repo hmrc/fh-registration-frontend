@@ -239,4 +239,86 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       ) shouldBe List("523456789", "623456789", "123456789")
     }
   }
+
+  "Check if vat number is unique when passed a unique vat number - limited company journey" in {
+    val uniqueVatNumber = FormTestData.vatNumber
+    val seqPages = journeys.limitedCompanyPages map { page =>
+      page.id match {
+        case companyOfficersPage.id =>
+          page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(vatNumberPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.isVatNumberUniqueForVatNumberPage(uniqueVatNumber) shouldBe true
+  }
+
+  "Check if vat number is unique when passed a non-unique vat number - limited company journey" in {
+    val nonUniqueVatNumber = FormTestData.vatNumber.copy(value = Some("523456789"))
+    val seqPages = journeys.limitedCompanyPages map { page =>
+      page.id match {
+        case companyOfficersPage.id =>
+          page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(vatNumberPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.isVatNumberUniqueForVatNumberPage(nonUniqueVatNumber) shouldBe false
+  }
+
+  "Check if vat number is unique when passed a unique vat number - business partnership journey" in {
+    val uniqueVatNumber = FormTestData.vatNumber
+    val seqPages = journeys.partnershipPages map { page =>
+      page.id match {
+        case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(vatNumberPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.isVatNumberUniqueForVatNumberPage(uniqueVatNumber) shouldBe true
+  }
+
+  "Check if vat number is unique when passed a non-unique vat number - business partnership journey" in {
+    val nonUniqueVatNumber = FormTestData.vatNumber.copy(value = Some("423456789"))
+    val seqPages = journeys.partnershipPages map { page =>
+      page.id match {
+        case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+        case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
+        case _ => page
+      }
+    }
+
+    val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+    val action = new PageAction(vatNumberPage.id, None, journeys)(
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
+
+    val refined = refinedRequest(action, request)
+    refined.isVatNumberUniqueForVatNumberPage(nonUniqueVatNumber) shouldBe false
+  }
 }
