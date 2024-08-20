@@ -54,16 +54,13 @@ object FormTestData {
   val companyOfficers = ListWithTrackedChanges(
     List(
       CompanyOfficer(
-        CompanyOfficerType.Individual,
-        CompanyOfficerIndividual(
-          "Cosmin",
-          "M",
+        CompanyOfficerType.Company,
+        CompanyOfficerCompany(
+          "Some Company",
           true,
-          Some("AA123123A"),
+          Some("523456789"),
           None,
-          None,
-          None,
-          "Company Secretary"
+          "Director"
         )
       ) -> Added,
       CompanyOfficer(
@@ -84,7 +81,7 @@ object FormTestData {
         CompanyOfficerCompany(
           "Some Company",
           true,
-          Some("123456789"),
+          Some("623456789"),
           None,
           "Company Secretary"
         )
@@ -93,6 +90,20 @@ object FormTestData {
     List.empty,
     false
   )
+
+  def companyOfficerCompanyWithVatNumber(vatNumber: Option[String]) = {
+    CompanyOfficer(
+      CompanyOfficerType.Company,
+      CompanyOfficerCompany(
+        "Some Company",
+        true,
+        vatNumber,
+        None,
+        "Company Secretary"
+      )
+    )
+  }
+
   val businessStatus = BusinessStatus(true, Some(LocalDate.of(2018, 6, 30)))
   val importingActivities = ImportingActivities(true, eori = Some("1234123132"), goodsImported = Some(false))
   val businessCustomers = BusinessCustomers("Over 100")
@@ -202,6 +213,24 @@ object FormTestData {
     List.empty,
     false
   )
+
+  def businessPartnerSoleProprietorWithVatNumber(vatNumber: Option[String]) = {
+    BusinessPartner(
+      BusinessPartnerType.SoleProprietor,
+      BusinessPartnerSoleProprietor(
+        "ms sole",
+        "trader",
+        true,
+        Some("dodgy sole trader"),
+        true,
+        Some("AA123231"),
+        true,
+        vatNumber,
+        None,
+        Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
+      )
+    )
+  }
 
   val anAddress = businessregistration
     .Address(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postcode = Some("NE98 1ZZ"), country = "GB")

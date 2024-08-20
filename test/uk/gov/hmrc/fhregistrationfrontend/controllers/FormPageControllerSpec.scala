@@ -23,7 +23,8 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.actions.JourneyRequestBuilder
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, ContactPersonForm, TradingNameForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.{BusinessPartnersForm, CompanyOfficersForm, ContactPersonForm, TradingNameForm, VatNumberForm}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficerType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, Save4LaterKeys}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, CacheMapBuilder, FormTestData, Save4LaterMocks}
@@ -145,6 +146,31 @@ class FormPageControllerSpec
         businessPartnerFormData(addMore = true, vatNumber = "123456789").toSeq: _*
       )
       val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
+
+      status(result) shouldBe BAD_REQUEST
+    }
+
+    "Render company officer error form if vat number used elsewhere in journey" in {
+      setupPageAction(companyOfficersPage, journeyPages = JourneyRequestBuilder.fullyCompleteJourney())
+      setupSave4Later()
+
+      val companyOfficerCompany = Map(
+        CompanyOfficersForm.companyNameKey     -> "George Co",
+        CompanyOfficersForm.hasVatKey          -> "true",
+        CompanyOfficersForm.vatRegistrationKey -> "123456789",
+        CompanyOfficersForm.roleKey            -> "Director"
+      )
+
+      val companyOfficersFormData = companyOfficerCompany.map { case (k, v) =>
+        s"companyIdentification.$k" -> v
+      } +
+        (CompanyOfficersForm.identificationTypeKey -> CompanyOfficerType.Company.toString) +
+        ("addMore"                                 -> true.toString)
+
+      val request = FakeRequest().withFormUrlEncodedBody(
+        companyOfficersFormData.toSeq: _*
+      )
+      val result = csrfAddToken(controller.saveWithSection(companyOfficersPage.id, "1"))(request)
 
       status(result) shouldBe BAD_REQUEST
     }
