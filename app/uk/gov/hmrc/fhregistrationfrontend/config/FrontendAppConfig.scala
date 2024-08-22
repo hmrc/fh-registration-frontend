@@ -34,6 +34,9 @@ trait AppConfig {
 
   val newBusinessPartnerPagesEnabled: Boolean
   val newCompanyOfficersPagesEnabled: Boolean
+
+  val isNewSummaryConfirmationCacheEnabled: Boolean
+  val isNewSessionRepositoryCacheEnabled: Boolean
 }
 
 @Singleton
@@ -75,6 +78,9 @@ class FrontendAppConfig @Inject() (
   override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
 
   override lazy val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
+
+  override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
+  override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =
