@@ -34,7 +34,7 @@ class SummaryConfirmationService @Inject() (
 
   private def cleanFHDDSSessionCache(
     id: String,
-    summaryForPrintKey: Option[String],
+    summaryForPrintKey: Option[String] = None,
     withdrawalReason: Option[WithdrawalReason] = None,
     deregistrationReason: Option[DeregistrationReason] = None
   ): SummaryConfirmation =
@@ -46,7 +46,7 @@ class SummaryConfirmationService @Inject() (
       case None     => throw new RuntimeException("Unexpected error, No session id found")
     }
 
-  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[Option[_]] = {
+  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
     logger.info("[EISessionLocalService][storeSummaryForPrintKey]: Storing Summary For Print Key to Session...")
 
     val fUpdatedCache = sessionRepository.get(getSummaryId) map {
@@ -80,12 +80,12 @@ class SummaryConfirmationService @Inject() (
       }
   }
 
-  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Option[_]] = {
+  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] = {
     logger.info("[SummaryConfirmationService][storeWithdrawalReason]: Storing Withdrawal Reason to Session...")
 
     val fUpdatedCache = sessionRepository.get(getSummaryId) map {
       case Some(summaryConfirmation) => summaryConfirmation.copy(withdrawalReason = Some(reason))
-      case None                      => cleanFHDDSSessionCache(getSummaryId, Some(""), withdrawalReason = Some(reason))
+      case None                      => cleanFHDDSSessionCache(getSummaryId, withdrawalReason = Some(reason))
     }
 
     fUpdatedCache.flatMap { updatedCache =>
@@ -114,12 +114,12 @@ class SummaryConfirmationService @Inject() (
       }
   }
 
-  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[Option[_]] = {
+  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] = {
     logger.info("[SummaryConfirmationService][storeAgentData]: Storing Deregistration Reason to Session...")
 
     val fUpdatedCache = sessionRepository.get(getSummaryId) map {
       case Some(summaryConfirmation) => summaryConfirmation.copy(deregistrationReason = Some(reason))
-      case None => cleanFHDDSSessionCache(getSummaryId, Some(""), deregistrationReason = Some(reason))
+      case None => cleanFHDDSSessionCache(getSummaryId, deregistrationReason = Some(reason))
     }
 
     fUpdatedCache.flatMap { updatedCache =>
