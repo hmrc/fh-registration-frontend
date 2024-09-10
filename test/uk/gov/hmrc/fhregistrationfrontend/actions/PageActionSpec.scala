@@ -133,9 +133,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load other used vat numbers in business partners when passed a vat number - business partnership journey" in {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id        => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _                       => page
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+          case _                => page
         }
       }
 
@@ -152,9 +153,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load other used vat numbers in business partners when passed a first business partner - business partnership journey" in {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id        => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _                       => page
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+          case _                => page
         }
       }
 
@@ -174,9 +176,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load other used vat numbers in business partners when passed a second business partner - business partnership journey" in {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id        => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _                       => page
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+          case _                => page
         }
       }
 
@@ -246,7 +249,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -267,7 +270,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -285,9 +288,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val uniqueVatNumber = FormTestData.vatNumber
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -305,9 +309,10 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val nonUniqueVatNumber = FormTestData.vatNumber.copy(value = Some("423456789"))
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -322,13 +327,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in business partners when passed a first business partner with unique vat number - business partnership journey" in {
-      val businessPartnerWithNonUniqueVatNumber = FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
-      val businessPartnersWithUniqueFirstVatNumber = FormTestData.partners.updated(1, businessPartnerWithNonUniqueVatNumber)
+      val businessPartnerWithNonUniqueVatNumber =
+        FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
+      val businessPartnersWithUniqueFirstVatNumber =
+        FormTestData.partners.updated(1, businessPartnerWithNonUniqueVatNumber)
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueFirstVatNumber
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueFirstVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -346,13 +354,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in business partners when passed a first business partner with non-unique vat number - business partnership journey" in {
-      val businessPartnerWithNonUniqueVatNumber = FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
-      val businessPartnersWithNonUniqueFirstVatNumber = FormTestData.partners.updated(0, businessPartnerWithNonUniqueVatNumber)
+      val businessPartnerWithNonUniqueVatNumber =
+        FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
+      val businessPartnersWithNonUniqueFirstVatNumber =
+        FormTestData.partners.updated(0, businessPartnerWithNonUniqueVatNumber)
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueFirstVatNumber
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueFirstVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -370,13 +381,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in business partners when passed a second business partner with unique vat number - business partnership journey" in {
-      val businessPartnerWithNonUniqueVatNumber = FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
-      val businessPartnersWithUniqueSecondVatNumber = FormTestData.partners.updated(0, businessPartnerWithNonUniqueVatNumber)
+      val businessPartnerWithNonUniqueVatNumber =
+        FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
+      val businessPartnersWithUniqueSecondVatNumber =
+        FormTestData.partners.updated(0, businessPartnerWithNonUniqueVatNumber)
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueSecondVatNumber
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueSecondVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -394,13 +408,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in business partners when passed a second business partner with non-unique vat number - business partnership journey" in {
-      val businessPartnerWithNonUniqueVatNumber = FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
-      val businessPartnersWithNonUniqueSecondVatNumber = FormTestData.partners.updated(1, businessPartnerWithNonUniqueVatNumber)
+      val businessPartnerWithNonUniqueVatNumber =
+        FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
+      val businessPartnersWithNonUniqueSecondVatNumber =
+        FormTestData.partners.updated(1, businessPartnerWithNonUniqueVatNumber)
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case businessPartnersPage.id => page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueSecondVatNumber
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueSecondVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -418,14 +435,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in company officers when passed a first company officer with unique vat number - limited company journey" in {
-      val companyOfficerWithNonUniqueVatNumber = FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
-      val companyOfficersWithUniqueFirstVatNumber = FormTestData.companyOfficers.updated(1, companyOfficerWithNonUniqueVatNumber)
+      val companyOfficerWithNonUniqueVatNumber =
+        FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
+      val companyOfficersWithUniqueFirstVatNumber =
+        FormTestData.companyOfficers.updated(1, companyOfficerWithNonUniqueVatNumber)
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithUniqueFirstVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -443,14 +462,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in company officers when passed a first company officer with non-unique vat number - limited company journey" in {
-      val companyOfficerWithNonUniqueVatNumber = FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
-      val companyOfficersWithNonUniqueFirstVatNumber = FormTestData.companyOfficers.updated(0, companyOfficerWithNonUniqueVatNumber)
+      val companyOfficerWithNonUniqueVatNumber =
+        FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
+      val companyOfficersWithNonUniqueFirstVatNumber =
+        FormTestData.companyOfficers.updated(0, companyOfficerWithNonUniqueVatNumber)
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithNonUniqueFirstVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -468,14 +489,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in company officers when passed a second company officer with unique vat number - limited company journey" in {
-      val companyOfficerWithNonUniqueVatNumber = FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
-      val companyOfficersWithUniqueSecondVatNumber = FormTestData.companyOfficers.updated(0, companyOfficerWithNonUniqueVatNumber)
+      val companyOfficerWithNonUniqueVatNumber =
+        FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
+      val companyOfficersWithUniqueSecondVatNumber =
+        FormTestData.companyOfficers.updated(0, companyOfficerWithNonUniqueVatNumber)
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithUniqueSecondVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 
@@ -493,14 +516,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Check if vat number unique in company officers when passed a second company officer with non-unique vat number - limited company journey" in {
-      val companyOfficerWithNonUniqueVatNumber = FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
-      val companyOfficersWithNonUniqueSecondVatNumber = FormTestData.companyOfficers.updated(1, companyOfficerWithNonUniqueVatNumber)
+      val companyOfficerWithNonUniqueVatNumber =
+        FormTestData.companyOfficerCompanyWithVatNumber(FormTestData.vatNumber.value)
+      val companyOfficersWithNonUniqueSecondVatNumber =
+        FormTestData.companyOfficers.updated(1, companyOfficerWithNonUniqueVatNumber)
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
             page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithNonUniqueSecondVatNumber
           case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
-          case _ => page
+          case _                => page
         }
       }
 

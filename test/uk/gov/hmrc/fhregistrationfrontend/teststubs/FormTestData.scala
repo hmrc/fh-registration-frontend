@@ -91,7 +91,7 @@ object FormTestData {
     false
   )
 
-  def companyOfficerCompanyWithVatNumber(vatNumber: Option[String]) = {
+  def companyOfficerCompanyWithVatNumber(vatNumber: Option[String]) =
     CompanyOfficer(
       CompanyOfficerType.Company,
       CompanyOfficerCompany(
@@ -102,7 +102,6 @@ object FormTestData {
         "Company Secretary"
       )
     )
-  }
 
   val businessStatus = BusinessStatus(true, Some(LocalDate.of(2018, 6, 30)))
   val importingActivities = ImportingActivities(true, eori = Some("1234123132"), goodsImported = Some(false))
@@ -214,7 +213,7 @@ object FormTestData {
     false
   )
 
-  def businessPartnerSoleProprietorWithVatNumber(vatNumber: Option[String]) = {
+  def businessPartnerSoleProprietorWithVatNumber(vatNumber: Option[String]) =
     BusinessPartner(
       BusinessPartnerType.SoleProprietor,
       BusinessPartnerSoleProprietor(
@@ -230,7 +229,6 @@ object FormTestData {
         Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
       )
     )
-  }
 
   val anAddress = businessregistration
     .Address(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postcode = Some("NE98 1ZZ"), country = "GB")
