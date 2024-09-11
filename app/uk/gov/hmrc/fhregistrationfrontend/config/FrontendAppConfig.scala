@@ -52,7 +52,7 @@ class FrontendAppConfig @Inject() (
   private def loadConfig(key: String) =
     configuration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private lazy val _serviceMaxNoOfAttempts: Int = 60
+  private lazy val _serviceMaxNoOfAttempts: Int = getConfString("fhdds-service_max_no_of_attempts", "").toInt
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
   val addressReputationEndpoint = baseUrl("address-lookup")

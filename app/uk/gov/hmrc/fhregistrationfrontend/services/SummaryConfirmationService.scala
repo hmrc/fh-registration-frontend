@@ -114,12 +114,14 @@ class SummaryConfirmationService @Inject() (
       }
   }
 
-  def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] = {
+  def saveDeregistrationReason(
+    reason: DeregistrationReason
+  )(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] = {
     logger.info("[SummaryConfirmationService][storeAgentData]: Storing Deregistration Reason to Session...")
 
     val fUpdatedCache = sessionRepository.get(getSummaryId) map {
       case Some(summaryConfirmation) => summaryConfirmation.copy(deregistrationReason = Some(reason))
-      case None => cleanFHDDSSessionCache(getSummaryId, deregistrationReason = Some(reason))
+      case None                      => cleanFHDDSSessionCache(getSummaryId, deregistrationReason = Some(reason))
     }
 
     fUpdatedCache.flatMap { updatedCache =>
