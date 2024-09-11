@@ -80,7 +80,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromVatNumberPage()
     vatNumberPageData.value match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
-      case _ => true
+      case _                                                          => true
     }
   }
 
@@ -93,7 +93,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
     vatNumberOnBusinessPartner match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
-      case _ => true
+      case _                                                          => true
     }
   }
 
@@ -106,7 +106,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
     val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
     vatNumberOnCompanyOfficer match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
-      case _ => true
+      case _                                                          => true
     }
   }
 }

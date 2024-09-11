@@ -37,6 +37,9 @@ trait AppConfig {
 
   val isNewSummaryConfirmationCacheEnabled: Boolean
   val isNewSessionRepositoryCacheEnabled: Boolean
+
+  def serviceMaxNoOfAttempts: Int
+
 }
 
 @Singleton
@@ -49,6 +52,7 @@ class FrontendAppConfig @Inject() (
   private def loadConfig(key: String) =
     configuration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
+  private lazy val _serviceMaxNoOfAttempts: Int = getConfString("fhdds-service_max_no_of_attempts", "").toInt
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
   val addressReputationEndpoint = baseUrl("address-lookup")
@@ -81,6 +85,7 @@ class FrontendAppConfig @Inject() (
 
   override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
+  override def serviceMaxNoOfAttempts: Int = _serviceMaxNoOfAttempts
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =
