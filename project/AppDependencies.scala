@@ -14,7 +14,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "8.5.0",
     "uk.gov.hmrc"                %% s"play-partials-$playVersion"                 % "10.0.0",
     "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.0.0",
-    "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "12.1.0",
+    "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "11.2.0",
     "uk.gov.hmrc"                %% s"play-conditional-form-mapping-$playVersion" % "3.2.0",
     "uk.gov.hmrc.mongo"          %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
     "org.typelevel"              %% "cats-core"                                   % "2.12.0",
