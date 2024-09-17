@@ -108,7 +108,7 @@ class FhddsConnector @Inject() (
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
 //    http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
-    val url = "$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress"
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress"
     http.get(url"$url").execute[EnrolmentProgress.EnrolmentProgress]
   }
 
