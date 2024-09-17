@@ -26,11 +26,13 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+
 import scala.concurrent.Future
 
 @Singleton
 class BusinessCustomerFrontendConnector @Inject() (
-  val http: HttpClient,
+  val http: HttpClientV2,
   val configuration: Configuration,
   environment: Environment,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter

@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Recor
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +36,7 @@ case class LookupAddressByPostcode(postcode: String, filter: Option[String])
 
 @Singleton
 class AddressLookupConnector @Inject() (
-  val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment,
   frontendAppConfig: FrontendAppConfig

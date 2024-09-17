@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 
 @ImplementedBy(classOf[DefaultEmailVerificationConnector])
 trait EmailVerificationConnector {
@@ -36,7 +37,7 @@ trait EmailVerificationConnector {
 
 class DefaultEmailVerificationConnector @Inject() (
   appConfig: AppConfig,
-  val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment
 )(implicit ec: ExecutionContext)

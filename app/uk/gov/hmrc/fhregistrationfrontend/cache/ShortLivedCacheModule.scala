@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.crypto.{ApplicationCrypto, Decrypter, Encrypter}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -44,7 +44,7 @@ class DefaultShortLivedCache @Inject() (
 
 @Singleton
 class DefaultShortLivedHttpCaching @Inject() (
-  override val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment
 ) extends ServicesConfig(runModeConfiguration) with client.ShortLivedHttpCaching {
@@ -57,4 +57,5 @@ class DefaultShortLivedHttpCaching @Inject() (
     throw new Exception(s"Could not find config 'cachable.short-lived-cache.domain'")
   )
 
+  override def httpClientV2: HttpClientV2 = http
 }

@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import java.util.Date
-
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Reads
 import play.api.{Configuration, Environment}
@@ -26,14 +25,16 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, Sub
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FhddsConnector @Inject() (
-  val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment
 )(implicit ec: ExecutionContext)
