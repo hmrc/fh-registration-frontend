@@ -50,9 +50,30 @@ class AddressLookupConnector @Inject() (
     logger.info("Lookup function is being called")
     val lookupAddressByPostcode = LookupAddressByPostcode(postcode, filter)
 
+//    http
+//      .POST[LookupAddressByPostcode, List[AddressRecord]](s"$endpoint/lookup", lookupAddressByPostcode, headers)
+//      .map { found =>
+//        val results = found.map { address =>
+//          AddressRecord(
+//            address.id,
+//            address.uprn,
+//            address.address,
+//            address.language
+//          )
+//        }
+//        val addressRec = RecordSet(results)
+//        AddressLookupSuccessResponse(addressRec)
+//      } recover { case e: Exception =>
+//      logger.warn(s"Error received from address lookup service: $e")
+//      AddressLookupErrorResponse(e)
+//    }
+    val url = s"$endpoint/lookup"
     http
-      .POST[LookupAddressByPostcode, List[AddressRecord]](s"$endpoint/lookup", lookupAddressByPostcode, headers)
-      .map { found =>
+      .post(url"$url")
+      .withBody[LookupAddressByPostcode](lookupAddressByPostcode)
+      .setHeader(headers.head)
+      .execute[List[AddressRecord]]
+      .map(found => {
         val results = found.map { address =>
           AddressRecord(
             address.id,
@@ -63,16 +84,24 @@ class AddressLookupConnector @Inject() (
         }
         val addressRec = RecordSet(results)
         AddressLookupSuccessResponse(addressRec)
-      } recover { case e: Exception =>
-      logger.warn(s"Error received from address lookup service: $e")
-      AddressLookupErrorResponse(e)
-    }
+      }).recover({ case e: Exception =>
+        logger.warn(s"Error received from address lookup service: $e")
+        AddressLookupErrorResponse(e)
+      })
+
   }
 
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
     logger.info("lookupById function is being called")
+//    http
+//      .POST[String, Array[AddressRecord]](s"$endpoint/lookup/$id", id, headers)
+//      .map(_.headOption)
+    val url = s"$endpoint/lookup/$id"
     http
-      .POST[String, Array[AddressRecord]](s"$endpoint/lookup/$id", id, headers)
+      .post(url"$url")
+      .withBody(id)
+      .setHeader(headers.head)
+      .execute[Array[AddressRecord]]
       .map(_.headOption)
   }
 

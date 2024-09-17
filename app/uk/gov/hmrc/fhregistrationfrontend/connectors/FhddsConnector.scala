@@ -51,7 +51,7 @@ class FhddsConnector @Inject() (
     headerCarrier: HeaderCarrier
   ): Future[SubscriptionDisplayWrapper] = {
 //    http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
-    val url = s"$FHDSSServiceUrl/fhdds/subscription/${fhddsRegistrationNumber}/get"
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get"
     http.get(url"$url").execute[SubscriptionDisplayWrapper]
   }
 
@@ -64,32 +64,42 @@ class FhddsConnector @Inject() (
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId?currentRegNumber=$currentRegNumber"
     }
 
-    http.POST[SubmissionRequest, SubmissionResponse](url, request)
+//    http.POST[SubmissionRequest, SubmissionResponse](url, request)
+    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
   }
 
   def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[SubmissionResponse] =
-    http.POST[SubmissionRequest, SubmissionResponse](
-      s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber",
-      request
-    )
+  ): Future[SubmissionResponse] = {
+//    http.POST[SubmissionRequest, SubmissionResponse](
+//      s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber",
+//      request
+//    )
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber"
+    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
+  }
 
   def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[Date] =
-    http.POST[WithdrawalRequest, Date](
-      s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber",
-      request
-    )
+  ): Future[Date] = {
+//    http.POST[WithdrawalRequest, Date](
+//      s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber",
+//      request
+//    )
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber"
+    http.post(url"$url").withBody[WithdrawalRequest](request).execute[Date]
+  }
 
   def deregister(fhddsRegistrationNumber: String, request: DeregistrationRequest)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[Date] =
-    http.POST[DeregistrationRequest, Date](
-      s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber",
-      request
-    )
+  ): Future[Date] = {
+//    http.POST[DeregistrationRequest, Date](
+//      s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber",
+//      request
+//    )
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber"
+    http.post(url"$url").withBody[DeregistrationRequest](request).execute[Date]
+  }
 
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
@@ -111,8 +121,11 @@ class FhddsConnector @Inject() (
     http.get(url"$url").execute[SubmissionTracking]
   }
 
-  def deleteSubmission(formBundleId: String)(implicit hc: HeaderCarrier) =
-    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
+  def deleteSubmission(formBundleId: String)(implicit hc: HeaderCarrier) = {
+//    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId"
+    http.delete(url"$url").execute[HttpResponse]
+  }
 
   def addEnrolment(userId: String, groupId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
 //    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
@@ -126,8 +139,11 @@ class FhddsConnector @Inject() (
     http.get(url"$url").execute[HttpResponse]
   }
 
-  def deleteEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
+  def deleteEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+//    http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
+    val url = s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo"
+    http.delete(url"$url").execute[HttpResponse]
+  }
 
   def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
 //    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/user-info/$userId")
