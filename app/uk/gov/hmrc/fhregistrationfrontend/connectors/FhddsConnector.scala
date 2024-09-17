@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, Sub
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -41,13 +41,19 @@ class FhddsConnector @Inject() (
     extends ServicesConfig(runModeConfiguration) {
   val FHDSSServiceUrl: String = baseUrl("fhdds")
 
-  def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] =
-    http.GET[FhddsStatus](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
+  def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] = {
+//    http.GET[FhddsStatus](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status")
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status"
+    http.get(url"$url").execute[FhddsStatus]
+  }
 
   def getSubmission(fhddsRegistrationNumber: String)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[SubscriptionDisplayWrapper] =
-    http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
+  ): Future[SubscriptionDisplayWrapper] = {
+//    http.GET[SubscriptionDisplayWrapper](s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/get")
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/${fhddsRegistrationNumber}/get"
+    http.get(url"$url").execute[SubscriptionDisplayWrapper]
+  }
 
   def createSubmission(safeId: String, currentRegNumber: Option[String], request: SubmissionRequest)(implicit
     headerCarrier: HeaderCarrier
@@ -87,38 +93,64 @@ class FhddsConnector @Inject() (
 
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
-    http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
+//    http.GET[EnrolmentProgress.EnrolmentProgress](s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress")
+    val url = "$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress"
+    http.get(url"$url").execute[EnrolmentProgress.EnrolmentProgress]
   }
 
   // $COVERAGE-OFF$
-  def getAllSubmission()(implicit hc: HeaderCarrier): Future[List[SubmissionTracking]] =
-    http.GET[List[SubmissionTracking]](s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission")
+  def getAllSubmission()(implicit hc: HeaderCarrier): Future[List[SubmissionTracking]] = {
+//    http.GET[List[SubmissionTracking]](s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission")
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/getAllSubmission"
+    http.get(url"$url").execute[List[SubmissionTracking]]
+  }
 
-  def getSubMission(formBundleId: String)(implicit headerCarrier: HeaderCarrier): Future[SubmissionTracking] =
-    http.GET[SubmissionTracking](s"$FHDSSServiceUrl/fhdds/subscription/getSubmission/$formBundleId")
+  def getSubMission(formBundleId: String)(implicit headerCarrier: HeaderCarrier): Future[SubmissionTracking] = {
+//    http.GET[SubmissionTracking](s"$FHDSSServiceUrl/fhdds/subscription/getSubmission/$formBundleId")
+    val url = s"$FHDSSServiceUrl/fhdds/subscription/getSubmission/$formBundleId"
+    http.get(url"$url").execute[SubmissionTracking]
+  }
 
   def deleteSubmission(formBundleId: String)(implicit hc: HeaderCarrier) =
     http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/subscription/deleteSubmission/$formBundleId")
 
-  def addEnrolment(userId: String, groupId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
+  def addEnrolment(userId: String, groupId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo")
+    val url = s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo"
+    http.get(url"$url").execute[HttpResponse]
+  }
 
-  def allocateEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo ")
+  def allocateEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo ")
+    val url = s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo"
+    http.get(url"$url").execute[HttpResponse]
+  }
 
   def deleteEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) =
     http.DELETE[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo ")
 
-  def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/user-info/$userId")
+  def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/user-info/$userId")
+    val url = s"$FHDSSServiceUrl/fhdds/user-info/$userId"
+    http.get(url"$url").execute[HttpResponse]
+  }
 
-  def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
+  def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/group-info/$groupId")
+    val url = s"$FHDSSServiceUrl/fhdds/group-info/$groupId"
+    http.get(url"$url").execute[HttpResponse]
+  }
 
-  def es2Info(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
+  def es2Info(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId")
+    val url = s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId"
+    http.get(url"$url").execute[HttpResponse]
+  }
 
-  def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
+  def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+//    http.GET[HttpResponse](s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId")
+    val url = s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId"
+    http.get(url"$url").execute[HttpResponse]
+  }
   // $COVERAGE-ON$
 }

@@ -47,6 +47,6 @@ class BusinessCustomerFrontendConnector @Inject() (
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"
 //    http.GET[BusinessRegistrationDetails](getUrl)
-    http.get(url"${getUrl}").execute[BusinessRegistrationDetails]
+    http.get(url"$getUrl").execute[BusinessRegistrationDetails]
   }
 }

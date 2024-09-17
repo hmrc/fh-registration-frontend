@@ -59,7 +59,8 @@ class DefaultEmailVerificationConnector @Inject() (
     }
 
 //    http.POST(url, Json.toJson(Email(email)))
-    http.post(url"$url")
+    http
+      .post(url"$url")
       .withBody(Json.toJson(Email(email)))
       .execute[HttpResponse]
       .map(_ => true)
@@ -93,7 +94,8 @@ class DefaultEmailVerificationConnector @Inject() (
 
     val url = s"$emailVerificationBaseUrl/verification-requests"
 //    http.POST[EmailVerificationRequest, Boolean](url, request).map(_ => true)
-    http.post(url"$url")
+    http
+      .post(url"$url")
       .withBody[EmailVerificationRequest](request)
       .execute[HttpResponse]
       .map(_ => true)
