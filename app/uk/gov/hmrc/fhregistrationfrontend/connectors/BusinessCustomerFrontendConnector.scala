@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
 import scala.concurrent.ExecutionContext
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HttpClient, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -46,6 +46,7 @@ class BusinessCustomerFrontendConnector @Inject() (
   def getReviewDetails(implicit request: Request[_], ec: ExecutionContext): Future[BusinessRegistrationDetails] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     val getUrl = s"$serviceUrl/$businessCustomerUri/$reviewDetailsUri/$service"
-    http.GET[BusinessRegistrationDetails](getUrl)
+//    http.GET[BusinessRegistrationDetails](getUrl)
+    http.get(url"${getUrl}").execute[BusinessRegistrationDetails]
   }
 }
