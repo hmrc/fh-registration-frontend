@@ -96,7 +96,8 @@ class DefaultEmailVerificationConnector @Inject() (
 //    http.POST[EmailVerificationRequest, Boolean](url, request).map(_ => true)
     http
       .post(url"$url")
-      .withBody[EmailVerificationRequest](request)
+//      .withBody[EmailVerificationRequest](request)
+      .withBody(Json.toJson(request))
       .execute[HttpResponse]
       .map(_ => true)
   }

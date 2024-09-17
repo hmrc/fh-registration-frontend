@@ -70,10 +70,11 @@ class AddressLookupConnector @Inject() (
     val url = s"$endpoint/lookup"
     http
       .post(url"$url")
-      .withBody[LookupAddressByPostcode](lookupAddressByPostcode)
+//      .withBody[LookupAddressByPostcode](lookupAddressByPostcode)
+      .withBody(Json.toJson(lookupAddressByPostcode))
       .setHeader(headers.head)
       .execute[List[AddressRecord]]
-      .map(found => {
+      .map { found =>
         val results = found.map { address =>
           AddressRecord(
             address.id,
@@ -84,10 +85,11 @@ class AddressLookupConnector @Inject() (
         }
         val addressRec = RecordSet(results)
         AddressLookupSuccessResponse(addressRec)
-      }).recover({ case e: Exception =>
+      }
+      .recover { case e: Exception =>
         logger.warn(s"Error received from address lookup service: $e")
         AddressLookupErrorResponse(e)
-      })
+      }
 
   }
 

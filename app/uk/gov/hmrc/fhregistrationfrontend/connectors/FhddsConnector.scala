@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import java.util.Date
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Reads
+import play.api.libs.json.{Json, Reads}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
@@ -65,7 +65,8 @@ class FhddsConnector @Inject() (
     }
 
 //    http.POST[SubmissionRequest, SubmissionResponse](url, request)
-    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
+//    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[SubmissionResponse]
   }
 
   def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit
@@ -76,7 +77,8 @@ class FhddsConnector @Inject() (
 //      request
 //    )
     val url = s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber"
-    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
+//    http.post(url"$url").withBody[SubmissionRequest](request).execute[SubmissionResponse]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[SubmissionResponse]
   }
 
   def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit
@@ -87,7 +89,8 @@ class FhddsConnector @Inject() (
 //      request
 //    )
     val url = s"$FHDSSServiceUrl/fhdds/subscription/withdrawal/$fhddsRegistrationNumber"
-    http.post(url"$url").withBody[WithdrawalRequest](request).execute[Date]
+//    http.post(url"$url").withBody[WithdrawalRequest](request).execute[Date]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[Date]
   }
 
   def deregister(fhddsRegistrationNumber: String, request: DeregistrationRequest)(implicit
@@ -98,7 +101,8 @@ class FhddsConnector @Inject() (
 //      request
 //    )
     val url = s"$FHDSSServiceUrl/fhdds/subscription/deregistration/$fhddsRegistrationNumber"
-    http.post(url"$url").withBody[DeregistrationRequest](request).execute[Date]
+//    http.post(url"$url").withBody[DeregistrationRequest](request).execute[Date]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[Date]
   }
 
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
