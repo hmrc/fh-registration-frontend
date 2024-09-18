@@ -47,8 +47,12 @@ class DefaultEmailVerificationConnector @Inject() (
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
     val url = s"$emailVerificationBaseUrl/verified-email-check"
-    implicit val customReads = new HttpReads[Boolean] {
-      override def read(method: String, url: String, response: HttpResponse): Boolean =
+    
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(Email(email)))
+      .execute[HttpResponse]
+      .map(response => {
         response.status match {
           case status if status == 200 => true
           case status if status == 404 => false
@@ -57,15 +61,7 @@ class DefaultEmailVerificationConnector @Inject() (
           case status if is5xx(status) =>
             throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 502)
         }
-    }
-
-//    TODO: Implement custom reads into below
-//    http.POST(url, Json.toJson(Email(email)))
-    http
-      .post(url"$url")
-      .withBody(Json.toJson(Email(email)))
-      .execute[HttpResponse]
-      .map(_ => true)
+      })
   }
 
   override def requestVerification(email: String, emailHash: String)(implicit
