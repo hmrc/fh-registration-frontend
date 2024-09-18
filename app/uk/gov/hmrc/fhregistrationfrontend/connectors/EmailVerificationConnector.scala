@@ -59,6 +59,7 @@ class DefaultEmailVerificationConnector @Inject() (
         }
     }
 
+//    TODO: Implement custom reads into below
 //    http.POST(url, Json.toJson(Email(email)))
     http
       .post(url"$url")
@@ -94,10 +95,8 @@ class DefaultEmailVerificationConnector @Inject() (
     }
 
     val url = s"$emailVerificationBaseUrl/verification-requests"
-//    http.POST[EmailVerificationRequest, Boolean](url, request).map(_ => true)
     http
       .post(url"$url")
-//      .withBody[EmailVerificationRequest](request)
       .withBody(Json.toJson(request))
       .execute[HttpResponse]
       .map(_ => true)
