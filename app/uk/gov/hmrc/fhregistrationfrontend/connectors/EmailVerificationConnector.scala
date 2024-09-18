@@ -47,7 +47,7 @@ class DefaultEmailVerificationConnector @Inject() (
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
     val url = s"$emailVerificationBaseUrl/verified-email-check"
-    
+
     http
       .post(url"$url")
       .withBody(Json.toJson(Email(email)))
