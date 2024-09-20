@@ -19,6 +19,8 @@ package uk.gov.hmrc.fhregistrationfrontend.models
 import models.UserAnswers
 import play.api.libs.json._
 import uk.gov.hmrc.crypto.EncryptedValue
+import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
 import java.time.Instant
@@ -48,4 +50,26 @@ object ModelEncryption {
     )
   }
 
+  def encryptSessionCache(
+    sessionCache: SummaryConfirmation
+  ): (String, Option[String], Option[WithdrawalReason], Option[DeregistrationReason]) =
+    (
+      sessionCache.id,
+      sessionCache.summaryForPrintKey,
+      sessionCache.withdrawalReason,
+      sessionCache.deregistrationReason
+    )
+
+  def decryptSessionCache(
+    id: String,
+    summaryForPrintKey: Option[String],
+    withdrawalReason: Option[WithdrawalReason],
+    deregistrationReason: Option[DeregistrationReason]
+  ): SummaryConfirmation =
+    SummaryConfirmation(
+      id = id,
+      summaryForPrintKey = summaryForPrintKey,
+      withdrawalReason = withdrawalReason,
+      deregistrationReason = deregistrationReason
+    )
 }

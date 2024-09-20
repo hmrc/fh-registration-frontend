@@ -16,7 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json._
+import uk.gov.hmrc.crypto.EncryptedValue
+import uk.gov.hmrc.crypto.json.CryptoFormats
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 
@@ -28,5 +31,31 @@ case class SummaryConfirmation(
 )
 
 object SummaryConfirmation {
-  implicit val formats: OFormat[SummaryConfirmation] = Json.format[SummaryConfirmation]
+  object MongoFormats {
+    implicit val cryptEncryptedValueFormats: Format[EncryptedValue] = CryptoFormats.encryptedValueFormat
+
+    def reads(): Reads[SummaryConfirmation] =
+      (
+        (__ \ "id").read[String] and
+          (__ \ "summaryForPrintKey").readNullable[String] and
+          (__ \ "withdrawalReason").readNullable[WithdrawalReason] and
+          (__ \ "deregistrationReason").readNullable[DeregistrationReason]
+      )(ModelEncryption.decryptSessionCache _)
+
+    def writes: OWrites[SummaryConfirmation] = new OWrites[SummaryConfirmation] {
+
+      override def writes(sessionCache: SummaryConfirmation): JsObject = {
+        val encryptedValue: (String, Option[String], Option[WithdrawalReason], Option[DeregistrationReason]) =
+          ModelEncryption.encryptSessionCache(sessionCache)
+        Json.obj(
+          "id"                   -> encryptedValue._1,
+          "summaryForPrintKey"   -> encryptedValue._2,
+          "withdrawalReason"     -> encryptedValue._3,
+          "deregistrationReason" -> encryptedValue._4
+        )
+      }
+    }
+
+    def formats: OFormat[SummaryConfirmation] = OFormat(reads(), writes)
+  }
 }
