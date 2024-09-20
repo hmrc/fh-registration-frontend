@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.repositories
 
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes, ReplaceOptions, Updates}
+import org.mongodb.scala.model._
 import play.api.libs.json.Format
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.SummaryConfirmation
@@ -38,7 +38,7 @@ class SummaryConfirmationRepository @Inject() (
     extends PlayMongoRepository[SummaryConfirmation](
       collectionName = "summary-confirmation",
       mongoComponent = mongoComponent,
-      domainFormat = SummaryConfirmation.formats,
+      domainFormat = SummaryConfirmation.MongoFormats.formats,
       indexes = Seq(
         IndexModel(
           Indexes.ascending("lastUpdated"),
