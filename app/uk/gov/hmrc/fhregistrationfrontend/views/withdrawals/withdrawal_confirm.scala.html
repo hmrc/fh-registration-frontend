@@ -28,70 +28,75 @@
 @(confirmationForm: Form[WithdrawalConfirmation], defaultEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+}
+
+@titlePrefix = @{
+    if (confirmationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
 
 @title = @{
-  Messages("fh.withdrawalConfirm.title")
+    Messages("fh.withdrawalConfirm.title")
 }
 
-@layout(title = title,  pageScripts = Some(pageScripts)) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, Symbol("novalidate") -> "novalidate") {
-    @if(confirmationForm.errors.nonEmpty) {
+@layout(title = titlePrefix + title,  pageScripts = Some(pageScripts)) {
 
-      @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
-        confirmationForm.errors.map { error =>
-          ErrorLink(
-            href = Some(s"#${error.key}"),
-            content = Text(messages(s"fh.withdrawalConfirm.${error.key}.${error.message}"))
-          )
-        }
-        ,
-        title = Text(messages("fh.generic.error"))))
-    }
-    @viewHelpers.govUkRadios(Radios(
-      fieldset = Some(Fieldset(
-        legend = Some(Legend(
-          content = Text(title),
-          classes = "govuk-fieldset__legend--m",
-          isPageHeading = true
-        ))
-      )),
-      idPrefix = Some(confirmKey),
-      name = confirmKey,
-      errorMessage = if (confirmationForm(confirmKey).hasErrors) {
-        Some(ErrorMessage(content = Text(messages(s"fh.withdrawalConfirm.confirm.${confirmationForm(confirmKey).error.head.message}"))))
-      } else None,
-      items = Seq(
-        RadioItem(
-          content = Text(messages("fh.generic.yes")),
-          value = Some("true"),
-          checked = confirmationForm(confirmKey).value.toList.contains("true"),
-        ),
-        RadioItem(
-          content = Text(messages("fh.generic.no")),
-          value = Some("false"),
-          checked = confirmationForm(confirmKey).value.toList.contains("false")
-        )
-      )
-    ))
+@viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, Symbol("novalidate") -> "novalidate") {
+@if(confirmationForm.errors.nonEmpty) {
 
-    @viewHelpers.govukWarningText(WarningText(
-      iconFallbackText = Some(messages("generic.warning")),
-      content = Text(messages("fh.withdrawalConfirm.email.warningText", defaultEmail.get))
-    ))
+@viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+confirmationForm.errors.map { error =>
+ErrorLink(
+href = Some(s"#${error.key}"),
+content = Text(messages(s"fh.withdrawalConfirm.${error.key}.${error.message}"))
+)
+}
+,
+title = Text(messages("fh.generic.error"))))
+}
+@viewHelpers.govUkRadios(Radios(
+fieldset = Some(Fieldset(
+legend = Some(Legend(
+content = Text(title),
+classes = "govuk-fieldset__legend--l",
+isPageHeading = true
+))
+)),
+idPrefix = Some(confirmKey),
+name = confirmKey,
+errorMessage = if (confirmationForm(confirmKey).hasErrors) {
+Some(ErrorMessage(content = Text(messages(s"fh.withdrawalConfirm.confirm.${confirmationForm(confirmKey).error.head.message}"))))
+} else None,
+items = Seq(
+RadioItem(
+content = Text(messages("fh.generic.yes")),
+value = Some("true"),
+checked = confirmationForm(confirmKey).value.toList.contains("true"),
+),
+RadioItem(
+content = Text(messages("fh.generic.no")),
+value = Some("false"),
+checked = confirmationForm(confirmKey).value.toList.contains("false")
+)
+)
+))
 
-    @viewHelpers.govukButton(Button(
-      content = Text(messages("button.confirm")),
-      inputType = Some("submit")
-    ))
+@viewHelpers.govukWarningText(WarningText(
+iconFallbackText = Some(messages("generic.warning")),
+content = Text(messages("fh.withdrawalConfirm.email.warningText", defaultEmail.get))
+))
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">
+@viewHelpers.govukButton(Button(
+content = Text(messages("button.confirm")),
+inputType = Some("submit")
+))
+
+<p class="govuk-body">
+    <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.checkStatus}">
         @Messages("link.cancel")
-      </a>
-    </p>
+    </a>
+</p>
 
-  }
+}
 }
