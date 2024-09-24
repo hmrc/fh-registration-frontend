@@ -20,8 +20,12 @@ import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum}
+import java.time.{Instant, LocalDate}
+import play.api.libs.json.Json
+import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
 class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {
+  implicit val encryption: Encryption = app.injector.instanceOf[Encryption]
 
   val id: String = "1"
   val summaryForPrintKey: String = "testData"
@@ -36,23 +40,33 @@ class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {
     deregistrationReason = Some(deregistrationReason)
   )
 
+  val fhSessionCache: SummaryConfirmationCache = SummaryConfirmationCache(
+    id = "id",
+    fhSession = summaryConfirmation,
+    createdAt = LocalDate.of(2023, 7, 8).atStartOfDay(),
+    lastModified = Instant.ofEpochSecond(1)
+  )
+
   "SummaryConfirmation Encryption" should {
     "Encrypt data" in {
-      val result = ModelEncryption.encryptSessionCache(summaryConfirmation)
+      val result = ModelEncryption.encryptSessionCache(fhSessionCache)
 
-      result._1 mustBe summaryConfirmation.id
-      result._2 mustBe summaryConfirmation.summaryForPrintKey
-      result._3 mustBe summaryConfirmation.withdrawalReason
-      result._4 mustBe summaryConfirmation.deregistrationReason
+      result._1 mustBe fhSessionCache.id
+      Json
+        .parse(encryption.crypto.decrypt(result._2, fhSessionCache.id))
+        .as[SummaryConfirmation] mustBe fhSessionCache.fhSession
+      result._3 mustBe fhSessionCache.createdAt
+      result._4 mustBe fhSessionCache.lastModified
     }
+
     "Decrypt data into model" in {
       val result = ModelEncryption.decryptSessionCache(
-        id = summaryConfirmation.id,
-        summaryForPrintKey = summaryConfirmation.summaryForPrintKey,
-        withdrawalReason = summaryConfirmation.withdrawalReason,
-        deregistrationReason = summaryConfirmation.deregistrationReason
+        id = fhSessionCache.id,
+        fhSession = encryption.crypto.encrypt(Json.toJson(fhSessionCache.fhSession).toString, fhSessionCache.id),
+        createdAt = fhSessionCache.createdAt,
+        lastModified = fhSessionCache.lastModified
       )
-      result mustBe summaryConfirmation
+      result mustBe fhSessionCache
     }
   }
 

@@ -38,7 +38,7 @@ class SummaryConfirmationRepository @Inject() (
     extends PlayMongoRepository[SummaryConfirmation](
       collectionName = "summary-confirmation",
       mongoComponent = mongoComponent,
-      domainFormat = SummaryConfirmation.MongoFormats.formats,
+      domainFormat = SummaryConfirmation.formats,
       indexes = Seq(
         IndexModel(
           Indexes.ascending("lastUpdated"),
