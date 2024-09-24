@@ -21,13 +21,10 @@ import play.api.libs.json._
 import uk.gov.hmrc.crypto.EncryptedValue
 import uk.gov.hmrc.crypto.json.CryptoFormats
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
-import java.time.{Instant, LocalDateTime}
 
 case class SummaryConfirmationCache(
   id: String,
-  fhSession: SummaryConfirmation,
-  createdAt: LocalDateTime,
-  lastModified: Instant = Instant.now()
+  fhSession: SummaryConfirmation
 )
 
 object SummaryConfirmationCache {
@@ -38,22 +35,18 @@ object SummaryConfirmationCache {
     def reads()(implicit encryption: Encryption): Reads[SummaryConfirmationCache] =
       (
         (__ \ "id").read[String] and
-          (__ \ "fhSession").read[EncryptedValue] and
-          (__ \ "createdAt").read[LocalDateTime] and
-          (__ \ "lastModified").read[Instant]
+          (__ \ "fhSession").read[EncryptedValue]
       )(ModelEncryption.decryptSessionCache _)
 
     def writes(implicit encryption: Encryption): OWrites[SummaryConfirmationCache] =
       new OWrites[SummaryConfirmationCache] {
 
         override def writes(sessionCache: SummaryConfirmationCache): JsObject = {
-          val encryptedValue: (String, EncryptedValue, LocalDateTime, Instant) =
+          val encryptedValue: (String, EncryptedValue) =
             ModelEncryption.encryptSessionCache(sessionCache)
           Json.obj(
-            "id"           -> encryptedValue._1,
-            "fhSession"    -> encryptedValue._2,
-            "createdAt"    -> encryptedValue._3,
-            "lastModified" -> encryptedValue._4
+            "id"        -> encryptedValue._1,
+            "fhSession" -> encryptedValue._2
           )
         }
       }

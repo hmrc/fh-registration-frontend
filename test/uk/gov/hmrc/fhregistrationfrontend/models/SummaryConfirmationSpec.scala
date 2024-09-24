@@ -42,9 +42,7 @@ class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {
 
   val fhSessionCache: SummaryConfirmationCache = SummaryConfirmationCache(
     id = "id",
-    fhSession = summaryConfirmation,
-    createdAt = LocalDate.of(2023, 7, 8).atStartOfDay(),
-    lastModified = Instant.ofEpochSecond(1)
+    fhSession = summaryConfirmation
   )
 
   "SummaryConfirmation Encryption" should {
@@ -55,16 +53,12 @@ class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {
       Json
         .parse(encryption.crypto.decrypt(result._2, fhSessionCache.id))
         .as[SummaryConfirmation] mustBe fhSessionCache.fhSession
-      result._3 mustBe fhSessionCache.createdAt
-      result._4 mustBe fhSessionCache.lastModified
     }
 
     "Decrypt data into model" in {
       val result = ModelEncryption.decryptSessionCache(
         id = fhSessionCache.id,
-        fhSession = encryption.crypto.encrypt(Json.toJson(fhSessionCache.fhSession).toString, fhSessionCache.id),
-        createdAt = fhSessionCache.createdAt,
-        lastModified = fhSessionCache.lastModified
+        fhSession = encryption.crypto.encrypt(Json.toJson(fhSessionCache.fhSession).toString, fhSessionCache.id)
       )
       result mustBe fhSessionCache
     }

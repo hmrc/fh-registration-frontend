@@ -50,24 +50,18 @@ object ModelEncryption {
 
   def encryptSessionCache(
     sessionCache: SummaryConfirmationCache
-  )(implicit encryption: Encryption): (String, EncryptedValue, LocalDateTime, Instant) =
+  )(implicit encryption: Encryption): (String, EncryptedValue) =
     (
       sessionCache.id,
-      encryption.crypto.encrypt(Json.toJson(sessionCache.fhSession).toString, sessionCache.id),
-      sessionCache.createdAt,
-      sessionCache.lastModified
+      encryption.crypto.encrypt(Json.toJson(sessionCache.fhSession).toString, sessionCache.id)
     )
 
   def decryptSessionCache(
     id: String,
-    fhSession: EncryptedValue,
-    createdAt: LocalDateTime,
-    lastModified: Instant
+    fhSession: EncryptedValue
   )(implicit encryption: Encryption): SummaryConfirmationCache =
     SummaryConfirmationCache(
       id = id,
-      fhSession = Json.parse(encryption.crypto.decrypt(fhSession, id)).as[SummaryConfirmation],
-      createdAt = createdAt,
-      lastModified = lastModified
+      fhSession = Json.parse(encryption.crypto.decrypt(fhSession, id)).as[SummaryConfirmation]
     )
 }
