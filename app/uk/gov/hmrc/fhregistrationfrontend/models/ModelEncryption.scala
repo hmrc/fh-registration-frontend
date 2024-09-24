@@ -19,11 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.models
 import models.UserAnswers
 import play.api.libs.json._
 import uk.gov.hmrc.crypto.EncryptedValue
-import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
-import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
-import java.time.Instant
+import java.time.{Instant, LocalDateTime}
 
 object ModelEncryption {
   def encryptUserAnswers(
@@ -51,25 +49,25 @@ object ModelEncryption {
   }
 
   def encryptSessionCache(
-    sessionCache: SummaryConfirmation
-  ): (String, Option[String], Option[WithdrawalReason], Option[DeregistrationReason]) =
+    sessionCache: SummaryConfirmationCache
+  )(implicit encryption: Encryption): (String, EncryptedValue, LocalDateTime, Instant) =
     (
       sessionCache.id,
-      sessionCache.summaryForPrintKey,
-      sessionCache.withdrawalReason,
-      sessionCache.deregistrationReason
+      encryption.crypto.encrypt(Json.toJson(sessionCache.fhSession).toString, sessionCache.id),
+      sessionCache.createdAt,
+      sessionCache.lastModified
     )
 
   def decryptSessionCache(
     id: String,
-    summaryForPrintKey: Option[String],
-    withdrawalReason: Option[WithdrawalReason],
-    deregistrationReason: Option[DeregistrationReason]
-  ): SummaryConfirmation =
-    SummaryConfirmation(
+    fhSession: EncryptedValue,
+    createdAt: LocalDateTime,
+    lastModified: Instant
+  )(implicit encryption: Encryption): SummaryConfirmationCache =
+    SummaryConfirmationCache(
       id = id,
-      summaryForPrintKey = summaryForPrintKey,
-      withdrawalReason = withdrawalReason,
-      deregistrationReason = deregistrationReason
+      fhSession = Json.parse(encryption.crypto.decrypt(fhSession, id)).as[SummaryConfirmation],
+      createdAt = createdAt,
+      lastModified = lastModified
     )
 }
