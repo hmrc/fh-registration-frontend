@@ -21,7 +21,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.crypto.EncryptedValue
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
-import java.time.Instant
+import java.time.{Instant, LocalDateTime}
 
 object ModelEncryption {
   def encryptUserAnswers(
@@ -48,4 +48,20 @@ object ModelEncryption {
     )
   }
 
+  def encryptSessionCache(
+    sessionCache: SummaryConfirmationCache
+  )(implicit encryption: Encryption): (String, EncryptedValue) =
+    (
+      sessionCache.id,
+      encryption.crypto.encrypt(Json.toJson(sessionCache.fhSession).toString, sessionCache.id)
+    )
+
+  def decryptSessionCache(
+    id: String,
+    fhSession: EncryptedValue
+  )(implicit encryption: Encryption): SummaryConfirmationCache =
+    SummaryConfirmationCache(
+      id = id,
+      fhSession = Json.parse(encryption.crypto.decrypt(fhSession, id)).as[SummaryConfirmation]
+    )
 }

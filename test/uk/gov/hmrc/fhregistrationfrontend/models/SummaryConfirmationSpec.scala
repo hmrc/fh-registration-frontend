@@ -17,40 +17,51 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
-import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum}
+import java.time.{Instant, LocalDate}
+import play.api.libs.json.Json
+import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
 class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {
+  implicit val encryption: Encryption = app.injector.instanceOf[Encryption]
 
   val id: String = "1"
   val summaryForPrintKey: String = "testData"
   val withdrawalReason: WithdrawalReason = WithdrawalReason(WithdrawalReasonEnum.NoLongerApplicable, Some("testData"))
   val deregistrationReason: DeregistrationReason =
     DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, Some("testData"))
-  val summaryConfirmation: SummaryConfirmation =
-    new SummaryConfirmation(id, Some(summaryForPrintKey), Some(withdrawalReason), Some(deregistrationReason))
-  val summaryConfirmationJson: JsValue = Json.parse(
-    """{
-      | "id":"1",
-      | "summaryForPrintKey":"testData",
-      | "withdrawalReason":
-      |   {"withdrawalReason":"No Longer Applicable",
-      |    "withdrawalReasonOther":"testData"},
-      | "deregistrationReason":
-      |   {"deregistrationReason":"CEASES_REGISTERABLE_SCHEME",
-      |    "deregistrationReasonOther":"testData"}
-      |}
-      |""".stripMargin
+
+  val summaryConfirmation: SummaryConfirmation = SummaryConfirmation(
+    id = "id",
+    summaryForPrintKey = Some(summaryForPrintKey),
+    withdrawalReason = Some(withdrawalReason),
+    deregistrationReason = Some(deregistrationReason)
   )
 
-  "SummaryConfirmation" should {
-    "convert model to json" in {
-      Json.toJson(summaryConfirmation) mustBe summaryConfirmationJson
+  val fhSessionCache: SummaryConfirmationCache = SummaryConfirmationCache(
+    id = "id",
+    fhSession = summaryConfirmation
+  )
+
+  "SummaryConfirmation Encryption" should {
+    "Encrypt data" in {
+      val result = ModelEncryption.encryptSessionCache(fhSessionCache)
+
+      result._1 mustBe fhSessionCache.id
+      Json
+        .parse(encryption.crypto.decrypt(result._2, fhSessionCache.id))
+        .as[SummaryConfirmation] mustBe fhSessionCache.fhSession
     }
-    "convert Json to model" in {
-      Json.fromJson[SummaryConfirmation](summaryConfirmationJson).get mustBe summaryConfirmation
+
+    "Decrypt data into model" in {
+      val result = ModelEncryption.decryptSessionCache(
+        id = fhSessionCache.id,
+        fhSession = encryption.crypto.encrypt(Json.toJson(fhSessionCache.fhSession).toString, fhSessionCache.id)
+      )
+      result mustBe fhSessionCache
     }
   }
+
 }
