@@ -61,3 +61,4 @@ object SummaryConfirmationCache {
     def formats(implicit encryption: Encryption): OFormat[SummaryConfirmationCache] = OFormat(reads(), writes)
   }
 }
+
