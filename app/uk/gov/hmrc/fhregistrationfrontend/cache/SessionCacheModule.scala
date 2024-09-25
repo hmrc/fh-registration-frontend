@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.cache
 import javax.inject.{Inject, Singleton}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.cache.client
 import uk.gov.hmrc.http.cache.client.SessionCache
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -32,7 +32,7 @@ class SessionCacheModule extends Module {
 
 @Singleton
 class DefaultSessionCache @Inject() (
-  override val http: HttpClient,
+  val http: HttpClientV2,
   val configuration: Configuration,
   environment: Environment
 ) extends ServicesConfig(configuration) with client.SessionCache {
@@ -47,4 +47,6 @@ class DefaultSessionCache @Inject() (
     "cachable.session-cache.domain",
     throw new Exception(s"Could not find config 'cachable.session-cache.domain'")
   )
+
+  override def httpClientV2: HttpClientV2 = http
 }

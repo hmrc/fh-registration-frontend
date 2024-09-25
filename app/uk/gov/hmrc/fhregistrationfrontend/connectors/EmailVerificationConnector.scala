@@ -24,9 +24,11 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.client.HttpClientV2
 
 @ImplementedBy(classOf[DefaultEmailVerificationConnector])
 trait EmailVerificationConnector {
@@ -36,7 +38,7 @@ trait EmailVerificationConnector {
 
 class DefaultEmailVerificationConnector @Inject() (
   appConfig: AppConfig,
-  val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment
 )(implicit ec: ExecutionContext)
@@ -45,8 +47,12 @@ class DefaultEmailVerificationConnector @Inject() (
 
   override def isVerified(email: String)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
     val url = s"$emailVerificationBaseUrl/verified-email-check"
-    implicit val customReads = new HttpReads[Boolean] {
-      override def read(method: String, url: String, response: HttpResponse): Boolean =
+
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(Email(email)))
+      .execute[HttpResponse]
+      .map { response =>
         response.status match {
           case status if status == 200 => true
           case status if status == 404 => false
@@ -55,9 +61,7 @@ class DefaultEmailVerificationConnector @Inject() (
           case status if is5xx(status) =>
             throw UpstreamErrorResponse("email-verification/verified-email-check error", response.status, 502)
         }
-    }
-
-    http.POST(url, Json.toJson(Email(email)))
+      }
   }
 
   override def requestVerification(email: String, emailHash: String)(implicit
@@ -87,6 +91,10 @@ class DefaultEmailVerificationConnector @Inject() (
     }
 
     val url = s"$emailVerificationBaseUrl/verification-requests"
-    http.POST[EmailVerificationRequest, Boolean](url, request).map(_ => true)
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(request))
+      .execute[HttpResponse]
+      .map(_ => true)
   }
 }

@@ -24,6 +24,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, Recor
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +36,7 @@ case class LookupAddressByPostcode(postcode: String, filter: Option[String])
 
 @Singleton
 class AddressLookupConnector @Inject() (
-  val http: HttpClient,
+  val http: HttpClientV2,
   val runModeConfiguration: Configuration,
   environment: Environment,
   frontendAppConfig: FrontendAppConfig
@@ -49,8 +50,12 @@ class AddressLookupConnector @Inject() (
     logger.info("Lookup function is being called")
     val lookupAddressByPostcode = LookupAddressByPostcode(postcode, filter)
 
+    val url = s"$endpoint/lookup"
     http
-      .POST[LookupAddressByPostcode, List[AddressRecord]](s"$endpoint/lookup", lookupAddressByPostcode, headers)
+      .post(url"$url")
+      .withBody(Json.toJson(lookupAddressByPostcode))
+      .setHeader(headers.head)
+      .execute[List[AddressRecord]]
       .map { found =>
         val results = found.map { address =>
           AddressRecord(
@@ -62,16 +67,22 @@ class AddressLookupConnector @Inject() (
         }
         val addressRec = RecordSet(results)
         AddressLookupSuccessResponse(addressRec)
-      } recover { case e: Exception =>
-      logger.warn(s"Error received from address lookup service: $e")
-      AddressLookupErrorResponse(e)
-    }
+      }
+      .recover { case e: Exception =>
+        logger.warn(s"Error received from address lookup service: $e")
+        AddressLookupErrorResponse(e)
+      }
+
   }
 
   def lookupById(id: String)(implicit hc: HeaderCarrier): Future[Option[AddressRecord]] = {
     logger.info("lookupById function is being called")
+    val url = s"$endpoint/lookup/$id"
     http
-      .POST[String, Array[AddressRecord]](s"$endpoint/lookup/$id", id, headers)
+      .post(url"$url")
+      .withBody(id)
+      .setHeader(headers.head)
+      .execute[Array[AddressRecord]]
       .map(_.headOption)
   }
 

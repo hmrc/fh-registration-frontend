@@ -59,7 +59,7 @@ class InMemoryShortLivedCache(userId: String) extends ShortLivedCache {
 
   override def remove(
     cacheId: String
-  )(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[HttpResponse] = {
+  )(implicit hc: HeaderCarrier, executionContext: ExecutionContext): Future[Unit] = {
     require(userId == cacheId)
     cache.clear()
     Future successful HttpResponse(200, "200")

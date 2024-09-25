@@ -20,11 +20,13 @@ import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc.{Request, Result, Results}
+import play.api.mvc.{Request, RequestHeader, Result, Results}
 import play.twirl.api.Html
 import play.api.mvc.Results.Status
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[DefaultErrorHandler])
 trait ErrorHandler {
@@ -35,15 +37,16 @@ trait ErrorHandler {
 
 @Singleton
 class DefaultErrorHandler @Inject() (val messagesApi: MessagesApi, val configuration: Configuration, views: Views)(
-  implicit val appConfig: AppConfig
+  implicit val appConfig: AppConfig,
+  implicit val ec: ExecutionContext
 ) extends FrontendErrorHandler with ErrorHandler {
 
   import Results._
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
-    rh: Request[_]
-  ): Html =
-    views.error_template(pageTitle, heading, message)
+    rh: RequestHeader
+  ): Future[Html] =
+    Future.successful(views.error_template(pageTitle, heading, message))
 
   override def applicationError(implicit request: Request[_]): Result =
     Ok(views.application_error())
