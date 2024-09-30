@@ -37,9 +37,9 @@ trait AppConfig {
 
   val isNewSummaryConfirmationCacheEnabled: Boolean
   val isNewSessionRepositoryCacheEnabled: Boolean
+  val isMongoDBCacheEnabled: Boolean
 
   def serviceMaxNoOfAttempts: Int
-
 }
 
 @Singleton
@@ -86,6 +86,8 @@ class FrontendAppConfig @Inject() (
   override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
   override def serviceMaxNoOfAttempts: Int = _serviceMaxNoOfAttempts
+  override val isMongoDBCacheEnabled: Boolean = getBoolean("isMongoDBCacheEnabled")
+
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =
