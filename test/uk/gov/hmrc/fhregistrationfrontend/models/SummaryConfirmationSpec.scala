@@ -17,11 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum}
-import java.time.{Instant, LocalDate}
-import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
 class SummaryConfirmationSpec extends ControllerSpecWithGuiceApp {

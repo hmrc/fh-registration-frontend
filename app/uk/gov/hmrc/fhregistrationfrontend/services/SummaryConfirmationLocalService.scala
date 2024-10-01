@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.Inject
 
-class SummaryConfirmationLocalService @Inject()(
+class SummaryConfirmationLocalService @Inject() (
   sessionRepository: SummaryConfirmationRepository,
   FHDDSConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
