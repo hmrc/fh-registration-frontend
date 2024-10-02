@@ -89,8 +89,6 @@ class FrontendAppConfig @Inject() (
   override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
   override def serviceMaxNoOfAttempts: Int = _serviceMaxNoOfAttempts
-//  override def isMongoDBCacheEnabled: Boolean = getBoolean("isMongoDBCacheEnabled")
-//override def isMongoDBCacheEnabled: Boolean = _isMongoDBCacheEnabled
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function
   val staticBusinessTypes: Seq[String] =
