@@ -15,144 +15,60 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.services
-import uk.gov.hmrc.fhregistrationfrontend.repositories.SummaryConfirmationRepository
 import services.helper.Retryable
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
-import uk.gov.hmrc.fhregistrationfrontend.models.SummaryConfirmation
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class SummaryConfirmationService @Inject() (
-  sessionRepository: SummaryConfirmationRepository,
-  FHDDSConfig: FrontendAppConfig
-)(implicit ec: ExecutionContext)
-    extends Retryable {
+  fhSessionKeystoreService: KeyStoreService,
+  fhSessionLocalService: SummaryConfirmationLocalService,
+  fhConfig: FrontendAppConfig
+) extends Retryable {
 
-  private def cleanFHDDSSessionCache(
-    id: String,
-    summaryForPrintKey: Option[String] = None,
-    withdrawalReason: Option[WithdrawalReason] = None,
-    deregistrationReason: Option[DeregistrationReason] = None
-  ): SummaryConfirmation =
-    SummaryConfirmation(id, summaryForPrintKey, withdrawalReason, deregistrationReason)
+  private def featureSwitchCheck[A](expr1: => Future[A], expr2: => Future[A]): Future[A] =
+    if (fhConfig.isMongoDBCacheEnabled) expr1 else expr2
 
-  private def getSummaryId(implicit hc: HeaderCarrier): String =
-    hc.sessionId match {
-      case Some(id) => id.value
-      case None     => throw new RuntimeException("Unexpected error, No session id found")
-    }
+  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[Any] =
+    featureSwitchCheck(
+      fhSessionLocalService.saveSummaryForPrint(o),
+      fhSessionKeystoreService.saveSummaryForPrint(o)
+    )
 
-  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    logger.info("[EISessionLocalService][storeSummaryForPrintKey]: Storing Summary For Print Key to Session...")
+  def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]] =
+    featureSwitchCheck(
+      fhSessionLocalService.fetchSummaryForPrint(),
+      fhSessionKeystoreService.fetchSummaryForPrint()
+    )
 
-    val fUpdatedCache = sessionRepository.get(getSummaryId) map {
-      case Some(summaryConfirmation) => summaryConfirmation.copy(summaryForPrintKey = Some(o))
-      case None                      => cleanFHDDSSessionCache(getSummaryId, summaryForPrintKey = Some(o))
-    }
+  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Any] =
+    featureSwitchCheck(
+      fhSessionLocalService.saveWithdrawalReason(reason),
+      fhSessionKeystoreService.saveWithdrawalReason(reason)
+    )
 
-    fUpdatedCache.flatMap { updatedCache =>
-      setSessionCacheDataWithRetry(updatedCache)
-        .map(_ => updatedCache.summaryForPrintKey)
-        .recover { case e: Throwable =>
-          logger.warn(
-            "[SummaryConfirmationService][storeSummaryForPrintKey] Error storing Summary For Print Key to Session: " + e.getMessage
-          )
-          None
-        }
-    }
-  }
-
-  def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    logger.info("[SummaryConfirmationService][fetchSummaryForPrintKey]: Reading Summary For Print Key From Session...")
-
-    retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
-      sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.summaryForPrintKey))
-      .recover { case e: Throwable =>
-        logger.warn(
-          "[SummaryConfirmationService][fetchSummaryForPrintKey] Reading Summary For Print Key From Session" + e.getMessage
-        )
-        None
-      }
-  }
-
-  def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] = {
-    logger.info("[SummaryConfirmationService][storeWithdrawalReason]: Storing Withdrawal Reason to Session...")
-
-    val fUpdatedCache = sessionRepository.get(getSummaryId) map {
-      case Some(summaryConfirmation) => summaryConfirmation.copy(withdrawalReason = Some(reason))
-      case None                      => cleanFHDDSSessionCache(getSummaryId, withdrawalReason = Some(reason))
-    }
-
-    fUpdatedCache.flatMap { updatedCache =>
-      setSessionCacheDataWithRetry(updatedCache)
-        .map(_ => updatedCache.withdrawalReason)
-        .recover { case e: Throwable =>
-          logger.warn(
-            "[SummaryConfirmationService][storeWithdrawalReason] Error storing Withdrawal Reason to Session: " + e.getMessage
-          )
-          None
-        }
-    }
-  }
-
-  def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] = {
-    logger.info("[SummaryConfirmationService][fetchWithdrawalReason]: Reading Withdrawal Reason From Session...")
-
-    retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
-      sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.withdrawalReason))
-      .recover { case e: Throwable =>
-        logger.warn(
-          "[SummaryConfirmationService][fetchWithdrawalReason] Reading Withdrawal Reason From Session" + e.getMessage
-        )
-        None
-      }
-  }
+  def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] =
+    featureSwitchCheck(
+      fhSessionLocalService.fetchWithdrawalReason(),
+      fhSessionKeystoreService.fetchWithdrawalReason()
+    )
 
   def saveDeregistrationReason(
     reason: DeregistrationReason
-  )(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] = {
-    logger.info("[SummaryConfirmationService][storeAgentData]: Storing Deregistration Reason to Session...")
+  )(implicit hc: HeaderCarrier): Future[Any] =
+    featureSwitchCheck(
+      fhSessionLocalService.saveDeregistrationReason(reason),
+      fhSessionKeystoreService.saveDeregistrationReason(reason)
+    )
 
-    val fUpdatedCache = sessionRepository.get(getSummaryId) map {
-      case Some(summaryConfirmation) => summaryConfirmation.copy(deregistrationReason = Some(reason))
-      case None                      => cleanFHDDSSessionCache(getSummaryId, deregistrationReason = Some(reason))
-    }
-
-    fUpdatedCache.flatMap { updatedCache =>
-      setSessionCacheDataWithRetry(updatedCache)
-        .map(_ => updatedCache.deregistrationReason)
-        .recover { case e: Throwable =>
-          logger.warn(
-            "[SummaryConfirmationService][storeDeregistrationReason]: Error storing Deregistration Reason to Session: " + e.getMessage
-          )
-          None
-        }
-    }
-  }
-
-  def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] = {
-    logger.info("[EISessionLocalService][fetchDeregistrationReason]: Reading Deregistration Reason From Session...")
-
-    retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
-      sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.deregistrationReason))
-      .recover { case e: Throwable =>
-        logger.warn(
-          "[SummaryConfirmationService][fetchDeregistrationReason] Reading Deregistration ReasonFrom Session" + e.getMessage
-        )
-        None
-      }
-  }
-
-  private def setSessionCacheDataWithRetry(updatedSession: SummaryConfirmation): Future[Boolean] =
-    retry(FHDDSConfig.serviceMaxNoOfAttempts, "Storing FHDDS Session") {
-      sessionRepository.set(updatedSession)
-    }
+  def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] =
+    featureSwitchCheck(
+      fhSessionLocalService.fetchDeregistrationReason(),
+      fhSessionKeystoreService.fetchDeregistrationReason()
+    )
 
 }

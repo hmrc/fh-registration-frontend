@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.services
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -25,75 +24,141 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
+import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.models.SummaryConfirmation
 import uk.gov.hmrc.fhregistrationfrontend.repositories.SummaryConfirmationRepository
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.SessionId
+import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite with ScalaFutures with MockitoSugar {
+  def createEiSessionService =
+    new SummaryConfirmationService(mockKeyStoreService, mockSummaryConfirmationLocalService, mockFhConfig)
 
   lazy val mockSessionRepository: SummaryConfirmationRepository = mock[SummaryConfirmationRepository]
-  lazy val summaryConfirmationService = new SummaryConfirmationService(mockSessionRepository, mockEiConfig)
+  lazy val summaryConfirmationLocalService = new SummaryConfirmationLocalService(mockSessionRepository, mockFhConfigInstance)
+  lazy val mockKeyStoreService: KeyStoreService = mock[KeyStoreService]
+  lazy val mockSummaryConfirmationLocalService: SummaryConfirmationLocalService = mock[SummaryConfirmationLocalService]
 
-  lazy val mockEiConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
+  lazy val mockFhConfigInstance: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   val summaryConfirmationCache: SummaryConfirmation =
     SummaryConfirmation("sessionId", Some("summaryForPrintKey"), None, None)
 
+  val deregistrationReason: DeregistrationReason =DeregistrationReason(
+    DeregistrationReasonEnum.NoLongerNeeded,
+     Some("saveDeregistrationReason")
+  )
+
   val id = "sessionId"
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(id)))
 
+  lazy val mockFhConfig: FrontendAppConfig = mock[FrontendAppConfig]
+
   "Summary Confirmation Service" should {
 
-    "return exception if exception thrown in fetchSummaryForPrint" in {
-      when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
+    "isMongoDBCacheEnabled returns true" when {
+      "saveSummaryForPrint is called" should {
+        "call fhSessionLocalService and return expected data if cache successful" in {
+          val sessionService = createEiSessionService
+          implicit val hc: HeaderCarrier = HeaderCarrier()
 
-      intercept[Exception] {
-        val result = Await.result(summaryConfirmationService.fetchSummaryForPrint()(hc), 20 seconds)
-        result mustBe new Exception
+          when(mockFhConfig.isMongoDBCacheEnabled).thenReturn(true)
+          when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any())).thenReturn(Future(Some("summaryForPrintKey")))
+
+          val result = Await.result(sessionService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+          result must be(Some("summaryForPrintKey"))
+        }
       }
     }
 
-    "return exception if exception thrown in fetchWithdrawalReason" in {
+    "isMongoDBCacheEnabled returns false" when {
+      "fetchSummaryForPrint is called" should {
+        "call fhSessionKeystoreService and return expected data if cache successful" in {
+          val sessionService = createEiSessionService
+          implicit val hc: HeaderCarrier = HeaderCarrier()
 
-      when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
+          when(mockFhConfig.isMongoDBCacheEnabled).thenReturn(false)
+          when(mockKeyStoreService.fetchSummaryForPrint()(any())).thenReturn(Future(Some("summaryForPrintKey")))
 
-      intercept[Exception] {
-        val result = Await.result(summaryConfirmationService.fetchWithdrawalReason()(hc), 20 seconds)
-        result mustBe new Exception
+          val result = Await.result(sessionService.fetchSummaryForPrint(), 10 seconds)
+          result must be(Some("summaryForPrintKey"))
+        }
       }
     }
 
-    "no Exception thrown if future Successful when calling fetchWithdrawalReason" in {
-      when(mockSessionRepository.get(any())).thenReturn(Future.successful(None))
+      "return exception if exception thrown in fetchSummaryForPrint" in {
 
-      val result = Await.result(summaryConfirmationService.fetchWithdrawalReason()(hc), 20 seconds)
+        when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
 
-      result mustBe None
-    }
+        intercept[Exception] {
+          val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(hc), 20 seconds)
+          result mustBe new Exception
+        }
+      }
 
-    "return exception if exception thrown in saveSummaryForPrint" in {
+      "return exception if exception thrown in fetchWithdrawalReason" in {
+
+        when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
+
+        intercept[Exception] {
+          val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
+          result mustBe new Exception
+        }
+      }
+
+      "no Exception thrown if future Successful when calling fetchWithdrawalReason" in {
+
+        when(mockSessionRepository.get(any())).thenReturn(Future.successful(None))
+
+        val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
+
+        result mustBe None
+      }
+
+      "return exception if exception thrown in saveSummaryForPrint" in {
+
+        when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
+        when(mockSessionRepository.set(any())).thenReturn(Future.failed(new Exception))
+
+        intercept[Exception] {
+          val result = Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+          result must be(new Exception)
+        }
+      }
+
+      "return data if future Successful when calling saveSummaryForPrint" in {
+
+        when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val result = Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+        result mustBe Some("summaryForPrintKey")
+      }
+
+
+    "return exception if exception thrown in saveDeregistrationReason" in {
 
       when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
       when(mockSessionRepository.set(any())).thenReturn(Future.failed(new Exception))
 
       intercept[Exception] {
-        val result = Await.result(summaryConfirmationService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+        val result = Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
         result must be(new Exception)
       }
     }
 
-    "return agent data if future Successful when calling saveSummaryForPrint" in {
+    "return data if future Successful when calling saveDeregistrationReason" in {
 
       when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      val result = Await.result(summaryConfirmationService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
-      result mustBe Some("summaryForPrintKey")
+      val result = Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
+      result mustBe Some(deregistrationReason)
     }
-  }
 
+  }
 }
