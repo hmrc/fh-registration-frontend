@@ -20,7 +20,7 @@ import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, localNew, oneOf, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress, PreviousAddress}
 
 import java.time.LocalDate
 
@@ -39,7 +39,6 @@ object MainBusinessAddressForm {
 
   val mainPreviousAddressMapping = mainPreviousAddressKey -> address
   val previousAddressStartdateMapping = previousAddressStartdateKey -> localNew
-  case class PreviousAddress(address: Address, startDate: LocalDate)
 
   val previousAddressForm = Form(
     mapping(
