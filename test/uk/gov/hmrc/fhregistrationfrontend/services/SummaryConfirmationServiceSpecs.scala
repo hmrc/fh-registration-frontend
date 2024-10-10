@@ -65,7 +65,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
         "call fhSessionLocalService and return expected data if cache successful" in {
           val sessionService = createEiSessionService
           implicit val hc: HeaderCarrier = HeaderCarrier()
-
+          
           when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(true)
           when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any()))
             .thenReturn(Future(Some("summaryForPrintKey")))
