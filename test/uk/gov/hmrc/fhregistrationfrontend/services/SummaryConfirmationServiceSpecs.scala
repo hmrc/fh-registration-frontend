@@ -38,19 +38,19 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
     new SummaryConfirmationService(mockKeyStoreService, mockSummaryConfirmationLocalService, mockFhConfig)
 
   lazy val mockSessionRepository: SummaryConfirmationRepository = mock[SummaryConfirmationRepository]
-  lazy val summaryConfirmationLocalService = new SummaryConfirmationLocalService(mockSessionRepository, mockFhConfigInstance)
+  lazy val summaryConfirmationLocalService =
+    new SummaryConfirmationLocalService(mockSessionRepository, mockFhConfigInstance)
   lazy val mockKeyStoreService: KeyStoreService = mock[KeyStoreService]
   lazy val mockSummaryConfirmationLocalService: SummaryConfirmationLocalService = mock[SummaryConfirmationLocalService]
-
 
   lazy val mockFhConfigInstance: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   val summaryConfirmationCache: SummaryConfirmation =
     SummaryConfirmation("sessionId", Some("summaryForPrintKey"), None, None)
 
-  val deregistrationReason: DeregistrationReason =DeregistrationReason(
+  val deregistrationReason: DeregistrationReason = DeregistrationReason(
     DeregistrationReasonEnum.NoLongerNeeded,
-     Some("saveDeregistrationReason")
+    Some("saveDeregistrationReason")
   )
 
   val id = "sessionId"
@@ -67,7 +67,8 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
           implicit val hc: HeaderCarrier = HeaderCarrier()
 
           when(mockFhConfig.isMongoDBCacheEnabled).thenReturn(true)
-          when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any())).thenReturn(Future(Some("summaryForPrintKey")))
+          when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any()))
+            .thenReturn(Future(Some("summaryForPrintKey")))
 
           val result = Await.result(sessionService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
           result must be(Some("summaryForPrintKey"))
@@ -90,55 +91,56 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       }
     }
 
-      "return exception if exception thrown in fetchSummaryForPrint" in {
+    "return exception if exception thrown in fetchSummaryForPrint" in {
 
-        when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
+      when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
 
-        intercept[Exception] {
-          val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(hc), 20 seconds)
-          result mustBe new Exception
-        }
+      intercept[Exception] {
+        val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(hc), 20 seconds)
+        result mustBe new Exception
       }
+    }
 
-      "return exception if exception thrown in fetchWithdrawalReason" in {
+    "return exception if exception thrown in fetchWithdrawalReason" in {
 
-        when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
+      when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
 
-        intercept[Exception] {
-          val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
-          result mustBe new Exception
-        }
-      }
-
-      "no Exception thrown if future Successful when calling fetchWithdrawalReason" in {
-
-        when(mockSessionRepository.get(any())).thenReturn(Future.successful(None))
-
+      intercept[Exception] {
         val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
-
-        result mustBe None
+        result mustBe new Exception
       }
+    }
 
-      "return exception if exception thrown in saveSummaryForPrint" in {
+    "no Exception thrown if future Successful when calling fetchWithdrawalReason" in {
 
-        when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
-        when(mockSessionRepository.set(any())).thenReturn(Future.failed(new Exception))
+      when(mockSessionRepository.get(any())).thenReturn(Future.successful(None))
 
-        intercept[Exception] {
-          val result = Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
-          result must be(new Exception)
-        }
+      val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
+
+      result mustBe None
+    }
+
+    "return exception if exception thrown in saveSummaryForPrint" in {
+
+      when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
+      when(mockSessionRepository.set(any())).thenReturn(Future.failed(new Exception))
+
+      intercept[Exception] {
+        val result =
+          Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+        result must be(new Exception)
       }
+    }
 
-      "return data if future Successful when calling saveSummaryForPrint" in {
+    "return data if future Successful when calling saveSummaryForPrint" in {
 
-        when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        val result = Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
-        result mustBe Some("summaryForPrintKey")
-      }
-
+      val result =
+        Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+      result mustBe Some("summaryForPrintKey")
+    }
 
     "return exception if exception thrown in saveDeregistrationReason" in {
 
@@ -146,7 +148,8 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.set(any())).thenReturn(Future.failed(new Exception))
 
       intercept[Exception] {
-        val result = Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
+        val result =
+          Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
         result must be(new Exception)
       }
     }
@@ -156,7 +159,8 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.get(any())).thenReturn(Future.successful(Some(summaryConfirmationCache)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      val result = Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
+      val result =
+        Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
       result mustBe Some(deregistrationReason)
     }
 
