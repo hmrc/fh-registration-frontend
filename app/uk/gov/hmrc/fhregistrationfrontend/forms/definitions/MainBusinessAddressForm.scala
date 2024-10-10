@@ -20,7 +20,9 @@ import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, localNew, oneOf, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
+
+import java.time.LocalDate
 
 object MainBusinessAddressForm {
 
@@ -30,19 +32,19 @@ object MainBusinessAddressForm {
   val previousAddressStartdateKey = "previousAddressStartdate"
 
   val timeAtCurrentAddressMapping = timeAtCurrentAddressKey -> oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)
-  val previousAddressMapping =
-    previousAddressKey -> (yesOrNo() onlyWhen (timeAtCurrentAddressMapping is "Less than 3 years"))
-  val mainPreviousAddressMapping = mainPreviousAddressKey -> (address onlyWhen (previousAddressMapping is Some(true)))
-  val previousAddressStartdateMapping =
-    previousAddressStartdateKey -> (localNew onlyWhen (previousAddressMapping is Some(true)))
+  val timeAtCurrentAddressForm: Form[String] = Form(timeAtCurrentAddressMapping)
 
-  val mainBusinessAddressForm = Form(
+  val hasPreviousAddressMapping = previousAddressKey -> yesOrNo()
+  val hasPreviousAddressForm: Form[Boolean] = Form(hasPreviousAddressMapping)
+
+  val mainPreviousAddressMapping = mainPreviousAddressKey -> address
+  val previousAddressStartdateMapping = previousAddressStartdateKey -> localNew
+  case class PreviousAddress(address: Address, startDate: LocalDate)
+
+  val previousAddressForm = Form(
     mapping(
-      timeAtCurrentAddressMapping,
-      previousAddressMapping,
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
-    )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
+    )(PreviousAddress.apply)(PreviousAddress.unapply)
   )
-
 }
