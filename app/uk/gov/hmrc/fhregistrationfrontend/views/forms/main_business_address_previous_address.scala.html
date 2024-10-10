@@ -63,83 +63,9 @@
   Messages("fh.mainBusinessAddress.title")
 }
 
-
-@addressHtml = {
-    @addressUK(
-    formDate = mainBusinessAddressForm,
-        params = AddressUKParams(
-          context = Some("mainPreviousAddressUK"),
-          name = "previousAddress",
-          label = Messages("fh.main_business_address.enter_previous.label"),
-          hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
-          error = Some(Messages("fh.main_business_address.enter_previous.error"))
-        )
-    )
-
-    <hr class="govuk-section-break govuk-section-break--m" />
-
-    @viewHelpers.govukDateInput(DateInput(
-        id = previousAddressStartdateKey,
-        hint = Some(Hint(
-            content = Text(Messages("fh.previousAddressStartdate.hint_text"))
-        )),
-        errorMessage = mainBusinessAddressForm(previousAddressStartdateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.previousAddressStartdate.${e.message}", e.args:_*)))),
-        items = Seq(
-            InputItem(name = s"$previousAddressStartdateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.day")),
-            InputItem(name = s"$previousAddressStartdateKey.month", classes = s"govuk-input--width-2 ${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.month")),
-            InputItem(name = s"$previousAddressStartdateKey.year", classes = s"govuk-input--width-4 ${if(inputHasErrors("year")){" govuk-input--error"} else {""}}", label=Some("Year"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.year"))),
-        fieldset = Some(Fieldset(
-            legend = Some(Legend(
-                content = Text(messages("fh.previousAddressStartdate.label")),
-                classes = "govuk-fieldset__legend--m",
-                isPageHeading = false
-            ))
-        ))
-    ))
-
-}
-
-@lessThan3Year = {
-      @viewHelpers.govUkRadios(Radios(
-          fieldset = Some(Fieldset(
-              legend = Some(Legend(
-                  content = Text(Messages("fh.main_business_address.previous.label")),
-                  classes = "govuk-fieldset__legend--m",
-                  isPageHeading = false
-              ))
-          )),
-          idPrefix = Some(previousAddressKey),
-          name = previousAddressKey,
-          errorMessage = if (mainBusinessAddressForm(previousAddressKey).hasErrors) {
-              Some(ErrorMessage(content = Text(messages("fh.previousAddress.error.required"))))
-          } else None,
-          hint = Some(Hint(
-           content = Text(Messages("fh.main_business_address.previous.hintText"))
-          )),
-          items = Seq(
-              RadioItem(
-                  content = Text(Messages("fh.generic.yes")),
-                  value = Some("true"),
-                  id = Some("previousAddress"),
-                  checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("true"),
-                  conditionalHtml = Some(addressHtml)
-              ),
-              RadioItem(
-                  content = Text(Messages("fh.generic.no")),
-                  id = Some("previousAddress-2"),
-                  checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("false"),
-                  value = Some("false")
-              )
-          )
-      ))
-}
-
 @layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
-
-
-
 
   @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
 
