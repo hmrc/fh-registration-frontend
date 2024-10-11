@@ -17,25 +17,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
-import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedAndMultipartFormBinding
-
-import java.time.LocalDate
-import java.util.Date
-import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{MessagesControllerComponents, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.{alternativeEmailKey, declarationForm, fullNameKey, jobTitleKey}
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.declarationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
-import uk.gov.hmrc.fhregistrationfrontend.services.{KeyStoreService, Save4LaterService}
-import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, SummaryConfirmationService}
+import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
+import java.time.LocalDate
+import java.util.Date
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -44,7 +42,7 @@ class DeclarationController @Inject() (
   links: ExternalUrls,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
-  keyStoreService: KeyStoreService,
+  keyStoreService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   journeys: Journeys,

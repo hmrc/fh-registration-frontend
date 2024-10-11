@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.scalatest.BeforeAndAfterEach
-import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
-import org.mockito.Mockito.{reset, when}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 
 import scala.concurrent.Future
-import play.api.test.Helpers._
 
 class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock with BeforeAndAfterEach {
 
-  val mockKeyStore = mock[KeyStoreService]
+  val mockKeyStore = mock[SummaryConfirmationService]
 
   val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockMcc, mockActions)(
     scala.concurrent.ExecutionContext.Implicits.global

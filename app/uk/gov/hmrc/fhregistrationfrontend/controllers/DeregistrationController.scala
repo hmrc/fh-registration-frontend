@@ -17,10 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
-
-import java.time.LocalDate
-import java.util.Date
-import javax.inject.Inject
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
@@ -29,10 +25,13 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.co
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.deregistrationReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
-import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
+import java.time.LocalDate
+import java.util.Date
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -40,7 +39,7 @@ class DeregistrationController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  keyStoreService: KeyStoreService,
+  SummaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -52,31 +51,31 @@ class DeregistrationController @Inject() (
   val EmailSessionKey = "deregistration_confirmation_email"
   val ProcessingTimestampSessionKey = "deregistration_processing_timestamp"
 
-  def startDeregister = Action {
+  def startDeregister: Action[AnyContent] = Action {
     Redirect(routes.DeregistrationController.reason)
   }
 
-  def reason = enrolledUserAction { implicit request =>
+  def reason: Action[AnyContent] = enrolledUserAction { implicit request =>
     Ok(views.deregistration_reason(deregistrationReasonForm))
   }
 
-  def postReason = enrolledUserAction.async { implicit request =>
+  def postReason: Action[AnyContent] = enrolledUserAction.async { implicit request =>
     deregistrationReasonForm
       .bindFromRequest()
       .fold(
         formWithError => Future successful BadRequest(views.deregistration_reason(formWithError)),
         deregistrationReason =>
-          keyStoreService
+          SummaryConfirmationService
             .saveDeregistrationReason(deregistrationReason)
             .map(_ => Redirect(routes.DeregistrationController.confirm))
       )
   }
 
-  def confirm = withDeregistrationReason { implicit request => reason =>
+  def confirm: Action[AnyContent] = withDeregistrationReason { implicit request => reason =>
     contactEmail map (email => Ok(views.deregistration_confirm(confirmationForm, email)))
   }
 
-  def postConfirmation = withDeregistrationReason { implicit request => reason =>
+  def postConfirmation: Action[AnyContent] = withDeregistrationReason { implicit request => reason =>
     confirmationForm
       .bindFromRequest()
       .fold(
@@ -89,9 +88,11 @@ class DeregistrationController @Inject() (
       )
   }
 
-  def withDeregistrationReason(f: EnrolledUserRequest[_] => DeregistrationReason => Future[Result]) =
+  def withDeregistrationReason(
+    f: EnrolledUserRequest[_] => DeregistrationReason => Future[Result]
+  ): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
-      keyStoreService.fetchDeregistrationReason() flatMap {
+      SummaryConfirmationService.fetchDeregistrationReason() flatMap {
         case Some(reason) => f(request)(reason)
         case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }
@@ -130,7 +131,7 @@ class DeregistrationController @Inject() (
       .deregister(request.registrationNumber, deregistrationRequest)
   }
 
-  def acknowledgment = userAction { implicit request =>
+  def acknowledgment: Action[AnyContent] = userAction { implicit request =>
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 

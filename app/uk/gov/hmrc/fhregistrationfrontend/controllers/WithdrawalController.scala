@@ -16,23 +16,22 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import java.time.LocalDate
-import java.util.Date
-import javax.inject.Inject
 import play.api.data.FormError
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions._
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
-import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.{Confirmation, WithdrawalConfirmation}
-import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.confirmationForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.WithdrawalConfirmation
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.WithdrawalConfirmationForm.withdrawalConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.withdrawalReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
-import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
+import java.time.LocalDate
+import java.util.Date
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Inject
@@ -40,7 +39,7 @@ class WithdrawalController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  keyStoreService: KeyStoreService,
+  keyStoreService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -51,15 +50,15 @@ class WithdrawalController @Inject() (
   val EmailSessionKey = "withdrawal_confirmation_email"
   val ProcessingTimestampSessionKey = "withdrawal_processing_timestamp"
 
-  def startWithdraw = Action {
+  def startWithdraw: Action[AnyContent] = Action {
     Redirect(routes.WithdrawalController.reason)
   }
 
-  def reason = enrolledUserAction { implicit request =>
+  def reason: Action[AnyContent] = enrolledUserAction { implicit request =>
     Ok(views.withdrawal_reason(withdrawalReasonForm))
   }
 
-  def postReason = enrolledUserAction.async { implicit request =>
+  def postReason: Action[AnyContent] = enrolledUserAction.async { implicit request =>
     withdrawalReasonForm
       .bindFromRequest()
       .fold(
@@ -71,7 +70,7 @@ class WithdrawalController @Inject() (
       )
   }
 
-  def withWithdrawalReason(f: EnrolledUserRequest[_] => WithdrawalReason => Future[Result]) =
+  def withWithdrawalReason(f: EnrolledUserRequest[_] => WithdrawalReason => Future[Result]): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
       keyStoreService.fetchWithdrawalReason() flatMap {
         case Some(reason) => f(request)(reason)
@@ -79,11 +78,11 @@ class WithdrawalController @Inject() (
       }
     }
 
-  def confirm = withWithdrawalReason { implicit request => reason =>
+  def confirm: Action[AnyContent] = withWithdrawalReason { implicit request => reason =>
     contactEmail map (email => Ok(views.withdrawal_confirm(withdrawalConfirmationForm, email)))
   }
 
-  def postConfirmation = withWithdrawalReason { implicit request => reason =>
+  def postConfirmation: Action[AnyContent] = withWithdrawalReason { implicit request => reason =>
     withdrawalConfirmationForm
       .bindFromRequest()
       .fold(
@@ -131,7 +130,7 @@ class WithdrawalController @Inject() (
       .withdraw(request.registrationNumber, withdrawRequest)
   }
 
-  def acknowledgment = userAction { implicit request =>
+  def acknowledgment: Action[AnyContent] = userAction { implicit request =>
     renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 

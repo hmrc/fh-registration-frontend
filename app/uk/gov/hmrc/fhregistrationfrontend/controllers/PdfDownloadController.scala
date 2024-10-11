@@ -16,25 +16,26 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import javax.inject.Inject
-import play.api.mvc.{MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
-import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
+
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 @Inject
 class PdfDownloadController @Inject() (
   ds: CommonPlayDependencies,
-  keyStoreService: KeyStoreService,
+  SummaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions
 )(implicit ec: ExecutionContext)
     extends AppController(ds, cc) {
 
   import actions._
-  def downloadPrintable() = userAction.async { implicit request =>
-    keyStoreService.fetchSummaryForPrint().map {
+  def downloadPrintable(): Action[AnyContent] = userAction.async { implicit request =>
+    SummaryConfirmationService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))
       case _ =>
