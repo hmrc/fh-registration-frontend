@@ -288,6 +288,7 @@ class ApplicationControllerSpec
       redirectLocation(result) shouldBe Some("/fhdds/form/contactPerson")
     }
 
+//    TODO: FIX TESTS
     "Redirect to last completed page" in {
       setupJourneyAction(rNumber = None, JourneyRequestBuilder.partiallyCompleteJourney)
       val request = FakeRequest()

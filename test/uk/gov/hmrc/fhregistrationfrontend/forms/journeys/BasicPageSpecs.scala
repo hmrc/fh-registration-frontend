@@ -26,6 +26,7 @@ import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
 class BasicPageSpecs extends UnitSpec with MockitoSugar {
 
+//  TODO: ARE THESE RELEVANT ANYMORE?
   "updatedAddresses" should {
     "return the new address" in {
 
