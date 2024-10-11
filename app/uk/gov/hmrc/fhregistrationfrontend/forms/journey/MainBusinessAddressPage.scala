@@ -25,7 +25,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAdd
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
-// TODO: Modify into using MainBusinessAddress rather than MainBusinessAddress
 case class MainBusinessAddressPage(
                                     mainPage: Page[String],
                                     hasPreviousAddressPage: Page[Boolean],
@@ -40,7 +39,7 @@ case class MainBusinessAddressPage(
   val mainSection = Some("any")
   val anyPreviousBusinessAddressSection = Some("any-previous-business-address")
   val previousBusinessAddressSection = Some("previous-business-address")
-  
+
   override def withData(data: MainBusinessAddress): Page[MainBusinessAddress] = {
     val newSection = if (data.timeAtCurrentAddress == MainBusinessAddress.TimeAtCurrentAddressOptions.head) section else None
     val hasPreviousAddressPageWithData = data.hasPreviousAddress.map(hpa => hasPreviousAddressPage withData hpa) getOrElse hasPreviousAddressPage
@@ -149,17 +148,21 @@ case class MainBusinessAddressPage(
       case _ => mainPage.render(bpr, navigation)
     }
 
-//  TODO: Update
   override val data: Option[MainBusinessAddress] =
-    mainPage.data map { hasEori =>
-      MainBusinessAddress(hasEori, eori = hasPreviousAddressPage.data, goodsImported = previousAddressPage.data)
+    mainPage.data map { timeAtCurrentAddress =>
+      MainBusinessAddress(
+        timeAtCurrentAddress,
+        hasPreviousAddress = hasPreviousAddressPage.data,
+        previousAddress = previousAddressPage.data.map(_.address),
+        previousAddressStartdate = previousAddressPage.data.map(_.startDate)
+      )
     }
 
-  //  TODO: Update
   override def pageStatus: PageStatus =
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
-    else if (!hasEori) Completed
-    else if (hasPreviousAddressPage.pageStatus == Completed && previousAddressPage.pageStatus == Completed) Completed
+    else if (!atCurrentAddressLessThan3Years) Completed
+    else if (hasPreviousAddressPage.pageStatus == Completed && !hasPreviousAddress) Completed
+    else if (hasPreviousAddressPage.pageStatus == Completed && hasPreviousAddress && previousAddressPage.pageStatus == Completed) Completed
     else InProgress
 
   override def delete: Option[Page[MainBusinessAddress]] = None
