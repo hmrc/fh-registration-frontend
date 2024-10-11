@@ -40,15 +40,18 @@ case class MainBusinessAddressPage(
   val mainSection = Some("any")
   val anyPreviousBusinessAddressSection = Some("any-previous-business-address")
   val previousBusinessAddressSection = Some("previous-business-address")
-
-  //  TODO: Update
+  
   override def withData(data: MainBusinessAddress): Page[MainBusinessAddress] = {
-    val newSection = if (data.hasEori) section else None
-    val hasPreviousAddressPageWithData = data.eoriValue.map(eori => hasPreviousAddressPage withData eori) getOrElse hasPreviousAddressPage
-    val previousAddressPageWithData = data.goodsImportedValue.map(goods => previousAddressPage withData goods) getOrElse previousAddressPage
+    val newSection = if (data.timeAtCurrentAddress == MainBusinessAddress.TimeAtCurrentAddressOptions.head) section else None
+    val hasPreviousAddressPageWithData = data.hasPreviousAddress.map(hpa => hasPreviousAddressPage withData hpa) getOrElse hasPreviousAddressPage
+    val previousAddressPageData = for {
+      previousAddress <- data.previousAddress
+      previousAddressStartDate <- data.previousAddressStartdate
+    } yield PreviousAddress(previousAddress, previousAddressStartDate)
+    val previousAddressPageWithData = previousAddressPageData.map(pa => previousAddressPage withData pa) getOrElse previousAddressPage
     this copy (
       section = newSection,
-      mainPage = mainPage withData data.hasEori,
+      mainPage = mainPage withData data.timeAtCurrentAddress,
       hasPreviousAddressPage = hasPreviousAddressPageWithData,
       previousAddressPage = previousAddressPageWithData
     )
@@ -87,11 +90,13 @@ case class MainBusinessAddressPage(
   override val withSubsection: PartialFunction[Option[String], Page[MainBusinessAddress]] = {
     case None          => this copy (section = mainSection)
     case `mainSection` => this copy (section = mainSection)
-    //  TODO: Update
-    case newSection if hasEori =>
+    case newSection if atCurrentAddressLessThan3Years && hasPreviousAddress =>
       this copy (section = newSection,
       hasPreviousAddressPage = hasPreviousAddressPage,
       previousAddressPage = previousAddressPage)
+    case newSection if atCurrentAddressLessThan3Years && !hasPreviousAddress =>
+      this copy(section = newSection,
+        hasPreviousAddressPage = hasPreviousAddressPage)
   }
 
   override def nextSubsection: Option[String] =
@@ -99,9 +104,9 @@ case class MainBusinessAddressPage(
       anyPreviousBusinessAddressSection
     else if (isMainSection && !atCurrentAddressLessThan3Years)
       None
-    else if (section == anyPreviousBusinessAddressSection && hasPreviousAddressPage.data.contains(true))
+    else if (section == anyPreviousBusinessAddressSection && hasPreviousAddress)
       previousBusinessAddressSection
-    else if (section == anyPreviousBusinessAddressSection && hasPreviousAddressPage.data.contains(false))
+    else if (section == anyPreviousBusinessAddressSection && !hasPreviousAddress)
       None
     else if (section == previousBusinessAddressSection)
       None
@@ -120,17 +125,18 @@ case class MainBusinessAddressPage(
     else
       None
 
-  
+
   override def lastSection: Option[String] =
-    if (atCurrentAddressLessThan3Years && hasPreviousAddressPage.data.contains(true))
+    if (atCurrentAddressLessThan3Years && hasPreviousAddress)
       previousBusinessAddressSection
-    else if (atCurrentAddressLessThan3Years && hasPreviousAddressPage.data.contains(true))
+    else if (atCurrentAddressLessThan3Years && !hasPreviousAddress)
       anyPreviousBusinessAddressSection
     else
       None
 
   private def isMainSection = section.isEmpty || (section == mainSection)
   private def atCurrentAddressLessThan3Years = mainPage.data contains MainBusinessAddress.TimeAtCurrentAddressOptions.head
+  private def hasPreviousAddress = hasPreviousAddressPage.data.contains(true)
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],
