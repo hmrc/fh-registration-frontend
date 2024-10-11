@@ -39,7 +39,7 @@ class WithdrawalController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  keyStoreService: SummaryConfirmationService,
+  summaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -64,7 +64,7 @@ class WithdrawalController @Inject() (
       .fold(
         formWithError => Future successful BadRequest(views.withdrawal_reason(formWithError)),
         withdrawalReason =>
-          keyStoreService
+          summaryConfirmationService
             .saveWithdrawalReason(withdrawalReason)
             .map(_ => Redirect(routes.WithdrawalController.confirm))
       )
@@ -72,7 +72,7 @@ class WithdrawalController @Inject() (
 
   def withWithdrawalReason(f: EnrolledUserRequest[_] => WithdrawalReason => Future[Result]): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
-      keyStoreService.fetchWithdrawalReason() flatMap {
+      summaryConfirmationService.fetchWithdrawalReason() flatMap {
         case Some(reason) => f(request)(reason)
         case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }

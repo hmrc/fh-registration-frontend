@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
 @Inject
 class PdfDownloadController @Inject() (
   ds: CommonPlayDependencies,
-  SummaryConfirmationService: SummaryConfirmationService,
+  summaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions
 )(implicit ec: ExecutionContext)
@@ -35,7 +35,7 @@ class PdfDownloadController @Inject() (
 
   import actions._
   def downloadPrintable(): Action[AnyContent] = userAction.async { implicit request =>
-    SummaryConfirmationService.fetchSummaryForPrint().map {
+    summaryConfirmationService.fetchSummaryForPrint().map {
       case Some(userSummary) =>
         Ok(Html(removeScriptTags(userSummary)))
       case _ =>

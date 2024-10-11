@@ -42,7 +42,7 @@ class DeclarationController @Inject() (
   links: ExternalUrls,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
-  keyStoreService: SummaryConfirmationService,
+  summaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   journeys: Journeys,
@@ -73,7 +73,7 @@ class DeclarationController @Inject() (
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Future[Option[Result]] =
-    keyStoreService.fetchSummaryForPrint() map { userSummary =>
+    summaryConfirmationService.fetchSummaryForPrint() map { userSummary =>
       for {
         email             <- request.session get emailSessionKey
         timestamp         <- request.session get processingTimestampSessionKey
@@ -115,7 +115,7 @@ class DeclarationController @Inject() (
               )
             ),
           _.flatMap { response =>
-            keyStoreService
+            summaryConfirmationService
               .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
               .map(_ => true)
               .recover { case _ => false }

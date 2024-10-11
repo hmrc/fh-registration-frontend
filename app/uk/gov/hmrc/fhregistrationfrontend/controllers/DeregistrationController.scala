@@ -39,7 +39,7 @@ class DeregistrationController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  SummaryConfirmationService: SummaryConfirmationService,
+  summaryConfirmationService: SummaryConfirmationService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -65,7 +65,7 @@ class DeregistrationController @Inject() (
       .fold(
         formWithError => Future successful BadRequest(views.deregistration_reason(formWithError)),
         deregistrationReason =>
-          SummaryConfirmationService
+          summaryConfirmationService
             .saveDeregistrationReason(deregistrationReason)
             .map(_ => Redirect(routes.DeregistrationController.confirm))
       )
@@ -92,7 +92,7 @@ class DeregistrationController @Inject() (
     f: EnrolledUserRequest[_] => DeregistrationReason => Future[Result]
   ): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
-      SummaryConfirmationService.fetchDeregistrationReason() flatMap {
+      summaryConfirmationService.fetchDeregistrationReason() flatMap {
         case Some(reason) => f(request)(reason)
         case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }

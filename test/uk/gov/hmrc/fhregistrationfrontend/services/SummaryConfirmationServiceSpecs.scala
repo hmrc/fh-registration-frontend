@@ -60,13 +60,13 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
 
   "Summary Confirmation Service" should {
 
-    "isMongoDBCacheEnabled returns true" when {
+    "isNewSummaryConfirmationCacheEnabled returns true" when {
       "saveSummaryForPrint is called" should {
         "call fhSessionLocalService and return expected data if cache successful" in {
           val sessionService = createEiSessionService
           implicit val hc: HeaderCarrier = HeaderCarrier()
 
-          when(mockFhConfig.isMongoDBCacheEnabled).thenReturn(true)
+          when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(true)
           when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any()))
             .thenReturn(Future(Some("summaryForPrintKey")))
 
@@ -76,13 +76,13 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       }
     }
 
-    "isMongoDBCacheEnabled returns false" when {
+    "isNewSummaryConfirmationCacheEnabled returns false" when {
       "fetchSummaryForPrint is called" should {
         "call fhSessionKeystoreService and return expected data if cache successful" in {
           val sessionService = createEiSessionService
           implicit val hc: HeaderCarrier = HeaderCarrier()
 
-          when(mockFhConfig.isMongoDBCacheEnabled).thenReturn(false)
+          when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(false)
           when(mockKeyStoreService.fetchSummaryForPrint()(any())).thenReturn(Future(Some("summaryForPrintKey")))
 
           val result = Await.result(sessionService.fetchSummaryForPrint(), 10 seconds)
