@@ -21,35 +21,36 @@ import play.api.libs.json.Format
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress, PreviousAddress}
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 // TODO: Modify into using MainBusinessAddress rather than MainBusinessAddress
 case class MainBusinessAddressPage(
-  mainPage: Page[Boolean],
-  eoriNumberPage: Page[String],
-  goodsPage: Page[Boolean],
-  section: Option[String] = None,
-  updatedAddresses: List[Address] = List.empty
+                                    mainPage: Page[String],
+                                    hasPreviousAddressPage: Page[Boolean],
+                                    previousAddressPage: Page[PreviousAddress],
+                                    section: Option[String] = None,
+                                    updatedAddresses: List[Address] = List.empty
 ) extends Page[MainBusinessAddress] {
 
   override val id: String = "mainBusinessAddress"
   override val format: Format[MainBusinessAddress] = MainBusinessAddress.format
 
   val mainSection = Some("any")
-  val eoriNumberSection = Some("enterEORI")
-  val goodsSection = Some("importingGoodsNotBelongingToBusiness")
+  val eoriNumberSection = Some("any-previous-business-address")
+  val goodsSection = Some("previous-business-address")
 
+  //  TODO: Update
   override def withData(data: MainBusinessAddress): Page[MainBusinessAddress] = {
     val newSection = if (data.hasEori) section else None
-    val eoriNumberPageWithData = data.eoriValue.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
-    val goodsPageWithData = data.goodsImportedValue.map(goods => goodsPage withData goods) getOrElse goodsPage
+    val hasPreviousAddressPageWithData = data.eoriValue.map(eori => hasPreviousAddressPage withData eori) getOrElse hasPreviousAddressPage
+    val previousAddressPageWithData = data.goodsImportedValue.map(goods => previousAddressPage withData goods) getOrElse previousAddressPage
     this copy (
       section = newSection,
       mainPage = mainPage withData data.hasEori,
-      eoriNumberPage = eoriNumberPageWithData,
-      goodsPage = goodsPageWithData
+      hasPreviousAddressPage = hasPreviousAddressPageWithData,
+      previousAddressPage = previousAddressPageWithData
     )
   }
 
@@ -57,19 +58,19 @@ case class MainBusinessAddressPage(
     r: Request[_]
   ): X =
     section match {
-      case Some("enterEORI") =>
-        eoriNumberPage.parseFromRequest(
+      case Some("any-previous-business-address") =>
+        hasPreviousAddressPage.parseFromRequest(
           withErrors,
-          en => {
-            val newValue = this copy (eoriNumberPage = en)
+          hpa => {
+            val newValue = this copy (hasPreviousAddressPage = hpa)
             withData(newValue)
           }
         )
-      case Some("importingGoodsNotBelongingToBusiness") =>
-        goodsPage.parseFromRequest(
+      case Some("previous-business-address") =>
+        previousAddressPage.parseFromRequest(
           withErrors,
-          goods => {
-            val newValue = this copy (goodsPage = goods)
+          pa => {
+            val newValue = this copy (previousAddressPage = pa)
             withData(newValue)
           }
         )
@@ -86,12 +87,14 @@ case class MainBusinessAddressPage(
   override val withSubsection: PartialFunction[Option[String], Page[MainBusinessAddress]] = {
     case None          => this copy (section = mainSection)
     case `mainSection` => this copy (section = mainSection)
+    //  TODO: Update
     case newSection if hasEori =>
       this copy (section = newSection,
-      eoriNumberPage = eoriNumberPage,
-      goodsPage = goodsPage)
+      hasPreviousAddressPage = hasPreviousAddressPage,
+      previousAddressPage = previousAddressPage)
   }
 
+  //  TODO: Update
   override def nextSubsection: Option[String] =
     if (isMainSection && hasEori)
       eoriNumberSection
@@ -104,6 +107,7 @@ case class MainBusinessAddressPage(
     else
       None
 
+  //  TODO: Update
   override def previousSubsection: Option[String] =
     if (isMainSection && hasEori)
       None
@@ -116,6 +120,8 @@ case class MainBusinessAddressPage(
     else
       None
 
+
+  //  TODO: Update
   override def lastSection: Option[String] =
     if (hasEori)
       goodsSection
@@ -123,6 +129,7 @@ case class MainBusinessAddressPage(
       None
 
   private def isMainSection = section.isEmpty || (section == mainSection)
+  //  TODO: Modify below for any previous address
   private def hasEori = mainPage.data contains true
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
@@ -131,20 +138,22 @@ case class MainBusinessAddressPage(
     appConfig: AppConfig
   ): Html =
     section match {
-      case Some("enterEORI")                            => eoriNumberPage.render(bpr, navigation)
-      case Some("importingGoodsNotBelongingToBusiness") => goodsPage.render(bpr, navigation)
+      case Some("any-previous-business-address")                            => hasPreviousAddressPage.render(bpr, navigation)
+      case Some("previous-business-address") => previousAddressPage.render(bpr, navigation)
       case _                                            => mainPage.render(bpr, navigation)
     }
 
+//  TODO: Update
   override val data: Option[MainBusinessAddress] =
     mainPage.data map { hasEori =>
-      MainBusinessAddress(hasEori, eori = eoriNumberPage.data, goodsImported = goodsPage.data)
+      MainBusinessAddress(hasEori, eori = hasPreviousAddressPage.data, goodsImported = previousAddressPage.data)
     }
 
+  //  TODO: Update
   override def pageStatus: PageStatus =
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
     else if (!hasEori) Completed
-    else if (eoriNumberPage.pageStatus == Completed && goodsPage.pageStatus == Completed) Completed
+    else if (hasPreviousAddressPage.pageStatus == Completed && previousAddressPage.pageStatus == Completed) Completed
     else InProgress
 
   override def delete: Option[Page[MainBusinessAddress]] = None

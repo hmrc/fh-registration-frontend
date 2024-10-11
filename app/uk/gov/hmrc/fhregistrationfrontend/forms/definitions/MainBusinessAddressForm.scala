@@ -40,7 +40,7 @@ object MainBusinessAddressForm {
   val mainPreviousAddressMapping = mainPreviousAddressKey -> address
   val previousAddressStartdateMapping = previousAddressStartdateKey -> localNew
 
-  val previousAddressForm = Form(
+  val previousAddressForm: Form[PreviousAddress] = Form(
     mapping(
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
