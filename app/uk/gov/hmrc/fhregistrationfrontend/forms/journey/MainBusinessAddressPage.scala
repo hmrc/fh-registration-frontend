@@ -38,8 +38,8 @@ case class MainBusinessAddressPage(
   override val format: Format[MainBusinessAddress] = MainBusinessAddress.format
 
   val mainSection = Some("any")
-  val eoriNumberSection = Some("any-previous-business-address")
-  val goodsSection = Some("previous-business-address")
+  val anyPreviousBusinessAddressSection = Some("any-previous-business-address")
+  val previousBusinessAddressSection = Some("previous-business-address")
 
   //  TODO: Update
   override def withData(data: MainBusinessAddress): Page[MainBusinessAddress] = {
@@ -94,43 +94,43 @@ case class MainBusinessAddressPage(
       previousAddressPage = previousAddressPage)
   }
 
-  //  TODO: Update
   override def nextSubsection: Option[String] =
-    if (isMainSection && hasEori)
-      eoriNumberSection
-    else if (isMainSection && !hasEori)
+    if (isMainSection && atCurrentAddressLessThan3Years)
+      anyPreviousBusinessAddressSection
+    else if (isMainSection && !atCurrentAddressLessThan3Years)
       None
-    else if (section == eoriNumberSection)
-      goodsSection
-    else if (section == goodsSection)
+    else if (section == anyPreviousBusinessAddressSection && hasPreviousAddressPage.data.contains(true))
+      previousBusinessAddressSection
+    else if (section == anyPreviousBusinessAddressSection && hasPreviousAddressPage.data.contains(false))
+      None
+    else if (section == previousBusinessAddressSection)
       None
     else
       None
 
-  //  TODO: Update
   override def previousSubsection: Option[String] =
-    if (isMainSection && hasEori)
+    if (isMainSection && atCurrentAddressLessThan3Years)
       None
-    else if (isMainSection && !hasEori)
+    else if (isMainSection && !atCurrentAddressLessThan3Years)
       None
-    else if (section == eoriNumberSection)
+    else if (section == anyPreviousBusinessAddressSection)
       mainSection
-    else if (section == goodsSection)
-      eoriNumberSection
+    else if (section == previousBusinessAddressSection)
+      anyPreviousBusinessAddressSection
     else
       None
 
-
-  //  TODO: Update
+  
   override def lastSection: Option[String] =
-    if (hasEori)
-      goodsSection
+    if (atCurrentAddressLessThan3Years && hasPreviousAddressPage.data.contains(true))
+      previousBusinessAddressSection
+    else if (atCurrentAddressLessThan3Years && hasPreviousAddressPage.data.contains(true))
+      anyPreviousBusinessAddressSection
     else
       None
 
   private def isMainSection = section.isEmpty || (section == mainSection)
-  //  TODO: Modify below for any previous address
-  private def hasEori = mainPage.data contains true
+  private def atCurrentAddressLessThan3Years = mainPage.data contains MainBusinessAddress.TimeAtCurrentAddressOptions.head
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
     request: Request[_],
@@ -138,9 +138,9 @@ case class MainBusinessAddressPage(
     appConfig: AppConfig
   ): Html =
     section match {
-      case Some("any-previous-business-address")                            => hasPreviousAddressPage.render(bpr, navigation)
+      case Some("any-previous-business-address") => hasPreviousAddressPage.render(bpr, navigation)
       case Some("previous-business-address") => previousAddressPage.render(bpr, navigation)
-      case _                                            => mainPage.render(bpr, navigation)
+      case _ => mainPage.render(bpr, navigation)
     }
 
 //  TODO: Update
