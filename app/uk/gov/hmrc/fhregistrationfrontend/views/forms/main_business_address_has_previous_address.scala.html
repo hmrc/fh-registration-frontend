@@ -91,20 +91,14 @@
           title = Text(messages("fh.generic.error"))))
       }
 
-    @PageHeading(
-      PageHeadingParams(
-        heading = title
-      )
-    )
-
     <div>TODO: UPDATE TO TEMPLATE AND STRIP OUT UNNECESSARY CODE</div>
 
     @viewHelpers.govUkRadios(Radios(
         fieldset = Some(Fieldset(
             legend = Some(Legend(
                 content = Text(Messages("fh.main_business_address.previous.label")),
-                classes = "govuk-fieldset__legend--m",
-                isPageHeading = false
+                classes = "govuk-fieldset__legend--l",
+                isPageHeading = true
             ))
         )),
         idPrefix = Some(previousAddressKey),
@@ -112,9 +106,6 @@
         errorMessage = if (mainBusinessAddressForm(previousAddressKey).hasErrors) {
             Some(ErrorMessage(content = Text(messages("fh.previousAddress.error.required"))))
         } else None,
-        hint = Some(Hint(
-            content = Text(Messages("fh.main_business_address.previous.hintText"))
-        )),
         items = Seq(
             RadioItem(
                 content = Text(Messages("fh.generic.yes")),
