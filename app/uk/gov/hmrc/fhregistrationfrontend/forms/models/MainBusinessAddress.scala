@@ -21,6 +21,10 @@ import play.api.libs.json.{Json, OFormat}
 
 case class PreviousAddress(address: Address, startDate: LocalDate)
 
+object PreviousAddress {
+  implicit val format: OFormat[PreviousAddress] = Json.format[PreviousAddress]
+}
+
 case class MainBusinessAddress(
   timeAtCurrentAddress: String,
   hasPreviousAddress: Option[Boolean],

@@ -37,7 +37,7 @@ object MainBusinessAddressForm {
   val hasPreviousAddressMapping = previousAddressKey -> yesOrNo()
   val hasPreviousAddressForm: Form[Boolean] = Form(hasPreviousAddressMapping)
 
-  val mainPreviousAddressMapping = mainPreviousAddressKey -> address
+  val mainPreviousAddressMapping = mainPreviousAddressKey           -> address
   val previousAddressStartdateMapping = previousAddressStartdateKey -> localNew
 
   val previousAddressForm: Form[PreviousAddress] = Form(

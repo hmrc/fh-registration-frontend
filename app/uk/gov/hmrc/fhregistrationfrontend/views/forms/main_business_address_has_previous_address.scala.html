@@ -28,7 +28,7 @@
 
 @this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
 
 @pageHeadBlock = {
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">

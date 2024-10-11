@@ -26,11 +26,11 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 
 case class MainBusinessAddressPage(
-                                    mainPage: Page[String],
-                                    hasPreviousAddressPage: Page[Boolean],
-                                    previousAddressPage: Page[PreviousAddress],
-                                    section: Option[String] = None,
-                                    updatedAddresses: List[Address] = List.empty
+  mainPage: Page[String],
+  hasPreviousAddressPage: Page[Boolean],
+  previousAddressPage: Page[PreviousAddress],
+  section: Option[String] = None,
+  updatedAddresses: List[Address] = List.empty
 ) extends Page[MainBusinessAddress] {
 
   override val id: String = "mainBusinessAddress"
@@ -41,13 +41,16 @@ case class MainBusinessAddressPage(
   val previousBusinessAddressSection = Some("previous-business-address")
 
   override def withData(data: MainBusinessAddress): Page[MainBusinessAddress] = {
-    val newSection = if (data.timeAtCurrentAddress == MainBusinessAddress.TimeAtCurrentAddressOptions.head) section else None
-    val hasPreviousAddressPageWithData = data.hasPreviousAddress.map(hpa => hasPreviousAddressPage withData hpa) getOrElse hasPreviousAddressPage
+    val newSection =
+      if (data.timeAtCurrentAddress == MainBusinessAddress.TimeAtCurrentAddressOptions.head) section else None
+    val hasPreviousAddressPageWithData =
+      data.hasPreviousAddress.map(hpa => hasPreviousAddressPage withData hpa) getOrElse hasPreviousAddressPage
     val previousAddressPageData = for {
-      previousAddress <- data.previousAddress
+      previousAddress          <- data.previousAddress
       previousAddressStartDate <- data.previousAddressStartdate
     } yield PreviousAddress(previousAddress, previousAddressStartDate)
-    val previousAddressPageWithData = previousAddressPageData.map(pa => previousAddressPage withData pa) getOrElse previousAddressPage
+    val previousAddressPageWithData =
+      previousAddressPageData.map(pa => previousAddressPage withData pa) getOrElse previousAddressPage
     this copy (
       section = newSection,
       mainPage = mainPage withData data.timeAtCurrentAddress,
@@ -94,8 +97,8 @@ case class MainBusinessAddressPage(
       hasPreviousAddressPage = hasPreviousAddressPage,
       previousAddressPage = previousAddressPage)
     case newSection if atCurrentAddressLessThan3Years && !hasPreviousAddress =>
-      this copy(section = newSection,
-        hasPreviousAddressPage = hasPreviousAddressPage)
+      this copy (section = newSection,
+      hasPreviousAddressPage = hasPreviousAddressPage)
   }
 
   override def nextSubsection: Option[String] =
@@ -124,7 +127,6 @@ case class MainBusinessAddressPage(
     else
       None
 
-
   override def lastSection: Option[String] =
     if (atCurrentAddressLessThan3Years && hasPreviousAddress)
       previousBusinessAddressSection
@@ -134,7 +136,8 @@ case class MainBusinessAddressPage(
       None
 
   private def isMainSection = section.isEmpty || (section == mainSection)
-  private def atCurrentAddressLessThan3Years = mainPage.data contains MainBusinessAddress.TimeAtCurrentAddressOptions.head
+  private def atCurrentAddressLessThan3Years =
+    mainPage.data contains MainBusinessAddress.TimeAtCurrentAddressOptions.head
   private def hasPreviousAddress = hasPreviousAddressPage.data.contains(true)
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
@@ -144,8 +147,8 @@ case class MainBusinessAddressPage(
   ): Html =
     section match {
       case Some("any-previous-business-address") => hasPreviousAddressPage.render(bpr, navigation)
-      case Some("previous-business-address") => previousAddressPage.render(bpr, navigation)
-      case _ => mainPage.render(bpr, navigation)
+      case Some("previous-business-address")     => previousAddressPage.render(bpr, navigation)
+      case _                                     => mainPage.render(bpr, navigation)
     }
 
   override val data: Option[MainBusinessAddress] =
@@ -162,7 +165,9 @@ case class MainBusinessAddressPage(
     if (mainPage.pageStatus != Completed) mainPage.pageStatus
     else if (!atCurrentAddressLessThan3Years) Completed
     else if (hasPreviousAddressPage.pageStatus == Completed && !hasPreviousAddress) Completed
-    else if (hasPreviousAddressPage.pageStatus == Completed && hasPreviousAddress && previousAddressPage.pageStatus == Completed) Completed
+    else if (
+      hasPreviousAddressPage.pageStatus == Completed && hasPreviousAddress && previousAddressPage.pageStatus == Completed
+    ) Completed
     else InProgress
 
   override def delete: Option[Page[MainBusinessAddress]] = None

@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
-@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.PreviousAddress
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
@@ -28,7 +28,7 @@
 
 @this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
-@(mainBusinessAddressForm: Form[MainBusinessAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[PreviousAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
 
 @pageHeadBlock = {
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
