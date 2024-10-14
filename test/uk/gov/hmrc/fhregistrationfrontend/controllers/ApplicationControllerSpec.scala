@@ -287,15 +287,14 @@ class ApplicationControllerSpec
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some("/fhdds/form/contactPerson")
     }
-
-//    TODO: FIX TESTS
+    
     "Redirect to last completed page" in {
       setupJourneyAction(rNumber = None, JourneyRequestBuilder.partiallyCompleteJourney)
       val request = FakeRequest()
       val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some("/fhdds/form/mainBusinessAddress")
+      redirectLocation(result) shouldBe Some("/fhdds/form/tradingName")
     }
 
     "Redirect to summary page" in {
