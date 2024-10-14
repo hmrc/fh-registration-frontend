@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum, DeregistrationReasonForm}
-import uk.gov.hmrc.fhregistrationfrontend.services.KeyStoreService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
 
@@ -33,7 +33,7 @@ class DeregistrationControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
   val desToForm = new DesToFormImpl()
-  val mockKeyStoreService = mock[KeyStoreService]
+  val mockKeyStoreService = mock[SummaryConfirmationService]
 
   val controller = new DeregistrationController(
     commonDependencies,

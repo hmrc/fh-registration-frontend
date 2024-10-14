@@ -31,7 +31,7 @@ class SummaryConfirmationService @Inject() (
 ) extends Retryable {
 
   private def featureSwitchCheck[A](expr1: => Future[A], expr2: => Future[A]): Future[A] =
-    if (fhConfig.isMongoDBCacheEnabled) expr1 else expr2
+    if (fhConfig.isNewSummaryConfirmationCacheEnabled) expr1 else expr2
 
   def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[Any] =
     featureSwitchCheck(

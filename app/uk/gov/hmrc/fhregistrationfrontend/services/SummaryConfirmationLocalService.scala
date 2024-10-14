@@ -71,7 +71,7 @@ class SummaryConfirmationLocalService @Inject() (
 
     retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
       sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.summaryForPrintKey))
+    }.map(optionFhSession => optionFhSession.flatMap(_.summaryForPrintKey))
       .recover { case e: Throwable =>
         logger.warn(
           "[SummaryConfirmationService][fetchSummaryForPrintKey] Reading Summary For Print Key From Session" + e.getMessage
@@ -105,7 +105,7 @@ class SummaryConfirmationLocalService @Inject() (
 
     retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
       sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.withdrawalReason))
+    }.map(optionFhSession => optionFhSession.flatMap(_.withdrawalReason))
       .recover { case e: Throwable =>
         logger.warn(
           "[SummaryConfirmationService][fetchWithdrawalReason] Reading Withdrawal Reason From Session" + e.getMessage
@@ -141,7 +141,7 @@ class SummaryConfirmationLocalService @Inject() (
 
     retry(FHDDSConfig.serviceMaxNoOfAttempts, "Reading Agent Date From Session") {
       sessionRepository.get(getSummaryId)
-    }.map(optionEiSession => optionEiSession.flatMap(_.deregistrationReason))
+    }.map(optionFhSession => optionFhSession.flatMap(_.deregistrationReason))
       .recover { case e: Throwable =>
         logger.warn(
           "[SummaryConfirmationService][fetchDeregistrationReason] Reading Deregistration ReasonFrom Session" + e.getMessage
