@@ -31,7 +31,9 @@
 }
 
 @legendClass = @{
-    if(params.legendAsSubHeading) {
+    if(params.legendAsHeading) {
+        "govuk-fieldset__legend govuk-fieldset__legend--l"
+    } else if (params.legendAsSubHeading) {
         "govuk-fieldset__legend govuk-fieldset__legend--m"
     } else {
         "govuk-fieldset__legend govuk-fieldset__legend--s"

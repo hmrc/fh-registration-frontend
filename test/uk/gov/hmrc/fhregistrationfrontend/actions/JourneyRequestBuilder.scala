@@ -36,7 +36,7 @@ trait JourneyRequestBuilder extends ActionSpecBase {
         case mainBusinessAddressPage.id =>
           page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
         case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] withData FormTestData.tradingName
-        case _ => page
+        case _                  => page
       }
     }
     new JourneyPages(pagesWithData)

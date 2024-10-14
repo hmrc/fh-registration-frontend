@@ -93,14 +93,13 @@
 
     <div>TODO: UPDATE TO TEMPLATE AND STRIP OUT UNNECESSARY CODE</div>
 
-    <div>TODO: Make label in addressUK page heading</div>
-
     @addressUK(
         formDate = mainBusinessAddressForm,
         params = AddressUKParams(
             context = Some("mainPreviousAddressUK"),
             name = "previousAddress",
             label = Messages("fh.main_business_address.enter_previous.label"),
+            legendAsHeading = true,
             hasErrors = mainBusinessAddressForm(s"$mainPreviousAddressKey").hasErrors,
             error = Some(Messages("fh.main_business_address.enter_previous.error"))
         )
