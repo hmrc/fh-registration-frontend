@@ -75,7 +75,7 @@
                 if(mainBusinessAddressForm(previousAddressKey).value.contains("true")) {
                   mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
                     ErrorLink(
-                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}") else if(error._1.key.contains("previousAddressStartdate"))  Some(s"#${deriveErrorKey(error._1.message)}")  else  Some(s"#${error._1.key}"),
+                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}") else Some(s"#${deriveErrorKey(error._1.message)}"),
                       content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
                     )
                   }
@@ -90,8 +90,6 @@
           ,
           title = Text(messages("fh.generic.error"))))
       }
-
-    <div>TODO: UPDATE TO TEMPLATE AND STRIP OUT UNNECESSARY CODE</div>
 
     @addressUK(
         formDate = mainBusinessAddressForm,
