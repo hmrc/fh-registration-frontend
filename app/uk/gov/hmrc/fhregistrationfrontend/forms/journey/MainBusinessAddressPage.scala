@@ -36,7 +36,7 @@ case class MainBusinessAddressPage(
   override val id: String = "mainBusinessAddress"
   override val format: Format[MainBusinessAddress] = MainBusinessAddress.format
 
-  val mainSection = Some("any")
+  val mainSection = Some("years-at-current-address")
   val anyPreviousBusinessAddressSection = Some("any-previous-business-address")
   val previousBusinessAddressSection = Some("previous-business-address")
 
