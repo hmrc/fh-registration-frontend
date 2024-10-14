@@ -60,7 +60,7 @@
 }
 
 @title = @{
-  Messages("fh.mainBusinessAddress.title")
+  Messages("fh.main_business_address.time_at_address.title")
 }
 
 @layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
@@ -93,7 +93,7 @@
 
     @PageHeading(
       PageHeadingParams(
-        heading = title
+        heading = messages("fh.mainBusinessAddress.title")
       )
     )
 
