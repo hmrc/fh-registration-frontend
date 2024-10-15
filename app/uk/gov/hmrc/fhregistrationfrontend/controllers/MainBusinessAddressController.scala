@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.mvc._
 import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
-import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.mainBusinessAddressForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.UnusedMainBusinessAddressForm.mainBusinessAddressForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation.noNavigation
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.views.Views

@@ -94,23 +94,61 @@ object Page {
     import BusinessPartner.businessPartnerFormat
     import ListWithTrackedChanges.listWithTrackedChangesFormat
 
-    val mainBusinessAddressPage: Page[MainBusinessAddress] = BasicPage[MainBusinessAddress](
-      "mainBusinessAddress",
-      MainBusinessAddressForm.mainBusinessAddressForm,
-      new FormRendering[MainBusinessAddress] {
-        override def render(
-          form: Form[MainBusinessAddress],
-          bpr: BusinessRegistrationDetails,
-          navigation: Navigation
-        )(implicit request: Request[_], messages: Messages, appConfig: AppConfig): Html =
-          views.main_business_address(
-            form,
-            bpr,
-            navigation,
-            uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress")
-          )
-      },
-      addressOnPage = _.previousAddress
+    val timeAtCurrentAddressPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("mainBusinessAddress")
+
+    val timeAtCurrentAddressPage = new BasicPage[String](
+      "years-at-current-address",
+      MainBusinessAddressForm.timeAtCurrentAddressForm,
+      new FormRendering[String] {
+        override def render(form: Form[String], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig
+        ): Html =
+          views.main_business_address_years_at_address(form, bpr, navigation, timeAtCurrentAddressPostUrl)
+      }
+    )
+
+    val anyPreviousBusinessAddressPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+        .saveWithSection("mainBusinessAddress", "any-previous-business-address")
+
+    val anyPreviousBusinessAddressPage = new BasicPage[Boolean](
+      "any-previous-business-address",
+      MainBusinessAddressForm.hasPreviousAddressForm,
+      new FormRendering[Boolean] {
+        override def render(form: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
+          request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig
+        ): Html =
+          views.main_business_address_has_previous_address(form, bpr, navigation, anyPreviousBusinessAddressPostUrl)
+      }
+    )
+
+    val previousBusinessAddressPostUrl =
+      uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController
+        .saveWithSection("mainBusinessAddress", "previous-business-address")
+
+    val previousBusinessAddressPage = new BasicPage[PreviousAddress](
+      "previous-business-address",
+      MainBusinessAddressForm.previousAddressForm,
+      new FormRendering[PreviousAddress] {
+        override def render(form: Form[PreviousAddress], bpr: BusinessRegistrationDetails, navigation: Navigation)(
+          implicit
+          request: Request[_],
+          messages: Messages,
+          appConfig: AppConfig
+        ): Html =
+          views.main_business_address_previous_address(form, bpr, navigation, previousBusinessAddressPostUrl)
+      }
+    )
+
+    val mainBusinessAddressPage = MainBusinessAddressPage(
+      timeAtCurrentAddressPage,
+      anyPreviousBusinessAddressPage,
+      previousBusinessAddressPage
     )
 
     val contactPersonPage: Page[ContactPerson] = new BasicPage[ContactPerson](

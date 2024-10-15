@@ -22,5 +22,6 @@ case class AddressUKParams(
   label: String,
   hasErrors: Boolean = false,
   error: Option[String] = None,
+  legendAsHeading: Boolean = false,
   legendAsSubHeading: Boolean = false
 )
