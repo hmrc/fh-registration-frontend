@@ -31,7 +31,7 @@
 }
 
 @legendClass = @{
-    if(params.legendAsHeading) {
+    if (params.legendAsHeading) {
         "govuk-fieldset__legend govuk-fieldset__legend--l"
     } else if (params.legendAsSubHeading) {
         "govuk-fieldset__legend govuk-fieldset__legend--m"
@@ -40,9 +40,17 @@
     }
 }
 
+@legendHtml = @{
+    if (params.legendAsHeading) {
+        <h1 class="govuk-fieldset__heading">{params.label}</h1>
+    } else {
+        {params.label}
+    }
+}
+
 <fieldset class="govuk-fieldset">
     <legend id="@{fieldName}-title" class="@legendClass">
-    @{params.label}
+        @legendHtml
     </legend>
 @viewHelpers.govukInput(Input(
             id = s"$fieldName.Line1",
