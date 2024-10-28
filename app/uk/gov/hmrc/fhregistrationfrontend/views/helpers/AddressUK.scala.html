@@ -31,16 +31,26 @@
 }
 
 @legendClass = @{
-    if(params.legendAsSubHeading) {
+    if (params.legendAsHeading) {
+        "govuk-fieldset__legend govuk-fieldset__legend--l"
+    } else if (params.legendAsSubHeading) {
         "govuk-fieldset__legend govuk-fieldset__legend--m"
     } else {
         "govuk-fieldset__legend govuk-fieldset__legend--s"
     }
 }
 
+@legendHtml = @{
+    if (params.legendAsHeading) {
+        <h1 class="govuk-fieldset__heading">{params.label}</h1>
+    } else {
+        {params.label}
+    }
+}
+
 <fieldset class="govuk-fieldset">
     <legend id="@{fieldName}-title" class="@legendClass">
-    @{params.label}
+        @legendHtml
     </legend>
 @viewHelpers.govukInput(Input(
             id = s"$fieldName.Line1",
@@ -90,7 +100,7 @@
             label = Label(
                 isPageHeading = false,
                 classes = "govuk-!-font-weight-bold",
-                content = HtmlContent(s"${message("fh.address.line3.label")}")
+                content = HtmlContent(s"${message("fh.address.townorcity.label")}")
             ),
             spellcheck = Some(false),
             autocomplete = Some("address-level2"),
@@ -111,7 +121,7 @@
             label = Label(
                 isPageHeading = false,
                 classes = "govuk-!-font-weight-bold",
-                content = HtmlContent(s"${message("fh.address.line4.label")}")
+                content = HtmlContent(s"${message("fh.address.county.label")}")
             ),
             spellcheck = Some(false),
             autocomplete = Some("address-level1"),

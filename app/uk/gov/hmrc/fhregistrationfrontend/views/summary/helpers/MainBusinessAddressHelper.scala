@@ -38,7 +38,7 @@ object MainBusinessAddressHelper {
           ),
           Helpers.createChangeLink(
             Mode isEditable mode,
-            "form/mainBusinessAddress",
+            "form/mainBusinessAddress/years-at-current-address",
             Text("Change"),
             Some(messages("fh.mainBusinessAddress.summary.yearsAtAddress"))
           )
@@ -61,7 +61,7 @@ object MainBusinessAddressHelper {
               ),
               Helpers.createChangeLink(
                 Mode isEditable mode,
-                "form/mainBusinessAddress",
+                "form/mainBusinessAddress/any-previous-business-address",
                 Text("Change"),
                 Some(messages("fh.mainBusinessAddress.summary.hasPreviousAddress"))
               )
@@ -78,7 +78,7 @@ object MainBusinessAddressHelper {
               ),
               Helpers.createChangeLink(
                 Mode isEditable mode,
-                "form/mainBusinessAddress",
+                "form/mainBusinessAddress/any-previous-business-address",
                 Text("Change"),
                 Some(messages("fh.mainBusinessAddress.summary.hasPreviousAddress"))
               )
@@ -92,7 +92,7 @@ object MainBusinessAddressHelper {
               ),
               Helpers.createChangeLink(
                 Mode isEditable mode,
-                "form/mainBusinessAddress",
+                "form/mainBusinessAddress/previous-business-address",
                 Text("Change"),
                 Some(messages("fh.mainBusinessAddress.summary.previousAddress"))
               )
@@ -106,7 +106,7 @@ object MainBusinessAddressHelper {
               ),
               Helpers.createChangeLink(
                 Mode isEditable mode,
-                "form/mainBusinessAddress",
+                "form/mainBusinessAddress/previous-business-address",
                 Text("Change"),
                 Some(messages("fh.mainBusinessAddress.summary.previousAddressStartdate"))
               )

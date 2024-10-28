@@ -1,0 +1,111 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+@import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.{timeAtCurrentAddressKey, previousAddressKey, mainPreviousAddressKey, previousAddressStartdateKey}
+@import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+
+@this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
+
+@(mainBusinessAddressForm: Form[Boolean], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+
+@pageHeadBlock = {
+  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
+}
+
+@pageScripts = {
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+}
+
+@titlePrefix = @{
+  if (mainBusinessAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
+}
+
+@title = @{
+  Messages("fh.main_business_address.previous.title")
+}
+
+@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
+
+  <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
+
+  @viewHelpers.form(action = postAction, Symbol("novalidate") -> "novalidate") {
+
+      @if(mainBusinessAddressForm.errors.nonEmpty) {
+
+        @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
+                if(mainBusinessAddressForm(previousAddressKey).value.contains("true")) {
+                  mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).map { error =>
+                    ErrorLink(
+                      href =  if(error._1.key.contains("-error")) Some(s"#${error._1.key}") else Some(s"#${error._1.key}"),
+                      content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
+                    )
+                  }
+                } else {
+                  mainBusinessAddressForm.errors.zipWithIndex.groupBy(_._1.key).map(_._2.head).toList.sortBy(_._2).filterNot(_._1.key.contains("Line4")).map { error =>
+                    ErrorLink(
+                      href = if(error._1.key.contains("timeAtCurrentAddress")) Some(s"#timeAtCurrentAddress-less-than-3-years") else Some(s"#${error._1.key}"),
+                      content = Text(messages(s"fh.${error._1.key}.${error._1.message}"))
+                    )
+                  }
+                }
+          ,
+          title = Text(messages("fh.generic.error"))))
+      }
+
+    @viewHelpers.govUkRadios(Radios(
+        fieldset = Some(Fieldset(
+            legend = Some(Legend(
+                content = Text(Messages("fh.main_business_address.previous.label")),
+                classes = "govuk-fieldset__legend--l",
+                isPageHeading = true
+            ))
+        )),
+        idPrefix = Some(previousAddressKey),
+        name = previousAddressKey,
+        errorMessage = if (mainBusinessAddressForm(previousAddressKey).hasErrors) {
+            Some(ErrorMessage(content = Text(messages("fh.previousAddress.error.required"))))
+        } else None,
+        items = Seq(
+            RadioItem(
+                content = Text(Messages("fh.generic.yes")),
+                id = Some("previousAddress"),
+                checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("true"),
+                value = Some("true")
+            ),
+            RadioItem(
+                content = Text(Messages("fh.generic.no")),
+                id = Some("previousAddress-2"),
+                checked = mainBusinessAddressForm(previousAddressKey).value.toList.contains("false"),
+                value = Some("false")
+            )
+        )
+    ))
+
+    @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
+    @SaveForLater()
+
+  }
+}

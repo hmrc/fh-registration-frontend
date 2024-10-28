@@ -18,13 +18,11 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, localNew, oneOf, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localNew, oneOf, yesOrNo}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress, PreviousAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.MainBusinessAddress
 
-import java.time.LocalDate
-
-object MainBusinessAddressForm {
+object UnusedMainBusinessAddressForm {
 
   val timeAtCurrentAddressKey = "timeAtCurrentAddress"
   val previousAddressKey = "previousAddress"
@@ -32,18 +30,19 @@ object MainBusinessAddressForm {
   val previousAddressStartdateKey = "previousAddressStartdate"
 
   val timeAtCurrentAddressMapping = timeAtCurrentAddressKey -> oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)
-  val timeAtCurrentAddressForm: Form[String] = Form(timeAtCurrentAddressMapping)
+  val previousAddressMapping =
+    previousAddressKey -> (yesOrNo() onlyWhen (timeAtCurrentAddressMapping is "Less than 3 years"))
+  val mainPreviousAddressMapping = mainPreviousAddressKey -> (address onlyWhen (previousAddressMapping is Some(true)))
+  val previousAddressStartdateMapping =
+    previousAddressStartdateKey -> (localNew onlyWhen (previousAddressMapping is Some(true)))
 
-  val hasPreviousAddressMapping = previousAddressKey -> yesOrNo()
-  val hasPreviousAddressForm: Form[Boolean] = Form(hasPreviousAddressMapping)
-
-  val mainPreviousAddressMapping = mainPreviousAddressKey           -> address
-  val previousAddressStartdateMapping = previousAddressStartdateKey -> localNew
-
-  val previousAddressForm: Form[PreviousAddress] = Form(
+  val mainBusinessAddressForm = Form(
     mapping(
+      timeAtCurrentAddressMapping,
+      previousAddressMapping,
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
-    )(PreviousAddress.apply)(PreviousAddress.unapply)
+    )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
   )
+
 }

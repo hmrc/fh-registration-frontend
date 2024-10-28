@@ -294,7 +294,7 @@ class ApplicationControllerSpec
       val result = controller resumeForm request
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some("/fhdds/form/mainBusinessAddress")
+      redirectLocation(result) shouldBe Some("/fhdds/form/tradingName")
     }
 
     "Redirect to summary page" in {
