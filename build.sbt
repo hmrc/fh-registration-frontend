@@ -13,16 +13,12 @@ lazy val scoverageSettings = {
   Seq(
     // Semicolon-separated list of regexs matching classes to exclude
     ScoverageKeys.coverageExcludedPackages :=
-      """uk\.gov\.hmrc\.BuildInfo;
-        |.*\.Routes;
-        |.*\.RoutesPrefix;
-        |.*\.Reverse[^.]*;
-        |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\.helpers;
-        |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
-        |uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*;
-        |""".stripMargin,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*javascript.*;.*models.*;.*Routes.*;.*viewmodels.*;.*testonly.*;.*controllers.AdminPageController.*;" +
-      ".*controllers.AuthenticationController.*",
+      """uk\.gov\.hmrc\.BuildInfo;.*\.Routes;.*\.RoutesPrefix;.*\.Reverse[^.]*;
+     uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\.helpers;
+     uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*""".stripMargin.replaceAll("\n", ""),
+    ScoverageKeys.coverageExcludedFiles :=
+      "<empty>;.*javascript.*;.*models.*;.*Routes.*;.*viewmodels.*;.*testonly.*;.*controllers.AdminPageController.*;"+
+        ".*controllers.AuthenticationController.*",
     ScoverageKeys.coverageMinimumStmtTotal := 80.00,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
