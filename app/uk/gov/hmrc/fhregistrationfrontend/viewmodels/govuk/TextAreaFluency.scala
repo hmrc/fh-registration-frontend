@@ -18,6 +18,7 @@ package viewmodels.govuk
 
 import play.api.data.Field
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 import uk.gov.hmrc.govukfrontend.views.viewmodels.textarea.Textarea
@@ -53,8 +54,8 @@ trait TextAreaFluency {
     def withHint(hint: Hint): Textarea =
       textArea copy (hint = Some(hint))
 
-    def withFormGroupClasses(classes: String): Textarea =
-      textArea copy (formGroupClasses = classes)
+    def withFormGroupClasses(classes: FormGroup): Textarea =
+      textArea copy (formGroup = classes)
 
     def withCssClass(newClass: String): Textarea =
       textArea copy (classes = s"${textArea.classes} $newClass")

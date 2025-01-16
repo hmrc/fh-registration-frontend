@@ -4,14 +4,14 @@ import sbt._
 object AppDependencies {
 
   val playVersion = "play-30"
-  val bootstrapVersion = "9.3.0"
-  val hmrcMongoVersion = "2.2.0"
+  val bootstrapVersion = "9.6.0"
+  val hmrcMongoVersion = "2.4.0"
   val monocleVersion = "2.1.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc"                %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
-    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "9.0.0",
+    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "11.9.0",
     "uk.gov.hmrc"                %% s"play-partials-$playVersion"                 % "10.0.0",
     "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.0.0",
     "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "12.1.0",
