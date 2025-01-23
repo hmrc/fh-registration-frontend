@@ -30,9 +30,9 @@
 
 @(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams, postAction: Call)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+@pageScripts = @{
+  Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
+  Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
 }
 
 @pageHeadBlock = {

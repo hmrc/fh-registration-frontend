@@ -22,13 +22,14 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 @(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @titlePrefix = @{

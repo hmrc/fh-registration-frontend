@@ -26,10 +26,14 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers._
 
+
 @this(layout: layout, govukFieldset : GovukFieldset)
 
 @(applicationData: PartnershipApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+
+@scripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+}
 
 @title = @{
   Messages(s"fh.summary.${params.mode}.title")

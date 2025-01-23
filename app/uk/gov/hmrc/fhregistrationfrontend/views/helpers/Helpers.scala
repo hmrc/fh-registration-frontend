@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views.helpers
 
+import play.api.data.FormError
+import play.api.mvc.RequestHeader
+import play.twirl.api.Html
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
+import uk.gov.hmrc.govukfrontend.views.html.components._
+import views.html.helper.CSPNonce
+
 import java.text.SimpleDateFormat
 import java.util.Date
-import play.api.data.FormError
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
-import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SummaryAddressBlock
-import uk.gov.hmrc.govukfrontend.views.html.components._
 
 object Helpers {
   def getError(error: Option[FormError]): String =
@@ -87,4 +90,8 @@ object Helpers {
         )
       )
     } else None
+
+  def cspScriptTag(src: String)(implicit request: RequestHeader): Html =
+    Html(s"""<script ${CSPNonce.attr} type="text/javascript" src="$src"></script>""")
+
 }

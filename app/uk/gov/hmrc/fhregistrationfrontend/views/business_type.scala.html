@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
-
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 
@@ -26,8 +26,9 @@
 
 @(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
-
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+}
 @typeNotListed = {
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">

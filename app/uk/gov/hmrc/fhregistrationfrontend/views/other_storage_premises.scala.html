@@ -26,8 +26,8 @@
 
 @(hasOtherStoragePremisesForm: Form[Boolean], postAction: Call)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @titlePrefix = @{

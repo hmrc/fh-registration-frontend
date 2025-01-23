@@ -23,13 +23,14 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.BackHelper
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 @(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@scripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@scripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @titlePrefix = @{

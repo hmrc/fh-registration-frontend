@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 
@@ -36,14 +37,15 @@
     else Messages("fh.emailVerification.label")
 }
 
-@pageScripts = {
-    <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @action = @{
     if (forced) uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitForcedContactEmail
     else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail
 }
+
 @conditionalHtml = @{
     viewHelpers.govukInput(Input(
         id = "alternativeEmail",
