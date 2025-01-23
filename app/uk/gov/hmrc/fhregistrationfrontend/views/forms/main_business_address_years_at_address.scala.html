@@ -25,6 +25,8 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.SaveForLater
+@import views.html.helper.CSPNonce
+
 
 @this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
@@ -34,9 +36,9 @@
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/addressLookup.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
 }
 
 @titlePrefix = @{

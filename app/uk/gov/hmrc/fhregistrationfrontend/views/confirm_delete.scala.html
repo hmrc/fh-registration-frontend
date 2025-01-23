@@ -44,7 +44,7 @@
         @viewHelpers.govukButton(Button(content = Text(Messages("fh.delete_confirmation_page.button"))))
 
         <p class="govuk-body">
-            <a id="back" href="javascript:history.go(-1)">@Messages("fh.delete_confirmation_page.back")</a>
+            <a id="back" href="#" data-module="hmrc-back-link">@Messages("fh.delete_confirmation_page.back")</a>
         </p>
     }
 }

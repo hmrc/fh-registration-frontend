@@ -21,13 +21,14 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 @(emailVerificationForm: Form[EmailVerification], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @titlePrefix = @{

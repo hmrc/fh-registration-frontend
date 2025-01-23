@@ -20,14 +20,15 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import java.util.Date
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers.formatDate
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
 @(date: Date, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@pageScripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
+@pageScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
 }
 
 @subtitle = @{

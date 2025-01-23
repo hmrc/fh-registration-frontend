@@ -17,13 +17,16 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
 @(expiryTime: String)(implicit request: Request[_], messages: Messages)
 
-@scripts = {<script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>}
+@scripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+}
 
 @title = @{
   messages("fh.has_saved")
@@ -61,6 +64,6 @@
   </ul>
 
   <p class="govuk-body">
-    <br><a class="govuk-link" href="javascript:history.go(-1)">@Messages("fh.held_until.back")</a>
+    <br><a class="govuk-link" href="#" data-module="hmrc-back-link">@Messages("fh.held_until.back")</a>
   </p>
 }

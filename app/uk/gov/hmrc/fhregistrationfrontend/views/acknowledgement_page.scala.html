@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 @import java.util.Date
 @import scala.concurrent.Future
 @import play.twirl.api.{Html=>tHtml}
@@ -33,10 +34,10 @@
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
-@scripts = {
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery-3.6.1.js")'></script>
-  <script type="text/javascript" src='@routes.Assets.at("javascripts/fh.js")'></script>
-  }
+@scripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+}
 
 @title1 = @{
   Messages(s"fh.ack.$mode.title")
@@ -65,7 +66,7 @@
           <i class="icon icon-file-download"></i>
 
           <p class="govuk-body">
-            <a class="govuk-link" href="JavaScript:window.print()">@Messages("fh.generic.print_application_status")</a>
+            <a class="govuk-link" href="#" data-module="hmrc-print-link">@Messages("fh.generic.print_application_status")</a>
           </p>
         </div>
           <hr class="govuk-section-break govuk-section-break--m" />
@@ -110,7 +111,7 @@
               <a class="govuk-link" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout" class="button" role="button">Finish and sign out</a>
               </p>
               <p>
-              <a class="govuk-link" href="JavaScript:window.print()">@Messages("fh.ack.Variation.print")</a>
+              <a class="govuk-link" href="#" data-module="hmrc-print-link">@Messages("fh.ack.Variation.print")</a>
               </p>
           </div>
       }
