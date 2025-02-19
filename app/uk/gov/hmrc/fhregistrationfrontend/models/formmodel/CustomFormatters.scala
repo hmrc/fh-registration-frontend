@@ -68,21 +68,21 @@ object CustomFormatters {
     override def unbind(key: String, value: String): Map[String, String] = Map(key -> value.toString)
   }
 
-  def enumFormat[E <: Enumeration](`enum`: E, requiredErrorKey: String, args: Seq[String]): Formatter[E#Value] =
-    new Formatter[E#Value] {
+  def enumFormat[E <: Enumeration](`enum`: E, requiredErrorKey: String, args: Seq[String]): Formatter[`enum`.Value] =
+    new Formatter[`enum`.Value] {
       def bind(key: String, data: Map[String, String]) =
         data.get(key) match {
           case None                      => Left(Seq(FormError(key, requiredErrorKey, args)))
           case Some(s) if s.trim.isEmpty => Left(Seq(FormError(key, requiredErrorKey, args)))
           case Some(s) =>
             scala.util.control.Exception
-              .allCatch[E#Value]
+              .allCatch[`enum`.Value]
               .either(`enum`.withName(s))
               .left
               .map(e => Seq(FormError(key, "error.invalid", args)))
         }
 
-      def unbind(key: String, value: E#Value) = Map(key -> value.toString)
+      def unbind(key: String, value: `enum`.Value) = Map(key -> value.toString)
     }
 
   def stringFormatter(errorKey: String, args: Seq[String] = Seq.empty): Formatter[String] = new Formatter[String] {

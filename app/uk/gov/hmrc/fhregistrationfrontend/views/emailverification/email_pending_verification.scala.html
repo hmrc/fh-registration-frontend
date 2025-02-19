@@ -55,7 +55,7 @@
     <h2 class ="govuk-heading-m">@Messages("fh.emailVerification.pendingText.whereEmailUpdated")</h2>
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.onlyFHDDS")</p>
     <p class="govuk-body">@Messages("fh.emailVerification.pendingText.otherGovUnchanged")</p>
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail) {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail()) {
         <input type="hidden" name="@{emailOptionKey}" value="false">
         <input type="hidden" name="@{alternativeEmailKey}" value="@{emailVerificationForm(alternativeEmailKey).value}">
 

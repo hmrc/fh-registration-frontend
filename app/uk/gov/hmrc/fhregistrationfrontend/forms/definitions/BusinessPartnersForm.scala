@@ -22,6 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
 
 object BusinessPartnersForm {
 
@@ -133,7 +134,7 @@ object BusinessPartnersForm {
 
   val addressMapping = addressKey -> address
 
-  val businessPartnersTypeMapping = businessPartnersTypeKey -> enum(BusinessPartnerType)
+  val businessPartnersTypeMapping = businessPartnersTypeKey -> `enum`(BusinessPartnerType)
 
   val businessPartnerIndividualMapping = mapping(
     firstNameKey -> personName,
@@ -141,7 +142,7 @@ object BusinessPartnersForm {
     hasNinoMapping,
     ninoMapping,
     addressMapping
-  )(BusinessPartnerIndividual.apply)(BusinessPartnerIndividual.unapply)
+  )(BusinessPartnerIndividual.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerSoleProprietorMapping = mapping(
     firstNameKey -> personName,
@@ -154,7 +155,7 @@ object BusinessPartnersForm {
     vatSoleProprietorMapping,
     uniqueTaxpayerReferenceSoleProprietorMapping,
     addressMapping
-  )(BusinessPartnerSoleProprietor.apply)(BusinessPartnerSoleProprietor.unapply)
+  )(BusinessPartnerSoleProprietor.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerPartnershipMapping = mapping(
     partnershipNameKey -> tradingName,
@@ -165,7 +166,7 @@ object BusinessPartnersForm {
     hasUniqueTaxpayerReferenceMapping,
     uniqueTaxpayerReferenceMapping,
     addressMapping
-  )(BusinessPartnerPartnership.apply)(BusinessPartnerPartnership.unapply)
+  )(BusinessPartnerPartnership.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerLimitedLiabilityPartnershipMapping = mapping(
     limitedLiabilityPartnershipNameKey -> tradingName,
@@ -176,7 +177,7 @@ object BusinessPartnersForm {
     vatLimitedLiabilityMapping,
     uniqueTaxpayerReferenceLimitedLiabilityMapping,
     addressMapping
-  )(BusinessPartnerLimitedLiabilityPartnership.apply)(BusinessPartnerLimitedLiabilityPartnership.unapply)
+  )(BusinessPartnerLimitedLiabilityPartnership.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerCorporateBodyMapping = mapping(
     companyNameKey -> tradingName,
@@ -187,7 +188,7 @@ object BusinessPartnersForm {
     vatCorporateBodyMapping,
     uniqueTaxpayerReferenceCorporateBodyMapping,
     addressMapping
-  )(BusinessPartnerCorporateBody.apply)(BusinessPartnerCorporateBody.unapply)
+  )(BusinessPartnerCorporateBody.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerUnincorporatedBodyMapping = mapping(
     unincorporatedBodyNameKey -> tradingName,
@@ -198,7 +199,7 @@ object BusinessPartnersForm {
     hasUniqueTaxpayerReferenceUnincorporatedBodyMapping,
     uniqueTaxpayerReferenceUnincorporatedBodyMapping,
     addressMapping
-  )(BusinessPartnerUnincorporatedBody.apply)(BusinessPartnerUnincorporatedBody.unapply)
+  )(BusinessPartnerUnincorporatedBody.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val businessPartnerMapping: Mapping[BusinessPartner] = mapping(
     businessPartnersTypeMapping,
@@ -245,7 +246,7 @@ object BusinessPartnersForm {
   val businessPartnersForm = Form(
     mapping(
       businessPartnersKey -> list(businessPartnerMapping)
-    )(BusinessPartners.apply)(BusinessPartners.unapply)
+    )(BusinessPartners.apply)(o => Some(o.businessPartners))
   )
 
   def withError(

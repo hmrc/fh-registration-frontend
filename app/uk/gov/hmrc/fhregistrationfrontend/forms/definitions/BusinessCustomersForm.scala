@@ -28,6 +28,6 @@ object BusinessCustomersForm {
   val businessCustomersForm = Form(
     mapping(
       numberOfCustomersKey -> oneOf(BusinessCustomers.businessCustomersOptions)
-    )(BusinessCustomers.apply)(BusinessCustomers.unapply)
+    )(BusinessCustomers.apply)(o => Some(o.numberOfCustomers))
   )
 }

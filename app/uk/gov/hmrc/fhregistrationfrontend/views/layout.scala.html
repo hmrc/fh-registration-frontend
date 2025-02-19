@@ -45,7 +45,7 @@
 
 @headBlock = {
     <style>.govuk-fieldset .govuk-summary-list__actions { width: 25%; }</style>
-    @hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout.url)
+    @hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout().url)
     @pageHeadBlock.getOrElse(Html(""))
 }
 @content = {
@@ -59,7 +59,7 @@
     pageTitle = Some(pageTitle),
     isWelshTranslationAvailable = false, /* or false if your service has not been translated */
     // serviceUrl = Some(routes.IndexController.index().url),
-    signOutUrl = Some(routes.SignOutController.signout.url),
+    signOutUrl = Some(routes.SignOutController.signout().url),
     backLinkUrl = backUrl,
     backLink = if(isBrowserBackMimic) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else None,
     displayHmrcBanner = true,

@@ -36,9 +36,9 @@ class StartUpdateRequest[A](
   def userId: String = request.userId
 }
 
-abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(
-  implicit val save4LaterService: Save4LaterService,
-  implicit val ec: ExecutionContext,
+abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(implicit
+  val save4LaterService: Save4LaterService,
+  val ec: ExecutionContext,
   errorHandler: ErrorHandler
 ) extends ActionRefiner[UserRequest, StartUpdateRequest] with FrontendAction with ActionFunctions {
 

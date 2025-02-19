@@ -41,12 +41,12 @@ class FormPageController @Inject() (
     extends AppController(ds, cc) {
 
   import actions._
-  def load(pageId: String) = pageAction(pageId) { implicit request =>
+  def load(pageId: String) = pageAction(pageId) { implicit request: PageRequest[AnyContent] =>
     renderForm(request.page, false)
   }
 
   def loadWithSection(pageId: String, sectionId: String) =
-    pageAction(pageId, Some(sectionId)) { implicit request =>
+    pageAction(pageId, Some(sectionId)) { implicit request: PageRequest[AnyContent] =>
       renderForm(request.page, false)
     }
 
@@ -189,7 +189,7 @@ class FormPageController @Inject() (
     else
       request.journey next newPage match {
         case Some(nextPage) => Redirect(routes.FormPageController.load(nextPage.id))
-        case None           => Redirect(routes.SummaryController.summary)
+        case None           => Redirect(routes.SummaryController.summary())
       }
 
   private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =

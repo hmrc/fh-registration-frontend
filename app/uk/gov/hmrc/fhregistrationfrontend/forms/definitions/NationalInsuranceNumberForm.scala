@@ -35,6 +35,6 @@ object NationalInsuranceNumberForm {
     mapping(
       hasNationalInsuranceNumberMapping,
       nationalInsuranceNumberMapping
-    )(NationalInsuranceNumber.apply)(NationalInsuranceNumber.unapply)
+    )(NationalInsuranceNumber.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

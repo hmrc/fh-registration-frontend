@@ -29,6 +29,6 @@ object WithdrawalConfirmationForm {
   val withdrawalConfirmationForm = Form(
     mapping(
       confirmMapping
-    )(WithdrawalConfirmation.apply)(WithdrawalConfirmation.unapply)
+    )(WithdrawalConfirmation.apply)(o => Some(o.continue))
   )
 }

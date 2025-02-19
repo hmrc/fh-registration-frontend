@@ -34,7 +34,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "2.13.12",
+  .settings(scalaVersion := "3.3.4",
     RoutesKeys.routesImport ++= Seq(
       "models._"
     ))
@@ -62,7 +62,5 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / scalafmtOnCompile := true)
   .settings(resolvers ++= Seq(Resolver.jcenterRepo))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .settings(scalacOptions += "-P:silencer:pathFilters=routes")
   .settings(scalacOptions += "-Wconf:cat=lint-multiarg-infix:silent")
-  .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(Global / lintUnusedKeysOnLoad := false)

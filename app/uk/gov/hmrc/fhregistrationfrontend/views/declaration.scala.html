@@ -30,7 +30,7 @@
 @(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages)
 
 
-@linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary.url}
+@linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
 
 @showAlert = @{
   params.hasAmendments.filter(_ == false).map { _ =>
@@ -96,7 +96,7 @@
 
 @layout(title = titlePrefix + title) {
 
-  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm) {
+  @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.submitForm()) {
     @if(declarationForm.errors.nonEmpty) {
 
       @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
@@ -203,7 +203,7 @@
         inputType = Some("submit")
       ))
       <p class="govuk-body">
-        <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary}">@Messages("link.goBackToSummary")
+        <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary()}">@Messages("link.goBackToSummary")
         </a>
       </p>
 

@@ -35,6 +35,6 @@ object BusinessStatusForm {
     mapping(
       isNewFulfilmentHouseMapping,
       proposedStartDateMapping
-    )(BusinessStatus.apply)(BusinessStatus.unapply)
+    )(BusinessStatus.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

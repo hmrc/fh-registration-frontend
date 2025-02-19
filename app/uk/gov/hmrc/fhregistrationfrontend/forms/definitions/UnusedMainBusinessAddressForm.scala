@@ -42,7 +42,7 @@ object UnusedMainBusinessAddressForm {
       previousAddressMapping,
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
-    )(MainBusinessAddress.apply)(MainBusinessAddress.unapply)
+    )(MainBusinessAddress.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
 }

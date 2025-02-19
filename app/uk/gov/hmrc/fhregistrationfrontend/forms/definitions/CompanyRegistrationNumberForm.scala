@@ -29,7 +29,7 @@ object CompanyRegistrationNumberForm {
     mapping(
       companyRegistrationNumberKey -> companyRegistrationNumber,
       companyRegistrationNumberKey -> optional(companyRegistrationNumberFormatted)
-    )(CompanyRegistrationNumber.apply)(CompanyRegistrationNumber.unapply)
+    )(CompanyRegistrationNumber.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
 }

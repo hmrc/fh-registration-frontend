@@ -38,6 +38,7 @@ object BusinessPartnerType extends Enumeration {
       id = Some(s"value_$index")
     )
   }
+  implicit val businessPartnerTypeValueOf: ValueOf[BusinessPartnerType.type] = ValueOf(BusinessPartnerType)
 
   implicit val format: Format[BusinessPartnerType.Value] =
     Format[BusinessPartnerType.Value](Reads.enumNameReads(BusinessPartnerType), Writes.enumNameWrites)
