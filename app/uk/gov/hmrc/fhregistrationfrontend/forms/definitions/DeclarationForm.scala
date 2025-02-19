@@ -42,6 +42,6 @@ object DeclarationForm {
       usingDefaultEmailMapping,
       defaultEmailMapping,
       alternativeEmailMapping
-    )(Declaration.apply)(Declaration.unapply)
+    )(Declaration.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

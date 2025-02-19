@@ -17,18 +17,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import cats.data.OptionT
-import cats.implicits._
+import cats.implicits.*
 
 import javax.inject.{Inject, Singleton}
 import play.api.data.Form
 import play.api.data.Forms.nonEmptyText
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.Logging
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, UserRequest}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, JourneyRequest, UserRequest}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
-import uk.gov.hmrc.fhregistrationfrontend.connectors._
+import uk.gov.hmrc.fhregistrationfrontend.connectors.*
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ExternalUrls
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessTypeForm.businessTypeForm
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
@@ -68,7 +68,7 @@ class Application @Inject() (
         case _ =>
           val whenRegistered = request.registrationNumber
             .map { _ =>
-              Redirect(routes.Application.checkStatus)
+              Redirect(routes.Application.checkStatus())
             }
 
           whenRegistered getOrElse Redirect(routes.Application.startOrContinueApplication())
@@ -161,9 +161,9 @@ class Application @Inject() (
     }
   }
 
-  def resumeForm = journeyAction { implicit request =>
+  def resumeForm = journeyAction { implicit request: JourneyRequest[AnyContent] =>
     if (request.journeyState.isComplete)
-      Redirect(routes.SummaryController.summary)
+      Redirect(routes.SummaryController.summary())
     else {
       request.journeyState.lastEditedPage.map(p => p.id -> p.lastSection) match {
         case None =>
@@ -182,7 +182,7 @@ class Application @Inject() (
     }
   }
 
-  def businessType = userAction { implicit request =>
+  def businessType = userAction { implicit request: Request[AnyContent] =>
     Ok(views.business_type(businessTypeForm, links.businessCustomerVerificationUrl))
   }
 
@@ -199,7 +199,7 @@ class Application @Inject() (
       )
   }
 
-  def startForm = userAction { _ =>
+  def startForm = userAction { implicit request: Request[AnyContent] =>
     Redirect(routes.Application.resumeForm)
   }
 

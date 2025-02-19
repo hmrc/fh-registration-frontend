@@ -34,6 +34,6 @@ object TradingNameForm {
     mapping(
       hasTradingNameMapping,
       tradingNameMapping
-    )(TradingName.apply)(TradingName.unapply)
+    )(TradingName.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

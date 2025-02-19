@@ -25,6 +25,12 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
+import play.api.libs.ws.WSBodyWritables.writeableOf_String
+import play.api.libs.ws.writeableOf_String
 
 import scala.concurrent.{ExecutionContext, Future}
 

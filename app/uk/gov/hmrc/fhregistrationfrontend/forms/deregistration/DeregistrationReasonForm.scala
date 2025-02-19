@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 
-import play.api.data.Form
-import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.enum
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.deregistrationReason
+import play.api.data.{Form, FormError, Forms, Mapping}
+import play.api.data.Forms.{mapping, optional, text}
+import play.api.data.format.Formatter
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{`enum`, deregistrationReason}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 
 object DeregistrationReasonForm {
@@ -27,7 +27,7 @@ object DeregistrationReasonForm {
   val reasonKey = "reason"
   val reasonOtherKey = "otherReasonContainer"
 
-  val reasonMapping = reasonKey -> enum(DeregistrationReasonEnum)
+  val reasonMapping = reasonKey -> `enum`(DeregistrationReasonEnum)
   val reasonOtherMapping =
     reasonOtherKey -> (deregistrationReason onlyWhen (reasonMapping is DeregistrationReasonEnum.Other))
 
@@ -35,7 +35,6 @@ object DeregistrationReasonForm {
     mapping(
       reasonMapping,
       reasonOtherMapping
-    )(DeregistrationReason.apply)(DeregistrationReason.unapply)
+    )(DeregistrationReason.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
-
 }

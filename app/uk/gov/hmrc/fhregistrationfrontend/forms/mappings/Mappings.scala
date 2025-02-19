@@ -48,7 +48,7 @@ object Mappings {
       "postcode"    -> postcode,
       "countryCode" -> optional(nonEmptyText),
       "lookupId"    -> optional(text).transform(_ filterNot StringUtils.isBlank, (v: Option[String]) => v)
-    )(Address.apply)(Address.unapply)
+    )(Address.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   def postcode: Mapping[String] =
     nonEmptyText.verifying(Constraints.pattern("^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s*?[0-9][A-Za-z]{2}$".r))
@@ -79,37 +79,34 @@ object Mappings {
     email verifying checkCandidateEmail()
   }
 
-  def companyRegistrationNumber =
-    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
-      v
-    }) verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
+  def companyRegistrationNumber: Mapping[String] =
+    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), (v: String) =>
+      v) verifying Constraints.pattern("^[A-Z0-9]{8}$".r)
 
-  def companyRegistrationNumberFormatted =
-    nonEmptyText transform (value => value.trim, { v: String =>
-      v
-    })
+  def companyRegistrationNumberFormatted: Mapping[String] =
+    nonEmptyText transform (value => value.trim, (v: String) => v)
 
-  def vatRegistrationNumber =
-    nonEmptyText transform (value => value.replaceAll("\\s", ""), { v: String =>
-      v
-    }) verifying Constraints.pattern("^[a-zA-Z]{2}[0-9]{9}|[0-9]{9}$".r)
+  def vatRegistrationNumber: Mapping[String] =
+    nonEmptyText transform (value => value.replaceAll("\\s", ""), (v: String) => v) verifying Constraints.pattern(
+      "^[a-zA-Z]{2}[0-9]{9}|[0-9]{9}$".r
+    )
 
-  def companyName =
+  def companyName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\\u005C\u2014\u2013\u2010\u002d]{1,140}$".r
     )
 
-  def tradingName =
+  def tradingName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
     )
 
-  def unincorporatedBodyName =
+  def unincorporatedBodyName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
     )
 
-  def ltdLiabilityPartnershipName =
+  def ltdLiabilityPartnershipName: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
     )
@@ -119,25 +116,24 @@ object Mappings {
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,120}$".r
     )
 
-  def eoriNumber =
-    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), { v: String =>
-      v
-    }) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
+  def eoriNumber: Mapping[String] =
+    nonEmptyText transform (value => value.replaceAll("\\s", "").toUpperCase(), (v: String) =>
+      v) verifying Constraints.pattern("^[A-Z0-9 -]{1,15}$".r)
 
-  def uniqueTaxpayerReferenceNumber = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
+  def uniqueTaxpayerReferenceNumber: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[0-9]{10}$".r)
 
-  def withdrwalReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
+  def withdrwalReason: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
 
-  def deregistrationReason = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
+  def deregistrationReason: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
 
-  def nino = of(ninoFormatter())
+  def nino: FieldMapping[String] = of(ninoFormatter())
 
-  def nationalIdNumber =
+  def nationalIdNumber: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r
     )
 
-  def passportNumber =
+  def passportNumber: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
       "^[a-zA-Z0-9\u00C0-\u00FF !#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]|~£€¥\\u005C\u2014\u2013\u2010\u005F\u005E\u0060\u002d]{1,20}$".r
     )
@@ -146,7 +142,7 @@ object Mappings {
     mapping(
       "email"             -> email,
       "emailConfirmation" -> of(emailConfirmationFormat)
-    )(AlternativeEmail.apply)(AlternativeEmail.unapply)
+    )(AlternativeEmail.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   def internationalAddress: Mapping[InternationalAddress] =
     mapping(
@@ -155,7 +151,7 @@ object Mappings {
       "Line3"       -> optional(addressLine),
       "Line4"       -> addressLine,
       "countryCode" -> nonEmptyText
-    )(InternationalAddress.apply)(InternationalAddress.unapply)
+    )(InternationalAddress.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   private type RawFormValues = (String, String, String)
 
@@ -198,16 +194,16 @@ object Mappings {
     case _ => Valid
   }
 
-  def localNew =
+  def localNew: Mapping[LocalDate] =
     tuple(
       "day"   -> text,
       "month" -> text,
       "year"  -> text
     ).transform(
-      { case (d, m, y) => (d.trim, m.trim, y.trim) },
-      { v: RawFormValues =>
-        v
-      }
+      { case (d, m, y) =>
+        (d.trim, m.trim, y.trim)
+      },
+      (v: RawFormValues) => v
     ).verifying(Constraint(allDateValuesEntered(_)))
       .verifying(Constraint(dateIsValid(_)))
       .verifying(Constraint(dateInAllowedRange(_)))
@@ -226,19 +222,46 @@ object Mappings {
       (d: LocalDate) => (d.getDayOfMonth, d.getMonth.getValue, d.getYear)
     )
 
-  def localDateTime(d: (Int, Int, Int)) =
+  private def localDateTime(d: (Int, Int, Int)) =
     LocalDate.of(d._3, d._2, d._1)
 
-  def localDateTimeConstraint(d: (Int, Int, Int)) =
+  private def localDateTimeConstraint(d: (Int, Int, Int)) =
     Try(localDateTime(d)).isSuccess
 
-  def oneOf(options: Seq[String]) = nonEmptyText verifying oneOfConstraint(options)
+  def oneOf(options: Seq[String]): Mapping[String] = nonEmptyText verifying oneOfConstraint(options)
+
+//  def `enum`[E <: Enumeration](
+//    `enum`: E,
+//    requiredErrorKey: String = "error.required",
+//    args: Seq[String] = Nil
+//  ): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
 
   def `enum`[E <: Enumeration](
     `enum`: E,
     requiredErrorKey: String = "error.required",
     args: Seq[String] = Nil
-  ): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
+  ): Mapping[`enum`.Value] =
+    of(enumFormat(`enum`, requiredErrorKey, args))
+
+//  def `enum`[E <: Enumeration](
+//    `enum`: E,
+//    requiredErrorKey: String = "error.required",
+//    args: Seq[String]= Nil
+//  ):
+//  Formatter[E#Value] = new Formatter[E#Value] {
+//    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], E#Value] =
+//      data.get(key) match {
+//        case None | Some("") => Left(Seq(FormError(key, requiredErrorKey)))
+//        case Some(s) =>
+//          `enum`.values.find (_.toString == s) match {
+//            case Some (value) => Right (value)
+//            case None => Left (Seq (FormError (key, "error.invalid", args) ) )
+//          }
+//      }
+//
+//    override def unbind(key: String, value: E#Value): Map[String, String] =
+//      Map(key -> value.toString)
+//  }
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)

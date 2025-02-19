@@ -23,7 +23,7 @@
 @summaryLink = @{
 
   navigation.back.map {
-    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary
+    case SummaryPage => uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary()
     case _ => ""
   }
 }

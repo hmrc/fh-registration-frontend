@@ -31,7 +31,7 @@ object UnusedImportingActivitiesForm {
   val eoriNumberMapping = mapping(
     eoriNumberKey               -> eoriNumber,
     goodsImportedOutsideEoriKey -> yesOrNo()
-  )(EoriNumber.apply)(EoriNumber.unapply)
+  )(EoriNumber.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val hasEoriMapping = hasEoriKey               -> yesOrNo()
   val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))

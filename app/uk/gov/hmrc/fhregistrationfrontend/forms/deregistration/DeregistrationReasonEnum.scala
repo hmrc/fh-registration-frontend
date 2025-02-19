@@ -17,6 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 import play.api.libs.json.{Format, Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
+import play.api.libs.json._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.businessTypeValueOf
 
 object DeregistrationReasonEnum extends Enumeration {
   type DeregistrationReasonEnum = Value
@@ -26,9 +28,13 @@ object DeregistrationReasonEnum extends Enumeration {
   val ChangedLegalEntity = Value("CHANGE_LEGAL_ENTITY")
   val Other = Value("Others")
 
-  implicit val format: Format[deregistration.DeregistrationReasonEnum.Value] = Format(
+  implicit val deregistrationReasonEnumValueOf: ValueOf[DeregistrationReasonEnum.type] = ValueOf(
+    DeregistrationReasonEnum
+  )
+
+  implicit val format: Format[DeregistrationReasonEnum.Value] = Format(
     Reads.enumNameReads(DeregistrationReasonEnum),
-    Writes.enumNameWrites[this.type]
+    Writes.enumNameWrites
   )
 
 }

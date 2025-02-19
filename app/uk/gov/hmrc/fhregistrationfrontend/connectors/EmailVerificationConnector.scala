@@ -25,6 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http._

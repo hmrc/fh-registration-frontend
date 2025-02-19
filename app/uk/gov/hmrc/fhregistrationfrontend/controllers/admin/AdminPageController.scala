@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers.admin
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.libs.json.{Format, Json}
-import play.api.mvc.{Action, AnyContent, BodyParser, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, BodyParser, MessagesControllerComponents, Request}
 import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.controllers.admin.AdminRequest.requestForm
@@ -74,7 +74,7 @@ class AdminPageController @Inject() (
 
   }
 
-  def loadUserIdPage = authAction { implicit request =>
+  def loadUserIdPage = authAction { implicit request: Request[AnyContent] =>
     Ok(views.admin_get_groupID(requestForm))
   }
 
@@ -90,7 +90,7 @@ class AdminPageController @Inject() (
       )
   }
 
-  def loadAllocateEnrolment = authAction { implicit request =>
+  def loadAllocateEnrolment = authAction { implicit request: Request[AnyContent] =>
     Ok(views.allocate_enrolment(allocateEnrolmentForm))
   }
 
@@ -104,7 +104,7 @@ class AdminPageController @Inject() (
       )
   }
 
-  def loadDeleteEnrolment = authAction { implicit request =>
+  def loadDeleteEnrolment = authAction { implicit request: Request[AnyContent] =>
     Ok(views.delete_enrolment(deleteEnrolmentForm))
   }
 
@@ -159,7 +159,7 @@ object AdminRequest {
       "userId"             -> nonEmptyText,
       "groupId"            -> nonEmptyText,
       "registrationNumber" -> nonEmptyText
-    )(AdminRequest.apply)(AdminRequest.unapply)
+    )(AdminRequest.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }
 
@@ -173,7 +173,7 @@ object EnrolmentForm {
     mapping(
       "userId"             -> nonEmptyText,
       "registrationNumber" -> nonEmptyText
-    )(EnrolmentForm.apply)(EnrolmentForm.unapply)
+    )(EnrolmentForm.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
   val deleteEnrolmentForm: Form[EnrolmentForm] = allocateEnrolmentForm

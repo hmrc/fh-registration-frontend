@@ -18,8 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.enum
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.withdrwalReason
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{`enum`, withdrwalReason}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 
 object WithdrawalReasonForm {
@@ -27,14 +26,14 @@ object WithdrawalReasonForm {
   val reasonKey = "reason"
   val reasonOtherKey = "reasonOtherText"
 
-  val reasonMapping = reasonKey           -> enum(WithdrawalReasonEnum)
+  val reasonMapping = reasonKey           -> `enum`(WithdrawalReasonEnum)
   val reasonOtherMapping = reasonOtherKey -> (withdrwalReason onlyWhen (reasonMapping is WithdrawalReasonEnum.Other))
 
   val withdrawalReasonForm = Form(
     mapping(
       reasonMapping,
       reasonOtherMapping
-    )(WithdrawalReason.apply)(WithdrawalReason.unapply)
+    )(WithdrawalReason.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
 }

@@ -54,7 +54,7 @@ object ContactPersonForm {
       ukAddressMapping,
       otherUkContactAddressMapping,
       otherInternationalContactAddressMapping
-    )(ContactPerson.apply)(ContactPerson.unapply)
+    )(ContactPerson.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
 }

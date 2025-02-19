@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.enum
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 
 object BusinessTypeForm {
@@ -25,6 +25,6 @@ object BusinessTypeForm {
   val businessTypeKey = "businessType"
 
   def businessTypeForm = Form(
-    businessTypeKey -> enum(BusinessType)
+    businessTypeKey -> `enum`(BusinessType)
   )
 }

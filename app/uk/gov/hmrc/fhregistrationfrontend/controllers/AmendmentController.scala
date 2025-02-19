@@ -43,14 +43,14 @@ class AmendmentController @Inject() (
 
   def startAmendment() = startAmendmentAction.async { implicit request =>
     if (request.currentJourneyType contains JourneyType.Amendment)
-      Future successful Redirect(routes.SummaryController.summary)
+      Future successful Redirect(routes.SummaryController.summary())
     else
       setupJourney(JourneyType.Amendment)
   }
 
   def startVariation() = startVariationAction.async { implicit request =>
     if (request.currentJourneyType contains JourneyType.Variation)
-      Future successful Redirect(routes.SummaryController.summary)
+      Future successful Redirect(routes.SummaryController.summary())
     else
       setupJourney(JourneyType.Variation)
   }
@@ -73,7 +73,7 @@ class AmendmentController @Inject() (
         _ <- savePageData(userId, journeyPages)
         _ <- save4LaterService.saveDisplayDeclaration(userId, display.declaration)
         _ <- save4LaterService.saveJourneyType(userId, JourneyType.Amendment)
-      } yield Redirect(routes.SummaryController.summary)
+      } yield Redirect(routes.SummaryController.summary())
     }
 
   private def saveContactEmail(contactEmail: Option[String])(implicit request: StartUpdateRequest[_]): Future[Any] = {

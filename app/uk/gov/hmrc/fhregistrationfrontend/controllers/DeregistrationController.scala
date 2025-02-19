@@ -113,7 +113,7 @@ class DeregistrationController @Inject() (
 
         }
     } else {
-      Future successful Redirect(routes.Application.checkStatus)
+      Future successful Redirect(routes.Application.checkStatus())
     }
 
   private def sendRequest(email: String, reason: DeregistrationReason)(implicit

@@ -5,14 +5,14 @@ GET         /                                                           @uk.gov.
 GET         /enrolment-progress                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.enrolmentPending()
 GET         /start                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startOrContinueApplication()
 GET         /continue                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.continueWithBpr
-GET         /sign-out                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout
-GET         /signed-out                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout
+GET         /sign-out                                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signout()
+GET         /signed-out                                                 @uk.gov.hmrc.fhregistrationfrontend.controllers.SignOutController.signedout()
 
 GET         /businessType                                               @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.businessType
 POST        /submitBusinessType                                         @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.submitBusinessType
 
 GET         /contact-email                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.contactEmail
-POST        /contact-email                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail
+POST        /contact-email                                              @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitContactEmail()
 GET         /contact-email-unverified                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.forcedContactEmail
 POST        /contact-email-unverified                                   @uk.gov.hmrc.fhregistrationfrontend.controllers.EmailVerificationController.submitForcedContactEmail
 
@@ -25,7 +25,7 @@ GET         /email-verified                                             @uk.gov.
 
 GET         /startForm                                                  @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.startForm
 
-GET         /subscription/status                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus
+GET         /subscription/status                                        @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.checkStatus()
 
 GET         /address-lookup                                             @uk.gov.hmrc.fhregistrationfrontend.controllers.AddressLookupController.addressLookup(postcode: String, filter: Option[String])
 
@@ -64,16 +64,16 @@ POST        /vatNumber                   @uk.gov.hmrc.fhregistrationfrontend.con
 GET         /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.load()
 POST        /importingActivities                   @uk.gov.hmrc.fhregistrationfrontend.controllers.ImportingActivitiesController.next()
 
-GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary
-GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view
-GET         /downloadPrintable                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable
+GET         /summary                                                    @uk.gov.hmrc.fhregistrationfrontend.controllers.SummaryController.summary()
+GET         /view                                                       @uk.gov.hmrc.fhregistrationfrontend.controllers.ReadOnlySummaryController.view()
+GET         /downloadPrintable                                          @uk.gov.hmrc.fhregistrationfrontend.controllers.PdfDownloadController.downloadPrintable()
 
-GET         /declaration                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration
-POST        /submit                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm
-GET         /acknowledgement                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment
+GET         /declaration                                                @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showDeclaration()
+POST        /submit                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.submitForm()
+GET         /acknowledgement                                            @uk.gov.hmrc.fhregistrationfrontend.controllers.DeclarationController.showAcknowledgment()
 
-GET         /amend                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment
-GET         /update                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation
+GET         /amend                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startAmendment()
+GET         /update                                                     @uk.gov.hmrc.fhregistrationfrontend.controllers.AmendmentController.startVariation()
 
 GET         /saved                                                      @uk.gov.hmrc.fhregistrationfrontend.controllers.Application.savedForLater
 

@@ -23,7 +23,8 @@ object JourneyType extends Enumeration {
   type JourneyType = Value
 
   val New, Amendment, Variation = Value
+  implicit val JourneyTypeValueOf: ValueOf[JourneyType.type] = ValueOf(JourneyType)
 
   implicit val businessTypeFormat: Format[journey.JourneyType.Value] =
-    Format(Reads.enumNameReads(JourneyType), Writes.enumNameWrites[this.type])
+    Format(Reads.enumNameReads(JourneyType), Writes.enumNameWrites)
 }

@@ -23,8 +23,13 @@ object BusinessType extends Enumeration {
   type BusinessType = Value
   val CorporateBody, SoleTrader, Partnership = Value
 
-  implicit val businessTypeFormat: Format[models.BusinessType.Value] =
-    Format(Reads.enumNameReads(BusinessType), Writes.enumNameWrites[this.type])
+  implicit val businessTypeValueOf: ValueOf[BusinessType.type] = ValueOf(BusinessType)
+
+  implicit val businessTypeFormat: Format[BusinessType.Value] =
+    Format(
+      Reads.enumNameReads(BusinessType),
+      Writes.enumNameWrites
+    )
 
   val businessTypeEntityMap: Map[BusinessType, String] = Map(
     CorporateBody -> "Corporate Body",

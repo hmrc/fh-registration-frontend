@@ -27,6 +27,8 @@ object WithdrawalReasonEnum extends Enumeration {
   val DuplicateApplication = Value("Duplicate Application")
   val Other = Value("Other")
 
+  implicit val withdrawalReasonTypeValueOf: ValueOf[WithdrawalReasonEnum.type] = ValueOf(WithdrawalReasonEnum)
+
   implicit val format: Format[withdrawal.WithdrawalReasonEnum.Value] = Format(
     Reads.enumNameReads(WithdrawalReasonEnum),
     Writes.enumNameWrites[this.type]

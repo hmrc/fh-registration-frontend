@@ -40,5 +40,5 @@ object StoragePremisesForm {
   val storagePremiseMapping = mapping(
     storagePremise_addressKey -> address,
     isThirdPartyKey           -> yesOrNo()
-  )(StoragePremise.apply)(StoragePremise.unapply)
+  )(StoragePremise.apply)(o => Some(Tuple.fromProductTyped(o)))
 }

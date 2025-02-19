@@ -44,6 +44,6 @@ object MainBusinessAddressForm {
     mapping(
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
-    )(PreviousAddress.apply)(PreviousAddress.unapply)
+    )(PreviousAddress.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

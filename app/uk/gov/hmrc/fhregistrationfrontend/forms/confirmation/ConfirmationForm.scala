@@ -40,6 +40,6 @@ object ConfirmationForm {
       usingDefaultEmailMapping,
       defaultEmailMapping,
       alternativeEmailMapping
-    )(Confirmation.apply)(Confirmation.unapply)
+    )(Confirmation.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }
