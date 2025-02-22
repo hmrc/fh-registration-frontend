@@ -229,38 +229,12 @@ object Mappings {
 
   def oneOf(options: Seq[String]): Mapping[String] = nonEmptyText verifying oneOfConstraint(options)
 
-//  def `enum`[E <: Enumeration](
-//    `enum`: E,
-//    requiredErrorKey: String = "error.required",
-//    args: Seq[String] = Nil
-//  ): Mapping[E#Value] = of(enumFormat(`enum`, requiredErrorKey, args))
-
   def `enum`[E <: Enumeration](
     `enum`: E,
     requiredErrorKey: String = "error.required",
     args: Seq[String] = Nil
   ): Mapping[`enum`.Value] =
     of(enumFormat(`enum`, requiredErrorKey, args))
-
-//  def `enum`[E <: Enumeration](
-//    `enum`: E,
-//    requiredErrorKey: String = "error.required",
-//    args: Seq[String]= Nil
-//  ):
-//  Formatter[E#Value] = new Formatter[E#Value] {
-//    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], E#Value] =
-//      data.get(key) match {
-//        case None | Some("") => Left(Seq(FormError(key, requiredErrorKey)))
-//        case Some(s) =>
-//          `enum`.values.find (_.toString == s) match {
-//            case Some (value) => Right (value)
-//            case None => Left (Seq (FormError (key, "error.invalid", args) ) )
-//          }
-//      }
-//
-//    override def unbind(key: String, value: E#Value): Map[String, String] =
-//      Map(key -> value.toString)
-//  }
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)

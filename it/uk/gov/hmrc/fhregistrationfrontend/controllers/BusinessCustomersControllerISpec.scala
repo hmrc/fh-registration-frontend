@@ -4,17 +4,15 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class BusinessCustomersControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+class BusinessCustomersControllerISpec extends Specifications with TestConfiguration  {
 
   "GET /businessCustomers" when {
     "render the business customers page" when {
       "the user is authenticated" in {
 
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -44,7 +42,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects None" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -68,7 +66,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 1-10" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -93,7 +91,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 11-50" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -118,7 +116,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 51-100" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -143,7 +141,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects Over 100" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -168,7 +166,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user does not select a radio button" should {
       "return 400" when {
         "the user doesn't select a radio button" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client

@@ -1,21 +1,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 
 class DeclarationControllerIntegrationSpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration  {
 
   "DeclarationController" should {
 
     "Show the declaration page when the user has fulfilled all the pages" in {
 
-      setupSummaryPreconditionMocks()
+      `given`.summaryPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -31,7 +29,7 @@ class DeclarationControllerIntegrationSpec
     }
 
     "Post the declaration form" in {
-      setupCreateSubscriptionMocks()
+      `given`.summaryPrecondition.fhddsBackend.createSubscription()
 
       WsTestClient.withClient { client =>
         val result =

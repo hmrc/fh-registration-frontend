@@ -1,22 +1,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.writeableOf_urlEncodedForm
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
 class WithdrawalControllerIntegrationSpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration {
 
   "WithdrawalController" should {
 
     "Ask the reason for the withdrawal" in {
 
-      setupWritesAuditOrMergedMocks()
-      setupIsAuthorisedAndEnrolledMocks()
+      `given`.withdrawalPrecondition
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -42,10 +39,8 @@ class WithdrawalControllerIntegrationSpec
 
     "Post the reason for the withdrawal" in {
 
-      setupWritesAuditOrMergedMocks()
-      setupIsAuthorisedAndEnrolledMocks()
-      setupSaveWithdrawalReasonMocks(sessionId)
-
+      `given`.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
+      
       WsTestClient.withClient { client =>
         val result =
           client
@@ -65,11 +60,8 @@ class WithdrawalControllerIntegrationSpec
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      setupWritesAuditOrMergedMocks()
-      setupIsAuthorisedAndEnrolledMocks()
-      setupSaveWithdrawalReasonMocks(sessionId)
-      setupGetSubscriptionMocks()
-
+      `given`.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
+      
       WsTestClient.withClient { client =>
         val result =
           client
@@ -86,7 +78,7 @@ class WithdrawalControllerIntegrationSpec
 
     "Show bad request to the user if not enrolled" in {
 
-      setupCommonPreconditionMocks()
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result1 = client

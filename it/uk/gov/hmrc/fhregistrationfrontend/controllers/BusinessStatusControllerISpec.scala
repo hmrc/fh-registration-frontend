@@ -1,22 +1,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
 
-class BusinessStatusControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+class BusinessStatusControllerISpec extends Specifications with TestConfiguration  {
   val requestUrl = "businessStatus"
 
   "GET /businessStatus" when {
 
     "render the business status page" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -40,7 +38,7 @@ class BusinessStatusControllerISpec extends Specifications with TestConfiguratio
     "Yes radio button selected and details are entered" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -64,7 +62,7 @@ class BusinessStatusControllerISpec extends Specifications with TestConfiguratio
         }
 
         "No radio button is selected" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -88,7 +86,7 @@ class BusinessStatusControllerISpec extends Specifications with TestConfiguratio
 
     "a radio button isn't selected" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -115,7 +113,7 @@ class BusinessStatusControllerISpec extends Specifications with TestConfiguratio
 
     "Yes radio button is selected but no date is entered" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -145,7 +143,7 @@ class BusinessStatusControllerISpec extends Specifications with TestConfiguratio
 
     "Yes radio button is selected but an invalid date is entered" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

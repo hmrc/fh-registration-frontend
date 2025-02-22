@@ -1,16 +1,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
 class MainBusinessAddressControllerISpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration{
   val requestUrl = "mainBusinessAddress"
   val pageTitle = "Business address - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
 
@@ -18,7 +16,7 @@ class MainBusinessAddressControllerISpec
 
     "render the main business address" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -41,7 +39,7 @@ class MainBusinessAddressControllerISpec
     "the user selects Less than 3 years" should {
       "return 200" when {
         "the user selects no" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -65,7 +63,7 @@ class MainBusinessAddressControllerISpec
         }
 
         "the user selects yes and correctly fills out the form" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -96,7 +94,7 @@ class MainBusinessAddressControllerISpec
 
       "return 400" when {
         "the user selects yes, leaves address line 1 blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -127,7 +125,7 @@ class MainBusinessAddressControllerISpec
 
       "return 400" when {
         "the user selects yes, leaves postcode field blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -158,7 +156,7 @@ class MainBusinessAddressControllerISpec
 
       "return 400" when {
         "the user selects yes, enters invalid postcode" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -189,7 +187,7 @@ class MainBusinessAddressControllerISpec
 
       "return 400" when {
         "the user selects yes, leaves day field blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -218,7 +216,7 @@ class MainBusinessAddressControllerISpec
         }
 
         "the user selects yes, leaves month field blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -247,7 +245,7 @@ class MainBusinessAddressControllerISpec
         }
 
         "the user selects yes, leaves year field blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -276,7 +274,7 @@ class MainBusinessAddressControllerISpec
         }
 
         "the user selects yes, leaves date field blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -305,7 +303,7 @@ class MainBusinessAddressControllerISpec
         }
 
         "the user selects yes, leaves all fields blank" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -342,7 +340,7 @@ class MainBusinessAddressControllerISpec
     "the user selects 3-5 years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -369,7 +367,7 @@ class MainBusinessAddressControllerISpec
     "the user selects 5-10 years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -396,7 +394,7 @@ class MainBusinessAddressControllerISpec
     "the user selects 10 or more years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -422,7 +420,7 @@ class MainBusinessAddressControllerISpec
 
     "no radio option is selected by the user" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

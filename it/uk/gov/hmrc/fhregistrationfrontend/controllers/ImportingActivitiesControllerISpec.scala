@@ -1,23 +1,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
 class ImportingActivitiesControllerISpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration{
 
   val requestUrl = "importingActivities"
 
   "GET /importingActivities" when {
     "render the importing activities page" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -44,7 +42,7 @@ class ImportingActivitiesControllerISpec
     "the user selects no" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -69,7 +67,7 @@ class ImportingActivitiesControllerISpec
     "the user selects yes, supplies EORI number and selects false for goodsImportedOutsideEori" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -98,7 +96,7 @@ class ImportingActivitiesControllerISpec
     "the user selects yes, supplies EORI number and selects true for goodsImportedOutsideEori" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -127,7 +125,7 @@ class ImportingActivitiesControllerISpec
     "the user selects yes and doesn't supply an EORI number" should {
       "return 400" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -157,7 +155,7 @@ class ImportingActivitiesControllerISpec
     "the user selects yes, enters EORI and doesn't select option for goodsImportedOutsideEori" should {
       "return 400" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -187,7 +185,7 @@ class ImportingActivitiesControllerISpec
     "the user selects yes and leaves EORI number form blank" should {
       "return 400" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client

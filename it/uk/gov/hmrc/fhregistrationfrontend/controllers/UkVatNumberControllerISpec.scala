@@ -9,14 +9,13 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.JsonBodyReadables.*
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class UkVatNumberControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+class UkVatNumberControllerISpec extends Specifications with TestConfiguration  {
 
   "GET /form/business-partners/corporate-body-vat-registration-number" should {
 
     "render the corporate-body-vat-registration-number page" in {
-      setupCommonPreconditionMocks()
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -37,7 +36,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
   "POST /form/business-partners/corporate-body-vat-registration-number" when {
     "yes is selected and the vatnumber entered" should {
       "return 200 with vatnumber" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -56,7 +55,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
 
     "no is selected" should {
       "return 200 with no vatnumber message" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -75,7 +74,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
 
     "no hasVat number selected" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -97,7 +96,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
 
     "hasVat number selected but vatNumber not supplied" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -119,7 +118,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
 
     "the form hasVat field is invalid format" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -141,7 +140,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration w
 
     "the vatnumber field is invalid format" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

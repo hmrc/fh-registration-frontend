@@ -6,15 +6,14 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import org.scalatest.concurrent.ScalaFutures.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
 class ApplicationControllerIntegrationSpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration with MockitoSugar {
 
   "Application" should {
 
     "be reachable" in {
-      setupWritesAuditOrMergedMocks()
+      `given`.audit.writesAuditOrMerged()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -29,7 +28,7 @@ class ApplicationControllerIntegrationSpec
     }
 
     "redirects to the login page if the user is not logged in" in {
-      setupUserIsNotAuthorisedMocks()
+      `given`.audit.writesAuditOrMerged().user.isNotAuthorised()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -48,8 +47,7 @@ class ApplicationControllerIntegrationSpec
     }
 
     "redirect to the verification of main business address if logged in" in {
-      setupUserIsAuthorisedMocks()
-      setupHasNoEnrolmentProgressMocks()
+      `given`.audit.writesAuditOrMerged().user.isAuthorised().fhddsBackend.hasNoEnrolmentProgress()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -80,7 +78,7 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to business type page when the user has a correct BPR and the user is new" in {
 
-      setupCommonPreconditionMocks()
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -98,12 +96,7 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to forbidden page when the user is assistant" in {
 
-      setupWritesAuditOrMergedMocks()
-      setupAuthorisedAssistantMocks()
-      setupHasBusinessCustomerRecordMocks()
-      setupBusinessRecordWasSavedMocks()
-      setupGetNoneDataMocks()
-      setupHasNoEnrolmentProgressMocks()
+      `given`.commonPreconditionAssist
 
       WsTestClient.withClient { client =>
         val result = client
@@ -121,12 +114,7 @@ class ApplicationControllerIntegrationSpec
 
     "continue redirects to bad request page when the user is not admin/user or assistant" in {
 
-      setupWritesAuditOrMergedMocks()
-      setupIsAuthorisedNoCredRoleMocks()
-      setupHasBusinessCustomerRecordMocks()
-      setupBusinessRecordWasSavedMocks()
-      setupGetNoneDataMocks()
-      setupHasNoEnrolmentProgressMocks()
+      `given`.commonPreconditionNoRole
 
       WsTestClient.withClient { client =>
         val result = client

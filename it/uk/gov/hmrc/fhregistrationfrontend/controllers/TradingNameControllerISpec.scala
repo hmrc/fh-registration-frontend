@@ -1,15 +1,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class TradingNameControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+class TradingNameControllerISpec extends Specifications with TestConfiguration {
 
   val requestUrl = "tradingName"
 
@@ -17,7 +15,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration w
 
     "render the trading name page" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -44,7 +42,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration w
     "the user selects yes and enters a trading name" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -68,7 +66,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration w
         }
 
         "the user selects no" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -93,7 +91,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration w
 
     "no radio option is selected by the user" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -121,7 +119,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration w
 
     "yes is selected but no trading name is entered" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

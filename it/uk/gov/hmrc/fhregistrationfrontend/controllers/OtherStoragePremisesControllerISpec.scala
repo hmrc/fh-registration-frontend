@@ -7,17 +7,16 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
 class OtherStoragePremisesControllerISpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration  {
   val requestUrl = "otherStoragePremises"
 
   "GET /otherStoragePremises" when {
 
     "render the Other Storage Premises page" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -43,7 +42,7 @@ class OtherStoragePremisesControllerISpec
     "Yes radio button selected" should {
       "return 200" when {
         "the user is authenticated" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -64,7 +63,7 @@ class OtherStoragePremisesControllerISpec
         }
 
         "No radio button is selected" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -88,7 +87,7 @@ class OtherStoragePremisesControllerISpec
 
     "a radio button isn't selected" should {
       "return 400" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

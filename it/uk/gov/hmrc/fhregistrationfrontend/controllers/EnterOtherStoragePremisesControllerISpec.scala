@@ -1,16 +1,14 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
 
 class EnterOtherStoragePremisesControllerISpec
-    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+    extends Specifications with TestConfiguration {
 
   val requestUrl = "otherStoragePremises/1"
 
@@ -18,7 +16,7 @@ class EnterOtherStoragePremisesControllerISpec
 
     "render the Other Storage Premises page" when {
       "the user is authenticated" in {
-        setupCommonPreconditionMocks()
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -44,7 +42,7 @@ class EnterOtherStoragePremisesControllerISpec
     "the user is authenticated" should {
       "return 200" when {
         "The form is filled out correctly" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -75,7 +73,7 @@ class EnterOtherStoragePremisesControllerISpec
 
       "return 400" when {
         "Address line 1 is missing" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -104,7 +102,7 @@ class EnterOtherStoragePremisesControllerISpec
           }
         }
         "Postcode is missing" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -133,7 +131,7 @@ class EnterOtherStoragePremisesControllerISpec
           }
         }
         "Postcode is invalid" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -162,7 +160,7 @@ class EnterOtherStoragePremisesControllerISpec
           }
         }
         "Third party radio button unchecked" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -191,7 +189,7 @@ class EnterOtherStoragePremisesControllerISpec
           }
         }
         "Are there anymore premises radio button unchecked" in {
-          setupCommonPreconditionMocks()
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
