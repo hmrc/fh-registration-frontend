@@ -27,10 +27,8 @@ object ListWithTrackedChanges {
   case object Updated extends Status
   case object Added extends Status
 
-// implicit val statusFormat: OFormat[Status] = derived.oformat[Status]()
 
   object Status {
-    // Reads method for Status
     def reads: Reads[Status] = Reads[Status] {
       case JsString("NoChange") => JsSuccess(NoChange)
       case JsString("Updated")  => JsSuccess(Updated)
@@ -38,14 +36,12 @@ object ListWithTrackedChanges {
       case other                => JsError(s"Unknown status: $other")
     }
 
-    // Writes method for Status
     def writes: Writes[Status] = Writes {
       case NoChange => JsString("NoChange")
       case Updated  => JsString("Updated")
       case Added    => JsString("Added")
     }
 
-    // Format combining reads and writes
     implicit val statusFormat: Format[Status] = Format(reads, writes)
   }
 
