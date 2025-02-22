@@ -22,7 +22,6 @@ import play.api.libs.json.Json
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import play.api.libs.ws.writeableOf_JsValue
@@ -40,8 +39,7 @@ trait EmailVerificationConnector {
 class DefaultEmailVerificationConnector @Inject() (
   appConfig: AppConfig,
   val http: HttpClientV2,
-  val runModeConfiguration: Configuration,
-  environment: Environment
+  val runModeConfiguration: Configuration
 )(implicit ec: ExecutionContext)
     extends ServicesConfig(runModeConfiguration) with EmailVerificationConnector with HttpErrorFunctions {
   val emailVerificationBaseUrl = s"${baseUrl("email-verification")}/email-verification"
@@ -77,19 +75,6 @@ class DefaultEmailVerificationConnector @Inject() (
       linkExpiryDuration = linkExpiryDuration,
       continueUrl = appConfig.emailVerificationCallback(emailHash)
     )
-
-    implicit val customReads = new HttpReads[Boolean] {
-      override def read(method: String, url: String, response: HttpResponse): Boolean =
-        response.status match {
-          case status if status == 409 => true
-          case status if status == 201 => false
-          case status if is4xx(status) =>
-            throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 500)
-          case status if is5xx(status) =>
-            throw UpstreamErrorResponse("email-verification/verification-requests error", response.status, 502)
-
-        }
-    }
 
     val url = s"$emailVerificationBaseUrl/verification-requests"
     http

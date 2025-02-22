@@ -1,18 +1,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.EoriNumber
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class ImportingActivitiesControllerISpec extends Specifications with TestConfiguration {
+class ImportingActivitiesControllerISpec
+    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+
   val requestUrl = "importingActivities"
 
   "GET /importingActivities" when {
     "render the importing activities page" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -39,7 +44,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects no" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -54,7 +59,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: ImportingActivities(false,None,None,None)")
+              res.body[String] must include("Form submitted, with result: ImportingActivities(false,None,None,None)")
             }
           }
         }
@@ -64,7 +69,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects yes, supplies EORI number and selects false for goodsImportedOutsideEori" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -81,7 +86,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include(
+              res.body[String] must include(
                 "Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,false)),None,None)"
               )
             }
@@ -93,7 +98,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects yes, supplies EORI number and selects true for goodsImportedOutsideEori" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -110,7 +115,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include(
+              res.body[String] must include(
                 "Form submitted, with result: ImportingActivities(true,Some(EoriNumber(GB1234567800,true)),None,None)"
               )
             }
@@ -122,7 +127,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects yes and doesn't supply an EORI number" should {
       "return 400" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -152,7 +157,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects yes, enters EORI and doesn't select option for goodsImportedOutsideEori" should {
       "return 400" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -182,7 +187,7 @@ class ImportingActivitiesControllerISpec extends Specifications with TestConfigu
     "the user selects yes and leaves EORI number form blank" should {
       "return 400" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client

@@ -18,11 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import org.apache.commons.lang3.StringUtils
 import play.api.data.Forms._
-import play.api.data.format.Formatter
-import play.api.data.{FieldMapping, FormError, Mapping}
+import play.api.data.{FieldMapping, Mapping}
 import play.api.data.validation._
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOfConstraint
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, Enumerable, InternationalAddress}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
 
 import java.time.LocalDate

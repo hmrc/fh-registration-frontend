@@ -37,7 +37,7 @@ class DefaultShortLivedCache @Inject() (
   override val shortLiveCache: ShortLivedHttpCaching,
   val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit lazy val crypto: Encrypter with Decrypter = new ApplicationCrypto(
+  override implicit val crypto: Encrypter with Decrypter = new ApplicationCrypto(
     runModeConfiguration.underlying
   ).JsonCrypto
 }
@@ -45,8 +45,7 @@ class DefaultShortLivedCache @Inject() (
 @Singleton
 class DefaultShortLivedHttpCaching @Inject() (
   val http: HttpClientV2,
-  val runModeConfiguration: Configuration,
-  environment: Environment
+  val runModeConfiguration: Configuration
 ) extends ServicesConfig(runModeConfiguration) with client.ShortLivedHttpCaching {
 
   override lazy val defaultSource: String =

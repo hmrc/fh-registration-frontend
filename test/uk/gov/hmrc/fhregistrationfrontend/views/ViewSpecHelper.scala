@@ -19,12 +19,13 @@ package uk.gov.hmrc.fhregistrationfrontend.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
-import play.api.test.Helpers._
+import org.scalatest.matchers.must.Matchers.{mustBe, mustEqual}
+import play.api.test.Helpers.*
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.controllers.{ControllerSpecWithGuiceApp, routes}
+import org.scalatest.matchers.must.Matchers._
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait ViewSpecHelper extends ControllerSpecWithGuiceApp {
   def doc(result: Html): Document = Jsoup.parse(contentAsString(result))
@@ -60,7 +61,7 @@ trait ViewSpecHelper extends ControllerSpecWithGuiceApp {
       "has the expected keep alive and signout urls" in {
         timeoutDialog.isDefined mustBe true
         timeoutDialog.get.attr("data-keep-alive-url") must include("/fhdds/hmrc-frontend/keep-alive")
-        timeoutDialog.get.attr("data-sign-out-url") mustBe routes.SignOutController.signout.url
+        timeoutDialog.get.attr("data-sign-out-url") mustBe routes.SignOutController.signout().url
       }
     }
   }

@@ -39,7 +39,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Inject
 class DeclarationController @Inject() (
   ds: CommonPlayDependencies,
-  links: ExternalUrls,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
   summaryConfirmationService: SummaryConfirmationService,

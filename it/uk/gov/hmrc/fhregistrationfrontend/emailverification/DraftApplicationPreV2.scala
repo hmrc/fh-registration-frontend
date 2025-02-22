@@ -1,15 +1,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class DraftApplicationPreV2 extends Specifications with TestConfiguration {
+class DraftApplicationPreV2 extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "Loading a draft application pre2.0" should {
     "redirect the user to email-verification-status" when {
       "the user loads the summary page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+
+        setupUserIsAuthorisedMocks()
+        setupHasFullPreEmailVerificationDataMocks()
+        setupWritesAuditOrMergedMocks()
 
         WsTestClient withClient { implicit client =>
           val result = client
@@ -26,7 +31,10 @@ class DraftApplicationPreV2 extends Specifications with TestConfiguration {
       }
 
       "the user loads a form page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+
+        setupUserIsAuthorisedMocks()
+        setupHasFullPreEmailVerificationDataMocks()
+        setupWritesAuditOrMergedMocks()
 
         WsTestClient withClient { implicit client =>
           val result = client
@@ -43,7 +51,10 @@ class DraftApplicationPreV2 extends Specifications with TestConfiguration {
       }
 
       "the user loads the declaration page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+
+        setupUserIsAuthorisedMocks()
+        setupHasFullPreEmailVerificationDataMocks()
+        setupWritesAuditOrMergedMocks()
 
         WsTestClient withClient { implicit client =>
           val result = client

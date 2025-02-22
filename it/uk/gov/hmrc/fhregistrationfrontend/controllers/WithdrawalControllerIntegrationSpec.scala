@@ -1,17 +1,22 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.writeableOf_urlEncodedForm
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class WithdrawalControllerIntegrationSpec extends Specifications with TestConfiguration {
+class WithdrawalControllerIntegrationSpec
+    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "WithdrawalController" should {
 
     "Ask the reason for the withdrawal" in {
 
-      given.withdrawalPrecondition
+      setupWritesAuditOrMergedMocks()
+      setupIsAuthorisedAndEnrolledMocks()
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -37,7 +42,9 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Post the reason for the withdrawal" in {
 
-      given.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
+      setupWritesAuditOrMergedMocks()
+      setupIsAuthorisedAndEnrolledMocks()
+      setupSaveWithdrawalReasonMocks(sessionId)
 
       WsTestClient.withClient { client =>
         val result =
@@ -58,7 +65,10 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      given.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
+      setupWritesAuditOrMergedMocks()
+      setupIsAuthorisedAndEnrolledMocks()
+      setupSaveWithdrawalReasonMocks(sessionId)
+      setupGetSubscriptionMocks()
 
       WsTestClient.withClient { client =>
         val result =
@@ -76,7 +86,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Show bad request to the user if not enrolled" in {
 
-      given.commonPrecondition
+      setupCommonPreconditionMocks()
 
       WsTestClient.withClient { client =>
         val result1 = client

@@ -29,7 +29,6 @@ case class SummaryConfirmationCache(
 
 object SummaryConfirmationCache {
   object MongoFormats {
-    import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
     implicit val cryptEncryptedValueFormats: Format[EncryptedValue] = CryptoFormats.encryptedValueFormat
 
     def reads()(implicit encryption: Encryption): Reads[SummaryConfirmationCache] =

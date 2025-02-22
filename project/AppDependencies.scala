@@ -20,7 +20,6 @@ object AppDependencies {
     "org.typelevel"              %% "cats-core"                                   % "2.13.0",
     "org.typelevel"              %% "cats-kernel"                                 % "2.13.0",
     "com.typesafe.play"          %% "play-json"                                   % "2.10.6",
-    "com.github.tototoshi"       %% "play-json-naming"                            % "1.5.0" cross CrossVersion.for3Use2_13,
     "dev.optics"                 %% "monocle-core"                                % monocleVersion,
     "dev.optics"                 %% "monocle-macro"                               % monocleVersion,
     "org.mindrot"                %  "jbcrypt"                                     % "0.4"

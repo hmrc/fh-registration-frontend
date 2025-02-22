@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models
 
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import org.scalatest.matchers.must.Matchers.mustBe
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}

@@ -4,13 +4,17 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class BusinessCustomersControllerISpec extends Specifications with TestConfiguration {
+class BusinessCustomersControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "GET /businessCustomers" when {
     "render the business customers page" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -40,7 +44,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects None" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -55,7 +59,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Next page! with form result: BusinessCustomers(None)")
+              res.json.as[String] must include("Next page! with form result: BusinessCustomers(None)")
             }
           }
         }
@@ -64,7 +68,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 1-10" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -79,7 +83,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Next page! with form result: BusinessCustomers(1-10)")
+              res.json.as[String] must include("Next page! with form result: BusinessCustomers(1-10)")
             }
           }
         }
@@ -89,7 +93,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 11-50" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -104,7 +108,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Next page! with form result: BusinessCustomers(11-50)")
+              res.json.as[String] must include("Next page! with form result: BusinessCustomers(11-50)")
             }
           }
         }
@@ -114,7 +118,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects 51-100" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -129,7 +133,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Next page! with form result: BusinessCustomers(51-100)")
+              res.json.as[String] must include("Next page! with form result: BusinessCustomers(51-100)")
             }
           }
         }
@@ -139,7 +143,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user selects Over 100" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -154,7 +158,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Next page! with form result: BusinessCustomers(Over 100)")
+              res.json.as[String] must include("Next page! with form result: BusinessCustomers(Over 100)")
             }
           }
         }
@@ -164,7 +168,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
     "the user does not select a radio button" should {
       "return 400" when {
         "the user doesn't select a radio button" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client

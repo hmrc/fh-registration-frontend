@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-import play.api.mvc.{MessagesControllerComponents, Results}
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, StartUpdateRequest}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.{EmailVerificationConnector, FhddsConnector}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType

@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 
-import com.github.tototoshi.play.json.JsonNaming
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.JsonNaming.SnakeCase
+import play.api.libs.json.{Format, Json, JsonConfiguration}
 
 case class BusinessRegistrationDetails(
   businessName: Option[String],
@@ -31,6 +31,8 @@ case class BusinessRegistrationDetails(
 )
 
 object BusinessRegistrationDetails {
-  implicit val formats: Format[BusinessRegistrationDetails] = JsonNaming snakecase Json
-    .format[BusinessRegistrationDetails]
+  implicit val format: Format[BusinessRegistrationDetails] = {
+    implicit val config: JsonConfiguration = JsonConfiguration(SnakeCase)
+    Json.format[BusinessRegistrationDetails]
+  }
 }

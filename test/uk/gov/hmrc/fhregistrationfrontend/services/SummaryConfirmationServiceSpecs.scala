@@ -97,7 +97,10 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
 
       intercept[Exception] {
         val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(hc), 20 seconds)
-        result mustBe new Exception
+        result match {
+          case Some(message) => message must include("Request was successful")
+          case None          => fail("Error happened")
+        }
       }
     }
 

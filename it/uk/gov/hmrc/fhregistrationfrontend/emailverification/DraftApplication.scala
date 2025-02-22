@@ -1,15 +1,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.{MockHelper, PreconditionBuilder}
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class DraftApplication extends Specifications with TestConfiguration {
+class DraftApplication extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "Loading a page w/o verified email" should {
 
     "redirect to email verification page" in {
-      given.user.isAuthorised().save4later.hasBusinessInformationWOVerifiedEmail.audit.writesAuditOrMerged()
+
+      setupUserIsAuthorisedMocks()
+      setupHasBusinessInformationWOVerifiedEmailMocks()
+      setupWritesAuditOrMergedMocks()
 
       WsTestClient withClient { implicit client =>
         val result = client

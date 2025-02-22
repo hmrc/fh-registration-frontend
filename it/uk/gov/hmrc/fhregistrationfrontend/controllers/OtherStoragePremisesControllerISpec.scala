@@ -1,18 +1,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class OtherStoragePremisesControllerISpec extends Specifications with TestConfiguration {
+class OtherStoragePremisesControllerISpec
+    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
   val requestUrl = "otherStoragePremises"
 
   "GET /otherStoragePremises" when {
 
     "render the Other Storage Premises page" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -38,7 +43,7 @@ class OtherStoragePremisesControllerISpec extends Specifications with TestConfig
     "Yes radio button selected" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -53,13 +58,13 @@ class OtherStoragePremisesControllerISpec extends Specifications with TestConfig
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: true")
+              res.body[String] must include("Form submitted, with result: true")
             }
           }
         }
 
         "No radio button is selected" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -74,7 +79,7 @@ class OtherStoragePremisesControllerISpec extends Specifications with TestConfig
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: false")
+              res.body[String] must include("Form submitted, with result: false")
             }
           }
         }
@@ -83,7 +88,7 @@ class OtherStoragePremisesControllerISpec extends Specifications with TestConfig
 
     "a radio button isn't selected" should {
       "return 400" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client

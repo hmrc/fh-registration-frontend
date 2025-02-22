@@ -15,10 +15,8 @@
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
-import play.api.libs.json.{Format, Reads, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 import play.api.libs.json._
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.businessTypeValueOf
 
 object DeregistrationReasonEnum extends Enumeration {
   type DeregistrationReasonEnum = Value

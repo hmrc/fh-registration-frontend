@@ -90,7 +90,6 @@ object Page {
     import CompanyRegistrationNumber.format
     import ContactPerson.format
     import DateOfIncorporation.format
-    import MainBusinessAddress.format
     import BusinessPartner.businessPartnerFormat
     import ListWithTrackedChanges.listWithTrackedChangesFormat
 

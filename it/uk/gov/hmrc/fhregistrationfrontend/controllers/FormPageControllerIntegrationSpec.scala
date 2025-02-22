@@ -1,17 +1,19 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class FormPageControllerIntegrationSpec extends Specifications with TestConfiguration {
+class FormPageControllerIntegrationSpec
+    extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "FormPageController" should {
     "Show the form's first page when the user has selected a business type and the user is new" in {
 
-      given.commonPrecondition.save4later.businessTypeWasSaved()
+      setupBusinessTypeWasSavedMocks()
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -39,10 +41,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
 
     "Show the form's second page when the user has fulfilled the first page" in {
 
-      given.commonPrecondition.save4later
-        .businessTypeWasSaved()
-        .save4later
-        .savePageData("mainBusinessAddress", """{"timeAtCurrentAddress": "3-5 years"}""")
+      setupSavePageDataMocks()
 
       WsTestClient.withClient { client =>
         val result = client
@@ -58,7 +57,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
 
     "Show page not found when the user try to call the second or the other pages without fulfilled the first page" in {
 
-      given.commonPrecondition.save4later.businessTypeWasSaved()
+      setupBusinessTypeWasSavedMocks()
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -82,10 +81,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
     }
 
     "Load Importing Activities data correctly from save4Later when the it contains the split fields" in {
-      val importingActivitiesWithSplitFields =
-        ImportingActivities(hasEori = true, eori = Some("1234123132"), goodsImported = Some(true))
-
-      given.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithSplitFields)
+      setupImportingActivitiesMocks()
 
       WsTestClient.withClient { client =>
         val result = client
@@ -101,12 +97,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
     }
 
     "Convert Importing Activities data correctly from save4Later when the it contains the EORI number model" in {
-      val importingActivitiesWithEoriNumberModel = ImportingActivities(
-        hasEori = true,
-        eoriNumber = Some(EoriNumber(eoriNumber = "1234123132", goodsImportedOutsideEori = true))
-      )
-
-      given.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithEoriNumberModel)
+      setupImportingActivitiesMocks()
 
       WsTestClient.withClient { client =>
         val result = client

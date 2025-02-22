@@ -1,22 +1,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.writeableOf_urlEncodedForm
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.{MockHelper, PreconditionBuilder}
 
-class AmendWithVerifiedEmailSpec extends Specifications with TestConfiguration {
+class AmendWithVerifiedEmailSpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "Submitting an amendment" should {
     "Allow submission" when {
       "The verified email was amended" in {
-        given.user.isAuthorisedAndEnrolled.save4later
-          .acceptsDelete()
-          .audit
-          .writesAuditOrMerged()
-          .fhddsBackend
-          .acceptsAmendments()
-          .save4later
-          .hasAmendmentDataWithNewVerifiedEmail("a@test.com")
+
+        setupIsAuthorisedAndEnrolledMocks()
+        setupAcceptsDeleteMocks()
+        setupWritesAuditOrMergedMocks()
+        setupAcceptsAmendmentsMocks()
+        setupHasAmendmentDataWithNewVerifiedEmailMocks()
 
         WsTestClient.withClient { implicit client =>
           val result = client

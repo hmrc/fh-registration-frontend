@@ -13,14 +13,15 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import play.api.mvc.{CookieHeaderEncoding, Session, SessionCookieBaker}
 import uk.gov.hmrc.crypto.PlainText
-import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
+import org.mongodb.scala.SingleObservableFuture
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait TestConfiguration
     extends GuiceOneServerPerSuite with IntegrationPatience with PatienceConfiguration with BeforeAndAfterEach

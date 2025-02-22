@@ -33,8 +33,7 @@ class SessionCacheModule extends Module {
 @Singleton
 class DefaultSessionCache @Inject() (
   val http: HttpClientV2,
-  val configuration: Configuration,
-  environment: Environment
+  val configuration: Configuration
 ) extends ServicesConfig(configuration) with client.SessionCache {
 
   val appNameConfiguration = configuration

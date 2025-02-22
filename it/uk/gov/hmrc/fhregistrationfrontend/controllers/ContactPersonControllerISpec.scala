@@ -1,16 +1,20 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
 
-class ContactPersonControllerISpec extends Specifications with TestConfiguration {
+class ContactPersonControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
 
   "GET /fhdds/contactPerson" should {
 
     "render the Contact Person's Details page" in {
-      given.commonPrecondition
+      setupCommonPreconditionMocks()
 
       WsTestClient.withClient { client =>
         val result = client
@@ -32,7 +36,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
     "details are entered \n" +
       "Is this the address you want to use? Yes" should {
         "return 200 with contact person's details" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -51,7 +55,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,true,None,None,None)"
+              res.body[String] mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,true,None,None,None)"
             }
           }
         }
@@ -62,7 +66,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
       "Is the contact address in the UK? Yes \n" +
       "Only mandatory fields entered" should {
         "return 200 with contact person's details message" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -84,7 +88,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,None,None,None,AB1 2YZ,None,None)),None)"
+              res.body[String] mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,None,None,None,AB1 2YZ,None,None)),None)"
             }
           }
         }
@@ -95,7 +99,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
       "Is the contact address in the UK? Yes \n" +
       "All fields entered" should {
         "return 200 with contact person's details message" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -120,7 +124,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
+              res.body[String] mustBe "Form submitted, with result: ContactPerson(John,Smith,Astronaut,0123456789,None,false,Some(true),Some(Address(Flat 1,Some(5 High Street),Some(Worthing),Some(West Sussex),AB1 2YZ,None,None)),None)"
             }
           }
         }
@@ -163,7 +167,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
 
     "no data entered" should {
       "return 400" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -199,7 +203,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
       "Is this the contact address you want to use? No \n" +
       "Is the contact address in the UK? Not selected" should {
         "return 400" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -233,7 +237,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
       "Is the contact address in the UK? Yes \n" +
       "Address details not entered" should {
         "return 400" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -272,7 +276,7 @@ class ContactPersonControllerISpec extends Specifications with TestConfiguration
       "Is the contact address in the UK? No \n" +
       "Address details not entered" should {
         "return 400" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client

@@ -17,8 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Forms.mapping
-import play.api.data.format.Formatter
-import play.api.data.{FieldMapping, Form, FormError, Mapping}
+import play.api.data.{Form, FormError, Mapping}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.*
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.*

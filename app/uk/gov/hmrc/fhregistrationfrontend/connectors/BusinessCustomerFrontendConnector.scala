@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
 import scala.concurrent.ExecutionContext
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.http.{HttpClient, StringContextOps}
+import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -34,7 +34,6 @@ import scala.concurrent.Future
 class BusinessCustomerFrontendConnector @Inject() (
   val http: HttpClientV2,
   val configuration: Configuration,
-  environment: Environment,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter
 ) extends ServicesConfig(configuration) {
 

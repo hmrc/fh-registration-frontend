@@ -20,7 +20,6 @@ import play.api.i18n.Messages
 import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
 case class StatusPageParams(

@@ -1,18 +1,23 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.MockHelper
 
-class TradingNameControllerISpec extends Specifications with TestConfiguration {
+class TradingNameControllerISpec extends Specifications with TestConfiguration with MockitoSugar with MockHelper {
+
   val requestUrl = "tradingName"
 
   "GET /tradingName" when {
 
     "render the trading name page" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -39,7 +44,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration {
     "the user selects yes and enters a trading name" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -55,13 +60,15 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration {
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(true,Some(Shelby Company Limited))")
+              res.body[String] must include(
+                "Form submitted, with result: TradingName(true,Some(Shelby Company Limited))"
+              )
             }
           }
         }
 
         "the user selects no" in {
-          given.commonPrecondition
+          setupCommonPreconditionMocks()
 
           WsTestClient.withClient { client =>
             val result = client
@@ -77,7 +84,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration {
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result: TradingName(false,None)")
+              res.body[String] must include("Form submitted, with result: TradingName(false,None)")
             }
           }
         }
@@ -86,7 +93,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration {
 
     "no radio option is selected by the user" should {
       "return 400" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client
@@ -114,7 +121,7 @@ class TradingNameControllerISpec extends Specifications with TestConfiguration {
 
     "yes is selected but no trading name is entered" should {
       "return 400" in {
-        given.commonPrecondition
+        setupCommonPreconditionMocks()
 
         WsTestClient.withClient { client =>
           val result = client

@@ -59,7 +59,6 @@ object CompanyOfficer {
         }
     }
 
-  implicit val writes: OWrites[CompanyOfficer] = Json.writes[CompanyOfficer]
   implicit val reads: Reads[CompanyOfficer] = new Reads[CompanyOfficer] {
     override def reads(value: JsValue): JsResult[CompanyOfficer] =
       value.validate[JsObject].flatMap { json =>
@@ -72,10 +71,18 @@ object CompanyOfficer {
           case _          => JsError("unknown official type")
         }
       }
-
   }
 
-  implicit val companyOfficerFormat: Format[CompanyOfficer] = Format(reads, writes)
+  implicit val companyOfficerIdentificationReads: Reads[CompanyOfficerIdentification] = Reads { json =>
+    (json \ "companyName").validateOpt[String].flatMap {
+      case Some(_) => json.validate[CompanyOfficerCompany]
+      case None    => json.validate[CompanyOfficerIndividual]
+    }
+  }
+
+  implicit val companyOfficerIdentificationFormat: Format[CompanyOfficerIdentification] =
+    Format(companyOfficerIdentificationReads, companyOfficerIdentificationWrites)
+  implicit val companyOfficerFormat: OFormat[CompanyOfficer] = Json.format[CompanyOfficer]
 
   def getVatNumber(companyOfficer: CompanyOfficer): Option[String] = companyOfficer.identification match {
     case co: CompanyOfficerCompany   => co.vat
