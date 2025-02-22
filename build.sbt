@@ -10,9 +10,9 @@ lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
 lazy val scoverageSettings = Seq(
     coverageExcludedPackages :=Seq(
-      """uk\.gov\.hmrc\.BuildInfo",".*\.Routes;.*\.RoutesPrefix",".*\.Reverse[^.]*;
-     uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\.helpers","
-     uk\.gov\.hmrc\.fhregistrationfrontend\.views\.html\..*""").mkString(","),
+      "uk.gov.hmrc.BuildInfo",".*Routes.*",".*RoutesPrefix","Reverse[^.]*",
+      "uk.gov.hmrc.fhregistrationfrontend.views.html.helpers",
+      "uk.gov.hmrc.fhregistrationfrontend.views.html.*").mkString(","),
     coverageExcludedFiles :=
       Seq("<empty>",".*javascript.*",".*models.*",".*Routes.*",".*viewmodels.*",".*testonly.*",".*controllers.AdminPageController.*",""+
         ".*controllers.AuthenticationController.*").mkString(","),
