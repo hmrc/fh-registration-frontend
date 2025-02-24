@@ -1,21 +1,21 @@
 {
-  "businessName": "DAVID BOWEN",
-  "businessType": "Sole Trader",
-  "businessAddress": {
-    "line_1": "LINE 1",
-    "line_2": "LINE 2",
-    "line_3": "LINE 3",
-    "line_4": "LINE 4",
+  "business_name": "DAVID BOWEN",
+  "business_type": "Sole Trader",
+  "business_address": {
+    "line1": "LINE 1",
+    "line2": "LINE 2",
+    "line3": "LINE 3",
+    "line4": "LINE 4",
     "postcode": "M46 0PT",
     "country": "GB"
   },
-  "sapNumber": "0100031105",
-  "safeId": "XR0000100031105",
-  "isAGroup": false,
-  "directMatch": true,
-  "agentReferenceNumber": "SARN0001341",
-  "firstName": "DAVID",
-  "lastName": "BOWEN",
+  "sap_number": "0100031105",
+  "safe_id": "XR0000100031105",
+  "is_a_group": false,
+  "direct_match": true,
+  "agent_reference_number": "SARN0001341",
+  "first_name": "DAVID",
+  "last_name": "BOWEN",
   "utr": "1111111112",
-  "isBusinessDetailsEditable": false
+  "is_business_details-editable": false
 }
