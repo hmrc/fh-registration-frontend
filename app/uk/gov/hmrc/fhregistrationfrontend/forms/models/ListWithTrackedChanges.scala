@@ -27,7 +27,6 @@ object ListWithTrackedChanges {
   case object Updated extends Status
   case object Added extends Status
 
-
   object Status {
     def reads: Reads[Status] = Reads[Status] {
       case JsString("NoChange") => JsSuccess(NoChange)

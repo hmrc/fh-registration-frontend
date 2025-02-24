@@ -13,7 +13,13 @@ class AmendWithVerifiedEmailSpec extends Specifications with TestConfiguration {
       "The verified email was amended" in {
 
         `given`.user.isAuthorisedAndEnrolled.save4later
-          .acceptsDelete().audit.writesAuditOrMerged().fhddsBackend.acceptsAmendments().save4later.hasAmendmentDataWithNewVerifiedEmail("a@test.com")
+          .acceptsDelete()
+          .audit
+          .writesAuditOrMerged()
+          .fhddsBackend
+          .acceptsAmendments()
+          .save4later
+          .hasAmendmentDataWithNewVerifiedEmail("a@test.com")
 
         WsTestClient.withClient { implicit client =>
           val result = client

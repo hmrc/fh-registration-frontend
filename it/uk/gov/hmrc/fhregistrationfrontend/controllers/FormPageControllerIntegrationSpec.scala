@@ -7,8 +7,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{EoriNumber, ImportingActivities}
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
-class FormPageControllerIntegrationSpec
-    extends Specifications with TestConfiguration {
+class FormPageControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "FormPageController" should {
     "Show the form's first page when the user has selected a business type and the user is new" in {
@@ -86,7 +85,7 @@ class FormPageControllerIntegrationSpec
     "Load Importing Activities data correctly from save4Later when the it contains the split fields" in {
       val importingActivitiesWithSplitFields =
         ImportingActivities(hasEori = true, eori = Some("1234123132"), goodsImported = Some(true))
-      
+
       `given`.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithSplitFields)
 
       WsTestClient.withClient { client =>
@@ -108,7 +107,9 @@ class FormPageControllerIntegrationSpec
         eoriNumber = Some(EoriNumber(eoriNumber = "1234123132", goodsImportedOutsideEori = true))
       )
 
-      `given`.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithEoriNumberModel)
+      `given`.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(
+        importingActivitiesWithEoriNumberModel
+      )
 
       WsTestClient.withClient { client =>
         val result = client

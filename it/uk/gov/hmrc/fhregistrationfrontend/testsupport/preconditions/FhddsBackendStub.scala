@@ -8,7 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, 
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 
 case class FhddsBackendStub()(implicit builder: PreconditionBuilder) {
-  import BusinessRegistrationDetails.format
+  import BusinessRegistrationDetails.formats
 
   private val aFakeAddress =
     Address(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postcode = Some("NE98 1ZZ"), country = "GB")

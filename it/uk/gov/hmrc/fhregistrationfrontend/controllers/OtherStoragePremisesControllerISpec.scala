@@ -8,8 +8,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
 
-class OtherStoragePremisesControllerISpec
-    extends Specifications with TestConfiguration  {
+class OtherStoragePremisesControllerISpec extends Specifications with TestConfiguration {
   val requestUrl = "otherStoragePremises"
 
   "GET /otherStoragePremises" when {

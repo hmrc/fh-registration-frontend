@@ -7,7 +7,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.api.libs.ws.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
 
-class ContactPersonControllerISpec extends Specifications with TestConfiguration  {
+class ContactPersonControllerISpec extends Specifications with TestConfiguration {
 
   "GET /fhdds/contactPerson" should {
 

@@ -10,7 +10,7 @@ import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.JsonBodyReadables.*
 
-class UkVatNumberControllerISpec extends Specifications with TestConfiguration  {
+class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/corporate-body-vat-registration-number" should {
 

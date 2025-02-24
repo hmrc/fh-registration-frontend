@@ -6,7 +6,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 
-class BusinessCustomersControllerISpec extends Specifications with TestConfiguration  {
+class BusinessCustomersControllerISpec extends Specifications with TestConfiguration {
 
   "GET /businessCustomers" when {
     "render the business customers page" when {

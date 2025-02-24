@@ -7,7 +7,7 @@ import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfi
 import play.api.libs.ws.writeableOf_urlEncodedForm
 import play.api.libs.ws.DefaultBodyReadables.*
 
-class BusinessStatusControllerISpec extends Specifications with TestConfiguration  {
+class BusinessStatusControllerISpec extends Specifications with TestConfiguration {
   val requestUrl = "businessStatus"
 
   "GET /businessStatus" when {

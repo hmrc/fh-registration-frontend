@@ -5,8 +5,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.{PreconditionBuilder, PreconditionHelpers}
 
-class SummaryControllerIntegrationSpec
-    extends Specifications with TestConfiguration with PreconditionHelpers {
+class SummaryControllerIntegrationSpec extends Specifications with TestConfiguration with PreconditionHelpers {
   implicit val builder: PreconditionBuilder = new PreconditionBuilder()
 
   "SummaryController" should {

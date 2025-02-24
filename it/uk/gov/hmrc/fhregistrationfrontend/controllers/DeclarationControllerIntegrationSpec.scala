@@ -6,8 +6,7 @@ import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 
-class DeclarationControllerIntegrationSpec
-    extends Specifications with TestConfiguration  {
+class DeclarationControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "DeclarationController" should {
 

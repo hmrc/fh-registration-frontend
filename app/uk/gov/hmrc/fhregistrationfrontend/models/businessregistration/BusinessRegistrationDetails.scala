@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 
-import play.api.libs.json.JsonNaming.SnakeCase
-import play.api.libs.json.{Format, Json, JsonConfiguration}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import play.api.libs.functional._
 
 case class BusinessRegistrationDetails(
   businessName: Option[String],
@@ -31,8 +32,41 @@ case class BusinessRegistrationDetails(
 )
 
 object BusinessRegistrationDetails {
-  implicit val format: Format[BusinessRegistrationDetails] = {
-    implicit val config: JsonConfiguration = JsonConfiguration(SnakeCase)
-    Json.format[BusinessRegistrationDetails]
-  }
+
+  def readWithFallback[T: Reads](primary: JsPath, fallback: JsPath): Reads[Option[T]] =
+    new Reads[Option[T]] {
+      override def reads(json: JsValue): JsResult[Option[T]] =
+        primary.readNullable[T].reads(json) match {
+          case JsSuccess(Some(value), _) => JsSuccess(Some(value))
+          case _                         => fallback.readNullable[T].reads(json)
+        }
+    }
+
+  implicit val businessRegistrationDetailsReads: Reads[BusinessRegistrationDetails] = (
+    readWithFallback[String](__ \ "businessName", __ \ "business_name") and
+      readWithFallback[String](__ \ "businessType", __ \ "business_type") and
+      (__ \ "businessAddress").read[Address].orElse((__ \ "business_address").read[Address]) and
+      readWithFallback[String](__ \ "safeId", __ \ "safe_id") and
+      (__ \ "utr").readNullable[String] and
+      readWithFallback[String](__ \ "firstName", __ \ "first_name") and
+      readWithFallback[String](__ \ "lastName", __ \ "last_name") and
+      (__ \ "identification").readNullable[Identification]
+  )(BusinessRegistrationDetails.apply _)
+
+  implicit val businessRegistrationDetailsWrites: OWrites[BusinessRegistrationDetails] =
+    new OWrites[BusinessRegistrationDetails] {
+      def writes(b: BusinessRegistrationDetails): JsObject = Json.obj(
+        "businessName"    -> b.businessName,
+        "businessType"    -> b.businessType,
+        "businessAddress" -> b.businessAddress,
+        "safeId"          -> b.safeId,
+        "utr"             -> b.utr,
+        "firstName"       -> b.firstName,
+        "lastName"        -> b.lastName,
+        "identification"  -> b.identification
+      )
+    }
+
+  implicit val formats: OFormat[BusinessRegistrationDetails] =
+    OFormat(businessRegistrationDetailsReads, businessRegistrationDetailsWrites)
 }

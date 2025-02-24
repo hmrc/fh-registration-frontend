@@ -6,8 +6,7 @@ import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.writeableOf_urlEncodedForm
 
-class WithdrawalControllerIntegrationSpec
-    extends Specifications with TestConfiguration {
+class WithdrawalControllerIntegrationSpec extends Specifications with TestConfiguration {
 
   "WithdrawalController" should {
 
@@ -40,7 +39,7 @@ class WithdrawalControllerIntegrationSpec
     "Post the reason for the withdrawal" in {
 
       `given`.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
-      
+
       WsTestClient.withClient { client =>
         val result =
           client
@@ -61,7 +60,7 @@ class WithdrawalControllerIntegrationSpec
     "Handle the reason and let the user to confirm withdraw" in {
 
       `given`.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
-      
+
       WsTestClient.withClient { client =>
         val result =
           client

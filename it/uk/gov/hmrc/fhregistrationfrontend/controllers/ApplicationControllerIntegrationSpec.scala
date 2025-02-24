@@ -7,8 +7,7 @@ import org.scalatest.concurrent.ScalaFutures.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
 
-class ApplicationControllerIntegrationSpec
-    extends Specifications with TestConfiguration with MockitoSugar {
+class ApplicationControllerIntegrationSpec extends Specifications with TestConfiguration with MockitoSugar {
 
   "Application" should {
 
