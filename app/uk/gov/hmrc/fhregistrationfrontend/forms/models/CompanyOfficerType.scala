@@ -23,12 +23,10 @@ object CompanyOfficerType extends Enumeration {
 
   val Individual, Company = Value
 
-  // JSON Writes for CompanyOfficialType
   implicit val writes: Writes[CompanyOfficialType] = Writes { officialType =>
     JsString(officialType.toString)
   }
 
-  // JSON Reads for CompanyOfficialType
   implicit val reads: Reads[CompanyOfficialType] = Reads {
     case JsString(s) =>
       values
