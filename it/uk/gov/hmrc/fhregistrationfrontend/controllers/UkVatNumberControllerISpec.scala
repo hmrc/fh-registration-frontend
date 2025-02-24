@@ -8,7 +8,7 @@ import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.JsonBodyReadables.*
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
@@ -47,7 +47,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body[JsValue] mustBe Json.parse("Next page!")
+            res.body mustBe "Next page!"
           }
         }
       }
@@ -66,7 +66,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
           whenReady(result) { res =>
             res.status mustBe 200
-            res.body mustBe Json.parse("Next page!")
+            res.body mustBe "Next page!"
           }
         }
       }
