@@ -92,7 +92,6 @@ class FormToDesSpecs extends UnitSpec {
     }
 
     "Compute the differences between initial subsciption and the amendment for Sole Proprietor Update" in {
-      println(brd("business-registration-details-sole-trader.json"))
 
       val originalSubscription: Subscription =
         service.soleProprietorCompanySubmission(
