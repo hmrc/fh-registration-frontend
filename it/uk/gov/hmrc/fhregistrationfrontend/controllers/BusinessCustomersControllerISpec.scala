@@ -5,6 +5,8 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+
 
 class BusinessCustomersControllerISpec extends Specifications with TestConfiguration {
 
@@ -57,7 +59,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.json.as[String] must include("Next page! with form result: BusinessCustomers(None)")
+              res.body must include("Next page! with form result: BusinessCustomers(None)")
             }
           }
         }
@@ -81,7 +83,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.json.as[String] must include("Next page! with form result: BusinessCustomers(1-10)")
+              res.body must include("Next page! with form result: BusinessCustomers(1-10)")
             }
           }
         }
@@ -106,7 +108,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.json.as[String] must include("Next page! with form result: BusinessCustomers(11-50)")
+              res.body must include("Next page! with form result: BusinessCustomers(11-50)")
             }
           }
         }
@@ -131,7 +133,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.json.as[String] must include("Next page! with form result: BusinessCustomers(51-100)")
+              res.body must include("Next page! with form result: BusinessCustomers(51-100)")
             }
           }
         }
@@ -156,7 +158,7 @@ class BusinessCustomersControllerISpec extends Specifications with TestConfigura
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.json.as[String] must include("Next page! with form result: BusinessCustomers(Over 100)")
+              res.body must include("Next page! with form result: BusinessCustomers(Over 100)")
             }
           }
         }
