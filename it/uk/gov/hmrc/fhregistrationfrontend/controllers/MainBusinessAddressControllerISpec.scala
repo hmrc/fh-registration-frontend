@@ -4,6 +4,8 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
 
 class MainBusinessAddressControllerISpec extends Specifications with TestConfiguration {
   val requestUrl = "mainBusinessAddress"
@@ -13,7 +15,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
     "render the main business address" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -36,7 +38,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
     "the user selects Less than 3 years" should {
       "return 200" when {
         "the user selects no" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -52,7 +54,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include(
+              res.body[String] must include(
                 "Form submitted, with result:MainBusinessAddress(Less than 3 years,Some(false),None,None)"
               )
             }
@@ -60,7 +62,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
         }
 
         "the user selects yes and correctly fills out the form" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -81,7 +83,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include(
+              res.body[String] must include(
                 "Form submitted, with result:MainBusinessAddress(Less than 3 years,Some(true),Some(Address(line 1,None,None,None,AA1 1YZ,None,None)),Some(2022-10-01))"
               )
             }
@@ -91,7 +93,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
       "return 400" when {
         "the user selects yes, leaves address line 1 blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -122,7 +124,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
       "return 400" when {
         "the user selects yes, leaves postcode field blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -153,7 +155,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
       "return 400" when {
         "the user selects yes, enters invalid postcode" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -184,7 +186,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
       "return 400" when {
         "the user selects yes, leaves day field blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -213,7 +215,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
         }
 
         "the user selects yes, leaves month field blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -242,7 +244,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
         }
 
         "the user selects yes, leaves year field blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -271,7 +273,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
         }
 
         "the user selects yes, leaves date field blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -300,7 +302,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
         }
 
         "the user selects yes, leaves all fields blank" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -337,7 +339,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
     "the user selects 3-5 years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -352,7 +354,9 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result:MainBusinessAddress(3 to 5 years,None,None,None)")
+              res.body[String] must include(
+                "Form submitted, with result:MainBusinessAddress(3 to 5 years,None,None,None)"
+              )
             }
           }
         }
@@ -362,7 +366,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
     "the user selects 5-10 years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -377,7 +381,9 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result:MainBusinessAddress(5 to 10 years,None,None,None)")
+              res.body[String] must include(
+                "Form submitted, with result:MainBusinessAddress(5 to 10 years,None,None,None)"
+              )
             }
           }
         }
@@ -387,7 +393,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
     "the user selects 10 or more years and submits the form" should {
       "return 200" when {
         "the user is authenticated" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -402,7 +408,9 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include("Form submitted, with result:MainBusinessAddress(10 or more years,None,None,None)")
+              res.body[String] must include(
+                "Form submitted, with result:MainBusinessAddress(10 or more years,None,None,None)"
+              )
             }
           }
         }
@@ -411,7 +419,7 @@ class MainBusinessAddressControllerISpec extends Specifications with TestConfigu
 
     "no radio option is selected by the user" should {
       "return 400" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

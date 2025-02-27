@@ -20,9 +20,9 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
-@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 
 
 @this(layout: layout, viewHelpers: ViewHelpers)
@@ -30,43 +30,43 @@
 @(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
 
 @indNameInput = @{
-  company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))
+    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))
 }
 
 @indSurnameInput = @{
-  company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$lastNameKey", "fh.contact_person.last_name.label", section, viewHelpers, None, Some("family-name"))
+    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$lastNameKey", "fh.contact_person.last_name.label", section, viewHelpers, None, Some("family-name"))
 }
 
 @condPassportQuestion =@{
-  company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasPassportNumberKey", section, Some(indPassportNoinput), Some(indNatIdInput), false, viewHelpers)
+    company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasPassportNumberKey", section, Some(indPassportNoinput), Some(indNatIdInput), false, viewHelpers)
 }
 
 @indPassportNoinput = @{
-  company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$passportNumberKey", s"fh.$individualIdentificationKey.$passportNumberKey.label", section, viewHelpers)
+    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$passportNumberKey", s"fh.$individualIdentificationKey.$passportNumberKey.label", section, viewHelpers)
 }
 
 @indNatInsNoInput = @{
-  company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some("fh.partner.national_insurance_number.hintText"))
+    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some("fh.partner.national_insurance_number.hintText"))
 }
 
 @indNatIdInput = @{
-  company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalIDKey", "fh.company_officers.individual.nationalID.label", section, viewHelpers, Some("fh.company_officers.individual.nationalID.hint_text"))
+    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalIDKey", "fh.company_officers.individual.nationalID.label", section, viewHelpers, Some("fh.company_officers.individual.nationalID.hint_text"))
 }
 
 @compNameinput = @{
-  company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyNameKey", "fh.company_officers.company.company_name.label", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
+    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyNameKey", "fh.company_officers.company.company_name.label", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
 @condVATQuestion =@{
-  company_officers.yes_no_conditional(companyOfficersForm, s"$companyIdentificationKey.$hasVatKey", section, Some(VATinput), Some(compRegNoInput), false, viewHelpers)
+    company_officers.yes_no_conditional(companyOfficersForm, s"$companyIdentificationKey.$hasVatKey", section, Some(VATinput), Some(compRegNoInput), false, viewHelpers)
 }
 
 @VATinput = @{
-  company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.guided.hintText"))
+    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.guided.hintText"))
 }
 
 @compRegNoInput = @{
-  company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyRegistrationKey", "fh.companyRegistrationNumber.title", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
+    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyRegistrationKey", "fh.companyRegistrationNumber.title", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
 @addMore = @{
@@ -75,7 +75,7 @@
    <input type="hidden" name="addMore" value="@force"/>
   }
   case None => {
-   company_officers.add_more(companyOfficersForm, viewHelpers)
+    company_officers.add_more(companyOfficersForm, viewHelpers)
   }
  }
 }

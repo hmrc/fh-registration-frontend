@@ -21,7 +21,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.crypto.EncryptedValue
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 
-import java.time.{Instant, LocalDateTime}
+import java.time.Instant
 
 object ModelEncryption {
   def encryptUserAnswers(

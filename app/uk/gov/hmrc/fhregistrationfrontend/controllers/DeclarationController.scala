@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.data.FormError
 import play.api.libs.json.Json
-import play.api.mvc.{MessagesControllerComponents, Result, Results}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Result, Results}
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest, UserRequest}
@@ -39,7 +39,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Inject
 class DeclarationController @Inject() (
   ds: CommonPlayDependencies,
-  links: ExternalUrls,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
   summaryConfirmationService: SummaryConfirmationService,
@@ -57,7 +56,7 @@ class DeclarationController @Inject() (
 
   import actions._
 
-  def showDeclaration() = summaryAction { implicit request =>
+  def showDeclaration() = summaryAction { implicit request: SummaryRequest[AnyContent] =>
     Ok(
       views.declaration(
         declarationForm,
@@ -120,7 +119,7 @@ class DeclarationController @Inject() (
               .map(_ => true)
               .recover { case _ => false }
               .map { pdfSaved =>
-                Redirect(routes.DeclarationController.showAcknowledgment)
+                Redirect(routes.DeclarationController.showAcknowledgment())
                   .withSession(
                     request.session
                       + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)

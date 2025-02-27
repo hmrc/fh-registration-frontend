@@ -18,7 +18,6 @@ package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import models.{Mode, UserAnswers}
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
-import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 
 import scala.concurrent.{ExecutionContext, Future}

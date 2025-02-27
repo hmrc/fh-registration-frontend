@@ -1,16 +1,18 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import play.api.http.HeaderNames
-import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import org.scalatest.concurrent.ScalaFutures.*
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
 
-class ApplicationControllerIntegrationSpec extends Specifications with TestConfiguration {
+class ApplicationControllerIntegrationSpec extends Specifications with TestConfiguration with MockitoSugar {
 
   "Application" should {
 
     "be reachable" in {
-      given.audit.writesAuditOrMerged()
+      `given`.audit.writesAuditOrMerged()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -25,7 +27,7 @@ class ApplicationControllerIntegrationSpec extends Specifications with TestConfi
     }
 
     "redirects to the login page if the user is not logged in" in {
-      given.audit.writesAuditOrMerged().user.isNotAuthorised()
+      `given`.audit.writesAuditOrMerged().user.isNotAuthorised()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -44,7 +46,7 @@ class ApplicationControllerIntegrationSpec extends Specifications with TestConfi
     }
 
     "redirect to the verification of main business address if logged in" in {
-      given.audit.writesAuditOrMerged().user.isAuthorised().fhddsBackend.hasNoEnrolmentProgress()
+      `given`.audit.writesAuditOrMerged().user.isAuthorised().fhddsBackend.hasNoEnrolmentProgress()
 
       WsTestClient.withClient { client =>
         whenReady(
@@ -75,7 +77,7 @@ class ApplicationControllerIntegrationSpec extends Specifications with TestConfi
 
     "continue redirects to business type page when the user has a correct BPR and the user is new" in {
 
-      given.commonPrecondition
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -93,7 +95,7 @@ class ApplicationControllerIntegrationSpec extends Specifications with TestConfi
 
     "continue redirects to forbidden page when the user is assistant" in {
 
-      given.commonPreconditionAssist
+      `given`.commonPreconditionAssist
 
       WsTestClient.withClient { client =>
         val result = client
@@ -111,7 +113,7 @@ class ApplicationControllerIntegrationSpec extends Specifications with TestConfi
 
     "continue redirects to bad request page when the user is not admin/user or assistant" in {
 
-      given.commonPreconditionNoRole
+      `given`.commonPreconditionNoRole
 
       WsTestClient.withClient { client =>
         val result = client

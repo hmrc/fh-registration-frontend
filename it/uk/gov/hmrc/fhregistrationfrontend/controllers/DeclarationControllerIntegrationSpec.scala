@@ -3,8 +3,8 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.KeyStoreStub
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 
 class DeclarationControllerIntegrationSpec extends Specifications with TestConfiguration {
 
@@ -12,7 +12,7 @@ class DeclarationControllerIntegrationSpec extends Specifications with TestConfi
 
     "Show the declaration page when the user has fulfilled all the pages" in {
 
-      given.summaryPrecondition
+      `given`.summaryPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -28,7 +28,7 @@ class DeclarationControllerIntegrationSpec extends Specifications with TestConfi
     }
 
     "Post the declaration form" in {
-      given.summaryPrecondition.fhddsBackend.createSubscription()
+      `given`.summaryPrecondition.fhddsBackend.createSubscription()
 
       WsTestClient.withClient { client =>
         val result =

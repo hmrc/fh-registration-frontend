@@ -34,6 +34,6 @@ object VatNumberForm {
     mapping(
       hasVatNumberMapping,
       vatNumberMapping
-    )(VatNumber.apply)(VatNumber.unapply)
+    )(VatNumber.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

@@ -17,11 +17,10 @@
 package uk.gov.hmrc.fhregistrationfrontend.models
 
 import models.UserAnswers
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.ControllerSpecWithGuiceApp
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
-
+import org.scalatest.matchers.must.Matchers.mustBe
 import java.time.Instant
 
 class ModelEncryptionSpec extends ControllerSpecWithGuiceApp {

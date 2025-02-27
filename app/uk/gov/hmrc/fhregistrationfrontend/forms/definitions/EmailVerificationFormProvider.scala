@@ -41,6 +41,6 @@ case class EmailVerificationFormProvider(candidateEmail: Option[String]) {
       usingDefaultEmailMapping,
       defaultEmailMapping,
       alternativeEmailMapping
-    )(EmailVerification.apply)(EmailVerification.unapply)
+    )(EmailVerification.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

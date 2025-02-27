@@ -25,7 +25,7 @@
   </p>
     <p class="govuk-button-group">
         @viewHelpers.govukButton(Button(
-            href = Some(s"${uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.showDeclaration}"),
+            href = Some(s"${uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeclarationController.showDeclaration()}"),
             content = Text(Messages("button.continue"))
         ))
     </p>

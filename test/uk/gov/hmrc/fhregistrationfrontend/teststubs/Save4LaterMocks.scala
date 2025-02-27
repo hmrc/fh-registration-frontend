@@ -36,7 +36,7 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
     setupSave4LaterFrom(CacheMapBuilder(userId).cacheMap, userId)
 
   def setupSave4LaterFrom(cacheMap: CacheMap, userId: String = testUserId): Unit = {
-    when(mockSave4Later.fetch(same(userId))(any())) thenReturn Future.successful(Some(cacheMap))
+    when(mockSave4Later.fetch(same(userId))(any())).thenReturn(Future.successful(Some(cacheMap)))
 
     when(mockSave4Later.fetchBusinessRegistrationDetails(same(userId))(any()))
       .thenReturn(
@@ -52,10 +52,10 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
     when(mockSave4Later.saveBusinessRegistrationDetails(same(userId), any())(any()))
       .thenReturn(ok)
 
-    when(mockSave4Later.removeUserData(same(userId))(any())) thenReturn ok
+    when(mockSave4Later.removeUserData(same(userId))(any())).thenReturn(ok)
 
-    when(mockSave4Later.saveBusinessType(same(userId), any())(any())) thenReturn ok
-    when(mockSave4Later.saveDraftData4Later(same(userId), any(), any())(any(), any())) thenReturn ok
+    when(mockSave4Later.saveBusinessType(same(userId), any())(any())).thenReturn(ok)
+    when(mockSave4Later.saveDraftData4Later(same(userId), any(), any())(any(), any())).thenReturn(ok)
   }
 
 }

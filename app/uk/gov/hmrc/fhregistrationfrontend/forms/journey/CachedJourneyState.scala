@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.journey
 
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Page.AnyPage
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 class CachedJourneyState(journeyPages: JourneyPages) extends JourneyState {
 

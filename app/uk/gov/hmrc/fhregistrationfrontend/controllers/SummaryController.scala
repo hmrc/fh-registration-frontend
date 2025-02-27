@@ -17,8 +17,8 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import javax.inject.Inject
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.fhregistrationfrontend.actions.Actions
+import play.api.mvc.{AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.fhregistrationfrontend.actions.{Actions, SummaryRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.Journeys
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.views.{ViewHelpers, Views}
@@ -33,7 +33,7 @@ class SummaryController @Inject() (
 ) extends AppController(ds, cc) with SummaryFunctions {
 
   import actions._
-  def summary() = summaryAction { implicit request =>
+  def summary() = summaryAction { implicit request: SummaryRequest[AnyContent] =>
     val application = request.businessType match {
       case BusinessType.CorporateBody =>
         journeys ltdApplication request

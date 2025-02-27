@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localDate, localNew, oneOf, yesOrNo}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localNew, oneOf, yesOrNo}
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.MappingWithKeyOps
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress, PreviousAddress}
 
 import java.time.LocalDate
@@ -44,6 +44,6 @@ object MainBusinessAddressForm {
     mapping(
       mainPreviousAddressMapping,
       previousAddressStartdateMapping
-    )(PreviousAddress.apply)(PreviousAddress.unapply)
+    )(PreviousAddress.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

@@ -20,7 +20,6 @@ import play.api.i18n.Messages
 import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus._
 
 case class StatusPageParams(
@@ -40,21 +39,21 @@ object StatusPageParams {
     val statusParams = List(
       StatusPageParams(
         Received,
-        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment,
+        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
         secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
         showSubHeading = false
       ),
       StatusPageParams(
         Processing,
-        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment,
+        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startAmendment(),
         secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.startWithdraw),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
         showSubHeading = false
       ),
       StatusPageParams(
         Approved,
-        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation,
+        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
         secondary =
           Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
@@ -62,7 +61,7 @@ object StatusPageParams {
       ),
       StatusPageParams(
         ApprovedWithConditions,
-        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation,
+        cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.AmendmentController.startVariation(),
         secondary =
           Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.DeregistrationController.startDeregister),
         nextTemplate = registrationStatusViews.statusWhatHappensNext.apply,
@@ -71,7 +70,7 @@ object StatusPageParams {
       StatusPageParams(
         Rejected,
         cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view),
+        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
         nextTemplate = registrationStatusViews.statusNewApplication.apply,
         showSubHeading = false,
         category = "post"
@@ -79,7 +78,7 @@ object StatusPageParams {
       StatusPageParams(
         Revoked,
         cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view),
+        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
         nextTemplate = registrationStatusViews.statusNewApplication.apply,
         category = "post"
       ),
@@ -93,7 +92,7 @@ object StatusPageParams {
       StatusPageParams(
         Deregistered,
         cta = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.Application.startOrContinueApplication(),
-        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view),
+        secondary = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.ReadOnlySummaryController.view()),
         nextTemplate = registrationStatusViews.statusNewApplication.apply,
         category = "no-notification"
       )

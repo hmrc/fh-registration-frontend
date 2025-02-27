@@ -19,9 +19,9 @@ package uk.gov.hmrc.fhregistrationfrontend.views
 import org.jsoup.Jsoup
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import org.scalatest.matchers.must.Matchers.{mustBe, mustEqual}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.fhregistrationfrontend.config.{ErrorHandler, FrontendAppConfig}
 import uk.gov.hmrc.fhregistrationfrontend.controllers.{BusinessCustomersController, ControllerSpecWithGuiceApp}
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks}

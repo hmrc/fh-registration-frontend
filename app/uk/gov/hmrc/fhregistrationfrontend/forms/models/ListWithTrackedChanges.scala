@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
-import julienrf.json.derived
 import play.api.libs.json._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ListWithTrackedChanges._
+import play.api.libs.json.Json._
 
 object ListWithTrackedChanges {
 
@@ -27,7 +27,23 @@ object ListWithTrackedChanges {
   case object Updated extends Status
   case object Added extends Status
 
-  implicit val statusFormat: OFormat[Status] = derived.oformat[Status]()
+  object Status {
+    def reads: Reads[Status] = Reads[Status] {
+      case JsString("NoChange") => JsSuccess(NoChange)
+      case JsString("Updated")  => JsSuccess(Updated)
+      case JsString("Added")    => JsSuccess(Added)
+      case other                => JsError(s"Unknown status: $other")
+    }
+
+    def writes: Writes[Status] = Writes {
+      case NoChange => JsString("NoChange")
+      case Updated  => JsString("Updated")
+      case Added    => JsString("Added")
+    }
+
+    implicit val statusFormat: Format[Status] = Format(reads, writes)
+  }
+
   def empty[T](): ListWithTrackedChanges[T] = ListWithTrackedChanges[T](List.empty, List.empty, false)
 
   def fromValues[T](values: List[T]): ListWithTrackedChanges[T] = ListWithTrackedChanges(

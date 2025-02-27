@@ -38,7 +38,7 @@ trait ErrorHandler {
 @Singleton
 class DefaultErrorHandler @Inject() (val messagesApi: MessagesApi, val configuration: Configuration, views: Views)(
   implicit val appConfig: AppConfig,
-  implicit val ec: ExecutionContext
+  val ec: ExecutionContext
 ) extends FrontendErrorHandler with ErrorHandler {
 
   import Results._

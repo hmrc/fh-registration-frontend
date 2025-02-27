@@ -45,8 +45,7 @@ trait AppConfig {
 class FrontendAppConfig @Inject() (
   configuration: play.api.Configuration,
   val runModeConfiguration: Configuration,
-  servicesConfig: ServicesConfig,
-  environment: Environment
+  servicesConfig: ServicesConfig
 ) extends ServicesConfig(runModeConfiguration) with AppConfig {
 
   private def loadConfig(key: String) =
@@ -57,17 +56,17 @@ class FrontendAppConfig @Inject() (
   lazy val contactFrontend: String = getConfString("contact-frontend-url-base", "")
   lazy val fhddsFrontendUrl: String = getConfString("fhdds-frontend-url-base", "/fhdds")
   val addressReputationEndpoint = baseUrl("address-lookup")
-  override lazy val exciseEnquiryLink: String = getConfString(
+  override val exciseEnquiryLink: String = getConfString(
     "exciseEnquiryLink",
     "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/excise-enquiries"
   )
 
-  override lazy val appName: String = loadConfig("appName")
+  override val appName: String = loadConfig("appName")
 
   private val contactFormServiceIdentifier = appName
-  override lazy val reportAProblemNonJSUrl =
+  override val reportAProblemNonJSUrl =
     s"$contactFrontend/contact/report-technical-problem?service=$contactFormServiceIdentifier"
-  override lazy val exitSurveyUrl: String =
+  override val exitSurveyUrl: String =
     s"$contactFrontend/contact/beta-feedback?service=$contactFormServiceIdentifier"
 
   override def emailVerificationCallback(hash: String) =
@@ -80,9 +79,9 @@ class FrontendAppConfig @Inject() (
 
   override def getConfiguration: Configuration = configuration
 
-  override lazy val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
+  override val newBusinessPartnerPagesEnabled: Boolean = getBoolean("business-partners-new-enabled")
 
-  override lazy val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
+  override val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
 
   override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")

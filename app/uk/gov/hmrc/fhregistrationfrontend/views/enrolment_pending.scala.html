@@ -53,6 +53,6 @@
     </div>
   <p>
       @viewHelpers.govukButton(Button(href = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController
-              .signout.url), content = Text(messages("fh.status_pending.finish")), inputType = Some("submit")))
+              .signout().url), content = Text(messages("fh.status_pending.finish")), inputType = Some("submit")))
   </p>
 }

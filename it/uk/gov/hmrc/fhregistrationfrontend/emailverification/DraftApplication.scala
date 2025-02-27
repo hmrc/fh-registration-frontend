@@ -2,6 +2,7 @@ package uk.gov.hmrc.fhregistrationfrontend.emailverification
 
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.PreconditionBuilder
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 
 class DraftApplication extends Specifications with TestConfiguration {
@@ -9,7 +10,7 @@ class DraftApplication extends Specifications with TestConfiguration {
   "Loading a page w/o verified email" should {
 
     "redirect to email verification page" in {
-      given.user.isAuthorised().save4later.hasBusinessInformationWOVerifiedEmail.audit.writesAuditOrMerged()
+      `given`.user.isAuthorised().save4later.hasBusinessInformationWOVerifiedEmail.audit.writesAuditOrMerged()
 
       WsTestClient withClient { implicit client =>
         val result = client

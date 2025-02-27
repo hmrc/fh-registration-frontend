@@ -29,7 +29,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerPartnersh
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessPartnerUnincorporatedBody => BusinessPartnerUnincorporatedBodyModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.GroupRow
-import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions, SummaryListRow, Text}
+import uk.gov.hmrc.govukfrontend.views.html.components.{SummaryListRow, Text}
 
 object BusinessPartnersHelper {
 

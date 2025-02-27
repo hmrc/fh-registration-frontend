@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.models.businessregistration
 
-import com.github.tototoshi.play.json.JsonNaming
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import play.api.libs.functional._
 
 case class Address(
   line1: String,
@@ -37,5 +38,33 @@ case class Address(
 }
 
 object Address {
-  implicit val formats: Format[Address] = JsonNaming snakecase Json.format[Address]
+
+  def readWithFallback[T: Reads](primary: JsPath, fallback: JsPath): Reads[Option[T]] = new Reads[Option[T]] {
+    override def reads(json: JsValue): JsResult[Option[T]] =
+      primary.readNullable[T].reads(json) match {
+        case JsSuccess(Some(value), _) => JsSuccess(Some(value))
+        case _                         => fallback.readNullable[T].reads(json)
+      }
+  }
+  implicit val addressReads: Reads[Address] = (
+    (__ \ "line1").read[String].orElse((__ \ "line_1").read[String]) and
+      (__ \ "line2").read[String].orElse((__ \ "line_2").read[String]) and
+      readWithFallback[String](__ \ "line3", __ \ "line_3") and
+      readWithFallback[String](__ \ "line4", __ \ "line_4") and
+      (__ \ "postcode").readNullable[String] and
+      (__ \ "country").read[String]
+  )(Address.apply _)
+
+  implicit val addressWrites: OWrites[Address] = new OWrites[Address] {
+    def writes(addr: Address): JsObject = Json.obj(
+      "line1"    -> addr.line1,
+      "line2"    -> addr.line2,
+      "line3"    -> addr.line3,
+      "line4"    -> addr.line4,
+      "postcode" -> addr.postcode,
+      "country"  -> addr.country
+    )
+  }
+
+  implicit val addressFormat: OFormat[Address] = OFormat(addressReads, addressWrites)
 }

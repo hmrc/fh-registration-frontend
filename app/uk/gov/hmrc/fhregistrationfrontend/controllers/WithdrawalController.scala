@@ -111,7 +111,7 @@ class WithdrawalController @Inject() (
 
           }
       } else {
-        Future successful Redirect(routes.Application.checkStatus)
+        Future successful Redirect(routes.Application.checkStatus())
       }
     )
 

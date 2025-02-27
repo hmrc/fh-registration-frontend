@@ -29,14 +29,14 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.ws.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FhddsConnector @Inject() (
   val http: HttpClientV2,
-  val runModeConfiguration: Configuration,
-  environment: Environment
+  val runModeConfiguration: Configuration
 )(implicit ec: ExecutionContext)
     extends ServicesConfig(runModeConfiguration) {
   val FHDSSServiceUrl: String = baseUrl("fhdds")

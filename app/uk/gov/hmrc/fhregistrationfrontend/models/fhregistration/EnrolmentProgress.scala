@@ -24,7 +24,9 @@ object EnrolmentProgress extends Enumeration {
   type EnrolmentProgress = Value
   val Pending, Unknown, Error = Value
 
+  implicit val enrolmentProgressValueOf: ValueOf[EnrolmentProgress.type] = ValueOf(EnrolmentProgress)
+
   implicit val format: Format[fhregistration.EnrolmentProgress.Value] =
-    Format(Reads.enumNameReads(EnrolmentProgress), Writes.enumNameWrites[this.type])
+    Format(Reads.enumNameReads(EnrolmentProgress), Writes.enumNameWrites)
 
 }

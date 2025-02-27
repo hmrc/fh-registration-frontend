@@ -18,8 +18,8 @@ package uk.gov.hmrc.fhregistrationfrontend.services.mapping
 
 import monocle.macros.GenLens
 import monocle.Monocle.some
-import monocle.Optional
-import uk.gov.hmrc.fhregistrationfrontend.models.des._
+import monocle.POptional
+import uk.gov.hmrc.fhregistrationfrontend.models.des.*
 
 object Diff {
 
@@ -52,7 +52,11 @@ object Diff {
   private def partnersChanged(original: Subscription, amended: Subscription) =
     anyChanged(original, amended, partnership)
 
-  private def anyChanged(original: Subscription, amended: Subscription, lenses: Optional[Subscription, _]*) =
+  private def anyChanged(
+    original: Subscription,
+    amended: Subscription,
+    lenses: POptional[Subscription, Subscription, ?, ?]*
+  ) =
     lenses.iterator
       .exists { lens =>
         lens.getOption(original) != lens.getOption(amended)

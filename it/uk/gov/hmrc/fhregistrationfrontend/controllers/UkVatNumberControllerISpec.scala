@@ -1,16 +1,21 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.json.JsValue
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
   "GET /form/business-partners/corporate-body-vat-registration-number" should {
 
     "render the corporate-body-vat-registration-number page" in {
-      given.commonPrecondition
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result = client
@@ -31,7 +36,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
   "POST /form/business-partners/corporate-body-vat-registration-number" when {
     "yes is selected and the vatnumber entered" should {
       "return 200 with vatnumber" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -50,7 +55,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
     "no is selected" should {
       "return 200 with no vatnumber message" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -69,7 +74,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
     "no hasVat number selected" should {
       "return 400" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -91,7 +96,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
     "hasVat number selected but vatNumber not supplied" should {
       "return 400" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -113,7 +118,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
     "the form hasVat field is invalid format" should {
       "return 400" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -135,7 +140,7 @@ class UkVatNumberControllerISpec extends Specifications with TestConfiguration {
 
     "the vatnumber field is invalid format" should {
       "return 400" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client

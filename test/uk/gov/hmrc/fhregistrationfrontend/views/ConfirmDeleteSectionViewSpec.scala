@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.views
 
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import org.scalatest.matchers.must.Matchers.{mustBe, mustEqual}
 import uk.gov.hmrc.fhregistrationfrontend.views.html.confirm_delete_section
 
 class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {

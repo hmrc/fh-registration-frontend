@@ -43,7 +43,7 @@
 
 @action = @{
     if (forced) uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitForcedContactEmail
-    else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail
+    else uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail()
 }
 
 @conditionalHtml = @{

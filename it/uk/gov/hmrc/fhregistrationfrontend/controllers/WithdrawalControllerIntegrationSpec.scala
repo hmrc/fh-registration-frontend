@@ -4,6 +4,7 @@ import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.writeableOf_urlEncodedForm
 
 class WithdrawalControllerIntegrationSpec extends Specifications with TestConfiguration {
 
@@ -11,7 +12,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Ask the reason for the withdrawal" in {
 
-      given.withdrawalPrecondition
+      `given`.withdrawalPrecondition
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -37,7 +38,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Post the reason for the withdrawal" in {
 
-      given.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
+      `given`.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
 
       WsTestClient.withClient { client =>
         val result =
@@ -58,7 +59,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      given.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
+      `given`.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
 
       WsTestClient.withClient { client =>
         val result =
@@ -76,7 +77,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Show bad request to the user if not enrolled" in {
 
-      given.commonPrecondition
+      `given`.commonPrecondition
 
       WsTestClient.withClient { client =>
         val result1 = client

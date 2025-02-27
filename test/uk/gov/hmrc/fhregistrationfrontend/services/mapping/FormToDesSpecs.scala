@@ -56,6 +56,7 @@ class FormToDesSpecs extends UnitSpec {
 
   "Form for amendment service" should {
     "Compute the differences between initial subscription and the amendment for Corporate Body" in {
+
       val originalSubscription: Subscription =
         service.limitedCompanySubmission(
           brd("business-registration-details-limited-company.json"),
@@ -91,6 +92,7 @@ class FormToDesSpecs extends UnitSpec {
     }
 
     "Compute the differences between initial subsciption and the amendment for Sole Proprietor Update" in {
+
       val originalSubscription: Subscription =
         service.soleProprietorCompanySubmission(
           brd("business-registration-details-sole-trader.json"),

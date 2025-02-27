@@ -9,7 +9,8 @@ class DraftApplicationPreV2 extends Specifications with TestConfiguration {
   "Loading a draft application pre2.0" should {
     "redirect the user to email-verification-status" when {
       "the user loads the summary page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+
+        `given`.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
 
         WsTestClient withClient { implicit client =>
           val result = client
@@ -26,7 +27,7 @@ class DraftApplicationPreV2 extends Specifications with TestConfiguration {
       }
 
       "the user loads a form page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+        `given`.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
 
         WsTestClient withClient { implicit client =>
           val result = client
@@ -43,7 +44,7 @@ class DraftApplicationPreV2 extends Specifications with TestConfiguration {
       }
 
       "the user loads the declaration page" in {
-        given.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
+        `given`.user.isAuthorised().save4later.hasFullPreEmailVerificationData().audit.writesAuditOrMerged()
 
         WsTestClient withClient { implicit client =>
           val result = client

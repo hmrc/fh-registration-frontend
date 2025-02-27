@@ -59,7 +59,7 @@
         content = Text(Messages("fh.emailVerification.alternativeEmail.info"))
     ))
 
-    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail, Symbol("novalidate") -> "novalidate") {
+    @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitContactEmail(), Symbol("novalidate") -> "novalidate") {
 
         @viewHelpers.govukInput(Input(
             id = alternativeEmailKey,

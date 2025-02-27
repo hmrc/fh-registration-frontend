@@ -4,15 +4,18 @@ import org.jsoup.Jsoup
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.DefaultBodyReadables.*
 
 class EnterOtherStoragePremisesControllerISpec extends Specifications with TestConfiguration {
+
   val requestUrl = "otherStoragePremises/1"
 
   "GET /otherStoragePremises/1" when {
 
     "render the Other Storage Premises page" when {
       "the user is authenticated" in {
-        given.commonPrecondition
+        `given`.commonPrecondition
 
         WsTestClient.withClient { client =>
           val result = client
@@ -38,7 +41,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
     "the user is authenticated" should {
       "return 200" when {
         "The form is filled out correctly" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -59,7 +62,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
 
             whenReady(result) { res =>
               res.status mustBe 200
-              res.body must include(
+              res.body[String] must include(
                 "Form submitted with: (StoragePremise(Address(44 Test town,Some(Testville),Some(Testington),Some(Testland),AB1 2YZ,None,None),true),false)"
               )
             }
@@ -69,7 +72,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
 
       "return 400" when {
         "Address line 1 is missing" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -98,7 +101,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
           }
         }
         "Postcode is missing" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -127,7 +130,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
           }
         }
         "Postcode is invalid" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -156,7 +159,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
           }
         }
         "Third party radio button unchecked" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client
@@ -185,7 +188,7 @@ class EnterOtherStoragePremisesControllerISpec extends Specifications with TestC
           }
         }
         "Are there anymore premises radio button unchecked" in {
-          given.commonPrecondition
+          `given`.commonPrecondition
 
           WsTestClient.withClient { client =>
             val result = client

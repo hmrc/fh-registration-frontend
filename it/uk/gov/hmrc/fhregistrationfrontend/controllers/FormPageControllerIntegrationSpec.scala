@@ -1,5 +1,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
@@ -11,7 +12,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
   "FormPageController" should {
     "Show the form's first page when the user has selected a business type and the user is new" in {
 
-      given.commonPrecondition.save4later.businessTypeWasSaved()
+      `given`.commonPrecondition.save4later.businessTypeWasSaved()
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -39,7 +40,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
 
     "Show the form's second page when the user has fulfilled the first page" in {
 
-      given.commonPrecondition.save4later
+      `given`.commonPrecondition.save4later
         .businessTypeWasSaved()
         .save4later
         .savePageData("mainBusinessAddress", """{"timeAtCurrentAddress": "3-5 years"}""")
@@ -58,7 +59,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
 
     "Show page not found when the user try to call the second or the other pages without fulfilled the first page" in {
 
-      given.commonPrecondition.save4later.businessTypeWasSaved()
+      `given`.commonPrecondition.save4later.businessTypeWasSaved()
 
       WsTestClient.withClient { client =>
         val result1 = client
@@ -85,7 +86,7 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
       val importingActivitiesWithSplitFields =
         ImportingActivities(hasEori = true, eori = Some("1234123132"), goodsImported = Some(true))
 
-      given.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithSplitFields)
+      `given`.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithSplitFields)
 
       WsTestClient.withClient { client =>
         val result = client
@@ -106,7 +107,9 @@ class FormPageControllerIntegrationSpec extends Specifications with TestConfigur
         eoriNumber = Some(EoriNumber(eoriNumber = "1234123132", goodsImportedOutsideEori = true))
       )
 
-      given.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(importingActivitiesWithEoriNumberModel)
+      `given`.commonPrecondition.save4later.hasFullFormDataWithImportingActivities(
+        importingActivitiesWithEoriNumberModel
+      )
 
       WsTestClient.withClient { client =>
         val result = client

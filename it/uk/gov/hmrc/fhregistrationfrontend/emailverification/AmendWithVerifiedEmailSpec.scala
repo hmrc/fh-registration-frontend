@@ -3,13 +3,16 @@ package uk.gov.hmrc.fhregistrationfrontend.emailverification
 import play.api.libs.ws.DefaultWSCookie
 import play.api.test.WsTestClient
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
+import play.api.libs.ws.writeableOf_urlEncodedForm
+import uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions.PreconditionBuilder
 
 class AmendWithVerifiedEmailSpec extends Specifications with TestConfiguration {
 
   "Submitting an amendment" should {
     "Allow submission" when {
       "The verified email was amended" in {
-        given.user.isAuthorisedAndEnrolled.save4later
+
+        `given`.user.isAuthorisedAndEnrolled.save4later
           .acceptsDelete()
           .audit
           .writesAuditOrMerged()

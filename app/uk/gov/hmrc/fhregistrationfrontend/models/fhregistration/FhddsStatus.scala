@@ -32,7 +32,9 @@ object FhddsStatus extends Enumeration {
   val Withdrawn = Value("withdrawn")
   val Deregistered = Value("deregistered")
 
+  implicit val fhddsStatusValueOf: ValueOf[FhddsStatus.type] = ValueOf(FhddsStatus)
+
   implicit val format: Format[fhregistration.FhddsStatus.Value] =
-    Format(Reads.enumNameReads(FhddsStatus), Writes.enumNameWrites[this.type])
+    Format(Reads.enumNameReads(FhddsStatus), Writes.enumNameWrites)
 
 }

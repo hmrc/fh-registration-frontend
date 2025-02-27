@@ -16,8 +16,23 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.models
 
+import play.api.libs.json.{JsError, JsString, JsSuccess, Reads, Writes}
+
 object CompanyOfficerType extends Enumeration {
   type CompanyOfficialType = Value
 
   val Individual, Company = Value
+
+  implicit val writes: Writes[CompanyOfficialType] = Writes { officialType =>
+    JsString(officialType.toString)
+  }
+
+  implicit val reads: Reads[CompanyOfficialType] = Reads {
+    case JsString(s) =>
+      values
+        .find(_.toString == s)
+        .map(JsSuccess(_))
+        .getOrElse(JsError(s"Unknown CompanyOfficialType: $s"))
+    case _ => JsError("String expected for CompanyOfficialType")
+  }
 }

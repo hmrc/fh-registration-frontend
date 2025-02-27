@@ -1,5 +1,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 
+import org.scalatestplus.mockito.MockitoSugar.mock
+
 class PreconditionBuilder extends PreconditionHelpers {
   implicit val builder: PreconditionBuilder = this
 

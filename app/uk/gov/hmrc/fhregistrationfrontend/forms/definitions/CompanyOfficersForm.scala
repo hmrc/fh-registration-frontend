@@ -18,9 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Forms.mapping
 import play.api.data.{Form, FormError, Mapping}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings._
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.*
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.*
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.`enum`
 
 object CompanyOfficersForm {
 
@@ -57,7 +58,7 @@ object CompanyOfficersForm {
 
   val roles = List("Director", "Company Secretary", "Director and Company Secretary", "Member")
 
-  val companyOfficerTypeMapping = identificationTypeKey -> enum(CompanyOfficerType)
+  val companyOfficerTypeMapping = identificationTypeKey -> `enum`(CompanyOfficerType)
 
   val companyOfficerIndividualMapping = mapping(
     firstNameKey -> personName,
@@ -68,7 +69,7 @@ object CompanyOfficersForm {
     passportNumberMapping,
     nationalIdMapping,
     roleKey -> oneOf(roles)
-  )(CompanyOfficerIndividual.apply)(CompanyOfficerIndividual.unapply)
+  )(CompanyOfficerIndividual.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val hasVatMapping = hasVatKey -> yesOrNo()
 
@@ -78,7 +79,7 @@ object CompanyOfficersForm {
     vatRegistrationKey -> (vatRegistrationNumber onlyWhen (hasVatMapping is true withPrefix companyIdentificationKey)),
     companyRegistrationKey -> (companyRegistrationNumber onlyWhen (hasVatMapping is false withPrefix companyIdentificationKey)),
     roleKey -> oneOf(roles)
-  )(CompanyOfficerCompany.apply)(CompanyOfficerCompany.unapply)
+  )(CompanyOfficerCompany.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val companyOfficerMapping: Mapping[CompanyOfficer] = mapping(
     companyOfficerTypeMapping,

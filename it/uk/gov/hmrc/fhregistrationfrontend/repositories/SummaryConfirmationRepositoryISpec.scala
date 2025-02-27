@@ -11,6 +11,7 @@ import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.{DeregistrationReason, DeregistrationReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum}
 import uk.gov.hmrc.fhregistrationfrontend.models.SummaryConfirmation
+import org.mongodb.scala.SingleObservableFuture
 
 import java.util.concurrent.TimeUnit
 
