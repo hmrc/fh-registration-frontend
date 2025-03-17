@@ -31,7 +31,8 @@ object AppDependencies {
     "org.pegdown"                %  "pegdown"                       % "1.6.0",
     "org.jsoup"                  %  "jsoup"                         % "1.18.3",
     "dev.optics"                 %% "monocle-law"                   % monocleVersion,
-    "com.github.java-json-tools" %  "json-schema-validator"         % "2.2.14"
+    "com.github.java-json-tools" %  "json-schema-validator"         % "2.2.14",
+    "org.scalatestplus.play"     %% "scalatestplus-play"            % "7.0.1"
   ).map(_ % "test, it")
 
   val all: Seq[ModuleID] = compile ++ test
