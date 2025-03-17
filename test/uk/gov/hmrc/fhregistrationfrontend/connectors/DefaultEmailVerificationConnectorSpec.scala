@@ -31,8 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class DefaultEmailVerificationConnectorSpec
-    extends AsyncWordSpec with Matchers with MockitoSugar with ScalaFutures with HttpClientV2Helper {
+class DefaultEmailVerificationConnectorSpec extends HttpClientV2Helper {
 
   val appConfig: AppConfig = mock[AppConfig]
   val runModeConfiguration: Configuration = Configuration.empty
