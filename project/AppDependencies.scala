@@ -4,7 +4,7 @@ import sbt._
 object AppDependencies {
 
   val playVersion = "play-30"
-  val bootstrapVersion = "9.7.0"
+  val bootstrapVersion = "9.11.0"
   val hmrcMongoVersion = "2.5.0"
   val monocleVersion = "3.3.0"
 
@@ -13,7 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
     "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "11.9.0",
     "uk.gov.hmrc"                %% s"play-partials-$playVersion"                 % "10.0.0",
-    "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.1.0",
+    "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.2.0",
     "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "12.1.0",
     "uk.gov.hmrc"                %% s"play-conditional-form-mapping-$playVersion" % "3.2.0",
     "uk.gov.hmrc.mongo"          %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
