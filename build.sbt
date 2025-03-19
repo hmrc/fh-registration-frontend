@@ -16,7 +16,7 @@ lazy val scoverageSettings = Seq(
     coverageExcludedFiles :=
       Seq("<empty>",".*javascript.*",".*models.*",".*Routes.*",".*viewmodels.*",".*testonly.*",".*controllers.AdminPageController.*",""+
         ".*controllers.AuthenticationController.*").mkString(","),
-    coverageMinimumStmtTotal := 76.00,
+    coverageMinimumStmtTotal := 78.00,
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     Test / parallelExecution := false
