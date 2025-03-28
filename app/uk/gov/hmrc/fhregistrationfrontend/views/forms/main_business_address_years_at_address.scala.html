@@ -36,11 +36,6 @@
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-}
-
 @titlePrefix = @{
   if (mainBusinessAddressForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -49,7 +44,7 @@
   Messages("fh.main_business_address.time_at_address.title")
 }
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, pageHeadBlock = Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
 
   <link rel="stylesheet" href='@routes.Assets.at("stylesheets/fh.css")'/>
 

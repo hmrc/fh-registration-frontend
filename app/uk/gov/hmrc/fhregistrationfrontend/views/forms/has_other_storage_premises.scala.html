@@ -27,11 +27,6 @@
 
 @(hasOtherStoragePremisesForm: Form[Boolean], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @titlePrefix = @{
   if (hasOtherStoragePremisesForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -40,7 +35,7 @@
   Messages("fh.other_storage_premises.confirm.label")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("otherStoragePremises"), Symbol("novalidate") -> "novalidate") {
       @if(hasOtherStoragePremisesForm.errors.nonEmpty) {
