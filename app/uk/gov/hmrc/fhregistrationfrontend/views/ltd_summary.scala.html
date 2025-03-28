@@ -36,10 +36,6 @@
         params: SummaryPageParams
 )(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
 
-@scripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @conditionalText = @{
     params.hasAmendments.filter(_ == true).map { _ =>
         Messages(s"fh.summary.${params.mode}.unsubmittedAlert")
@@ -50,7 +46,7 @@
   Messages(s"fh.summary.${params.mode}.title")
 }
 
-@layout(title, Some(scripts)) {
+@layout(title) {
 
     @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
 

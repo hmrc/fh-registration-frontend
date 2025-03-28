@@ -30,11 +30,6 @@
 
 @(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams, postAction: Call)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-  Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
-  Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-}
-
 @pageHeadBlock = {
   <style>
   .js-hidden.js-hidden {
@@ -92,7 +87,7 @@
   Messages("fh.other_storage_premises.title")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, Some(pageHeadBlock), backUrl = BackHelper.getUrl(navigation)) {
 
 @if(otherStoragePremisesForm.errors.nonEmpty) {
 

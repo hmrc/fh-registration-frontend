@@ -34,14 +34,6 @@
 
 @(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = {
-  @autocompleteJavascript()
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/autocomplete-polyfill.js").url)
-}
-
 @pageHeadBlock = {
     @autcompleteCss()
     <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
@@ -117,7 +109,7 @@
   </div>
   }
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
+@layout(title = titlePrefix + title, pageHeadBlock = Some(pageHeadBlock)) {
 
     @if(contactPersonForm.errors.nonEmpty) {
 

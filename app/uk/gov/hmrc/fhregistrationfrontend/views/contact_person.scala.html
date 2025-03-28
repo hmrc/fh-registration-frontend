@@ -36,13 +36,6 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 @(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/autocomplete-polyfill.js").url)
-}
-
 @titlePrefix = @{
     if (contactPersonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -109,7 +102,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
     </div>
 }
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some("#")) {
 
     @if(contactPersonForm.errors.nonEmpty) {
 
