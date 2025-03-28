@@ -46,7 +46,12 @@
 
 @layout(title, Some(scripts)) {
 
+@if(Mode isNew params.mode) {
+    @viewHelpers.govukBackLink(BackLink(href ="businessType", content = Text(messages("fh.generic.back"))))
+        } else {
     @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
+}
+
 
     @{PageHeading(PageHeadingParams(heading = title))}
     @*Could this be inset text ?*@
