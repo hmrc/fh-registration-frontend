@@ -42,9 +42,7 @@
 @layout(title, Some(scripts)) {
 
     @if(Mode isNew params.mode) {
-        <a id="back" class="govuk-back-link" href="#" data-module="hmrc-back-link">
-            @Messages("fh.generic.back")
-        </a>
+        @viewHelpers.govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)
     } else {
         @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
     }
