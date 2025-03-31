@@ -41,12 +41,13 @@
 
 @layout(title, Some(scripts)) {
 
-
-@if(Mode isNew params.mode) {
-    @viewHelpers.govukBackLink(BackLink(href ="form/otherStoragePremises", content = Text(messages("fh.generic.back"))))
-         } else {
-    @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
-}
+    @if(Mode isNew params.mode) {
+        <a id="back" class="govuk-back-link" href="#" data-module="hmrc-back-link">
+            @Messages("fh.generic.back")
+        </a>
+    } else {
+        @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
+    }
 
     @{PageHeading(PageHeadingParams(heading = title))}
 
