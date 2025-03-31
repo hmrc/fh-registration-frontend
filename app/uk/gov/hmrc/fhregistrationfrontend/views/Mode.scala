@@ -25,12 +25,8 @@ object Mode extends Enumeration {
     case _                                      => false
   }
 
-  def isNewOnly(mode: Mode) = mode match {
-    case New => true
-    case _   => false
-  }
-
   def isEditable(mode: Mode) = !isReadOnly(mode)
 
-  def isNew(mode: Mode) = isNewOnly(mode)
+  def isNew(mode: Mode): Boolean =
+    mode == New
 }
