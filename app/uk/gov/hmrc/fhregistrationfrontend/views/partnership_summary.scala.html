@@ -44,7 +44,7 @@
     @if(Mode isNew params.mode) {
         @viewHelpers.govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)
     } else {
-        @viewHelpers.govukBackLink(BackLink(href ="subscription/status", content = Text(messages("fh.generic.back"))))
+        @viewHelpers.govukBackLink(BackLink(href = "subscription/status", content = Text(messages("fh.generic.back"))))
     }
 
     @{PageHeading(PageHeadingParams(heading = title))}
