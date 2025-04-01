@@ -26,4 +26,7 @@ object Mode extends Enumeration {
   }
 
   def isEditable(mode: Mode) = !isReadOnly(mode)
+
+  def isNew(mode: Mode): Boolean =
+    mode == New
 }
