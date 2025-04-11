@@ -37,10 +37,7 @@ autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 @(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[_], messages: Messages)
 
 @pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
     Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/autocomplete-polyfill.js").url)
 }
 
 @titlePrefix = @{

@@ -26,9 +26,6 @@
 
 @(confirmationForm: Form[Confirmation], defaultEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @titlePrefix = @{
     if (confirmationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -134,7 +131,7 @@
      title = Text(messages("fh.generic.error"))))
  }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title) {
 
     @if(confirmationForm.errors.nonEmpty) {
         @errorHeading

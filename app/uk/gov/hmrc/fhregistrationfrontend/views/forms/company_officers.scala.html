@@ -96,10 +96,6 @@
   @company_officers.roles(companyOfficersForm, companyIdentificationKey, section, viewHelpers)
 }
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @titlePrefix = @{
   if (companyOfficersForm.hasErrors) messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -113,7 +109,7 @@
   }
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = tempBackUrl) {
+@layout(title = titlePrefix + title, backUrl = tempBackUrl) {
 
   <h1 class="govuk-heading-l">@title</h1>
 

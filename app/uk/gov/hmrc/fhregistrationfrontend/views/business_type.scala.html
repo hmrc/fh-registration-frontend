@@ -26,9 +26,7 @@
 
 @(businessTypeForm: Form[BusinessType], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
+
 @typeNotListed = {
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
@@ -54,7 +52,7 @@
 
 }
 
-@layout(pageTitle, Some(pageScripts), None, Some(backUrl)) {
+@layout(pageTitle, None, None, Some(backUrl)) {
 
 
     @if(businessTypeForm.errors.nonEmpty) {

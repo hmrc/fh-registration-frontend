@@ -39,7 +39,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class FhddsConnectorSpec extends  HttpClientV2Helper {
+class FhddsConnectorSpec extends HttpClientV2Helper {
 
   val runModeConfiguration: Configuration = Configuration.empty
   val mockServicesConfig: ServicesConfig = mock[ServicesConfig]

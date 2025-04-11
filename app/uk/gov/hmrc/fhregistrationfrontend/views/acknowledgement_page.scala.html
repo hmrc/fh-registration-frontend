@@ -34,10 +34,6 @@
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
 }
 
-@scripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title1 = @{
   Messages(s"fh.ack.$mode.title")
@@ -47,9 +43,7 @@
   formatDate(date)
 }
 
-@layout(title = title1, pageScripts = Some(scripts), pageHeadBlock = Some(pageHeadBlock)) {
-
-
+@layout(title = title1, pageHeadBlock = Some(pageHeadBlock)) {
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title1),

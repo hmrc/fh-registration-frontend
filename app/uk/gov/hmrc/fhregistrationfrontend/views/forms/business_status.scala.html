@@ -30,10 +30,6 @@
 
 @(businessStatusForm: Form[BusinessStatus], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @titlePrefix = @{
   if (businessStatusForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -82,7 +78,7 @@
 
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
 
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("businessStatus"), Symbol("novalidate") -> "novalidate") {

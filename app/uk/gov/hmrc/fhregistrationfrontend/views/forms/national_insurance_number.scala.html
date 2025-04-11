@@ -29,9 +29,7 @@
 
 @(nationalInsuranceNumberForm: Form[NationalInsuranceNumber], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@scripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
+
 
 @titlePrefix = @{
   if (nationalInsuranceNumberForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -66,7 +64,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, pageScripts = Some(scripts), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
 
     @if(nationalInsuranceNumberForm.errors.nonEmpty) {
 
