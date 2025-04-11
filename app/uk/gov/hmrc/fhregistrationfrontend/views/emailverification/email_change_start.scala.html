@@ -27,15 +27,12 @@
 
 @(currentEmail: String, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title = @{
   Messages("fh.emailVerification.edit.start.title")
 }
 
-@layout(title = title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = title, backUrl = BackHelper.getUrl(navigation)) {
 
   <h1 class="govuk-heading-l">@title</h1>
 

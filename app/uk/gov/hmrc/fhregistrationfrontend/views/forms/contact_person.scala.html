@@ -36,10 +36,7 @@
 
 @pageScripts = {
   @autocompleteJavascript()
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url)
   @Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-  @Helpers.cspScriptTag(routes.Assets.at("javascripts/autocomplete-polyfill.js").url)
 }
 
 @pageHeadBlock = {

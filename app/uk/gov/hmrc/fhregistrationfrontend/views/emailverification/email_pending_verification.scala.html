@@ -28,9 +28,6 @@
 
 @(emailVerificationForm: Form[EmailVerification], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title = @{
   Messages("fh.emailVerification.pending.title")
@@ -42,7 +39,7 @@
   }
 }
 
-@layout(title = title, Some(pageScripts)) {
+@layout(title = title) {
 
   @showAlert
 

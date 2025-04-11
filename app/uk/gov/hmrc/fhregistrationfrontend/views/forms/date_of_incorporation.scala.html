@@ -29,10 +29,6 @@
 
 @(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @findDateHelp = {
   @Messages("fh.dateOfIncorporation.details")
   <a class="govuk-link" href="@Messages("link.searchCompaniesHouse")" target="_blank">
@@ -62,7 +58,7 @@
     case _ => "dateOfIncorporation-dateOfIncorporation.day"
 }}
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = BackHelper.getUrl(navigation)) {
+@layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), Symbol("novalidate") -> "novalidate") {
 

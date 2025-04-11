@@ -24,15 +24,12 @@
 
 @(expiryTime: String)(implicit request: Request[_], messages: Messages)
 
-@scripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title = @{
   messages("fh.has_saved")
 }
 
-@layout(title = title, Some(scripts)) {
+@layout(title = title) {
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title),

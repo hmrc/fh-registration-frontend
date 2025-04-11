@@ -18,11 +18,14 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
+@import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
+@import play.twirl.api.HtmlFormat
+@import play.twirl.api.Html
 
 @this(
         hmrcLayout: HmrcLayout,
@@ -45,9 +48,15 @@
 
 @headBlock = {
     <style>.govuk-fieldset .govuk-summary-list__actions { width: 25%; }</style>
-    @hmrcTimeoutDialogHelper(signOutUrl = routes.SignOutController.signout().url)
+    @hmrcTimeoutDialogHelper(signOutUrl = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout().url)
     @pageHeadBlock.getOrElse(Html(""))
 }
+
+@defaultScripts = @{
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
+    Helpers.cspScriptTag(routes.Assets.at("javascripts/autocomplete-polyfill.js").url)
+}
+
 @content = {
     @contentBlock
     @hmrcReportTechnicalIssueHelper()
@@ -55,15 +64,20 @@
 @pageTitle = @{
     title + " - " + Messages("app.name") + " - " + "GOV.UK"
 }
+
+@combinedScripts = @{
+    Html(Helpers.cspScriptTag(routes.Assets.at("javascripts/jquery-3.6.1.js").url).body + pageScripts.getOrElse(Html("")).body + defaultScripts.body)
+}
+
 @hmrcLayout(
     pageTitle = Some(pageTitle),
     isWelshTranslationAvailable = false, /* or false if your service has not been translated */
-    // serviceUrl = Some(routes.IndexController.index().url),
-    signOutUrl = Some(routes.SignOutController.signout().url),
+    // serviceUrl = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.IndexController.index().url),
+    signOutUrl = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout().url),
     backLinkUrl = backUrl,
     backLink = if(isBrowserBackMimic) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else None,
     displayHmrcBanner = true,
     additionalHeadBlock = Some(headBlock),
-    additionalScriptsBlock = pageScripts,
+    additionalScriptsBlock = Some(combinedScripts),
     // phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
 )(content)

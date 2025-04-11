@@ -26,9 +26,6 @@
 
 @(date: Date, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title = @{
   Messages("fh.ack.withdrawal")
@@ -39,7 +36,7 @@
             formatDate(date)
 }
 
-@layout(title = title, pageScripts = Some(pageScripts)) {
+@layout(title = title) {
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title),

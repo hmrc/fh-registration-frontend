@@ -27,9 +27,6 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 @(importingActivitiesForm: Form[Boolean], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @titlePrefix = @{
   if (importingActivitiesForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -68,7 +65,7 @@
   ))
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts),  backUrl = BackHelper.getUrl(navigation) ) {
+@layout(title = titlePrefix + title,  backUrl = BackHelper.getUrl(navigation) ) {
 
   @viewHelpers.form(action = postAction) {
 

@@ -28,9 +28,7 @@
 
 @(businessStatusForm: Form[BusinessStatus])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
+
 
 @titlePrefix = @{
     if (businessStatusForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -79,7 +77,7 @@
     ))
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts), backUrl = Some("#")) {
+@layout(title = titlePrefix + title, backUrl = Some("#")) {
 
     @viewHelpers.form(action = BusinessStatusController.next(), Symbol("novalidate") -> "novalidate") {
 

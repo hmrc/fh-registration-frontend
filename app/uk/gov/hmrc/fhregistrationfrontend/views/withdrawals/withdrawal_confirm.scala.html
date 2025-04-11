@@ -27,9 +27,6 @@
 
 @(confirmationForm: Form[WithdrawalConfirmation], defaultEmail: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @titlePrefix = @{
     if (confirmationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -40,7 +37,7 @@
 }
 
 
-@layout(title = titlePrefix + title,  pageScripts = Some(pageScripts)) {
+@layout(title = titlePrefix + title) {
 
 @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.WithdrawalController.postConfirmation, Symbol("novalidate") -> "novalidate") {
 @if(confirmationForm.errors.nonEmpty) {

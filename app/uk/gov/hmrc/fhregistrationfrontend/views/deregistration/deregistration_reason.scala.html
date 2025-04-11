@@ -27,9 +27,6 @@
 
 @(reasonForm: Form[DeregistrationReason])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @title = @{messages("fh.deregistration.title")}
 
@@ -55,7 +52,7 @@
 }
 
 
-@layout(title = title, pageScripts = Some(pageScripts)) {
+@layout(title = title) {
     @if(reasonForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
