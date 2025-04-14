@@ -37,9 +37,6 @@
     else Messages("fh.emailVerification.label")
 }
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @action = @{
     if (forced) uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.submitForcedContactEmail
@@ -73,7 +70,7 @@
     ))
 }
 
-@layout(title = titlePrefix + pageTitle, Some(pageScripts)) {
+@layout(title = titlePrefix + pageTitle) {
     @if(emailVerificationForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(

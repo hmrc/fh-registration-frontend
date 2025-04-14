@@ -26,9 +26,7 @@
 
 @(reasonForm: Form[WithdrawalReason])(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-  Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
+
 
 @titlePrefix = @{
   if (reasonForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -60,7 +58,7 @@
   ))
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title) {
   @if(reasonForm.errors.nonEmpty) {
     @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
       Seq(ErrorLink(

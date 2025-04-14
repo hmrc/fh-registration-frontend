@@ -25,15 +25,11 @@
 
 @(verifiedEmail: String, navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
-
 @title = @{
   Messages("fh.emailVerification.verified.title")
 }
 
-@layout(title = title, Some(pageScripts)) {
+@layout(title = title) {
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title),

@@ -27,9 +27,6 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 @(importingActivitiesForm: Form[ImportingActivities], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-  Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @helpHtml = {
   <p class="govuk-body govuk-!-margin-top-2"></p>
@@ -106,7 +103,7 @@
 
 
 
-@layout(title = titlePrefix + title, Some(pageScripts),  backUrl = BackHelper.getUrl(navigation) ) {
+@layout(title = titlePrefix + title,  backUrl = BackHelper.getUrl(navigation) ) {
 
   @viewHelpers.form(action = postAction) {
 

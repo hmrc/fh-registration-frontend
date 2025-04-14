@@ -27,9 +27,6 @@
 
 @(emailVerificationForm: Form[EmailVerification], navigation: Navigation)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
 
 @titlePrefix = @{
   if (emailVerificationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -39,7 +36,7 @@
   Messages("fh.emailVerification.edit.title")
 }
 
-@layout(title = titlePrefix + title, Some(pageScripts)) {
+@layout(title = titlePrefix + title) {
 
     @if(emailVerificationForm.errors.nonEmpty) {
 

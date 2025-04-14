@@ -27,15 +27,13 @@ layout: layout, viewHelpers: ViewHelpers
 
 @(page: String, section: String, timestamp: Long)(implicit request: Request[_], messages: Messages)
 
-@pageScripts = @{
-    Helpers.cspScriptTag(routes.Assets.at("javascripts/fh.js").url)
-}
+
 
 @sectionName = {@messages(s"fh.$page.each.title", section)}
 
 @title = @{messages("fh.delete_confirmation_section.header", sectionName)}
 
-@layout(title = title, pageScripts = Some(pageScripts), isBrowserBackMimic = true) {
+@layout(title = title, isBrowserBackMimic = true) {
 
     @viewHelpers.form(action = FormPageController.deleteSection(page, section, timestamp), Symbol("novalidate") -> "novalidate") {
 
