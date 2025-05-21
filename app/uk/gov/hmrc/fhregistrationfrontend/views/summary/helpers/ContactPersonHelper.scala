@@ -80,13 +80,11 @@ object ContactPersonHelper {
       )
 
     val ContactPersonAddressLabel =
-      if (!contactPersonForm.usingSameContactAddress) {
-        if (contactPersonForm.ukOtherAddress.contains(true)) {
-          "fh.contact_person.contact_address_new.label"
-        } else {
-          "fh.contact_person.contact_address_international.label"
-        }
-      } else "fh.contact_person.contact_address.title"
+      if (contactPersonForm.ukOtherAddress.contains(true)) {
+        "fh.contact_person.contact_address_new.label"
+      } else {
+        "fh.contact_person.contact_address_international.label"
+      }
 
     val ContactPersonAddress =
       (contactPersonForm.otherUkContactAddress, contactPersonForm.otherInternationalContactAddress) match {
@@ -96,33 +94,23 @@ object ContactPersonHelper {
       }
 
     val Address =
-      if (!contactPersonForm.usingSameContactAddress) {
-        Seq(
-          Helpers.createSummaryRow(
-            SummaryRowParams
-              .ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None, GroupRow.Bottom),
-            Helpers.createChangeLink(
-              Mode isEditable mode,
-              "form/contactPerson",
-              Text("Change"),
-              Some(Messages(ContactPersonAddressLabel))
-            )
+      Seq(
+        Helpers.createSummaryRow(
+          SummaryRowParams
+            .ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None, GroupRow.Bottom),
+          Helpers.createChangeLink(
+            Mode isEditable mode,
+            "form/contactPerson",
+            Text("Change"),
+            Some(Messages(ContactPersonAddressLabel))
           )
         )
-      } else Seq.empty
-
-    if (!contactPersonForm.usingSameContactAddress) {
-      Seq(
-        PageLabel,
-        JobTitle,
-        TelephoneNumber
-      ) ++ Address
-    } else {
-      Seq(
-        PageLabel,
-        JobTitle,
-        TelephoneNumber
       )
-    }
+
+    Seq(
+      PageLabel,
+      JobTitle,
+      TelephoneNumber
+    ) ++ Address
   }
 }
