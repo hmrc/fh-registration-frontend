@@ -88,16 +88,9 @@ class DeclarationController @Inject() (
 
   def submitForm() = summaryAction.async { implicit request =>
     val form = declarationForm.bindFromRequest()
-    val errorList = scala.collection.mutable.Set[String]()
     form.fold(
       hasErrors = formWithErrors => {
-        val errors: Seq[FormError] = formWithErrors.errors.filter { error =>
-          if (errorList.contains(error.key)) false
-          else {
-            errorList.add(error.key)
-            true
-          }
-        }
+        val errors: List[FormError] = formWithErrors.errors.distinctBy(_.key).toList
         val newFormErrors = formWithErrors.copy(errors = errors)
         Future successful BadRequest(
           views.declaration(
