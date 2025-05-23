@@ -81,10 +81,10 @@ object ContactPersonHelper {
         )
       )
     val ContactPersonAddressLabel =
-      if (contactPersonForm.ukOtherAddress.contains(true)) {
-        "fh.contact_person.contact_address_new.label"
-      } else {
+      if (contactPersonForm.ukOtherAddress.contains(false)) {
         "fh.contact_person.contact_address_international.label"
+      } else {
+        "fh.contact_person.contact_address_new.label"
       }
 
     object ConverterBusinessAddress {
