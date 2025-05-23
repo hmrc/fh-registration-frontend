@@ -17,20 +17,22 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-import uk.gov.hmrc.govukfrontend.views.html.components._
+import uk.gov.hmrc.govukfrontend.views.html.components.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
-import uk.gov.hmrc.fhregistrationfrontend.views.summary._
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address => FormAddress}
+
+import java.util.regex.Pattern
 
 object ContactPersonHelper {
   def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit
     messages: Messages
   ) = {
-
     val PageLabel =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
@@ -78,7 +80,6 @@ object ContactPersonHelper {
           Some(Messages("fh.contact_person.telephone.label"))
         )
       )
-
     val ContactPersonAddressLabel =
       if (contactPersonForm.ukOtherAddress.contains(true)) {
         "fh.contact_person.contact_address_new.label"
@@ -86,11 +87,34 @@ object ContactPersonHelper {
         "fh.contact_person.contact_address_international.label"
       }
 
-    val ContactPersonAddress =
-      (contactPersonForm.otherUkContactAddress, contactPersonForm.otherInternationalContactAddress) match {
-        case (Some(otherUkContactAddress), None)            => Helpers.formatAddress(otherUkContactAddress)
-        case (None, Some(otherInternationalContactAddress)) => Helpers.formatAddress(otherInternationalContactAddress)
-        case (_, _)                                         => ""
+    object ConverterBusinessAddress {
+      def toFormAddress(b: Address): FormAddress =
+        FormAddress(
+          addressLine1 = b.line1,
+          addressLine2 = Some(b.line2),
+          addressLine3 = b.line3,
+          addressLine4 = b.line4,
+          postcode = b.postcode.getOrElse(""),
+          countryCode = Some(b.country),
+          lookupId = None
+        )
+    }
+
+    val ContactPersonAddress: String =
+      (
+        contactPersonForm.otherUkContactAddress,
+        contactPersonForm.otherInternationalContactAddress,
+        bpr.businessAddress
+      ) match {
+
+        case (Some(otherUkContactAddress), None, _) =>
+          Helpers.formatAddress(otherUkContactAddress)
+
+        case (None, Some(otherInternationalContactAddress), _) =>
+          Helpers.formatAddress(otherInternationalContactAddress)
+
+        case (None, None, businessAddress) =>
+          Helpers.formatAddress(ConverterBusinessAddress.toFormAddress(businessAddress))
       }
 
     val Address =
