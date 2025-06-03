@@ -80,11 +80,13 @@ object ContactPersonHelper {
       )
 
     val ContactPersonAddressLabel = (contactPersonForm.ukOtherAddress, bpr.businessAddress.country) match {
-      case (None, "GB") =>
+      case (Some(true), _) =>
         "fh.contact_person.contact_address_new.label"
       case (Some(false), _) =>
         "fh.contact_person.contact_address_international.label"
-      case _ =>
+      case (None, "GB") =>
+        "fh.contact_person.contact_address_new.label"
+      case (None, _) =>
         "fh.contact_person.contact_address_international.label"
     }
 
