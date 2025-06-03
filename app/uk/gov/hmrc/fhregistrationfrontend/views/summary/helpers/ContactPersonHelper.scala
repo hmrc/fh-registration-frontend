@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.views.summary.helpers
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails}
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
@@ -25,9 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address => FormAddress}
-
-import java.util.regex.Pattern
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
 object ContactPersonHelper {
   def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit
@@ -80,24 +78,15 @@ object ContactPersonHelper {
           Some(Messages("fh.contact_person.telephone.label"))
         )
       )
-    val ContactPersonAddressLabel =
-      if (contactPersonForm.ukOtherAddress.contains(false)) {
-        "fh.contact_person.contact_address_international.label"
-      } else {
-        "fh.contact_person.contact_address_new.label"
-      }
 
-    object ConverterBusinessAddress {
-      def toFormAddress(b: Address): FormAddress =
-        FormAddress(
-          addressLine1 = b.line1,
-          addressLine2 = Some(b.line2),
-          addressLine3 = b.line3,
-          addressLine4 = b.line4,
-          postcode = b.postcode.getOrElse(""),
-          countryCode = Some(b.country),
-          lookupId = None
-        )
+    val ContactPersonAddressLabel = {
+      val isUkAddress = bpr.businessAddress.country.contains("GB")
+      val useInternational = contactPersonForm.ukOtherAddress.contains(false)
+
+      if (useInternational || !isUkAddress)
+        "fh.contact_person.contact_address_international.label"
+      else
+        "fh.contact_person.contact_address_new.label"
     }
 
     val ContactPersonAddress: String =
@@ -114,10 +103,10 @@ object ContactPersonHelper {
           Helpers.formatAddress(otherInternationalContactAddress)
 
         case (None, None, businessAddress) =>
-          Helpers.formatAddress(ConverterBusinessAddress.toFormAddress(businessAddress))
+          Helpers.formatBusinessRegistrationAddress(businessAddress)
       }
 
-    val Address =
+    val BusinessAddress =
       Seq(
         Helpers.createSummaryRow(
           SummaryRowParams
@@ -135,6 +124,6 @@ object ContactPersonHelper {
       PageLabel,
       JobTitle,
       TelephoneNumber
-    ) ++ Address
+    ) ++ BusinessAddress
   }
 }
