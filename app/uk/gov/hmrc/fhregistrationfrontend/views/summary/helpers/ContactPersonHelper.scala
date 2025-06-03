@@ -93,18 +93,12 @@ object ContactPersonHelper {
     val ContactPersonAddress: String =
       (
         contactPersonForm.otherUkContactAddress,
-        contactPersonForm.otherInternationalContactAddress,
-        bpr.businessAddress
+        contactPersonForm.otherInternationalContactAddress
       ) match {
-
-        case (Some(otherUkContactAddress), None, _) =>
+        case (Some(otherUkContactAddress), None) =>
           Helpers.formatAddress(otherUkContactAddress)
-
-        case (None, Some(otherInternationalContactAddress), _) =>
+        case (None, Some(otherInternationalContactAddress)) =>
           Helpers.formatAddress(otherInternationalContactAddress)
-
-        case (None, None, businessAddress) =>
-          Helpers.formatBusinessRegistrationAddress(businessAddress)
         case _ =>
           Helpers.formatBusinessRegistrationAddress(bpr.businessAddress)
       }
