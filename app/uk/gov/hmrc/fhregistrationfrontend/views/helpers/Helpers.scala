@@ -56,30 +56,16 @@ object Helpers {
   }
 
   def formatBusinessRegistrationAddress(address: BusinessRegistrationAddress): String = {
-    val addressLine1 = address.line1.trim
-    val addressLine2 = s"<br>${address.line2.trim}"
+    val addressLines: List[String] = List(
+      Some(address.line1.trim),
+      Some(address.line2.trim).filter(_.nonEmpty),
+      address.line3.map(_.trim).filter(_.nonEmpty),
+      address.line4.map(_.trim).filter(_.nonEmpty),
+      address.postcode.map(_.trim).filter(_.nonEmpty),
+      Some(address.country.trim)
+    ).flatten
 
-    val addressLine3 = address.line3
-      .map(_.trim)
-      .filter(_.nonEmpty)
-      .map(s => s"<br>$s")
-      .getOrElse("")
-
-    val addressLine4 = address.line4
-      .map(_.trim)
-      .filter(_.nonEmpty)
-      .map(s => s"<br>$s")
-      .getOrElse("")
-
-    val postCode = address.postcode
-      .map(_.trim)
-      .filter(_.nonEmpty)
-      .map(s => s"<br>$s")
-      .getOrElse("")
-
-    val countryCode = s"<br>${address.country.trim}"
-
-    s"$addressLine1$addressLine2$addressLine3$addressLine4$postCode$countryCode"
+    addressLines.mkString("<br>")
   }
 
   def createAddressString(address: Address): String = {

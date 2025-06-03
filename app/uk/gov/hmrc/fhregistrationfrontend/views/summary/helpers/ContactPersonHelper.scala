@@ -79,14 +79,13 @@ object ContactPersonHelper {
         )
       )
 
-    val ContactPersonAddressLabel = {
-      val isUkAddress = bpr.businessAddress.country.contains("GB")
-      val useInternational = contactPersonForm.ukOtherAddress.contains(false)
-
-      if (useInternational || !isUkAddress)
+    val ContactPersonAddressLabel = (contactPersonForm.ukOtherAddress, bpr.businessAddress.country) match {
+      case (Some(false), _) =>
         "fh.contact_person.contact_address_international.label"
-      else
+      case (_, "GB") =>
         "fh.contact_person.contact_address_new.label"
+      case _ =>
+        "fh.contact_person.contact_address_international.label"
     }
 
     val ContactPersonAddress: String =
@@ -104,6 +103,8 @@ object ContactPersonHelper {
 
         case (None, None, businessAddress) =>
           Helpers.formatBusinessRegistrationAddress(businessAddress)
+        case _ =>
+          Helpers.formatBusinessRegistrationAddress(bpr.businessAddress)
       }
 
     val BusinessAddress =
