@@ -58,7 +58,7 @@ object Helpers {
   def formatBusinessRegistrationAddress(address: BusinessRegistrationAddress): String = {
     val addressLines: List[String] = List(
       Some(address.line1.trim),
-      Some(address.line2.trim).filter(_.nonEmpty),
+      Some(address.line2.trim),
       address.line3.map(_.trim).filter(_.nonEmpty),
       address.line4.map(_.trim).filter(_.nonEmpty),
       address.postcode.map(_.trim).filter(_.nonEmpty),
