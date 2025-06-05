@@ -20,6 +20,7 @@ import play.api.data.FormError
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, InternationalAddress}
+import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address => BusinessRegistrationAddress}
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import views.html.helper.CSPNonce
 
@@ -52,6 +53,19 @@ object Helpers {
       .map(line => s"<br>$line")
       .mkString("")
     s"${address.addressLine1}$optionalLines<br>${address.countryCode}"
+  }
+
+  def formatBusinessRegistrationAddress(address: BusinessRegistrationAddress): String = {
+    val addressLines: List[String] = List(
+      Some(address.line1.trim),
+      Some(address.line2.trim),
+      address.line3.map(_.trim).filter(_.nonEmpty),
+      address.line4.map(_.trim).filter(_.nonEmpty),
+      address.postcode.map(_.trim).filter(_.nonEmpty),
+      Some(address.country.trim)
+    ).flatten
+
+    addressLines.mkString("<br>")
   }
 
   def createAddressString(address: Address): String = {

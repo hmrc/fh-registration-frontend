@@ -21,16 +21,16 @@ import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRe
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{ContactPerson => ContactPersonModel}
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode
 import uk.gov.hmrc.fhregistrationfrontend.views.Mode.Mode
-import uk.gov.hmrc.govukfrontend.views.html.components._
+import uk.gov.hmrc.govukfrontend.views.html.components.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
-import uk.gov.hmrc.fhregistrationfrontend.views.summary._
+import uk.gov.hmrc.fhregistrationfrontend.views.summary.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
 object ContactPersonHelper {
   def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit
     messages: Messages
   ) = {
-
     val PageLabel =
       Helpers.createSummaryRow(
         SummaryRowParams.ofString(
@@ -79,21 +79,31 @@ object ContactPersonHelper {
         )
       )
 
-    val ContactPersonAddressLabel =
-      if (contactPersonForm.ukOtherAddress.contains(true)) {
+    val ContactPersonAddressLabel = (contactPersonForm.ukOtherAddress, bpr.businessAddress.country) match {
+      case (Some(true), _) =>
         "fh.contact_person.contact_address_new.label"
-      } else {
+      case (Some(false), _) =>
         "fh.contact_person.contact_address_international.label"
+      case (None, "GB") =>
+        "fh.contact_person.contact_address_new.label"
+      case (None, _) =>
+        "fh.contact_person.contact_address_international.label"
+    }
+
+    val ContactPersonAddress: String =
+      (
+        contactPersonForm.otherUkContactAddress,
+        contactPersonForm.otherInternationalContactAddress
+      ) match {
+        case (Some(otherUkContactAddress), None) =>
+          Helpers.formatAddress(otherUkContactAddress)
+        case (None, Some(otherInternationalContactAddress)) =>
+          Helpers.formatAddress(otherInternationalContactAddress)
+        case _ =>
+          Helpers.formatBusinessRegistrationAddress(bpr.businessAddress)
       }
 
-    val ContactPersonAddress =
-      (contactPersonForm.otherUkContactAddress, contactPersonForm.otherInternationalContactAddress) match {
-        case (Some(otherUkContactAddress), None)            => Helpers.formatAddress(otherUkContactAddress)
-        case (None, Some(otherInternationalContactAddress)) => Helpers.formatAddress(otherInternationalContactAddress)
-        case (_, _)                                         => ""
-      }
-
-    val Address =
+    val BusinessAddress =
       Seq(
         Helpers.createSummaryRow(
           SummaryRowParams
@@ -111,6 +121,6 @@ object ContactPersonHelper {
       PageLabel,
       JobTitle,
       TelephoneNumber
-    ) ++ Address
+    ) ++ BusinessAddress
   }
 }
