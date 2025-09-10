@@ -30,7 +30,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "3.3.4",
+  .settings(scalaVersion := "3.3.6",
     RoutesKeys.routesImport ++= Seq(
       "models._"
     ))
