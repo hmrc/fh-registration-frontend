@@ -26,7 +26,7 @@ class NoPendingSubmissionFilterSpec extends ActionSpecBase with FhddsConnectorMo
 
   val request = new UserRequest("id", None, None, Some(Assistant), Some(AffinityGroup.Individual), FakeRequest())
   lazy val filter = new NoPendingSubmissionFilter(mockFhddsConnector)(
-    StubbedErrorHandler,
+    using StubbedErrorHandler,
     scala.concurrent.ExecutionContext.Implicits.global
   )
 

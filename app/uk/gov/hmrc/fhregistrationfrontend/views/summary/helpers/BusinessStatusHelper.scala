@@ -38,7 +38,7 @@ object BusinessStatusHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/businessStatus",
           Text("Change"),
           Some(Messages("fh.summary.startNewFulfilmentDate"))
@@ -55,7 +55,7 @@ object BusinessStatusHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/businessStatus",
           Text("Change"),
           Some(Messages("fh.summary.newFulfilmentBusiness"))

@@ -31,7 +31,7 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
   val mockKeyStore = mock[SummaryConfirmationService]
 
   val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockMcc, mockActions)(
-    scala.concurrent.ExecutionContext.Implicits.global
+    using scala.concurrent.ExecutionContext.Implicits.global
   )
 
   override def beforeEach(): Unit = {
@@ -66,5 +66,5 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
   }
 
   def setupKeyStore(summaryText: Option[String]): Unit =
-    when(mockKeyStore.fetchSummaryForPrint()(any())) thenReturn Future.successful(summaryText)
+    when(mockKeyStore.fetchSummaryForPrint()(using any())) `thenReturn` Future.successful(summaryText)
 }

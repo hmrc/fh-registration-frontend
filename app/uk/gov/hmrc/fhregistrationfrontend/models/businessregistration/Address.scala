@@ -53,7 +53,7 @@ object Address {
       readWithFallback[String](__ \ "line4", __ \ "line_4") and
       (__ \ "postcode").readNullable[String] and
       (__ \ "country").read[String]
-  )(Address.apply _)
+  )(Address.apply)
 
   implicit val addressWrites: OWrites[Address] = new OWrites[Address] {
     def writes(addr: Address): JsObject = Json.obj(

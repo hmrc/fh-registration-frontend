@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 import java.util.Date
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{Json, Reads}
-import play.api.{Configuration, Environment}
+import play.api.Configuration
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress

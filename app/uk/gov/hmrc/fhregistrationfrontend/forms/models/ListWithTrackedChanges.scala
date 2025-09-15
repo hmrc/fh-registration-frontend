@@ -79,7 +79,7 @@ object ListWithTrackedChanges {
 
 case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], deleted: List[T], addMore: Boolean) {
 
-  def append(value: T) = this copy (valuesWithStatus = valuesWithStatus :+ (value -> Added))
+  def append(value: T) = this.copy(valuesWithStatus = valuesWithStatus :+ (value -> Added))
 
   def values = valuesWithStatus.iterator map (_._1)
 
@@ -91,10 +91,7 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
       case (v, i) if index != i => v
     }
 
-    this copy (
-      valuesWithStatus = newValues,
-      deleted = newDeleted
-    )
+    this.copy(valuesWithStatus = newValues, deleted = newDeleted)
   }
 
   def apply(index: Int) = valuesWithStatus(index)._1
@@ -102,7 +99,7 @@ case class ListWithTrackedChanges[T](valuesWithStatus: List[(T, Status)], delete
   def updated(index: Int, value: T) = {
     val prevValue = valuesWithStatus(index)._1
     if (prevValue != value)
-      this copy (valuesWithStatus = valuesWithStatus updated (index, value -> Updated))
+      this.copy(valuesWithStatus = valuesWithStatus updated (index, value -> Updated))
     else
       this
   }

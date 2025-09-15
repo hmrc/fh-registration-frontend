@@ -36,7 +36,7 @@ object BusinessCustomersHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/businessCustomers",
           Text("Change"),
           Some(Messages("fh.summary.overseasCustomers"))

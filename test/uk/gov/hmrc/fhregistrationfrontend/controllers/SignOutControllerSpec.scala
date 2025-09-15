@@ -28,9 +28,9 @@ class SignOutControllerSpec extends ControllerSpecWithGuiceApp {
 
   "SignOut Controller" should {
     "Redirect to logout" in {
-      when(mockExternalUrls.ggLogoutUrl) thenReturn "ggLogout"
-      when(mockExternalUrls.logoutContinueUrl) thenReturn "ggLogoutContinue"
-      when(mockExternalUrls.ggOrigin) thenReturn "ggOrigin"
+      when(mockExternalUrls.ggLogoutUrl) `thenReturn` "ggLogout"
+      when(mockExternalUrls.logoutContinueUrl) `thenReturn` "ggLogoutContinue"
+      when(mockExternalUrls.ggOrigin) `thenReturn` "ggOrigin"
 
       val result = controller.signout().apply(FakeRequest())
 
@@ -39,7 +39,7 @@ class SignOutControllerSpec extends ControllerSpecWithGuiceApp {
     }
 
     "Redirect to the survey" in {
-      when(mockExternalUrls.surveyRedirectUrl) thenReturn "surveyUrl"
+      when(mockExternalUrls.surveyRedirectUrl) `thenReturn` "surveyUrl"
       val result = controller.signedout().apply(FakeRequest())
 
       status(result) shouldBe SEE_OTHER

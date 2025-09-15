@@ -34,7 +34,7 @@
         verifiedEmail: String,
         environment: Option[String],
         params: SummaryPageParams
-)(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
+)(implicit request: Request[?], messages: Messages, viewHelpers: ViewHelpers)
 
 
 
@@ -50,7 +50,7 @@
 
 @layout(title) {
 
-    @if(Mode isNew params.mode) {
+    @if(Mode.isNew(params.mode)) {
         @viewHelpers.govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)
     } else {
         @viewHelpers.govukBackLink(BackLink(href = "subscription/status", content = Text(messages("fh.generic.back"))))
@@ -106,7 +106,7 @@
         ))
     ))
 
-  @if(Mode isEditable params.mode) {
+  @if(Mode.isEditable(params.mode)) {
       <div style="display: flex; justify-content: flex-end">
           <p class="govuk-body">
             <a class="govuk-link" href="@{s"form/companyOfficers/${(applicationData.companyOfficers.size+1).toString}"}">@{Messages("fh.summary.addMoreCompanyOfficers")}</a>
@@ -129,7 +129,7 @@
     ))
 
 
-  @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
+  @if(applicationData.otherStoragePremises.hasValue && (Mode.isEditable(params.mode))) {
       <div style="display: flex; justify-content: flex-end">
       <p class="govuk-body">
           <a class="govuk-link" href="@{s"form/otherStoragePremises/${(applicationData.otherStoragePremises.value.size+1).toString}"}">@{Messages("fh.summary.addMoreStoragePremises")}</a>
@@ -137,7 +137,7 @@
       </div>
   }
 
-  @if(Mode isEditable params.mode) {
+  @if(Mode.isEditable(params.mode)) {
         @SummaryButtons()
   }
 

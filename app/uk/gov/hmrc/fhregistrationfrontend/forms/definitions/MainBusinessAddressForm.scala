@@ -19,7 +19,6 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{address, localNew, oneOf, yesOrNo}
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.MappingWithKeyOps
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, MainBusinessAddress, PreviousAddress}
 
 import java.time.LocalDate

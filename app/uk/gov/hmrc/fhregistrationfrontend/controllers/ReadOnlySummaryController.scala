@@ -37,11 +37,11 @@ class ReadOnlySummaryController @Inject() (
 
   def view() = actions.enrolledUserAction.async { implicit request =>
     for {
-      status         <- fhddsConnector getStatus request.registrationNumber
-      displayWrapper <- fhddsConnector getSubmission request.registrationNumber
+      status         <- fhddsConnector `getStatus` request.registrationNumber
+      displayWrapper <- fhddsConnector `getSubmission` request.registrationNumber
       display = displayWrapper.subScriptionDisplay
     } yield {
-      val application = desToForm loadApplicationFromDes display
+      val application = desToForm `loadApplicationFromDes` display
       val bpr = desToForm.businessRegistrationDetails(display)
       val contactEmail = desToForm.contactEmail(display)
 

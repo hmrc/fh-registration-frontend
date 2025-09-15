@@ -43,7 +43,7 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
       formDataHasErrors(
         individual(),
-        individualErrors(required: _*)
+        individualErrors(required *)
       )
     }
 
@@ -91,7 +91,7 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
     }
 
     "accept valid" in {
-      val data = dataFromValidForm(individual(validIndividual.toSeq: _*))
+      val data = dataFromValidForm(individual(validIndividual.toSeq *))
       data.identification match {
         case v: CompanyOfficerIndividual =>
           v.firstName shouldBe "George"
@@ -114,7 +114,7 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
       formDataHasErrors(
         company(),
-        companyErrors(required: _*)
+        companyErrors(required *)
       )
     }
 

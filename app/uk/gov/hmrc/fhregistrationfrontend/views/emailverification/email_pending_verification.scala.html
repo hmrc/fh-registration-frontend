@@ -26,7 +26,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(emailVerificationForm: Form[EmailVerification], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[_], messages: Messages)
+@(emailVerificationForm: Form[EmailVerification], navigation: Navigation, emailSentAgain: Option[Boolean] = None)(implicit request: Request[?], messages: Messages)
 
 
 @title = @{

@@ -37,7 +37,7 @@ object ImportingActivitiesHelper {
             GroupRow.Single
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/importingActivities",
             Text("Change"),
             Some(Messages("fh.summary.hasEORI"))
@@ -51,7 +51,7 @@ object ImportingActivitiesHelper {
             GroupRow.Top
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/importingActivities/enterEORI",
             Text("Change"),
             Some(Messages("fh.importing_activities.eori.label"))
@@ -65,7 +65,7 @@ object ImportingActivitiesHelper {
             GroupRow.Bottom
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/importingActivities/importingGoodsNotBelongingToBusiness",
             Text("Change"),
             Some(Messages("fh.summary.usesEORI"))
@@ -82,7 +82,7 @@ object ImportingActivitiesHelper {
             GroupRow.Single
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/importingActivities",
             Text("Change"),
             Some(Messages("fh.summary.hasEORI"))

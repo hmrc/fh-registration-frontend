@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.BusinessPartnersForm._
 
 
-@(businessPartnersForm: Form[_], params: RepeatingPageParams)(implicit messages: Messages, viewHelpers: ViewHelpers)
+@(businessPartnersForm: Form[?], params: RepeatingPageParams)(implicit messages: Messages, viewHelpers: ViewHelpers)
 
 @params.forceHasMore match {
     case Some(force) => {

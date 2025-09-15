@@ -19,15 +19,13 @@ package uk.gov.hmrc.fhregistrationfrontend.controllers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import play.api.libs.json.JsValue
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
-import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, FhddsConnectorMocks, InMemoryShortLivedCache}
+import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
+import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, EmailVerificationConnectorMocks, FhddsConnectorMocks}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -57,7 +55,7 @@ class AmendmentControllerSpec
     mockMcc,
     mockActions,
     journeys
-  )(mockSave4LaterService, ec)
+  )(using mockSave4LaterService, ec)
 
   "startAmendment" should {
     "Redirect to summary when an amendment is already in progress" in {
@@ -75,22 +73,22 @@ class AmendmentControllerSpec
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", true)
 
-      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(using any()))
         .thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(using any()))
         .thenReturn(Future(Some(BusinessType.CorporateBody)))
-      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any()))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(using any()))
         .thenReturn(Future.successful(Some("a@w.ro")))
 
       for (page <- journeys.limitedCompanyPages) {
-        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
-        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
       }
 
-      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(using any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(using any()))
         .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
       val request = FakeRequest()
@@ -103,22 +101,22 @@ class AmendmentControllerSpec
       setupStartAmendmentAction(None)
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", false)
-      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(using any()))
         .thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(using any()))
         .thenReturn(Future(Some(BusinessType.CorporateBody)))
-      when(mockSave4LaterService.saveV1ContactEmail(any(), any())(any()))
+      when(mockSave4LaterService.saveV1ContactEmail(any(), any())(using any()))
         .thenReturn(Future.successful(Some("a@w.ro")))
 
       for (page <- journeys.limitedCompanyPages) {
-        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
-        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
       }
 
-      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(using any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(using any()))
         .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
       val request = FakeRequest()
@@ -143,22 +141,22 @@ class AmendmentControllerSpec
       setupStartVariationAction(None)
       setupDesDisplayResult()
       setupEmailVerificationConnector("a@w.ro", true)
-      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessRegistrationDetails(any(), any())(using any()))
         .thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveBusinessType(any(), any())(any()))
+      when(mockSave4LaterService.saveBusinessType(any(), any())(using any()))
         .thenReturn(Future(Some(BusinessType.CorporateBody)))
-      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any()))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(using any()))
         .thenReturn(Future.successful(Some("a@w.ro")))
 
       for (page <- journeys.limitedCompanyPages) {
-        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDisplayData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
-        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(any(), any()))
+        when(mockSave4LaterService.saveDraftData4Later(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(None))
       }
 
-      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(any())).thenReturn(Future.successful(None))
-      when(mockSave4LaterService.saveJourneyType(any(), any())(any()))
+      when(mockSave4LaterService.saveDisplayDeclaration(any(), any())(using any())).thenReturn(Future.successful(None))
+      when(mockSave4LaterService.saveJourneyType(any(), any())(using any()))
         .thenReturn(Future.successful(Some(JourneyType.Amendment)))
 
       val request = FakeRequest()

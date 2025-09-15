@@ -134,14 +134,14 @@ class PageAction[T, V] @Inject() (pageId: String, sectionId: Option[String], jou
     result.value
   }
 
-  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
+  def accessiblePage(page: AnyPage, state: JourneyState)(implicit request: Request[?]): Either[Result, Boolean] =
     if (state.isPageComplete(page) || state.nextPageToComplete().contains(page.id)) {
       Right(true)
     } else {
       Left(errorHandler.errorResultsPages(Results.NotFound))
     }
 
-  def loadPageSection(page: Page[T])(implicit request: Request[_]): Either[Result, Page[T]] =
+  def loadPageSection(page: Page[T])(implicit request: Request[?]): Either[Result, Page[T]] =
     if (page.withSubsection isDefinedAt sectionId)
       Right(page withSubsection sectionId)
     else {
@@ -152,7 +152,7 @@ class PageAction[T, V] @Inject() (pageId: String, sectionId: Option[String], jou
     request.journeyState.get[T](pageId) match {
       case Some(page) => Right(page)
       case None =>
-        Left(errorHandler.errorResultsPages(Results.NotFound)(request))
+        Left(errorHandler.errorResultsPages(Results.NotFound)(using request))
     }
 
   def loadJourneyNavigation(journeyPages: JourneyPages, state: JourneyState) =

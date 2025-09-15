@@ -20,7 +20,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(timeSaved: String)(implicit request: Request[_], messages: Messages)
+@(timeSaved: String)(implicit request: Request[?], messages: Messages)
 
 @pageTitle = @{
   Messages("fh.delete_confirmation_page.header")

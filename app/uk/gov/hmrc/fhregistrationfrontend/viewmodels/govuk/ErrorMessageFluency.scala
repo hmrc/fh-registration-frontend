@@ -30,7 +30,7 @@ trait ErrorMessageFluency {
       field.error.map { err =>
         ErrorMessage(
           id = id,
-          content = HtmlContent(messages(err.message, err.args: _*))
+          content = HtmlContent(messages(err.message, err.args *))
         )
       }.get
   }

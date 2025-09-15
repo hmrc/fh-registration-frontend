@@ -42,7 +42,7 @@ class AddressAuditServiceSpecs
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val addressAuditService = new DefaultAddressAuditService(addressLookupConnector, auditConnector)(
-    scala.concurrent.ExecutionContext.Implicits.global
+    using scala.concurrent.ExecutionContext.Implicits.global
   )
   val ac: ArgumentCaptor[DataEvent] = ArgumentCaptor.forClass(classOf[DataEvent])
 
@@ -116,14 +116,14 @@ class AddressAuditServiceSpecs
   }
 
   def auditEventFor(address: Address) = {
-    await(addressAuditService auditAddresses ("contact", List(address)))
-    verify(auditConnector).sendEvent(ac.capture())(any(), any())
+    await(addressAuditService `auditAddresses` ("contact", List(address)))
+    verify(auditConnector).sendEvent(ac.capture())(using any(), any())
     ac.getValue
   }
 
   def setupAddressLookupConnector(addressRecord: Option[AddressRecord]) =
-    when(addressLookupConnector.lookupById(any())(any())).thenReturn(Future successful addressRecord)
+    when(addressLookupConnector.lookupById(any())(using any())).thenReturn(Future successful addressRecord)
 
   def setupAuditConnector() =
-    when(auditConnector.sendEvent(any())(any(), any())).thenReturn(Future successful AuditResult.Success)
+    when(auditConnector.sendEvent(any())(using any(), any())).thenReturn(Future successful AuditResult.Success)
 }

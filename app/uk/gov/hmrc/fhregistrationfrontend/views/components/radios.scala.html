@@ -19,7 +19,7 @@
 @this(govukRadios: GovukRadios)
 
 @(
-    form: Form[_],
+    form: Form[?],
     legendContent: String,
     id: String = "",
     items: Seq[RadioItem],
@@ -50,5 +50,5 @@
     )),
     hint = hint.map { hint => Hint(content = HtmlContent(hint))},
     items = items,
-    errorMessage = form.error(id).map(err => ErrorMessage(content = Text(messages(s"fh.partner.$id.${err.message}", err.args: _*))))
+    errorMessage = form.error(id).map(err => ErrorMessage(content = Text(messages(s"fh.partner.$id.${err.message}", err.args*))))
 ))

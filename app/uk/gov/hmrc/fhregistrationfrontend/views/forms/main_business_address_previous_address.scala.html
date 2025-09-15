@@ -28,7 +28,7 @@
 
 @this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
-@(mainBusinessAddressForm: Form[PreviousAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(mainBusinessAddressForm: Form[PreviousAddress], bpr: BusinessRegistrationDetails, navigation: Navigation, postAction: Call)(implicit request: Request[?], messages: Messages)
 
 @pageHeadBlock = {
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
@@ -109,7 +109,7 @@
         hint = Some(Hint(
             content = Text(Messages("fh.previousAddressStartdate.hint_text"))
         )),
-        errorMessage = mainBusinessAddressForm(previousAddressStartdateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.previousAddressStartdate.${e.message}", e.args:_*)))),
+        errorMessage = mainBusinessAddressForm(previousAddressStartdateKey).errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.previousAddressStartdate.${e.message}", e.args*)))),
         items = Seq(
             InputItem(name = s"$previousAddressStartdateKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.day")),
             InputItem(name = s"$previousAddressStartdateKey.month", classes = s"govuk-input--width-2 ${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = mainBusinessAddressForm.data.get(s"$previousAddressStartdateKey.month")),

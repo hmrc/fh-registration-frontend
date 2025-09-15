@@ -23,7 +23,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.StubbedErrorHandler
 
 class EnrolledUserActionSpec extends ActionSpecBase {
 
-  lazy val action = new EnrolledUserAction()(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action =
+    new EnrolledUserAction()(using StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Enrolled user action" should {
     "Fail when no registration number" in {

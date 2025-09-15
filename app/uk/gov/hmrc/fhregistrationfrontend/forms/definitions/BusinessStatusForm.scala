@@ -29,7 +29,7 @@ object BusinessStatusForm {
 
   private val isNewFulfilmentHouseMapping = isNewFulfilmentBusinessKey -> yesOrNo()
   private val proposedStartDateMapping =
-    proposedStartDateKey -> (localNew onlyWhen (isNewFulfilmentHouseMapping is true))
+    proposedStartDateKey -> (localNew `onlyWhen` (isNewFulfilmentHouseMapping `is` true))
 
   val businessStatusForm = Form(
     mapping(

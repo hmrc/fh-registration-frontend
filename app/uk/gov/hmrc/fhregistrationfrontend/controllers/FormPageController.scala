@@ -56,7 +56,7 @@ class FormPageController @Inject() (
   private def saveSuccessfully[T](page: Page[T])(implicit request: PageRequest[AnyContent]): Future[Result] = {
     addressAuditService.auditAddresses(page.id, page.updatedAddresses)
     save4LaterService
-      .saveDraftData4Later(request.userId, request.page.id, page.data.get)(hc, request.page.format)
+      .saveDraftData4Later(request.userId, request.page.id, page.data.get)(using hc, request.page.format)
       .map { _ =>
         if (isSaveForLate)
           Redirect(routes.Application.savedForLater)
@@ -98,7 +98,7 @@ class FormPageController @Inject() (
                     request.bpr,
                     request.journey
                       .navigation(request.lastUpdateTimestamp, request.page)
-                  )(request, request2Messages(request), appConfig)
+                  )(using request, request2Messages(using request), appConfig)
                 )
               case _ => saveSuccessfully(page)
             }
@@ -123,7 +123,7 @@ class FormPageController @Inject() (
                     BusinessPartnersForm.withError(pageData, sectionId, "vat_value", "error.vatAlreadyUsed"),
                     request.bpr,
                     request.journey.navigation(request.lastUpdateTimestamp, request.page)
-                  )(request, request2Messages(request), appConfig)
+                  )(using request, request2Messages(using request), appConfig)
                 )
               case _ => saveSuccessfully(page)
             }
@@ -149,7 +149,7 @@ class FormPageController @Inject() (
                     CompanyOfficersForm.withError("vatRegistration", "error.vatAlreadyUsed"),
                     request.bpr,
                     request.journey.navigation(request.lastUpdateTimestamp, request.page)
-                  )(request, request2Messages(request), appConfig)
+                  )(using request, request2Messages(using request), appConfig)
                 )
               case _ => saveSuccessfully(page)
             }
@@ -164,7 +164,7 @@ class FormPageController @Inject() (
           case None => Future successful errorHandler.errorResultsPages(Results.BadRequest)
           case Some(newPage) =>
             save4LaterService
-              .saveDraftData4Later(request.userId, request.page.id, newPage.data.get)(hc, request.page.format)
+              .saveDraftData4Later(request.userId, request.page.id, newPage.data.get)(using hc, request.page.format)
               .map { _ =>
                 showNextPage(newPage)
               }
@@ -183,16 +183,16 @@ class FormPageController @Inject() (
       }
     }
 
-  private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[_]) =
+  private def showNextPage[T](newPage: Page[T])(implicit request: PageRequest[?]) =
     if (newPage.nextSubsection.isDefined)
       Redirect(routes.FormPageController.loadWithSection(newPage.id, newPage.nextSubsection.get))
     else
-      request.journey next newPage match {
+      request.journey `next` newPage match {
         case Some(nextPage) => Redirect(routes.FormPageController.load(nextPage.id))
         case None           => Redirect(routes.SummaryController.summary())
       }
 
-  private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[_]) =
+  private def renderForm[T](page: Rendering, hasErrors: Boolean)(implicit request: PageRequest[?]) =
     if (hasErrors)
       BadRequest(page.render(request.bpr, request.journey.navigation(request.lastUpdateTimestamp, request.page)))
     else {
@@ -202,7 +202,7 @@ class FormPageController @Inject() (
   val submitButtonValueForm: Form[String] = Form("saveAction" -> nonEmptyText)
 
   /** returns true only when the form contains an 'saveAction' button with value == 'saveForLater' */
-  private def isSaveForLate(implicit req: Request[_]): Boolean =
+  private def isSaveForLate(implicit req: Request[?]): Boolean =
     submitButtonValueForm
       .bindFromRequest()
       .fold(

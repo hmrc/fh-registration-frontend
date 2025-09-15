@@ -57,7 +57,7 @@ object UserAnswers {
         (__ \ "_id").read[String] and
           (__ \ "data").read[Map[String, EncryptedValue]] and
           (__ \ "lastUpdated").read[Instant]
-      )(ModelEncryption.decryptUserAnswers _)
+      )(ModelEncryption.decryptUserAnswers)
 
     def writes(implicit encryption: Encryption): OWrites[UserAnswers] = new OWrites[UserAnswers] {
       override def writes(userAnswers: UserAnswers): JsObject = {

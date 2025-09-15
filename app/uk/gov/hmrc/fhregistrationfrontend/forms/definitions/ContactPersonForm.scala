@@ -35,13 +35,13 @@ object ContactPersonForm {
   val otherInternationalContactAddressKey = "otherInternationalContactAddress_contactAddress"
 
   private val usingSameContactAddressMapping = usingSameContactAddressKey -> yesOrNo()
-  private val ukAddressMapping = isUkAddressKey -> (yesOrNo() onlyWhen (usingSameContactAddressMapping is false))
+  private val ukAddressMapping = isUkAddressKey -> (yesOrNo() `onlyWhen` (usingSameContactAddressMapping `is` false))
 
   private val otherUkContactAddressMapping =
-    otherUkContactAddressKey -> (address onlyWhen (ukAddressMapping is Some(true)))
+    otherUkContactAddressKey -> (address `onlyWhen` (ukAddressMapping `is` Some(true)))
 
   private val otherInternationalContactAddressMapping =
-    otherInternationalContactAddressKey -> (internationalAddress onlyWhen (ukAddressMapping is Some(false)))
+    otherInternationalContactAddressKey -> (internationalAddress `onlyWhen` (ukAddressMapping `is` Some(false)))
 
   val contactPersonForm = Form(
     mapping(

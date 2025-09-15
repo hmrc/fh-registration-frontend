@@ -16,22 +16,14 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
-import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address, AddressRecord, Country, RecordSet}
 import uk.gov.hmrc.http.*
-import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 
-import java.net.URL
-import java.net.http.HttpRequest
 import scala.concurrent.Future
 
 class AddressLookupConnectorSpec extends HttpClientV2Helper {

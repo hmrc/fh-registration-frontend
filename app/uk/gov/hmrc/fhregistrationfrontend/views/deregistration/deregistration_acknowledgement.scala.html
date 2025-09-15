@@ -25,7 +25,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(date: Date, email: String)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(date: Date, email: String)(implicit request: Request[?], messages: Messages, config: AppConfig)
 
 
 @subtitle = @{

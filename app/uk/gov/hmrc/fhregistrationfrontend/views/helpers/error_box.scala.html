@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(form: Form[_], context: String=".", sectionP: String="", dateKey: String="")(implicit message: Messages)
+@(form: Form[?], context: String=".", sectionP: String="", dateKey: String="")(implicit message: Messages)
 @defining(new scala.collection.mutable.HashSet[String]()) { set =>
 
   @if(form.hasErrors) {

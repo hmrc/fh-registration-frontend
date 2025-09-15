@@ -29,7 +29,7 @@ object NationalInsuranceNumberForm {
 
   private val hasNationalInsuranceNumberMapping = hasNationalInsuranceNumberKey -> yesOrNo()
   private val nationalInsuranceNumberMapping = nationalInsuranceNumberKey       ->
-    (nino onlyWhen (hasNationalInsuranceNumberMapping is true))
+    (nino `onlyWhen` (hasNationalInsuranceNumberMapping `is` true))
 
   val nationalInsuranceNumberForm = Form(
     mapping(

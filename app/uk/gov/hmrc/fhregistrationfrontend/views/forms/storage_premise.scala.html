@@ -28,7 +28,7 @@
 @this(layout: layout, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
 
-@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[(StoragePremise, Boolean)], navigation: Navigation, sectionId: String, params: RepeatingPageParams, postAction: Call)(implicit request: Request[?], messages: Messages)
 
 @pageScripts = @{
   Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)

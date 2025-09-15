@@ -27,7 +27,7 @@ object Identification {
     (__ \ "idNumber").read[String].orElse((__ \ "id_number").read[String]) and
       (__ \ "issuingInstitution").read[String].orElse((__ \ "issuing_institution").read[String]) and
       (__ \ "issuingCountryCode").read[String].orElse((__ \ "issuing_country_code").read[String])
-  )(Identification.apply _)
+  )(Identification.apply)
 
   implicit val identificationWrites: OWrites[Identification] = new OWrites[Identification] {
     def writes(identification: Identification): JsObject = Json.obj(

@@ -19,7 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 import javax.inject.Inject
 import com.google.inject.ImplementedBy
 import play.api.libs.json.Json
-import play.api.{Configuration, Environment}
+import play.api.Configuration
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig

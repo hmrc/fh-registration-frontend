@@ -68,9 +68,9 @@ trait SummaryFunctions {
     journeys: Journeys
   )(implicit request: SummaryRequest[AnyContent]): HtmlFormat.Appendable = {
     val application = request.businessType match {
-      case BusinessType.CorporateBody => journeys ltdApplication request
-      case BusinessType.SoleTrader    => journeys soleTraderApplication request
-      case _                          => journeys partnershipApplication request
+      case BusinessType.CorporateBody => journeys `ltdApplication` request
+      case BusinessType.SoleTrader    => journeys `soleTraderApplication` request
+      case _                          => journeys `partnershipApplication` request
     }
 
     SummaryPrintable(application, request.bpr, request.verifiedEmail)
@@ -85,7 +85,7 @@ trait SummaryFunctions {
     SummaryPageParams(mode, None)
   }
 
-  protected def summaryPageParams(journeyRequest: JourneyRequest[_]): SummaryPageParams =
+  protected def summaryPageParams(journeyRequest: JourneyRequest[?]): SummaryPageParams =
     SummaryPageParams(
       modeForJourneyType(journeyRequest.journeyType),
       journeyRequest.hasUpdates,

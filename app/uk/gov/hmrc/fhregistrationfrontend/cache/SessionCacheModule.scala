@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.cache.client.SessionCache
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class SessionCacheModule extends Module {
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] = Seq(
     bind[SessionCache].to[DefaultSessionCache]
   )
 }

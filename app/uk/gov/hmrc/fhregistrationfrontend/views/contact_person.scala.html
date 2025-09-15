@@ -34,7 +34,7 @@ autcompleteCss: HmrcAccessibleAutocompleteCss,
 autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 
-@(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: Form[ContactPerson], address: Address)(implicit request: Request[?], messages: Messages)
 
 @pageScripts = @{
     Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)

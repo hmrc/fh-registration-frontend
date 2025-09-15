@@ -45,7 +45,7 @@ object BusinessPartnersHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           s"form/businessPartners/${index + 1}",
           Text("Change"),
           Some(Messages("fh.business_partners.add_a_partner", index + 1))

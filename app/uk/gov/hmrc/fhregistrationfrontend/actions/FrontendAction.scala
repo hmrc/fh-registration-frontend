@@ -23,6 +23,6 @@ import play.api.Logging
 
 trait FrontendAction extends Results with Logging {
 
-  implicit def hc(implicit request: Request[_]): HeaderCarrier =
+  implicit def hc(implicit request: Request[?]): HeaderCarrier =
     HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 }

@@ -51,7 +51,7 @@ class SummaryAction(implicit errorHandler: ErrorHandler, val executionContext: E
     result.value
   }
 
-  def journeyIsComplete(journeyState: JourneyState)(implicit request: Request[_]): Either[Result, Boolean] =
+  def journeyIsComplete(journeyState: JourneyState)(implicit request: Request[?]): Either[Result, Boolean] =
     if (journeyState.isComplete)
       Right(true)
     else {

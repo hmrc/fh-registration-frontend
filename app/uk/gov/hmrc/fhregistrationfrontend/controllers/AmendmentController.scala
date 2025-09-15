@@ -55,13 +55,13 @@ class AmendmentController @Inject() (
       setupJourney(JourneyType.Variation)
   }
 
-  private def setupJourney(journeyType: JourneyType)(implicit request: StartUpdateRequest[_]) =
+  private def setupJourney(journeyType: JourneyType)(implicit request: StartUpdateRequest[?]) =
     fhddsConnector.getSubmission(request.registrationNumber) flatMap { displayWrapper =>
       val display = displayWrapper.subScriptionDisplay
       val userId = request.userId
-      val entityType = desToForm entityType display
-      val application = desToForm loadApplicationFromDes display
-      val journeyPages = journeys unapplyApplication application
+      val entityType = desToForm `entityType` display
+      val application = desToForm `loadApplicationFromDes` display
+      val journeyPages = journeys `unapplyApplication` application
       val bpr = desToForm.businessRegistrationDetails(display)
       val contactEmail = desToForm.contactEmail(display)
 
@@ -76,7 +76,7 @@ class AmendmentController @Inject() (
       } yield Redirect(routes.SummaryController.summary())
     }
 
-  private def saveContactEmail(contactEmail: Option[String])(implicit request: StartUpdateRequest[_]): Future[Any] = {
+  private def saveContactEmail(contactEmail: Option[String])(implicit request: StartUpdateRequest[?]): Future[Any] = {
     val ignored: Any = 1
     contactEmail.fold(
       Future successful ignored
@@ -98,7 +98,7 @@ class AmendmentController @Inject() (
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) { case (acc, page) =>
       acc flatMap { _ =>
-        save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(hc, page.format)
+        save4LaterService.saveDisplayData4Later(userId, page.id, page.data.get)(using hc, page.format)
       }
     }
   }
@@ -107,7 +107,7 @@ class AmendmentController @Inject() (
     val ignored: Any = 1
     pages.pages.foldLeft(Future successful ignored) { case (acc, page) =>
       acc flatMap { _ =>
-        save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(hc, page.format)
+        save4LaterService.saveDraftData4Later(userId, page.id, page.data.get)(using hc, page.format)
       }
     }
   }

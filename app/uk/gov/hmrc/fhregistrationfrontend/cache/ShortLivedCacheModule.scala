@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class ShortLivedCacheModule extends Module {
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] = Seq(
     bind[client.ShortLivedHttpCaching].to[DefaultShortLivedHttpCaching],
     bind[ShortLivedCache].to[DefaultShortLivedCache]
   )
@@ -37,7 +37,7 @@ class DefaultShortLivedCache @Inject() (
   override val shortLiveCache: ShortLivedHttpCaching,
   val runModeConfiguration: Configuration
 ) extends client.ShortLivedCache {
-  override implicit val crypto: Encrypter with Decrypter = new ApplicationCrypto(
+  override implicit val crypto: Encrypter & Decrypter = new ApplicationCrypto(
     runModeConfiguration.underlying
   ).JsonCrypto
 }

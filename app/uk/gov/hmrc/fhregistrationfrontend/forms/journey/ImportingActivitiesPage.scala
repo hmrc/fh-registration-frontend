@@ -42,25 +42,25 @@ case class ImportingActivitiesPage(
 
   override def withData(data: ImportingActivities): Page[ImportingActivities] = {
     val newSection = if (data.hasEori) section else None
-    val eoriNumberPageWithData = data.eoriValue.map(eori => eoriNumberPage withData eori) getOrElse eoriNumberPage
-    val goodsPageWithData = data.goodsImportedValue.map(goods => goodsPage withData goods) getOrElse goodsPage
-    this copy (
+    val eoriNumberPageWithData = data.eoriValue.map(eori => eoriNumberPage `withData` eori) getOrElse eoriNumberPage
+    val goodsPageWithData = data.goodsImportedValue.map(goods => goodsPage `withData` goods) getOrElse goodsPage
+    this.copy(
       section = newSection,
-      mainPage = mainPage withData data.hasEori,
+      mainPage = mainPage `withData` data.hasEori,
       eoriNumberPage = eoriNumberPageWithData,
       goodsPage = goodsPageWithData
     )
   }
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[ImportingActivities] => X)(implicit
-    r: Request[_]
+    r: Request[?]
   ): X =
     section match {
       case Some("enterEORI") =>
         eoriNumberPage.parseFromRequest(
           withErrors,
           en => {
-            val newValue = this copy (eoriNumberPage = en)
+            val newValue = this.copy(eoriNumberPage = en)
             withData(newValue)
           }
         )
@@ -68,7 +68,7 @@ case class ImportingActivitiesPage(
         goodsPage.parseFromRequest(
           withErrors,
           goods => {
-            val newValue = this copy (goodsPage = goods)
+            val newValue = this.copy(goodsPage = goods)
             withData(newValue)
           }
         )
@@ -76,19 +76,17 @@ case class ImportingActivitiesPage(
         mainPage.parseFromRequest(
           withErrors,
           mp => {
-            val newValue = this copy (mainPage = mp)
+            val newValue = this.copy(mainPage = mp)
             withData(newValue)
           }
         )
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[ImportingActivities]] = {
-    case None          => this copy (section = mainSection)
-    case `mainSection` => this copy (section = mainSection)
+    case None          => this.copy(section = mainSection)
+    case `mainSection` => this.copy(section = mainSection)
     case newSection if hasEori =>
-      this copy (section = newSection,
-      eoriNumberPage = eoriNumberPage,
-      goodsPage = goodsPage)
+      this.copy(section = newSection, eoriNumberPage = eoriNumberPage, goodsPage = goodsPage)
   }
 
   override def nextSubsection: Option[String] =
@@ -125,7 +123,7 @@ case class ImportingActivitiesPage(
   private def hasEori = mainPage.data contains true
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html =

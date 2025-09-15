@@ -56,7 +56,7 @@ class DesToFormImpl extends DesToForm {
     subscriptionDisplay.contactDetail.commonDetails.email
 
   override def entityType(subscriptionDisplay: des.SubscriptionDisplay) =
-    EntityTypeMapping desToForm subscriptionDisplay.organizationType
+    EntityTypeMapping `desToForm` subscriptionDisplay.organizationType
 
   override def loadApplicationFromDes(display: SubscriptionDisplay): BusinessEntityApplication =
     entityType(display) match {
@@ -142,7 +142,7 @@ class DesToFormImpl extends DesToForm {
 
   def otherStoragePremises(allOtherInformation: des.AllOtherInformation) = OtherStoragePremises(
     allOtherInformation.numberOfpremises != "0",
-    ListWithTrackedChanges fromValues (allOtherInformation.premises getOrElse List.empty map premises)
+    ListWithTrackedChanges `fromValues` (allOtherInformation.premises getOrElse List.empty map premises)
   )
 
   def premises(premise: des.Premises): StoragePremise = StoragePremise(
@@ -278,7 +278,7 @@ class DesToFormImpl extends DesToForm {
     )
 
   def companyOfficers(partners: Option[des.PartnerCorporateBody]): ListWithTrackedChanges[CompanyOfficer] =
-    ListWithTrackedChanges fromValues partners
+    ListWithTrackedChanges `fromValues` partners
       .flatMap(_.companyOfficials)
       .map(_ map companyOfficial)
       .get

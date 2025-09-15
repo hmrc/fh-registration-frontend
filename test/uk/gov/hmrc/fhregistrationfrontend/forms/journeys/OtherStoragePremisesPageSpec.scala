@@ -39,13 +39,13 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
   "Next section" should {
     "Be None" when {
       "Answer is No" in {
-        val page = OtherStoragePremisesPage(mainPage withData false, repeatingPage)
+        val page = OtherStoragePremisesPage(mainPage `withData` false, repeatingPage)
 
         page.nextSubsection shouldBe None
       }
 
       "Has more is false" in {
-        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage `withData` true, repeatingPage `withData` listWithPremises(2))
           .withSubsection(Some("2"))
 
         page.nextSubsection shouldBe None
@@ -58,7 +58,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
       "Answer is Yes" in {
 
         val page =
-          OtherStoragePremisesPage(mainPage withData true, repeatingPage withData ListWithTrackedChanges.empty())
+          OtherStoragePremisesPage(mainPage `withData` true, repeatingPage `withData` ListWithTrackedChanges.empty())
 
         page.nextSubsection shouldBe Some("1")
       }
@@ -66,8 +66,8 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
       "Has more is True" in {
 
         val page = OtherStoragePremisesPage(
-          mainPage withData true,
-          repeatingPage withData (listWithPremises(2) copy (addMore = true))
+          mainPage `withData` true,
+          repeatingPage `withData` (listWithPremises(2).copy(addMore = true))
         )
           .withSubsection(Some("2"))
 
@@ -81,8 +81,8 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
     "Be none" when {
       "on main section" in {
         val page = OtherStoragePremisesPage(
-          mainPage withData true,
-          repeatingPage withData (listWithPremises(2) copy (addMore = true))
+          mainPage `withData` true,
+          repeatingPage `withData` (listWithPremises(2).copy(addMore = true))
         )
 
         page.previousSubsection shouldBe None
@@ -91,7 +91,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
 
     "Be main section" when {
       "on first premise" in {
-        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage `withData` true, repeatingPage `withData` listWithPremises(2))
           .withSubsection(Some("1"))
 
         page.previousSubsection shouldBe Some("any")
@@ -100,7 +100,7 @@ class OtherStoragePremisesPageSpec extends UnitSpec with MockitoSugar {
 
     "Be first premise" when {
       "on second premise" in {
-        val page = OtherStoragePremisesPage(mainPage withData true, repeatingPage withData listWithPremises(2))
+        val page = OtherStoragePremisesPage(mainPage `withData` true, repeatingPage `withData` listWithPremises(2))
           .withSubsection(Some("2"))
 
         page.previousSubsection shouldBe Some("1")

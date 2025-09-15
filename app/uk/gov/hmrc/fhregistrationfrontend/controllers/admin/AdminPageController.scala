@@ -120,7 +120,7 @@ class AdminPageController @Inject() (
 
   def checkStatus(regNo: String) = authAction.async { _ =>
     fhddsConnector
-      .getStatus(regNo)(hc)
+      .getStatus(regNo)(using hc)
       .map(result => Ok(result.toString))
   }
 

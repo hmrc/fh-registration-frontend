@@ -36,7 +36,7 @@ object Mappings {
 
   def skippingOnePrefix[T](mapping: Mapping[T]) = new SkippingOnePrefixMapping(mapping)
 
-  def yesOrNo(errorKey: String = "error.required") = of(yesOrNoFormatter(errorKey))
+  def yesOrNo(errorKey: String = "error.required") = of(using yesOrNoFormatter(errorKey))
 
   def address: Mapping[Address] =
     mapping(
@@ -125,7 +125,7 @@ object Mappings {
 
   def deregistrationReason: Mapping[String] = nonEmptyText verifying Constraints.pattern("^[a-zA-Z0-9 ]{1,40}$".r)
 
-  def nino: FieldMapping[String] = of(ninoFormatter())
+  def nino: FieldMapping[String] = of(using ninoFormatter())
 
   def nationalIdNumber: Mapping[String] =
     nonEmptyText verifying Constraints.pattern(
@@ -140,7 +140,7 @@ object Mappings {
   def alternativeEmail: Mapping[AlternativeEmail] =
     mapping(
       "email"             -> email,
-      "emailConfirmation" -> of(emailConfirmationFormat)
+      "emailConfirmation" -> of(using emailConfirmationFormat)
     )(AlternativeEmail.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   def internationalAddress: Mapping[InternationalAddress] =
@@ -157,7 +157,7 @@ object Mappings {
   private def invalid(error: String, params: String*) =
     Invalid(
       Seq(
-        ValidationError(error, params: _*)
+        ValidationError(error, params *)
       )
     )
 
@@ -234,16 +234,16 @@ object Mappings {
     requiredErrorKey: String = "error.required",
     args: Seq[String] = Nil
   ): Mapping[`enum`.Value] =
-    of(enumFormat(`enum`, requiredErrorKey, args))
+    of(using enumFormat(`enum`, requiredErrorKey, args))
 
   def optionalWithYesOrNo[T](wrapped: Mapping[T]): Mapping[Option[T]] =
     x(wrapped) verifying ("error.invalid", y) transform (z, t)
 
   def string(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
-    of(stringFormatter(errorKey, args))
+    of(using stringFormatter(errorKey, args))
 
   private def x[T](wrapped: Mapping[T]): Mapping[(Boolean, Option[T])] = tuple(
-    "yesNo" -> of(yesOrNoFormatter("error.required")),
+    "yesNo" -> of(using yesOrNoFormatter("error.required")),
     "value" -> optional(wrapped)
   )
 

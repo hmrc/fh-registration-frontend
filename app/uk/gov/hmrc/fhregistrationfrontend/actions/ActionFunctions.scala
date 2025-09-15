@@ -29,7 +29,7 @@ trait ActionFunctions {
 
   def loadCacheMap(implicit
     save4LaterService: Save4LaterService,
-    request: UserRequest[_],
+    request: UserRequest[?],
     ec: ExecutionContext
   ): Future[Either[Result, CacheMap]] =
     save4LaterService.fetch(request.userId) map {

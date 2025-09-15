@@ -26,6 +26,6 @@ trait ErrorMessageAwareness {
   def errorMessage(field: Field)(implicit messages: Messages): Option[ErrorMessage] =
     field.error
       .map { err =>
-        ErrorMessage(content = HtmlContent(messages(err.message, err.args: _*)))
+        ErrorMessage(content = HtmlContent(messages(err.message, err.args *)))
       }
 }

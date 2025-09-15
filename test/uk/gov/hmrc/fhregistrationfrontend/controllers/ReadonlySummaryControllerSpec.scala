@@ -33,7 +33,7 @@ class ReadonlySummaryControllerSpec
     mockMcc,
     mockActions,
     views
-  )(scala.concurrent.ExecutionContext.Implicits.global)
+  )(using scala.concurrent.ExecutionContext.Implicits.global)
 
   "view" should {
     "Render the summary for an approved application" in {

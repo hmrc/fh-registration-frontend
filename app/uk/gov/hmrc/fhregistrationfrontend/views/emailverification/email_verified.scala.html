@@ -23,7 +23,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers)
 
 
-@(verifiedEmail: String, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(verifiedEmail: String, navigation: Navigation)(implicit request: Request[?], messages: Messages)
 
 @title = @{
   Messages("fh.emailVerification.verified.title")

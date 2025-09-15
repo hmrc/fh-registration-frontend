@@ -38,7 +38,7 @@ object VatRegistrationNumberHelper {
             GroupRow.Single
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/vatNumber",
             Text("Change"),
             Some(Messages("fh.vatNumber.label"))
@@ -54,7 +54,7 @@ object VatRegistrationNumberHelper {
           ),
           Helpers
             .createChangeLink(
-              Mode isEditable mode,
+              Mode `isEditable` mode,
               "form/vatNumber",
               Text("Change"),
               Some(Messages("fh.summary.HasVat"))

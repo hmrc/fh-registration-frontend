@@ -20,7 +20,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[?], messages: Messages)
 
 @title1 = @{
   Messages("fh.status.received.title")

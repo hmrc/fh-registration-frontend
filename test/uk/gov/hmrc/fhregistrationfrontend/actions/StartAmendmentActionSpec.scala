@@ -32,7 +32,7 @@ import scala.concurrent.Future
 class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with FhddsConnectorMocks {
 
   val errorHandler = StubbedErrorHandler
-  lazy val action = new StartAmendmentAction(mockFhddsConnector)(mockSave4Later, errorHandler, ec)
+  lazy val action = new StartAmendmentAction(mockFhddsConnector)(using mockSave4Later, errorHandler, ec)
 
   "Start amendment action " should {
     "Fail when no fhdds registration number" in {
@@ -77,10 +77,10 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Approved, ApprovedWithConditions, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
 
         val action = new StartAmendmentAction(fhddsConnector)(
-          mockSave4Later,
+          using mockSave4Later,
           errorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )
@@ -103,9 +103,9 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Received, Processing)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
         val action = new StartAmendmentAction(fhddsConnector)(
-          mockSave4Later,
+          using mockSave4Later,
           errorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )

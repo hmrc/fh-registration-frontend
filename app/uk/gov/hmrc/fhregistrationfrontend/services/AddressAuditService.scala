@@ -88,7 +88,7 @@ class DefaultAddressAuditService @Inject() (
       AddressAuditService.AuditSource,
       addressAuditData.auditType,
       tags = headerCarrier.toAuditTags("fh-registration", path),
-      detail = headerCarrier.toAuditDetails(addressAuditData.details: _*)
+      detail = headerCarrier.toAuditDetails(addressAuditData.details *)
     )
     logger.info(s"Submitting event with id ${event.eventId}")
     auditConnector sendEvent event
@@ -103,7 +103,7 @@ class DefaultAddressAuditService @Inject() (
   private def postcodeAddress(id: String, address: Address)(implicit
     headerCarrier: HeaderCarrier
   ): Future[AddressAuditData] =
-    addressLookupConnector lookupById id map {
+    addressLookupConnector `lookupById` id map {
       case Some(originalAddressRecord) =>
         val originalAddress = addressRecordToAddress(originalAddressRecord)
         if (sameUkAddresses(address, originalAddress))

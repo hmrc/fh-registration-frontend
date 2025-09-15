@@ -60,7 +60,7 @@ abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(implicit
 
   private def checkIsProcessing(
     registrationNumber: String
-  )(implicit request: UserRequest[_]): Future[Either[Result, Boolean]] =
+  )(implicit request: UserRequest[?]): Future[Either[Result, Boolean]] =
     fhddsConnector.getStatus(registrationNumber) map isAllowed map {
       case true  => Right(true)
       case false => Left(errorHandler.errorResultsPages(Results.BadRequest))

@@ -24,7 +24,7 @@
 @(nationalInsuranceForm: NationalInsuranceNumber, mode: Mode)(implicit messages: Messages)
 
 @changeLink = @{
-  if (Mode isEditable mode) {
+  if (Mode.isEditable(mode)) {
     Some("nationalInsuranceNumber")
   } else {
     None

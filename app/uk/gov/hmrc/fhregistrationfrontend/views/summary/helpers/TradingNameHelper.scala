@@ -38,7 +38,7 @@ object TradingNameHelper {
             GroupRow.Single
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/tradingName",
             Text("Change"),
             Some(Messages("fh.tradingName.title"))
@@ -53,7 +53,7 @@ object TradingNameHelper {
             GroupRow.Single
           ),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/tradingName",
             Text("Change"),
             Some(Messages("fh.summary.hasTradingName"))

@@ -66,7 +66,7 @@ class ApplicationControllerSpec
     statusView,
     statusParams
   )(
-    mockSave4Later,
+    using mockSave4Later,
     ec
   )
 
@@ -398,7 +398,7 @@ class ApplicationControllerSpec
     "Redirect to the businessType page" in {
       setupNewApplicationAction()
       setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
-      when(mockBusinessCustomerConnector.getReviewDetails(any(), any())) thenReturn Future.successful(
+      when(mockBusinessCustomerConnector.getReviewDetails(using any(), any())) `thenReturn` Future.successful(
         FormTestData.someBpr
       )
 

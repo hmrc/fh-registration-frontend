@@ -37,16 +37,16 @@ trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
   val mockFhddsConnector = mock[FhddsConnector]
 
   def setupFhddsEnrolmentProgress(enrolmentProgress: EnrolmentProgress) =
-    when(mockFhddsConnector.getEnrolmentProgress(any())) thenReturn Future(enrolmentProgress)
+    when(mockFhddsConnector.getEnrolmentProgress(using any())) `thenReturn` Future(enrolmentProgress)
 
   def setupFhddsStatus(fhddsStatus: FhddsStatus, registrationNumber: String = registrationNumber) =
-    when(mockFhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+    when(mockFhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
 
   def setupDesDisplayResult(
     jsonFile: String = "limited-company/fhdds-limited-company-large-uk",
     registrationNumber: String = registrationNumber
   ) =
-    when(mockFhddsConnector.getSubmission(same(registrationNumber))(any())) thenReturn Future.successful(
+    when(mockFhddsConnector.getSubmission(same(registrationNumber))(using any())) `thenReturn` Future.successful(
       loadDesDataFile(jsonFile)
     )
 
@@ -56,9 +56,13 @@ trait FhddsConnectorMocks extends MockitoSugar with UserTestData {
   }
 
   def setupDeregister(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) =
-    when(mockFhddsConnector.deregister(same(registrationNumber), any())(any())) thenReturn Future.successful(new Date())
+    when(mockFhddsConnector.deregister(same(registrationNumber), any())(using any())) `thenReturn` Future.successful(
+      new Date()
+    )
 
   def setupWithdrawal(registrationNumber: String = registrationNumber, date: LocalDate = LocalDate.now()) =
-    when(mockFhddsConnector.withdraw(same(registrationNumber), any())(any())) thenReturn Future.successful(new Date())
+    when(mockFhddsConnector.withdraw(same(registrationNumber), any())(using any())) `thenReturn` Future.successful(
+      new Date()
+    )
 
 }

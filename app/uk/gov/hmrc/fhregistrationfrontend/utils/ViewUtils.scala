@@ -21,7 +21,7 @@ import play.twirl.api.{Html, HtmlFormat}
 trait ViewUtils {
 
   def html(content: HtmlFormat.Appendable*): Html =
-    HtmlFormat.fill(collection.immutable.Seq(content: _*))
+    HtmlFormat.fill(collection.immutable.Seq(content *))
 
   def stringAsHtml(content: String): Html =
     Html(content)

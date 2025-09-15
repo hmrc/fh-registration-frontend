@@ -46,27 +46,27 @@ trait TextAreaFluency {
   implicit class FluentTextArea(textArea: Textarea) {
 
     def withId(id: String): Textarea =
-      textArea copy (id = id)
+      textArea.copy(id = id)
 
     def describedBy(value: String): Textarea =
-      textArea copy (describedBy = Some(value))
+      textArea.copy(describedBy = Some(value))
 
     def withHint(hint: Hint): Textarea =
-      textArea copy (hint = Some(hint))
+      textArea.copy(hint = Some(hint))
 
     def withFormGroupClasses(classes: FormGroup): Textarea =
-      textArea copy (formGroup = classes)
+      textArea.copy(formGroup = classes)
 
     def withCssClass(newClass: String): Textarea =
-      textArea copy (classes = s"${textArea.classes} $newClass")
+      textArea.copy(classes = s"${textArea.classes} $newClass")
 
     def withAutocomplete(value: String): Textarea =
-      textArea copy (autocomplete = Some(value))
+      textArea.copy(autocomplete = Some(value))
 
     def withAttribute(attribute: (String, String)): Textarea =
-      textArea copy (attributes = textArea.attributes + attribute)
+      textArea.copy(attributes = textArea.attributes + attribute)
 
     def withSpellcheck(on: Boolean = true): Textarea =
-      textArea copy (spellcheck = Some(on))
+      textArea.copy(spellcheck = Some(on))
   }
 }

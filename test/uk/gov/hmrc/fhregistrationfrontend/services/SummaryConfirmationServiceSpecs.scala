@@ -67,10 +67,10 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
           implicit val hc: HeaderCarrier = HeaderCarrier()
 
           when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(true)
-          when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(any()))
+          when(mockSummaryConfirmationLocalService.saveSummaryForPrint(any())(using any()))
             .thenReturn(Future(Some("summaryForPrintKey")))
 
-          val result = Await.result(sessionService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+          val result = Await.result(sessionService.saveSummaryForPrint("summaryForPrintKey")(using hc), 20 seconds)
           result must be(Some("summaryForPrintKey"))
         }
       }
@@ -83,7 +83,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
           implicit val hc: HeaderCarrier = HeaderCarrier()
 
           when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(false)
-          when(mockKeyStoreService.fetchSummaryForPrint()(any())).thenReturn(Future(Some("summaryForPrintKey")))
+          when(mockKeyStoreService.fetchSummaryForPrint()(using any())).thenReturn(Future(Some("summaryForPrintKey")))
 
           val result = Await.result(sessionService.fetchSummaryForPrint(), 10 seconds)
           result must be(Some("summaryForPrintKey"))
@@ -96,7 +96,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
 
       intercept[Exception] {
-        val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(hc), 20 seconds)
+        val result = Await.result(summaryConfirmationLocalService.fetchSummaryForPrint()(using hc), 20 seconds)
         result match {
           case Some(message) => message must include("Request was successful")
           case None          => fail("Error happened")
@@ -109,7 +109,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.get(any())).thenReturn(Future.failed(new Exception))
 
       intercept[Exception] {
-        val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
+        val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(using hc), 20 seconds)
         result mustBe new Exception
       }
     }
@@ -118,7 +118,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
 
       when(mockSessionRepository.get(any())).thenReturn(Future.successful(None))
 
-      val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(hc), 20 seconds)
+      val result = Await.result(summaryConfirmationLocalService.fetchWithdrawalReason()(using hc), 20 seconds)
 
       result mustBe None
     }
@@ -130,7 +130,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
 
       intercept[Exception] {
         val result =
-          Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+          Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(using hc), 20 seconds)
         result must be(new Exception)
       }
     }
@@ -141,7 +141,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val result =
-        Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(hc), 20 seconds)
+        Await.result(summaryConfirmationLocalService.saveSummaryForPrint("summaryForPrintKey")(using hc), 20 seconds)
       result mustBe Some("summaryForPrintKey")
     }
 
@@ -152,7 +152,10 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
 
       intercept[Exception] {
         val result =
-          Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
+          Await.result(
+            summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(using hc),
+            20 seconds
+          )
         result must be(new Exception)
       }
     }
@@ -163,7 +166,10 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val result =
-        Await.result(summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(hc), 20 seconds)
+        Await.result(
+          summaryConfirmationLocalService.saveDeregistrationReason(deregistrationReason)(using hc),
+          20 seconds
+        )
       result mustBe Some(deregistrationReason)
     }
 

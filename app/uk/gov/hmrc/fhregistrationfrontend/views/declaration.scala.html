@@ -27,7 +27,7 @@
 
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[_], messages: Messages)
+@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[?], messages: Messages)
 
 
 @linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}

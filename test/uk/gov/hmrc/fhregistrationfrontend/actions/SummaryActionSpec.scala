@@ -22,7 +22,7 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{FormTestData, StubbedErrorH
 
 class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
-  val action = new SummaryAction()(StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+  val action = new SummaryAction()(using StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
 
   "Summary Action" should {
     "Fail if journey is not complete" in {
@@ -32,7 +32,7 @@ class SummaryActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Work when the journey is complete" in {
-      val onePage = contactPersonPage withData FormTestData.contactPerson
+      val onePage = contactPersonPage `withData` FormTestData.contactPerson
       val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
       val refined = refinedRequest(action, request)

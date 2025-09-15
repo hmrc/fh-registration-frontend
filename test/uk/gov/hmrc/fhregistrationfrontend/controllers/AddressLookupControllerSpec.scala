@@ -32,7 +32,9 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
 
   val mockAddressLookupConnector = mock[AddressLookupConnector]
   val controller =
-    new AddressLookupController(mockAddressLookupConnector, mockMcc)(scala.concurrent.ExecutionContext.Implicits.global)
+    new AddressLookupController(mockAddressLookupConnector, mockMcc)(
+      using scala.concurrent.ExecutionContext.Implicits.global
+    )
 
   "Address lookup controller" should {
     "Fail with wrong postcode" in {
@@ -45,7 +47,7 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails" in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+      when(mockAddressLookupConnector.lookup(any(), any())(using any())) `thenReturn` Future(
         AddressLookupErrorResponse(new BadRequestException("unkown"))
       )
 
@@ -56,7 +58,7 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
     "Fail when address lookup connector fails with unknown " in {
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+      when(mockAddressLookupConnector.lookup(any(), any())(using any())) `thenReturn` Future(
         AddressLookupErrorResponse(new IOException())
       )
 
@@ -78,7 +80,7 @@ class AddressLookupControllerSpec extends ControllerSpecWithGuiceApp {
       )
       val action = controller.addressLookup("AA1 1AA", None)
 
-      when(mockAddressLookupConnector.lookup(any(), any())(any())) thenReturn Future(
+      when(mockAddressLookupConnector.lookup(any(), any())(using any())) `thenReturn` Future(
         AddressLookupSuccessResponse(response)
       )
 

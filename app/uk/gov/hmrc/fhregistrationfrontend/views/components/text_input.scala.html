@@ -19,7 +19,7 @@
 @this(govukInput : GovukInput)
 
 @(
-    form: Form[_],
+    form: Form[?],
     legendContent: String,
     inputKey: String,
     id: String = "nino",
@@ -36,6 +36,6 @@
     ),
     classes = s"govuk-!-width-one-half${if(form(id).hasErrors || form.errors.exists(_.args.size > 1)) " govuk-input--error" else ""}",
     hint = hintText.map(hint => Hint(content = Text(msgs(hint)))),
-    errorMessage = form.error(id).orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(s"fh.$id.${err.message}", err.args: _*)))),
+    errorMessage = form.error(id).orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(s"fh.$id.${err.message}", err.args*)))),
     value = form(inputKey).value
 ))

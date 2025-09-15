@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, User}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterKeys
@@ -25,7 +24,8 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, Save4Later
 
 class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
-  lazy val action = new EmailVerificationAction()(mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
+  lazy val action =
+    new EmailVerificationAction()(using mockSave4Later, scala.concurrent.ExecutionContext.Implicits.global)
   val verifiedEmail = "verified@test.com"
   val contactEmail = "contact@test.com"
   val pendingEmail = "pending@test.com"
