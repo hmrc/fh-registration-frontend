@@ -58,7 +58,6 @@ lazy val microservice = Project(appName, file("."))
     addTestReportOption(IntegrationTest, "int-test-reports"),
     IntegrationTest / parallelExecution := false,
     IntegrationTest / scalafmtOnCompile := true)
-  .settings(resolvers ++= Seq(Resolver.jcenterRepo))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(scalacOptions ++= Seq("-Wconf:msg=lint-multiarg-infix:silent",
     //"-Wconf:msg=unused-patterns&src=routes/.*:s",
