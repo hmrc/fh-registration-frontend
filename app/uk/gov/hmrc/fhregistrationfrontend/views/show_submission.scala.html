@@ -22,7 +22,7 @@
 layout: layout
 )
 
-@(submission: SubmissionTracking)(implicit request: Request[_],  messages: Messages)
+@(submission: SubmissionTracking)(implicit request: Request[?],  messages: Messages)
 
 @layout(title = messages("home.admin.submisson.page.title")) {
 

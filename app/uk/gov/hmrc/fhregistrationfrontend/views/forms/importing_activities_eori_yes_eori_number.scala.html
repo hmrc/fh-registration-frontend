@@ -26,7 +26,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(importingActivitiesForm: Form[String], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: Form[String], navigation: Navigation, postAction: Call, sectionId: String = "eoriNumber")(implicit request: Request[?], messages: Messages)
 
 
 @titlePrefix = @{

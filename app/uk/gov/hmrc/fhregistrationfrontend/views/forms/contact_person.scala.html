@@ -32,7 +32,7 @@
     autocompleteJavascript: HmrcAccessibleAutocompleteJavascript)
 
 
-@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(contactPersonForm: Form[ContactPerson], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit request: Request[?], messages: Messages)
 
 @pageScripts = {
   @autocompleteJavascript()

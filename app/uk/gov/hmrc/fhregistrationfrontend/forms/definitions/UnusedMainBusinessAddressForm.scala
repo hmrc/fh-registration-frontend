@@ -31,10 +31,11 @@ object UnusedMainBusinessAddressForm {
 
   val timeAtCurrentAddressMapping = timeAtCurrentAddressKey -> oneOf(MainBusinessAddress.TimeAtCurrentAddressOptions)
   val previousAddressMapping =
-    previousAddressKey -> (yesOrNo() onlyWhen (timeAtCurrentAddressMapping is "Less than 3 years"))
-  val mainPreviousAddressMapping = mainPreviousAddressKey -> (address onlyWhen (previousAddressMapping is Some(true)))
+    previousAddressKey -> (yesOrNo() `onlyWhen` (timeAtCurrentAddressMapping `is` "Less than 3 years"))
+  val mainPreviousAddressMapping =
+    mainPreviousAddressKey -> (address `onlyWhen` (previousAddressMapping `is` Some(true)))
   val previousAddressStartdateMapping =
-    previousAddressStartdateKey -> (localNew onlyWhen (previousAddressMapping is Some(true)))
+    previousAddressStartdateKey -> (localNew `onlyWhen` (previousAddressMapping `is` Some(true)))
 
   val mainBusinessAddressForm = Form(
     mapping(

@@ -46,26 +46,26 @@ class MainBusinessAddressPageSpec extends UnitSpec with MockitoSugar {
   private val previousBusinessAddressSection = Some("previous-business-address")
 
   private val answeredMoreThanThreeYearsToTimeAtCurrentAddress = MainBusinessAddressPage(
-    mainPage withData MainBusinessAddress.TimeAtCurrentAddressOptions.last,
+    mainPage `withData` MainBusinessAddress.TimeAtCurrentAddressOptions.last,
     hasPreviousAddressPage,
     previousAddressPage
   )
 
   private val answeredLessThanThreeYearsToTimeAtCurrentAddress = MainBusinessAddressPage(
-    mainPage withData MainBusinessAddress.TimeAtCurrentAddressOptions.head,
+    mainPage `withData` MainBusinessAddress.TimeAtCurrentAddressOptions.head,
     hasPreviousAddressPage,
     previousAddressPage
   )
 
   private val answeredLessThanThreeYearsToTimeAtCurrentAddressAndHasPreviousAddressFalse = MainBusinessAddressPage(
-    mainPage withData MainBusinessAddress.TimeAtCurrentAddressOptions.head,
-    hasPreviousAddressPage withData false,
+    mainPage `withData` MainBusinessAddress.TimeAtCurrentAddressOptions.head,
+    hasPreviousAddressPage `withData` false,
     previousAddressPage
   ).withSubsection(anyPreviousBusinessAddressSection)
 
   private val answeredLessThanThreeYearsToTimeAtCurrentAddressAndHasPreviousAddressTrue = MainBusinessAddressPage(
-    mainPage withData MainBusinessAddress.TimeAtCurrentAddressOptions.head,
-    hasPreviousAddressPage withData true,
+    mainPage `withData` MainBusinessAddress.TimeAtCurrentAddressOptions.head,
+    hasPreviousAddressPage `withData` true,
     previousAddressPage
   ).withSubsection(anyPreviousBusinessAddressSection)
 
@@ -75,9 +75,9 @@ class MainBusinessAddressPageSpec extends UnitSpec with MockitoSugar {
   )
 
   private val answeredLessThanThreeYearsToTimeAtCurrentAddressAndPreviousAddressInputted = MainBusinessAddressPage(
-    mainPage withData MainBusinessAddress.TimeAtCurrentAddressOptions.head,
-    hasPreviousAddressPage withData true,
-    previousAddressPage withData previousAddress
+    mainPage `withData` MainBusinessAddress.TimeAtCurrentAddressOptions.head,
+    hasPreviousAddressPage `withData` true,
+    previousAddressPage `withData` previousAddress
   ).withSubsection(previousBusinessAddressSection)
 
   "Next section" should {

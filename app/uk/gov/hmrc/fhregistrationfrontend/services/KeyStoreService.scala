@@ -35,19 +35,19 @@ class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache)(implicit ec: Ex
     extends KeyStoreService {
   import KeyStoreKeys._
 
-  override def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_] =
+  override def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[?] =
     sessionCache.cache(SummaryForPrintKey, o)
 
   override def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]] =
     sessionCache.fetchAndGetEntry[String](SummaryForPrintKey)
 
-  override def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[_] =
+  override def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[?] =
     sessionCache.cache(WithdrawalReasonKey, reason)
 
   override def fetchWithdrawalReason()(implicit hc: HeaderCarrier): Future[Option[WithdrawalReason]] =
     sessionCache.fetchAndGetEntry[WithdrawalReason](WithdrawalReasonKey)
 
-  override def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[_] =
+  override def saveDeregistrationReason(reason: DeregistrationReason)(implicit hc: HeaderCarrier): Future[?] =
     sessionCache.cache(DeregistrationReasonKey, reason)
 
   override def fetchDeregistrationReason()(implicit hc: HeaderCarrier): Future[Option[DeregistrationReason]] =
@@ -57,7 +57,7 @@ class KeyStoreServiceImpl @Inject() (sessionCache: SessionCache)(implicit ec: Ex
 
 @ImplementedBy(classOf[KeyStoreServiceImpl])
 trait KeyStoreService {
-  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[_]
+  def saveSummaryForPrint(o: String)(implicit hc: HeaderCarrier): Future[?]
   def fetchSummaryForPrint()(implicit hc: HeaderCarrier): Future[Option[String]]
 
   def saveWithdrawalReason(reason: WithdrawalReason)(implicit hc: HeaderCarrier): Future[Any]

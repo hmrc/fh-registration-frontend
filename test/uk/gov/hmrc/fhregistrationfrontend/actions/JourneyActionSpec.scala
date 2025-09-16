@@ -31,7 +31,11 @@ import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestDa
 class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeAndAfterEach with GuiceOneAppPerSuite {
 
   lazy val action =
-    new JourneyAction(journeys)(mockSave4Later, StubbedErrorHandler, scala.concurrent.ExecutionContext.Implicits.global)
+    new JourneyAction(journeys)(
+      using mockSave4Later,
+      StubbedErrorHandler,
+      scala.concurrent.ExecutionContext.Implicits.global
+    )
   val userRequest = new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
 
   override def beforeEach(): Unit = {

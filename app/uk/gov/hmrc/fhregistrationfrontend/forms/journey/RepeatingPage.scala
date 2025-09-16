@@ -54,11 +54,11 @@ case class RepeatingPage[T](
     )
   )
 
-  override def withData(data: ListWithTrackedChanges[T]) = this copy (value = data)
+  override def withData(data: ListWithTrackedChanges[T]) = this.copy(value = data)
 
   override val withSubsection: PartialFunction[Option[String], Page[ListWithTrackedChanges[T]]] = {
-    case None                       => this copy (index = 0)
-    case Some(v) if validSection(v) => this copy (index = v.toInt - 1)
+    case None                       => this.copy(index = 0)
+    case Some(v) if validSection(v) => this.copy(index = v.toInt - 1)
   }
 
   private def validSection(sectionId: String): Boolean =
@@ -81,7 +81,7 @@ case class RepeatingPage[T](
   def section(index: Int) = (index + 1).toString
 
   override def parseFromRequest[X](onErrors: Rendering => X, onSuccess: Page[ListWithTrackedChanges[T]] => X)(implicit
-    r: Request[_]
+    r: Request[?]
   ): X = {
     import play.api.data.FormBinding.Implicits._
     val updatedForm = form.bindFromRequest()
@@ -95,7 +95,7 @@ case class RepeatingPage[T](
         onErrors(errorRenderer(updatedForm withError (AddMoreKey, "too.many.items")))
       else {
         val updateValue =
-          if (value.size <= index) value append element
+          if (value.size <= index) value `append` element
           else value.updated(index, element)
 
         val updatedAddress =
@@ -103,7 +103,8 @@ case class RepeatingPage[T](
           else if (addressOnPage(value(index)) != addressOnPage(element)) addressOnPage(element)
           else None
 
-        val updatePage = this copy (value = updateValue.copy(addMore = more), updatedAddresses = updatedAddress.toList)
+        val updatePage =
+          this.copy(value = updateValue.copy(addMore = more), updatedAddresses = updatedAddress.toList)
         onSuccess(updatePage)
       }
     }
@@ -114,7 +115,7 @@ case class RepeatingPage[T](
     bpr: BusinessRegistrationDetails,
     navigation: Navigation
   )(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html = {
@@ -122,12 +123,12 @@ case class RepeatingPage[T](
       if (index < value.size) form fill ((value(index), value.addMore))
       else form
 
-    val formWithError = filledForm copy (errors = formError)
+    val formWithError = filledForm.copy(errors = formError)
     renderer.render(formWithError, bpr, navigation, section(index), renderingParams)
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html = {
@@ -140,7 +141,7 @@ case class RepeatingPage[T](
 
   private def errorRenderer(form: Form[(T, Boolean)]) = new Rendering {
     override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-      request: Request[_],
+      request: Request[?],
       messages: Messages,
       appConfig: AppConfig
     ): Html =
@@ -161,7 +162,7 @@ case class RepeatingPage[T](
     if (value.size <= minItems)
       None
     else
-      Some(this copy (value = value remove index))
+      Some(this.copy(value = value `remove` index))
 
   override def pageStatus: PageStatus =
     if (value.size == 0 && minItems > 0) NotStarted

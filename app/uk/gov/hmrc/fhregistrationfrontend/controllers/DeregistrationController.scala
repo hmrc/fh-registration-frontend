@@ -89,7 +89,7 @@ class DeregistrationController @Inject() (
   }
 
   def withDeregistrationReason(
-    f: EnrolledUserRequest[_] => DeregistrationReason => Future[Result]
+    f: EnrolledUserRequest[?] => DeregistrationReason => Future[Result]
   ): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
       summaryConfirmationService.fetchDeregistrationReason() flatMap {
@@ -99,7 +99,7 @@ class DeregistrationController @Inject() (
     }
 
   private def handleConfirmation(confirmed: Confirmation, reason: DeregistrationReason)(implicit
-    request: EnrolledUserRequest[_]
+    request: EnrolledUserRequest[?]
   ) =
     if (confirmed.continue) {
       sendRequest(confirmed.email.get, reason)
@@ -117,7 +117,7 @@ class DeregistrationController @Inject() (
     }
 
   private def sendRequest(email: String, reason: DeregistrationReason)(implicit
-    request: EnrolledUserRequest[_]
+    request: EnrolledUserRequest[?]
   ): Future[Date] = {
     val deregistrationRequest = des.DeregistrationRequest(
       email,
@@ -132,7 +132,7 @@ class DeregistrationController @Inject() (
   }
 
   def acknowledgment: Action[AnyContent] = userAction { implicit request =>
-    renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
+    renderAcknowledgmentPage(using request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =

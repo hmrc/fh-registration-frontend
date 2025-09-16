@@ -33,7 +33,7 @@ class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {
 
   "confirm_delete_section_view for Storage Premises" should {
     val pageName = "other_storage_premises"
-    val html = confirm_delete_section_view(pageName, section, timestamp)(request, Messages)
+    val html = confirm_delete_section_view(pageName, section, timestamp)(using request, Messages)
     val document = doc(html)
     "have the expected title" in {
       document
@@ -52,7 +52,7 @@ class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {
     "contain the correct content" in {
       document
         .getElementsByClass(Selectors.body)
-        .text() contains "Storage premises 1 will be removed from your application."
+        .text() `contains` "Storage premises 1 will be removed from your application."
     }
     testBackLink(document, backLink)
     validateTimeoutDialog(document)
@@ -62,7 +62,7 @@ class ConfirmDeleteSectionViewSpec extends ViewSpecHelper {
 
   "confirm_delete_section_view for CompanyOfficers" should {
     val pageName = "company_officers"
-    val html = confirm_delete_section_view(pageName, section, timestamp)(request, Messages)
+    val html = confirm_delete_section_view(pageName, section, timestamp)(using request, Messages)
     val document = doc(html)
     "have the expected title" in {
       document

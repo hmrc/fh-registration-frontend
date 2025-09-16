@@ -25,7 +25,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers._
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(importingActivitiesForm: Form[Boolean], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(importingActivitiesForm: Form[Boolean], navigation: Navigation, postAction: Call)(implicit request: Request[?], messages: Messages)
 
 @helpHtml = {
   <p class="govuk-body govuk-!-margin-top-2">

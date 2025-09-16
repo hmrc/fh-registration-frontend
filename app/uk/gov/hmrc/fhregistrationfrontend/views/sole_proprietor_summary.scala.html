@@ -28,7 +28,7 @@
 
 @this(layout: layout, govukFieldset : GovukFieldset)
 
-@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[_], messages: Messages, viewHelpers: ViewHelpers)
+@(applicationData: SoleProprietorApplication, bpr: BusinessRegistrationDetails, verifiedEmail: String, environment: Option[String], params: SummaryPageParams)(implicit request: Request[?], messages: Messages, viewHelpers: ViewHelpers)
 
 
 @conditionalText = @{
@@ -43,7 +43,7 @@
 
 @layout(title) {
 
-    @if(Mode isNew params.mode) {
+    @if(Mode.isNew(params.mode)) {
         @viewHelpers.govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)
     } else {
         @viewHelpers.govukBackLink(BackLink(href = "subscription/status", content = Text(messages("fh.generic.back"))))
@@ -113,7 +113,7 @@
         ))
     ))
 
-    @if(applicationData.otherStoragePremises.hasValue && (Mode isEditable params.mode)) {
+    @if(applicationData.otherStoragePremises.hasValue && (Mode.isEditable(params.mode))) {
         <div style="display: flex; justify-content: flex-end">
             <p class="govuk-body">
                 <a class="govuk-link" href="@{s"form/otherStoragePremises/${(applicationData.otherStoragePremises.value.size+1).toString}"}">@{Messages("fh.summary.addMoreStoragePremises")}</a>
@@ -121,7 +121,7 @@
         </div>
     }
 
-    @if(Mode isEditable params.mode) {
+    @if(Mode.isEditable(params.mode)) {
         @SummaryButtons()
     }
 

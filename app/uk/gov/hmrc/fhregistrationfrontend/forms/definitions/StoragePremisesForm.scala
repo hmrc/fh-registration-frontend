@@ -30,8 +30,8 @@ object StoragePremisesForm {
 
   val hasOtherStoragePremisesMapping = otherStoragePremisesKey -> yesOrNo()
   val optionalStorageAddressMapping =
-    storagePremise_addressKey               -> (address onlyWhen (hasOtherStoragePremisesMapping is true))
-  val isThirdPartyMapping = isThirdPartyKey -> (yesOrNo() onlyWhen (hasOtherStoragePremisesMapping is true))
+    storagePremise_addressKey               -> (address `onlyWhen` (hasOtherStoragePremisesMapping `is` true))
+  val isThirdPartyMapping = isThirdPartyKey -> (yesOrNo() `onlyWhen` (hasOtherStoragePremisesMapping `is` true))
 
   val hasOtherStoragePrmisesForm = Form(
     otherStoragePremisesKey -> yesOrNo()

@@ -61,11 +61,13 @@ class JourneyRequest[A](
   private def verifiedEmailHasAmendments = displayVerifiedEmail exists (_ != verifiedEmail)
 
   private def pageHasAmendments[T](page: Page[T]) =
-    cacheMap.getEntry[T](page.id)(page.format) != cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
+    cacheMap.getEntry[T](page.id)(using page.format) != cacheMap.getEntry[T](displayKeyForPage(page.id))(
+      using page.format
+    )
 
   def displayPageDataLoader = new PageDataLoader {
     override def pageDataOpt[T](page: Page[T]): Option[T] =
-      cacheMap.getEntry[T](displayKeyForPage(page.id))(page.format)
+      cacheMap.getEntry[T](displayKeyForPage(page.id))(using page.format)
   }
 
   def displayDeclaration =
@@ -105,7 +107,7 @@ class JourneyAction @Inject() (journeys: Journeys)(implicit
         Either.left[Result, String](Redirect(routes.EmailVerificationController.emailVerificationStatus))
       )(verifiedEmail => Either.right(verifiedEmail))
 
-  def findBpr(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessRegistrationDetails] =
+  def findBpr(cacheMap: CacheMap)(implicit request: Request[?]): Either[Result, BusinessRegistrationDetails] =
     cacheMap.getEntry[BusinessRegistrationDetails](businessRegistrationDetailsKey) match {
       case Some(bpr) => Right(bpr)
       case None =>
@@ -114,7 +116,7 @@ class JourneyAction @Inject() (journeys: Journeys)(implicit
 
     }
 
-  def getBusinessType(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, BusinessType] =
+  def getBusinessType(cacheMap: CacheMap)(implicit request: Request[?]): Either[Result, BusinessType] =
     cacheMap.getEntry[BusinessType](Save4LaterKeys.businessTypeKey) match {
       case Some(bt) => Right(bt)
       case None =>
@@ -123,7 +125,7 @@ class JourneyAction @Inject() (journeys: Journeys)(implicit
 
     }
 
-  def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[_]): Either[Result, JourneyPages] = {
+  def getJourneyPages(cacheMap: CacheMap)(implicit request: Request[?]): Either[Result, JourneyPages] = {
     val pagesForEntityType = getBusinessType(cacheMap).flatMap {
       _ match {
         case BusinessType.CorporateBody => Right(journeys.limitedCompanyPages)
@@ -146,8 +148,8 @@ class JourneyAction @Inject() (journeys: Journeys)(implicit
   }
 
   private def pageWithData[T](cacheMap: CacheMap)(page: Page[T]) =
-    cacheMap.getEntry(page.id)(page.format) match {
-      case Some(data) => page withData data
+    cacheMap.getEntry(page.id)(using page.format) match {
+      case Some(data) => page `withData` data
       case None       => page
     }
 

@@ -29,7 +29,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
 
       val action =
         new PageAction("some-page-id", None, journeys)(
-          StubbedErrorHandler,
+          using StubbedErrorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )
       status(result(action, request)) shouldBe NOT_FOUND
@@ -39,7 +39,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val request = journeyRequest()
 
       val action = new PageAction(contactPersonPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -57,7 +57,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val request = journeyRequest()
 
       val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -68,7 +68,7 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val request = journeyRequest()
 
       val action = new PageAction(contactPersonPage.id, Some("1"), journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -78,16 +78,16 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     "Load page data" in {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
-          case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+          case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] `withData` FormTestData.contactPerson
           case mainBusinessAddressPage.id =>
-            page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
+            page.asInstanceOf[Page[MainBusinessAddress]] `withData` FormTestData.mainBusinessAddress
           case _ => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(mainBusinessAddressPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -97,12 +97,12 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
     }
 
     "Load page section" in {
-      val onePage = companyOfficersPage withData FormTestData.companyOfficers
+      val onePage = companyOfficersPage `withData` FormTestData.companyOfficers
 
       val request = journeyRequest(journeyPages = new JourneyPages(Seq(onePage)))
 
       val action = new PageAction(companyOfficersPage.id, Some("2"), journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
       val refined = refinedRequest(action, request)
@@ -114,15 +114,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` FormTestData.companyOfficers
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -134,15 +134,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -154,15 +154,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -177,15 +177,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -200,15 +200,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` FormTestData.companyOfficers
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -223,15 +223,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` FormTestData.companyOfficers
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -247,15 +247,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` FormTestData.companyOfficers
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` uniqueVatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -268,15 +268,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData FormTestData.companyOfficers
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` FormTestData.companyOfficers
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` nonUniqueVatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -289,15 +289,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData uniqueVatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` uniqueVatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -310,15 +310,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData FormTestData.partners
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData nonUniqueVatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` nonUniqueVatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(vatNumberPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -334,15 +334,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueFirstVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` businessPartnersWithUniqueFirstVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -361,15 +361,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueFirstVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` businessPartnersWithNonUniqueFirstVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -388,15 +388,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithUniqueSecondVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` businessPartnersWithUniqueSecondVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -415,15 +415,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.partnershipPages map { page =>
         page.id match {
           case businessPartnersPage.id =>
-            page.asInstanceOf[RepeatingPage[BusinessPartner]] withData businessPartnersWithNonUniqueSecondVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` businessPartnersWithNonUniqueSecondVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(businessPartnersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -442,15 +442,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithUniqueFirstVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` companyOfficersWithUniqueFirstVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -469,15 +469,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithNonUniqueFirstVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` companyOfficersWithNonUniqueFirstVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -496,15 +496,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithUniqueSecondVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` companyOfficersWithUniqueSecondVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -523,15 +523,15 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val seqPages = journeys.limitedCompanyPages map { page =>
         page.id match {
           case companyOfficersPage.id =>
-            page.asInstanceOf[RepeatingPage[CompanyOfficer]] withData companyOfficersWithNonUniqueSecondVatNumber
-          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` companyOfficersWithNonUniqueSecondVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
           case _                => page
         }
       }
 
       val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
       val action = new PageAction(companyOfficersPage.id, None, journeys)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 

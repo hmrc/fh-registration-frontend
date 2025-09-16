@@ -28,7 +28,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(businessCustomersForm: Form[BusinessCustomers], navigation: Navigation, postAction: Call)(implicit request: Request[?], messages: Messages)
 
 
 @titlePrefix = @{

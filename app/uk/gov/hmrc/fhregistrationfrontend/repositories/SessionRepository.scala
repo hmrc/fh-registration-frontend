@@ -73,7 +73,7 @@ class SessionRepository @Inject() (
 
   def set(answers: UserAnswers): Future[Boolean] = {
 
-    val updatedAnswers = answers copy (lastUpdated = Instant.now())
+    val updatedAnswers = answers.copy(lastUpdated = Instant.now())
 
     collection
       .replaceOne(

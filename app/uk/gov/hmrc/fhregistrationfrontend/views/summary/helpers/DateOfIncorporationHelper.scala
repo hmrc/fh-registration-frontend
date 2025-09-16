@@ -37,7 +37,7 @@ object DateOfIncorporationHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/dateOfIncorporation",
           Text("Change"),
           Some(Messages("fh.date_of_incorporation.title"))

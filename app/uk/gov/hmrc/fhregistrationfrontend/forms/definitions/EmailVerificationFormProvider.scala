@@ -32,9 +32,9 @@ case class EmailVerificationFormProvider(candidateEmail: Option[String]) {
   import EmailVerificationFormKeys._
 
   private val usingDefaultEmailMapping = emailOptionKey -> yesOrNo()
-  private val defaultEmailMapping = defaultEmailKey     -> (email onlyWhen (usingDefaultEmailMapping is true))
+  private val defaultEmailMapping = defaultEmailKey     -> (email `onlyWhen` (usingDefaultEmailMapping `is` true))
   private val alternativeEmailMapping =
-    alternativeEmailKey -> (changedEmail(candidateEmail) onlyWhen (usingDefaultEmailMapping is false))
+    alternativeEmailKey -> (changedEmail(candidateEmail) `onlyWhen` (usingDefaultEmailMapping `is` false))
 
   val emailVerificationForm = Form(
     mapping(

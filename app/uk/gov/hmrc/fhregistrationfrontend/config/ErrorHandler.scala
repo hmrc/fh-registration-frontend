@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[DefaultErrorHandler])
 trait ErrorHandler {
-  def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[_]): Result
+  def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit request: Request[?]): Result
 
-  def applicationError(implicit request: Request[_]): Result
+  def applicationError(implicit request: Request[?]): Result
 }
 
 @Singleton
@@ -49,11 +49,11 @@ class DefaultErrorHandler @Inject() (val messagesApi: MessagesApi, val configura
   ): Future[Html] =
     Future.successful(views.error_template(pageTitle, heading, message))
 
-  override def applicationError(implicit request: Request[_]): Result =
+  override def applicationError(implicit request: Request[?]): Result =
     Ok(views.application_error())
 
   override def errorResultsPages(errorResults: Status, errorMsg: Option[String] = None)(implicit
-    request: Request[_]
+    request: Request[?]
   ): Result = {
     val messages = implicitly[Messages]
     errorResults match {

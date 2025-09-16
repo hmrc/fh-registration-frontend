@@ -55,10 +55,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     extends FormToDes {
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes =
-    this copy (
-      withModificationFlags = true,
-      changeDate = changeDate
-    )
+    this.copy(withModificationFlags = true, changeDate = changeDate)
 
   override def soleProprietorCompanySubmission(
     bpr: BusinessRegistrationDetails,
@@ -67,7 +64,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     d: Declaration
   ): des.Subscription =
     des.Subscription(
-      EntityTypeMapping formToDes BusinessType.SoleTrader,
+      EntityTypeMapping `formToDes` BusinessType.SoleTrader,
       isNewFulfilmentBusiness(application.businessStatus),
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
@@ -83,7 +80,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     d: Declaration
   ): des.Subscription =
     des.Subscription(
-      EntityTypeMapping formToDes BusinessType.Partnership,
+      EntityTypeMapping `formToDes` BusinessType.Partnership,
       isNewFulfilmentBusiness(application.businessStatus),
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
@@ -99,7 +96,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     d: Declaration
   ): des.Subscription =
     des.Subscription(
-      EntityTypeMapping formToDes BusinessType.CorporateBody,
+      EntityTypeMapping `formToDes` BusinessType.CorporateBody,
       isNewFulfilmentBusiness(application.businessStatus),
       additionalBusinessInformation(application),
       businessDetail(application, bpr),
@@ -122,7 +119,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
       contact.usingSameContactAddress,
       contactDetailAddress(bpr, contact),
       des.CommonDetails(Some(contact.telephone), None, Some(verifiedEmail)),
-      Some(des.RoleInOrganization otherRole contact.jobTitle) // TODO: job title is the role?
+      Some(des.RoleInOrganization `otherRole` contact.jobTitle) // TODO: job title is the role?
     )
 
   def internationalAddress(a: InternationalAddress) =

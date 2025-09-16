@@ -28,7 +28,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[_], messages: Messages, config: AppConfig)
+@(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[?], messages: Messages, config: AppConfig)
 
 @pageHeadBlock = {
   <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">

@@ -70,7 +70,7 @@ class WithdrawalController @Inject() (
       )
   }
 
-  def withWithdrawalReason(f: EnrolledUserRequest[_] => WithdrawalReason => Future[Result]): Action[AnyContent] =
+  def withWithdrawalReason(f: EnrolledUserRequest[?] => WithdrawalReason => Future[Result]): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
       summaryConfirmationService.fetchWithdrawalReason() flatMap {
         case Some(reason) => f(request)(reason)
@@ -96,7 +96,7 @@ class WithdrawalController @Inject() (
   }
 
   private def handleConfirmation(confirmed: WithdrawalConfirmation, reason: WithdrawalReason)(implicit
-    request: EnrolledUserRequest[_]
+    request: EnrolledUserRequest[?]
   ): Future[Result] =
     contactEmail flatMap (email =>
       if (confirmed.continue) {
@@ -116,7 +116,7 @@ class WithdrawalController @Inject() (
     )
 
   private def sendRequest(email: String, reason: WithdrawalReason)(implicit
-    request: EnrolledUserRequest[_]
+    request: EnrolledUserRequest[?]
   ): Future[Date] = {
     val withdrawRequest = des.WithdrawalRequest(
       email,
@@ -131,7 +131,7 @@ class WithdrawalController @Inject() (
   }
 
   def acknowledgment: Action[AnyContent] = userAction { implicit request =>
-    renderAcknowledgmentPage(request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
+    renderAcknowledgmentPage(using request) getOrElse errorHandler.errorResultsPages(Results.NotFound)
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[AnyContent]) =

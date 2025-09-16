@@ -34,7 +34,7 @@ object UnusedImportingActivitiesForm {
   )(EoriNumber.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val hasEoriMapping = hasEoriKey               -> yesOrNo()
-  val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping onlyWhen (hasEoriMapping is true))
+  val optionalEoriNumberMapping = eoriNumberKey -> (eoriNumberMapping `onlyWhen` (hasEoriMapping `is` true))
 
   val importingActivitiesForm: Form[ImportingActivities] = {
     val apply: (Boolean, Option[EoriNumber]) => ImportingActivities = (hasEori, eoriNumber) =>

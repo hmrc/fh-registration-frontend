@@ -21,7 +21,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(tradingNameForm: Form[_], companyName: String)(implicit request: Request[_], messages: Messages)
+@(tradingNameForm: Form[?], companyName: String)(implicit request: Request[?], messages: Messages)
 
 
 @titlePrefix = @{

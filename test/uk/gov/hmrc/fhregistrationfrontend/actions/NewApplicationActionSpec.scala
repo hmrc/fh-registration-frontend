@@ -43,9 +43,9 @@ class NewApplicationActionSpec extends ActionSpecBase {
         fhddsStatus <- List(Processing, Received, Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
-          StubbedErrorHandler,
+          using StubbedErrorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )
 
@@ -64,7 +64,7 @@ class NewApplicationActionSpec extends ActionSpecBase {
       )
       val fhddsConnector = mock[FhddsConnector]
       val action = new NewApplicationAction(fhddsConnector)(
-        StubbedErrorHandler,
+        using StubbedErrorHandler,
         scala.concurrent.ExecutionContext.Implicits.global
       )
 
@@ -84,9 +84,9 @@ class NewApplicationActionSpec extends ActionSpecBase {
         fhddsStatus <- List(Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
         val action = new NewApplicationAction(fhddsConnector)(
-          StubbedErrorHandler,
+          using StubbedErrorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )
 

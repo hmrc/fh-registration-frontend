@@ -26,7 +26,7 @@
 @this(layout: layout, viewHelpers: ViewHelpers, addressForm: AddressUK)
 
 
-@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(otherStoragePremisesForm: Form[OtherStoragePremises], navigation: Navigation)(implicit request: Request[?], messages: Messages)
 
 @pageScripts = @{
   Helpers.cspScriptTag(routes.Assets.at("javascripts/addressLookup.js").url)

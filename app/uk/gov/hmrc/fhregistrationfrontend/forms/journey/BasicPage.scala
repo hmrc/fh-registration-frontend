@@ -36,10 +36,10 @@ case class BasicPage[T](
 )(implicit val format: Format[T])
     extends Page[T] with Rendering {
 
-  override def withData(data: T) = this copy (data = Some(data))
+  override def withData(data: T) = this.copy(data = Some(data))
 
   override def nextSubsection: Option[String] = None
-  override def parseFromRequest[X](onError: Rendering => X, onSuccess: Page[T] => X)(implicit r: Request[_]): X = {
+  override def parseFromRequest[X](onError: Rendering => X, onSuccess: Page[T] => X)(implicit r: Request[?]): X = {
     import play.api.data.FormBinding.Implicits._
     val updatedForm = form.bindFromRequest()
     logger.info(s"errors ${updatedForm.errors}")
@@ -56,17 +56,17 @@ case class BasicPage[T](
   }
 
   def renderWithFormError(formError: Seq[FormError], bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html = {
     val filledForm = data map (form fill _) getOrElse form
-    val formWithError = filledForm copy (errors = formError)
+    val formWithError = filledForm.copy(errors = formError)
     rendering.render(formWithError, bpr, navigation)
   }
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html = {
@@ -76,7 +76,7 @@ case class BasicPage[T](
 
   private def errorRenderer(form: Form[T]) = new Rendering {
     override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-      request: Request[_],
+      request: Request[?],
       messages: Messages,
       appConfig: AppConfig
     ): Html =

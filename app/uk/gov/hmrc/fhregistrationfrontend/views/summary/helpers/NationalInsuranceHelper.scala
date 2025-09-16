@@ -35,7 +35,7 @@ object NationalInsuranceHelper {
           None
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/nationalInsuranceNumber",
           Text("Change"),
           Some(Messages("fh.company_registration_number.title"))
@@ -50,7 +50,7 @@ object NationalInsuranceHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/nationalInsuranceNumber",
           Text("Change"),
           Some(Messages("fh.company_registration_number.title"))

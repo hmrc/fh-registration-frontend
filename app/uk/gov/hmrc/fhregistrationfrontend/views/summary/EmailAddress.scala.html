@@ -28,7 +28,7 @@
         <dt class="cya-question">@Messages("fh.summary.email.label")</dt>
         <dd class="cya-answer">@verifiedEmail</dd>
         <dd class="cya-change">
-        @if(Mode isEditable mode){
+        @if(Mode.isEditable(mode)){
             <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailEdit}">Change<span class="visuallyhidden"> @Messages("fh.summary.email.title")</span></a>
         }
         </dd>

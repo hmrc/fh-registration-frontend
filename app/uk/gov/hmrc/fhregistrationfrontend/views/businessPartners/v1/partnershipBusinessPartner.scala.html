@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.businessPartners.v1.helpers._
 
-@(businessPartnerForm: Form[_])(implicit messages: Messages, addressUK: AddressUK, viewHelpers: ViewHelpers)
+@(businessPartnerForm: Form[?])(implicit messages: Messages, addressUK: AddressUK, viewHelpers: ViewHelpers)
 
 <h3 class="govuk-heading-m">@messages("fh.business_partners.enter.title")</h3>
 

@@ -312,7 +312,7 @@ class FormToDesSpecs extends UnitSpec {
   }
 
   def loadExpectedSubscriptionForFile(file: String, entityPath: String): SubScriptionCreate = {
-    val baseName = FilenameUtils getBaseName file
+    val baseName = FilenameUtils `getBaseName` file
     val resource = getClass.getResourceAsStream(s"/json/valid/submission/$entityPath/$baseName.json")
     Json.parse(resource).as[SubScriptionCreate]
   }

@@ -51,7 +51,7 @@ object BusinessRegistrationDetails {
       readWithFallback[String](__ \ "firstName", __ \ "first_name") and
       readWithFallback[String](__ \ "lastName", __ \ "last_name") and
       (__ \ "identification").readNullable[Identification]
-  )(BusinessRegistrationDetails.apply _)
+  )(BusinessRegistrationDetails.apply)
 
   implicit val businessRegistrationDetailsWrites: OWrites[BusinessRegistrationDetails] =
     new OWrites[BusinessRegistrationDetails] {

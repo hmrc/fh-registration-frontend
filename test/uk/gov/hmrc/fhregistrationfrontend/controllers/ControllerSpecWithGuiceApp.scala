@@ -25,10 +25,10 @@ import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 
 trait ControllerSpecWithGuiceApp extends ControllersSpecBase with GuiceOneAppPerSuite with I18nSupport {
 
-  lazy val request: Request[_] = FakeRequest()
+  lazy val request: Request[?] = FakeRequest()
   lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   val messagesApi = app.injector.instanceOf(classOf[MessagesApi])
-  val Messages = request2Messages(request)
+  val Messages = request2Messages(using request)
 
   val commonDependencies = app.injector.instanceOf(classOf[CommonPlayDependencies])
   val csrfAddToken: CSRFAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]

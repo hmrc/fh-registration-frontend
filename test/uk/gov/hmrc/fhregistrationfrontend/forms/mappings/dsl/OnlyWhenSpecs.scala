@@ -25,8 +25,8 @@ class OnlyWhenSpecs extends UnitSpec with MappingSpecsHelper[Option[String]] {
 
   val conditionMapping = "yesNo" -> nonEmptyText(1, 10)
 
-  val field = nonEmptyText onlyWhen (conditionMapping is "yes")
-  val mapping = field withPrefix "value"
+  val field = nonEmptyText `onlyWhen` (conditionMapping `is` "yes")
+  val mapping = field `withPrefix` "value"
 
   val validPresent = Map(
     "yesNo" -> "yes",

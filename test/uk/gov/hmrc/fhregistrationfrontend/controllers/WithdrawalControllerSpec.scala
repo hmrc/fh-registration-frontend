@@ -43,7 +43,7 @@ class WithdrawalControllerSpec
     mockMcc,
     mockActions,
     views
-  )(scala.concurrent.ExecutionContext.Implicits.global)
+  )(using scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()
@@ -184,10 +184,10 @@ class WithdrawalControllerSpec
   }
 
   def setupSaveWithdrawalReason() =
-    when(mockKeyStoreService.saveWithdrawalReason(any())(any())) thenReturn Future.successful(())
+    when(mockKeyStoreService.saveWithdrawalReason(any())(using any())) `thenReturn` Future.successful(())
 
   def setupKeyStoreWithdrawalReason(
     reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))
   ): Unit =
-    when(mockKeyStoreService.fetchWithdrawalReason()(any())) thenReturn Future.successful(reason)
+    when(mockKeyStoreService.fetchWithdrawalReason()(using any())) `thenReturn` Future.successful(reason)
 }

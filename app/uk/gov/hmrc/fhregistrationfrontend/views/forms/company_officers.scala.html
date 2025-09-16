@@ -27,7 +27,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[_], messages: Messages)
+@(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[?], messages: Messages)
 
 @indNameInput = @{
     company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))

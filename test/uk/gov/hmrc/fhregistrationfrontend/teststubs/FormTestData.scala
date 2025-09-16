@@ -37,7 +37,7 @@ object FormTestData {
     None
   )
 
-  val otherContactPerson = contactPerson copy (firstName = "John")
+  val otherContactPerson = contactPerson.copy(firstName = "John")
 
   val mainBusinessAddress = MainBusinessAddress(
     "Less than 3 years",

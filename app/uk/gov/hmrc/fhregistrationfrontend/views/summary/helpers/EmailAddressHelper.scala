@@ -27,7 +27,7 @@ import play.api.i18n.Messages
 object EmailAddressHelper {
   def apply(verifiedEmail: String, mode: Mode)(implicit messages: Messages) = {
     val changeLink = Helpers.createChangeLink(
-      Mode isEditable mode,
+      Mode `isEditable` mode,
       "email-edit",
       Text("Change"),
       Some(Messages("fh.summary.email.label"))

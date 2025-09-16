@@ -29,7 +29,7 @@ object OtherStoragePremisesHelper {
 
   def apply(data: StoragePremisesModel, mode: Mode, lastUpdateTimestamp: String)(implicit messages: Messages) = {
 
-    val isEditable = Mode isEditable mode
+    val isEditable = Mode `isEditable` mode
 
     def getActions(index: Int) =
       if (data.value.values.size > 1) {
@@ -78,7 +78,7 @@ object OtherStoragePremisesHelper {
               GroupRow.Bottom
             ),
             Helpers.createChangeLink(
-              Mode isEditable mode,
+              Mode `isEditable` mode,
               s"form/otherStoragePremises/${index + 1}",
               Text("Change"),
               Some(Messages("fh.summary.thirdPartyPremises.hidden", index + 1))
@@ -96,7 +96,7 @@ object OtherStoragePremisesHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           s"form/otherStoragePremises",
           Text("Change"),
           Some(Messages("fh.summary.usesStorage.hidden"))

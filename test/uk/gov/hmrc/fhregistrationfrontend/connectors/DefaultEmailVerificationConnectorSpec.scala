@@ -18,14 +18,10 @@ package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
-import uk.gov.hmrc.fhregistrationfrontend.models.emailverification.{Email, EmailVerificationRequest}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +35,7 @@ class DefaultEmailVerificationConnectorSpec extends HttpClientV2Helper {
 
   when(mockServicesConfig.baseUrl(anyString())).thenReturn("http://localhost:8080")
 
-  val connector = new DefaultEmailVerificationConnector(appConfig, mockHttp, runModeConfiguration)(global) {
+  val connector = new DefaultEmailVerificationConnector(appConfig, mockHttp, runModeConfiguration)(using global) {
     override def baseUrl(serviceName: String): String = mockServicesConfig.baseUrl(serviceName)
   }
 

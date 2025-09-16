@@ -33,7 +33,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
 
   val errorHandler = StubbedErrorHandler
   lazy val action = new StartVariationAction(mockFhddsConnector)(
-    mockSave4Later,
+    using mockSave4Later,
     errorHandler,
     scala.concurrent.ExecutionContext.Implicits.global
   )
@@ -87,10 +87,10 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Received, Processing, Rejected, Revoked, Withdrawn, Deregistered)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
 
         val action = new StartVariationAction(fhddsConnector)(
-          mockSave4Later,
+          using mockSave4Later,
           errorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )
@@ -113,9 +113,9 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
         fhddsStatus <- List(Approved, ApprovedWithConditions)
       } {
         val fhddsConnector = mock[FhddsConnector]
-        when(fhddsConnector.getStatus(same(registrationNumber))(any())) thenReturn Future(fhddsStatus)
+        when(fhddsConnector.getStatus(same(registrationNumber))(using any())) `thenReturn` Future(fhddsStatus)
         val action = new StartVariationAction(fhddsConnector)(
-          mockSave4Later,
+          using mockSave4Later,
           errorHandler,
           scala.concurrent.ExecutionContext.Implicits.global
         )

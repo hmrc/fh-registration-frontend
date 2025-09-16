@@ -20,7 +20,7 @@
  layout: layout
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[?], messages: Messages)
 
 @layout(title = Messages("home.admin.page.title")) {
  <h1>@messages("home.admin.page.header")</h1>

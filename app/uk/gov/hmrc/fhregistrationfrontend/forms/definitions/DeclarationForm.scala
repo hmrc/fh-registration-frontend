@@ -31,9 +31,9 @@ object DeclarationForm {
   val alternativeEmailKey = "alternativeEmail"
 
   private val usingDefaultEmailMapping = usingDefaultEmailKey -> yesOrNo()
-  private val defaultEmailMapping = defaultEmailKey           -> (email onlyWhen (usingDefaultEmailMapping is true))
+  private val defaultEmailMapping = defaultEmailKey           -> (email `onlyWhen` (usingDefaultEmailMapping `is` true))
   private val alternativeEmailMapping =
-    alternativeEmailKey -> (alternativeEmail onlyWhen (usingDefaultEmailMapping is false))
+    alternativeEmailKey -> (alternativeEmail `onlyWhen` (usingDefaultEmailMapping `is` false))
 
   def declarationForm = Form(
     mapping(

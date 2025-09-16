@@ -20,7 +20,7 @@
 @this(govukInput : GovukInput)
 
 @(
-    form: Form[_],
+    form: Form[?],
     legendContent: String,
     id: String = "",
     optLegendCaption: Option[String] = None,
@@ -37,6 +37,6 @@
     ),
     classes = classes,
     hint = hintText.map(hint => Hint(content = Text(msgs(hint)))),
-    errorMessage = form.error(id).orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(s"fh.$id.${err.message}", err.args: _*)))),
+    errorMessage = form.error(id).orElse(form(id).error).map(err => ErrorMessage(content = Text(msgs(s"fh.$id.${err.message}", err.args*)))),
     value = form(inputKey).value
 ))

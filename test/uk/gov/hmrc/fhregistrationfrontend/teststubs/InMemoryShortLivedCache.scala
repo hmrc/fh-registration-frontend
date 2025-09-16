@@ -28,7 +28,7 @@ class InMemoryShortLivedCache(userId: String) extends ShortLivedCache {
 
   val cache = mutable.Map[String, JsValue]()
 
-  override implicit val crypto: Encrypter with Decrypter = null
+  override implicit val crypto: Encrypter & Decrypter = null
   override def shortLiveCache: ShortLivedHttpCaching = null
 
   override def cache[A](cacheId: String, formId: String, body: A)(implicit

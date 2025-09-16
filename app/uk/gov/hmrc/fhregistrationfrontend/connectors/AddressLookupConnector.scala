@@ -17,7 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment, Logging}
+import play.api.{Configuration, Logging}
 import play.api.libs.json.{Json, Writes}
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{AddressRecord, RecordSet}

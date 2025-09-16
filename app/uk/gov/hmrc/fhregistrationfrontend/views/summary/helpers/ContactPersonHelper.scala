@@ -25,7 +25,6 @@ import uk.gov.hmrc.govukfrontend.views.html.components.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
 import uk.gov.hmrc.fhregistrationfrontend.views.summary.*
 import uk.gov.hmrc.fhregistrationfrontend.views.helpers.SummaryRowParams
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 
 object ContactPersonHelper {
   def apply(contactPersonForm: ContactPersonModel, bpr: BusinessRegistrationDetails, mode: Mode)(implicit
@@ -40,7 +39,7 @@ object ContactPersonHelper {
           GroupRow.Top
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/contactPerson",
           Text("Change"),
           Some(Messages("fh.generic.name"))
@@ -56,7 +55,7 @@ object ContactPersonHelper {
           GroupRow.Top
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/contactPerson",
           Text("Change"),
           Some(Messages("fh.contact_person.job_title.label"))
@@ -72,7 +71,7 @@ object ContactPersonHelper {
           GroupRow.Top
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/contactPerson",
           Text("Change"),
           Some(Messages("fh.contact_person.telephone.label"))
@@ -109,7 +108,7 @@ object ContactPersonHelper {
           SummaryRowParams
             .ofString(Some(Messages(ContactPersonAddressLabel)), ContactPersonAddress, None, GroupRow.Bottom),
           Helpers.createChangeLink(
-            Mode isEditable mode,
+            Mode `isEditable` mode,
             "form/contactPerson",
             Text("Change"),
             Some(Messages(ContactPersonAddressLabel))

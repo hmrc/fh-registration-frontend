@@ -20,15 +20,11 @@ import java.time.LocalDate
 import java.util.Date
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionResponse}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, Declaration}
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{AdditionalBusinessInformationwithType, BusinessAddressForFHDDS, BusinessDetail, CommonDetails, ContactDetail, Deregistration, DeregistrationRequest, IsNewFulfilmentBusiness, SubscriptionDisplay, SubscriptionDisplayWrapper, Withdrawal, WithdrawalRequest}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{Deregistration, DeregistrationRequest, Withdrawal, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
@@ -46,7 +42,7 @@ class FhddsConnectorSpec extends HttpClientV2Helper {
 
   when(mockServicesConfig.baseUrl(anyString())).thenReturn("http://localhost:8080")
 
-  val connector = new FhddsConnector(mockHttp, runModeConfiguration)(global) {
+  val connector = new FhddsConnector(mockHttp, runModeConfiguration)(using global) {
     override def baseUrl(serviceName: String): String = mockServicesConfig.baseUrl(serviceName)
   }
 

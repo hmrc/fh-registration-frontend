@@ -44,30 +44,30 @@ case class MainBusinessAddressPage(
     val newSection =
       if (data.timeAtCurrentAddress == MainBusinessAddress.TimeAtCurrentAddressOptions.head) section else None
     val hasPreviousAddressPageWithData =
-      data.hasPreviousAddress.map(hpa => hasPreviousAddressPage withData hpa) getOrElse hasPreviousAddressPage
+      data.hasPreviousAddress.map(hpa => hasPreviousAddressPage `withData` hpa) getOrElse hasPreviousAddressPage
     val previousAddressPageData = for {
       previousAddress          <- data.previousAddress
       previousAddressStartDate <- data.previousAddressStartdate
     } yield PreviousAddress(previousAddress, previousAddressStartDate)
     val previousAddressPageWithData =
-      previousAddressPageData.map(pa => previousAddressPage withData pa) getOrElse previousAddressPage
-    this copy (
+      previousAddressPageData.map(pa => previousAddressPage `withData` pa) getOrElse previousAddressPage
+    this.copy(
       section = newSection,
-      mainPage = mainPage withData data.timeAtCurrentAddress,
+      mainPage = mainPage `withData` data.timeAtCurrentAddress,
       hasPreviousAddressPage = hasPreviousAddressPageWithData,
       previousAddressPage = previousAddressPageWithData
     )
   }
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[MainBusinessAddress] => X)(implicit
-    r: Request[_]
+    r: Request[?]
   ): X =
     section match {
       case Some("any-previous-business-address") =>
         hasPreviousAddressPage.parseFromRequest(
           withErrors,
           hpa => {
-            val newValue = this copy (hasPreviousAddressPage = hpa)
+            val newValue = this.copy(hasPreviousAddressPage = hpa)
             withData(newValue)
           }
         )
@@ -75,7 +75,7 @@ case class MainBusinessAddressPage(
         previousAddressPage.parseFromRequest(
           withErrors,
           pa => {
-            val newValue = this copy (previousAddressPage = pa)
+            val newValue = this.copy(previousAddressPage = pa)
             withData(newValue)
           }
         )
@@ -83,22 +83,23 @@ case class MainBusinessAddressPage(
         mainPage.parseFromRequest(
           withErrors,
           mp => {
-            val newValue = this copy (mainPage = mp)
+            val newValue = this.copy(mainPage = mp)
             withData(newValue)
           }
         )
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[MainBusinessAddress]] = {
-    case None          => this copy (section = mainSection)
-    case `mainSection` => this copy (section = mainSection)
+    case None          => this.copy(section = mainSection)
+    case `mainSection` => this.copy(section = mainSection)
     case newSection if atCurrentAddressLessThan3Years && hasPreviousAddress =>
-      this copy (section = newSection,
-      hasPreviousAddressPage = hasPreviousAddressPage,
-      previousAddressPage = previousAddressPage)
+      this.copy(
+        section = newSection,
+        hasPreviousAddressPage = hasPreviousAddressPage,
+        previousAddressPage = previousAddressPage
+      )
     case newSection if atCurrentAddressLessThan3Years && !hasPreviousAddress =>
-      this copy (section = newSection,
-      hasPreviousAddressPage = hasPreviousAddressPage)
+      this.copy(section = newSection, hasPreviousAddressPage = hasPreviousAddressPage)
   }
 
   override def nextSubsection: Option[String] =
@@ -141,7 +142,7 @@ case class MainBusinessAddressPage(
   private def hasPreviousAddress = hasPreviousAddressPage.data.contains(true)
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html =

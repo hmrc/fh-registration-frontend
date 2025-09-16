@@ -33,13 +33,13 @@ object CompanyOfficersHelper {
     companyOfficers.values.zipWithIndex.flatMap { case (companyOfficer, index) =>
       val individualOrCompanyDetails = companyOfficer.identification match {
         case individual: CompanyOfficerIndividual =>
-          CompanyOrIndividualHelper.createIndividual(individual)(messages: Messages)
+          CompanyOrIndividualHelper.createIndividual(individual)(using messages: Messages)
 
         case company: CompanyOfficerCompany =>
-          CompanyOrIndividualHelper.createCompany(company)(messages: Messages)
+          CompanyOrIndividualHelper.createCompany(company)(using messages: Messages)
       }
 
-      val isEditable = Mode isEditable mode
+      val isEditable = Mode `isEditable` mode
 
       def getActions(index: Int) =
         if (companyOfficers.values.size > 1) {

@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class RadioHelper @Inject() (input: text_input) extends ViewUtils {
 
-  def conditionalYesNoRadio(form: Form[_])(implicit msgs: Messages): Seq[RadioItem] =
+  def conditionalYesNoRadio(form: Form[?])(implicit msgs: Messages): Seq[RadioItem] =
     Seq(
       RadioItem(
         value = Some("true"),

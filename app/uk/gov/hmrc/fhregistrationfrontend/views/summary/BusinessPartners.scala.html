@@ -31,7 +31,7 @@
 @(businessPartners: ListWithTrackedChanges[BusinessPartner], mode: Mode)(implicit messages: Messages)
 
 @changeLink = @{
-  if (Mode isEditable mode) {
+  if (Mode.isEditable(mode)) {
     Some("businessPartners")
   } else {
     None

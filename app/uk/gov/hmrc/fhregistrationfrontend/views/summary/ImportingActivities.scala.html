@@ -24,7 +24,7 @@
 @(importingActivitiesForm: ImportingActivitiesModel, mode: Mode)(implicit messages: Messages)
 
   @changeLink = @{
-    if (Mode isEditable mode) {
+    if (Mode.isEditable(mode)) {
       Some("importingActivities")
     } else {
       None

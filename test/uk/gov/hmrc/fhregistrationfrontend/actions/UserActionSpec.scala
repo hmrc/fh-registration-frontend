@@ -38,7 +38,7 @@ class UserActionSpec extends ActionSpecBase {
 
   val fakeRequest: Request[Any] = FakeRequest()
   lazy val action = new UserAction(StubbedExternalUrls, StubbedErrorHandler, mockMessagesControllerComponent)(
-    mockAuthConnector,
+    using mockAuthConnector,
     scala.concurrent.ExecutionContext.Implicits.global
   )
 
@@ -119,11 +119,13 @@ class UserActionSpec extends ActionSpecBase {
       new ~(new ~(new ~(id, email), Enrolments(enrolments)), credentialRole),
       userAffinityGroup
     ))
-    when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn authResult
+    when(
+      mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(using any(), any())
+    ) `thenReturn` authResult
   }
 
   def setupAuthConnector(throwable: Throwable) =
     when(
-      mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
-    ) thenReturn (Future failed throwable)
+      mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(using any(), any())
+    ) `thenReturn` (Future failed throwable)
 }

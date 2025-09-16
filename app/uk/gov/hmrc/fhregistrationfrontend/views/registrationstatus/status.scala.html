@@ -28,7 +28,7 @@
 )
 
 
-@(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(params: StatusPageParams, id: String = "XLFH00399483992")(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 @html = {
  @if(params.showSubHeading) {
    @Html(Messages(s"fh.status.${params.status}.subheading", id))

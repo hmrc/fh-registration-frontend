@@ -26,10 +26,10 @@ case class OnlyWhen[T](wrapped: Mapping[T], condition: Condition, val constraint
 
   override val key: String = wrapped.key
 
-  override val mappings: Seq[Mapping[_]] = wrapped.mappings :+ this
+  override val mappings: Seq[Mapping[?]] = wrapped.mappings :+ this
 
   override def bind(data: Map[String, String]): Either[Seq[FormError], Option[T]] = {
-    val required = condition eval data
+    val required = condition `eval` data
     if (!required)
       Right(None)
     else

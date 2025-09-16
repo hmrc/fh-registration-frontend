@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.forms.deregistration
 
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.{`enum`, deregistrationReason}
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.dsl.MappingsApi.{MappingOps, MappingWithKeyOps}
@@ -28,7 +28,7 @@ object DeregistrationReasonForm {
 
   val reasonMapping = reasonKey -> `enum`(DeregistrationReasonEnum)
   val reasonOtherMapping =
-    reasonOtherKey -> (deregistrationReason onlyWhen (reasonMapping is DeregistrationReasonEnum.Other))
+    reasonOtherKey -> (deregistrationReason `onlyWhen` (reasonMapping `is` DeregistrationReasonEnum.Other))
 
   val deregistrationReasonForm = Form(
     mapping(

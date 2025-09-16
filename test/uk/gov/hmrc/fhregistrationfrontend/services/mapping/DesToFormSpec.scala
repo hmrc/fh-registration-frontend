@@ -82,9 +82,9 @@ class DesToFormSpec extends UnitSpec {
   def validatesFor(file: String, application: BusinessEntityApplication) = {
     val display = loadDesDataFile(file)
     val loadedApplication = display.organizationType match {
-      case "Corporate Body"  => service limitedCompanyApplication display
-      case "Sole Proprietor" => service soleProprietorApplication display
-      case "Partnership"     => service partnershipApplication display
+      case "Corporate Body"  => service `limitedCompanyApplication` display
+      case "Sole Proprietor" => service `soleProprietorApplication` display
+      case "Partnership"     => service `partnershipApplication` display
     }
     loadedApplication shouldEqual application
   }

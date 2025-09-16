@@ -43,12 +43,12 @@ class FormPageControllerSpec
       mockActions,
       addressAuditService
     )
-    when(addressAuditService.auditAddresses(any(), any())(any())).thenReturn(Future successful true)
+    when(addressAuditService.auditAddresses(any(), any())(using any())).thenReturn(Future successful true)
   }
 
   val addressAuditService: AddressAuditService = mock[AddressAuditService]
   val controller = new FormPageController(commonDependencies, addressAuditService, mockMcc, mockActions, views)(
-    mockSave4Later,
+    using mockSave4Later,
     scala.concurrent.ExecutionContext.Implicits.global
   )
 
@@ -119,10 +119,10 @@ class FormPageControllerSpec
         "postcode" -> "AA11 1AA"
       ).map { case (k, v) => s"${ContactPersonForm.otherUkContactAddressKey}.$k" -> v }
 
-      val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm): _*)
+      val request = FakeRequest().withFormUrlEncodedBody((form ++ addressForm) *)
       val result = csrfAddToken(controller.save(contactPersonPage.id))(request)
       status(result) shouldBe SEE_OTHER
-      verify(addressAuditService).auditAddresses(any(), any())(any())
+      verify(addressAuditService).auditAddresses(any(), any())(using any())
     }
 
     "Render vat number error form if vat number used elsewhere in journey" in {
@@ -143,7 +143,7 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        businessPartnerFormData(addMore = true, vatNumber = "123456789").toSeq: _*
+        businessPartnerFormData(addMore = true, vatNumber = "123456789").toSeq *
       )
       val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
 
@@ -168,7 +168,7 @@ class FormPageControllerSpec
         ("addMore"                                 -> true.toString)
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        companyOfficersFormData.toSeq: _*
+        companyOfficersFormData.toSeq *
       )
       val result = csrfAddToken(controller.saveWithSection(companyOfficersPage.id, "1"))(request)
 
@@ -214,7 +214,7 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        businessPartnerFormData(addMore = false).toSeq: _*
+        businessPartnerFormData(addMore = false).toSeq *
       )
 
       val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
@@ -228,7 +228,7 @@ class FormPageControllerSpec
       setupSave4Later()
 
       val request = FakeRequest().withFormUrlEncodedBody(
-        businessPartnerFormData(addMore = true).toSeq: _*
+        businessPartnerFormData(addMore = true).toSeq *
       )
 
       val result = csrfAddToken(controller.saveWithSection(businessPartnersPage.id, "1"))(request)
@@ -331,7 +331,7 @@ class FormPageControllerSpec
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
         .cacheMap
 
-      val page = businessPartnersPage withData FormTestData.partners
+      val page = businessPartnersPage `withData` FormTestData.partners
 
       setupPageAction(page, cacheMap = cacheMap, journeyPages = JourneyRequestBuilder.partialJourneyWithSection)
       setupSave4LaterFrom(cacheMap)

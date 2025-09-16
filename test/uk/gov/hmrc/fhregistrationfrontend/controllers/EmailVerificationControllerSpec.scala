@@ -41,7 +41,7 @@ class EmailVerificationControllerSpec
     mockEmailVerifcationConnector,
     mockSave4LaterService,
     views
-  )(scala.concurrent.ExecutionContext.Implicits.global)
+  )(using scala.concurrent.ExecutionContext.Implicits.global)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -99,7 +99,7 @@ class EmailVerificationControllerSpec
         )
         .withMethod("POST")
 
-      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(using any())).thenReturn(Future(Some("c@c.co")))
 
       val result = csrfAddToken(controller.submitContactEmail())(request)
 
@@ -111,7 +111,7 @@ class EmailVerificationControllerSpec
       setupEmailVerificationAction(None, None)
       setupEmailVerificationConnector("c@c.co", false)
 
-      when(mockSave4LaterService.savePendingEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
+      when(mockSave4LaterService.savePendingEmail(any(), any())(using any())).thenReturn(Future(Some("c@c.co")))
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(
@@ -269,8 +269,8 @@ class EmailVerificationControllerSpec
   "emailVerify" should {
     "Redirect to email verified and save the email" in {
       setupEmailVerificationAction(None, pendingEmail = Some("c@c.co"))
-      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(any())).thenReturn(Future(Some("c@c.co")))
-      when(mockSave4LaterService.deletePendingEmail(any())(any())).thenReturn(Future(None))
+      when(mockSave4LaterService.saveVerifiedEmail(any(), any())(using any())).thenReturn(Future(Some("c@c.co")))
+      when(mockSave4LaterService.deletePendingEmail(any())(using any())).thenReturn(Future(None))
 
       val request = FakeRequest()
       val result = csrfAddToken(controller.emailVerify("ACA35F94"))(request)

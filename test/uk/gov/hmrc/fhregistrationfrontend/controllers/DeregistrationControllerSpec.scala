@@ -43,7 +43,7 @@ class DeregistrationControllerSpec
     mockMcc,
     mockActions,
     views
-  )(scala.concurrent.ExecutionContext.Implicits.global)
+  )(using scala.concurrent.ExecutionContext.Implicits.global)
 
   override def afterEach(): Unit = {
     super.afterEach()
@@ -185,10 +185,10 @@ class DeregistrationControllerSpec
   }
 
   def setupSaveDeregistrationReason() =
-    when(mockKeyStoreService.saveDeregistrationReason(any())(any())) thenReturn Future.successful(())
+    when(mockKeyStoreService.saveDeregistrationReason(any())(using any())) `thenReturn` Future.successful(())
 
   def setupKeyStoreDeregistrationReason(
     reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))
   ): Unit =
-    when(mockKeyStoreService.fetchDeregistrationReason()(any())) thenReturn Future.successful(reason)
+    when(mockKeyStoreService.fetchDeregistrationReason()(using any())) `thenReturn` Future.successful(reason)
 }

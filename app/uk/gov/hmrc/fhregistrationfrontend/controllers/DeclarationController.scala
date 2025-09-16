@@ -71,7 +71,7 @@ class DeclarationController @Inject() (
     renderAcknowledgmentPage map { _ getOrElse errorHandler.errorResultsPages(Results.NotFound) }
   }
 
-  private def renderAcknowledgmentPage(implicit request: UserRequest[_]): Future[Option[Result]] =
+  private def renderAcknowledgmentPage(implicit request: UserRequest[?]): Future[Option[Result]] =
     summaryConfirmationService.fetchSummaryForPrint() map { userSummary =>
       for {
         email             <- request.session get emailSessionKey
@@ -115,7 +115,7 @@ class DeclarationController @Inject() (
             ),
           _.flatMap { response =>
             summaryConfirmationService
-              .saveSummaryForPrint(getSummaryPrintable(journeys)(request).toString())
+              .saveSummaryForPrint(getSummaryPrintable(journeys)(using request).toString())
               .map(_ => true)
               .recover { case _ => false }
               .map { pdfSaved =>
@@ -134,7 +134,7 @@ class DeclarationController @Inject() (
 
   private def sendSubscription(
     declaration: Declaration
-  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
     val submissionResult = request.journeyRequest.journeyType match {
       case JourneyType.Amendment => amendedSubmission(declaration)
       case JourneyType.Variation => amendedSubmission(declaration)
@@ -149,7 +149,7 @@ class DeclarationController @Inject() (
 
   def createSubmission(
     declaration: Declaration
-  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
     val subscription = getSubscriptionForDes(formToDes, declaration, request.verifiedEmail, request)
     val payload = SubScriptionCreate(subscription)
 
@@ -163,7 +163,7 @@ class DeclarationController @Inject() (
 
   def amendedSubmission(
     declaration: Declaration
-  )(implicit request: SummaryRequest[_]): Either[String, Future[SubmissionResponse]] = {
+  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
@@ -202,13 +202,13 @@ class DeclarationController @Inject() (
     d: Declaration,
     verifiedEmail: String,
     pageDataLoader: PageDataLoader
-  )(implicit request: SummaryRequest[_]) =
+  )(implicit request: SummaryRequest[?]) =
     request.businessType match {
       case BusinessType.CorporateBody =>
-        formToDes limitedCompanySubmission (request.bpr, verifiedEmail, journeys ltdApplication pageDataLoader, d)
+        formToDes `limitedCompanySubmission` (request.bpr, verifiedEmail, journeys `ltdApplication` pageDataLoader, d)
       case BusinessType.SoleTrader =>
-        formToDes soleProprietorCompanySubmission (request.bpr, verifiedEmail, journeys soleTraderApplication pageDataLoader, d)
+        formToDes `soleProprietorCompanySubmission` (request.bpr, verifiedEmail, journeys `soleTraderApplication` pageDataLoader, d)
       case _ =>
-        formToDes partnership (request.bpr, verifiedEmail, journeys partnershipApplication pageDataLoader, d)
+        formToDes `partnership` (request.bpr, verifiedEmail, journeys `partnershipApplication` pageDataLoader, d)
     }
 }

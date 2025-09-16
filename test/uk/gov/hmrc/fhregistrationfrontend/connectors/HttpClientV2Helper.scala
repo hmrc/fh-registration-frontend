@@ -37,16 +37,16 @@ trait HttpClientV2Helper extends AsyncWordSpec with Matchers with MockitoSugar w
 
   val jsonCaptor: ArgumentCaptor[JsValue] = ArgumentCaptor.forClass(classOf[JsValue])
 
-  when(mockHttp.get(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
-  when(mockHttp.post(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
-  when(mockHttp.delete(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
-  when(mockHttp.put(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
+  when(mockHttp.get(any[URL])(using any[HeaderCarrier])).thenReturn(requestBuilder)
+  when(mockHttp.post(any[URL])(using any[HeaderCarrier])).thenReturn(requestBuilder)
+  when(mockHttp.delete(any[URL])(using any[HeaderCarrier])).thenReturn(requestBuilder)
+  when(mockHttp.put(any[URL])(using any[HeaderCarrier])).thenReturn(requestBuilder)
   when(requestBuilder.transform(any())).thenReturn(requestBuilder)
   when(requestBuilder.setHeader(any())).thenReturn(requestBuilder)
-  when(requestBuilder.withBody(any[JsValue])(any(), any(), any())).thenReturn(requestBuilder)
-  when(requestBuilder.withBody(jsonCaptor.capture())(any(), any(), any())).thenReturn(requestBuilder)
+  when(requestBuilder.withBody(any[JsValue])(using any(), any(), any())).thenReturn(requestBuilder)
+  when(requestBuilder.withBody(jsonCaptor.capture())(using any(), any(), any())).thenReturn(requestBuilder)
 
   def requestBuilderExecute[A](result: Future[A]): Unit =
-    when(requestBuilder.execute[A](any[HttpReads[A]], any[ExecutionContext]))
+    when(requestBuilder.execute[A](using any[HttpReads[A]], any[ExecutionContext]))
       .thenReturn(result)
 }

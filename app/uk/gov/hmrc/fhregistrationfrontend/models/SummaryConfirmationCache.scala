@@ -35,7 +35,7 @@ object SummaryConfirmationCache {
       (
         (__ \ "id").read[String] and
           (__ \ "fhSession").read[EncryptedValue]
-      )(ModelEncryption.decryptSessionCache _)
+      )(ModelEncryption.decryptSessionCache)
 
     def writes(implicit encryption: Encryption): OWrites[SummaryConfirmationCache] =
       new OWrites[SummaryConfirmationCache] {

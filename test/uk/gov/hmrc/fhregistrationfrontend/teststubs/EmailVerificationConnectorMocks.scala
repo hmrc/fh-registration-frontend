@@ -31,8 +31,12 @@ trait EmailVerificationConnectorMocks extends MockitoSugar {
   val mockEmailVerifcationConnector = mock[EmailVerificationConnector]
 
   def setupEmailVerificationConnector(email: String, isVerified: Boolean) = {
-    when(mockEmailVerifcationConnector.isVerified(ArgumentMatchers.eq(email))(any())) thenReturn Future(isVerified)
-    when(mockEmailVerifcationConnector.requestVerification(ArgumentMatchers.eq(email), any())(any())) thenReturn Future(
+    when(mockEmailVerifcationConnector.isVerified(ArgumentMatchers.eq(email))(using any())) `thenReturn` Future(
+      isVerified
+    )
+    when(
+      mockEmailVerifcationConnector.requestVerification(ArgumentMatchers.eq(email), any())(using any())
+    ) `thenReturn` Future(
       isVerified
     )
   }

@@ -32,10 +32,10 @@ trait JourneyRequestBuilder extends ActionSpecBase {
   def partiallyCompleteJourney = {
     val pagesWithData = journeys.partnershipPages map { page =>
       page.id match {
-        case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+        case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] `withData` FormTestData.contactPerson
         case mainBusinessAddressPage.id =>
-          page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
-        case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] withData FormTestData.tradingName
+          page.asInstanceOf[Page[MainBusinessAddress]] `withData` FormTestData.mainBusinessAddress
+        case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] `withData` FormTestData.tradingName
         case _                  => page
       }
     }
@@ -45,13 +45,13 @@ trait JourneyRequestBuilder extends ActionSpecBase {
   def partialJourneyWithSection = {
     val pagesWithData = journeys.partnershipPages map { page =>
       page.id match {
-        case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+        case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] `withData` FormTestData.contactPerson
         case mainBusinessAddressPage.id =>
-          page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
-        case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] withData FormTestData.tradingName
-        case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+          page.asInstanceOf[Page[MainBusinessAddress]] `withData` FormTestData.mainBusinessAddress
+        case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] `withData` FormTestData.tradingName
+        case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
         case businessPartnersPage.id =>
-          page.asInstanceOf[Page[ListWithTrackedChanges[BusinessPartner]]] withData FormTestData.partners.copy(
+          page.asInstanceOf[Page[ListWithTrackedChanges[BusinessPartner]]] `withData` FormTestData.partners.copy(
             addMore = true
           )
         case _ => page
@@ -60,45 +60,45 @@ trait JourneyRequestBuilder extends ActionSpecBase {
     new JourneyPages(pagesWithData)
   }
 
-  def fullyCompleteJourney(pages: Seq[Page[_]] = journeys.partnershipPages): JourneyPages = {
+  def fullyCompleteJourney(pages: Seq[Page[?]] = journeys.partnershipPages): JourneyPages = {
     val pagesWithData = pages map examplePageData
     new JourneyPages(pagesWithData)
   }
 
-  def examplePageData(page: Page[_]): Page[
-    _ >: ContactPerson with MainBusinessAddress with CompanyRegistrationNumber with DateOfIncorporation with NationalInsuranceNumber with TradingName with VatNumber with ListWithTrackedChanges[
+  def examplePageData(page: Page[?]): Page[
+    ? >: ContactPerson & MainBusinessAddress & CompanyRegistrationNumber & DateOfIncorporation & NationalInsuranceNumber & TradingName & VatNumber & ListWithTrackedChanges[
       CompanyOfficer
-    ] with ListWithTrackedChanges[
+    ] & ListWithTrackedChanges[
       BusinessPartner
-    ] with BusinessStatus with ImportingActivities with BusinessCustomers with OtherStoragePremises <: Product
+    ] & BusinessStatus & ImportingActivities & BusinessCustomers & OtherStoragePremises <: Product
   ] =
     page.id match {
-      case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] withData FormTestData.contactPerson
+      case contactPersonPage.id => page.asInstanceOf[Page[ContactPerson]] `withData` FormTestData.contactPerson
       case mainBusinessAddressPage.id =>
-        page.asInstanceOf[Page[MainBusinessAddress]] withData FormTestData.mainBusinessAddress
+        page.asInstanceOf[Page[MainBusinessAddress]] `withData` FormTestData.mainBusinessAddress
       case companyRegistrationNumberPage.id =>
-        page.asInstanceOf[Page[CompanyRegistrationNumber]] withData FormTestData.companyRegistrationNumber
+        page.asInstanceOf[Page[CompanyRegistrationNumber]] `withData` FormTestData.companyRegistrationNumber
       case dateOfIncorporationPage.id =>
-        page.asInstanceOf[Page[DateOfIncorporation]] withData FormTestData.dateOfIncorporation
+        page.asInstanceOf[Page[DateOfIncorporation]] `withData` FormTestData.dateOfIncorporation
       case nationalInsuranceNumberPage.id =>
-        page.asInstanceOf[Page[NationalInsuranceNumber]] withData FormTestData.nationalInsuranceNumber
-      case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] withData FormTestData.tradingName
-      case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] withData FormTestData.vatNumber
+        page.asInstanceOf[Page[NationalInsuranceNumber]] `withData` FormTestData.nationalInsuranceNumber
+      case tradingNamePage.id => page.asInstanceOf[Page[TradingName]] `withData` FormTestData.tradingName
+      case vatNumberPage.id   => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
       case companyOfficersPage.id =>
-        page.asInstanceOf[Page[ListWithTrackedChanges[CompanyOfficer]]] withData FormTestData.companyOfficers
+        page.asInstanceOf[Page[ListWithTrackedChanges[CompanyOfficer]]] `withData` FormTestData.companyOfficers
       case businessPartnersPage.id =>
-        page.asInstanceOf[Page[ListWithTrackedChanges[BusinessPartner]]] withData FormTestData.partners
-      case businessStatusPage.id => page.asInstanceOf[Page[BusinessStatus]] withData FormTestData.businessStatus
+        page.asInstanceOf[Page[ListWithTrackedChanges[BusinessPartner]]] `withData` FormTestData.partners
+      case businessStatusPage.id => page.asInstanceOf[Page[BusinessStatus]] `withData` FormTestData.businessStatus
       case importingActivitiesPage.id =>
-        page.asInstanceOf[Page[ImportingActivities]] withData FormTestData.importingActivities
+        page.asInstanceOf[Page[ImportingActivities]] `withData` FormTestData.importingActivities
       case businessCustomersPage.id =>
-        page.asInstanceOf[Page[BusinessCustomers]] withData FormTestData.businessCustomers
+        page.asInstanceOf[Page[BusinessCustomers]] `withData` FormTestData.businessCustomers
       case otherStoragePremisesPage.id =>
-        page.asInstanceOf[Page[OtherStoragePremises]] withData FormTestData.otherStoragePremises
+        page.asInstanceOf[Page[OtherStoragePremises]] `withData` FormTestData.otherStoragePremises
     }
 
   def journeyRequest(
-    userRequest: UserRequest[_] =
+    userRequest: UserRequest[?] =
       new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest()),
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     businessType: BusinessType = BusinessType.Partnership,

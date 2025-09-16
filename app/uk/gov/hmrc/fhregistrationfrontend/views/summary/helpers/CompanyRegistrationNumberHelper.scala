@@ -39,7 +39,7 @@ object CompanyRegistrationNumberHelper {
           GroupRow.Single
         ),
         Helpers.createChangeLink(
-          Mode isEditable mode,
+          Mode `isEditable` mode,
           "form/companyRegistrationNumber",
           Text("Change"),
           Some(Messages("fh.company_registration_number.title"))

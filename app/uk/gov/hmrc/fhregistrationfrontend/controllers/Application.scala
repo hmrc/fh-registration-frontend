@@ -99,7 +99,7 @@ class Application @Inject() (
     redirectWhenSaved getOrElseF newApplication
   }
 
-  private def newApplication(implicit request: UserRequest[_]) =
+  private def newApplication(implicit request: UserRequest[?]) =
     save4LaterService
       .fetch(request.userId)
       .map {
@@ -214,7 +214,7 @@ class Application @Inject() (
 
   def checkStatus() = enrolledUserAction.async { implicit request =>
     fhddsConnector
-      .getStatus(request.registrationNumber)(hc)
+      .getStatus(request.registrationNumber)(using hc)
       .map(fhddsStatus => Ok(status(statusParams.apply(fhddsStatus).get, request.registrationNumber)))
   }
 }

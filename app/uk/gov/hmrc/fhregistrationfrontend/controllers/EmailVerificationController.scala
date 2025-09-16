@@ -58,7 +58,7 @@ class EmailVerificationController @Inject() (
     doSubmitContactEmail(true)
   }
 
-  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[_]) = {
+  private def doSubmitContactEmail(forced: Boolean)(implicit request: EmailVerificationRequest[?]) = {
     val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm
     emailVerificationForm.bindFromRequest() fold (
       formWithErrors =>
@@ -69,7 +69,7 @@ class EmailVerificationController @Inject() (
     )
   }
 
-  private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[_]) =
+  private def handleContactEmail(emailOptions: EmailVerification)(implicit request: EmailVerificationRequest[?]) =
     emailVerificationConnector.requestVerification(emailOptions.email, emailHash(emailOptions.email)) flatMap {
       isVerified =>
         if (isVerified) {
@@ -147,8 +147,8 @@ class EmailVerificationController @Inject() (
     request.pendingEmail match {
       case Some(pendingEmail) if hashMatches(pendingEmail, token) =>
         for {
-          _ <- save4LaterService saveVerifiedEmail (request.userId, pendingEmail)
-          _ <- save4LaterService deletePendingEmail request.userId
+          _ <- save4LaterService `saveVerifiedEmail` (request.userId, pendingEmail)
+          _ <- save4LaterService `deletePendingEmail` request.userId
         } yield Redirect(routes.EmailVerificationController.emailVerified)
       case Some(pendingEmail) =>
         val emailVerificationForm = EmailVerificationFormProvider(request.candidateEmail).emailVerificationForm

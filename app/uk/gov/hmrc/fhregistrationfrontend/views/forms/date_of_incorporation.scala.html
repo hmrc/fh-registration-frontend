@@ -27,7 +27,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[_], messages: Messages)
+@(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[?], messages: Messages)
 
 @findDateHelp = {
   @Messages("fh.dateOfIncorporation.details")
@@ -77,7 +77,7 @@
           hint = Some(Hint(
               content = Text(Messages("fh.dateOfIncorporation.hint_text"))
           )),
-          errorMessage = dateOfIncorporationForm.errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.dateOfIncorporation.${e.message}", e.args:_*)))),
+          errorMessage = dateOfIncorporationForm.errors.headOption.map(e => ErrorMessage(content = Text(messages(s"fh.dateOfIncorporation.${e.message}", e.args*)))),
           items = Seq(
               InputItem(name = s"$dateOfIncorporationKey.day", classes = s"govuk-input--width-2 ${if(inputHasErrors("day")){" govuk-input--error"} else {""}}", label=Some("Day"), value = dateOfIncorporationForm.data.get(s"$dateOfIncorporationKey.day")),
               InputItem(name = s"$dateOfIncorporationKey.month", classes = s"govuk-input--width-2${if(inputHasErrors("month")){" govuk-input--error"} else {""}}", label=Some("Month"), value = dateOfIncorporationForm.data.get(s"$dateOfIncorporationKey.month")),

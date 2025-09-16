@@ -80,7 +80,7 @@ class Actions @Inject() (
         if (frontendAppConfig.newBusinessPartnerPagesEnabled) {
           Future.successful(Right(request))
         } else {
-          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(request)))
+          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(using request)))
         }
 
       override protected def executionContext: ExecutionContext = ec
@@ -92,7 +92,7 @@ class Actions @Inject() (
         if (frontendAppConfig.newCompanyOfficersPagesEnabled) {
           Future.successful(Right(request))
         } else {
-          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(request)))
+          Future.successful(Left(errorHandler.errorResultsPages(Results.NotFound)(using request)))
         }
 
       override protected def executionContext: ExecutionContext = ec

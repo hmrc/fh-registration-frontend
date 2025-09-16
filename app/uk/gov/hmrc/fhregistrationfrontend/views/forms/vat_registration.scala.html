@@ -26,7 +26,7 @@
 
 @this(layout: layout, viewHelpers: ViewHelpers)
 
-@(vatNumberForm: Form[VatNumber], navigation: Navigation, postAction: Call)(implicit request: Request[_], messages: Messages)
+@(vatNumberForm: Form[VatNumber], navigation: Navigation, postAction: Call)(implicit request: Request[?], messages: Messages)
 
 
 @titlePrefix = @{

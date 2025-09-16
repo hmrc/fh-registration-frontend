@@ -38,21 +38,21 @@ case class OtherStoragePremisesPage(
 
   override def withData(data: OtherStoragePremises): Page[OtherStoragePremises] = {
     val newSection = if (data.hasValue) section else None
-    this copy (
+    this.copy(
       section = newSection,
-      mainPage = mainPage withData data.hasValue,
-      storagePremisePage = storagePremisePage withData data.value
+      mainPage = mainPage `withData` data.hasValue,
+      storagePremisePage = storagePremisePage `withData` data.value
     )
   }
 
   override def parseFromRequest[X](withErrors: Rendering => X, withData: Page[OtherStoragePremises] => X)(implicit
-    r: Request[_]
+    r: Request[?]
   ): X =
     if (isMainSection) {
       mainPage.parseFromRequest(
         withErrors,
         mp => {
-          val newValue = this copy (mainPage = mp)
+          val newValue = this.copy(mainPage = mp)
           withData(newValue)
         }
       )
@@ -60,18 +60,17 @@ case class OtherStoragePremisesPage(
       storagePremisePage.parseFromRequest(
         withErrors,
         spp => {
-          val newValue = this copy (storagePremisePage = spp)
+          val newValue = this.copy(storagePremisePage = spp)
           withData(newValue)
         }
       )
     }
 
   override val withSubsection: PartialFunction[Option[String], Page[OtherStoragePremises]] = {
-    case None          => this copy (section = mainSection)
-    case `mainSection` => this copy (section = mainSection)
+    case None          => this.copy(section = mainSection)
+    case `mainSection` => this.copy(section = mainSection)
     case newSection if hasOtherPremises && storagePremisePage.withSubsection.isDefinedAt(newSection) =>
-      this copy (section = newSection,
-      storagePremisePage = storagePremisePage withSubsection newSection)
+      this.copy(section = newSection, storagePremisePage = storagePremisePage withSubsection newSection)
   }
 
   override def nextSubsection: Option[String] =
@@ -90,7 +89,7 @@ case class OtherStoragePremisesPage(
   private def hasOtherPremises = mainPage.data contains true
 
   override def render(bpr: BusinessRegistrationDetails, navigation: Navigation)(implicit
-    request: Request[_],
+    request: Request[?],
     messages: Messages,
     appConfig: AppConfig
   ): Html =
@@ -109,9 +108,7 @@ case class OtherStoragePremisesPage(
       None
     else
       storagePremisePage.delete map { updatedStoragePremisePage =>
-        this copy (
-          storagePremisePage = updatedStoragePremisePage
-        )
+        this.copy(storagePremisePage = updatedStoragePremisePage)
       }
 
   override def pageStatus: PageStatus =
