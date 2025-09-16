@@ -31,11 +31,9 @@ lazy val microservice = Project(appName, file("."))
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
   .settings(scalaVersion := "3.7.1",
-   //scalacOptions ++=Seq("-source:3.7-migration", "-rewrite"),
     RoutesKeys.routesImport ++= Seq(
       "models._"
     ))
-  //.settings(   scalacOptions ++= Seq(     "-source:3.7-migration",     "-rewrite"   ) )
   .settings(defaultSettings(): _*)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
@@ -60,8 +58,6 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / scalafmtOnCompile := true)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(scalacOptions ++= Seq("-Wconf:msg=lint-multiarg-infix:silent",
-    //"-Wconf:msg=unused-patterns&src=routes/.*:s",
-    //"-Wconf:msg=unused&src=target/.*:s",
     "-Wconf:src=target/scala.*/twirl/.*:s",
     "-Wconf:msg=Flag.*repeatedly:s",
     "-Wconf:msg=composePrism:silent",
