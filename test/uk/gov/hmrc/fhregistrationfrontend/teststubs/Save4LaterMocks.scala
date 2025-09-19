@@ -56,6 +56,36 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
 
     when(mockSave4Later.saveBusinessType(same(userId), any())(using any())).thenReturn(ok)
     when(mockSave4Later.saveDraftData4Later(same(userId), any(), any())(using any(), any())).thenReturn(ok)
+
+    when(mockSave4Later.fetchVerifiedEmail(same(userId))(using any()))
+      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey)))
+    when(mockSave4Later.saveVerifiedEmail(same(userId), any())(using any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.fetchPendingEmail(same(userId))(using any()))
+      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.pendingEmailKey)))
+    when(mockSave4Later.savePendingEmail(same(userId), any())(using any()))
+      .thenReturn(ok)
+    when(mockSave4Later.deletePendingEmail(same(userId))(using any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.fetchV1ContactEmail(same(userId))(using any()))
+      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.v1ContactEmailKey)))
+    when(mockSave4Later.saveV1ContactEmail(same(userId), any())(using any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.saveJourneyType(same(userId), any())(using any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.saveDisplayData4Later(same(userId), any(), any())(using any(), any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.saveDisplayData4Later(same(userId), any(), any())(using any(), any()))
+      .thenReturn(ok)
+
+    when(mockSave4Later.fetchData4Later[Any](same(userId), any())(using any(), any()))
+      .thenReturn(Future.successful(None))
+
   }
 
 }
