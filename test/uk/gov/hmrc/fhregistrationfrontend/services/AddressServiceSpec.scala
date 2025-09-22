@@ -1,19 +1,3 @@
-/*
- * Copyright 2023 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import org.mockito.Mockito.*
@@ -25,14 +9,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.fhregistrationfrontend.connectors.*
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.Address
 import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.{Address => ModelAddress, AddressRecord, Country, RecordSet}
-import uk.gov.hmrc.fhregistrationfrontend.services.{AddressAuditService, AddressService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class AddressServiceSpec extends AsyncWordSpec with Matchers with MockitoSugar with ScalaFutures {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given HeaderCarrier = HeaderCarrier()
 
   "AddressService.addressLookup" should {
 
@@ -58,9 +41,9 @@ class AddressServiceSpec extends AsyncWordSpec with Matchers with MockitoSugar w
       val recordSet = RecordSet(Seq(addressRecord))
       val response = AddressLookupSuccessResponse(recordSet)
 
-      when(mockConnector.lookup(eqTo("SW1A 2AA"), any())(any()))
+      when(mockConnector.lookup(eqTo("SW1A 2AA"), any())(using any[HeaderCarrier]))
         .thenReturn(Future.successful(response))
-      when(mockAuditService.auditAddressesFromRecordSet(any(), any())(any()))
+      when(mockAuditService.auditAddressesFromRecordSet(any(), any())(using any[HeaderCarrier]))
         .thenReturn(Future.successful(()))
 
       val resultF = service.addressLookup("/test-path", "SW1A 2AA", None)
@@ -81,7 +64,7 @@ class AddressServiceSpec extends AsyncWordSpec with Matchers with MockitoSugar w
         )
 
         actual shouldBe expected
-        verify(mockAuditService).auditAddressesFromRecordSet(eqTo("/test-path"), eqTo(recordSet))(any())
+        verify(mockAuditService).auditAddressesFromRecordSet(eqTo("/test-path"), eqTo(recordSet))(using any())
 
         succeed
       }
@@ -95,7 +78,7 @@ class AddressServiceSpec extends AsyncWordSpec with Matchers with MockitoSugar w
       val exception = new RuntimeException("lookup failure")
       val errorResponse = AddressLookupErrorResponse(exception)
 
-      when(mockConnector.lookup(eqTo("INVALID"), any())(any()))
+      when(mockConnector.lookup(eqTo("INVALID"), any())(using any[HeaderCarrier]))
         .thenReturn(Future.successful(errorResponse))
 
       val resultF = service.addressLookup("/bad-path", "INVALID", None)
