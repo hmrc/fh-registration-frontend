@@ -17,7 +17,6 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers.admin
 
 import org.mockito.ArgumentMatchers.*
-import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.*
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -76,7 +75,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     "Basic " + java.util.Base64.getEncoder.encodeToString(s"$testUsername:$testPasswordPlain".getBytes)
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders("Authorization" -> authHeader)
 
-  given request: Request[_] = fakeRequest
+  given request: Request[?] = fakeRequest
   given messages: Messages = MessagesImpl(Lang.defaultLang, cc.messagesApi)
 
   val controller = new AdminPageController(
@@ -92,7 +91,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.showAdminPage" should {
     "render the temp admin page view" in {
-      when(mockTempAdminPage.apply()(any(), any())).thenReturn(Html("<h1>Admin Page</h1>"))
+      when(mockTempAdminPage.apply()(using any(), any())).thenReturn(Html("<h1>Admin Page</h1>"))
 
       val result = controller.showAdminPage(fakeRequest)
       status(result) mustBe OK
@@ -102,8 +101,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.getSubmissions" should {
     "render submissions if available" in {
-      when(mockFhddsConnector.getAllSubmission()(any[HeaderCarrier])).thenReturn(Future.successful(Seq("submission1")))
-      when(mockShowAllSubmissions.apply(any())(any(), any())).thenReturn(Html("<div>Submissions</div>"))
+      when(mockFhddsConnector.getAllSubmission()(using any[HeaderCarrier])).thenReturn(Future.successful(Seq("submission1")))
+      when(mockShowAllSubmissions.apply(any())(using any(), any())).thenReturn(Html("<div>Submissions</div>"))
 
       val result = controller.getSubmissions(fakeRequest)
       status(result) mustBe OK
@@ -111,8 +110,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     }
 
     "render 'No Submissions found' if none" in {
-      when(mockFhddsConnector.getAllSubmission()(any[HeaderCarrier])).thenReturn(Future.successful(Seq.empty))
-      when(mockShowAllSubmissions.apply(any())(any(), any())).thenReturn(Html("<div>No Submissions found</div>"))
+      when(mockFhddsConnector.getAllSubmission()(using any[HeaderCarrier])).thenReturn(Future.successful(Seq.empty))
+      when(mockShowAllSubmissions.apply(any())(using any(), any())).thenReturn(Html("<div>No Submissions found</div>"))
 
       val result = controller.getSubmissions(fakeRequest)
       status(result) mustBe OK
@@ -123,8 +122,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.loadDeletePage" should {
     "render a submission if found" in {
       val submission = mock[SubmissionTracking]
-      when(mockFhddsConnector.getSubMission(any[String])(any[HeaderCarrier])).thenReturn(Future.successful(submission))
-      when(mockShowSubmission.apply(any())(any(), any())).thenReturn(Html("<div>Submission</div>"))
+      when(mockFhddsConnector.getSubMission(any[String])(using any[HeaderCarrier])).thenReturn(Future.successful(submission))
+      when(mockShowSubmission.apply(any())(using any(), any())).thenReturn(Html("<div>Submission</div>"))
 
       val result = controller.loadDeletePage("123")(fakeRequest)
       status(result) mustBe OK
@@ -132,7 +131,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     }
 
     "render not found if missing" in {
-      when(mockFhddsConnector.getSubMission(any[String])(any[HeaderCarrier])).thenReturn(Future.successful(null))
+      when(mockFhddsConnector.getSubMission(any[String])(using any[HeaderCarrier])).thenReturn(Future.successful(null))
       val result = controller.loadDeletePage("999")(fakeRequest)
       status(result) mustBe OK
       contentAsString(result) must include("No Submission found for 999")
@@ -141,7 +140,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.deleteSubmission" should {
     "delete successfully" in {
-      when(mockFhddsConnector.deleteSubmission(any[String])(any[HeaderCarrier]))
+      when(mockFhddsConnector.deleteSubmission(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(HttpResponse(status = 200, body = "")))
 
       val result = controller.deleteSubmission("123")(fakeRequest)
@@ -150,7 +149,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     }
 
     "handle not found" in {
-      when(mockFhddsConnector.deleteSubmission(any[String])(any[HeaderCarrier])).
+      when(mockFhddsConnector.deleteSubmission(any[String])(using any[HeaderCarrier])).
         thenReturn(Future.failed(new Exception("not found")))
 
       val result = controller.deleteSubmission("999")(fakeRequest)
@@ -161,7 +160,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.loadUserIdPage" should {
     "render the admin get groupID page" in {
-      when(mockAdminGetGroupID.apply(any())(any(), any())).thenReturn(Html("<div>UserId Page</div>"))
+      when(mockAdminGetGroupID.apply(any())(using any(), any())).thenReturn(Html("<div>UserId Page</div>"))
 
       val result = controller.loadUserIdPage(fakeRequest)
       status(result) mustBe OK
@@ -171,7 +170,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.sendAdminRequest" should {
     "return BadRequest for invalid form" in {
-      when(mockAdminGetGroupID.apply(any())(any(), any())).thenReturn(Html("<div>Error Form</div>"))
+      when(mockAdminGetGroupID.apply(any())(using any(), any())).thenReturn(Html("<div>Error Form</div>"))
 
       val request = fakeRequest.withFormUrlEncodedBody("userId" -> "", "groupId" -> "", "registrationNumber" -> "")
       val result = controller.sendAdminRequest()(request)
@@ -182,7 +181,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.loadAllocateEnrolment" should {
     "render allocate enrolment page" in {
-      when(mockAllocateEnrolment.apply(any())(any(), any())).thenReturn(Html("<div>Allocate</div>"))
+      when(mockAllocateEnrolment.apply(any())(using any(), any())).thenReturn(Html("<div>Allocate</div>"))
 
       val result = controller.loadAllocateEnrolment(fakeRequest)
       status(result) mustBe OK
@@ -192,7 +191,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.allocateEnrolment" should {
     "return BadRequest for invalid form" in {
-      when(mockAllocateEnrolment.apply(any())(any(), any())).thenReturn(Html("<div>Error Allocate</div>"))
+      when(mockAllocateEnrolment.apply(any())(using any(), any())).thenReturn(Html("<div>Error Allocate</div>"))
 
       val request = fakeRequest.withFormUrlEncodedBody("userId" -> "", "registrationNumber" -> "")
       val result = controller.allocateEnrolment(request)
@@ -203,7 +202,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.loadDeleteEnrolment" should {
     "render delete enrolment page" in {
-      when(mockDeleteEnrolment.apply(any())(any(), any())).thenReturn(Html("<div>Delete Enrolment</div>"))
+      when(mockDeleteEnrolment.apply(any())(using any(), any())).thenReturn(Html("<div>Delete Enrolment</div>"))
 
       val result = controller.loadDeleteEnrolment(fakeRequest)
       status(result) mustBe OK
@@ -213,7 +212,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.deleteEnrolment" should {
     "return BadRequest for invalid form" in {
-      when(mockDeleteEnrolment.apply(any())(any(), any())).thenReturn(Html("<div>Error Delete</div>"))
+      when(mockDeleteEnrolment.apply(any())(using any(), any())).thenReturn(Html("<div>Error Delete</div>"))
 
       val request = fakeRequest.withFormUrlEncodedBody("userId" -> "", "registrationNumber" -> "")
       val result = controller.deleteEnrolment(request)
@@ -224,7 +223,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.checkStatus" should {
     "return status from connector" in {
-      when(mockFhddsConnector.getStatus(any[String])(any[HeaderCarrier]))
+      when(mockFhddsConnector.getStatus(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(FhddsStatus.Approved))
 
       val result = controller.checkStatus("r1")(fakeRequest)
@@ -236,7 +235,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.getUserInfo" should {
     "return JSON response" in {
       val httpResponse = HttpResponse(200, """{"user":"info"}""")
-      when(mockFhddsConnector.getUserInfo(any[String])(any[HeaderCarrier])).thenReturn(Future.successful(httpResponse))
+      when(mockFhddsConnector.getUserInfo(any[String])(using any[HeaderCarrier])).thenReturn(Future.successful(httpResponse))
 
       val result = controller.getUserInfo("u1")(fakeRequest)
       status(result) mustBe OK
@@ -247,7 +246,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.getGroupInfo" should {
     "return JSON response" in {
       val httpResponse = HttpResponse(200, """{"group":"info"}""")
-      when(mockFhddsConnector.getGroupInfo(any[String])(any[HeaderCarrier]))
+      when(mockFhddsConnector.getGroupInfo(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(httpResponse))
 
       val result = controller.getGroupInfo("g1")(fakeRequest)
@@ -259,7 +258,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.es2" should {
     "return JSON response" in {
       val httpResponse = HttpResponse(200, """{"es2":"info"}""")
-      when(mockFhddsConnector.es2Info(any[String])(any[HeaderCarrier]))
+      when(mockFhddsConnector.es2Info(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(httpResponse))
 
       val result = controller.es2("u1")(fakeRequest)
@@ -271,7 +270,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.es3" should {
     "return JSON response" in {
       val httpResponse = HttpResponse(200, """{"es3":"info"}""")
-      when(mockFhddsConnector.es3Info(any[String])(any[HeaderCarrier]))
+      when(mockFhddsConnector.es3Info(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(httpResponse))
 
 
