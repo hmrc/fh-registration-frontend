@@ -231,7 +231,7 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
         .thenReturn(Future.successful(()))
 
       val result = Await.result(sessionService.saveDeregistrationReason(reason), 10.seconds)
-      result mustBe()
+      result mustBe ()
     }
 
     "saveDeregistrationReason should delegate to keystore service when feature flag is OFF" in {
@@ -243,12 +243,13 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
         .thenReturn(Future.successful(()))
 
       val result = Await.result(sessionService.saveDeregistrationReason(reason), 10.seconds)
-      result mustBe()
+      result mustBe ()
     }
 
     "fetchDeregistrationReason should delegate to local service when feature flag is ON" in {
       val sessionService = createEiSessionService
-      val expected = Some(DeregistrationReason(DeregistrationReasonEnum.Other, Some("Business transferred to another company")))
+      val expected =
+        Some(DeregistrationReason(DeregistrationReasonEnum.Other, Some("Business transferred to another company")))
 
       when(mockFhConfig.isNewSummaryConfirmationCacheEnabled).thenReturn(true)
       when(mockSummaryConfirmationLocalService.fetchDeregistrationReason()(using any()))
@@ -269,7 +270,6 @@ class SummaryConfirmationServiceSpecs extends PlaySpec with GuiceOneAppPerSuite 
       val result = Await.result(sessionService.fetchDeregistrationReason(), 10.seconds)
       result mustBe expected
     }
-
 
   }
 }

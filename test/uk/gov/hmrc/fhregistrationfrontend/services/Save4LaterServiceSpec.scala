@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
@@ -32,7 +48,9 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
 
       val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(businessType)))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
       when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(businessType))(using any(), any(), any()))
@@ -67,7 +85,9 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
 
       val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(email)))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
       when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(email))(using any(), any(), any()))
@@ -84,7 +104,10 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-456"
       val email = "test@example.com"
 
-      when(mockCache.fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.verifiedEmailKey))(using any(), any(), any()))
+      when(
+        mockCache
+          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.verifiedEmailKey))(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some(email)))
 
       service.fetchVerifiedEmail(userId).map { result =>
@@ -106,10 +129,18 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
 
       val cacheMap = CacheMap(userId, Map(Save4LaterKeys.businessRegistrationDetailsKey -> Json.toJson(brd)))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.businessRegistrationDetailsKey), eqTo(brd))(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.businessRegistrationDetailsKey), eqTo(brd))(
+          using any(),
+          any(),
+          any()
+        )
+      )
         .thenReturn(Future.successful(cacheMap))
 
       service.saveBusinessRegistrationDetails(userId, brd).map { result =>
@@ -129,10 +160,12 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
         safeId = Some("SAFE123")
       )
 
-      when(mockCache.fetchAndGetEntry[BusinessRegistrationDetails](
-        eqTo(userId),
-        eqTo(Save4LaterKeys.businessRegistrationDetailsKey)
-      )(using any(), any(), any()))
+      when(
+        mockCache.fetchAndGetEntry[BusinessRegistrationDetails](
+          eqTo(userId),
+          eqTo(Save4LaterKeys.businessRegistrationDetailsKey)
+        )(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some(brd)))
 
       service.fetchBusinessRegistrationDetails(userId).map { result =>
@@ -149,7 +182,9 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
 
       val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(email)))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
       when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(email))(using any(), any(), any()))
@@ -166,7 +201,10 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-321"
       val email = "pending@example.com"
 
-      when(mockCache.fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any()))
+      when(
+        mockCache
+          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some(email)))
 
       service.fetchPendingEmail(userId).map { result =>
@@ -177,7 +215,10 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
     "return None if pending email is an empty string" in {
       val userId = "user-321"
 
-      when(mockCache.fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any()))
+      when(
+        mockCache
+          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some("")))
 
       service.fetchPendingEmail(userId).map { result =>
@@ -191,7 +232,9 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-321"
       val cacheMap = CacheMap(userId, Map(Save4LaterKeys.pendingEmailKey -> Json.toJson("")))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
       when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey), eqTo(""))(using any(), any(), any()))
@@ -210,7 +253,9 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val formId = Save4LaterKeys.v1ContactEmailKey
       val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(email)))
 
-      when(mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any()))
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
         .thenReturn(Future.successful(cacheMap))
 
       when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(email))(using any(), any(), any()))
@@ -227,7 +272,10 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-654"
       val email = "v1@example.com"
 
-      when(mockCache.fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.v1ContactEmailKey))(using any(), any(), any()))
+      when(
+        mockCache
+          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.v1ContactEmailKey))(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some(email)))
 
       service.fetchV1ContactEmail(userId).map { result =>
@@ -252,7 +300,6 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
     }
   }
 
-
   "Save4LaterService.saveDisplayData4Later" should {
     "cache the display data using prefixed display key" in {
       val userId = "user-display"
@@ -276,13 +323,15 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
     }
   }
 
-
   "Save4LaterService.fetchLastUpdateTime" should {
     "return the cached last update time" in {
       val userId = "user-999"
       val timestamp = 1699999999999L
 
-      when(mockCache.fetchAndGetEntry[Long](eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey))(using any(), any(), any()))
+      when(
+        mockCache
+          .fetchAndGetEntry[Long](eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey))(using any(), any(), any())
+      )
         .thenReturn(Future.successful(Some(timestamp)))
 
       service.fetchLastUpdateTime(userId).map { result =>
@@ -303,6 +352,5 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       }
     }
   }
-
 
 }

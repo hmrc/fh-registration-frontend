@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
 import org.mockito.ArgumentMatchers.any
@@ -22,12 +38,12 @@ class ActionsSpec extends AsyncWordSpec with Matchers with MockitoSugar {
 
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  private val externalUrls       = mock[ExternalUrls]
-  private val fhddsConnector     = mock[FhddsConnector]
-  private val sessionRepository  = mock[SessionRepository]
-  private val frontendAppConfig  = mock[FrontendAppConfig]
+  private val externalUrls = mock[ExternalUrls]
+  private val fhddsConnector = mock[FhddsConnector]
+  private val sessionRepository = mock[SessionRepository]
+  private val frontendAppConfig = mock[FrontendAppConfig]
   private val cc: ControllerComponents = stubControllerComponents()
-  private val journeys           = mock[Journeys]
+  private val journeys = mock[Journeys]
   private implicit val authConnector: AuthConnector = mock[AuthConnector]
   private implicit val save4LaterService: Save4LaterService = mock[Save4LaterService]
   private implicit val errorHandler: ErrorHandler = mock[ErrorHandler]
@@ -69,10 +85,8 @@ class ActionsSpec extends AsyncWordSpec with Matchers with MockitoSugar {
 
     "block request when feature is disabled" in {
       when(frontendAppConfig.newBusinessPartnerPagesEnabled).thenReturn(false)
-      when(errorHandler.errorResultsPages(
-        any[Results.Status],
-        any[Option[String]])(using any[UserRequest[?]])
-      ).thenReturn(NotFound("Business partners flow disabled"))
+      when(errorHandler.errorResultsPages(any[Results.Status], any[Option[String]])(using any[UserRequest[?]]))
+        .thenReturn(NotFound("Business partners flow disabled"))
 
       val dummyActionBuilder = new ActionBuilder[UserRequest, AnyContent] {
         override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
@@ -119,10 +133,8 @@ class ActionsSpec extends AsyncWordSpec with Matchers with MockitoSugar {
 
     "block request when feature is disabled" in {
       when(frontendAppConfig.newCompanyOfficersPagesEnabled).thenReturn(false)
-      when(errorHandler.errorResultsPages(
-        any[Results.Status],
-        any[Option[String]])(using any[UserRequest[?]])
-      ).thenReturn(NotFound("Company officers flow disabled"))
+      when(errorHandler.errorResultsPages(any[Results.Status], any[Option[String]])(using any[UserRequest[?]]))
+        .thenReturn(NotFound("Company officers flow disabled"))
 
       val dummyActionBuilder = new ActionBuilder[UserRequest, AnyContent] {
         override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
@@ -143,7 +155,6 @@ class ActionsSpec extends AsyncWordSpec with Matchers with MockitoSugar {
       contentAsString(result) should include("Company officers flow disabled")
     }
   }
-
 
   "userAction" should {
     "be an ActionBuilder" in {
