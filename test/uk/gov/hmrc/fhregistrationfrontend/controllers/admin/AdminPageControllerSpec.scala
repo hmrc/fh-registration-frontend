@@ -76,7 +76,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders("Authorization" -> authHeader)
 
   implicit val request: Request[?] = fakeRequest
-  given messages: Messages = MessagesImpl(Lang.defaultLang, cc.messagesApi)
+  implicit val messages: Messages = MessagesImpl(Lang.defaultLang, cc.messagesApi)
 
   val controller = new AdminPageController(
     mockFrontendAppConfig,
