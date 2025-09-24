@@ -75,7 +75,7 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     "Basic " + java.util.Base64.getEncoder.encodeToString(s"$testUsername:$testPasswordPlain".getBytes)
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders("Authorization" -> authHeader)
 
-  given request: Request[?] = fakeRequest
+  given request: Request[_] = fakeRequest
   given messages: Messages = MessagesImpl(Lang.defaultLang, cc.messagesApi)
 
   val controller = new AdminPageController(
