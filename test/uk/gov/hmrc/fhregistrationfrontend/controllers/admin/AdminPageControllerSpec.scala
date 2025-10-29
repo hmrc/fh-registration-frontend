@@ -7,11 +7,11 @@
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions
- * and limitations under the License.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package uk.gov.hmrc.fhregistrationfrontend.controllers.admin
@@ -37,7 +37,6 @@ import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-
 
 class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSugar {
 
@@ -88,7 +87,6 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     override val authAction = AdminPageControllerSpec.this.authAction
   }
 
-
   "AdminPageController.showAdminPage" should {
     "render the temp admin page view" in {
       when(mockTempAdminPage.apply()(using any(), any())).thenReturn(Html("<h1>Admin Page</h1>"))
@@ -101,7 +99,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
 
   "AdminPageController.getSubmissions" should {
     "render submissions if available" in {
-      when(mockFhddsConnector.getAllSubmission()(using any[HeaderCarrier])).thenReturn(Future.successful(Seq("submission1")))
+      when(mockFhddsConnector.getAllSubmission()(using any[HeaderCarrier]))
+        .thenReturn(Future.successful(Seq("submission1")))
       when(mockShowAllSubmissions.apply(any())(using any(), any())).thenReturn(Html("<div>Submissions</div>"))
 
       val result = controller.getSubmissions(fakeRequest)
@@ -122,7 +121,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.loadDeletePage" should {
     "render a submission if found" in {
       val submission = mock[SubmissionTracking]
-      when(mockFhddsConnector.getSubMission(any[String])(using any[HeaderCarrier])).thenReturn(Future.successful(submission))
+      when(mockFhddsConnector.getSubMission(any[String])(using any[HeaderCarrier]))
+        .thenReturn(Future.successful(submission))
       when(mockShowSubmission.apply(any())(using any(), any())).thenReturn(Html("<div>Submission</div>"))
 
       val result = controller.loadDeletePage("123")(fakeRequest)
@@ -149,8 +149,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
     }
 
     "handle not found" in {
-      when(mockFhddsConnector.deleteSubmission(any[String])(using any[HeaderCarrier])).
-        thenReturn(Future.failed(new Exception("not found")))
+      when(mockFhddsConnector.deleteSubmission(any[String])(using any[HeaderCarrier]))
+        .thenReturn(Future.failed(new Exception("not found")))
 
       val result = controller.deleteSubmission("999")(fakeRequest)
       status(result) mustBe OK
@@ -235,7 +235,8 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
   "AdminPageController.getUserInfo" should {
     "return JSON response" in {
       val httpResponse = HttpResponse(200, """{"user":"info"}""")
-      when(mockFhddsConnector.getUserInfo(any[String])(using any[HeaderCarrier])).thenReturn(Future.successful(httpResponse))
+      when(mockFhddsConnector.getUserInfo(any[String])(using any[HeaderCarrier]))
+        .thenReturn(Future.successful(httpResponse))
 
       val result = controller.getUserInfo("u1")(fakeRequest)
       status(result) mustBe OK
@@ -272,7 +273,6 @@ class AdminPageControllerSpec extends AnyWordSpec with Matchers with MockitoSuga
       val httpResponse = HttpResponse(200, """{"es3":"info"}""")
       when(mockFhddsConnector.es3Info(any[String])(using any[HeaderCarrier]))
         .thenReturn(Future.successful(httpResponse))
-
 
       val result = controller.es3("g1")(fakeRequest)
       status(result) mustBe OK
