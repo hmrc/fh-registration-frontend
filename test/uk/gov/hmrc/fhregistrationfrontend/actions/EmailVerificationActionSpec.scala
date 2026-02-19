@@ -32,12 +32,12 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
   "EmailVerificationAction" should {
     "Find the verified email" in {
-      val cacheMap =
+      val userAnswers =
         CacheMapBuilder(testUserId)
           .withValue(Save4LaterKeys.verifiedEmailKey, verifiedEmail)
-          .cacheMap
+          .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val userRequest =
         new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
@@ -51,12 +51,12 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
     "Find the from contact person" in {
       val contactPerson = ContactPerson("f", "l", "job", "1231231", Some(contactEmail), true, None, None, None)
 
-      val cacheMap =
+      val userAnswers =
         CacheMapBuilder(testUserId)
           .withValue("contactPerson", contactPerson)
-          .cacheMap
+          .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val userRequest =
         new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
@@ -69,12 +69,12 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
     "Find the from contact person v1" in {
 
-      val cacheMap =
+      val userAnswers =
         CacheMapBuilder(testUserId)
           .withValue(Save4LaterKeys.v1ContactEmailKey, contactEmail)
-          .cacheMap
+          .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val userRequest =
         new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
@@ -86,12 +86,12 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
     "Find the pending email" in {
 
-      val cacheMap =
+      val userAnswers =
         CacheMapBuilder(testUserId)
           .withValue(Save4LaterKeys.pendingEmailKey, pendingEmail)
-          .cacheMap
+          .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val userRequest =
         new UserRequest(testUserId, None, None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
@@ -104,9 +104,9 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
 
     "Find the gg email" in {
 
-      val cacheMap = CacheMapBuilder(testUserId).cacheMap
+      val userAnswers = CacheMapBuilder(testUserId).userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val userRequest =
         new UserRequest(testUserId, Some(ggEmail), None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
@@ -118,8 +118,8 @@ class EmailVerificationActionSpec extends ActionSpecBase with Save4LaterMocks {
     }
 
     "Have correct user id " in {
-      val cacheMap = CacheMapBuilder(testUserId).cacheMap
-      setupSave4LaterFrom(cacheMap)
+      val userAnswers = CacheMapBuilder(testUserId).userAnswers
+      setupSave4LaterFrom(userAnswers)
       val userRequest =
         new UserRequest(testUserId, Some(ggEmail), None, Some(User), Some(AffinityGroup.Individual), FakeRequest())
 

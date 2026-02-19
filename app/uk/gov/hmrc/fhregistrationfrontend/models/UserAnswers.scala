@@ -31,12 +31,12 @@ final case class UserAnswers(
   lastUpdated: Instant = Instant.now
 ) {
 
-  def getDataEntry[A](key: String)(implicit rds: Reads[A]): Option[A] =
+  def getEntry[A](key: String)(implicit rds: Reads[A]): Option[A] =
     data
       .get(key)
-      .map(_.as[A])
+      .flatMap(_.asOpt[A])
 
-  def setDataEntry[A](key: String, value: A)(implicit writes: Writes[A]): UserAnswers = {
+  def setEntry[A](key: String, value: A)(implicit writes: Writes[A]): UserAnswers = {
     val updatedData = data + (key -> Json.toJson(value))
     copy(data = updatedData)
   }
@@ -64,7 +64,7 @@ object UserAnswers {
         val encryptedValue: (String, Map[String, EncryptedValue], Instant) =
           ModelEncryption.encryptUserAnswers(userAnswers)
         Json.obj(
-          "id"          -> encryptedValue._1,
+          "_id"         -> encryptedValue._1,
           "data"        -> encryptedValue._2,
           "lastUpdated" -> encryptedValue._3
         )

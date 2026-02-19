@@ -23,6 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.ErrorHandler
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import models.UserAnswers
 import uk.gov.hmrc.fhregistrationfrontend.services.Save4LaterService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,9 +49,9 @@ abstract class StartUpdateAction(fhddsConnector: FhddsConnector)(implicit
 
     val whenRegistered = request.registrationNumber.map { registrationNumber =>
       val result = for {
-        _        <- EitherT(checkIsProcessing(registrationNumber))
-        cacheMap <- EitherT(loadCacheMap)
-        journeyType = loadJourneyType(cacheMap)
+        _           <- EitherT(checkIsProcessing(registrationNumber))
+        userAnswers <- EitherT.liftF(loadUserAnswers)
+        journeyType = loadJourneyType(userAnswers)
       } yield new StartUpdateRequest[A](registrationNumber, Some(journeyType), request)
       result.value
     }

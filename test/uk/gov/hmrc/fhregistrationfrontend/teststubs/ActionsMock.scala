@@ -30,7 +30,6 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyPages, JourneyTy
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,7 +44,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
     credRole: Option[CredentialRole] = Some(adminRole),
     userAffinityGroup: AffinityGroup = AffinityGroup.Individual,
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
-    cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap
+    userAnswers: UserAnswers = CacheMapBuilder(testUserId).userAnswers
   ) = {
 
     val actionBuilder = new ActionBuilder[PageRequest, AnyContent] {
@@ -55,7 +54,7 @@ trait ActionsMock extends MockitoSugar with UserTestData {
         val userRequest =
           new UserRequest(testUserId, Some(ggEmail), rNumber, credRole, Some(userAffinityGroup), request)
         val journeyRequest = JourneyRequestBuilder
-          .journeyRequest(userRequest, journeyPages, cacheMap = cacheMap)
+          .journeyRequest(userRequest, journeyPages, userAnswers = userAnswers)
           .asInstanceOf[JourneyRequest[A]]
         val journeyNavigation =
           if (journeyRequest.journeyState.isComplete)

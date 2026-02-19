@@ -16,33 +16,28 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.actions
 
-import play.api.mvc.Result
+import models.UserAnswers
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ActionFunctions {
   this: FrontendAction =>
 
-  def loadCacheMap(implicit
+  def loadUserAnswers(implicit
     save4LaterService: Save4LaterService,
     request: UserRequest[?],
     ec: ExecutionContext
-  ): Future[Either[Result, CacheMap]] =
-    save4LaterService.fetch(request.userId) map {
-      case Some(cacheMap) => Right(cacheMap)
-      case None           => Right(new CacheMap(request.userId, Map.empty))
+  ): Future[UserAnswers] =
+    save4LaterService.fetch(request.userId).map(_.getOrElse(UserAnswers(request.userId)))
 
-    }
-
-  def loadJourneyType(cacheMap: CacheMap): JourneyType =
-    cacheMap
+  def loadJourneyType(userAnswers: UserAnswers): JourneyType =
+    userAnswers
       .getEntry[JourneyType](Save4LaterKeys.journeyTypeKey)
       .orElse(
-        cacheMap
+        userAnswers
           .getEntry[Boolean](Save4LaterKeys.isAmendmentKey)
           .collect { case true => JourneyType.Amendment }
       )

@@ -53,11 +53,11 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
         new UserRequest(testUserId, None, Some(registrationNumber), None, Some(AffinityGroup.Individual), FakeRequest())
 
       setupFhddsStatus(FhddsStatus.Received)
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Amendment)
-        .cacheMap
+        .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
       val refined = refinedRequest(action, userRequest)
 
       refined.currentJourneyType shouldBe Some(JourneyType.Amendment)
@@ -110,7 +110,7 @@ class StartAmendmentActionSpec extends ActionSpecBase with Save4LaterMocks with 
           scala.concurrent.ExecutionContext.Implicits.global
         )
 
-        setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+        setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
         val refined = refinedRequest(action, userRequest)
         refined.registrationNumber shouldBe registrationNumber

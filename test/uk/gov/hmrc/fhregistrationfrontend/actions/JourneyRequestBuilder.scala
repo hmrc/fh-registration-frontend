@@ -23,7 +23,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey._
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{CacheMapBuilder, FormTestData, UserTestData}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.UserAnswers
 
 trait JourneyRequestBuilder extends ActionSpecBase {
 
@@ -103,10 +103,10 @@ trait JourneyRequestBuilder extends ActionSpecBase {
     journeyPages: JourneyPages = new JourneyPages(journeys.partnershipPages),
     businessType: BusinessType = BusinessType.Partnership,
     journeyType: JourneyType = JourneyType.Amendment,
-    cacheMap: CacheMap = CacheMapBuilder(testUserId).cacheMap
+    userAnswers: UserAnswers = CacheMapBuilder(testUserId).userAnswers
   ) =
     new JourneyRequest(
-      cacheMap,
+      userAnswers,
       userRequest,
       FormTestData.someBpr,
       businessType,

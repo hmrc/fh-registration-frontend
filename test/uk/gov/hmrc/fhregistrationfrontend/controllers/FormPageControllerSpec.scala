@@ -242,12 +242,12 @@ class FormPageControllerSpec
   "confirmDeleteSection" should {
     "Return an error if the page expired" in {
       val userLastSavedTime = System.currentTimeMillis()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
-        .cacheMap
+        .userAnswers
 
       setupPageAction(businessPartnersPage)
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
 
@@ -260,17 +260,17 @@ class FormPageControllerSpec
 
     "Render the confirmation page" in {
       val userLastSavedTime = System.currentTimeMillis()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
-        .cacheMap
+        .userAnswers
 
       setupPageAction(
         businessPartnersPage,
         journeyPages = JourneyRequestBuilder.fullyCompleteJourney(),
-        cacheMap = cacheMap
+        userAnswers = userAnswers
       )
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
 
@@ -288,12 +288,12 @@ class FormPageControllerSpec
   "deleteSection" should {
     "Return an error if last update timestamp do not match" in {
       val userLastSavedTime = System.currentTimeMillis()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
-        .cacheMap
+        .userAnswers
 
       setupPageAction(businessPartnersPage)
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
 
@@ -307,13 +307,13 @@ class FormPageControllerSpec
 
     "Return an error if section can not be deleted" in {
       val userLastSavedTime = System.currentTimeMillis()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
-        .cacheMap
+        .userAnswers
 
       val otherStoragePremises = page.otherStoragePremisesPage
-      setupPageAction(otherStoragePremises, cacheMap = cacheMap)
-      setupSave4LaterFrom(cacheMap)
+      setupPageAction(otherStoragePremises, userAnswers = userAnswers)
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
 
@@ -327,14 +327,14 @@ class FormPageControllerSpec
 
     "Redirect to the next page" in {
       val userLastSavedTime = System.currentTimeMillis()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, userLastSavedTime)
-        .cacheMap
+        .userAnswers
 
       val page = businessPartnersPage `withData` FormTestData.partners
 
-      setupPageAction(page, cacheMap = cacheMap, journeyPages = JourneyRequestBuilder.partialJourneyWithSection)
-      setupSave4LaterFrom(cacheMap)
+      setupPageAction(page, userAnswers = userAnswers, journeyPages = JourneyRequestBuilder.partialJourneyWithSection)
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
 

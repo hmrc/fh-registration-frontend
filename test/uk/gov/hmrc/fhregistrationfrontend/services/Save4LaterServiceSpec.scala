@@ -17,28 +17,46 @@
 package uk.gov.hmrc.fhregistrationfrontend.services
 
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.fhregistrationfrontend.config.AppConfig
 import uk.gov.hmrc.fhregistrationfrontend.models.des
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.JourneyType
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.{Address, BusinessRegistrationDetails, Identification}
+import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import models.UserAnswers
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.{CacheMap, ShortLivedCache}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSugar with ScalaFutures {
+class Save4LaterServiceSpec
+    extends AsyncWordSpec with Matchers with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
   given HeaderCarrier = HeaderCarrier()
 
   val mockCache: ShortLivedCache = mock[ShortLivedCache]
-  val service = new Save4LaterService(mockCache)
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  val mockAppConfig: AppConfig = mock[AppConfig]
+  val service = new Save4LaterService(mockCache, mockSessionRepository, mockAppConfig)
+
+  private def stubFetch(userId: String, data: Map[String, JsValue]): Unit =
+    when(mockCache.fetch(eqTo(userId))(using any(), any()))
+      .thenReturn(Future.successful(Some(CacheMap(userId, data))))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockCache, mockSessionRepository, mockAppConfig)
+    when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(false)
+  }
 
   "Save4LaterService.saveBusinessType" should {
     "cache the business type and timestamp" in {
@@ -60,6 +78,76 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
         result shouldBe Some(businessType)
       }
     }
+
+    "when new session repository cache is enabled, persist to session repository and also write to short-lived cache" in {
+      when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(true)
+
+      val userId = "user-123"
+      val businessType: BusinessType.Value = BusinessType.SoleTrader
+      val formId = Save4LaterKeys.businessTypeKey
+
+      val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(businessType)))
+
+      when(mockSessionRepository.setEntries(eqTo(userId), any[Map[String, JsValue]]))
+        .thenReturn(Future.successful(true))
+
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
+        .thenReturn(Future.successful(cacheMap))
+
+      when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(businessType))(using any(), any(), any()))
+        .thenReturn(Future.successful(cacheMap))
+
+      val captor = ArgumentCaptor.forClass(classOf[Map[String, JsValue]])
+
+      service.saveBusinessType(userId, businessType).map { result =>
+        result shouldBe Some(businessType)
+
+        verify(mockSessionRepository).setEntries(eqTo(userId), captor.capture())
+        val savedEntries = captor.getValue
+        savedEntries(formId) shouldBe Json.toJson(businessType)
+        savedEntries(Save4LaterKeys.userLastTimeSavedKey).asOpt[Long].isDefined shouldBe true
+
+        verify(mockCache)
+          .cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+        verify(mockCache).cache(eqTo(userId), eqTo(formId), eqTo(businessType))(using any(), any(), any())
+
+        succeed
+      }
+    }
+
+    "when session repository write fails, still write to short-lived cache" in {
+      when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(true)
+
+      val userId = "user-err"
+      val businessType: BusinessType.Value = BusinessType.SoleTrader
+      val formId = Save4LaterKeys.businessTypeKey
+
+      val cacheMap = CacheMap(userId, Map(formId -> Json.toJson(businessType)))
+
+      when(mockSessionRepository.setEntries(eqTo(userId), any[Map[String, JsValue]]))
+        .thenReturn(Future.failed(new RuntimeException("boom")))
+
+      when(
+        mockCache.cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+      )
+        .thenReturn(Future.successful(cacheMap))
+
+      when(mockCache.cache(eqTo(userId), eqTo(formId), eqTo(businessType))(using any(), any(), any()))
+        .thenReturn(Future.successful(cacheMap))
+
+      service.saveBusinessType(userId, businessType).map { result =>
+        result shouldBe Some(businessType)
+
+        verify(mockSessionRepository).setEntries(eqTo(userId), any[Map[String, JsValue]])
+        verify(mockCache)
+          .cache(eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey), any[Long])(using any(), any(), any())
+        verify(mockCache).cache(eqTo(userId), eqTo(formId), eqTo(businessType))(using any(), any(), any())
+
+        succeed
+      }
+    }
   }
 
   "Save4LaterService.fetchBusinessType" should {
@@ -68,8 +156,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val formId = Save4LaterKeys.businessTypeKey
       val businessType = BusinessType.CorporateBody
 
-      when(mockCache.fetchAndGetEntry[String](eqTo(userId), eqTo(formId))(using any(), any(), any()))
-        .thenReturn(Future.successful(Some(businessType.toString)))
+      stubFetch(userId, Map(formId -> Json.toJson(businessType.toString)))
 
       service.fetchBusinessType(userId).map { result =>
         result shouldBe Some(businessType.toString)
@@ -104,11 +191,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-456"
       val email = "test@example.com"
 
-      when(
-        mockCache
-          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.verifiedEmailKey))(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some(email)))
+      stubFetch(userId, Map(Save4LaterKeys.verifiedEmailKey -> Json.toJson(email)))
 
       service.fetchVerifiedEmail(userId).map { result =>
         result shouldBe Some(email)
@@ -160,13 +243,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
         safeId = Some("SAFE123")
       )
 
-      when(
-        mockCache.fetchAndGetEntry[BusinessRegistrationDetails](
-          eqTo(userId),
-          eqTo(Save4LaterKeys.businessRegistrationDetailsKey)
-        )(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some(brd)))
+      stubFetch(userId, Map(Save4LaterKeys.businessRegistrationDetailsKey -> Json.toJson(brd)))
 
       service.fetchBusinessRegistrationDetails(userId).map { result =>
         result shouldBe Some(brd)
@@ -201,11 +278,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-321"
       val email = "pending@example.com"
 
-      when(
-        mockCache
-          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some(email)))
+      stubFetch(userId, Map(Save4LaterKeys.pendingEmailKey -> Json.toJson(email)))
 
       service.fetchPendingEmail(userId).map { result =>
         result shouldBe Some(email)
@@ -215,11 +288,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
     "return None if pending email is an empty string" in {
       val userId = "user-321"
 
-      when(
-        mockCache
-          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.pendingEmailKey))(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some("")))
+      stubFetch(userId, Map(Save4LaterKeys.pendingEmailKey -> Json.toJson("")))
 
       service.fetchPendingEmail(userId).map { result =>
         result shouldBe None
@@ -272,11 +341,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-654"
       val email = "v1@example.com"
 
-      when(
-        mockCache
-          .fetchAndGetEntry[String](eqTo(userId), eqTo(Save4LaterKeys.v1ContactEmailKey))(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some(email)))
+      stubFetch(userId, Map(Save4LaterKeys.v1ContactEmailKey -> Json.toJson(email)))
 
       service.fetchV1ContactEmail(userId).map { result =>
         result shouldBe Some(email)
@@ -328,11 +393,7 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
       val userId = "user-999"
       val timestamp = 1699999999999L
 
-      when(
-        mockCache
-          .fetchAndGetEntry[Long](eqTo(userId), eqTo(Save4LaterKeys.userLastTimeSavedKey))(using any(), any(), any())
-      )
-        .thenReturn(Future.successful(Some(timestamp)))
+      stubFetch(userId, Map(Save4LaterKeys.userLastTimeSavedKey -> Json.toJson(timestamp)))
 
       service.fetchLastUpdateTime(userId).map { result =>
         result shouldBe Some(timestamp)
@@ -344,11 +405,67 @@ class Save4LaterServiceSpec extends AsyncWordSpec with Matchers with MockitoSuga
     "remove all data for the given user" in {
       val userId = "user-to-delete"
 
+      when(mockSessionRepository.clear(any[String])).thenReturn(Future.successful(true))
       when(mockCache.remove(any[String])(using any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(()))
 
       service.removeUserData(userId).map { result =>
         result shouldBe ()
+      }
+    }
+
+    "remove old cache even if session repository clear fails" in {
+      val userId = "user-clear-fail"
+
+      when(mockSessionRepository.clear(any[String]))
+        .thenReturn(Future.failed(new RuntimeException("boom")))
+      when(mockCache.remove(any[String])(using any[HeaderCarrier], any[ExecutionContext]))
+        .thenReturn(Future.successful(()))
+
+      service.removeUserData(userId).map { result =>
+        result shouldBe ()
+      }
+    }
+  }
+
+  "Save4LaterService.fetch" should {
+    "return data from session repository when enabled" in {
+      when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(true)
+      val userId = "user-fetch"
+      val userAnswers = UserAnswers(userId, Map("key" -> Json.toJson("value")))
+
+      when(mockSessionRepository.get(eqTo(userId))).thenReturn(Future.successful(Some(userAnswers)))
+
+      service.fetch(userId).map { result =>
+        result shouldBe Some(userAnswers)
+      }
+    }
+
+    "fallback to short-lived cache and persist when session repository is empty" in {
+      when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(true)
+      val userId = "user-fallback"
+      val cacheMap = CacheMap(userId, Map("key" -> Json.toJson("value")))
+
+      when(mockSessionRepository.get(eqTo(userId))).thenReturn(Future.successful(None))
+      when(mockCache.fetch(eqTo(userId))(using any(), any())).thenReturn(Future.successful(Some(cacheMap)))
+      when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
+
+      service.fetch(userId).map { result =>
+        result.map(_.data) shouldBe Some(cacheMap.data)
+      }
+    }
+
+    "return old cache data even if session repository write fails" in {
+      when(mockAppConfig.isNewSessionRepositoryCacheEnabled).thenReturn(true)
+      val userId = "user-fallback-error"
+      val cacheMap = CacheMap(userId, Map("key" -> Json.toJson("value")))
+
+      when(mockSessionRepository.get(eqTo(userId))).thenReturn(Future.successful(None))
+      when(mockCache.fetch(eqTo(userId))(using any(), any())).thenReturn(Future.successful(Some(cacheMap)))
+      when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.failed(new RuntimeException("boom")))
+
+      service.fetch(userId).map { result =>
+        result.map(_.data) shouldBe Some(cacheMap.data)
       }
     }
   }
