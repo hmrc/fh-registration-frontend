@@ -63,11 +63,11 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
       )
 
       setupFhddsStatus(FhddsStatus.ApprovedWithConditions)
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Variation)
-        .cacheMap
+        .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
       val refined = refinedRequest(action, userRequest)
 
       refined.currentJourneyType shouldBe Some(JourneyType.Variation)
@@ -120,7 +120,7 @@ class StartVariationActionSpec extends ActionSpecBase with Save4LaterMocks with 
           scala.concurrent.ExecutionContext.Implicits.global
         )
 
-        setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+        setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
         val refined = refinedRequest(action, userRequest)
         refined.registrationNumber shouldBe registrationNumber

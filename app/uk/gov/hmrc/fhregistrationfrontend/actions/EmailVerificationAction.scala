@@ -20,8 +20,8 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.mvc.{ActionRefiner, Result, WrappedRequest}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.ContactPerson
+import models.UserAnswers
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,11 +41,11 @@ class EmailVerificationAction(implicit val save4LaterService: Save4LaterService,
   override protected def refine[A](request: UserRequest[A]): Future[Either[Result, EmailVerificationRequest[A]]] = {
     implicit val r = request
     val result = for {
-      cacheMap <- EitherT(loadCacheMap)
-      verifiedEmail = cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey)
-      pendingEmail = getPendingEmail(cacheMap)
-      contactPersonEmail = getContactPersonEmail(cacheMap)
-      contactPersonV1Email = getContactPersonEmailV1(cacheMap)
+      userAnswers <- EitherT.liftF(loadUserAnswers)
+      verifiedEmail = userAnswers.getEntry[String](Save4LaterKeys.verifiedEmailKey)
+      pendingEmail = getPendingEmail(userAnswers)
+      contactPersonEmail = getContactPersonEmail(userAnswers)
+      contactPersonV1Email = getContactPersonEmailV1(userAnswers)
 
     } yield {
 
@@ -62,18 +62,18 @@ class EmailVerificationAction(implicit val save4LaterService: Save4LaterService,
     result.value
   }
 
-  private def getPendingEmail(cacheMap: CacheMap) =
-    cacheMap
+  private def getPendingEmail(userAnswers: UserAnswers) =
+    userAnswers
       .getEntry[String](Save4LaterKeys.pendingEmailKey)
       .filterNot(_.isEmpty)
 
-  private def getContactPersonEmail(cacheMap: CacheMap) =
-    cacheMap
+  private def getContactPersonEmail(userAnswers: UserAnswers) =
+    userAnswers
       .getEntry[ContactPerson]("contactPerson")
       .flatMap(_.emailAddress)
 
-  private def getContactPersonEmailV1(cacheMap: CacheMap) =
-    cacheMap
+  private def getContactPersonEmailV1(userAnswers: UserAnswers) =
+    userAnswers
       .getEntry[String](Save4LaterKeys.v1ContactEmailKey)
 
 }

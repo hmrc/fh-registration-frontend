@@ -85,6 +85,6 @@ trait PreconditionHelpers {
     builder.audit.writesAuditOrMerged().user.isAuthorisedAndEnrolled
 
   def summaryPrecondition =
-    builder.audit.writesAuditOrMerged().user.isAuthorised().save4later.hasFullFormData()
+    builder.audit.writesAuditOrMerged().user.isAuthorised().save4later.hasFullFormData().save4later.acceptsDelete()
 
 }

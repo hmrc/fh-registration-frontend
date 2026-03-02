@@ -17,9 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.repositories
 
 import models.UserAnswers
+import org.bson.BsonDocument
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model._
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, JsValue, Json}
+import uk.gov.hmrc.crypto.EncryptedValue
+import uk.gov.hmrc.crypto.json.CryptoFormats
 import uk.gov.hmrc.fhregistrationfrontend.config.FrontendAppConfig
 import uk.gov.hmrc.fhregistrationfrontend.services.Encryption
 import uk.gov.hmrc.mongo.MongoComponent
@@ -85,9 +88,30 @@ class SessionRepository @Inject() (
       .map(_ => true)
   }
 
+  def setEntries(id: String, entries: Map[String, JsValue]): Future[Boolean] = {
+    val entryUpdates = entries.map { case (key, value) =>
+      val encrypted = encryption.crypto.encrypt(value.toString(), id)
+      Updates.set(s"data.$key", encryptedValueAsDocument(encrypted))
+    }
+
+    val update = Updates.combine((Updates.set("lastUpdated", Instant.now())) +: entryUpdates.toSeq *)
+
+    collection
+      .updateOne(
+        filter = byId(id),
+        update = update,
+        options = UpdateOptions().upsert(true)
+      )
+      .toFuture()
+      .map(_ => true)
+  }
+
   def clear(id: String): Future[Boolean] =
     collection
       .deleteOne(byId(id))
       .toFuture()
       .map(_ => true)
+
+  private def encryptedValueAsDocument(encryptedValue: EncryptedValue): BsonDocument =
+    BsonDocument.parse(Json.stringify(Json.toJson(encryptedValue)(using CryptoFormats.encryptedValueFormat)))
 }

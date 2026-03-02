@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.teststubs
 import org.mockito.ArgumentMatchers.{any, same}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import models.UserAnswers
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterKeys, Save4LaterService}
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -33,21 +34,26 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
   private val ok = Future successful None
 
   def setupSave4Later(userId: String = testUserId): Unit =
-    setupSave4LaterFrom(CacheMapBuilder(userId).cacheMap, userId)
+    setupSave4LaterFrom(CacheMapBuilder(userId).userAnswers, userId)
 
-  def setupSave4LaterFrom(cacheMap: CacheMap, userId: String = testUserId): Unit = {
-    when(mockSave4Later.fetch(same(userId))(using any())).thenReturn(Future.successful(Some(cacheMap)))
+  def setupSave4LaterFrom(cacheMap: CacheMap, userId: String): Unit =
+    setupSave4LaterFrom(CacheMapBuilder(userId, cacheMap.data).userAnswers, userId)
+
+  def setupSave4LaterFrom(userAnswers: UserAnswers, userId: String = testUserId): Unit = {
+    when(mockSave4Later.fetch(same(userId))(using any())).thenReturn(Future.successful(Some(userAnswers)))
 
     when(mockSave4Later.fetchBusinessRegistrationDetails(same(userId))(using any()))
       .thenReturn(
-        Future successful cacheMap.getEntry[BusinessRegistrationDetails](Save4LaterKeys.businessRegistrationDetailsKey)
+        Future successful userAnswers.getEntry[BusinessRegistrationDetails](
+          Save4LaterKeys.businessRegistrationDetailsKey
+        )
       )
 
     when(mockSave4Later.fetchBusinessType(same(userId))(using any()))
-      .thenReturn(Future successful cacheMap.getEntry[String](Save4LaterKeys.businessTypeKey))
+      .thenReturn(Future successful userAnswers.getEntry[String](Save4LaterKeys.businessTypeKey))
 
     when(mockSave4Later.fetchLastUpdateTime(same(userId))(using any()))
-      .thenReturn(Future successful cacheMap.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey))
+      .thenReturn(Future successful userAnswers.getEntry[Long](Save4LaterKeys.userLastTimeSavedKey))
 
     when(mockSave4Later.saveBusinessRegistrationDetails(same(userId), any())(using any()))
       .thenReturn(ok)
@@ -58,19 +64,19 @@ trait Save4LaterMocks extends MockitoSugar with UserTestData {
     when(mockSave4Later.saveDraftData4Later(same(userId), any(), any())(using any(), any())).thenReturn(ok)
 
     when(mockSave4Later.fetchVerifiedEmail(same(userId))(using any()))
-      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.verifiedEmailKey)))
+      .thenReturn(Future.successful(userAnswers.getEntry[String](Save4LaterKeys.verifiedEmailKey)))
     when(mockSave4Later.saveVerifiedEmail(same(userId), any())(using any()))
       .thenReturn(ok)
 
     when(mockSave4Later.fetchPendingEmail(same(userId))(using any()))
-      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.pendingEmailKey)))
+      .thenReturn(Future.successful(userAnswers.getEntry[String](Save4LaterKeys.pendingEmailKey)))
     when(mockSave4Later.savePendingEmail(same(userId), any())(using any()))
       .thenReturn(ok)
     when(mockSave4Later.deletePendingEmail(same(userId))(using any()))
       .thenReturn(ok)
 
     when(mockSave4Later.fetchV1ContactEmail(same(userId))(using any()))
-      .thenReturn(Future.successful(cacheMap.getEntry[String](Save4LaterKeys.v1ContactEmailKey)))
+      .thenReturn(Future.successful(userAnswers.getEntry[String](Save4LaterKeys.v1ContactEmailKey)))
     when(mockSave4Later.saveV1ContactEmail(same(userId), any())(using any()))
       .thenReturn(ok)
 

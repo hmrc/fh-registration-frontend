@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.CompanyOfficer
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.{BackHelper, RepeatingPageParams}
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers._
+@import uk.gov.hmrc.fhregistrationfrontend.views.html.helpers.company_officers.{add_more => coAddMore, inputText => coInputText, roles => coRoles, yes_no_conditional => coYesNoConditional}
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.CompanyOfficersForm._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
@@ -30,43 +31,43 @@
 @(companyOfficersForm: Form[(CompanyOfficer, Boolean)], navigation: Navigation, section: String, params: RepeatingPageParams)(implicit request: Request[?], messages: Messages)
 
 @indNameInput = @{
-    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))
+    coInputText(companyOfficersForm, s"$individualIdentificationKey.$firstNameKey", "fh.contact_person.first_name.label", section, viewHelpers, None, Some("given-name"))
 }
 
 @indSurnameInput = @{
-    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$lastNameKey", "fh.contact_person.last_name.label", section, viewHelpers, None, Some("family-name"))
+    coInputText(companyOfficersForm, s"$individualIdentificationKey.$lastNameKey", "fh.contact_person.last_name.label", section, viewHelpers, None, Some("family-name"))
 }
 
 @condPassportQuestion =@{
-    company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasPassportNumberKey", section, Some(indPassportNoinput), Some(indNatIdInput), false, viewHelpers)
+    coYesNoConditional(companyOfficersForm, s"$individualIdentificationKey.$hasPassportNumberKey", section, Some(indPassportNoinput), Some(indNatIdInput), false, viewHelpers)
 }
 
 @indPassportNoinput = @{
-    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$passportNumberKey", s"fh.$individualIdentificationKey.$passportNumberKey.label", section, viewHelpers)
+    coInputText(companyOfficersForm, s"$individualIdentificationKey.$passportNumberKey", s"fh.$individualIdentificationKey.$passportNumberKey.label", section, viewHelpers)
 }
 
 @indNatInsNoInput = @{
-    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some("fh.partner.national_insurance_number.hintText"))
+    coInputText(companyOfficersForm, s"$individualIdentificationKey.$nationalInsuranceNumberKey", s"fh.$individualIdentificationKey.$nationalInsuranceNumberKey.label", section, viewHelpers, Some("fh.partner.national_insurance_number.hintText"))
 }
 
 @indNatIdInput = @{
-    company_officers.inputText(companyOfficersForm, s"$individualIdentificationKey.$nationalIDKey", "fh.company_officers.individual.nationalID.label", section, viewHelpers, Some("fh.company_officers.individual.nationalID.hint_text"))
+    coInputText(companyOfficersForm, s"$individualIdentificationKey.$nationalIDKey", "fh.company_officers.individual.nationalID.label", section, viewHelpers, Some("fh.company_officers.individual.nationalID.hint_text"))
 }
 
 @compNameinput = @{
-    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyNameKey", "fh.company_officers.company.company_name.label", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
+    coInputText(companyOfficersForm, s"$companyIdentificationKey.$companyNameKey", "fh.company_officers.company.company_name.label", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
 @condVATQuestion =@{
-    company_officers.yes_no_conditional(companyOfficersForm, s"$companyIdentificationKey.$hasVatKey", section, Some(VATinput), Some(compRegNoInput), false, viewHelpers)
+    coYesNoConditional(companyOfficersForm, s"$companyIdentificationKey.$hasVatKey", section, Some(VATinput), Some(compRegNoInput), false, viewHelpers)
 }
 
 @VATinput = @{
-    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.guided.hintText"))
+    coInputText(companyOfficersForm, s"$companyIdentificationKey.$vatRegistrationKey", "fh.vatNumber.label", section, viewHelpers, Some("fh.vatNumber.guided.hintText"))
 }
 
 @compRegNoInput = @{
-    company_officers.inputText(companyOfficersForm, s"$companyIdentificationKey.$companyRegistrationKey", "fh.companyRegistrationNumber.title", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
+    coInputText(companyOfficersForm, s"$companyIdentificationKey.$companyRegistrationKey", "fh.companyRegistrationNumber.title", section, viewHelpers, Some("fh.companyRegistrationNumber.hint_text"))
 }
 
 @addMore = @{
@@ -75,7 +76,7 @@
    <input type="hidden" name="addMore" value="@force"/>
   }
   case None => {
-    company_officers.add_more(companyOfficersForm, viewHelpers)
+    coAddMore(companyOfficersForm, viewHelpers)
   }
  }
 }
@@ -85,15 +86,15 @@
   <h2 class="govuk-heading-m">@messages("fh.company_officers.individual.title")</h2>
   @indNameInput
   @indSurnameInput
-  @company_officers.yes_no_conditional(companyOfficersForm, s"$individualIdentificationKey.$hasNationalInsuranceNumberKey", section, Some(indNatInsNoInput), Some(condPassportQuestion), true, viewHelpers)
-  @company_officers.roles(companyOfficersForm, individualIdentificationKey, section, viewHelpers)
+  @coYesNoConditional(companyOfficersForm, s"$individualIdentificationKey.$hasNationalInsuranceNumberKey", section, Some(indNatInsNoInput), Some(condPassportQuestion), true, viewHelpers)
+  @coRoles(companyOfficersForm, individualIdentificationKey, section, viewHelpers)
 }
 
 @officerIsCompany = {
   <h2 class="govuk-heading-m">@messages("fh.company_officers.company.title")</h2>
   @compNameinput
   @condVATQuestion
-  @company_officers.roles(companyOfficersForm, companyIdentificationKey, section, viewHelpers)
+  @coRoles(companyOfficersForm, companyIdentificationKey, section, viewHelpers)
 }
 
 @titlePrefix = @{

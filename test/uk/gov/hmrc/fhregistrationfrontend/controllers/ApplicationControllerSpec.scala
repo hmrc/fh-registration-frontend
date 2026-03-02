@@ -148,13 +148,13 @@ class ApplicationControllerSpec
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction(rNumber = None)
 
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.CorporateBody)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
-        .cacheMap
+        .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
       val request = FakeRequest()
 
       val result = csrfAddToken(controller.startOrContinueApplication)(request)
@@ -179,11 +179,11 @@ class ApplicationControllerSpec
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction(rNumber = None)
 
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
-        .cacheMap
+        .userAnswers
 
-      setupSave4LaterFrom(cacheMap)
+      setupSave4LaterFrom(userAnswers)
       val request = FakeRequest()
 
       val result = csrfAddToken(controller.startOrContinueApplication)(request)
@@ -199,10 +199,10 @@ class ApplicationControllerSpec
     ) = {
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction(rNumber = None)
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withOptValue(Save4LaterKeys.userLastTimeSavedKey, userLastTimeSaved)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
     }
 
     "Fail if no answer was given" in {
@@ -254,10 +254,10 @@ class ApplicationControllerSpec
     def setup(userLastTimeSaved: Option[Long]) = {
       setupFhddsEnrolmentProgress(EnrolmentProgress.Unknown)
       setupUserAction(rNumber = None)
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withOptValue(Save4LaterKeys.userLastTimeSavedKey, userLastTimeSaved)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
     }
 
     "Fail when no userLastTimeSaved is present" in {
@@ -319,7 +319,7 @@ class ApplicationControllerSpec
   "deleteUserData" should {
     "Redirect to the landing page" in {
       setupUserAction()
-      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
       val request = FakeRequest()
       val result = controller deleteUserData request
@@ -332,7 +332,7 @@ class ApplicationControllerSpec
   "savedForLater" should {
     "Fail if no last time saved" in {
       setupUserAction()
-      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
       val request = FakeRequest()
       val result = controller savedForLater request
@@ -342,10 +342,10 @@ class ApplicationControllerSpec
 
     "Render the saved page" in {
       setupUserAction()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
       val result = controller savedForLater request
@@ -369,7 +369,7 @@ class ApplicationControllerSpec
 
     "Redirect to businessType when no saved data" in {
       setupUserAction()
-      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
       val request = FakeRequest()
       val result = controller.deleteOrContinue(false)(request)
@@ -380,10 +380,10 @@ class ApplicationControllerSpec
 
     "Render the continue_delete page" in {
       setupUserAction()
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, System.currentTimeMillis())
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val request = FakeRequest()
       val result = csrfAddToken(controller.deleteOrContinue(false))(request)
@@ -397,7 +397,7 @@ class ApplicationControllerSpec
   "continueWithBpr" should {
     "Redirect to the businessType page" in {
       setupNewApplicationAction()
-      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
       when(mockBusinessCustomerConnector.getReviewDetails(using any(), any())) `thenReturn` Future.successful(
         FormTestData.someBpr
       )
@@ -435,7 +435,7 @@ class ApplicationControllerSpec
 
     "Redirect to contactEmail" in {
       setupUserAction()
-      setupSave4LaterFrom(CacheMapBuilder(testUserId).cacheMap)
+      setupSave4LaterFrom(CacheMapBuilder(testUserId).userAnswers)
 
       val request = FakeRequest()
         .withFormUrlEncodedBody(

@@ -46,29 +46,29 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
   "JourenyAction" should {
     "Fail when no bpr" in {
 
-      val cacheMap = CacheMapBuilder(testUserId).cacheMap
-      setupSave4LaterFrom(cacheMap)
+      val userAnswers = CacheMapBuilder(testUserId).userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
 
     }
 
     "Fail when no business type" in {
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       status(result(action, userRequest)) shouldBe BAD_REQUEST
 
     }
 
     "Redirect to email verification when no verified email" in {
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.CorporateBody)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val r = result(action, userRequest)
       status(r) shouldBe SEE_OTHER
@@ -77,12 +77,12 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
     }
 
     "Load journey with no page yet saved" in {
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.CorporateBody)
         .withValue(Save4LaterKeys.verifiedEmailKey, ggEmail)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
 
@@ -102,15 +102,15 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
     }
 
     "Load journey with several pages saved" in {
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.CorporateBody)
         .withValue(Save4LaterKeys.verifiedEmailKey, ggEmail)
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
         .withValue(contactPersonPage.id, FormTestData.contactPerson)
         .withValue(mainBusinessAddressPage.id, FormTestData.mainBusinessAddress)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
 
@@ -124,7 +124,7 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
     }
 
     "Load journey with all pages saved" in {
-      val cacheMap = CacheMapBuilder(testUserId)
+      val userAnswers = CacheMapBuilder(testUserId)
         .withValue(Save4LaterKeys.businessRegistrationDetailsKey, FormTestData.someBpr)
         .withValue(Save4LaterKeys.businessTypeKey, BusinessType.SoleTrader)
         .withValue(Save4LaterKeys.verifiedEmailKey, ggEmail)
@@ -138,8 +138,8 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(importingActivitiesPage.id, FormTestData.importingActivities)
         .withValue(businessCustomersPage.id, FormTestData.businessCustomers)
         .withValue(otherStoragePremisesPage.id, FormTestData.otherStoragePremises)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
 
@@ -160,8 +160,8 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Amendment)
 
-      val cacheMap = addUpdatePageData(cacheMapBuilder).cacheMap
-      setupSave4LaterFrom(cacheMap)
+      val userAnswers = addUpdatePageData(cacheMapBuilder).userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
       refined.hasUpdates shouldBe Some(false)
@@ -177,10 +177,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Amendment)
 
-      val cacheMap = addUpdatePageData(cacheMapBuilder)
+      val userAnswers = addUpdatePageData(cacheMapBuilder)
         .withValue(Save4LaterKeys.verifiedEmailKey, "other@tes.com")
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
       refined.hasUpdates shouldBe Some(true)
@@ -196,10 +196,10 @@ class JourneyActionSpec extends ActionSpecBase with Save4LaterMocks with BeforeA
         .withValue(Save4LaterKeys.userLastTimeSavedKey, 1529327782000L)
         .withValue(Save4LaterKeys.journeyTypeKey, JourneyType.Variation)
 
-      val cacheMap = addUpdatePageData(cacheMapBuilder)
+      val userAnswers = addUpdatePageData(cacheMapBuilder)
         .withValue(contactPersonPage.id, FormTestData.otherContactPerson)
-        .cacheMap
-      setupSave4LaterFrom(cacheMap)
+        .userAnswers
+      setupSave4LaterFrom(userAnswers)
 
       val refined = refinedRequest(action, userRequest)
       refined.hasUpdates shouldBe Some(true)

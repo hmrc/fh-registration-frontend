@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.fhregistrationfrontend.teststubs
 
+import models.UserAnswers
 import play.api.libs.json.{JsValue, Writes}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -32,5 +33,7 @@ case class CacheMapBuilder(id: String, data: Map[String, JsValue] = Map.empty) {
     this.copy(data = data + (key -> writes.writes(value)))
 
   def cacheMap = CacheMap(id, data)
+
+  def userAnswers = UserAnswers(id, data)
 
 }

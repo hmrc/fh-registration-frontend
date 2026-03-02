@@ -9,7 +9,7 @@ This service provides the frontend endpoint for the [Fulfilment House Due Dilige
 Use service manager to run all the required services:
 
 ```
-sm --start FHDDS_ALL -f
+sm2 --start FHDDS_ALL
 ```
 
 To run the application execute
