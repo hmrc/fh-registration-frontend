@@ -4,22 +4,22 @@ import sbt._
 object AppDependencies {
 
   val playVersion = "play-30"
-  val bootstrapVersion = "10.5.0"
+  val bootstrapVersion = "10.7.0"
   val hmrcMongoVersion = "2.12.0"
   val monocleVersion = "3.3.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc"                %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
-    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "12.31.0",
+    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "12.32.0",
     "uk.gov.hmrc"                %% s"play-partials-$playVersion"                 % "10.2.0",
     "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.3.0",
     "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "12.2.0",
-    "uk.gov.hmrc"                %% s"play-conditional-form-mapping-$playVersion" % "3.4.0",
+    "uk.gov.hmrc"                %% s"play-conditional-form-mapping-$playVersion" % "3.5.0",
     "uk.gov.hmrc.mongo"          %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
     "org.typelevel"              %% "cats-core"                                   % "2.13.0",
     "org.typelevel"              %% "cats-kernel"                                 % "2.13.0",
-    "com.typesafe.play"          %% "play-json"                                   % "2.10.6",
+    "com.typesafe.play"          %% "play-json"                                   % "2.10.8",
     "dev.optics"                 %% "monocle-core"                                % monocleVersion,
     "dev.optics"                 %% "monocle-macro"                               % monocleVersion,
     "org.mindrot"                %  "jbcrypt"                                     % "0.4"
@@ -28,10 +28,10 @@ object AppDependencies {
   val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"                %% s"bootstrap-test-$playVersion"  % bootstrapVersion,
     "uk.gov.hmrc.mongo"          %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion,
-    "org.jsoup"                  %  "jsoup"                         % "1.18.3",
+    "org.jsoup"                  %  "jsoup"                         % "1.22.1",
     "dev.optics"                 %% "monocle-law"                   % monocleVersion,
     "com.github.java-json-tools" %  "json-schema-validator"         % "2.2.14",
-    "org.scalatestplus.play"     %% "scalatestplus-play"            % "7.0.1"
+    "org.scalatestplus.play"     %% "scalatestplus-play"            % "7.0.2"
   ).map(_ % "test, it")
 
   val all: Seq[ModuleID] = compile ++ test
