@@ -89,7 +89,7 @@ class FhddsConnector @Inject() (
   def getEnrolmentProgress(implicit hc: HeaderCarrier): Future[EnrolmentProgress.EnrolmentProgress] = {
     implicit val reads = Reads.enumNameReads(EnrolmentProgress)
     val url = s"$FHDSSServiceUrl/fhdds/subscription/enrolmentProgress"
-    http.get(url"$url")(using correlationOnlyHc).execute[EnrolmentProgress.EnrolmentProgress]
+    http.get(url"$url").execute[EnrolmentProgress.EnrolmentProgress]
   }
 
   // $COVERAGE-OFF$
@@ -110,37 +110,37 @@ class FhddsConnector @Inject() (
 
   def addEnrolment(userId: String, groupId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
     val url = s"$FHDSSServiceUrl/fhdds/enrolment/es8/userId/$userId/groupId/$groupId/regNo/$regNo"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
 
   def allocateEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
     val url = s"$FHDSSServiceUrl/fhdds/enrolment/es11/userId/$userId/regNo/$regNo"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
 
   def deleteEnrolment(userId: String, regNo: String)(implicit headerCarrier: HeaderCarrier) = {
     val url = s"$FHDSSServiceUrl/fhdds/enrolment/es12/userId/$userId/regNo/$regNo"
-    http.delete(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.delete(url"$url").execute[HttpResponse]
   }
 
   def getUserInfo(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = s"$FHDSSServiceUrl/fhdds/user-info/$userId"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
 
   def getGroupInfo(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = s"$FHDSSServiceUrl/fhdds/group-info/$groupId"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
 
   def es2Info(userId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = s"$FHDSSServiceUrl/fhdds/enrolment/es2/userId/$userId"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
 
   def es3Info(groupId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = s"$FHDSSServiceUrl/fhdds/enrolment/es3/groupId/$groupId"
-    http.get(url"$url")(using correlationOnlyHc).execute[HttpResponse]
+    http.get(url"$url").execute[HttpResponse]
   }
   // $COVERAGE-ON$
   private def correlationOnlyHc(implicit hc: HeaderCarrier): HeaderCarrier = {
