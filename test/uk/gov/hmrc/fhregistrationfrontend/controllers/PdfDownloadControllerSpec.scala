@@ -21,22 +21,23 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationLocalService
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.ActionsMock
 
 import scala.concurrent.Future
 
 class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock with BeforeAndAfterEach {
 
-  val mockKeyStore = mock[SummaryConfirmationService]
+  val mockSummaryConfirmationLocalService = mock[SummaryConfirmationLocalService]
 
-  val controller = new PdfDownloadController(commonDependencies, mockKeyStore, mockMcc, mockActions)(
-    using scala.concurrent.ExecutionContext.Implicits.global
-  )
+  val controller =
+    new PdfDownloadController(commonDependencies, mockSummaryConfirmationLocalService, mockMcc, mockActions)(
+      using scala.concurrent.ExecutionContext.Implicits.global
+    )
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockKeyStore)
+    reset(mockSummaryConfirmationLocalService)
   }
 
   "downloadPrintable" should {
@@ -66,5 +67,7 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
   }
 
   def setupKeyStore(summaryText: Option[String]): Unit =
-    when(mockKeyStore.fetchSummaryForPrint()(using any())) `thenReturn` Future.successful(summaryText)
+    when(mockSummaryConfirmationLocalService.fetchSummaryForPrint()(using any())) `thenReturn` Future.successful(
+      summaryText
+    )
 }

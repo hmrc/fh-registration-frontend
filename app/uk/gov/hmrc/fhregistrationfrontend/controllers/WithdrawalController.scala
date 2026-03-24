@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.WithdrawalConfirmat
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.WithdrawalReasonForm.withdrawalReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
-import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationLocalService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -39,7 +39,7 @@ class WithdrawalController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  summaryConfirmationService: SummaryConfirmationService,
+  summaryConfirmationLocalService: SummaryConfirmationLocalService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -64,7 +64,7 @@ class WithdrawalController @Inject() (
       .fold(
         formWithError => Future successful BadRequest(views.withdrawal_reason(formWithError)),
         withdrawalReason =>
-          summaryConfirmationService
+          summaryConfirmationLocalService
             .saveWithdrawalReason(withdrawalReason)
             .map(_ => Redirect(routes.WithdrawalController.confirm))
       )
@@ -72,7 +72,7 @@ class WithdrawalController @Inject() (
 
   def withWithdrawalReason(f: EnrolledUserRequest[?] => WithdrawalReason => Future[Result]): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
-      summaryConfirmationService.fetchWithdrawalReason() flatMap {
+      summaryConfirmationLocalService.fetchWithdrawalReason() flatMap {
         case Some(reason) => f(request)(reason)
         case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }

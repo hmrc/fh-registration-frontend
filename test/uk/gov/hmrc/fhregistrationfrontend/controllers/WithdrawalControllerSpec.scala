@@ -20,12 +20,13 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm
 import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum, WithdrawalReasonForm}
-import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationLocalService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToFormImpl
 import uk.gov.hmrc.fhregistrationfrontend.teststubs.{ActionsMock, FhddsConnectorMocks}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -33,13 +34,13 @@ class WithdrawalControllerSpec
     extends ControllerSpecWithGuiceApp with FhddsConnectorMocks with ActionsMock with BeforeAndAfterEach {
 
   val desToForm = new DesToFormImpl()
-  val mockKeyStoreService = mock[SummaryConfirmationService]
+  val mockSummaryConfirmationLocalService = mock[SummaryConfirmationLocalService]
 
   val controller = new WithdrawalController(
     commonDependencies,
     mockFhddsConnector,
     desToForm,
-    mockKeyStoreService,
+    mockSummaryConfirmationLocalService,
     mockMcc,
     mockActions,
     views
@@ -47,7 +48,7 @@ class WithdrawalControllerSpec
 
   override def afterEach(): Unit = {
     super.afterEach()
-    reset(mockKeyStoreService, mockFhddsConnector, mockActions)
+    reset(mockSummaryConfirmationLocalService, mockFhddsConnector, mockActions)
   }
 
   override def beforeEach() = {
@@ -183,11 +184,15 @@ class WithdrawalControllerSpec
     }
   }
 
-  def setupSaveWithdrawalReason() =
-    when(mockKeyStoreService.saveWithdrawalReason(any())(using any())) `thenReturn` Future.successful(())
+  def setupSaveWithdrawalReason(
+    reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))
+  ) =
+    when(mockSummaryConfirmationLocalService.saveWithdrawalReason(any())(using any[HeaderCarrier]()))
+      .thenReturn(Future.successful(reason))
 
   def setupKeyStoreWithdrawalReason(
     reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))
-  ): Unit =
-    when(mockKeyStoreService.fetchWithdrawalReason()(using any())) `thenReturn` Future.successful(reason)
+  ) =
+    when(mockSummaryConfirmationLocalService.fetchWithdrawalReason()(using any[HeaderCarrier]()))
+      .thenReturn(Future.successful(reason))
 }

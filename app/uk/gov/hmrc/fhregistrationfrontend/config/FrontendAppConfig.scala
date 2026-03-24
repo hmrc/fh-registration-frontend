@@ -35,7 +35,6 @@ trait AppConfig {
   val newBusinessPartnerPagesEnabled: Boolean
   val newCompanyOfficersPagesEnabled: Boolean
 
-  val isNewSummaryConfirmationCacheEnabled: Boolean
   val isNewSessionRepositoryCacheEnabled: Boolean
 
   def serviceMaxNoOfAttempts: Int
@@ -83,7 +82,6 @@ class FrontendAppConfig @Inject() (
 
   override val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
 
-  override val isNewSummaryConfirmationCacheEnabled: Boolean = getBoolean("isNewSummaryConfirmationCacheEnabled")
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
   override def serviceMaxNoOfAttempts: Int = _serviceMaxNoOfAttempts
 
