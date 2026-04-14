@@ -46,8 +46,8 @@ class SummaryConfirmationLocalServiceSpec
 
   val service = new SummaryConfirmationLocalService(mockSessionRepository, mockConfig)
 
-  val summaryForPrintKeyTestData = "some-html-summary"
   val sessionIdExampleTestData = "test-session-id"
+  val summaryForPrintKeyTestData = "some-html-summary"
   val withdrawalReasonTestData: WithdrawalReason =
     WithdrawalReason(WithdrawalReasonEnum.NoLongerApplicable, Some("testData"))
   val deregistrationReasonTestData: DeregistrationReason =
