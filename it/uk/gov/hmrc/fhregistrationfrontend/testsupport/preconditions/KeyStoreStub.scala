@@ -3,7 +3,7 @@ package uk.gov.hmrc.fhregistrationfrontend.testsupport.preconditions
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 
-case class KeyStoreStub()(implicit builder: PreconditionBuilder) {
+case class LocalSummaryStub()(implicit builder: PreconditionBuilder) {
 
   def fetchWithdrawalReason(sessionId: String = "some-id") = {
     stubFor(

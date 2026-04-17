@@ -16,7 +16,7 @@ import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.health.HealthController
 import org.mongodb.scala.SingleObservableFuture
-import uk.gov.hmrc.fhregistrationfrontend.repositories.SessionRepository
+import uk.gov.hmrc.fhregistrationfrontend.repositories.{SessionRepository, SummaryConfirmationRepository}
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await
@@ -99,6 +99,8 @@ trait TestConfiguration
       Map(s"auditing.consumer.baseUri.host" -> wiremockHost, s"auditing.consumer.baseUri.port" -> wiremockPort)
 
   val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
+
+  val summaryConfirmationRepo: SummaryConfirmationRepository = app.injector.instanceOf[SummaryConfirmationRepository]
 
   lazy val ws: WSClient = app.injector.instanceOf[WSClient]
 
