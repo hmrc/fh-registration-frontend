@@ -20,7 +20,7 @@ lazy val scoverageSettings = Seq(
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     Test / parallelExecution := false
-  )
+)
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)

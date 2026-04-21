@@ -10,7 +10,6 @@ class PreconditionBuilder extends PreconditionHelpers {
   def businessCustomerFrontend = BusinessCustomerFrontendStub()
   def fhddsBackend = FhddsBackendStub()
   def save4later = Save4LaterStub()
-  def keyStore = KeyStoreStub()
 
   def addressLookup = AddressLookupStub()
 

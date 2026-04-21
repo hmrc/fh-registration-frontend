@@ -28,7 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, 
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
-import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, SummaryConfirmationService}
+import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, SummaryConfirmationLocalService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
 import java.time.LocalDate
@@ -41,7 +41,7 @@ class DeclarationController @Inject() (
   ds: CommonPlayDependencies,
   desToForm: DesToForm,
   fhddsConnector: FhddsConnector,
-  summaryConfirmationService: SummaryConfirmationService,
+  summaryConfirmationLocalService: SummaryConfirmationLocalService,
   cc: MessagesControllerComponents,
   actions: Actions,
   journeys: Journeys,
@@ -72,7 +72,7 @@ class DeclarationController @Inject() (
   }
 
   private def renderAcknowledgmentPage(implicit request: UserRequest[?]): Future[Option[Result]] =
-    summaryConfirmationService.fetchSummaryForPrint() map { userSummary =>
+    summaryConfirmationLocalService.fetchSummaryForPrint() map { userSummary =>
       for {
         email             <- request.session get emailSessionKey
         timestamp         <- request.session get processingTimestampSessionKey
@@ -114,7 +114,7 @@ class DeclarationController @Inject() (
               )
             ),
           _.flatMap { response =>
-            summaryConfirmationService
+            summaryConfirmationLocalService
               .saveSummaryForPrint(getSummaryPrintable(journeys)(using request).toString())
               .map(_ => true)
               .recover { case _ => false }

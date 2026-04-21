@@ -25,7 +25,7 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.confirmation.ConfirmationForm.co
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReason
 import uk.gov.hmrc.fhregistrationfrontend.forms.deregistration.DeregistrationReasonForm.deregistrationReasonForm
 import uk.gov.hmrc.fhregistrationfrontend.models.des
-import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationService
+import uk.gov.hmrc.fhregistrationfrontend.services.SummaryConfirmationLocalService
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
 
@@ -39,7 +39,7 @@ class DeregistrationController @Inject() (
   ds: CommonPlayDependencies,
   val fhddsConnector: FhddsConnector,
   val desToForm: DesToForm,
-  summaryConfirmationService: SummaryConfirmationService,
+  summaryConfirmationLocalService: SummaryConfirmationLocalService,
   cc: MessagesControllerComponents,
   actions: Actions,
   views: Views
@@ -65,7 +65,7 @@ class DeregistrationController @Inject() (
       .fold(
         formWithError => Future successful BadRequest(views.deregistration_reason(formWithError)),
         deregistrationReason =>
-          summaryConfirmationService
+          summaryConfirmationLocalService
             .saveDeregistrationReason(deregistrationReason)
             .map(_ => Redirect(routes.DeregistrationController.confirm))
       )
@@ -92,7 +92,7 @@ class DeregistrationController @Inject() (
     f: EnrolledUserRequest[?] => DeregistrationReason => Future[Result]
   ): Action[AnyContent] =
     enrolledUserAction.async { implicit request =>
-      summaryConfirmationService.fetchDeregistrationReason() flatMap {
+      summaryConfirmationLocalService.fetchDeregistrationReason() flatMap {
         case Some(reason) => f(request)(reason)
         case None         => Future successful errorHandler.errorResultsPages(Results.BadRequest)
       }

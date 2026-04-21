@@ -5,8 +5,15 @@ import play.api.test.WsTestClient
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.fhregistrationfrontend.testsupport.{Specifications, TestConfiguration}
 import play.api.libs.ws.writeableOf_urlEncodedForm
+import uk.gov.hmrc.fhregistrationfrontend.forms.withdrawal.{WithdrawalReason, WithdrawalReasonEnum}
+import uk.gov.hmrc.fhregistrationfrontend.models.SummaryConfirmation
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.Await
 
 class WithdrawalControllerIntegrationSpec extends Specifications with TestConfiguration {
+
+  val withdrawalReasonTestData: WithdrawalReason =
+    WithdrawalReason(WithdrawalReasonEnum.NoLongerApplicable, Some("testData"))
 
   "WithdrawalController" should {
 
@@ -38,7 +45,7 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Post the reason for the withdrawal" in {
 
-      `given`.withdrawalPrecondition.keyStore.saveWithdrawalReason(sessionId)
+      `given`.withdrawalPrecondition
 
       WsTestClient.withClient { client =>
         val result =
@@ -59,7 +66,19 @@ class WithdrawalControllerIntegrationSpec extends Specifications with TestConfig
 
     "Handle the reason and let the user to confirm withdraw" in {
 
-      `given`.withdrawalPrecondition.keyStore.fetchWithdrawalReason(sessionId).fhddsBackend.getSubscription()
+      `given`.withdrawalPrecondition.fhddsBackend.getSubscription()
+
+      Await.result(
+        summaryConfirmationRepo.set(
+          SummaryConfirmation(
+            sessionId,
+            None,
+            Some(withdrawalReasonTestData),
+            None
+          )
+        ),
+        3.seconds
+      )
 
       WsTestClient.withClient { client =>
         val result =
