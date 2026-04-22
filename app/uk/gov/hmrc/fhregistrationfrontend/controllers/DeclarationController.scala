@@ -27,6 +27,8 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.decl
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{JourneyType, Journeys, PageDataLoader}
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, Declaration}
 import uk.gov.hmrc.fhregistrationfrontend.models.des.SubScriptionCreate
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome.{ActiveSubscription, NoChanges}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.{DesToForm, Diff, FormToDes, FormToDesImpl}
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, SummaryConfirmationLocalService}
 import uk.gov.hmrc.fhregistrationfrontend.views.Views
@@ -48,6 +50,7 @@ class DeclarationController @Inject() (
   views: Views
 )(implicit save4LaterService: Save4LaterService, ec: ExecutionContext)
     extends AppController(ds, cc) with SummaryFunctions {
+  private val activeSubscriptionMessageKey = "fh.declaration.activeSubscription.error"
 
   val emailSessionKey = "declaration_email"
   val processingTimestampSessionKey = "declaration_processing_timestamp"
@@ -103,53 +106,47 @@ class DeclarationController @Inject() (
 
       },
       success = usersDeclaration =>
-        sendSubscription(usersDeclaration).fold(
-          error =>
-            Future successful BadRequest(
-              views.declaration(
-                form,
-                Some(request.verifiedEmail),
-                request.bpr,
-                summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false))
-              )
-            ),
-          _.flatMap { response =>
-            summaryConfirmationLocalService
-              .saveSummaryForPrint(getSummaryPrintable(journeys)(using request).toString())
-              .map(_ => true)
-              .recover { case _ => false }
-              .map { pdfSaved =>
-                Redirect(routes.DeclarationController.showAcknowledgment())
-                  .withSession(
-                    request.session
-                      + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)
-                      + (emailSessionKey               -> usersDeclaration.email)
-                      + (processingTimestampSessionKey -> response.processingDate.getTime.toString)
-                  )
-              }
-          }
-        )
+        sendSubscription(usersDeclaration).flatMap { submissionResult =>
+          submissionResult.fold(
+            submissionOutcome => Future successful handleSubmissionOutcome(form, submissionOutcome),
+            response =>
+              summaryConfirmationLocalService
+                .saveSummaryForPrint(getSummaryPrintable(journeys)(using request).toString())
+                .map(_ => true)
+                .recover { case _ => false }
+                .map { _ =>
+                  Redirect(routes.DeclarationController.showAcknowledgment())
+                    .withSession(
+                      request.session
+                        + (journeyTypeKey                -> request.journeyRequest.journeyType.toString)
+                        + (emailSessionKey               -> usersDeclaration.email)
+                        + (processingTimestampSessionKey -> response.processingDate.getTime.toString)
+                    )
+                }
+          )
+        }
     )
   }
 
   private def sendSubscription(
     declaration: Declaration
-  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
-    val submissionResult = request.journeyRequest.journeyType match {
-      case JourneyType.Amendment => amendedSubmission(declaration)
-      case JourneyType.Variation => amendedSubmission(declaration)
-      case _                     => createSubmission(declaration)
-    }
+  )(implicit request: SummaryRequest[?]): Future[Either[SubmissionOutcome, SubmissionResponse]] = {
+    val submissionResult: Future[Either[SubmissionOutcome, SubmissionResponse]] =
+      request.journeyRequest.journeyType match {
+        case JourneyType.Amendment => amendedSubmission(declaration)
+        case JourneyType.Variation => amendedSubmission(declaration)
+        case _                     => createSubmission(declaration)
+      }
 
-    submissionResult.map { submissionResponse =>
-      submissionResponse foreach { case _ => save4LaterService.removeUserData(request.userId) }
-      submissionResponse
+    submissionResult.map { result =>
+      result.foreach(_ => save4LaterService.removeUserData(request.userId))
+      result
     }
   }
 
   def createSubmission(
     declaration: Declaration
-  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
+  )(implicit request: SummaryRequest[?]): Future[Either[SubmissionOutcome, SubmissionResponse]] = {
     val subscription = getSubscriptionForDes(formToDes, declaration, request.verifiedEmail, request)
     val payload = SubScriptionCreate(subscription)
 
@@ -158,17 +155,17 @@ class DeclarationController @Inject() (
       Json toJson payload
     )
 
-    Right(fhddsConnector.createSubmission(request.bpr.safeId.get, request.registrationNumber, submissionRequest))
+    fhddsConnector.createSubmission(request.bpr.safeId.get, request.registrationNumber, submissionRequest)
   }
 
   def amendedSubmission(
     declaration: Declaration
-  )(implicit request: SummaryRequest[?]): Either[String, Future[SubmissionResponse]] = {
+  )(implicit request: SummaryRequest[?]): Future[Either[SubmissionOutcome, SubmissionResponse]] = {
     val newDesDeclaration = formToDes.declaration(declaration)
     val prevDesDeclaration = request.journeyRequest.displayDeclaration.get
 
     if (prevDesDeclaration == newDesDeclaration && request.journeyRequest.hasUpdates == Some(false))
-      Left("no.changes")
+      Future.successful(Left(NoChanges))
     else {
       val subscription = getSubscriptionForDes(
         formToDes.withModificationFlags(true, Some(LocalDate.now)),
@@ -191,9 +188,7 @@ class DeclarationController @Inject() (
         Json toJson payload
       )
 
-      Right(
-        fhddsConnector.amendSubmission(request.registrationNumber.get, submissionRequest)
-      )
+      fhddsConnector.amendSubmission(request.registrationNumber.get, submissionRequest)
     }
   }
 
@@ -211,4 +206,28 @@ class DeclarationController @Inject() (
       case _ =>
         formToDes `partnership` (request.bpr, verifiedEmail, journeys `partnershipApplication` pageDataLoader, d)
     }
+
+  private def handleSubmissionOutcome(form: play.api.data.Form[Declaration], submissionOutcome: SubmissionOutcome)(
+    implicit request: SummaryRequest[?]
+  ): Result = submissionOutcome match {
+    case NoChanges =>
+      BadRequest(
+        views.declaration(
+          form,
+          Some(request.verifiedEmail),
+          request.bpr,
+          summaryPageParams(request.journeyRequest.journeyType, hasUpdates = Some(false))
+        )
+      )
+    case ActiveSubscription =>
+      BadRequest(
+        views.declaration(
+          form,
+          Some(request.verifiedEmail),
+          request.bpr,
+          summaryPageParams(request.journeyRequest.journeyType),
+          Some(messagesApi.preferred(request)(activeSubscriptionMessageKey))
+        )
+      )
+  }
 }
