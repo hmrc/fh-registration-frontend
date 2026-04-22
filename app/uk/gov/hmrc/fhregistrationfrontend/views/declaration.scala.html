@@ -27,14 +27,16 @@
 
 
 @this(layout: layout, viewHelpers: ViewHelpers)
-@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams)(implicit request: Request[?], messages: Messages)
+@(declarationForm: Form[Declaration], defaultEmail: Option[String], bpr: BusinessRegistrationDetails, params: SummaryPageParams, alertMessage: Option[String] = None)(implicit request: Request[?], messages: Messages)
 
 
 @linkVal = @{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SummaryController.summary().url}
 
 @showAlert = @{
-  params.hasAmendments.filter(_ == false).map { _ =>
-    Alert(Messages(s"fh.declaration.${params.mode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.mode}.hasAmendments.error.linkText")), Some(linkVal))
+  alertMessage.map(Alert(_)).orElse {
+    params.hasAmendments.filter(_ == false).map { _ =>
+      Alert(Messages(s"fh.declaration.${params.mode}.hasAmendments.error"), Some(Messages(s"fh.declaration.${params.mode}.hasAmendments.error.linkText")), Some(linkVal))
+    }
   }
 }
 

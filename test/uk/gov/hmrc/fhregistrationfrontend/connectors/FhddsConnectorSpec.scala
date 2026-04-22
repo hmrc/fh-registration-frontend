@@ -28,6 +28,7 @@ import uk.gov.hmrc.fhregistrationfrontend.models.des.{Deregistration, Deregistra
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome.ActiveSubscription
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -62,8 +63,8 @@ class FhddsConnectorSpec extends HttpClientV2Helper {
         val response = SubmissionResponse("formBundleId", new Date())
         val submissionData = Json.obj("test" -> "data")
         val request = SubmissionRequest("test@example.com", submissionData)
-        requestBuilderExecute(Future.successful(Json.toJson(response).as[SubmissionResponse]))
-        connector.createSubmission("safeId", None, request).futureValue shouldBe response
+        requestBuilderExecute(Future.successful(HttpResponse(200, Json.toJson(response).toString())))
+        connector.createSubmission("safeId", None, request).futureValue shouldBe Right(response)
         jsonCaptor.getValue shouldBe Json.toJson(request)
       }
 
@@ -71,9 +72,31 @@ class FhddsConnectorSpec extends HttpClientV2Helper {
         val response = SubmissionResponse("formBundleId", new Date())
         val submissionData = Json.obj("test" -> "data")
         val request = SubmissionRequest("test@example.com", submissionData)
-        requestBuilderExecute(Future.successful(Json.toJson(response).as[SubmissionResponse]))
-        connector.createSubmission("safeId", Some("regNumber"), request).futureValue shouldBe response
+        requestBuilderExecute(Future.successful(HttpResponse(200, Json.toJson(response).toString())))
+        connector.createSubmission("safeId", Some("regNumber"), request).futureValue shouldBe Right(response)
         jsonCaptor.getValue shouldBe Json.toJson(request)
+      }
+
+      "return ACTIVE_SUBSCRIPTION as a submission outcome" in {
+        val submissionData = Json.obj("test" -> "data")
+        val request = SubmissionRequest("test@example.com", submissionData)
+        requestBuilderExecute(
+          Future.successful(
+            HttpResponse(
+              403,
+              Json
+                .obj(
+                  "code"   -> "ACTIVE_SUBSCRIPTION",
+                  "reason" -> "Business Partner already has an active FHDDS Subscription."
+                )
+                .toString()
+            )
+          )
+        )
+
+        connector.createSubmission("safeId", None, request).map { result =>
+          result shouldBe Left(ActiveSubscription)
+        }
       }
     }
 
@@ -82,9 +105,31 @@ class FhddsConnectorSpec extends HttpClientV2Helper {
         val response = SubmissionResponse("formBundleId", new Date())
         val submissionData = Json.obj("test" -> "data")
         val request = SubmissionRequest("test@example.com", submissionData)
-        requestBuilderExecute(Future.successful(Json.toJson(response).as[SubmissionResponse]))
-        connector.amendSubmission("12345", request).futureValue shouldBe response
+        requestBuilderExecute(Future.successful(HttpResponse(200, Json.toJson(response).toString())))
+        connector.amendSubmission("12345", request).futureValue shouldBe Right(response)
         jsonCaptor.getValue shouldBe Json.toJson(request)
+      }
+
+      "return amend ACTIVE_SUBSCRIPTION as a submission outcome" in {
+        val submissionData = Json.obj("test" -> "data")
+        val request = SubmissionRequest("test@example.com", submissionData)
+        requestBuilderExecute(
+          Future.successful(
+            HttpResponse(
+              403,
+              Json
+                .obj(
+                  "code"   -> "ACTIVE_SUBSCRIPTION",
+                  "reason" -> "Business Partner already has an active FHDDS Subscription."
+                )
+                .toString()
+            )
+          )
+        )
+
+        connector.amendSubmission("12345", request).map { result =>
+          result shouldBe Left(ActiveSubscription)
+        }
       }
     }
 

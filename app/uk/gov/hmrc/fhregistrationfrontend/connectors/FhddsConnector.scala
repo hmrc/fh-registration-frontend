@@ -24,14 +24,25 @@ import uk.gov.hmrc.fhregistration.models.fhdds.{SubmissionRequest, SubmissionRes
 import uk.gov.hmrc.fhregistrationfrontend.models.des.{DeregistrationRequest, SubscriptionDisplayWrapper, WithdrawalRequest}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.EnrolmentProgress
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.FhddsStatus.FhddsStatus
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome
+import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome.ActiveSubscription
 import uk.gov.hmrc.fhregistrationfrontend.models.submissiontracking.SubmissionTracking
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.client.HttpClientV2
 import play.api.libs.ws.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
+
+object FhddsConnector {
+  final case class SubmissionErrorResponse(code: String, reason: String)
+
+  object SubmissionErrorResponse {
+    implicit val reads: Reads[SubmissionErrorResponse] = Json.reads[SubmissionErrorResponse]
+  }
+}
 
 @Singleton
 class FhddsConnector @Inject() (
@@ -39,7 +50,26 @@ class FhddsConnector @Inject() (
   val runModeConfiguration: Configuration
 )(implicit ec: ExecutionContext)
     extends ServicesConfig(runModeConfiguration) {
+  import FhddsConnector._
+
+  private val activeSubscriptionCode = "ACTIVE_SUBSCRIPTION"
   val FHDSSServiceUrl: String = baseUrl("fhdds")
+
+  private def submissionErrorResponse(response: HttpResponse): SubmissionErrorResponse =
+    Try(response.json.as[SubmissionErrorResponse])
+      .getOrElse(SubmissionErrorResponse("UNKNOWN_SUBMISSION_ERROR", response.body))
+
+  private def submissionRead(response: HttpResponse): Either[SubmissionOutcome, SubmissionResponse] =
+    response.status match {
+      case status if status >= 200 && status < 300 =>
+        Right(response.json.as[SubmissionResponse])
+      case status if status >= 400 && status < 500 =>
+        val error = submissionErrorResponse(response)
+        if (error.code == activeSubscriptionCode) Left(ActiveSubscription)
+        else throw UpstreamErrorResponse(s"$status received from fhdds: ${error.reason}", status, status)
+      case status =>
+        throw UpstreamErrorResponse(s"$status received from fhdds", status, status)
+    }
 
   def getStatus(fhddsRegistrationNumber: String)(implicit headerCarrier: HeaderCarrier): Future[FhddsStatus] = {
     val url = s"$FHDSSServiceUrl/fhdds/subscription/$fhddsRegistrationNumber/status"
@@ -55,21 +85,21 @@ class FhddsConnector @Inject() (
 
   def createSubmission(safeId: String, currentRegNumber: Option[String], request: SubmissionRequest)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[SubmissionResponse] = {
+  ): Future[Either[SubmissionOutcome, SubmissionResponse]] = {
     val url = currentRegNumber.fold(
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId"
     ) { currentRegNumber =>
       s"$FHDSSServiceUrl/fhdds/subscription/subscribe/$safeId?currentRegNumber=$currentRegNumber"
     }
 
-    http.post(url"$url").withBody(Json.toJson(request)).execute[SubmissionResponse]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[HttpResponse].map(submissionRead)
   }
 
   def amendSubmission(fhddsRegistrationNumber: String, request: SubmissionRequest)(implicit
     headerCarrier: HeaderCarrier
-  ): Future[SubmissionResponse] = {
+  ): Future[Either[SubmissionOutcome, SubmissionResponse]] = {
     val url = s"$FHDSSServiceUrl/fhdds/subscription/amend/$fhddsRegistrationNumber"
-    http.post(url"$url").withBody(Json.toJson(request)).execute[SubmissionResponse]
+    http.post(url"$url").withBody(Json.toJson(request)).execute[HttpResponse].map(submissionRead)
   }
 
   def withdraw(fhddsRegistrationNumber: String, request: WithdrawalRequest)(implicit
