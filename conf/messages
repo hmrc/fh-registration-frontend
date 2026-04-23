@@ -635,6 +635,8 @@ fh.companyIdentification.companyRegistration.error.pattern=Company registration 
 fh.companyIdentification.role.error.required=Select what role company officer {0} has in the company
 fh.company_officers.addMore=Are there any more company officers?
 fh.companyIdentification.error.required=Select whether there are any more to add
+fh.company_officers.company.vat_registration.confirm.label = Does the company have a UK VAT registration number?
+fh.company_officers.company.company_registration_number.label = Company registration number
 
 # - Business partners v2
 #====================================================================================================================================================================================
