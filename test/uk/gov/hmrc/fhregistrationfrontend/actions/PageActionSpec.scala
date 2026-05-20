@@ -326,6 +326,27 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       refined.isVatNumberUniqueForVatNumberPage(nonUniqueVatNumber) shouldBe false
     }
 
+    "Check if prefixed vat number is not unique when unprefixed value is already used" in {
+      val prefixedNonUniqueVatNumber = FormTestData.vatNumber.copy(value = Some("GB423456789"))
+      val seqPages = journeys.partnershipPages map { page =>
+        page.id match {
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` FormTestData.partners
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` prefixedNonUniqueVatNumber
+          case _                => page
+        }
+      }
+
+      val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+      val action = new PageAction(vatNumberPage.id, None, journeys)(
+        using StubbedErrorHandler,
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
+
+      val refined = refinedRequest(action, request)
+      refined.isVatNumberUniqueForVatNumberPage(prefixedNonUniqueVatNumber) shouldBe false
+    }
+
     "Check if vat number unique in business partners when passed a first business partner with unique vat number - business partnership journey" in {
       val businessPartnerWithNonUniqueVatNumber =
         FormTestData.businessPartnerSoleProprietorWithVatNumber(FormTestData.vatNumber.value)
@@ -376,6 +397,33 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForBusinessPartner(
         businessPartnersWithNonUniqueFirstVatNumber.values.toList,
+        index = 0
+      ) shouldBe false
+    }
+
+    "Check if prefixed vat number in business partners is not unique when applicant vat number is unprefixed" in {
+      val businessPartnerWithPrefixedVatNumber =
+        FormTestData.businessPartnerSoleProprietorWithVatNumber(Some("GB123456789"))
+      val businessPartnersWithPrefixedVatNumber =
+        FormTestData.partners.updated(0, businessPartnerWithPrefixedVatNumber)
+      val seqPages = journeys.partnershipPages map { page =>
+        page.id match {
+          case businessPartnersPage.id =>
+            page.asInstanceOf[RepeatingPage[BusinessPartner]] `withData` businessPartnersWithPrefixedVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
+          case _                => page
+        }
+      }
+
+      val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+      val action = new PageAction(businessPartnersPage.id, None, journeys)(
+        using StubbedErrorHandler,
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
+
+      val refined = refinedRequest(action, request)
+      refined.isVatNumberUniqueForBusinessPartner(
+        businessPartnersWithPrefixedVatNumber.values.toList,
         index = 0
       ) shouldBe false
     }
@@ -484,6 +532,33 @@ class PageActionSpec extends ActionSpecBase with JourneyRequestBuilder {
       val refined = refinedRequest(action, request)
       refined.isVatNumberUniqueForCompanyOfficer(
         companyOfficersWithNonUniqueFirstVatNumber.values.toList,
+        index = 0
+      ) shouldBe false
+    }
+
+    "Check if prefixed vat number in company officers is not unique when applicant vat number is unprefixed" in {
+      val companyOfficerWithPrefixedVatNumber =
+        FormTestData.companyOfficerCompanyWithVatNumber(Some("GB123456789"))
+      val companyOfficersWithPrefixedVatNumber =
+        FormTestData.companyOfficers.updated(0, companyOfficerWithPrefixedVatNumber)
+      val seqPages = journeys.limitedCompanyPages map { page =>
+        page.id match {
+          case companyOfficersPage.id =>
+            page.asInstanceOf[RepeatingPage[CompanyOfficer]] `withData` companyOfficersWithPrefixedVatNumber
+          case vatNumberPage.id => page.asInstanceOf[Page[VatNumber]] `withData` FormTestData.vatNumber
+          case _                => page
+        }
+      }
+
+      val request = journeyRequest(journeyPages = new JourneyPages(seqPages))
+      val action = new PageAction(companyOfficersPage.id, None, journeys)(
+        using StubbedErrorHandler,
+        scala.concurrent.ExecutionContext.Implicits.global
+      )
+
+      val refined = refinedRequest(action, request)
+      refined.isVatNumberUniqueForCompanyOfficer(
+        companyOfficersWithPrefixedVatNumber.values.toList,
         index = 0
       ) shouldBe false
     }

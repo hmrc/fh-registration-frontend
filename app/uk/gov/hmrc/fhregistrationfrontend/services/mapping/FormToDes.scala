@@ -51,8 +51,14 @@ trait FormToDes {
   def declaration(d: Declaration): des.Declaration
 }
 
-case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Option[LocalDate] = None)
-    extends FormToDes {
+case class FormToDesImpl(
+  withModificationFlags: Boolean = false,
+  changeDate: Option[LocalDate] = None,
+  vatNumberPrefixesToRemove: Seq[String] = VatNumber.defaultPrefixesToRemove
+) extends FormToDes {
+
+  private def sanitisedVatNumber(vatNumber: Option[String]): Option[String] =
+    VatNumber.sanitisedVatNumber(vatNumber, vatNumberPrefixesToRemove)
 
   def withModificationFlags(withModificationFlags: Boolean = false, changeDate: Option[LocalDate]): FormToDes =
     this.copy(withModificationFlags = true, changeDate = changeDate)
@@ -223,7 +229,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
   ): SoleProprietorIdentification =
     SoleProprietorIdentification(
       st.nationalInsuranceNumber.value,
-      VatNumber.sanitisedVatNumber(st.vatNumber.value),
+      sanitisedVatNumber(st.vatNumber.value),
       bpr.utr
     )
 
@@ -231,7 +237,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.NonProprietor(
       tradingName.value,
       des.NonProprietorIdentification(
-        VatNumber.sanitisedVatNumber(vatNumber.value),
+        sanitisedVatNumber(vatNumber.value),
         bpr.utr
       )
     )
@@ -363,7 +369,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
               Name(firstName = s.firstName, None, lastName = s.lastName),
               nino = s.nino,
               identification = PartnerIdentification(
-                vatRegistrationNumber = s.vat,
+                vatRegistrationNumber = sanitisedVatNumber(s.vat),
                 uniqueTaxpayerReference = s.uniqueTaxpayerReference
               ),
               tradingName = s.tradeName
@@ -377,7 +383,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
               CompanyName(companyName = Some(p.partnershipName), tradingName = p.tradeName),
               identification = PartnerIdentification(
-                vatRegistrationNumber = p.vat,
+                vatRegistrationNumber = sanitisedVatNumber(p.vat),
                 uniqueTaxpayerReference = p.uniqueTaxpayerReference
               )
             ),
@@ -390,7 +396,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             partnerTypeDetail = LimitedLiabilityPartnershipType(
               CompanyName(companyName = Some(l.limitedLiabilityPartnershipName), tradingName = l.tradeName),
               identification = PartnerIdentification(
-                vatRegistrationNumber = l.vat,
+                vatRegistrationNumber = sanitisedVatNumber(l.vat),
                 uniqueTaxpayerReference = l.uniqueTaxpayerReference
               ),
               incorporationDetails = IncorporationDetail(
@@ -407,7 +413,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             partnerTypeDetail = LimitedLiabilityPartnershipType(
               CompanyName(companyName = Some(c.companyName), tradingName = c.tradeName),
               identification = PartnerIdentification(
-                vatRegistrationNumber = c.vat,
+                vatRegistrationNumber = sanitisedVatNumber(c.vat),
                 uniqueTaxpayerReference = c.uniqueTaxpayerReference
               ),
               incorporationDetails = IncorporationDetail(
@@ -424,7 +430,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
             partnerTypeDetail = PartnershipOrUnIncorporatedBodyPartnerType(
               CompanyName(companyName = Some(u.unincorporatedBodyName), tradingName = u.tradeName),
               identification = PartnerIdentification(
-                vatRegistrationNumber = u.vat,
+                vatRegistrationNumber = sanitisedVatNumber(u.vat),
                 uniqueTaxpayerReference = u.uniqueTaxpayerReference
               )
             ),
@@ -446,7 +452,7 @@ case class FormToDesImpl(withModificationFlags: Boolean = false, changeDate: Opt
     des.CompanyAsOfficial(
       role,
       des.CompanyName(Some(companyName), None),
-      des.CompanyIdentification(c.vat, None, c.crn),
+      des.CompanyIdentification(sanitisedVatNumber(c.vat), None, c.crn),
       modification
     )
   }

@@ -26,9 +26,16 @@ case class VatNumber(
 object VatNumber {
   implicit val format: OFormat[VatNumber] = Json.format[VatNumber]
 
-  def sanitisedVatNumber(vatNumber: Option[String]): Option[String] =
-    vatNumber match {
-      case Some(value) if value.toLowerCase().contains("gb") => Some(value.substring(2))
-      case _                                                 => vatNumber
+  val defaultPrefixesToRemove: Seq[String] = Seq("GB")
+
+  def sanitisedVatNumber(
+    vatNumber: Option[String],
+    prefixesToRemove: Seq[String] = defaultPrefixesToRemove
+  ): Option[String] =
+    vatNumber.map { value =>
+      val valueWithoutSpaces = value.replaceAll("\\s", "")
+      prefixesToRemove
+        .find(prefix => valueWithoutSpaces.regionMatches(true, 0, prefix, 0, prefix.length))
+        .fold(valueWithoutSpaces)(prefix => valueWithoutSpaces.substring(prefix.length))
     }
 }

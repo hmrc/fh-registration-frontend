@@ -63,13 +63,14 @@ class Actions @Inject() (
   def startVariationAction = userAction andThen new StartVariationAction(fhddsConnector)
   def enrolledUserAction = userAction andThen new EnrolledUserAction
   def journeyAction = userAction andThen new JourneyAction(journeys)
-  def pageAction(pageId: String) = journeyAction andThen new PageAction(pageId, None, journeys)
+  def pageAction(pageId: String) =
+    journeyAction andThen new PageAction(pageId, None, journeys, frontendAppConfig.vatNumberPrefixesToRemove)
 
   def newApplicationAction =
     noPendingSubmissionFilter andThen notAdminUser andThen new NewApplicationAction(fhddsConnector)
 
   def pageAction(pageId: String, sectionId: Option[String]) =
-    journeyAction andThen new PageAction(pageId, sectionId, journeys)
+    journeyAction andThen new PageAction(pageId, sectionId, journeys, frontendAppConfig.vatNumberPrefixesToRemove)
 
   def summaryAction =
     userAction andThen journeyAction andThen new SummaryAction

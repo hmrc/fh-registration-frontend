@@ -55,7 +55,7 @@ class DeclarationController @Inject() (
   val emailSessionKey = "declaration_email"
   val processingTimestampSessionKey = "declaration_processing_timestamp"
   val journeyTypeKey = "journey_type"
-  val formToDes: FormToDes = new FormToDesImpl()
+  val formToDes: FormToDes = new FormToDesImpl(vatNumberPrefixesToRemove = ds.appConfig.vatNumberPrefixesToRemove)
 
   import actions._
 
