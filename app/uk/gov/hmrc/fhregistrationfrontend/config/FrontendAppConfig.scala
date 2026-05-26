@@ -19,6 +19,7 @@ package uk.gov.hmrc.fhregistrationfrontend.config
 import javax.inject.{Inject, Singleton}
 import com.google.inject.ImplementedBy
 import play.api.Configuration
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.VatNumber
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.util.Random
@@ -36,6 +37,8 @@ trait AppConfig {
   val newCompanyOfficersPagesEnabled: Boolean
 
   val isNewSessionRepositoryCacheEnabled: Boolean
+
+  val vatNumberPrefixesToRemove: Seq[String]
 
   def serviceMaxNoOfAttempts: Int
 }
@@ -83,6 +86,9 @@ class FrontendAppConfig @Inject() (
   override val newCompanyOfficersPagesEnabled: Boolean = getBoolean("company-officers-new-enabled")
 
   override val isNewSessionRepositoryCacheEnabled: Boolean = getBoolean("isNewSessionRepositoryCacheEnabled")
+  override val vatNumberPrefixesToRemove: Seq[String] =
+    configuration.getOptional[Seq[String]]("vatNumber.prefixesToRemove").getOrElse(VatNumber.defaultPrefixesToRemove)
+
   override def serviceMaxNoOfAttempts: Int = _serviceMaxNoOfAttempts
 
   // TODO [DLS-7603] - temp save4later solution remove when cookies removed from load function

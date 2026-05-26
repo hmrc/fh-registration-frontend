@@ -27,8 +27,12 @@ import uk.gov.hmrc.fhregistrationfrontend.forms.models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: JourneyRequest[A])
-    extends WrappedRequest[A](request) {
+class PageRequest[A](
+  val journey: JourneyNavigation,
+  p: AnyPage,
+  request: JourneyRequest[A],
+  vatNumberPrefixesToRemove: Seq[String] = VatNumber.defaultPrefixesToRemove
+) extends WrappedRequest[A](request) {
 
   def page[T]: Page[T] = p.asInstanceOf[Page[T]]
   def userId: String = request.userId
@@ -48,9 +52,15 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   private def businessPartners(): List[BusinessPartner] =
     pageDataOpt("businessPartners").getOrElse(ListWithTrackedChanges.empty[BusinessPartner]()).values.toList
 
+  private def sanitisedVatNumber(vatNumber: Option[String]): Option[String] =
+    VatNumber.sanitisedVatNumber(vatNumber, vatNumberPrefixesToRemove)
+
+  private def sanitisedVatNumbers(vatNumbers: List[Option[String]]): List[String] =
+    vatNumbers.flatMap(sanitisedVatNumber)
+
   private[actions] def otherUsedVatNumbersFromVatNumberPage(): List[String] = {
-    val usedVatRegInCompanyOfficers = companyOfficers().flatMap(CompanyOfficer.getVatNumber)
-    val usedVatRegInBusinessPartners = businessPartners().flatMap(BusinessPartner.getVatNumber)
+    val usedVatRegInCompanyOfficers = sanitisedVatNumbers(companyOfficers().map(CompanyOfficer.getVatNumber))
+    val usedVatRegInBusinessPartners = sanitisedVatNumbers(businessPartners().map(BusinessPartner.getVatNumber))
     usedVatRegInCompanyOfficers ++ usedVatRegInBusinessPartners
   }
 
@@ -62,7 +72,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
       case (businessPartner, currentIndex) if currentIndex != index =>
         BusinessPartner.getVatNumber(businessPartner)
     }
-    (usedVatRegInBusinessPartners ++ List(vatNumberRegistering.flatMap(_.value))).flatten
+    sanitisedVatNumbers(usedVatRegInBusinessPartners ++ List(vatNumberRegistering.flatMap(_.value)))
   }
 
   private[actions] def otherUsedVatNumbersFromCompanyOfficersPage(
@@ -73,12 +83,12 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
       case (companyOfficer, currentIndex) if currentIndex != index =>
         CompanyOfficer.getVatNumber(companyOfficer)
     }
-    (usedVatRegInCompanyOfficers ++ List(vatNumberRegistering.flatMap(_.value))).flatten
+    sanitisedVatNumbers(usedVatRegInCompanyOfficers ++ List(vatNumberRegistering.flatMap(_.value)))
   }
 
   def isVatNumberUniqueForVatNumberPage(vatNumberPageData: VatNumber): Boolean = {
     val otherUsedVatNumbers: List[String] = otherUsedVatNumbersFromVatNumberPage()
-    vatNumberPageData.value match {
+    sanitisedVatNumber(vatNumberPageData.value) match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
       case _                                                          => true
     }
@@ -90,7 +100,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   ): Boolean = {
     val otherUsedVatNumbers: List[String] =
       otherUsedVatNumbersFromBusinessPartnersPage(businessPartnersPageData, index)
-    val vatNumberOnBusinessPartner = BusinessPartner.getVatNumber(businessPartnersPageData(index))
+    val vatNumberOnBusinessPartner = sanitisedVatNumber(BusinessPartner.getVatNumber(businessPartnersPageData(index)))
     vatNumberOnBusinessPartner match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
       case _                                                          => true
@@ -103,7 +113,7 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
   ): Boolean = {
     val otherUsedVatNumbers: List[String] =
       otherUsedVatNumbersFromCompanyOfficersPage(companyOfficersPageData, index)
-    val vatNumberOnCompanyOfficer = CompanyOfficer.getVatNumber(companyOfficersPageData(index))
+    val vatNumberOnCompanyOfficer = sanitisedVatNumber(CompanyOfficer.getVatNumber(companyOfficersPageData(index)))
     vatNumberOnCompanyOfficer match {
       case Some(vatNumber) if otherUsedVatNumbers.contains(vatNumber) => false
       case _                                                          => true
@@ -112,7 +122,12 @@ class PageRequest[A](val journey: JourneyNavigation, p: AnyPage, request: Journe
 }
 
 //TODO all exceptional results need to be reviewed
-class PageAction[T, V] @Inject() (pageId: String, sectionId: Option[String], journey: Journeys)(implicit
+class PageAction[T, V] @Inject() (
+  pageId: String,
+  sectionId: Option[String],
+  journey: Journeys,
+  vatNumberPrefixesToRemove: Seq[String] = VatNumber.defaultPrefixesToRemove
+)(implicit
   errorHandler: ErrorHandler,
   val executionContext: ExecutionContext
 ) extends ActionRefiner[JourneyRequest, PageRequest] with FrontendAction {
@@ -129,7 +144,8 @@ class PageAction[T, V] @Inject() (pageId: String, sectionId: Option[String], jou
     } yield new PageRequest(
       journeyNavigation,
       pageWithSection,
-      input
+      input,
+      vatNumberPrefixesToRemove
     )
     result.value
   }

@@ -22,8 +22,10 @@ import com.github.fge.jsonschema.core.report.{ListReportProvider, LogLevel, Proc
 import com.github.fge.jsonschema.main.JsonSchemaFactory
 import org.apache.commons.io.FilenameUtils
 import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.fhregistrationfrontend.forms.models._
+import uk.gov.hmrc.fhregistrationfrontend.models.businessPartners.BusinessPartnerType
 import uk.gov.hmrc.fhregistrationfrontend.models.businessregistration.BusinessRegistrationDetails
-import uk.gov.hmrc.fhregistrationfrontend.models.des.{SubScriptionCreate, Subscription}
+import uk.gov.hmrc.fhregistrationfrontend.models.des.{CompanyAsOfficial, IndividualPartnerType, LimitedLiabilityPartnershipType, PartnershipOrUnIncorporatedBodyPartnerType, SoleProprietorPartnerType, SubScriptionCreate, Subscription}
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.data._
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
 
@@ -229,6 +231,37 @@ class FormToDesSpecs extends UnitSpec {
     validatesFor(submission, "fhdds-limited-company-large-uk", "limited-company")
   }
 
+  "Normalise prefixed VAT numbers for limited company DES submission" in {
+    val application = LtdLargeUk.application()
+    val prefixedApplication = application.copy(
+      vatNumber = VatNumber(true, Some("GB123456789")),
+      companyOfficers = application.companyOfficers.updated(
+        2,
+        CompanyOfficer(
+          CompanyOfficerType.Company,
+          CompanyOfficerCompany("Some Company", hasVat = true, Some("GB987654321"), None, "Company Secretary")
+        )
+      )
+    )
+
+    val submission = SubScriptionCreate(
+      "Create",
+      service.limitedCompanySubmission(
+        brd("business-registration-details-limited-company.json"),
+        LtdLargeUk.verifiedEmail,
+        prefixedApplication,
+        LtdLargeUk.declaration
+      ),
+      None
+    )
+
+    submission.subScriptionCreate.businessDetail.nonProprietor.flatMap(
+      _.identification.vatRegistrationNumber
+    ) shouldBe Some("123456789")
+    companyOfficialVatNumbers(submission.subScriptionCreate) should contain("987654321")
+    validateAgainstSchema(JsonLoader.fromString(Json.toJson(submission).toString)).isSuccess shouldBe true
+  }
+
   "Create a correct json for fhdds-limited-company-large-uk-updated" in {
     val submission = SubScriptionCreate(
       "Update",
@@ -296,7 +329,98 @@ class FormToDesSpecs extends UnitSpec {
 
       validatesFor(submission, "partnership-large-int", "partnership")
     }
+
+    "Normalise prefixed VAT numbers for business partners before DES submission" in {
+      val application = PartnershipLargeInt.application()
+      val prefixedBusinessPartners = application.businessPartners
+        .updated(
+          1,
+          BusinessPartner(
+            BusinessPartnerType.SoleProprietor,
+            BusinessPartnerSoleProprietor(
+              "ms sole",
+              "trader",
+              hasTradeName = true,
+              Some("dodgy sole trader"),
+              hasNino = true,
+              Some("AA123231"),
+              hasVat = true,
+              Some("GB223456789"),
+              None,
+              Address("sole line one", None, None, Some("sole town"), "AA13 1AA", None, None)
+            )
+          )
+        )
+        .updated(
+          2,
+          BusinessPartner(
+            BusinessPartnerType.LimitedLiabilityPartnership,
+            BusinessPartnerLimitedLiabilityPartnership(
+              "fulfilment llp",
+              hasTradeName = true,
+              Some("dodgy llp"),
+              "SC123456",
+              hasVat = true,
+              Some("GB323456789"),
+              None,
+              Address(
+                "llp line one",
+                Some("llp line two"),
+                Some("llp line three"),
+                Some("llp town"),
+                "AA14 1AA",
+                None,
+                None
+              )
+            )
+          )
+        )
+
+      val submission = SubScriptionCreate(
+        "Create",
+        service.partnership(
+          brd("business-registration-details-partnership.json"),
+          PartnershipLargeInt.verifiedEmail,
+          application.copy(
+            vatNumber = VatNumber(true, Some("GB123456789")),
+            businessPartners = prefixedBusinessPartners
+          ),
+          PartnershipLargeInt.declaration
+        ),
+        None
+      )
+
+      submission.subScriptionCreate.businessDetail.nonProprietor.flatMap(
+        _.identification.vatRegistrationNumber
+      ) shouldBe Some("123456789")
+      partnerVatNumbers(submission.subScriptionCreate) should contain allOf ("223456789", "323456789")
+      validateAgainstSchema(JsonLoader.fromString(Json.toJson(submission).toString)).isSuccess shouldBe true
+    }
   }
+
+  private def companyOfficialVatNumbers(subscription: Subscription): List[String] =
+    subscription.additionalBusinessInformation.partnerCorporateBody
+      .flatMap(_.companyOfficials)
+      .toList
+      .flatten
+      .collect { case company: CompanyAsOfficial =>
+        company.identification.vatRegistrationNumber
+      }
+      .flatten
+
+  private def partnerVatNumbers(subscription: Subscription): List[String] =
+    subscription.businessDetail.partnership
+      .map(_.partnerDetails)
+      .getOrElse(Nil)
+      .flatMap {
+        _.partnerTypeDetail match {
+          case partnerType: SoleProprietorPartnerType       => partnerType.identification.vatRegistrationNumber
+          case partnerType: LimitedLiabilityPartnershipType => partnerType.identification.vatRegistrationNumber
+          case partnerType: PartnershipOrUnIncorporatedBodyPartnerType =>
+            partnerType.identification.vatRegistrationNumber
+          case _: IndividualPartnerType => None
+        }
+      }
 
   def validatesFor(subscrtiptionCreate: SubScriptionCreate, file: String, entityPath: String) = {
 

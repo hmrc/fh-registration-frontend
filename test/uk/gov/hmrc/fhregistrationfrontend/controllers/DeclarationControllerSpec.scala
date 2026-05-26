@@ -35,7 +35,7 @@ import uk.gov.hmrc.fhregistrationfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.fhregistrationfrontend.connectors.FhddsConnector
 import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.DeclarationForm.{defaultEmailKey, fullNameKey, jobTitleKey, usingDefaultEmailKey}
 import uk.gov.hmrc.fhregistrationfrontend.forms.journey.{CachedJourneyState, JourneyPages, JourneyType, Journeys, Page}
-import uk.gov.hmrc.fhregistrationfrontend.forms.models.BusinessType
+import uk.gov.hmrc.fhregistrationfrontend.forms.models.{BusinessType, VatNumber}
 import uk.gov.hmrc.fhregistrationfrontend.models.fhregistration.SubmissionOutcome.ActiveSubscription
 import uk.gov.hmrc.fhregistrationfrontend.services.mapping.DesToForm
 import uk.gov.hmrc.fhregistrationfrontend.services.{Save4LaterService, SummaryConfirmationLocalService}
@@ -61,10 +61,12 @@ class DeclarationControllerSpec extends PlaySpec with MockitoSugar with ScalaFut
   private val controllerMessagesApi: MessagesApi = new DefaultMessagesApi(
     Map("en" -> Map("fh.declaration.activeSubscription.error" -> activeSubscriptionMessage))
   )
+  private val mockAppConfig = mock[AppConfig]
+  when(mockAppConfig.vatNumberPrefixesToRemove).thenReturn(VatNumber.defaultPrefixesToRemove)
 
   private val commonDependencies = new CommonPlayDependencies(
     Configuration.empty,
-    mock[AppConfig],
+    mockAppConfig,
     Environment.simple(),
     controllerMessagesApi,
     mock[ErrorHandler],
