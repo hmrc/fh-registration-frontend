@@ -11,7 +11,7 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc"                %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
-    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "13.5.0",
+    "uk.gov.hmrc"                %% s"play-frontend-hmrc-$playVersion"            % "13.9.0",
     "uk.gov.hmrc"                %% s"play-partials-$playVersion"                 % "10.2.0",
     "uk.gov.hmrc"                %% s"play-hmrc-api-$playVersion"                 % "8.3.0",
     "uk.gov.hmrc"                %% s"http-caching-client-$playVersion"           % "12.2.0",
@@ -32,7 +32,7 @@ object AppDependencies {
     "dev.optics"                 %% "monocle-law"                   % monocleVersion,
     "com.github.java-json-tools" %  "json-schema-validator"         % "2.2.14",
     "org.scalatestplus.play"     %% "scalatestplus-play"            % "7.0.2"
-  ).map(_ % "test, it")
+  ).map(_ % "test")
 
   val all: Seq[ModuleID] = compile ++ test
 }

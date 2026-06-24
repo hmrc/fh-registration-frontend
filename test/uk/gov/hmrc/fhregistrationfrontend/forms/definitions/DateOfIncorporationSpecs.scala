@@ -136,7 +136,7 @@ class DateOfIncorporationSpecs extends UnitSpec {
       val result = form.bind(data)
 
       val errors = result.errors.flatMap(v => v.messages)
-      errors should contain("date.error.invalid")
+      errors should contain("date.error.invalid.day")
       result.value shouldBe None
     }
 
