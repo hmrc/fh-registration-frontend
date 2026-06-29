@@ -193,7 +193,18 @@ object Mappings {
     case _ => Valid
   }
 
-  def localNew: Mapping[LocalDate] =
+  val dateInPast: RawFormValues => ValidationResult = {
+    case (d, m, y) =>
+      localDateFromValues(d, m, y)
+        .map { parsedDate =>
+          if (parsedDate.isAfter(LocalDate.now())) invalid("date.error.inPast", "day", "month", "year")
+          else Valid
+        }
+        .getOrElse(Valid)
+    case _ => Valid
+  }
+
+  private def baseDateMapping: Mapping[RawFormValues] =
     tuple(
       "day"   -> text,
       "month" -> text,
@@ -206,6 +217,16 @@ object Mappings {
     ).verifying(Constraint(allDateValuesEntered(_)))
       .verifying(Constraint(dateIsValid(_)))
       .verifying(Constraint(dateInAllowedRange(_)))
+
+  def localNew: Mapping[LocalDate] =
+    baseDateMapping.transform(
+      { case (d, m, y) => LocalDate.of(y.toInt, m.toInt, d.toInt) },
+      (d: LocalDate) => (d.getDayOfMonth.toString, d.getMonthValue.toString, d.getYear.toString)
+    )
+
+  def localNewInPast: Mapping[LocalDate] =
+    baseDateMapping
+      .verifying(Constraint(dateInPast(_)))
       .transform(
         { case (d, m, y) => LocalDate.of(y.toInt, m.toInt, d.toInt) },
         (d: LocalDate) => (d.getDayOfMonth.toString, d.getMonthValue.toString, d.getYear.toString)
