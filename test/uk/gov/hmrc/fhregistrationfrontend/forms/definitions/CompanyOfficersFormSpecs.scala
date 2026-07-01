@@ -90,6 +90,36 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
       )
     }
 
+    "reject illegal characters in individual names" in {
+      formDataHasErrors(
+        individual(
+          "firstName"                  -> "Jo@hn",
+          "lastName"                   -> "Do#e",
+          "hasNationalInsuranceNumber" -> "true",
+          "nationalInsuranceNumber"    -> "AA123123A",
+          "role"                       -> "Director"
+        ),
+        individualErrors(
+          "firstName" -> "error.pattern",
+          "lastName"  -> "error.pattern"
+        )
+      )
+    }
+
+    "reject illegal characters in passport or national ID" in {
+      formDataHasErrors(
+        individual(
+          "firstName"                  -> "John",
+          "lastName"                   -> "Doe",
+          "hasNationalInsuranceNumber" -> "false",
+          "hasPassportNumber"          -> "true",
+          "passportNumber"             -> "12{345",
+          "role"                       -> "Director"
+        ),
+        individualErrors("passportNumber" -> "error.pattern")
+      )
+    }
+
     "accept valid" in {
       val data = dataFromValidForm(individual(validIndividual.toSeq *))
       data.identification match {
@@ -152,6 +182,29 @@ class CompanyOfficersFormSpecs extends UnitSpec with FormSpecsHelper[CompanyOffi
 
     }
 
+    "reject illegal characters in company name" in {
+      formDataHasErrors(
+        company(
+          "companyName"     -> "Bad{Name",
+          "hasVat"          -> "true",
+          "vatRegistration" -> "123456789",
+          "role"            -> "Director"
+        ),
+        companyErrors("companyName" -> "error.pattern")
+      )
+    }
+
+    "reject illegal characters in VAT registration number" in {
+      formDataHasErrors(
+        company(
+          "companyName"     -> "Valid Co",
+          "hasVat"          -> "true",
+          "vatRegistration" -> "GB12@56789",
+          "role"            -> "Director"
+        ),
+        companyErrors("vatRegistration" -> "error.pattern")
+      )
+    }
   }
 
   def individualErrors(errors: (String, String)*) =

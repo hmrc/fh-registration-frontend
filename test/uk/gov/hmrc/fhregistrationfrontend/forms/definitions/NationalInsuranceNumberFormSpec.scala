@@ -39,5 +39,39 @@ class NationalInsuranceNumberFormSpec extends UnitSpec {
       )
       form.bind(data).get shouldBe NationalInsuranceNumber(true, Some("AA123456C"))
     }
+
+    "reject missing NINO when selected" in {
+      val data = Map("nationalInsuranceNumber_yesNo" -> "true")
+
+      val result = form.bind(data)
+      val errors = result.errors.map(_.message)
+
+      errors should contain("error.required")
+    }
+
+    "reject NINO with illegal characters" in {
+      val data = Map(
+        "nationalInsuranceNumber_yesNo" -> "true",
+        "nationalInsuranceNumber_value" -> "AA12@456C"
+      )
+
+      val result = form.bind(data)
+      val errors = result.errors.map(_.message)
+
+      errors should contain("error.pattern")
+    }
+
+    "reject invalid NINO format" in {
+      val data = Map(
+        "nationalInsuranceNumber_yesNo" -> "true",
+        "nationalInsuranceNumber_value" -> "123456789"
+      )
+
+      val result = form.bind(data)
+      val errors = result.errors.map(_.message)
+
+      errors should contain("error.pattern")
+    }
+
   }
 }

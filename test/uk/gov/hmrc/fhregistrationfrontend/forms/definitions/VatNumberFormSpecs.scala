@@ -41,6 +41,52 @@ class VatNumberFormSpecs extends UnitSpec {
 
       form.bind(data).get shouldBe VatNumber(true, Some("123456789"))
     }
+
+    "reject VAT numbers with illegal characters" in {
+      val invalidInputs = Seq(
+        "@@@",
+        "12{456789",
+        "GB12#56789",
+        "GB12 56789",
+        "12345A789",
+        "GB12345A789"
+      )
+
+      invalidInputs.foreach { vat =>
+        val result = form.bind(Map("vatNumber_yesNo" -> "true", "vatNumber_value" -> vat))
+        val errors = result.errors.flatMap(e => e.messages.map(m => e.key -> m))
+        errors should contain("vatNumber_value" -> "error.pattern")
+      }
+    }
+
+    "reject VAT numbers with invalid length" in {
+      val invalidLengths = Seq(
+        "12345678",
+        "1234567890",
+        "GB12345678",
+        "GB1234567890"
+      )
+
+      invalidLengths.foreach { vat =>
+        val result = form.bind(Map("vatNumber_yesNo" -> "true", "vatNumber_value" -> vat))
+        val errors = result.errors.flatMap(e => e.messages.map(m => e.key -> m))
+        errors should contain("vatNumber_value" -> "error.pattern")
+      }
+    }
+
+    "accept valid VAT numbers" in {
+      val validInputs = Seq(
+        "123456789",
+        "GB123456789",
+        "gb123456789"
+      )
+
+      validInputs.foreach { vat =>
+        val result = form.bind(Map("vatNumber_yesNo" -> "true", "vatNumber_value" -> vat))
+        result.errors shouldBe empty
+      }
+    }
+
   }
 
 }
