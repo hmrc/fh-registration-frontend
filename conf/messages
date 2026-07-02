@@ -182,8 +182,8 @@ fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
 fh.business_type.summary=My business type is not listed here
 fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
-fh.business_type.detailsLinkText=Check the guidance (opens in a new window or tab)
-fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
+fh.business_type.detailsLinkText=Check the guidance (opens in a new tab)
+fh.business_type.details2= on how to apply for the Fulfilment House Due Diligence Scheme as a different type of business, such as a limited liability partnership or an unincorporated body.
 
 # - Email verification
 #============================================================
