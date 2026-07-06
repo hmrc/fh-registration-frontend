@@ -182,8 +182,8 @@ fh.business_type.business_partnership=Ordinary business partnership
 fh.business_type.type_not_match=Your Government Gateway ID does not match the business type you have selected
 fh.business_type.summary=My business type is not listed here
 fh.business_type.details1=You can only apply online for a limited company, sole trader or ordinary business partnership.
-fh.business_type.detailsLinkText=Check the guidance (opens in a new window or tab)
-fh.business_type.details2=to find out how to apply for a different type of business, like a limited liability partnership or an unincorporated body.
+fh.business_type.detailsLinkText=Check the guidance (opens in a new tab)
+fh.business_type.details2= on how to apply for the Fulfilment House Due Diligence Scheme as a different type of business, such as a limited liability partnership or an unincorporated body.
 
 # - Email verification
 #============================================================
@@ -266,6 +266,9 @@ fh.mainBusinessAddress.summary.previousAddressStartdate=Date the business starte
 
 fh.previousAddressStartdate.date.empty.error=Enter the date when the business started operating from the previous address
 fh.previousAddressStartdate.date.error.invalid=Enter a valid date for when the business started operating from the previous address
+fh.previousAddressStartdate.date.error.invalid.day=Enter a valid day for when the business started operating from the previous address
+fh.previousAddressStartdate.date.error.invalid.month=Enter a valid month for when the business started operating from the previous address
+fh.previousAddressStartdate.date.error.invalid.year=Enter a valid year for when the business started operating from the previous address
 fh.previousAddressStartdate.day.missing=Enter a day for the intended start date
 fh.previousAddressStartdate.month.missing=Enter a month for the intended start date
 fh.previousAddressStartdate.year.missing=Enter a year for the intended start date
@@ -382,6 +385,9 @@ fh.business_status.new_business.error.number=Enter the intended start date
 fh.business_status.new_business.error.pattern=Enter a valid date for the intended start date
 fh.proposedStartDate.date.empty.error=Enter the intended start date
 fh.proposedStartDate.date.error.invalid=Enter a valid date for the intended start date
+fh.proposedStartDate.date.error.invalid.day=Enter a valid day for the intended start date
+fh.proposedStartDate.date.error.invalid.month=Enter a valid month for the intended start date
+fh.proposedStartDate.date.error.invalid.year=Enter a valid year for the intended start date
 fh.proposedStartDate.day.missing=Enter a day for the intended start date
 fh.proposedStartDate.month.missing=Enter a month for the intended start date
 fh.proposedStartDate.year.missing=Enter a year for the intended start date
@@ -557,6 +563,9 @@ fh.dateOfIncorporation.hint_text=For example, 31 07 2017
 fh.dateOfIncorporation.date.empty.error=Enter the date of incorporation
 fh.dateOfIncorporation.date.error.invalid=Enter a valid date for the date of incorporation
 fh.dateOfIncorporation.date.error.inPast=Date of incorporation cannot be in the future
+fh.dateOfIncorporation.date.error.invalid.day=Enter a valid day for the date of incorporation
+fh.dateOfIncorporation.date.error.invalid.month=Enter a valid month for the date of incorporation
+fh.dateOfIncorporation.date.error.invalid.year=Enter a valid year for the date of incorporation
 fh.dateOfIncorporation.day=Day
 fh.dateOfIncorporation.month=Month
 fh.dateOfIncorporation.year=Year

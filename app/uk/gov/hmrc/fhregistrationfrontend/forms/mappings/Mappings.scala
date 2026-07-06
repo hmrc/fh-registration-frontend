@@ -17,12 +17,13 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import org.apache.commons.lang3.StringUtils
-import play.api.data.Forms._
-import play.api.data.{FieldMapping, Mapping}
-import play.api.data.validation._
+import play.api.data.Forms.*
+import play.api.data.{FieldMapping, FormError, Mapping}
+import play.api.data.validation.*
+import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.MainBusinessAddressForm.previousAddressStartdateKey
 import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Constraints.oneOfConstraint
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.{Address, AlternativeEmail, InternationalAddress}
-import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters._
+import uk.gov.hmrc.fhregistrationfrontend.models.formmodel.CustomFormatters.*
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -154,30 +155,51 @@ object Mappings {
 
   private type RawFormValues = (String, String, String)
 
-  private def invalid(error: String, params: String*) =
+  private def invalid(error: String, fields: String*) =
     Invalid(
-      Seq(
-        ValidationError(error, params *)
-      )
+      fields.map(f => ValidationError(error, Seq.empty, Seq(s"$previousAddressStartdateKey.$f")))
     )
 
   private def localDateFromValues(d: String, m: String, y: String) = Try(LocalDate.of(y.toInt, m.toInt, d.toInt))
 
   private val allDateValuesEntered: RawFormValues => ValidationResult = {
-    case ("", "", "") => invalid("date.empty.error")
-    case ("", "", _)  => invalid("day-and-month.missing")
-    case (_, "", "")  => invalid("month-and-year.missing")
-    case ("", _, "")  => invalid("day-and-year.missing")
-    case ("", _, _)   => invalid("day.missing")
-    case (_, "", _)   => invalid("month.missing")
-    case (_, _, "")   => invalid("year.missing")
+    case ("", "", "") => invalid("date.empty.error", "day", "month", "year")
+    case ("", "", _)  => invalid("day-and-month.missing", "day", "month")
+    case (_, "", "")  => invalid("month-and-year.missing", "month", "year")
+    case ("", _, "")  => invalid("day-and-year.missing", "day", "year")
+    case ("", _, _)   => invalid("day.missing", "day")
+    case (_, "", _)   => invalid("month.missing", "month")
+    case (_, _, "")   => invalid("year.missing", "year")
     case _            => Valid
   }
 
   private val dateIsValid: RawFormValues => ValidationResult = {
-    case (d, m, y) if Try(s"$d$m$y".toInt).isFailure         => invalid("date.error.invalid")
-    case (d, m, y) if localDateFromValues(d, m, y).isFailure => invalid("date.error.invalid")
-    case _                                                   => Valid
+    case (d, m, y) if d.isEmpty || m.isEmpty || y.isEmpty =>
+      Valid
+
+    case (d, m, y) =>
+      val dayErrors =
+        if (d.forall(_.isDigit)) Option.when(d.toInt < 1 || d.toInt > 31)("day")
+        else Some("day")
+
+      val monthErrors =
+        if (m.forall(_.isDigit)) Option.when(m.toInt < 1 || m.toInt > 12)("month")
+        else Some("month")
+
+      val yearErrors =
+        if (y.forall(_.isDigit)) Option.when(y.toInt < 1800 || y.toInt > 2999)("year")
+        else Some("year")
+
+      val errors = Seq(dayErrors, monthErrors, yearErrors).flatten
+
+      if (errors.size == 1)
+        invalid(s"date.error.invalid.${errors.head}", errors *)
+      else if (errors.nonEmpty)
+        invalid("date.error.invalid", errors *)
+      else if (localDateFromValues(d, m, y).isFailure)
+        invalid("date.error.invalid", "day", "month", "year")
+      else
+        Valid
   }
 
   private val dateInAllowedRange: RawFormValues => ValidationResult = {
@@ -187,7 +209,7 @@ object Mappings {
           val enteredYear = parsedDate.getYear
           if (enteredYear >= 1800 && enteredYear <= 2999) Valid
           else
-            invalid("date.error.invalid")
+            invalid("date.error.invalid", "year")
         }
         .getOrElse(Valid)
     case _ => Valid
@@ -228,7 +250,9 @@ object Mappings {
     baseDateMapping
       .verifying(Constraint(dateInPast(_)))
       .transform(
-        { case (d, m, y) => LocalDate.of(y.toInt, m.toInt, d.toInt) },
+        { case (d, m, y) =>
+          LocalDate.of(y.toIntOption.getOrElse(1900), m.toIntOption.getOrElse(1), d.toIntOption.getOrElse(1))
+        },
         (d: LocalDate) => (d.getDayOfMonth.toString, d.getMonthValue.toString, d.getYear.toString)
       )
 
