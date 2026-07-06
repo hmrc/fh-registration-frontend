@@ -78,31 +78,76 @@ class ContactPersonFormSpecs extends UnitSpec with FormSpecsHelper[ContactPerson
     }
 
     "reject wrong fields" in {
-      fieldHasErrors(firstNameKey, "", "error.pattern")
-      fieldHasErrors(lastNameKey, "", "error.pattern")
+      formDataHasErrors(
+        Map(firstNameKey -> ""),
+        Seq(firstNameKey -> "error.pattern")
+      )
 
-      fieldHasErrors(firstNameKey, Array.fill(36)('a').mkString, "error.pattern")
-      fieldHasErrors(lastNameKey, Array.fill(36)('a').mkString, "error.pattern")
+      formDataHasErrors(
+        Map(lastNameKey -> ""),
+        Seq(lastNameKey -> "error.pattern")
+      )
+
+      formDataHasErrors(
+        Map(firstNameKey -> Array.fill(36)('a').mkString),
+        Seq(firstNameKey -> "error.pattern")
+      )
+
+      formDataHasErrors(
+        Map(lastNameKey -> Array.fill(36)('a').mkString),
+        Seq(lastNameKey -> "error.pattern")
+      )
 
       for (w <- Seq("@", "#")) {
-        fieldHasErrors(firstNameKey, w, "error.pattern")
-        fieldHasErrors(lastNameKey, w, "error.pattern")
+        formDataHasErrors(
+          Map(firstNameKey -> w),
+          Seq(firstNameKey -> "error.pattern")
+        )
+        formDataHasErrors(
+          Map(lastNameKey -> w),
+          Seq(lastNameKey -> "error.pattern")
+        )
       }
 
-      fieldHasErrors(jobTitleKey, "", "error.pattern")
-      fieldHasErrors(jobTitleKey, Array.fill(41)('a').mkString, "error.pattern")
-      fieldHasErrors(jobTitleKey, "@", "error.pattern")
+      formDataHasErrors(
+        Map(jobTitleKey -> ""),
+        Seq(jobTitleKey -> "error.pattern")
+      )
 
-      fieldHasErrors(telephoneKey, "", "error.pattern")
+      formDataHasErrors(
+        Map(jobTitleKey -> Array.fill(41)('a').mkString),
+        Seq(jobTitleKey -> "error.pattern")
+      )
 
-      fieldHasErrors(telephoneKey, "", "error.pattern")
-      fieldHasErrors(telephoneKey, Array.fill(25)('7').mkString, "error.pattern")
-      fieldHasErrors(telephoneKey, "a", "error.pattern")
+      formDataHasErrors(
+        Map(jobTitleKey -> "@"),
+        Seq(jobTitleKey -> "error.pattern")
+      )
 
-      fieldHasErrors(emailAddressKey, "user", "error.email")
-      // max 132
-      fieldHasErrors(emailAddressKey, "user@" + Array.fill(128)('a').mkString, "error.email")
+      formDataHasErrors(
+        Map(telephoneKey -> ""),
+        Seq(telephoneKey -> "error.pattern")
+      )
 
+      formDataHasErrors(
+        Map(telephoneKey -> Array.fill(25)('7').mkString),
+        Seq(telephoneKey -> "error.pattern")
+      )
+
+      formDataHasErrors(
+        Map(telephoneKey -> "a"),
+        Seq(telephoneKey -> "error.pattern")
+      )
+
+      formDataHasErrors(
+        Map(emailAddressKey -> "user"),
+        Seq(emailAddressKey -> "error.email")
+      )
+
+      formDataHasErrors(
+        Map(emailAddressKey -> ("user@" + Array.fill(128)('a').mkString)),
+        Seq(emailAddressKey -> "error.email")
+      )
     }
 
     "accept valid short form" in {
