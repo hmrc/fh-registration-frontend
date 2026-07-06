@@ -3,6 +3,8 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import play.sbt.routes.RoutesKeys
 
+ThisBuild / scalaVersion := "3.7.3"
+
 val appName = "fh-registration-frontend"
 
 lazy val plugins : Seq[Plugins] = Seq.empty
@@ -30,7 +32,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(scoverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(scalaVersion := "3.7.3",
+  .settings(
     RoutesKeys.routesImport ++= Seq(
       "models._"
     ))
@@ -47,15 +49,6 @@ lazy val microservice = Project(appName, file("."))
       "viewmodels.govuk.all._"
     )
   )
-  .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
-  .settings(
-    IntegrationTest / Keys.fork := false,
-    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "it")).value,
-    IntegrationTest / resourceDirectory := baseDirectory.value / "it/resources",
-    addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / parallelExecution := false,
-    IntegrationTest / scalafmtOnCompile := true)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(scalacOptions ++= Seq("-Wconf:msg=lint-multiarg-infix:silent",
     "-Wconf:src=target/scala.*/twirl/.*:s",
@@ -66,3 +59,20 @@ lazy val microservice = Project(appName, file("."))
     "-Wconf:cat=deprecation:silent")
   )
   .settings(Global / lintUnusedKeysOnLoad := false)
+
+lazy val it = (project in file("it"))
+  .enablePlugins(PlayScala)
+  .disablePlugins(SbtDistributablesPlugin)
+  .configs(Test)
+  .dependsOn(microservice % "test->test")
+  .settings(
+    majorVersion := 0,
+    Test / unmanagedSourceDirectories := Seq(baseDirectory.value),
+    Test / unmanagedResourceDirectories := Seq(baseDirectory.value / "resources"),
+    Test / parallelExecution := false,
+    Test / fork := true,
+    Test / javaOptions += "-XX:+EnableDynamicAgentLoading",
+    addTestReportOption(Test, "int-test-reports"),
+    Test / scalafmtOnCompile := true,
+    scalacOptions := scalacOptions.value.distinct
+  )
