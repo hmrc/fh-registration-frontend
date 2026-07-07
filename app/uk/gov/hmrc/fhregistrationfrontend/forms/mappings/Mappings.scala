@@ -202,28 +202,27 @@ object Mappings {
         Valid
   }
 
-  private val dateInAllowedRange: RawFormValues => ValidationResult = {
-    case (d, m, y) =>
-      localDateFromValues(d, m, y)
-        .map { parsedDate =>
-          val enteredYear = parsedDate.getYear
-          if (enteredYear >= 1800 && enteredYear <= 2999) Valid
-          else
-            invalid("date.error.invalid", "year")
-        }
-        .getOrElse(Valid)
-    case _ => Valid
+  private val dateInAllowedRange: RawFormValues => ValidationResult = { case (d, m, y) =>
+    localDateFromValues(d, m, y)
+      .map { parsedDate =>
+        val enteredYear = parsedDate.getYear
+        if (enteredYear >= 1800 && enteredYear <= 2999) Valid
+        else
+          invalid("date.error.invalid", "year")
+      }
+      .getOrElse(Valid)
   }
 
-  val dateInPast: RawFormValues => ValidationResult = {
-    case (d, m, y) =>
-      localDateFromValues(d, m, y)
-        .map { parsedDate =>
-          if (parsedDate.isAfter(LocalDate.now())) invalid("date.error.inPast", "day", "month", "year")
-          else Valid
-        }
-        .getOrElse(Valid)
-    case _ => Valid
+  val dateInPast: RawFormValues => ValidationResult = { case (d, m, y) =>
+    localDateFromValues(d, m, y)
+      .map { parsedDate =>
+        if (parsedDate.isAfter(LocalDate.now()))
+          Invalid(
+            Seq(ValidationError("date.error.invalid.inFuture", "day", "month", "year"))
+          )
+        else Valid
+      }
+      .getOrElse(Valid)
   }
 
   private def baseDateMapping: Mapping[RawFormValues] =
