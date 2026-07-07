@@ -114,7 +114,7 @@
   </div>
   }
 
-@layout(title = titlePrefix + title, pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
+@layout(title = titlePrefix + title, backUrl = Some(uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.contactEmail.url), pageScripts = Some(pageScripts), pageHeadBlock = Some(pageHeadBlock)) {
 
     @if(contactPersonForm.errors.nonEmpty) {
 

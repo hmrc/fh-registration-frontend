@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.fhregistrationfrontend.forms.models.EmailVerification
 @import uk.gov.hmrc.fhregistrationfrontend.forms.definitions.EmailVerificationFormKeys._
 @import uk.gov.hmrc.fhregistrationfrontend.forms.navigation.Navigation
+@import uk.gov.hmrc.fhregistrationfrontend.controllers.routes
 @import uk.gov.hmrc.fhregistrationfrontend.views.html.layout
 @import uk.gov.hmrc.fhregistrationfrontend.views.ViewHelpers
 @import uk.gov.hmrc.fhregistrationfrontend.views.helpers.Helpers
@@ -70,7 +71,7 @@
     ))
 }
 
-@layout(title = titlePrefix + pageTitle) {
+@layout(title = titlePrefix + pageTitle ,backUrl = Some(routes.Application.businessType.url)) {
     @if(emailVerificationForm.errors.nonEmpty) {
         @viewHelpers.govukErrorSummary(ErrorSummary(errorList =
             Seq(ErrorLink(
