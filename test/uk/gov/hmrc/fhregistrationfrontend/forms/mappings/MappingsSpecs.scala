@@ -17,8 +17,12 @@
 package uk.gov.hmrc.fhregistrationfrontend.forms.mappings
 
 import uk.gov.hmrc.fhregistrationfrontend.util.UnitSpec
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import org.scalatest.EitherValues
+import play.api.data.validation.*
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.*
+
+import java.time.LocalDate
 
 class MappingsSpecs extends UnitSpec with EitherValues {
 
@@ -35,6 +39,35 @@ class MappingsSpecs extends UnitSpec with EitherValues {
       test.unbind(None) shouldEqual Map("prefix.yesNo" -> "false")
       test.unbind(Some(123)) shouldEqual Map("prefix.yesNo" -> "true", "prefix.value" -> "123")
 
+    }
+  }
+
+  "dateInPast" should {
+    "return Valid for a date in the past" in {
+      val yesterday = LocalDate.now().minusDays(1)
+      dateInPast(
+        yesterday.getDayOfMonth.toString,
+        yesterday.getMonthValue.toString,
+        yesterday.getYear.toString
+      ) shouldEqual Valid
+    }
+
+    "return Valid for today's date" in {
+      val today = LocalDate.now()
+      dateInPast(
+        today.getDayOfMonth.toString,
+        today.getMonthValue.toString,
+        today.getYear.toString
+      ) shouldEqual Valid
+    }
+
+    "return Invalid for a date in the future" in {
+      val tomorrow = LocalDate.now().plusDays(1)
+      dateInPast(
+        tomorrow.getDayOfMonth.toString,
+        tomorrow.getMonthValue.toString,
+        tomorrow.getYear.toString
+      ) shouldBe an[Invalid]
     }
   }
 

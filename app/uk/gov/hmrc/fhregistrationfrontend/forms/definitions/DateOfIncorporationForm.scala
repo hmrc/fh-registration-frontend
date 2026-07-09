@@ -18,7 +18,7 @@ package uk.gov.hmrc.fhregistrationfrontend.forms.definitions
 
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localNew
+import uk.gov.hmrc.fhregistrationfrontend.forms.mappings.Mappings.localNewInPast
 import uk.gov.hmrc.fhregistrationfrontend.forms.models.DateOfIncorporation
 
 object DateOfIncorporationForm {
@@ -26,7 +26,7 @@ object DateOfIncorporationForm {
   val dateOfIncorporationKey = "dateOfIncorporation"
   val dateOfIncorporationForm = Form(
     mapping(
-      dateOfIncorporationKey -> localNew
+      dateOfIncorporationKey -> localNewInPast
     )(DateOfIncorporation.apply)(o => Some(o.dateOfIncorporation))
   )
 

@@ -562,6 +562,7 @@ fh.dateOfIncorporation.label=What is the company''s date of incorporation?
 fh.dateOfIncorporation.hint_text=For example, 31 07 2017
 fh.dateOfIncorporation.date.empty.error=Enter the date of incorporation
 fh.dateOfIncorporation.date.error.invalid=Enter a valid date for the date of incorporation
+fh.dateOfIncorporation.date.error.invalid.inFuture=Date of incorporation cannot be in the future
 fh.dateOfIncorporation.date.error.invalid.day=Enter a valid day for the date of incorporation
 fh.dateOfIncorporation.date.error.invalid.month=Enter a valid month for the date of incorporation
 fh.dateOfIncorporation.date.error.invalid.year=Enter a valid year for the date of incorporation
