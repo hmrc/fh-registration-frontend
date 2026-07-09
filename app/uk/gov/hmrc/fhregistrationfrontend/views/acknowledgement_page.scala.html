@@ -51,18 +51,11 @@
     ))
 
     <div class="govuk-body govuk-body-s">
-        <div class="js-show notice with-icon">
-            <i class="icon icon-file-download"></i>
       <h2>@Messages("fh.ack.confirmation_email_sent") <strong>@{email}</strong></h2>
-        </div>
       @if(mode != Variation) {
-        <div class="js-show notice with-icon">
-          <i class="icon icon-file-download"></i>
-
           <p class="govuk-body">
-            <a class="govuk-link" href="#" data-module="hmrc-print-link">@Messages("fh.generic.print_application_status")</a>
+            <a class="govuk-link hmrc-!-js-visible" href="#" data-module="hmrc-print-link">@Messages("fh.generic.print_application_status")</a>
           </p>
-        </div>
           <hr class="govuk-section-break govuk-section-break--m" />
 
         <h2 class="govuk-heading-m">
@@ -105,13 +98,13 @@
               <a class="govuk-link" href="@uk.gov.hmrc.fhregistrationfrontend.controllers.routes.SignOutController.signout()" class="button" role="button">Finish and sign out</a>
               </p>
               <p>
-              <a class="govuk-link" href="#" data-module="hmrc-print-link">@Messages("fh.ack.Variation.print")</a>
+              <a class="govuk-link hmrc-!-js-visible" href="#" data-module="hmrc-print-link">@Messages("fh.ack.Variation.print")</a>
               </p>
           </div>
       }
     </div>
       <p class="govuk-body">
-        <a class="govuk-link" href=@config.exitSurveyUrl>@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
+        <a class="govuk-link" href="@config.exitSurveyUrl">@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
       </p>
 
       <div class="fhdds-print-only govuk-body">
