@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
@@ -419,6 +420,9 @@ class ApplicationControllerSpec
 
       status(result) shouldBe OK
       contentAsString(result) should include(Messages("fh.business_type.title"))
+      Jsoup
+        .parse(contentAsString(result))
+        .title() shouldBe "What type of business are you applying to register? - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
     }
   }
 

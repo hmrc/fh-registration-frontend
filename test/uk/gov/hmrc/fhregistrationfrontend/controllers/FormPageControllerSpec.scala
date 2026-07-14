@@ -17,6 +17,7 @@
 package uk.gov.hmrc.fhregistrationfrontend.controllers
 
 import com.codahale.metrics.SharedMetricRegistries
+import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -61,6 +62,9 @@ class FormPageControllerSpec
 
       status(result) shouldBe OK
       contentAsString(result) should include(Messages("fh.main_business_address.title"))
+      Jsoup
+        .parse(contentAsString(result))
+        .title() shouldBe "Business address - Apply for the Fulfilment House Due Diligence Scheme - GOV.UK"
     }
   }
 
