@@ -50,6 +50,7 @@ class SummaryControllerSpec extends ControllerSpecWithGuiceApp with ActionsMock 
 
         status(result) shouldBe OK
         contentAsString(result) should include(Messages(s"fh.summary.${expectedMode(journeyType)}.title"))
+        contentAsString(result) should include("""class="govuk-link hmrc-!-js-visible"""")
 
         reset(mockActions)
       }
