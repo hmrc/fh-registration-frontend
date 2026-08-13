@@ -30,11 +30,6 @@
 
 @(date: Date, email:String, printableSummary: Html, mode: Mode)(implicit request: Request[?], messages: Messages, config: AppConfig)
 
-@pageHeadBlock = {
-  <link href="@routes.Assets.at("stylesheets/fhdds-govuk.css")" media="all" rel="stylesheet" type="text/css">
-}
-
-
 @title1 = @{
   Messages(s"fh.ack.$mode.title")
 }
@@ -43,7 +38,7 @@
   formatDate(date)
 }
 
-@layout(title = title1, pageHeadBlock = Some(pageHeadBlock)) {
+@layout(title = title1) {
 
     @viewHelpers.govukPanel(Panel(
         title = Text(title1),
@@ -107,8 +102,15 @@
         <a class="govuk-link" href="@config.exitSurveyUrl">@Messages("fh.survey_link_text")@Messages("fh.survey_hint")</a>
       </p>
 
-      <div class="fhdds-print-only govuk-body">
-        @printableSummary
-      </div>
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            @Messages("fh.ack.application_summary")
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          @printableSummary
+        </div>
+      </details>
 
 }

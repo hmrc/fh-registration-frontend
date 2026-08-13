@@ -15,12 +15,12 @@
  *@
 
 @(heading:String, address:Html, changeLink: Option[String] = None, section: String)
-<div>
-  <dt class="cya-question">@{heading}</dt>
-  <dd class="cya-answer">@address</dd>
+<div class="govuk-summary-list__row">
+  <dt class="govuk-summary-list__key">@{heading}</dt>
+  <dd class="govuk-summary-list__value">@address</dd>
   @if(changeLink.nonEmpty){
-    <dd class="cya-change group-head">
-        <a href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(changeLink.get, section)}">Change<span class="visuallyhidden"> @heading</span></a>
+    <dd class="govuk-summary-list__actions group-head">
+        <a class="govuk-link" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.loadWithSection(changeLink.get, section)}">Change<span class="govuk-visually-hidden"> @heading</span></a>
     </dd>
   }
 </div>

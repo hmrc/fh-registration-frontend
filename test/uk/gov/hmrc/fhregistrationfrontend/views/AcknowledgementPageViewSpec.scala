@@ -46,5 +46,31 @@ class AcknowledgementPageViewSpec extends ViewSpecHelper {
       document.html().contains("icon-file-download") mustBe false
       document.html().contains("js-show") mustBe false
     }
+
+    "render the application summary inside a collapsed details component" in {
+      val html = acknowledgementPage(
+        new Date(),
+        "user@test.com",
+        Html(
+          """<dl class="govuk-summary-list"><div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Email address</dt><dd class="govuk-summary-list__value">user@test.com</dd></div></dl>"""
+        ),
+        New
+      )(using request, Messages, appConfig)
+
+      val document = doc(html)
+      val details = document.select("details.govuk-details").first()
+
+      details.hasAttr("open") mustBe false
+      details.select(".govuk-details__summary-text").text() mustBe "View your application summary"
+      details.select(".govuk-summary-list").size() mustBe 1
+      details.select(".govuk-summary-list__row").size() mustBe 1
+
+      document.html().contains("fhdds-print-only") mustBe false
+      document.html().contains("govuk-check-your-answers") mustBe false
+      document.html().contains("cya-question") mustBe false
+      document.html().contains("cya-answer") mustBe false
+      document.html().contains("cya-change") mustBe false
+      document.select("details a").size() mustBe 0
+    }
   }
 }

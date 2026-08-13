@@ -23,15 +23,15 @@
 
 @SummarySectionHead(heading = Messages("fh.summary.email.title"))
 
-<dl class="govuk-check-your-answers cya-questions-long">
-    <div>
-        <dt class="cya-question">@Messages("fh.summary.email.label")</dt>
-        <dd class="cya-answer">@verifiedEmail</dd>
-        <dd class="cya-change">
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">@Messages("fh.summary.email.label")</dt>
+        <dd class="govuk-summary-list__value">@verifiedEmail</dd>
         @if(Mode.isEditable(mode)){
-            <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailEdit}">Change<span class="visuallyhidden"> @Messages("fh.summary.email.title")</span></a>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.EmailVerificationController.emailEdit}">Change<span class="govuk-visually-hidden"> @Messages("fh.summary.email.title")</span></a>
+            </dd>
         }
-        </dd>
     </div>
 
 </dl>

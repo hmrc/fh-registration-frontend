@@ -32,15 +32,12 @@
   }
 
 }
-<div>
-  <dt class="cya-question">@if(params.label.nonEmpty){ @params.label }</dt>
-  <dd class="cya-answer">@if(params.value.nonEmpty){ @params.value }</dd>
+<div class="govuk-summary-list__row">
+  <dt class="govuk-summary-list__key">@if(params.label.nonEmpty){ @params.label }</dt>
+  <dd class="govuk-summary-list__value">@if(params.value.nonEmpty){ @params.value }</dd>
   @if(params.changeLink.nonEmpty){
-    <dd class="cya-change@{linkClass}">
-      <a class="hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="visuallyhidden"> @changeLinkText</span></a>
+    <dd class="govuk-summary-list__actions@{linkClass}">
+      <a class="govuk-link hidden-print" href="@{uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.load(params.changeLink.get)}">Change<span class="govuk-visually-hidden"> @changeLinkText</span></a>
     </dd>
-  }
-  @if(params.groupRow == GroupRow.Bottom) {
-    <dd></dd>
   }
 </div>

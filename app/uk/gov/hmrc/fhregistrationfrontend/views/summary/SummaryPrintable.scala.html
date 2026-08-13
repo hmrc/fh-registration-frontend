@@ -29,7 +29,7 @@
           ContactPerson(limitedCompanyApplication.contactPerson, bpr, ReadOnlyApplication).toString() +
           MainBusinessAddress(limitedCompanyApplication.mainBusinessAddress, ReadOnlyApplication).toString() +
           SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
-          "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+          "<dl class=\"govuk-summary-list\">" +
           CompanyRegistrationNumber(limitedCompanyApplication.companyRegistrationNumber, ReadOnlyApplication).toString() +
           DateOfIncorporation(limitedCompanyApplication.dateOfIncorporation, ReadOnlyApplication).toString() +
           TradingName(limitedCompanyApplication.tradingName, ReadOnlyApplication).toString() +
@@ -37,7 +37,7 @@
           CompanyOfficers(limitedCompanyApplication.companyOfficers, ReadOnlyApplication).toString() +
           "</dl>" +
           SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
-          "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+          "<dl class=\"govuk-summary-list\">" +
           BusinessStatus(limitedCompanyApplication.businessStatus, ReadOnlyApplication).toString() +
           ImportingActivities(limitedCompanyApplication.importingActivities, ReadOnlyApplication).toString() +
           BusinessCustomers(limitedCompanyApplication.businessCustomers, ReadOnlyApplication).toString() +
@@ -51,13 +51,13 @@
             ContactPerson(soleProprietorApplication.contactPerson, bpr, ReadOnlyApplication).toString() +
             MainBusinessAddress(soleProprietorApplication.mainBusinessAddress, ReadOnlyApplication).toString() +
             SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
-            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+            "<dl class=\"govuk-summary-list\">" +
             NationalInsurance(soleProprietorApplication.nationalInsuranceNumber, ReadOnlyApplication).toString() +
             TradingName(soleProprietorApplication.tradingName, ReadOnlyApplication).toString() +
             VATRegistrationNumber(soleProprietorApplication.vatNumber, ReadOnlyApplication).toString() +
             "</dl>" +
             SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
-            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+            "<dl class=\"govuk-summary-list\">" +
             BusinessStatus(soleProprietorApplication.businessStatus, ReadOnlyApplication).toString() +
             ImportingActivities(soleProprietorApplication.importingActivities, ReadOnlyApplication).toString() +
             BusinessCustomers(soleProprietorApplication.businessCustomers, ReadOnlyApplication).toString() +
@@ -71,13 +71,13 @@
             ContactPerson(partnershipApplication.contactPerson, bpr, ReadOnlyApplication).toString() +
             MainBusinessAddress(partnershipApplication.mainBusinessAddress, ReadOnlyApplication).toString() +
             SummarySectionHead(heading = Messages("fh.summary.businessDetails")).toString() +
-            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+            "<dl class=\"govuk-summary-list\">" +
             TradingName(partnershipApplication.tradingName, ReadOnlyApplication).toString() +
             VATRegistrationNumber(partnershipApplication.vatNumber, ReadOnlyApplication).toString() +
             BusinessPartners(partnershipApplication.businessPartners, ReadOnlyApplication).toString() +
             "</dl>" +
             SummarySectionHead(heading = Messages("fh.summary.businessActivities")).toString() +
-            "<dl class=\"govuk-check-your-answers cya-questions-long\">" +
+            "<dl class=\"govuk-summary-list\">" +
             BusinessStatus(partnershipApplication.businessStatus, ReadOnlyApplication).toString() +
             ImportingActivities(partnershipApplication.importingActivities, ReadOnlyApplication).toString() +
             BusinessCustomers(partnershipApplication.businessCustomers, ReadOnlyApplication).toString() +
