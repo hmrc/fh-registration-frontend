@@ -5,7 +5,7 @@ object AppDependencies {
 
   val playVersion = "play-30"
   val bootstrapVersion = "10.7.0"
-  val hmrcMongoVersion = "2.12.0"
+  val hmrcMongoVersion = "2.13.0"
   val monocleVersion = "3.3.0"
 
   val compile: Seq[ModuleID] = Seq(
