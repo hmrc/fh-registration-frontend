@@ -29,13 +29,6 @@
 
 @(dateOfIncorporationForm: Form[DateOfIncorporation], navigation: Navigation)(implicit request: Request[?], messages: Messages)
 
-@findDateHelp = {
-  @Messages("fh.dateOfIncorporation.details")
-  <a class="govuk-link" href="@Messages("link.searchCompaniesHouse")" target="_blank">
-  @Messages("fh.dateOfIncorporation.companies_house")
-  </a>.
-}
-
 @titlePrefix = @{
   if (dateOfIncorporationForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
 }
@@ -45,6 +38,7 @@
 }
 
 @layout(title = titlePrefix + title, backUrl = BackHelper.getUrl(navigation)) {
+
 
   @viewHelpers.form(action = uk.gov.hmrc.fhregistrationfrontend.controllers.routes.FormPageController.save("dateOfIncorporation"), Symbol("novalidate") -> "novalidate") {
 
@@ -58,6 +52,9 @@
               ,
               title = Text(messages("fh.generic.error"))))
       }
+
+
+
       @viewHelpers.govukDateInput(DateInput(
           id = "dateOfIncorporation",
           hint = Some(Hint(
@@ -97,16 +94,21 @@
         ),
           fieldset = Some(Fieldset(
               legend = Some(Legend(
-                  content = Text(title),
+                  content = HtmlContent(s"""
+                  <h1 class = "govuk-fieldset__heading govuk-!-margin-bottom-4">$title</h1>
+                  <p class="govuk-body">
+                  ${Messages("fh.dateOfIncorporation.details")}
+                  <a class="govuk-link" href="${Messages("link.searchCompaniesHouse")}" target="_blank">
+                  ${Messages("fh.dateOfIncorporation.companies_house")}
+                      </a>
+                  </p>
+                """),
                   classes = "govuk-fieldset__legend--xl",
                   isPageHeading = true
+              )),
+
               ))
           ))
-      ))
-
-      @viewHelpers.govukDetails(Details(
-          summary = Text(messages("fh.dateOfIncorporation.summary")),
-          content = HtmlContent(findDateHelp)
       ))
 
       @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))

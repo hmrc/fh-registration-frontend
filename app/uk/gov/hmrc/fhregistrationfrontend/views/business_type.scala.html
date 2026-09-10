@@ -28,19 +28,9 @@
 
 
 @typeNotListed = {
-    <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-            @Messages("fh.business_type.summary")
-            </span>
-        </summary>
-        <div class="govuk-details__text">
             <p>@Messages("fh.business_type.details1")</p>
             <p><a class="govuk-link" href="@Messages("link.guidance_page")" target="_blank">@Messages("fh.business_type.detailsLinkText")</a> @Messages("fh.business_type.details2")</p>
-        </div>
-    </details>
 }
-
 
 @titlePrefix = @{
     if (businessTypeForm.hasErrors) Messages("fh.generic.errorPrefix") + " " else ""
@@ -74,6 +64,7 @@
                         isPageHeading = true
                     ))
                 )),
+                hint = Some(Hint(content = HtmlContent(typeNotListed))),
                 idPrefix = Some("businessType"),
                 name = "businessType",
                 errorMessage = if(businessTypeForm("businessType").hasErrors) {
@@ -95,8 +86,6 @@
                 )
             ).withFormField(businessTypeForm("businessType"))
         )
-
-        @typeNotListed
 
         @viewHelpers.govukButton(Button(
             content = Text(Messages("button.save.continue"))
