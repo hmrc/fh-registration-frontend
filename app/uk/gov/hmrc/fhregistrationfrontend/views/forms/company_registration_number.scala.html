@@ -68,7 +68,7 @@
             spellcheck = Some(false),
             classes = "govuk-!-width-one-half",
             hint = Some(Hint(
-                content = Text(messages("fh.companyRegistrationNumber.hint_text"))
+                content = HtmlContent(crnDetails)
             )),
             errorMessage =
                 companyRegistrationNumberForm.error(companyRegistrationNumberKey).map { e =>
@@ -81,10 +81,7 @@
             value = companyRegistrationNumberForm(companyRegistrationNumberKey).value
         ))
 
-        @viewHelpers.govukDetails(Details(
-            summary = Text(messages("fh.companyRegistrationNumber.summary")),
-            content = HtmlContent(crnDetails)
-        ))
+
         @viewHelpers.govukButton(Button(content = Text(messages("button.save.continue")), inputType = Some("submit")))
 
        @SaveForLater()
