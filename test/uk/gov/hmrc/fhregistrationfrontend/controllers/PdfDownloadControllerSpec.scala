@@ -41,9 +41,9 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
   }
 
   "downloadPrintable" should {
-    "Return an error when summary is not found in the keystore" in {
+    "Return an error when summary is not found in the mongo session" in {
       setupUserAction()
-      setupKeyStore(None)
+      setupSummaryConfirmationLocal(None)
       val request = FakeRequest()
 
       val result = csrfAddToken(controller.downloadPrintable())(request)
@@ -56,7 +56,7 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
       val expectedSummary = "<html><body>summary</body></html>"
       val request = FakeRequest()
       setupUserAction()
-      setupKeyStore(Some(summary))
+      setupSummaryConfirmationLocal(Some(summary))
 
       val result = csrfAddToken(controller.downloadPrintable())(request)
 
@@ -66,7 +66,7 @@ class PdfDownloadControllerSpec extends ControllerSpecWithGuiceApp with ActionsM
     }
   }
 
-  def setupKeyStore(summaryText: Option[String]): Unit =
+  def setupSummaryConfirmationLocal(summaryText: Option[String]): Unit =
     when(mockSummaryConfirmationLocalService.fetchSummaryForPrint()(using any())) `thenReturn` Future.successful(
       summaryText
     )
