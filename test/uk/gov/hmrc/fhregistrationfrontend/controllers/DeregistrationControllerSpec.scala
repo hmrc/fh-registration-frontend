@@ -95,7 +95,7 @@ class DeregistrationControllerSpec
 
     "Render the confirmation page if all data is given" in {
       val request = FakeRequest()
-      setupKeyStoreDeregistrationReason()
+      setupSummaryConfirmationLocalDeregistrationReason()
       val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe OK
@@ -103,7 +103,7 @@ class DeregistrationControllerSpec
     }
 
     "Fail to render confirmation if reason was not given previously" in {
-      setupKeyStoreDeregistrationReason(None)
+      setupSummaryConfirmationLocalDeregistrationReason(None)
       val request = FakeRequest()
       val result = csrfAddToken(controller.confirm)(request)
 
@@ -111,7 +111,7 @@ class DeregistrationControllerSpec
     }
 
     "Fail on postConfirmation if confirmation is not answered" in {
-      setupKeyStoreDeregistrationReason()
+      setupSummaryConfirmationLocalDeregistrationReason()
       val request = FakeRequest()
       val result = csrfAddToken(controller.postConfirmation)(request)
 
@@ -121,7 +121,7 @@ class DeregistrationControllerSpec
     }
 
     "Fail on postConfirmation if reason was not saved" in {
-      setupKeyStoreDeregistrationReason(None)
+      setupSummaryConfirmationLocalDeregistrationReason(None)
       val request = FakeRequest().withFormUrlEncodedBody(
         ConfirmationForm.confirmKey           -> "true",
         ConfirmationForm.usingDefaultEmailKey -> "true",
@@ -133,7 +133,7 @@ class DeregistrationControllerSpec
     }
 
     "Redirect from postConfirmation if all data is give" in {
-      setupKeyStoreDeregistrationReason()
+      setupSummaryConfirmationLocalDeregistrationReason()
       setupDeregister()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
@@ -152,7 +152,7 @@ class DeregistrationControllerSpec
     }
 
     "Redirect from postConfirmation if tne answer is no" in {
-      setupKeyStoreDeregistrationReason()
+      setupSummaryConfirmationLocalDeregistrationReason()
       setupDeregister()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
@@ -192,7 +192,7 @@ class DeregistrationControllerSpec
       mockSummaryConfirmationLocalService.saveDeregistrationReason(any())(using any[HeaderCarrier]())
     ).thenReturn(Future.successful(reason))
 
-  def setupKeyStoreDeregistrationReason(
+  def setupSummaryConfirmationLocalDeregistrationReason(
     reason: Option[DeregistrationReason] = Some(DeregistrationReason(DeregistrationReasonEnum.NoLongerNeeded, None))
   ) =
     when(

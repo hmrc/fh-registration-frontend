@@ -95,7 +95,7 @@ class WithdrawalControllerSpec
 
     "Render the confirmation page if all data is given" in {
       val request = FakeRequest()
-      setupKeyStoreWithdrawalReason()
+      setupSummaryConfirmationLocalWithdrawalReason()
       val result = csrfAddToken(controller.confirm)(request)
 
       status(result) shouldBe OK
@@ -103,7 +103,7 @@ class WithdrawalControllerSpec
     }
 
     "Fail to render confirmation if reason was not given previously" in {
-      setupKeyStoreWithdrawalReason(None)
+      setupSummaryConfirmationLocalWithdrawalReason(None)
       val request = FakeRequest()
       val result = csrfAddToken(controller.confirm)(request)
 
@@ -111,7 +111,7 @@ class WithdrawalControllerSpec
     }
 
     "Fail on postConfirmation if confirmation is not answered" in {
-      setupKeyStoreWithdrawalReason()
+      setupSummaryConfirmationLocalWithdrawalReason()
       val request = FakeRequest()
       val result = csrfAddToken(controller.postConfirmation)(request)
 
@@ -121,7 +121,7 @@ class WithdrawalControllerSpec
     }
 
     "Fail on postConfirmation if reason was not saved" in {
-      setupKeyStoreWithdrawalReason(None)
+      setupSummaryConfirmationLocalWithdrawalReason(None)
       val request = FakeRequest().withFormUrlEncodedBody(
         ConfirmationForm.confirmKey           -> "true",
         ConfirmationForm.usingDefaultEmailKey -> "true",
@@ -133,7 +133,7 @@ class WithdrawalControllerSpec
     }
 
     "Redirect from postConfirmation if all data is give" in {
-      setupKeyStoreWithdrawalReason()
+      setupSummaryConfirmationLocalWithdrawalReason()
       setupWithdrawal()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
@@ -150,7 +150,7 @@ class WithdrawalControllerSpec
     }
 
     "Redirect from postConfirmation if tne answer is no" in {
-      setupKeyStoreWithdrawalReason()
+      setupSummaryConfirmationLocalWithdrawalReason()
       setupWithdrawal()
       val request = FakeRequest()
         .withFormUrlEncodedBody(
@@ -190,7 +190,7 @@ class WithdrawalControllerSpec
     when(mockSummaryConfirmationLocalService.saveWithdrawalReason(any())(using any[HeaderCarrier]()))
       .thenReturn(Future.successful(reason))
 
-  def setupKeyStoreWithdrawalReason(
+  def setupSummaryConfirmationLocalWithdrawalReason(
     reason: Option[WithdrawalReason] = Some(WithdrawalReason(WithdrawalReasonEnum.AppliedInError, None))
   ) =
     when(mockSummaryConfirmationLocalService.fetchWithdrawalReason()(using any[HeaderCarrier]()))

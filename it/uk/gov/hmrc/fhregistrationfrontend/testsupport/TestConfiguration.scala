@@ -102,7 +102,6 @@ trait TestConfiguration
         s"microservice.services.$service.host"                     -> wiremockHost,
         s"microservice.services.$service.port"                     -> wiremockPort,
         s"microservice.services.cachable.short-lived-cache.domain" -> "save4later",
-        s"microservice.services.cachable.session-cache.domain"     -> "keystore",
         s"play.filters.csrf.header.bypassHeaders.X-Requested-With" -> "*",
         s"play.filters.csrf.header.bypassHeaders.Csrf-Token"       -> "nocheck",
         s"json.encryption.key"                                     -> "fqpLDZ4sumDsekHkeEBlCA==",
